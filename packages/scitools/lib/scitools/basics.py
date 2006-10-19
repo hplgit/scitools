@@ -13,6 +13,7 @@ Imports and definitions for the scitools library.
 # avoid integer division (for safety):
 from __future__ import division  # must appear in each application file too
 
+import sys
 sys.path.insert(0, 'core')  # much from py4cs etc. will lie here
 
 # unified interface to Numeric, numarray, and numpy:
@@ -20,7 +21,11 @@ from numpytools import *
 # numpytools imports os, sys, operator, math, StringFunction
 
 # plotting/graphics:
-from easyviz import *
+#import easyviz
+# if gnuplot is available (check that)
+#from easyviz.gnuplot_ import *
+#from easyviz import *
+
 from glob import glob # nice to have
 
 # for safety checks:
