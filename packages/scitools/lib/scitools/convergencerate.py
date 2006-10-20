@@ -273,7 +273,7 @@ def many_discrprm_log_fit(d, e, factors):
     C = inv_log(logC)
     return a, C
 
-""
+"""
 Experimental code for analyzing experiments:
 
 Idea: fill a table of (dt,h,error) tuples. Explore the diagonal
