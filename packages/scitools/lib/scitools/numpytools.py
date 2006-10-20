@@ -240,7 +240,7 @@ _NumPy_modules = (
     ('RandomArray', 'numarray.random_array.RandomArray2', 'numpy.random'),
     ('RNG', '', 'numpy.random'),
     ('FFT', 'numarray.fft', 'numpy.fft'),
-    ('MLab', 'numarray.linear_algebra.mlab', 'numpy.lib.mlab'),
+    ('MLab', 'numarray.linear_algebra.mlab', 'numpy.oldnumeric.mlab'),
     ('MA', 'numarray.ma.MA', 'numpy.core.ma'),
     )
      
