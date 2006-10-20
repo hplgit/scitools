@@ -14,7 +14,6 @@ Imports and definitions for the scitools library.
 from __future__ import division  # must appear in each application file too
 
 import sys
-sys.path.insert(0, 'core')  # much from py4cs etc. will lie here
 
 # unified interface to Numeric, numarray, and numpy:
 from numpytools import *  

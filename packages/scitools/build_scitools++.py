@@ -85,10 +85,10 @@ def copy_pure_scitools_files():
     cmd = 'cp -r ' + ' '.join(files) + ' ' + bindir
     print cmd
     os_system(cmd)
-    
-    
+        
 
 def copy_package(package):
+    # was used for easyviz, pyPDE, but not used anymore
     """Copy package as sub-package of scitools."""
     print '********* %s **************' % package
     dir = join(os.pardir, package, 'lib', package)
@@ -99,6 +99,7 @@ def copy_package(package):
     os_system(cmd)
 
 def rename(directory, from_name='py4cs', to_name='scitools'):
+    # not used anymore
     """Rename py4cs to scitools in directory/*.py files."""
     pyfiles = ' '.join(glob.glob(join(directory, '*.py')))
     os_system(r"subst.py '%s\.' %s. " % (from_name, to_name) + pyfiles)
@@ -106,12 +107,9 @@ def rename(directory, from_name='py4cs', to_name='scitools'):
     # the standard "from scitools import *")
     for f in glob.glob(join(directory, '*.old~')):
         os.remove(f)
-
-#def rename_easyviz():
-#    pyfiles = ' '.join(glob.glob(join(scitools_dir, 'easyviz'), '*.py'))
-    
     
 def copy_scriptingbook_tools():
+    # not used anymore
     """Copy scripting/src/tools scripts to scitools++/bin."""
     print '********* copy $scripting/src/tools **************'
     files = ['_gnuplot.py', 'diff.pl', 'diff.py', 
@@ -125,6 +123,7 @@ def copy_scriptingbook_tools():
     rename(bindir, 'py4cs', 'scitools')
     
 def copy_py4cs():
+    # not used anymore
     """
     Copy py4cs to scitools directory.
     This is convenient since scripts do import py4cs.mod and we
@@ -190,6 +189,7 @@ def copy_third_party_scripts():
 
 
 def check_numpytools():
+    # not used anymore
     ev = '/home/store/scriptingsuite/trunk/packages/easyviz/lib/easyviz'
     orig = join(os.environ['scripting'],'src','tools','py4cs')
     failure = os.system('diff %s/numpytools.py %s/numpytools.py' % (orig,ev))
@@ -198,6 +198,7 @@ def check_numpytools():
         sys.exit(1)
 
 def fix_easyviz_numpytools():
+    # not used anymore
     dir = join(scitools_dir, 'easyviz')
     os.remove(join(dir, 'numpytools.py'))
     pyfiles = ' '.join(glob.glob(join(dir, '*.py')))
@@ -209,11 +210,11 @@ def fix_easyviz_numpytools():
 def main():
     check_numpytools()
     copy_pure_scitools_files()
-    copy_package('pyPDE')
 
-    copy_package('easyviz')
-    rename(join(scitools_dir, 'easyviz'), 'py4cs', 'scitools')
-    fix_easyviz_numpytools()
+    #copy_package('pyPDE')
+    #copy_package('easyviz')
+    #rename(join(scitools_dir, 'easyviz'), 'py4cs', 'scitools')
+    #fix_easyviz_numpytools()
     
     copy_scriptingbook_tools()
     copy_py4cs()
