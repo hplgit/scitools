@@ -1,0 +1,11 @@
+There are two ways of using scitools:
+
+1. Put the lib subdirectory here in PYTHONPATH and bin in PATH.
+This gives access to the svn directories for scitools, easyviz, etc.
+
+2. Run build_scitools++.py. This makes a new directory build/scitools++
+that you can move to any convenient place. scitools++ contains scitools
+plus some standard Python modules like Gnuplot, IPython, epydoc, etc.
+Put scitools++/lib in PYTHONPATH and scitools++/bin in PATH.
+Or you may run scitools++/setup.py to install scitools++ in the
+official installation directories on your system.

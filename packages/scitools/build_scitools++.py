@@ -208,7 +208,17 @@ def fix_easyviz_numpytools():
     
 
 def main():
-    check_numpytools()
+    # Large parts of this script is not needed anymore.
+    # It built a scitools++ directory when
+    # the original version of many scitools files were stored in
+    # different places.
+    # Now the official versions are stored under scitools and other packages
+    # (like py4cs) must make a copy from scitools.
+    
+    # The only thing left is copying scitools and third-party modules to
+    # a scitools++ directory and removing .svn directories.
+
+    #check_numpytools()
     copy_pure_scitools_files()
 
     #copy_package('pyPDE')
@@ -216,8 +226,8 @@ def main():
     #rename(join(scitools_dir, 'easyviz'), 'py4cs', 'scitools')
     #fix_easyviz_numpytools()
     
-    copy_scriptingbook_tools()
-    copy_py4cs()
+    #copy_scriptingbook_tools()
+    #copy_py4cs()
     remove_svn_files(newdir)
     copy_third_party_modules()
     copy_third_party_scripts()
