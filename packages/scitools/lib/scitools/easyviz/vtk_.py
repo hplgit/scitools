@@ -449,13 +449,13 @@ class VtkBackend(BaseClass):
             sz = ravel(sz)/dar[2]
             for i in range(len(sx)):
                 normals.append([1,0,0])
-                origins.append([sx[i]/dar[0], center[1], center[2]])
+                origins.append([sx[i], center[1], center[2]])
             for i in range(len(sy)):
                 normals.append([0,1,0])
-                origins.append([center[0], sy[i]/dar[1], center[2]])
+                origins.append([center[0], sy[i], center[2]])
             for i in range(len(sz)):
                 normals.append([0,0,1])
-                origins.append([center[0], center[1], sz[i]/dar[2]])
+                origins.append([center[0], center[1], sz[i]])
             for i in range(len(normals)):
                 plane = vtk.vtkPlane()
                 plane.SetOrigin(origins[i])
