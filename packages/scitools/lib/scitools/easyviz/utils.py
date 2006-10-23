@@ -1,23 +1,28 @@
-from scitools.numpytools import zeros, ones, exp, NewAxis, reshape, ravel, \
-     Float, meshgrid, seq
-    
+from scitools.numpytools import zeros, ones, exp, reshape, ravel, Float, \
+     meshgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos, \
+     NumPyArray, NumPy_type
+
 def peaks(*args):
+    # z = peaks()
+    # z = peaks(n)
+    # z = peaks(x,y)
     n = 49
     nargs = len(args)
     if nargs in (0,1):
         if nargs == 1:
             n = int(args[0])
-        x, y = meshgrid(seq(n),seq(n))
+        x, y = meshgrid(linspace(-3,3,n),linspace(-3,3,n))
     elif nargs == 2:
         x, y = args
     else:
-        raise ValueError, "peaks: wrong number of arguments"
+        raise SyntaxError("Invalid number of arguments.")
     z = 3*(1-x)**2*exp(-x**2 - (y+1)**2) \
         - 10*(x/5 - x**3 - y**5)*exp(-x**2-y**2) \
         - 1/3*exp(-(x+1)**2 - y**2)
     return z
-    
-def gradient(f,*varargs):
+
+# The gradient function is now available in numpy/scipy.
+def gradient(f,*varargs): 
     """Written by Travis Oliphant?
     (http://aspn.activestate.com/ASPN/Mail/Message/scipy-user/2761129)
     """
@@ -75,8 +80,6 @@ def gradient(f,*varargs):
         return outvals[0]
     else:
         return outvals
-    
-from scitools.numpytools import arctan2, sqrt, shape, log, sin, cos
 
 def cart2sph(xx, yy, zz):
     # theta, phi, r = cart2sph(xx, yy, zz)
@@ -92,8 +95,23 @@ def sph2cart(theta, phi, r):
     zz = r * sin(phi)
     return xx, yy, zz
 
-def flow(xx, yy, zz):
+def flow(*args):
+    # xx,yy,zz,vv = flow()
+    # xx,yy,zz,vv = flow(n)
     # xx,yy,zz,vv = flow(xx,yy,zz)
+    if len(args) == 0:
+        xx, yy, zz = meshgrid(seq(.1,10,.2), seq(-3,3,.25), seq(-3,3,.25),
+                              sparse=False)
+    elif len(args) == 1:
+        n = int(args[0])
+        xx, yy, zz = meshgrid(linspace(.1,10,2*n),
+                              linspace(-3,3,n),
+                              linspace(-3,3,n),
+                              sparse=False)
+    elif len(args) == 3:
+        xx, yy, zz = args
+    else:
+        raise SyntaxError("Invalid number of arguments.")
     
     # Convert to spherical coordinates (with xx as the axis).
     A = 2; nu = 1
