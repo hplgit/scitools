@@ -852,7 +852,7 @@ class VtkBackend(BaseClass):
             elif item.get('tubes'):
                 streamtube = vtk.vtkTubeFilter()
                 streamtube.SetInput(data.GetOutput())
-                streamtube.SetRadius(0.02)
+                streamtube.SetRadius(1)
                 streamtube.SetNumberOfSides(item.get('n'))
                 streamtube.SetVaryRadiusToVaryRadiusByVector()
                 streamtube.Update()
