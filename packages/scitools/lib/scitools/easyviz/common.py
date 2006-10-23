@@ -956,7 +956,7 @@ class Volume(PlotProperties):
 
         if nargs in (3,6): # isosurface(...,COLORS)
             cdata = asarray(args[-1])
-            assert shape == cdata.shape, \
+            assert v.shape == cdata.shape, \
                    "COLORS must have shape %s (as V), not %s" % \
                    (v.shape, cdata.shape)
             self._prop['cdata'] = cdata
