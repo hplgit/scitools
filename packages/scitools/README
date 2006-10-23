@@ -3,7 +3,7 @@ Different ways of installing scitools is listed below
 1. Normal install ([, ... ] means optional)
     sh> python setup.py install [,--prefix=$PREFIX]
 
-2. Easysetup using eggs
+2. Setuptools using eggs
 Build the egg with the following command	
     sh> python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg	
 Then install the created egg using easy_install
