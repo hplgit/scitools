@@ -1,9 +1,20 @@
-There are two ways of using scitools:
+Different ways of installing scitools is listed below
 
-1. Put the lib subdirectory here in PYTHONPATH and bin in PATH.
+1. Normal install ([, ... ] means optional)
+    sh> python setup.py install [,--prefix=$PREFIX]
+
+2. Easysetup using eggs
+Build the egg with the following command	
+    sh> python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg	
+Then install the created egg using easy_install
+    sh> easy_install [, --prefix=$PREFIX] dist/Scitools-0.1-py2.4.egg 
+
+3. Manual
+Put the lib subdirectory here in PYTHONPATH and bin in PATH.
 This gives access to the svn directories for scitools, easyviz, etc.
 
-2. Run build_scitools++.py. This makes a new directory build/scitools++
+4. Extended
+Run build_scitools++.py. This makes a new directory build/scitools++
 that you can move to any convenient place. scitools++ contains scitools
 plus some standard Python modules like Gnuplot, IPython, epydoc, etc.
 Put scitools++/lib in PYTHONPATH and scitools++/bin in PATH.
