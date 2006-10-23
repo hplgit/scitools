@@ -185,3 +185,14 @@ def _check_xyzuvw(*args):
 
     return x, y, z, u, v, w
 
+def arrayconverter(a):
+    """Convert the numpy array a with type 'numpy.ndarray' into a
+    Numeric array with type 'array'. This is useful when the new numpy
+    array data type is not accepted, which for example is the case in
+    the gnuplot module.
+    """
+    if isinstance(a, NumPyArray) and NumPy_type(a) == 'numpy':
+        import Numeric
+        return Numeric.array(a.tolist())
+    else:
+        return a
