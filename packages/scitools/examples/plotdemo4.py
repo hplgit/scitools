@@ -1,5 +1,5 @@
 from scitools import *
-from scitools.easyplot.gnuplot_ import *
+from scitools.easyviz.gnuplot_ import *
 from time import sleep
 
 x = seq(0, 15, 0.1)

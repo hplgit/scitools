@@ -1,5 +1,5 @@
 from scitools import *
-from scitools.easyplot.gnuplot_ import *
+from scitools.easyviz.gnuplot_ import *
 from time import sleep
 
 x = seq(0, 15, 0.2)
@@ -13,7 +13,7 @@ plot(x, y, 'r-', x, v, 'b--', x, w, 'g--',
 sleep(3)
 
 # get backend and fine-tune the plot:
-g = get_easyplot_backend()
+g = get_easyviz_backend()
 print type(g), g  # Gnuplot instance
 g('set key left box')
 g('set grid')
