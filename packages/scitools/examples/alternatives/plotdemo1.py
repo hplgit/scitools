@@ -1,12 +1,13 @@
 from scitools import *
-from scitools.easyplot.gnuplot_ import *
+from scitools.easyviz.gnuplot_ import *
 
 def pic(fname):
-    os.system('import %s' % fname)
+    #os.system('import %s' % fname)
+    pass
     
 
-x = seq(0, 15, 0.2)
-y = sin(x)*x
+x = seq(-3, 3, 0.05)
+y = exp(-x**2)*cos(pi*x)
 
 plot(x, y)
 
@@ -34,9 +35,9 @@ pic('plot14.ps')
 
 # add legend, title, axis ranges, and axis labels:
 plot(x, y, 'b-')
-legend('sin(x)*x')
+legend('exp(-x**2)*cos(pi*x)')
 title('plot demo 1')
-axis(0, 15, -20, 20)
+axis(-2.5, 2.5, -1.2, 1.2)
 show()
 sleep(3)
 pic('plot15.ps')
@@ -49,7 +50,7 @@ pic('plot16.ps')
 
 # alternative syntax:
 plot(x, y, 'b-', legend='x*sin(x)', title='plot demo 2',
-     axis=(0, 15, -25, 25), xlabel='X', ylabel='Y')
+     axis=(-2.5, 2.5, -1.2, 1.2), xlabel='X', ylabel='Y')
 
 hardcopy('tmp1.ps')
 

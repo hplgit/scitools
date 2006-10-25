@@ -1,8 +1,10 @@
 from scitools import *
-from scitools.easyplot.gnuplot_ import *
 from time import sleep
-backend = sys.argv[1]
-exec 'from scitools.easyplot.%s import *' % backend
+try:
+    backend = sys.argv[1]
+except:
+    backend = 'gnuplot_'
+exec 'from scitools.easyviz.%s import *' % backend
 if backend == 'blt_':
     set(interactive=True, color=True)
 
