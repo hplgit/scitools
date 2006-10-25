@@ -1,5 +1,6 @@
 from common import *
-from scitools.numpytools import ones, ravel, shape, NewAxis
+from misc import arrayconverter
+from scitools.numpytools import ones, ravel, shape, NewAxis, rank
 import Gnuplot, tempfile, os
 
 class GnuplotBackend(BaseClass):
@@ -285,19 +286,21 @@ class GnuplotBackend(BaseClass):
             if isinstance(item, Line):
                 self._use_splot = False
                 withstring = self._get_withstring(item)
-                ax._gdata.append(Gnuplot.Data(item.get('xdata'),
-                                              item.get('ydata'),
+                x = arrayconverter(item.get('xdata'))
+                y = arrayconverter(item.get('ydata'))
+                ax._gdata.append(Gnuplot.Data(x, y,
                                               title=item.get('legend'),
                                               with=withstring))
             elif isinstance(item, Surface):
                 self._use_splot = True
                 self._set_wireframe_state(item)
                 self._g('set surface')
-                x = item.get('xdata')
-                y = item.get('ydata')
-                if len(shape(x)) == 2 and len(shape(y)) == 2:
+                x = arrayconverter(item.get('xdata'))
+                y = arrayconverter(item.get('ydata'))
+                z = arrayconverter(item.get('zdata'))
+                if rank(x) == 2 and rank(y) == 2:
                     x = x[:,0];  y = y[0,:]
-                data = Gnuplot.GridData(item.get('zdata'), x, y,
+                data = Gnuplot.GridData(z, x, y,
                                         title=item.get('legend'),
                                         with='l palette',
                                         binary=0)
@@ -307,11 +310,12 @@ class GnuplotBackend(BaseClass):
                 self._use_splot = True
                 self._set_contour_state(item)
                 self._g('set surface')
-                x = item.get('xdata')
-                y = item.get('ydata')
-                if len(shape(x)) == 2 and len(shape(y)) == 2:
+                x = arrayconverter(item.get('xdata'))
+                y = arrayconverter(item.get('ydata'))
+                z = arrayconverter(item.get('zdata'))
+                if rank(x) == 2 and rank(y) == 2:
                     x = x[:,0];  y = y[0,:]
-                tmp_data = Gnuplot.GridData(item.get('zdata'), x, y,
+                tmp_data = Gnuplot.GridData(z, x, y,
                                             title=item.get('legend'),
                                             binary=0,
                                             with='l palette')
@@ -340,10 +344,10 @@ class GnuplotBackend(BaseClass):
                 linewidth = item.get('linewidth')
                 if linewidth:
                     withstring += ' lw %g' % float(item.get('linewidth'))
-                x = item.get('xdata')
-                y = item.get('ydata')
-                u = item.get('udata')
-                v = item.get('vdata')
+                x = arrayconverter(item.get('xdata'))
+                y = arrayconverter(item.get('ydata'))
+                u = arrayconverter(item.get('udata'))
+                v = arrayconverter(item.get('vdata'))
                 if shape(x) != shape(u):
                     if len(shape(x)) == 2:
                         x = x*ones(shape(u))

@@ -1,5 +1,5 @@
 from scitools.numpytools import asarray, NewAxis, ones, seq, shape, reshape, \
-     meshgrid
+     meshgrid, NumPyArray, NumPy_type
 
 def _toggle_state(state):
     if state == 'off' or not state:

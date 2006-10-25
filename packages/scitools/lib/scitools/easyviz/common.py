@@ -667,7 +667,7 @@ class VelocityVectors(PlotProperties):
             self._prop['arrowscale'] = float(args[-1])
 
         if z is None and w is None:
-            z = w = zeros(shape(u), u.typecode())
+            z = w = zeros(shape(u))
         self._set_data(x, y, z, u, v, w)
 
     def scale_vectors(self):
