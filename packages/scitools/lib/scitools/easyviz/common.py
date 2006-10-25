@@ -2119,7 +2119,7 @@ class BaseClass(object):
             - plot(x1,y1,x2,y2,...)
               like above, but automatically chooses different colours.
                 
-            - plot(y1,...,x=x)
+            - plot(y1,y2,...,x=x)
               uses 'x' as the x values for all the supplied curves.
               x='auto' has the same effect as x=range(len(y1)).
  
@@ -2171,20 +2171,28 @@ class BaseClass(object):
         # If two format strings are used only the first of them will be used
         if 'x' in kwargs:   
             nargs = len(args)
-            for i in range(len(args)-1):
-                if not isinstance(args[i], str):
-                    if isinstance(args[i+1], str):
-                        lines.append(Line(x=kwargs['x'],
-                                          y=args[i],
-                                          format=args[1+i]))
-                    else:
-                        lines.append(Line(x=kwargs['x'],
-                                          y=args[i],
-                                          format=''))
-                        if i == nargs-2: 
+            if nargs == 1 or (nargs == 2 and isinstance(args[1], str)):
+                if nargs == 1:
+                    lines.append(Line(x=kwargs['x'], y=args[0], format=''))
+                else:
+                    lines.append(Line(x=kwargs['x'],
+                                      y=args[0],
+                                      format=args[1]))
+            else:
+                for i in range(len(args)-1):
+                    if not isinstance(args[i], str):
+                        if isinstance(args[i+1], str):
                             lines.append(Line(x=kwargs['x'],
-                                              y=args[i+1],
+                                              y=args[i],
+                                              format=args[1+i]))
+                        else:
+                            lines.append(Line(x=kwargs['x'],
+                                              y=args[i],
                                               format=''))
+                            if i == nargs-2: 
+                                lines.append(Line(x=kwargs['x'],
+                                                  y=args[i+1],
+                                                  format=''))
         else: # Normal case
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
@@ -2347,23 +2355,35 @@ class BaseClass(object):
         # If two format strings are used only the first of them will be used
         if 'x' in kwargs and 'y' in kwargs:
             nargs = len(args)
-            for i in range(len(args)-1):
-                if not isinstance(args[i], str):
-                    if isinstance(args[i+1], str):
-                        lines.append(Line(x=kwargs['x'],
-                                          y=kwargs['y'],
-                                          z=args[i],
-                                          format=args[1+i]))
-                    else:
-                        lines.append(Line(x=kwargs['x'],
-                                          y=kwargs['y'],
-                                          z=args[i],
-                                          format=''))
-                        if i == nargs-2: 
+            if nargs == 1 or (nargs == 2 and isinstance(args[1], str)):
+                if nargs == 1:
+                    lines.append(Line(x=kwargs['x'],
+                                      y=kwargs['y'],
+                                      z=args[0],
+                                      format=''))
+                else:
+                    lines.append(Line(x=kwargs['x'],
+                                      y=kwargs['y'],
+                                      z=args[0],
+                                      format=args[1]))
+            else:
+                for i in range(len(args)-1):
+                    if not isinstance(args[i], str):
+                        if isinstance(args[i+1], str):
                             lines.append(Line(x=kwargs['x'],
                                               y=kwargs['y'],
-                                              z=args[i+1],
+                                              z=args[i],
+                                              format=args[1+i]))
+                        else:
+                            lines.append(Line(x=kwargs['x'],
+                                              y=kwargs['y'],
+                                              z=args[i],
                                               format=''))
+                            if i == nargs-2: 
+                                lines.append(Line(x=kwargs['x'],
+                                                  y=kwargs['y'],
+                                                  z=args[i+1],
+                                                  format=''))
         else: # Normal case
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
