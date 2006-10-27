@@ -6,7 +6,9 @@ from scitools.numpytools import ravel, zeros, array, allclose, Float
 #import vtk.util.colors
 
 import Tkinter
-import vtkTkRenderWidget
+try: import vtkTkRenderWidget
+except:
+    from vtk.tk import vtkTkRenderWidget
 
 class VtkBackend(BaseClass):
     """Backend using VTK."""
