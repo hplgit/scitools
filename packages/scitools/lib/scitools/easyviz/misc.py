@@ -191,7 +191,7 @@ def arrayconverter(a):
     array data type is not accepted, which for example is the case in
     the gnuplot module.
     """
-    if isinstance(a, NumPyArray) and NumPy_type(a) == 'numpy':
+    if NumPy_type(a) == 'numpy':
         import Numeric
         return Numeric.array(a.tolist())
     else:
