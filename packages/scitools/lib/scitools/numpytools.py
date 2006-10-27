@@ -1343,6 +1343,14 @@ def NumPy_type(a):
     @return:  "Numeric", "numarray", or "numpy", depending on which
     module that was used to generate the a array
     """
+
+    # check basic_NumPy type first to avoid possible import errors
+    types = {'Numeric': 'Numeric.ArrayType',
+             'numarray': 'numarray.NumArray',
+             'numpy': 'numpy.ndarray'}
+    if isinstance(a, eval(types[basic_NumPy])):
+        return basic_NumPy
+       
     import Numeric
     if isinstance(a, Numeric.ArrayType):
         return 'Numeric'
@@ -1493,7 +1501,13 @@ if __name__ == '__main__':
             #magic()('from unittest')
             
     sys.argv.append('')  # extra argument for the test below
-    for arg in ['--Numeric', '--numarray', ' --numpy']:
+    for arg in ['--Numeric', '--numarray', '--numpy']:
+        try:
+            __import__(arg[2:])
+        except:
+            print "You don't have %s installed" %arg[2:]
+            continue
+        
         sys.argv[-1] = arg
         print '\nNow testing with system arg %10s\n%s' %(arg, '='*38)
         print N, dir(N)
