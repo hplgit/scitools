@@ -1,4 +1,3 @@
-from scitools import *
 from scitools.easyviz.gnuplot_ import *
 from time import sleep
 

@@ -1,4 +1,3 @@
-from scitools import *
 from scitools.easyviz.gnuplot_ import *
 
 x = seq(0, 15, 0.2)
