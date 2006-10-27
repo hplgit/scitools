@@ -16,7 +16,7 @@ _plts = {}
 _suites = []
 # Gnuplot
 try:
-    from easyviz.gnuplot_ import plt
+    from scitools.easyviz.gnuplot_ import plt
     _plts['gnuplot'] = plt
     del(plt)
     
@@ -110,7 +110,7 @@ except ImportError, e:
 # BLT
 try:
     raise ImportError # Blt windows appears when tk is started from matplotlib
-    from easyviz.blt_ import * 
+    from scitools.easyviz.blt_ import * 
     _plts['blt'] = plt
   
     class bltTest(unittest.TestCase):
@@ -166,7 +166,7 @@ except ImportError,e:
 
 # Matplotlib
 try:
-    from easyviz.matplotlib_ import plt
+    from scitools.easyviz.matplotlib_ import plt
     _plts['matplotlib'] = plt
     del(plt)
     class matplotlibTest(unittest.TestCase):
@@ -176,7 +176,7 @@ except ImportError, e:
     print e
 
 # Load default backend
-from easyviz.examples import * 
+from scitools.easyviz.examples import * 
 
 # Common 1d test
 class easyvizTest(unittest.TestCase):
@@ -328,7 +328,7 @@ def main():
     #unittest.main() # There is a sys.exit() inside here....
     if False:
         os.system(
-            "python -c '''from easyviz.unittest_ import *;unittest.main()'''")
+            "python -c '''from scitools.easyviz.unittest_ import *;unittest.main()'''")
         suite = unittest.makeSuite(easyvizTest, 'test')
         suite = unittest.makeSuite(bltTest, 'test')
         suite = unittest.makeSuite(gnuplotTest, 'test')
