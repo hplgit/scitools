@@ -1361,7 +1361,21 @@ def NumPy_type(a):
     import numpy
     if isinstance(a, numpy.ndarray):
         return 'numpy'
-    
+
+def NumPy_dtype(a):
+    """
+    @param a: NumPy array
+    @return:  array data type, depending on which module that was
+    used to generate the a array
+    """
+    if NumPy_type(a) == 'Numeric':
+        return a.typecode()
+    elif NumPy_type(a) == 'numarray':
+        return a.typecode()
+    elif NumPy_type(a) == 'numpy':
+        return a.dtype
+    else:
+        raise TypeError("array should be NumPy array, not %s" % type(a))
 
 def fortran_storage(a):
     """
