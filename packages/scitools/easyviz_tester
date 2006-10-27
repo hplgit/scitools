@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     # Override backend for sessions started here
     if options.backend:
-        os.environ['easyviz_backend'] = options.backend+'_' # template_ backend
+        os.environ['EASYVIZ_BACKEND'] = options.backend+'_' # template_ backend
             
     # Unittest
     if options.unittest:
@@ -104,8 +104,8 @@ if __name__ == '__main__':
     
     # Test template_ only (defined here)
     if 'test' in args:
-        os.environ['easyviz_backend'] = 'template_' # template_ backend
-        os.environ['easyviz_backend'] = 'matplotlib_' # template_ backend
+        os.environ['EASYVIZ_BACKEND'] = 'template_' # template_ backend
+        os.environ['EASYVIZ_BACKEND'] = 'matplotlib_' # template_ backend
         from scitools.easyviz import *
 
         # Test plot without arguments
