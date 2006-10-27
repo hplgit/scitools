@@ -1348,9 +1348,10 @@ def NumPy_type(a):
     types = {'Numeric': 'Numeric.ArrayType',
              'numarray': 'numarray.NumArray',
              'numpy': 'numpy.ndarray'}
+    exec "import %s" %basic_NumPy # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy
-       
+
     import Numeric
     if isinstance(a, Numeric.ArrayType):
         return 'Numeric'
