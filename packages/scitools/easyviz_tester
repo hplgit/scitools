@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     # Rolvs favourite install ...
     if 'install' in sys.argv[-1]:
-        cmd = 'rm dist/*.egg && '\
+        cmd = 'rm -f dist/*.egg && '\
               'python setupegg.py  egg_info --tag-svn-revision  bdist_egg && '\
               'easy_install --always-unzip --prefix=%(prefix)s '\
               'dist/Scitools*py%(pyversion)s.egg'  \
