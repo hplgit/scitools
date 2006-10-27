@@ -15,7 +15,7 @@ if len(sys.argv) > 1:
         backend = sys.argv[1]
         sys.argv = sys.argv[:1] + sys.argv[2:]
 try:
-    exec('from easyviz.%s import *' % backend)
+    exec('from scitools.easyviz.%s import *' % backend)
 except:
     print 'could not import backend %s' % backend
     sys.exit(1)

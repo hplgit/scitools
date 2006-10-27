@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from easyviz import *
+from scitools.easyviz import *
 from Numeric import array, sin, cos, sqrt, pi, ones, zeros, Float
 from scipy import linspace
 import time

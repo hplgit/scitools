@@ -1,26 +1,12 @@
 #!/usr/bin/env python
 __doc__ = """
+
+
 Usage:
-
-./make
-./make --test --backend=[vtk, gnuplot, matplotlib, template]
-./make --test3d
-./make --unittest
-"""
-
-# Add the following to .bashrc to run this script with the make command
-"""
-# Run make without a Makefile
-make_if_make () {
-  if [ -x ./make ]
-  then
-    ./make $@
-  else
-    make $@
-  fi
-  return $?
-}
-alias make=make_if_make
+./easyviz_tester install
+./easyviz_tester --test --backend=[vtk, gnuplot, matplotlib, template]
+./easyviz_tester --test3d
+./easyviz_tester --unittest
 """
 
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no>'
@@ -36,7 +22,7 @@ if __name__ == '__main__':
     parser.formatter.format_usage = lambda usage: usage # no 'usage: '+ usage
     parser.add_option('-b', '--backend',
                       nargs=1,
-                      default='',
+                      default='gnuplot',
                       help='Which backend to use for testing',
                       choices='vtk gnuplot matplotlib template'.split(),
                       )
@@ -71,22 +57,16 @@ if __name__ == '__main__':
         args = args[1:] 
     except Exception, e:
         print e, "so you're not running ipython"
-        
-    # Default install
-    if 'install' in args:
-        cmd = 'python setup.py install'
-        print "\n\nRun the following command in shell:\n%s\n" %cmd
-    
-    # Remove (previous installation) and install with the prefix-scheme
-    if 'make' in sys.argv[-1]:
-        cmd = 'rm -rf %(prefix)s/lib/python%(pyversion)s/site-packages/easyviz/ '\
-        '&& ' \
-        'python setup.py install --prefix=$PREFIX' \
-        %{
-        'prefix': os.environ.get('PREFIX',sys.prefix),
-        'pyversion': '.'.join(map(str,sys.version_info[:2]))
-        }
 
+    # Rolvs favourite install ...
+    if 'install' in sys.argv[-1]:
+        cmd = 'rm dist/*.egg && '\
+              'python setupegg.py  egg_info --tag-svn-revision  bdist_egg && '\
+              'easy_install --always-unzip --prefix=%(prefix)s '\
+              'dist/Scitools*py%(pyversion)s.egg'  \
+              %{'prefix': os.environ.get('PREFIX', sys.prefix),
+                'pyversion': '.'.join(map(str,sys.version_info[:2]))
+                }
         if 'y' in raw_input('Execute the following command? \n%s\n[y/N]' %cmd):
             print ''
             print commands.getoutput(cmd)
@@ -98,12 +78,12 @@ if __name__ == '__main__':
             
     # Unittest
     if options.unittest:
-        from easyviz import unittest_
+        from scitools.easyviz import unittest_
         execfile(unittest_.__file__[:-1]) # py not pyc
         
     # Specific test (examples.py
     if options.test:
-        import easyviz
+        from scitools import easyviz
         path = easyviz.__path__[0]
         b = ''
         if options.backend:
@@ -116,7 +96,7 @@ if __name__ == '__main__':
         print os.system('python %s/examples.py %s '  %(path, b))
     # examples_vtk.py
     if options.test3d:
-        from easyviz import examples_vtk
+        from scitools.easyviz import examples_vtk
         execfile(examples_vtk.__file__[:-1]) # py not pyc
                 
     if options.secret:
@@ -126,7 +106,7 @@ if __name__ == '__main__':
     if 'test' in args:
         os.environ['easyviz_backend'] = 'template_' # template_ backend
         os.environ['easyviz_backend'] = 'matplotlib_' # template_ backend
-        from easyviz import *
+        from scitools.easyviz import *
 
         # Test plot without arguments
         if False:
@@ -142,7 +122,7 @@ if __name__ == '__main__':
         set(show=False)
         figure(1)
         hold('on')
-
+        
         #subplot(3,2,4)
         #contour(([[1,2,3],[34,5,5]]))
         #plot((1,2,3))
