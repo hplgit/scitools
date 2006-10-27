@@ -176,7 +176,7 @@ The following extensions to Numerical Python are also defined:
            transparent transform of an array to column major (Fortran) storage
            that preserves the nature (Numeric, numarray, numpy) of the array
 """
-__id__ = '$Id: numpytools.py 140 2006-08-22 13:53:17Z rolv $'
+__id__ = '$Id$'
 import os, sys, operator, math
 
 # The first task to accomplish in this module is to determine
@@ -662,19 +662,18 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
     >>> x=seq(0,1,0.5)   # coordinate along x axis
     >>> y=seq(0,1,1)     # coordinate along y axis
     >>> meshgrid(x,y)    # extend x and y for a 2D xy grid
-    (array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]), array([       [ 0.,  1.]]))
+    (array([[ 0. ,  0.5,  1. ]]), array([[ 0.],
+           [ 1.]]))
     >>> z=5
     >>> meshgrid(x,y,z)  # 2D slice of a 3D grid, with z=const
-    (array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]), array([       [ 0.,  1.]]), 5)
+    (array([[ 0. ,  0.5,  1. ]]), array([[ 0.],
+           [ 1.]]), 5)
     >>> xv, yv, zc = meshgrid(x,y,z)  # typical usage
 
     >>> meshgrid(2,y,x)  # 2D slice of a 3D grid, with x=const
-    (2, array([[ 0.],
-           [ 1.]]), array([       [ 0. ,  0.5,  1. ]]))
+    (2, array([[ 0.,  1.]]), array([[ 0. ],
+           [ 0.5],
+           [ 1. ]]))
     >>> meshgrid(0,1,5)  # just a 3D point
     (0, 1, 5)
     >>> meshgrid(3)
@@ -682,16 +681,18 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
     >>> meshgrid(y)      # 1D grid; y is just returned
     array([ 0.,  1.])
     >>> meshgrid(x,y,sparse=False)  # store the full N-D matrix
-    ([[ 0. , 0. , 0. ,]
-     [ 0.5, 0.5, 0.5,]
-     [ 1. , 1. , 1. ,]], [[ 0. , 0.5, 1. ,]
-     [ 0. , 0.5, 1. ,]
-     [ 0. , 0.5, 1. ,]])
+    (array([[ 0. ,  0.5,  1. ],
+       [ 0. ,  0.5,  1. ]]), array([[ 0.,  0.,  0.],
+       [ 1.,  1.,  1.]]))
 
     """
 
     # NOTE: numpy.mgrid defines a similar functionality, should use
     # that function if numpy is imported??
+
+    import types
+    def fixed(coor):
+        return isinstance(coor, (float, complex, int, types.NoneType))
 
     if False:
         # convert list/tuple to NumPy arrays:
@@ -711,10 +712,9 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
                 print "Warning in meshgrid: converting z to %s" %basic_NumPy
                 z = asarray(z)
     else:
-        x = asarray(x)
-        y = asarray(y)
-        if z is not None:
-            z = asarray(z)
+        if not fixed(x):  x = asarray(x)
+        if not fixed(y):  y = asarray(y)
+        if not fixed(z):  z = asarray(z)
 
     # Only singleton dimensions is allowed if rank > 1
     def squeeze(a):
@@ -730,19 +730,10 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
         y = squeeze(y)
         assert rank(y) == 1
     if z is not None:
-        if rank(z) >1:
+        if rank(z) > 1:
             z = squeeze(z)
             assert rank(z) == 1
     
-    
-    # if x,y,z are identical, make copies:
-    if y is x:  y = x.copy()
-    if z is x:  z = x.copy()
-    if z is y:  z = y.copy()
-    
-    import types
-    def fixed(coor):
-        return isinstance(coor, (float, complex, int, types.NoneType))
     
     def arr1D(coor):
         if isinstance(coor, NumPyArray):
@@ -760,42 +751,50 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
     if fixed(x) and fixed(y) and arr1D(z):
         return z
 
+    # if x,y,z are identical, make copies:
+    if y is x and isinstance(x, NumPyArray):
+        y = x.copy()
+    if z is x and isinstance(x, NumPyArray):
+        z = x.copy()
+    if z is y and isinstance(y, NumPyArray):
+        z = y.copy()
+    
     mult_fact = 1
-    # if the sparse argument is False, the full N-D matrix (not only the 1-D
-    # vector) should be returned. The mult_fact variable should then be updated
-    # as necessary.
+    # if the keyword argument sparse is set to False, the full N-D matrix
+    # (not only the 1-D vector) should be returned. The mult_fact variable
+    # should then be updated as necessary.
 
     # if only one argument is fixed, we have a 2D grid:
     if arr1D(x) and arr1D(y) and fixed(z):
         if not sparse:
-            mult_fact = ones((len(x),len(y)))
+            mult_fact = ones((len(y),len(x)))
         if z is None:
-            return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact
+            return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact
         else:
-            return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact, z
+            return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact, z
         
     if arr1D(x) and fixed(y) and arr1D(z):
         if not sparse:
-            mult_fact = ones((len(x),len(z)))
+            mult_fact = ones((len(z),len(x)))
         if y is None:
-            return x[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+            return x[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
         else:
-            return x[:,NewAxis]*mult_fact, y, z[NewAxis,:]*mult_fact
+            return x[NewAxis,:]*mult_fact, y, z[:,NewAxis]*mult_fact
         
     if fixed(x) and arr1D(y) and arr1D(z):
         if not sparse:
-            mult_fact = ones((len(y),len(z)))
+            mult_fact = ones((len(z),len(y)))
         if x is None:
-            return y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+            return y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
         else:
-            return x, y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+            return x, y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
 
     # or maybe we have a full 3D grid:
     if arr1D(x) and arr1D(y) and arr1D(z):
         if not sparse:
-            mult_fact = ones((len(x),len(y),len(z)))
-        return x[:,NewAxis,NewAxis]*mult_fact, \
-               y[NewAxis,:,NewAxis]*mult_fact, \
+            mult_fact = ones((len(y),len(x),len(z)))
+        return x[NewAxis,:,NewAxis]*mult_fact, \
+               y[:,NewAxis,NewAxis]*mult_fact, \
                z[NewAxis,NewAxis,:]*mult_fact
 
     # at this stage we assume that we just have scalars:
@@ -1482,13 +1481,13 @@ if __name__ == '__main__':
             self.assertEqual(multiply.reduce(yy.shape), size(yy))
             # This one should fail when xx and yy is not flat as well
             xx, yy = meshgrid(xx.flat, yy.flat, sparse=False) # no singleton
-            self.assertEqual(shape(xx), (size(x), size(y)))
-            self.assertEqual(shape(yy), (size(x), size(y)))
+            self.assertEqual(shape(xx), (size(y), size(x)))
+            self.assertEqual(shape(yy), (size(y), size(x)))
             
             xx, yy = meshgrid(x,y) # Add singleton dimensions
             xx, yy = meshgrid(xx, yy, sparse=False) 
-            self.assertEqual(shape(xx), (size(x), size(y)))
-            self.assertEqual(shape(yy), (size(x), size(y)))
+            self.assertEqual(shape(xx), (size(y), size(x)))
+            self.assertEqual(shape(yy), (size(y), size(x)))
 
             #from IPython.Shell import IPythonShellEmbed as magic
             #magic()('from unittest')
