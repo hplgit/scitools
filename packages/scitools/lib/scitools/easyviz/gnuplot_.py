@@ -225,6 +225,17 @@ class GnuplotBackend(BaseClass):
             self._g('set border 4095 linetype -1 linewidth .4')
         else: # set default borders
             self._g('set border 1+2+4+8+16 linetype -1 linewidth .4')
+
+    def _set_axis_appearance(self, ax):
+        if ax.get('mode') == 'tight':
+            #self._g('set autoscale fix')
+            pass
+        if not ax.get('visible'):
+            self._g('unset border')
+            self._g('unset grid')
+            self._g('unset xtics')
+            self._g('unset ytics')
+            self._g('unset ztics')
   
     def _get_withstring(self, item):
         linetype = self._line_types[item.get('linetype')]
@@ -277,7 +288,7 @@ class GnuplotBackend(BaseClass):
         self._set_contour_state(item)
         self._set_grid_state(ax)
         self._g('set border 4095 linetype -1 linewidth .4')
-
+        
     def _create_gnuplot_data(self, ax):
         self._use_splot = False
         ax._gdata = []
@@ -299,7 +310,7 @@ class GnuplotBackend(BaseClass):
                 y = arrayconverter(item.get('ydata'))
                 z = arrayconverter(item.get('zdata'))
                 if rank(x) == 2 and rank(y) == 2:
-                    x = x[:,0];  y = y[0,:]
+                    x = x[0,:];  y = y[:,0]
                 data = Gnuplot.GridData(z, x, y,
                                         title=item.get('legend'),
                                         with='l palette',
@@ -314,7 +325,7 @@ class GnuplotBackend(BaseClass):
                 y = arrayconverter(item.get('ydata'))
                 z = arrayconverter(item.get('zdata'))
                 if rank(x) == 2 and rank(y) == 2:
-                    x = x[:,0];  y = y[0,:]
+                    x = x[0,:];  y = y[:,0]
                 tmp_data = Gnuplot.GridData(z, x, y,
                                             title=item.get('legend'),
                                             binary=0,
@@ -352,12 +363,14 @@ class GnuplotBackend(BaseClass):
                     if len(shape(x)) == 2:
                         x = x*ones(shape(u))
                     else:
-                        x = x[:,NewAxis]*ones(shape(u))
+                        #x = x[:,NewAxis]*ones(shape(u))
+                        x = x[NewAxis,:]*ones(shape(u))
                 if shape(y) != shape(u):
                     if len(shape(y)) == 2:
                         y = y*ones(shape(u))
                     else:
-                        y = y[NewAxis,:]*ones(shape(u))
+                        #y = y[NewAxis,:]*ones(shape(u))
+                        y = y[:,NewAxis]*ones(shape(u))
                 data = Gnuplot.Data(ravel(x), ravel(y),
                                     ravel(u), ravel(v),
                                     title=item.get('legend'),
@@ -492,6 +505,8 @@ class GnuplotBackend(BaseClass):
                 self._set_axis_ranges(ax)
                 self._set_caxis(ax)
                 #self._g('set border 4095 linetype -1 linewidth .4')
+                self._set_axis_appearance(ax)
+
         
                 # Plot data
                 if len(ax._gdata) > 0:
