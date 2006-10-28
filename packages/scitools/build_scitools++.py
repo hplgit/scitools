@@ -231,7 +231,7 @@ def main():
     remove_svn_files(newdir)
     copy_third_party_modules()
     copy_third_party_scripts()
-    shutil.copy('setup.py', newdir)
+    shutil.copy('scitools++_setup.py', join(newdir, 'setup.py'))
     print '\nSciTools++ umbrella was successfully made'
 
 if __name__ == '__main__':
