@@ -167,7 +167,7 @@ class InputPrm:
             v = str(v)  # convert to 'value unit' string
         if isinstance(v, str) and isinstance(self.unit, str) and \
            (self.str2type is float or self.str2type is int):
-            if v.find(' ') != -1: # 'value unit' string?
+            if ' ' in v: # 'value unit' string?
                 try:
                     self.pq = PQ.PhysicalQuantity(v)
                 except:
