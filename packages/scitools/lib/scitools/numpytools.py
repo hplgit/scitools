@@ -102,8 +102,7 @@ the following procedure is applied:
      corresponding module is imported.
 
 If neither 1., 2., nor 3. determines the import, i.e., the user has not
-explicitly indicated what to use, old and safe Numeric is the default
-choice.
+explicitly indicated what to use, the new numpy is the default choice.
 
 
 Functionality of this module that extends Numerical Python:
@@ -222,7 +221,7 @@ if basic_NumPy is None:
 
 # final default choice:
 if basic_NumPy is None:
-    basic_NumPy = 'Numeric'
+    basic_NumPy = 'numpy'
 
 if basic_NumPy not in ('Numeric', 'numarray', 'numpy'):
     raise ImportError, 'cannot decide which Numerical Python '\
