@@ -7,6 +7,7 @@ __doc__ += common._idea
 __author__ = "Rolv Erlend Bredesen, Hans Petter Langtangen, Johannes H. Ring"
 __version__ = "0.1"
 
+from scitools import *    # nice to have
 from common import *
 from utils import *
 from movie import movie
