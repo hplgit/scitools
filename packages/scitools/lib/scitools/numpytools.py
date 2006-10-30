@@ -652,7 +652,7 @@ def squeeze(a):
     b = asarray(a.shape)
     return reshape (a, tuple (compress (not_equal (b, 1), b)))
     
-def meshgrid(x=None, y=None, z=None, sparse=True):
+def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
     """
     Make 1D/2D/3D coordinate arrays for vectorized evaluations of
     1D/2D/3D scalar/vector fields over 1D/2D/3D grids, given
@@ -683,6 +683,16 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
     (array([[ 0. ,  0.5,  1. ],
        [ 0. ,  0.5,  1. ]]), array([[ 0.,  0.,  0.],
        [ 1.,  1.,  1.]]))
+    >>> meshgrid(x,y,memoryorder='xyz') # change memory order
+    (array([[ 0. ],
+           [ 0.5],
+           [ 1. ]]), array([[ 0.,  1.]]))
+    >>> meshgrid(x,y,sparse=False,memoryorder='xyz')
+    (array([[ 0. ,  0. ],
+           [ 0.5,  0.5],
+           [ 1. ,  1. ]]), array([[ 0.,  1.],
+           [ 0.,  1.],
+           [ 0.,  1.]]))
 
     """
 
@@ -765,36 +775,67 @@ def meshgrid(x=None, y=None, z=None, sparse=True):
 
     # if only one argument is fixed, we have a 2D grid:
     if arr1D(x) and arr1D(y) and fixed(z):
-        if not sparse:
-            mult_fact = ones((len(y),len(x)))
-        if z is None:
-            return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact
+        if memoryorder == 'xyz':
+            if not sparse:
+                mult_fact = ones((len(x),len(y)))
+            if z is None:
+                return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact
+            else:
+                return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact, z
         else:
-            return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact, z
+            if not sparse:
+                mult_fact = ones((len(y),len(x)))
+            if z is None:
+                return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact
+            else:
+                return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact, z
         
     if arr1D(x) and fixed(y) and arr1D(z):
-        if not sparse:
-            mult_fact = ones((len(z),len(x)))
-        if y is None:
-            return x[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+        if memoryorder == 'xyz':
+            if not sparse:
+                mult_fact = ones((len(x),len(z)))
+            if y is None:
+                return x[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+            else:
+                return x[:,NewAxis]*mult_fact, y, z[NewAxis,:]*mult_fact
         else:
-            return x[NewAxis,:]*mult_fact, y, z[:,NewAxis]*mult_fact
+            if not sparse:
+                mult_fact = ones((len(z),len(x)))
+            if y is None:
+                return x[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+            else:
+                return x[NewAxis,:]*mult_fact, y, z[:,NewAxis]*mult_fact
         
     if fixed(x) and arr1D(y) and arr1D(z):
-        if not sparse:
-            mult_fact = ones((len(z),len(y)))
-        if x is None:
-            return y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+        if memoryorder == 'xyz':
+            if not sparse:
+                mult_fact = ones((len(y),len(z)))
+            if x is None:
+                return y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+            else:
+                return x, y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
         else:
-            return x, y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+            if not sparse:
+                mult_fact = ones((len(z),len(y)))
+            if x is None:
+                return y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+            else:
+                return x, y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
 
     # or maybe we have a full 3D grid:
     if arr1D(x) and arr1D(y) and arr1D(z):
-        if not sparse:
-            mult_fact = ones((len(y),len(x),len(z)))
-        return x[NewAxis,:,NewAxis]*mult_fact, \
-               y[:,NewAxis,NewAxis]*mult_fact, \
-               z[NewAxis,NewAxis,:]*mult_fact
+        if memoryorder == 'xyz':
+            if not sparse:
+                mult_fact = ones((len(x),len(y),len(z)))
+            return x[:,NewAxis,NewAxis]*mult_fact, \
+                   y[NewAxis,:,NewAxis]*mult_fact, \
+                   z[NewAxis,NewAxis,:]*mult_fact
+        else:
+            if not sparse:
+                mult_fact = ones((len(y),len(x),len(z)))
+            return x[NewAxis,:,NewAxis]*mult_fact, \
+                   y[:,NewAxis,NewAxis]*mult_fact, \
+                   z[NewAxis,NewAxis,:]*mult_fact
 
     # at this stage we assume that we just have scalars:
     l = []
