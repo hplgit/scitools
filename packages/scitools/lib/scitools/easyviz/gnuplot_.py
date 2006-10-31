@@ -227,9 +227,25 @@ class GnuplotBackend(BaseClass):
             self._g('set border 1+2+4+8+16 linetype -1 linewidth .4')
 
     def _set_axis_appearance(self, ax):
-        if ax.get('mode') == 'tight':
+        mode = ax.get('mode')
+        method = ax.get('method')
+        direction = ax.get('direction')
+        if mode == 'tight':
             #self._g('set autoscale fix')
             pass
+        if method == 'equal':
+            self._g('set size ratio -1')
+        elif method == 'image':
+            self._g('set size ratio -1')
+            # TODO: also 'tight'
+        elif method == 'square':
+            self._g('set size ratio 1')
+        else: # method == 'normal'
+            self._g('set size noratio')
+        if direction == 'ij':
+            self._g('set yrange [] reverse')
+        else: # method == 'xy'
+            self._g('set yrange [] noreverse')
         if not ax.get('visible'):
             self._g('unset border')
             self._g('unset grid')
