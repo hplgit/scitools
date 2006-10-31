@@ -222,6 +222,7 @@ class PlotProperties(object):
         'linemarker': '',
         'pointsize': 1.0,
         'material': None,
+        'memoryorder': 'yxz',
         }
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
@@ -284,6 +285,13 @@ class PlotProperties(object):
             else:
                 raise ValueError, 'linemarker must be %s, not %s' % \
                       (self._markers, kwargs['linemarker'])
+
+        if 'memoryorder' in kwargs:
+            if kwargs['memoryorder'] in ('xyz', 'yxz'):
+                self._prop['memoryorder'] = kwargs['memoryorder']
+            else:
+                raise ValueError, "memoryorder must be 'xyz' or 'yxz', not %s"\
+                      % kwargs['memoryorder']
 
         # set material properties:
         self._prop['material'].set(**kwargs)
@@ -495,11 +503,12 @@ class Surface(PlotProperties):
             self._prop['wireframe'] = _toggle_state(kwargs['wireframe'])
 
     def _parseargs(self, *args):
+        kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 3 and nargs <= 4: # mesh(X,Y,Z) or mesh(x,y,Z)
-            x, y, z = _check_xyz(*args[:3])
+            x, y, z = _check_xyz(*args[:3], **kwargs)
         elif nargs >= 1 and nargs <= 2: # mesh(Z)
-            x, y, z = _check_xyz(args[0])
+            x, y, z = _check_xyz(args[0], memoryorder=kwargs['memoryorder'])
         else:
             raise TypeError, "Surface._parseargs: wrong number of arguments"
         
@@ -568,11 +577,12 @@ class Contours(PlotProperties):
     def _parseargs(self, *args):
         if isinstance(args[-1], str): # contour(...,LineSpec)
             self.setformat(args[-1]);  args = args[:-1]
+        kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 3 and nargs <= 4:
-            x, y, z = _check_xyz(*args[:3])
+            x, y, z = _check_xyz(*args[:3], **kwargs)
         elif nargs >= 1:
-            x, y, z = _check_xyz(args[0])
+            x, y, z = _check_xyz(args[0], memoryorder=kwargs['memoryorder'])
         else:
             raise TypeError, "Contours._parseargs: wrong number of arguments"
 
@@ -647,16 +657,17 @@ class VelocityVectors(PlotProperties):
                     
         z, w = [None]*2
         func = self._prop['function']
+        kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 6 and nargs <= 7: # quiver3(X,Y,Z,U,V,W)
-            x, y, z, u, v, w = _check_xyzuvw(*args[:6])
+            x, y, z, u, v, w = _check_xyzuvw(*args[:6], **kwargs)
         elif nargs >= 4 and nargs <= 5: # quiver(X,Y,U,V) or quiver3(Z,U,V,W)
             if func == 'quiver3':
-                x, y, z, u, v, w = _check_xyzuvw(*args[:4])
+                x, y, z, u, v, w = _check_xyzuvw(*args[:4], **kwargs)
             else:
-                x, y, u, v = _check_xyuv(*args[:4])
+                x, y, u, v = _check_xyuv(*args[:4], **kwargs)
         elif func == 'quiver' and nargs >= 2 and nargs <= 3: # quiver(U,V)
-            x, y, u, v = _check_xyuv(*args[:2])
+            x, y, u, v = _check_xyuv(*args[:2], **kwargs)
         else:
             raise TypeError, \
                   "VelocityVectors._parseargs: wrong number of arguments"
@@ -714,9 +725,6 @@ class VelocityVectors(PlotProperties):
         else:
             self._prop['dims'] = u.shape
         self._prop['numberofpoints'] = len(ravel(z))
-        # scaling of the vectors should probably be done in the backend and
-        # not here?
-        #self.scale_vectors()
 
 
 class Streams(PlotProperties):
@@ -760,7 +768,9 @@ class Streams(PlotProperties):
         self._prop['ribbons'] = func == 'streamribbon'
 
     def _parseargs(self, *args):
+        # TODO: do more error checking and add support for memoryorder='xyz'.
         z, w, option = [None]*3
+        #kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 9 and nargs <= 10:
             x, y, z, u, v, w, sx, sy, sz = [asarray(a) for a in args[:9]]
@@ -911,14 +921,16 @@ class Volume(PlotProperties):
 
     def _parseargs_slice_(self, *args):
         # this method also works for contourslice
+        kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 7 and nargs <= 8:
             # slice_(X,Y,Z,V,Sx,Sy,Sz) or slice_(X,Y,Z,V,XI,YI,ZI)
-            x, y, z, v = _check_xyzv(*args[:4])
+            x, y, z, v = _check_xyzv(*args[:4], **kwargs)
             slices = [asarray(a) for a in args[4:7]]
         elif nargs >= 4 and nargs <= 5:
             # slice_(V,Sx,Sy,Sz) or slice_(V,XI,YI,ZI)
-            x, y, z, v = _check_xyzv(args[0])
+            x, y, z, v = _check_xyzv(args[0],
+                                     memoryorder=kwargs['memoryorder'])
             slices = [asarray(a) for a in args[1:4]]
         else:
             raise TypeError, "Wrong number of arguments"
@@ -944,12 +956,14 @@ class Volume(PlotProperties):
         self._set_data(x, y, z, v, slices=slices)
 
     def _parseargs_isosurface(self, *args):
+        kwargs = {'memoryorder': self._prop['memoryorder']}
         nargs = len(args)
         if nargs >= 5 and nargs <= 6: # isosurface(X,Y,Z,V,isovalue) 
-            x, y, z, v = _check_xyzv(*args[:4])
+            x, y, z, v = _check_xyzv(*args[:4], **kwargs)
             isovalue = float(args[4])
         elif nargs >= 2 and nargs <= 3: # isosurface(V,isovalue)
-            x, y, z, v = _check_xyzv(args[0])
+            x, y, z, v = _check_xyzv(args[0],
+                                     memoryorder=kwargs['memoryorder'])
             isovalue = float(args[1])
         else:
             raise TypeError, "Wrong number of arguments"

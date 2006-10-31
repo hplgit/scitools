@@ -1,6 +1,6 @@
 from common import *
 from misc import arrayconverter
-from scitools.numpytools import ones, ravel, shape, NewAxis, rank
+from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose
 import Gnuplot, tempfile, os
 
 class GnuplotBackend(BaseClass):
@@ -306,12 +306,19 @@ class GnuplotBackend(BaseClass):
                 self._use_splot = True
                 self._set_wireframe_state(item)
                 self._g('set surface')
-                x = arrayconverter(item.get('xdata'))
-                y = arrayconverter(item.get('ydata'))
-                z = arrayconverter(item.get('zdata'))
-                if rank(x) == 2 and rank(y) == 2:
-                    x = x[0,:];  y = y[:,0]
-                data = Gnuplot.GridData(z, x, y,
+                x = asarray(item.get('xdata'))
+                y = asarray(item.get('ydata'))
+                z = asarray(item.get('zdata'))
+                if item.get('memoryorder') == 'yxz':
+                    if rank(x) == 2 and rank(y) == 2:
+                        x = x[0,:];  y = y[:,0]
+                    z = transpose(z, [1,0])
+                else:
+                    if rank(x) == 2 and rank(y) == 2:
+                        x = x[:,0];  y = y[0,:]
+                data = Gnuplot.GridData(arrayconverter(z),
+                                        arrayconverter(x),
+                                        arrayconverter(y),
                                         title=item.get('legend'),
                                         with='l palette',
                                         binary=0)
@@ -321,12 +328,19 @@ class GnuplotBackend(BaseClass):
                 self._use_splot = True
                 self._set_contour_state(item)
                 self._g('set surface')
-                x = arrayconverter(item.get('xdata'))
-                y = arrayconverter(item.get('ydata'))
-                z = arrayconverter(item.get('zdata'))
-                if rank(x) == 2 and rank(y) == 2:
-                    x = x[0,:];  y = y[:,0]
-                tmp_data = Gnuplot.GridData(z, x, y,
+                x = asarray(item.get('xdata'))
+                y = asarray(item.get('ydata'))
+                z = asarray(item.get('zdata'))
+                if item.get('memoryorder') == 'yxz':
+                    z = transpose(item.get('zdata'), [1,0])
+                    if rank(x) == 2 and rank(y) == 2:
+                        x = x[0,:];  y = y[:,0]
+                else:
+                    if rank(x) == 2 and rank(y) == 2:
+                        x = x[:,0];  y = y[0,:]
+                tmp_data = Gnuplot.GridData(arrayconverter(z),
+                                            arrayconverter(x),
+                                            arrayconverter(y),
                                             title=item.get('legend'),
                                             binary=0,
                                             with='l palette')
@@ -348,6 +362,7 @@ class GnuplotBackend(BaseClass):
                 if item.get('function') == 'quiver3':
                     print "quiver3 not supported under Gnuplot"
                     continue
+                item.scale_vectors()
                 withstring = 'vectors'
                 color = self._colors[item.get('linecolor')]
                 if color:
@@ -355,24 +370,30 @@ class GnuplotBackend(BaseClass):
                 linewidth = item.get('linewidth')
                 if linewidth:
                     withstring += ' lw %g' % float(item.get('linewidth'))
-                x = arrayconverter(item.get('xdata'))
-                y = arrayconverter(item.get('ydata'))
-                u = arrayconverter(item.get('udata'))
-                v = arrayconverter(item.get('vdata'))
+                x = asarray(item.get('xdata'))
+                y = asarray(item.get('ydata'))
+                u = asarray(item.get('udata'))
+                v = asarray(item.get('vdata'))
                 if shape(x) != shape(u):
                     if len(shape(x)) == 2:
                         x = x*ones(shape(u))
                     else:
-                        #x = x[:,NewAxis]*ones(shape(u))
-                        x = x[NewAxis,:]*ones(shape(u))
+                        if item.get('memoryorder') == 'yxz':
+                            x = x[NewAxis,:]*ones(shape(u))
+                        else:
+                            x = x[:,NewAxis]*ones(shape(u))
                 if shape(y) != shape(u):
                     if len(shape(y)) == 2:
                         y = y*ones(shape(u))
                     else:
-                        #y = y[NewAxis,:]*ones(shape(u))
-                        y = y[:,NewAxis]*ones(shape(u))
-                data = Gnuplot.Data(ravel(x), ravel(y),
-                                    ravel(u), ravel(v),
+                        if item.get('memoryorder') == 'yxz':
+                            y = y[:,NewAxis]*ones(shape(u))
+                        else:
+                            y = y[NewAxis,:]*ones(shape(u))
+                data = Gnuplot.Data(arrayconverter(ravel(x)),
+                                    arrayconverter(ravel(y)),
+                                    arrayconverter(ravel(u)),
+                                    arrayconverter(ravel(v)),
                                     title=item.get('legend'),
                                     with=withstring)
                 ax._gdata.append(data)

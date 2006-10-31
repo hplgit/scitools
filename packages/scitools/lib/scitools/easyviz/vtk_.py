@@ -1,7 +1,8 @@
 from common import *
 import vtk, os
 
-from scitools.numpytools import ravel, zeros, array, allclose, Float
+from scitools.numpytools import ravel, zeros, array, allclose, Float, rank, \
+     NumPy_dtype, meshgrid
 
 #import vtk.util.colors
 
@@ -522,6 +523,7 @@ class VtkBackend(BaseClass):
 
     def _get_2d_structured_grid(self, item, vectors=False,
                                 heights=True, bottom=False):
+        memoryorder = item.get('memoryorder')
         dar = self._axis.get('daspect')
         x = asarray(item.get('xdata'))/dar[0]
         y = asarray(item.get('ydata'))/dar[1]
@@ -531,6 +533,7 @@ class VtkBackend(BaseClass):
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(no_points)
         if vectors:
+            item.scale_vectors()
             x = ravel(x)
             y = ravel(y)
             u = asarray(item.get('udata'))
@@ -539,12 +542,18 @@ class VtkBackend(BaseClass):
             z = ravel(item.get('zdata'))
             if item.get('function') == 'quiver3':
                 z = z/dar[2]
-            if len(shape(u)) == 2:
+            if rank(u) == 2:
                 nx, ny = shape(u)
-                if len(x) == nx:
-                    x = ravel(x[:,NewAxis]*ones((1,ny)))
-                if len(y) == ny:
-                    y = ravel(y[NewAxis,:]*ones((nx,1)))
+                if memoryorder == 'xyz':
+                    if len(x) == nx:
+                        x = ravel(x[:,NewAxis]*ones((nx,ny)))
+                    if len(y) == ny:
+                        y = ravel(y[NewAxis,:]*ones((nx,ny)))
+                else:
+                    if len(x) == ny:
+                        x = ravel(x[NewAxis,:]*ones((nx,ny)))
+                    if len(y) == nx:
+                        y = ravel(y[:,NewAxis]*ones((nx,ny)))
             u = ravel(u)
             vectors = vtk.vtkFloatArray()
             vectors.SetNumberOfTuples(no_points)
@@ -563,10 +572,10 @@ class VtkBackend(BaseClass):
             if heights:
                 z = values/dar[2]
             elif bottom:
-                z = zeros(values.shape, typecode=values.typecode()) + \
+                z = zeros(values.shape, NumPy_dtype(values)) + \
                     self._axis._vtk_scaled_bounds[4]
             else:
-                z = zeros(values.shape, typecode=values.typecode())
+                z = zeros(values.shape, NumPy_dtype(values))
             try:
                 cdata = asarray(item.get('cdata'))
             except KeyError:
@@ -578,12 +587,9 @@ class VtkBackend(BaseClass):
             scalars.SetNumberOfTuples(no_points)
             scalars.SetNumberOfComponents(1)
             nx, ny = shape(values)
-            if shape(x) == (nx,) and shape(y) == (ny,):
-                x = x[:,NewAxis]
-                y = y[NewAxis,:]
-            if shape(x) == (nx,1) and shape(y) == (1,ny):
-                x = x*ones((1,ny))
-                y = y*ones((nx,1))
+            if not (shape(x) == shape(y) == (nx,ny)):
+                x, y = meshgrid(ravel(x), ravel(y),
+                                sparse=False, memoryorder=memoryorder)
             assert shape(x) == shape(y) == shape(z), \
                    "array dimensions must agree"
             ind = 0
@@ -600,6 +606,7 @@ class VtkBackend(BaseClass):
         return sgrid
 
     def _get_3d_structured_grid(self, item, vectors=False):
+        memoryorder = item.get('memoryorder')
         dar = self._axis.get('daspect')
         x = asarray(item.get('xdata'))/dar[0]
         y = asarray(item.get('ydata'))/dar[1]
@@ -614,14 +621,9 @@ class VtkBackend(BaseClass):
             v = asarray(item.get('vdata'))
             w = asarray(item.get('wdata'))
             nx, ny, nz = shape(u)
-            if shape(x) == (nx,) and shape(y) == (ny,):
-                x = x[:,NewAxis,NewAxis]
-                y = y[NewAxis,:,NewAxis]
-            if shape(x) == (nx,1,1) and shape(y) == (1,ny,1):
-                x = x*ones((1,ny,nz))
-                y = y*ones((nx,1,nz))
-            if shape(z) == (1,1,nz):
-                z = z*ones((nx,ny,1))
+            if not (shape(x) == shape(y) == shape(z)):
+                x, y, z = meshgrid(ravel(x), ravel(y), ravel(z),
+                                   sparse=False, memoryorder=memoryorder)
             assert shape(x) == shape(y) == shape(z) == \
                    shape(u) == shape(v) == shape(w), \
                    "array dimensions must agree"
@@ -652,15 +654,11 @@ class VtkBackend(BaseClass):
             #if cdata is not None:
             #    v = cdata
             nx, ny, nz = shape(v)
-            if shape(x) == (nx,) and shape(y) == (ny,) and shape(z) == (nz,):
-                x = x[:,NewAxis,NewAxis]
-                y = y[NewAxis,:,NewAxis]
-                z = z[NewAxis,NewAxis,:]
-            if shape(x) == (nx,1,1) and \
-                   shape(y) == (1,ny,1) and shape(z) == (1,1,nz):
-                x = x*ones((1,ny,nz))
-                y = y*ones((nx,1,nz))
-                z = z*ones((nx,ny,1))
+            if not (shape(x) == shape(y) == shape(z) == (nx,ny,nz)):
+                x, y, z = meshgrid(ravel(x), ravel(y), ravel(z),
+                                   sparse=False, memoryorder=memoryorder)
+            assert shape(x) == shape(y) == shape(z) == shape(v), \
+                   "array dimensions must agree"
             ind = 0
             for k in range(nz):
                 for j in range(ny):
@@ -891,7 +889,7 @@ class VtkBackend(BaseClass):
         if z is not None:
             z = ravel(z)/dar[2]
         else:
-            z = zeros(n, x.typecode())
+            z = zeros(n, NumPy_dtype(x))
         ids = vtk.vtkIdList()
         for i in range(1,n):
             points.InsertNextPoint(x[i-1], y[i-1], z[i-1])

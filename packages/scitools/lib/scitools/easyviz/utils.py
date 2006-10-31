@@ -1,6 +1,6 @@
 from scitools.numpytools import zeros, ones, exp, reshape, ravel, Float, \
      meshgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos, \
-     NumPyArray, NumPy_type
+     NumPyArray, NumPy_type, NumPy_dtype
 
 def peaks(*args):
     # z = peaks()
@@ -51,7 +51,7 @@ def gradient(f,*varargs):
 
     for axis in range(N):
         # select out appropriate parts for this dimension
-        out = zeros(f.shape, f.typecode())
+        out = zeros(f.shape, NumPy_dtype(f))
         slices[0][axis] = slice(1,-1)
         slices[1][axis] = slice(2,None)
         slices[2][axis] = slice(None,-2)

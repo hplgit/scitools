@@ -21,7 +21,7 @@ def _check_size(a, a_name, expected_size):
         raise ValueError, '%s has shape %s, expected %s' % \
               (a_name, a.shape, expected_size)
 
-def _check_xyzv(*args):
+def _check_xyzv(*args, **kwargs):
     nargs = len(args)
     if nargs == 1:
         x, y, z = [None]*3
@@ -36,35 +36,72 @@ def _check_xyzv(*args):
     except:
         raise ValueError, '_check_xyzv: v must be 3D, not %dD' % len(shape(v))
 
+    memoryorder = kwargs.get('memoryorder', 'yxz')
+
     if x is None and y is None and z is None:
-        x, y, z = meshgrid(seq(nx-1), seq(ny-1), seq(nz-1))
+        if memoryorder == 'xyz':
+            ny, nx = nx, nz  # swap
+        x, y, z = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1),
+                           memoryorder=memoryorder)
     else:
-        assert shape(x)==(nx,ny,nz) or shape(x)==(nx,1,1) or shape(x)==(nx,), \
-               "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
-               (shape(x), (nx,ny,nz), (nx,1,1), (nx,))
+        if memoryorder == 'xyz':
+            assert shape(x)==(nx,ny,nz) or shape(x)==(1,ny,1) or \
+                   shape(x)==(ny,), \
+                   "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
+                   (shape(x), (nx,ny,nz), (1,ny,1), (ny,))
         
-        if shape(x) == (nx,ny,nz):
-            assert shape(y) == shape(z) == (nx,ny,nz), \
-                   "_check_xyzv: x has shape %s, expected same for y and z" % \
-                   shape(x)
-        elif shape(x) == (nx,1,1):
-            assert shape(y) == (1,ny,1), \
-                   "_check_xyzv: x has shape %s, expected y to be %s, not %s" \
-                   % (shape(x), (1,ny,1), shape(y))
-            assert shape(z) == (1,1,nz), \
-                   "_check_xyzv: x has shape %s, expected z to be %s, not %s" \
-                   % (shape(x), (1,1,nz), shape(z))
-        else: # shape(x) == (nx,)
-            assert shape(y) == (ny,), \
-                   "_check_xyzv: x has shape %s, expected y to be %s, not %s" \
-                   % (shape(x), (ny,), shape(y))
-            assert shape(z) == (nz,), \
-                   "_check_xyzv: x has shape %s, expected z to be %s, not %s" \
-                   % (shape(x), (nz,), shape(z))
+            if shape(x) == (nx,ny,nz):
+                assert shape(y) == (nx,ny,nz), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (nx,ny,nz), shape(y))
+                assert shape(z) == (nx,ny,nz), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (nx,ny,nz), shape(z))
+            elif shape(x) == (nx,1,1):
+                assert shape(y) == (1,ny,1), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (1,ny,1), shape(y))
+                assert shape(z) == (1,1,nz), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (1,1,nz), shape(z))
+            else: # shape(x) == (nx,)
+                assert shape(y) == (ny,), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (ny,), shape(y))
+                assert shape(z) == (nz,), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (nz,), shape(z))
+        else:
+            assert shape(x)==(nx,ny,nz) or shape(x)==(1,ny,1) or \
+                   shape(x)==(ny,), \
+                   "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
+                   (shape(x), (nx,ny,nz), (1,ny,1), (ny,))
+        
+            if shape(x) == (nx,ny,nz):
+                assert shape(y) == (nx,ny,nz), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (nx,ny,nz), shape(y))
+                assert shape(z) == (nx,ny,nz), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (nx,ny,nz), shape(z))
+            elif shape(x) == (1,ny,1):
+                assert shape(y) == (nx,1,1), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (nx,1,1), shape(y))
+                assert shape(z) == (1,1,nz), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (1,1,nz), shape(z))
+            else: # shape(x) == (ny,)
+                assert shape(y) == (nx,), \
+                       "_check_xyzv: x has shape %s, expected y to be %s, " \
+                       "not %s" % (shape(x), (nx,), shape(y))
+                assert shape(z) == (nz,), \
+                       "_check_xyzv: x has shape %s, expected z to be %s, " \
+                       "not %s" % (shape(x), (nz,), shape(z))
         
     return x, y, z, v
 
-def _check_xyz(*args):
+def _check_xyz(*args, **kwargs):
     nargs = len(args)
     if nargs == 1:
         x, y = [None]*2
@@ -79,20 +116,33 @@ def _check_xyz(*args):
     except:
         raise ValueError, "z must be 2D, not %dD" % len(shape(z))
 
+    memoryorder = kwargs.get('memoryorder', 'yxz')
+
     if x is None and y is None:
-        x, y = meshgrid(seq(nx-1), seq(ny-1))
+        if memoryorder == 'xyz':
+            nx, ny = ny, nx  # swap
+        x, y = meshgrid(seq(ny-1), seq(nx-1), memoryorder=memoryorder)
     else:
-        assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
-               "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
-               (shape(x), (nx,ny), (nx,1), (nx,))
+        if memoryorder == 'xyz':
+            assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
+                   "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
+                   (shape(x), (nx,ny), (nx,1), (nx,))
         
-        assert shape(y) == (nx,ny) or shape(y) == (1,ny) or len(y) == ny, \
-               "_check_xyz: y has shape %s, expected %s, %s, or %s" % \
-               (shape(y), (nx,ny), (1,ny), (ny,))
+            assert shape(y) == (nx,ny) or shape(y) == (1,ny) or len(y) == ny, \
+                   "_check_xyz: y has shape %s, expected %s, %s, or %s" % \
+                   (shape(y), (nx,ny), (1,ny), (ny,))
+        else:
+            assert shape(x) == (nx,ny) or shape(x) == (1,ny) or len(x) == ny, \
+                   "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
+                   (shape(x), (nx,ny), (1,ny), (ny,))
+        
+            assert shape(y) == (nx,ny) or shape(y) == (nx,1) or len(y) == nx, \
+                   "_check_xyz: y has shape %s, expected %s, %s, or %s" % \
+                   (shape(y), (nx,ny), (nx,1), (nx,))
         
     return x, y, z
     
-def _check_xyuv(*args):
+def _check_xyuv(*args, **kwargs):
     nargs = len(args)
     if nargs == 2:
         x, y = [None]*2
@@ -101,6 +151,8 @@ def _check_xyuv(*args):
         x, y, u, v = [asarray(a) for a in args]
     else:
         raise TypeError, "_check_xyuv: wrong number of arguments"
+    
+    memoryorder = kwargs.get('memoryorder', 'yxz')
 
     us = shape(u)
     assert us == shape(v), "_check_xyuv: u and v must be of same shape"
@@ -117,22 +169,38 @@ def _check_xyuv(*args):
     elif len(us) == 2:
         nx, ny = us
         if x is None and y is None:
-            x = seq(nx-1)
-            y = seq(ny-1)
+            if memoryorder == 'xyz':
+                x = seq(nx-1)
+                y = seq(ny-1)
+            else:
+                x = seq(ny-1)
+                y = seq(nx-1)                
         else:
-            assert shape(x)==(nx,ny) or shape(x)==(nx,1) or shape(x)==(nx,), \
-                   "_check_xyuv: x has shape %s, expected %s, %s, or %s" % \
-                   (shape(x), (nx,ny), (nx,1), (nx,))
-            assert shape(y)==(nx,ny) or shape(y)==(1,ny) or shape(y)==(ny,), \
-                   "_check_xyuv: y has shape %s, expected %s, %s, or %s" % \
-                   (shape(y), (nx,ny), (1,ny), (ny,))
+            if memoryorder == 'xyz':
+                assert shape(x)==(nx,ny) or shape(x)==(nx,1) or \
+                       shape(x)==(nx,), \
+                       "_check_xyuv: x has shape %s, expected %s, %s, " \
+                       "or %s" % (shape(x), (nx,ny), (nx,1), (nx,))
+                assert shape(y)==(nx,ny) or shape(y)==(1,ny) or \
+                       shape(y)==(ny,), \
+                       "_check_xyuv: y has shape %s, expected %s, %s, " \
+                       "or %s" % (shape(y), (nx,ny), (1,ny), (ny,))
+            else:
+                assert shape(x)==(nx,ny) or shape(x)==(1,ny) or \
+                       shape(x)==(ny,), \
+                       "_check_xyuv: x has shape %s, expected %s, %s, " \
+                       "or %s" % (shape(x), (nx,ny), (1,ny), (ny,))
+                assert shape(y)==(nx,ny) or shape(y)==(nx,1) or \
+                       shape(y)==(nx,), \
+                       "_check_xyuv: y has shape %s, expected %s, %s, " \
+                       "or %s" % (shape(y), (nx,ny), (nx,1), (nx,))
     else:
         raise ValueError, \
               "_check_xyuv: u must be 1D or 2D, not %dD" % len(us)
         
     return x, y, u, v
 
-def _check_xyzuvw(*args):
+def _check_xyzuvw(*args, **kwargs):
     nargs = len(args)
     if nargs == 4:
         x, y = [None]*2
@@ -141,6 +209,8 @@ def _check_xyzuvw(*args):
         x, y, z, u, v, w = [asarray(a) for a in args]
     else:
         raise TypeError, "_check_xyzuvw: wrong number of arguments"
+
+    memoryorder = kwargs.get('memoryorder', 'yxz')
 
     us = shape(u)
     assert us == shape(v) == shape(w), \
@@ -160,22 +230,32 @@ def _check_xyzuvw(*args):
     elif len(us) == 2:
         nx, ny = us
         if x is None and y is None:
-            x, y, z = _check_xyz(z)
+            x, y, z = _check_xyz(z, memoryorder=memoryorder)
         else:
-            x, y, z = _check_xyz(x, y, z)
+            x, y, z = _check_xyz(x, y, z, memoryorder=memoryorder)
         assert shape(z) == us, \
                "_check_xyzuvw: z, u, v, and w must be of same shape"
     elif len(us) == 3:
         nx, ny, nz = us
         if x is None and y is None:
-            x, y, junk = meshgrid(seq(nx-1), seq(ny-1), seq(nz-1))
+            if memoryorder == 'xyz':
+                nx, ny = ny, nx  # swap
+            x, y, junk = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1))
         else:
-            assert shape(x)==us or shape(x)==(nx,1,1) or shape(x)==(nx,), \
-                   "_check_xyzuvw: x has shape %s, expected %s, %s, or %s" % \
-                   (shape(x), us, (nx,1,1), (nx,))
-            assert shape(y)==us or shape(y)==(1,ny,1) or shape(y)==(ny,), \
-                   "_check_xyzuvw: y has shape %s, expected %s, %s, or %s" % \
-                   (shape(y), us, (1,ny,1), (ny,))
+            if memoryorder == 'xyz':
+                assert shape(x)==us or shape(x)==(nx,1,1) or shape(x)==(nx,), \
+                       "_check_xyzuvw: x has shape %s, expected %s, %s, or %s"\
+                       % (shape(x), us, (nx,1,1), (nx,))
+                assert shape(y)==us or shape(y)==(1,ny,1) or shape(y)==(ny,), \
+                       "_check_xyzuvw: y has shape %s, expected %s, %s, or %s"\
+                       % (shape(y), us, (1,ny,1), (ny,))
+            else:
+                assert shape(x)==us or shape(x)==(1,ny,1) or shape(x)==(ny,), \
+                       "_check_xyzuvw: x has shape %s, expected %s, %s, or %s"\
+                       % (shape(x), us, (1,ny,1), (ny,))
+                assert shape(y)==us or shape(y)==(nx,1,1) or shape(y)==(nx,), \
+                       "_check_xyzuvw: y has shape %s, expected %s, %s, or %s"\
+                       % (shape(y), us, (nx,1,1), (nx,))                
         assert shape(z) == us or shape(z) == (1,1,nz) or shape(z) == (nz,), \
                "_check_xyzuvw: z has shape %s, expected %s, %s, or %s" % \
                (shape(z), us, (1,1,nz), (nz,))
@@ -187,9 +267,9 @@ def _check_xyzuvw(*args):
 
 def arrayconverter(a):
     """Convert the numpy array a with type 'numpy.ndarray' into a
-    Numeric array with type 'array'. This is useful when the new numpy
-    array data type is not accepted, which for example is the case in
-    the gnuplot module.
+    Numeric.array object (type 'array'). This is useful when a
+    'numpy.ndarray' object is not accepted, which is the case in the
+    gnuplot module.
     """
     if NumPy_type(a) == 'numpy':
         import Numeric
