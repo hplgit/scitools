@@ -7,20 +7,14 @@ __doc__ += common._idea
 __author__ = "Rolv Erlend Bredesen, Hans Petter Langtangen, Johannes H. Ring"
 __version__ = "0.1"
 
-from scitools import *    # nice to have
+from scitools import *  # need at least config, nice to have it all for a user
 from common import *
 from utils import *
 from movie import movie
-# gnuplot is default:
-backend = 'gnuplot_'
-#backend = 'vtk_'
-#backend = 'pyx_'
-#backend = 'blt_'
 
-# Try to set backend from environment variable
-import os
-backend = os.environ.get('EASYVIZ_BACKEND', backend)
-print "Easyviz backend is %s" % backend
+backend = scitools_config.get('easyviz', 'backend')
+if VERBOSE >= 1:
+    print "Easyviz backend is %s" % backend
 
 exec('from %s import *' % backend)
 
