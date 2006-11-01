@@ -1214,6 +1214,7 @@ class Axis(object):
         'numberofitems': 0,
         'mode': 'auto',
         'method': 'normal',
+        'direction': 'xy',
         'hold': False,
         'hidden': False,
         'box': False,
@@ -1251,11 +1252,13 @@ class Axis(object):
         }
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
-    _methods = "ij xy equal image square normal vis3d".split()
+    _directions = "ij xy".split()
+    _methods = "equal image square normal vis3d".split()
     _modes = "auto manual tight fill".split()
     _ranges = "xmin xmax ymin ymax zmin zmax".split()
     _shadings = "flat interp faceted".split()
     
+    __doc__ += docadd('Legal values for direction keyword', _directions)
     __doc__ += docadd('Legal values for method keyword', _methods)
     __doc__ += docadd('Legal values for mode keyword', _modes)
     __doc__ += docadd('Legal values for range keyword', _ranges)
@@ -1291,6 +1294,13 @@ class Axis(object):
             else:
                 raise ValueError, "Axis.set: method must be %s, not %s" % \
                       (self._methods, kwargs['method'])
+
+        if 'direction' in kwargs:
+            if kwargs['direction'] in self._directions:
+                self._prop['direction'] = kwargs['direction']
+            else:
+                raise ValueError, "Axis.set: direction must be %s, not %s" % \
+                      (self._directions, kwargs['direction'])
 
         for key in 'hold hidden box grid'.split():
             if key in kwargs:
@@ -1377,6 +1387,8 @@ class Axis(object):
                 self._prop['method'] = axis
             elif axis in self._modes:
                 self._prop['mode'] = axis
+            elif axis in self._directions:
+                self._prop['direction'] = axis
             else:
                 raise ValueError, "not a valid axis specification"
 
@@ -1489,7 +1501,8 @@ class Axis(object):
             self._prop['daspect'] = (1.,1.,1.)
             self._prop['mode'] = 'tight'
         elif method == 'square':
-            print "axis method 'square' not implemented yet"
+            #print "axis method 'square' not implemented yet"
+            pass
         elif method == 'normal':
             if None in self._prop['daspect'] or \
                    self._prop['daspectmode'] == 'auto':
@@ -1965,6 +1978,12 @@ class BaseClass(object):
           sets the appearance of the current axis as specified by method.
           %s
 
+        - axis(direction)
+          sets the direction of the increasing values on the axes.
+
+             'ij' - reverse y-axis
+             'xy' - restore y-axis
+
         - axis('on') or axis('off')
           turn axis on or off
         """
@@ -1984,6 +2003,8 @@ class BaseClass(object):
                     ax.set(visible=state)
                 elif args[0] in Axis._methods:
                     ax.set(method=args[0])
+                elif args[0] in Axis._directions:
+                    ax.set(direction=args[0])
 
         kwargs_ = {}
         # first treat positional arguments:
