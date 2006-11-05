@@ -7,12 +7,12 @@ __doc__ += common._idea
 __author__ = "Rolv Erlend Bredesen, Hans Petter Langtangen, Johannes H. Ring"
 __version__ = "0.1"
 
-from scitools import *  # need at least config, nice to have it all for a user
+import scitools
 from common import *
 from utils import *
 from movie import movie
 
-backend = scitools_config.get('easyviz', 'backend')
+backend = scitools.scitools_config.get('easyviz', 'backend')
 if VERBOSE >= 1:
     print "Easyviz backend is %s" % backend
 
