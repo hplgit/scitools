@@ -14,6 +14,8 @@ if  __file__ == 'setupegg.py':
 else:
     from distutils.core import setup
     
+configfile = os.path.join("lib", "scitools", "scitools.cfg")
+
 setup(
     version = "0.1", 
     author = "Hans Petter Langtangen, Rolv Erlend Bredesen, Johannes Ring",
@@ -25,14 +27,14 @@ setup(
     package_dir = {'': 'lib'},
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"), 
-                os.path.join("scitools", "pyPDE"),
+		os.path.join("scitools", "pyPDE"),
                 ],
     #py_modules = ['numpytools',], # Extra scripts to install
-    #data_files = [(os.path.join('easyviz', 'data'), glob.glob('data/*')), ],
+    data_files = [("scitools", [configfile,])],
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
-    )
-    
+	       )
+	       
     
     
                
