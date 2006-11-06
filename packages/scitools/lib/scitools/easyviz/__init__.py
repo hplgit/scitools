@@ -13,7 +13,7 @@ from utils import *
 from movie import movie
 
 backend = scitools.scitools_config.get('easyviz', 'backend')
-if VERBOSE >= 1:
+if scitools.VERBOSE >= 1:
     print "Easyviz backend is %s" % backend
 
 exec('from %s import *' % backend)

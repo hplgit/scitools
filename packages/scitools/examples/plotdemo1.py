@@ -1,4 +1,5 @@
 from scitools.easyviz.gnuplot_ import *
+from scitools import *
 
 def pic(fname):
     os.system('import %s' % fname)

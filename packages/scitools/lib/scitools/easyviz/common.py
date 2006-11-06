@@ -2306,8 +2306,9 @@ class BaseClass(object):
                         else:
                             print "Legend "+legend+" is not a string"
                 else:
-                    print """Number of legend items is not equal to number \
-                    of lines in plotcommand"""
+                    print 'Number of legend items (%d) is not equal to '\
+                          'number of lines in plotcommand (%d)' % \
+                          (len(legends), legendcounter)
             elif isinstance(legends,str): # only one legend
                 ax.get('plotitems')[-1].set(legend=legends)
 
