@@ -1,5 +1,5 @@
 from scitools import *
-from scitools.easyviz.gnuplot_ import *
+from scitools.easyviz import *
 from time import sleep
 backend = get_backend()
 if backend == 'blt_':

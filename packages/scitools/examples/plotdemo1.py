@@ -1,7 +1,8 @@
-from scitools.easyviz.gnuplot_ import *
 from scitools import *
+from scitools.easyviz import *
 
 def pic(fname):
+    print 'Click on the plot window to proceed!'
     os.system('import %s' % fname)
     
 
