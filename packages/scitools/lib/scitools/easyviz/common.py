@@ -2382,7 +2382,6 @@ class BaseClass(object):
         if len(args) == 0:
             raise TypeError, "plot3: not enough arguments given"
         
-        legendcounter=len(ax.get('plotitems')) # can use len(lines) instead
         lines = [] # all Line instances are stored here
         
         # If first argument is a format string this will be ignored
@@ -2503,21 +2502,20 @@ class BaseClass(object):
     
         # Set legends
         if 'legend' in kwargs:
-            # Number of new lines
-            #legendcounter = len(ax.get('plotitems'))-legendcounter
-            legendcounter = len(lines)
+            no_lines = len(lines)
             legends = kwargs['legend']
             if isinstance(legends, (tuple,list)): # legends is a sequence
-                if len(legends) == legendcounter:
-                    for i in range(legendcounter):
-                        legend = legends[legendcounter-i-1]
+                if len(legends) == no_lines:
+                    for i in range(no_lines):
+                        legend = legends[no_lines-i-1]
                         if isinstance(legend, str):
                             ax.get('plotitems')[-1-i].set(legend=legend)
                         else:
                             print "Legend "+legend+" is not a string"
                 else:
-                    print """Number of legend items is not equal to number \
-                    of lines in plotcommand"""
+                    print "Number of legend items (%d) is not equal to " \
+                          "number of lines (%d) in plotcommand" % \
+                          (len(legends), no_lines)
             elif isinstance(legends,str): # only one legend
                 ax.get('plotitems')[-1].set(legend=legends)
 
