@@ -15,6 +15,7 @@ else:
     from distutils.core import setup
     
 configfile = os.path.join("lib", "scitools", "scitools.cfg")
+ver = sys.version[:3]
 
 setup(
     version = "0.1", 
@@ -30,7 +31,8 @@ setup(
 		os.path.join("scitools", "pyPDE"),
                 ],
     #py_modules = ['numpytools',], # Extra scripts to install
-    data_files = [("scitools", [configfile,])],
+    # Force configfile to reside with the scitools python package
+    data_files = [('lib/python'+ver+'/site-packages/scitools', [configfile,])],
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
 	       )
