@@ -6,7 +6,9 @@
 rm -rf dist/
 python setup.py sdist
 cd dist
-tar -xzf *
-rm *.tar.gz
 file=`ls`
-mv $file ../../../SYSDIR/src/python/tools
+mv $file ../../../SYSDIR/src/python/tools/
+cd ../../../SYSDIR/src/python/tools/
+tar -xzf $file
+rm $file
+cd -
