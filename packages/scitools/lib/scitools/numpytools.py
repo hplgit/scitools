@@ -1382,12 +1382,20 @@ def NumPy_type(a):
     @param a: NumPy array
     @return:  "Numeric", "numarray", or "numpy", depending on which
     module that was used to generate the a array
+
+    If type is list or tuple then the corresponding typename will be returned
     """
 
     # check basic_NumPy type first to avoid possible import errors
     types = {'Numeric': 'Numeric.ArrayType',
              'numarray': 'numarray.NumArray',
              'numpy': 'numpy.ndarray'}
+	     
+    # Check for non NumPy types first
+    if isinstance(a, tuple):
+	return "tuple"
+    elif isinstance(a, list):
+	return "list"
     exec "import %s" %basic_NumPy # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy
