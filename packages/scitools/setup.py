@@ -8,11 +8,20 @@ __author__ = 'Rolv Erlend Bredsen <rolv@simula.no>'
 
 import os, sys, socket, re, glob
 
+BOOTSTRAP = 1 # Bootstrap setuptools
+
+if BOOTSTRAP:
+    from ez_setup import use_setuptools
+    use_setuptools()
+    
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
     from setuptools import setup, Extension
 else:
-    from distutils.core import setup
+    if BOOTSTRAP:
+	from setuptools import setup
+    else:
+	from distutils.core import setup
     
 configfile = os.path.join("lib", "scitools", "scitools.cfg")
 ver = sys.version[:3]
@@ -32,12 +41,13 @@ setup(
                 ],
     #py_modules = ['numpytools',], # Extra scripts to install
     # Force configfile to reside with the scitools python package
-    data_files = [('lib/python'+ver+'/site-packages/scitools', [configfile,])],
+    #data_files = [('lib/python'+ver+'/site-packages/scitools', [configfile,])],
+    data_files = [("scitools", [configfile,])], # easier to use bootstrap
+    
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
 	       )
-	       
-    
+	    
     
                
 
