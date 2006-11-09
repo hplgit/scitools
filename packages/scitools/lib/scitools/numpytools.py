@@ -250,6 +250,9 @@ if basic_NumPy == 'numpy':
             if _numpy_name == 'RNG':
                 import numpy.random
                 RNG = numpy.random
+            elif _numpy_name == 'FFT': # on windows import numpy.FFT fails
+                import numpy
+                FFT = numpy.FFT
             elif _numpy_name != '':
                 exec 'import %s; %s = %s' % \
                      (_numpy_name, _Numeric_name, _numpy_name)
