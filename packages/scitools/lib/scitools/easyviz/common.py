@@ -8,6 +8,10 @@ from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state
 
 _idea = """
+
+What is Easyviz?
+----------------
+
 Easyviz is a light-weight interface to visualization engines for
 scientific data. The Easyviz interface is written in Python with the
 purpose of making it very easy to visualize data in Python
@@ -89,6 +93,18 @@ These three principles and the Easyviz implementation make simple things
 simple and unified, and complicated things are not more complicated than
 they would otherwise be. You can always start out with the simple commands
 - and jump to complicated fine-tuning only when strictly needed.
+
+Controlling the Backend
+-----------------------
+
+The Easyviz backend can either be set in a config file (see Config File
+below) or a command-line option --easyviz can be followed by the name
+of the backend.
+
+There are several available backends: "gnuplot_", "vtk_",
+"matplotlib_", "blt_" (using Pmw.Blt.Graph), etc. Which backend
+you choose depends on what you have available on your computer
+system and what kind of plotting functionality you want.
 """
 
 _usage = """

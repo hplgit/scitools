@@ -13,6 +13,7 @@ from movie import movie
 
 # ----
 # which backend? load config file, check command line
+import sys
 if '--easyviz' in sys.argv:
     try:
         backend = sys.argv[sys.argv.index('--easyviz') + 1]
@@ -20,7 +21,7 @@ if '--easyviz' in sys.argv:
         print '--easyviz option must be followed by backend name\n'\
               '(gnuplot_, vtk_, matplotlib_, etc.)'
 else:
-    import scitools as _st
+    import scitools.basics as _st
     backend = _st.scitools_config.get('easyviz', 'backend')
 
 exec('from %s import *' % backend)
