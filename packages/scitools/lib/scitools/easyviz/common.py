@@ -767,13 +767,13 @@ class Streams(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Streams._local_prop)
-        self._parseargs(*args)
         self.set(**kwargs)
+        self._parseargs(*args)
 
     def set(self, **kwargs):
         PlotProperties.set(self, **kwargs)
 
-        for key in 'stepsize tubescale ribbonwith'.split():
+        for key in 'stepsize tubescale ribbonwidth'.split():
             if key in kwargs:
                 _check_type(kwargs[key], key, (float,int))
                 self._prop[key] = float(kwargs[key])
