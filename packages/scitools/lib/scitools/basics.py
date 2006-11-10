@@ -32,11 +32,15 @@ Imports and definitions for the scitools library.
 # avoid integer division (for safety):
 from __future__ import division  # must appear in each application file too
 
+import time as _time   # measure how much time various imports take
+_t0 = _time.clock()
+
 # load configuration file
 import ConfigParser, os, sys
 scitools_config = ConfigParser.ConfigParser()
 
-_default_config_file = os.path.join(os.path.dirname(__file__), 'scitools.cfg')
+_default_config_file = os.path.join(os.path.dirname(__file__),
+                                    'scitools.cfg.py')
 scitools_config.readfp(open(_default_config_file))
 _files = scitools_config.read(['.scitools.cfg',
                                os.path.expanduser('~/.scitools.cfg')])
@@ -52,31 +56,27 @@ OPTIMIZATION = scitools_config.get('modes', 'OPTIMIZATION')
 
 VERBOSE = int(scitools_config.get('modes', 'VERBOSE'))
 
-load_scipy = scitools_config.getboolean('scipy', 'load')
+_load_scipy = scitools_config.getboolean('scipy', 'load')
+
+_t1 = _time.clock()
+_config_time = _t1 - _t0
 
 # unified interface to Numeric, numarray, and numpy:
-from numpytools import *  
+# NO, restrict scitools to numpy, split numpytools into numpyload and numpyutils, update script in py4cs must be changed; numpyutils must also have arrmin, arrmax (?) or...? check numpy.min/max if they are sufficient
+#from numpytools import *
+# could avoid numpy import if there is a scipy import!!!
+from numpy import *
+basic_NumPy = 'numpy'
 # numpytools imports os, sys, operator, math, StringFunction
 from glob import glob   # nice to have
 
-# plotting/graphics:
-#import easyviz
-# if gnuplot is available (check that)
-#from easyviz.gnuplot_ import *
-#from easyviz import *
-
-def debug(comment, var):
-    if os.environ.get('PYDEBUG', '0') == '1':
-        print comment, var
-
-def check(variable_name, variable):
-    print '%s, type=%s' % (variable_name, type(variable)),
-    print variable
+_t2 = _time.clock()
+_numpytools_time = _t2 - _t1
 
 # *** try to import SciPy if it is installed ***
 has_scipy = False
 #print '....before from scipy import *.....'
-if load_scipy:
+if _load_scipy:
     if basic_NumPy == 'numpy':   # modern scipy works with numpy
         try:
             from scipy import *
@@ -88,9 +88,26 @@ if load_scipy:
 
 #print '....after from scipy import *.....'
 
+_t3 = _time.clock()
+_scipy_time = _t3 - _t2
+
 if VERBOSE >= 2:
     print 'from numpytools import *'
     print 'Numerical Python implementation:', basic_NumPy
     if has_scipy:
         print 'from scipy import *'
-        
+if VERBOSE >= 3:
+    print 'Import time: config=%.3f, numpytools=%.3f, scipy=%.3f' \
+          % (_config_time, _numpytools_time, _scipy_time)
+
+
+# ------------ utility functions ---------------
+
+def debug(comment, var):
+    if os.environ.get('PYDEBUG', '0') == '1':
+        print comment, var
+
+def check(variable_name, variable):
+    print '%s, type=%s' % (variable_name, type(variable)),
+    print variable
+
