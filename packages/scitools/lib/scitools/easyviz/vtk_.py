@@ -847,6 +847,9 @@ class VtkBackend(BaseClass):
                 streamribbon.SetInput(data.GetOutput())
                 streamribbon.VaryWidthOn()
                 streamribbon.SetWidthFactor(item.get('ribbonwidth'))
+                #streamribbon.SetAngle(90)
+                streamribbon.SetDefaultNormal([0,1,0])
+                streamribbon.UseDefaultNormalOn()
                 streamribbon.Update()
                 output = streamribbon.GetOutput()
             elif item.get('tubes'):
