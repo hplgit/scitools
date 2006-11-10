@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/visualize/f5-3558.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/ref/slice.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 
 BUG = 0.0001 # bug somewhere in _add_slice in vtk_.py
 x,y,z = meshgrid(seq(-2,2,.2),seq(-2,2,.25),seq(-2,2,.16),sparse=True)

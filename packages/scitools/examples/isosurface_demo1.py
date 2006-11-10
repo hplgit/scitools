@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
 # Examples taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/ref/isosurface.html and
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/visualize/f5-3653.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/ref/isosurface.html and
+# http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-3653.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
-from scitools import linspace
+from time import sleep
 
 x, y, z, v = flow()
 

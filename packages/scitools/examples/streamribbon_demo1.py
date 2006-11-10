@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/ref/streamribbon.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/ref/streamribbon.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 from scipy import io
 
 wind = io.loadmat('wind_matlab_v6.mat')
@@ -20,9 +17,10 @@ w = wind['w']
 
 set(show=False)
 sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
-streamribbon(x,y,z,u,v,w,sx,sy,sz)
+streamribbon(x,y,z,u,v,w,sx,sy,sz,ribbonwidth=5)
 view(3)
-axis([60,140,10,60,-5,20])
+daspect([1,1,1])
+axis('tight')
 shading('interp')
 #camlight(); lighting('gouraud')
 set(show=True)
@@ -31,8 +29,9 @@ sleep(3)
 
 # alternative syntax:
 streamribbon(x,y,z,u,v,w,sx,sy,sz,
+             daspect=[1,1,1],
              view=3,
-             axis=[60,140,10,60,-5,20],
+             axis='tight',
              shading='interp',
              camlight='right',
              lighting='gouraud')

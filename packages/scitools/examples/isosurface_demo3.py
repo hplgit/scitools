@@ -3,11 +3,8 @@
 # Example taken from:
 # http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-7858.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 from scipy import io
 
 # Create an Isosurface:

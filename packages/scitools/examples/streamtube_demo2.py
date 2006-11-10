@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/visualize/f5-6736.html
-
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
+# http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-6736.html
 
 from time import sleep
 from scitools.easyviz import *
-#from scitools import linspace
-from numpy import linspace
 from scipy import io
 
 wind = io.loadmat('wind_matlab_v6.mat')

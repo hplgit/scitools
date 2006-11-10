@@ -3,11 +3,8 @@
 # Example taken from:
 # http://www.mathworks.fr/access/helpdesk/help/techdoc/ref/streamparticles.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 from scipy import io
 
 wind = io.loadmat('wind_matlab_v6.mat')

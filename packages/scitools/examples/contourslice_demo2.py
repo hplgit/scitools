@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.ch/access/helpdesk/help/techdoc/visualize/f5-3371.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-3371.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 from scipy import io
 
 mri = io.loadmat('mri_matlab_v6.mat')

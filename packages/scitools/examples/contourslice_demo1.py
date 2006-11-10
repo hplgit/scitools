@@ -3,12 +3,8 @@
 # Example taken from:
 # http://www.mathworks.com/access/helpdesk/help/techdoc/ref/contourslice.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
-from scitools import linspace
+from time import sleep
 
 set(show=False)
 x, y, z, v = flow()

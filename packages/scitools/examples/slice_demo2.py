@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/visualize/f5-3558.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-3558.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 
 # Investigate the Data:
 x,y,z,v = flow()

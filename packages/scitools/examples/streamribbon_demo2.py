@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # Example taken from:
-# http://www.mathworks.fr/access/helpdesk/help/techdoc/ref/streamribbon.html
+# http://www.mathworks.com/access/helpdesk/help/techdoc/ref/streamribbon.html
 
-import os
-os.environ['EASYVIZ_BACKEND'] = 'vtk_'
-
-from time import sleep
 from scitools.easyviz import *
+from time import sleep
 
 xmin = -7; xmax = 7
 ymin = -7; ymax = 7 
