@@ -1,18 +1,23 @@
 """
 
 """
-import common
-__doc__ += common._idea
-
 __author__ = "Rolv Erlend Bredesen, Hans Petter Langtangen, Johannes H. Ring"
 __version__ = "0.1"
 
-from common import *
-from utils import *
-from movie import movie
+import time as _time; _t0 = _time.clock();
+_import_times = 'easyviz import time: '
+
+import common
+__doc__ += common._idea
 
 # ----
 # which backend? load config file, check command line
+backend = 'gnuplot_'
+# load configuration file:
+from scitools.misc import load_config_file
+scitools_config = load_config_file('scitools')
+backend = scitools_config.get('easyviz', 'backend')
+
 import sys
 if '--easyviz' in sys.argv:
     try:
@@ -20,18 +25,24 @@ if '--easyviz' in sys.argv:
     except:
         print '--easyviz option must be followed by backend name\n'\
               '(gnuplot_, vtk_, matplotlib_, etc.)'
-else:
-    import scitools.basics as _st
-    backend = _st.scitools_config.get('easyviz', 'backend')
+
+_t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
 exec('from %s import *' % backend)
+_t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
+
+from utils import *
+from movie import movie
+
+_t3 = _time.clock(); _import_times += 'utils: %s ' % (_t3 - _t2)
+
 # ----
 
-if _st.VERBOSE >= 1:
-    print "Easyviz backend is %s" % backend
-if _st.VERBOSE >= 3:
-    import time as _time
-    print "Import time %s=%g" % (backend, _time.clock())
+VERBOSE = int(scitools_config.get('modes', 'VERBOSE'))
+if VERBOSE >= 3:
+    print _import_times
+if VERBOSE >= 1:
+    print "scitools.easyviz backend is %s" % backend
 
 
 # add plot doc string to package doc string:

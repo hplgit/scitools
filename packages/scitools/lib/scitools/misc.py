@@ -33,6 +33,31 @@ def get_from_commandline(option, default=None, argv=sys.argv):
         raise IndexError, 'array of command-line arguments is too short; '\
               'no value after %s option' % option
 
+def load_config_file(name, locations=[]):
+    """
+    Load a config file with the format implied by the ConfigParser
+    module (Windows .INI files).
+
+    @param name: name stem of config file, e.g., "mytools".
+    @param locations: optional list of directories with name.cfg files.
+    @return: a ConfigParser object.
+
+    A config file is searched for as follows:
+    1) name.cfg files for each directory in locations list,
+    2) name.cfg.py in the same directory as this module,
+    3) name.cfg in the directory where the main script is running,
+    4) name.cfg in the user's home directory.
+    """
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+
+    _default_config_file = os.path.join(os.path.dirname(__file__),
+                                        '%s.cfg.py' % name)
+    config.readfp(open(_default_config_file))
+    _files = config.read(locations + ['.scitools.cfg',
+                                      os.path.expanduser('~/.scitools.cfg')])
+    return config
+                     
 def str2obj(s, globals=globals(), locals=locals()):
     """
     Turn string s into the corresponding object.
