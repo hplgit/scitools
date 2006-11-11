@@ -1,4 +1,7 @@
 """
+Unified interface to Numeric, numarray, and numpy
+=================================================
+
 Numeric, numarray, and numpy can be viewed as three different
 implementations of Numerical Python functionality.  The present module
 enables writing scripts that are independent of the particular choice

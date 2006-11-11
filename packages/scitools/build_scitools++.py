@@ -28,6 +28,7 @@ join = os.path.join
 #          scitools
 #          IPython
 #          epydoc
+#          preprocess.py
 #          ...
 #       bin
 #
@@ -36,6 +37,7 @@ join = os.path.join
 #
 # scitools contains some py4cs modules and some new stuff
 
+thisdir = os.getcwd()
 olddir = join('build', 'previous-build-of-scitools++')
 newdir = join('build', 'scitools++')
 libdir = join(newdir, 'lib')
@@ -57,13 +59,7 @@ os.makedirs(libdir)
 os.makedirs(bindir)
 os.makedirs(scitools_dir)
 
-
-
-def os_system(cmd):
-    failure = os.system(cmd)
-    if failure:
-        print 'FAILURE of command:\n', cmd
-        sys.exit(1)
+from scitools.misc import os_system
         
 def clean(root, filetypes=['*.pyc', '*~', '*.pyo']):
     for type in filetypes:
@@ -72,6 +68,11 @@ def clean(root, filetypes=['*.pyc', '*~', '*.pyo']):
 def copy_pure_scitools_files():
     """Copy pure scitools files from original place to new scitools++ tree."""
     print '********* copy pure scitools files **************'
+    # run _update.py locally in scitools dir:
+    os.chdir(st_src)
+    os_system('python _update.py')
+    os.chdir(thisdir)
+    
     clean(root=st_src)
     files = glob.glob(join(st_src, '*'))
     # (shutil.copytree does not work properly for this type of copy)
@@ -146,9 +147,10 @@ def copy_py4cs():
 def remove_svn_files(root=newdir):
     print '********* remove svn directories **************'
     cmd = 'find %s -name ".svn" -print' % root
-    os_system(cmd)
+    res = os_system(cmd)
     cmd = 'find %s -name ".svn" -exec rm -rf {} \;' % root
-    os.system(cmd)  # drop testing since this removal is always failure
+    # drop testing and hide output since this removal is always failure
+    os_system(cmd, grab_output=True, failure_handling='silent')  
 
 def copy_third_party_modules():
     """
@@ -161,7 +163,7 @@ def copy_third_party_modules():
     print '********* copy third-party modules to scitools++ **************'
     path = join(sys.prefix, 'lib', 'python' + sys.version[:3], 'site-packages')
     clean(root=path)
-    files = ['Gnuplot', 'IPython', 'Scientific', 'epydoc', ]
+    files = ['Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess.py']
     print files
     # shutil.copytree does not work properly for this type of copy
     files = [join(path, file) for file in files]
@@ -176,7 +178,7 @@ def copy_third_party_scripts():
     Copy third party executable scripts to the scitools++/bin directory.
     """
     print '********* copy third-party executable scripts **************'
-    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui')
+    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui', 'preprocess')
     print scripts
     for script in scripts:
         os_system("cp `which %s` %s" % (script, bindir))

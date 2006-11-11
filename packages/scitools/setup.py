@@ -8,7 +8,7 @@ __author__ = 'Rolv Erlend Bredsen <rolv@simula.no>'
 
 import os, sys, socket, re, glob
 
-BOOTSTRAP = 1 # Bootstrap setuptools
+BOOTSTRAP = False # Bootstrap setuptools
 
 if BOOTSTRAP:
     from ez_setup import use_setuptools
@@ -22,8 +22,9 @@ else:
 	from setuptools import setup
     else:
 	from distutils.core import setup
-    
-configfile = os.path.join("lib", "scitools", "scitools.cfg")
+
+# The scitools.cfg.py config file is treated as a Python file...
+#configfile = os.path.join("lib", "scitools", "scitools.cfg.py")
 ver = sys.version[:3]
 
 setup(
@@ -39,10 +40,9 @@ setup(
                 os.path.join("scitools", "easyviz"), 
 		os.path.join("scitools", "pyPDE"),
                 ],
-    #py_modules = ['numpytools',], # Extra scripts to install
     # Force configfile to reside with the scitools python package
     #data_files = [('lib/python'+ver+'/site-packages/scitools', [configfile,])],
-    data_files = [("scitools", [configfile,])], # easier to use bootstrap
+    #data_files = [("scitools", [configfile,])], # easier to use bootstrap
     
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],

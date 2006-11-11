@@ -24,8 +24,10 @@ setup(
     # packages to install:
     packages = ["scitools", "scitools.easyviz", "scitools.pyPDE",] + \
                external_packages,
+    py_modules = ["preprocess",],
     # standalone scripts :
-    scripts = glob.glob(os.path.join('scitools', 'bin', '*')),
+    scripts = [os.path.join('scitools', 'bin', f) \
+               for f in os.listdir('bin') if not f.startswith('.')],
     )
     
     

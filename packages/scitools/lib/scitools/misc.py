@@ -1,10 +1,64 @@
 """
-A collection of Python utilities developed for the
+A collection of Python utilities originally developed for the
 "Python for Computational Science" book.
 """
 
 import time, sys, os, re, getopt, math, threading, shutil
 from errorcheck import right_type
+
+def os_system(command, verbose=0, failure_handling='exit',
+              grab_output=0):
+    """
+    Wrapping of the os.system command. This function checks the
+    return value and issues a warning of exception.
+
+    @param command: operating system command to be executed.
+    @param verbose: False: no output, True: print command.
+    @param failure_handling: one of 'exit', 'warning', 'exception',
+    or 'silent'.
+    @param grab_output: 1: return list of lines in output,
+    2: return list of lines in output and standard error (two lists),
+    0: do not return any output. If execution failed, False is returned
+    in any case.
+    @return: see the grab_output parameter.
+    """
+    if verbose:
+        print 'Running operating system command\n   %s' % command
+        
+    if grab_output:
+        import popen2
+        stdout, stdin, stderr = popen2.popen3(command)
+        res = stdout.readlines()
+        errors = stderr.readlines()
+        failure = stdout.close()
+        stdin.close()
+        stderr.close()
+    else:
+        failure = os.system(command)
+
+    if failure:
+        msg = 'Failure when running operating system command\n  %s' % command
+        if failure_handling == 'warning':
+            print 'Warning:', msg
+        elif failure_handling == 'exit':
+            print msg, '\nExecution aborted!'
+        elif failure_handling == 'exception':
+            raise OSError, msg
+        elif failure_handling == 'silent':
+            pass
+        else:
+            raise ValueError, 'wrong value "%s" of failure_handling' % \
+                  failure_handling
+
+    if not failure:
+        if grab_output == 1:
+            return res
+        elif grab_output == 2:
+            return res, errors
+        elif grab_output:
+            return res
+
+    return not bool(failure)
 
 def get_from_commandline(option, default=None, argv=sys.argv):
     """
@@ -42,11 +96,12 @@ def load_config_file(name, locations=[]):
     @param locations: optional list of directories with name.cfg files.
     @return: a ConfigParser object.
 
-    A config file is searched for as follows:
-    1) name.cfg files for each directory in locations list,
-    2) name.cfg.py in the same directory as this module,
-    3) name.cfg in the directory where the main script is running,
-    4) name.cfg in the user's home directory.
+    A config file is searched for as follows (in the listed order):
+
+      1. name.cfg files for each directory in locations list,
+      2. name.cfg.py in the same directory as this module,
+      3. name.cfg in the directory where the main script is running,
+      4. name.cfg in the user's home directory.
     """
     import ConfigParser
     config = ConfigParser.ConfigParser()
@@ -57,6 +112,7 @@ def load_config_file(name, locations=[]):
     _files = config.read(locations + ['.scitools.cfg',
                                       os.path.expanduser('~/.scitools.cfg')])
     return config
+
                      
 def str2obj(s, globals=globals(), locals=locals()):
     """
@@ -268,28 +324,28 @@ def findprograms(programs, searchlibs=[], write_message=False):
     case, findprograms returns True or False according to whether
     the program is found or not.
     
-    Example on usage:
+    Example on usage::
 
-    if findprograms('plotmtv'):
-        os.system('plotmtv ...')
+      if findprograms('plotmtv'):
+          os.system('plotmtv ...')
 
-    # write a message if a program is not found:
-    if findprograms(['plotmtv'], write_message=True):
-        os.system('plotmtv ...')
+      # write a message if a program is not found:
+      if findprograms(['plotmtv'], write_message=True):
+          os.system('plotmtv ...')
 
-    programs = ['gs', 'convert']
-    path = findprograms(programs)
-    if path['gs']:
-        os.system('gs ...')
-    if path['convert']:
-        os.system('convert ...')
+      programs = ['gs', 'convert']
+      path = findprograms(programs)
+      if path['gs']:
+          os.system('gs ...')
+      if path['convert']:
+          os.system('convert ...')
 
-    programs = { 'gs' : 'Ghostscript: file format conversions',
-                 'convert' : 'File format conversion from ImageMagick',
-               }
-    if not findprograms(programs, write_message=True):
-        print 'the mentioned programs need to be installed'
-        sys.exit(1)
+      programs = { 'gs' : 'Ghostscript: file format conversions',
+                   'convert' : 'File format conversion from ImageMagick',
+                 }
+      if not findprograms(programs, write_message=True):
+          print 'the mentioned programs need to be installed'
+          sys.exit(1)
     """
     def program_exists(fullpath):
         if sys.platform.startswith('win'):
@@ -705,10 +761,10 @@ def checkmathfunc(f, args):
     """
     Investigate the (mathematical) function f(*args):
 
-       * Check that f works with scalar and array arguments
+    * Check that f works with scalar and array arguments
 
-       * Check if args are scalars and if basic functions in
-         f apply NumPy versions and not math
+    * Check if args are scalars and if basic functions in
+    f apply NumPy versions and not math
     """
     import numarray, Numeric
     # local import:

@@ -1,6 +1,6 @@
 """
-Functionality of this module that extends Numerical Python:
------------------------------------------------------------
+Functionality of this module that extends Numerical Python
+==========================================================
 
 The following extensions to Numerical Python are also defined:
 

@@ -27,6 +27,7 @@ def run_preprocess(files):
             _warning = ppy_warning % f
             _f = open(f_new, 'w'); _f.write(_warning + _str); _f.close()
 
-files = ['numpytools.ppy',]
-run_preprocess(files)
+if __name__ == '__main__':
+    files = ['numpytools.ppy',]
+    run_preprocess(files)
 

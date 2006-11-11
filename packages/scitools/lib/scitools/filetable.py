@@ -3,29 +3,18 @@
 Read tabular data from file into NumPy arrays and vice versa.
 
 This module provides functions for
+1) reading row-column table data from file into NumPy arrays, and
+2) writing two-dimensional NumPy arrays to file in a table fashion.
 
-  * reading row-column table data from file into NumPy arrays
-  * writing two-dimensional NumPy arrays to file in a table fashion.
+read: Load a table with numbers into a two-dim. NumPy array.
 
-read:
-    Load a table with numbers into a two-dim. NumPy array.
-    file            file object
-    commentchar     files starting with commentchar are skipped
-                    (a blank line is an array data delimiter and stops reading)
-    output          two-dimensional (row-column) NumPy array.
+write: Write a two-dim. NumPy array a in tabular form.
 
-write:
-    Write a two-dim. NumPy array a in tabular form.
-    file             file object
-    a                two-dim. NumPy array
+read_columns: As read, but the columns are returned as separate arrays instead
+of a two-dimensional array.
 
-read_columns:
-    As read, but the columns are returned as separate arrays instead
-    of a two-dimensional array.
-
-write_columns:
-    As write, but the arguments are comma-separated one-dimensional
-    arrays, one for each column, instead of a two-dimensional array.
+write_columns: As write, but the arguments are comma-separated one-dimensional
+arrays, one for each column, instead of a two-dimensional array.
 """
 # author: Hans Petter Langtangen <hpl@ifi.uio.no>
 
@@ -36,7 +25,13 @@ __all__ = ['read', 'read2', 'read_columns', 'readfile',
            'write', 'write2', 'write3', 'write4', 'write_columns',]
 
 def read(file, commentchar='#'):
-    """Load a table with numbers into a two-dim. NumPy array."""
+    """
+    Load a table with numbers into a two-dim. NumPy array.
+    @param file: open file object.
+    @param commentchar: lines starting with commentchar are skipped
+    (a blank line is an array data delimiter and stops reading).
+    @return: two-dimensional (row-column) NumPy array.
+    """
     # read until next blank line:
     r = []  # total set of numbers (r[i]: numbers in i-th row)
     while 1:  # might call read several times for a file
@@ -98,7 +93,7 @@ def readfile(filename, commentchar='#'):
 
 
 def write(file, a):
-    """Write a two-dim. NumPy array a in tabular form."""
+    """Write a two-dim. NumPy array a in tabular form to open file object."""
     if len(a.shape) != 2:
         raise TypeError, \
               "a 2D array is required, shape now is "+str(a.shape)

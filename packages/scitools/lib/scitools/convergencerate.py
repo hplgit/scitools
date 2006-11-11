@@ -46,17 +46,17 @@ class ManyDiscretizationPrm(object):
 
     def nonlinear_fit(d, e, initial_guess):
         """
-        d   : list of values of the set of discretization
+        @param d: list of values of the set of discretization
               parameters in each experiment:
-              d = ((d_1,d_2,d_3),(d_1,d_2,d_3,),...)
+              d = ((d_1,d_2,d_3),(d_1,d_2,d_3,),...);
               d[i] provides the values of the discretization
-              parameters in experiement no. i
-        e   : list of error values; e = (e_1, e_2, ...)
+              parameters in experiement no. i.
+        @param e: list of error values; e = (e_1, e_2, ...):
               e[i] is the error associated with the parameters
-              d[i]
-
-        initial_guess is the starting value for the unknown
+              d[i].
+        @param initial_guess: the starting value for the unknown
         parameters vector.
+        @return: list of fitted paramters.
         """
         if len(d) != len(e):
             raise ValueError, 'len(d) != len(e)'
@@ -116,16 +116,17 @@ class OneDiscretizationPrm(object):
 
     def nonlinear_fit(d, e, initial_guess):
         """
-        d   : list of values of the (single) discretization
+        @param d: list of values of the (single) discretization
               parameter in each experiment:
-              d[i] provides the values of the discretization
-              parameter in experiement no. i
-        e   : list of error values; e = (e_1, e_2, ...)
+              d[i] provides the values of the discretization,
+              parameter in experiement no. i.
+        @param e: list of error values; e = (e_1, e_2, ...),
               e[i] is the error associated with the parameters
               d[i]
 
-        initial_guess is the starting value for the unknown
+        @param initial_guess: the starting value for the unknown
         parameters vector.
+        @return: a, C; a is the exponent, C is the factor in front.
         """
         if len(d) != len(e):
             raise ValueError, 'd and e must have the same length'
@@ -258,10 +259,10 @@ def many_discrprm_log_fit(d, e, factors):
     convergence rate for each parameter.
     Only the exponent can be estimated.
     
-    d  : sequence of the main discretization parameter values
-    e  : sequence of corresponding error values
-    factors : multiply factors[j]*d[i][j] such that
-              the rate gets the same
+    @param d: sequence of the main discretization parameter values.
+    @param e: sequence of corresponding error values.
+    @param factors: multiply factors[j]*d[i][j] such that
+    the rate gets the same.
 
     The error model the data is supposed to fit reads
     log(e[i]) = log(C[i]) + a*log(d[i])
