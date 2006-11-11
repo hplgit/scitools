@@ -26,7 +26,7 @@ setup(
                external_packages,
     py_modules = ["preprocess",],
     # standalone scripts :
-    scripts = [os.path.join('scitools', 'bin', f) \
+    scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
     )
     
