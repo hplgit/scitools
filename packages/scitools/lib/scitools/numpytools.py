@@ -3,12 +3,6 @@
 # Edit the original file numpytools.ppy (on which preprocess.py will be run)
 #############################################################################
 """
-Unified interface to Numeric, numarray, and numpy
-=================================================
-
-This module imports Numeric, numarray, or numpy, plus some other
-useful functions for numerical computing.
-
 %s
 
 %s
@@ -20,6 +14,9 @@ import os, sys, operator, math
 
 # to copied into this file by preprocess.py:
 """
+Unified interface to Numeric, numarray, and numpy
+=================================================
+
 Numeric, numarray, and numpy can be viewed as three different
 implementations of Numerical Python functionality.  The present module
 enables writing scripts that are independent of the particular choice
@@ -536,8 +533,8 @@ def fortran_storage(a):
         return numpy.asarray(a, fortran=True)
     
 """
-Functionality of this module that extends Numerical Python:
------------------------------------------------------------
+Functionality of this module that extends Numerical Python
+==========================================================
 
 The following extensions to Numerical Python are also defined:
 
