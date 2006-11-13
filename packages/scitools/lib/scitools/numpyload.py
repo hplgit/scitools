@@ -206,21 +206,26 @@ _NumPy_modules = (
 
 if basic_NumPy == 'numpy':
     try:
-        for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
-            if _numpy_name == 'RNG':
-                import numpy.random
-                RNG = numpy.random
-            elif _numpy_name == 'FFT': # on windows import numpy.FFT fails
-                import numpy
-                FFT = numpy.FFT
-            elif _numpy_name != '':
-                exec 'import %s; %s = %s' % \
-                     (_numpy_name, _Numeric_name, _numpy_name)
-        del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
+	import numpy
+	oldversion = (numpy.version.version[0] != '1')
+	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
+	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
+		n, module = _numpy_name.split('.')
+		exec "from %s import %s as %s" %(n, module, _Numeric_name)
+	    elif oldversion and (_Numeric_name == 'MLab'):
+		from numpy.lib import mlab as MLab
+	    elif _numpy_name != '':
+		exec 'import %s; %s = %s' % \
+		(_numpy_name, _Numeric_name, _numpy_name)
+		
+	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
-        from numpy import *
-        # get the old names too (NewAxis, Float, etc.):
-        from numpy.oldnumeric import *
+	from numpy import *
+	if not oldversion:
+	    # get the old names too (NewAxis, Float, etc.):
+	    from numpy.oldnumeric import *
+	del(oldversion)
+
 
     except ImportError, e:
         raise ImportError, '%s\nnumpy import failed!\n'\
