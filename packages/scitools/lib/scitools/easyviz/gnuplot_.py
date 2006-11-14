@@ -1,9 +1,9 @@
 from common import *
 from misc import arrayconverter
 from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose
-import Gnuplot, tempfile, os
+import Gnuplot, tempfile, os, sys
 
-if os.uname()[0] == "Darwin" and os.environ.get("TERM", "") == "xterm":
+if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
     Gnuplot.GnuplotOpts.default_term = "x11"
 
 class GnuplotBackend(BaseClass):
