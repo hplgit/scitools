@@ -3,6 +3,9 @@ from misc import arrayconverter
 from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose
 import Gnuplot, tempfile, os
 
+if os.uname()[0] == "Darwin" and os.environ.get("TERM", "") == "xterm":
+    Gnuplot.GnuplotOpts.default_term = "x11"
+
 class GnuplotBackend(BaseClass):
     """
     Backend using the Gnuplot.py Python module.
