@@ -107,7 +107,7 @@ def load_config_file(name, locations=[]):
     config = ConfigParser.ConfigParser()
 
     _default_config_file = os.path.join(os.path.dirname(__file__),
-                                        '%s.cfg.py' % name)
+                                        '%s.cfg' % name)
     config.readfp(open(_default_config_file))
     _files = config.read(locations + ['.scitools.cfg',
                                       os.path.expanduser('~/.scitools.cfg')])
