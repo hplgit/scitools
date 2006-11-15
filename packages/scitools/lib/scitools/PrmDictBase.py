@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Module for managing parameters.
+"""
 import re, os, sys
 
 def message(m):
@@ -8,116 +11,116 @@ def message(m):
 
 class PrmDictBase(object):
     """
-    Base class for holding parameters stored in dictionaries.
-    Typical use includes data or solver classes for solving physical
-    problems numerically. One may then choose to hold all physical
-    parameters in a dictionary physical_prm, containing
-    (parameter name, value) pairs, and all numerical parameters in
-    a dictionary numerical_prm. The physical_prm and numerical_prm
-    dictionaries can then be defined in a subclass of PrmDictBase
-    and managed by PrmDictBase. The management includes several
-    convenient features:
+Base class for managing parameters stored in dictionaries.
+Typical use includes data or solver classes for solving physical
+problems numerically. One may then choose to hold all physical
+parameters in a dictionary physical_prm, containing
+(parameter name, value) pairs, and all numerical parameters in
+a dictionary numerical_prm. The physical_prm and numerical_prm
+dictionaries can then be defined in a subclass of PrmDictBase
+and managed by PrmDictBase. The management includes several
+convenient features:
 
-    * keeping all input data in one place
-    * setting of one or more parameters where the type of the value
-      must match the type of the previous (initial) value
-    * pretty print of all defined parameters
-    * copying parameters from dictionaries to, e.g., local variables
-      and back again, or to local namespaces and back again
-    * easy transition from parameter dictionaries to more sophisticated
-      handling of input data, e.g., class scitools.ParameterInterface
-      (GUI, CGI, command-line args)
+ - keeping all input data in one place
+ - setting of one or more parameters where the type of the value
+   must match the type of the previous (initial) value
+ - pretty print of all defined parameters
+ - copying parameters from dictionaries to, e.g., local variables
+   and back again, or to local namespaces and back again
+ - easy transition from parameter dictionaries to more sophisticated
+   handling of input data, e.g., class scitools.ParameterInterface
+   (GUI, CGI, command-line args)
 
-    The subclass typically defines the dictionaries, say
-    self.physical_prm and self.numerical_prm. Then these are
-    appended to the inherited self._prm_list list to be registered.
-    All members of this list are dictionaries that will not accept
-    new keys (i.e., all parameters must be defined prior to registering
-    them in self._prm_list). With this list one has a collection of all
-    parameter dictionaries in the application.
+The subclass typically defines the dictionaries, say
+self.physical_prm and self.numerical_prm. Then these are
+appended to the inherited self._prm_list list to be registered.
+All members of this list are dictionaries that will not accept
+new keys (i.e., all parameters must be defined prior to registering
+them in self._prm_list). With this list one has a collection of all
+parameter dictionaries in the application.
 
-    self._type_check[prm] is defined if we want to type check
-    a parameter prm.
-    if self._type_check[prm] is True (or False), prm must either
-    be None, of the same type as the previously registered
-    value of prm, or any number (float, int, complex) if
-    the previous value prm was any number. Instead of a boolean
-    value, self._type_check[prm] may hold a tuple of class types
-    (to be used in isinstance checks), or a function which takes
-    the value as argument and returns True if the that value is
-    of the right type (otherwise False).
-    
-
-    In addition to the parameter dictionaries with fixed keys, class
-    PrmDictBase also holds a self.user_prm, which is a dictionary
-    of "meta data", i.e., an arbitrary set of keys and values that
-    can arbitrarily extended anywhere. If self.user_prm is None,
-    no such meta data can exists (implying that only parameters
-    registered in the dictionaries in self._prm_list are allowed - the
-    programmer of subclasses can of course extend these parameter
-    sets whenever desired; disallowing a parameter name is only a
-    feature of the set function for setting the value of a (registered)
-    parameter).
-
-    Here is an example:
-
-from scitools.PrmDictBase import PrmDictBase
-
-class SomeSolver(PrmDictBase):
-    def __init__(self, **kwargs):
-        PrmDictBase.__init__(self)
-        # register parameters in dictionaries:
-        self.physical_prm = {'density': 1.0, 'Cp': 1.0,
-                                   'k': 1.0, 'L': 1.0}
-        self.numerical_prm =  {'n': 10, 'dt': 0.1, 'tstop': 3}
-
-        # attach dictionaries to base class list (required):
-        self._prm_list = [self.physical_prm, self.numerical_prm]
-
-        # specify parameters to be type checked when set:
-        self._type_check.update({'n': True, 'dt': (float,),
-              'k': lambda k: isinstance(int,float) and k>0})
-
-        # disallow arbitrary meta data
-        self.user_prm = None # set to {} if meta data are allowed
-
-        # initialize parameters according to keyword arguments:
-        self.set(**kwargs)
+self._type_check[prm] is defined if we want to type check
+a parameter prm.
+if self._type_check[prm] is True (or False), prm must either
+be None, of the same type as the previously registered
+value of prm, or any number (float, int, complex) if
+the previous value prm was any number. Instead of a boolean
+value, self._type_check[prm] may hold a tuple of class types
+(to be used in isinstance checks), or a function which takes
+the value as argument and returns True if the that value is
+of the right type (otherwise False).
 
 
-    def _update(self):
-        # dt depends on n, L, k; update dt in case the three
-        # others parameters have been changed
-        # (in general this method is used to check consistency
-        # between parameters and perform updates if necessary)
-        n = self.numerical_prm['n']
-        L = self.physical_prm['L']
-        k = self.physical_prm['k']
+In addition to the parameter dictionaries with fixed keys, class
+PrmDictBase also holds a self.user_prm, which is a dictionary
+of "meta data", i.e., an arbitrary set of keys and values that
+can arbitrarily extended anywhere. If self.user_prm is None,
+no such meta data can exists (implying that only parameters
+registered in the dictionaries in self._prm_list are allowed - the
+programmer of subclasses can of course extend these parameter
+sets whenever desired; disallowing a parameter name is only a
+feature of the set function for setting the value of a (registered)
+parameter).
 
-        self.u = zeros(n+1, Float)
-        h = L/float(n)
-        dt_limit = h**2/(2*k)
-        if self.numerical_prm['dt'] > dt_limit:
-            self.numerical_prm['dt'] = dt_limit
+Here is an example::
 
-    def compute1(self):
-        # compute something
-        return self.physical_prm['k']/self.physical_prm['Cp']
-    
-    def compute2(self):
-        # turn numerical parameters into local variables:
-        exec self.dicts2variables(self._prm_list)
-        # or exec self.dicts2variables(self.numerical_prm)  # selected prms
+    from scitools.PrmDictBase import PrmDictBase
 
-        # now we have local variables n, dt, tstop, density, Cp, k, L
-        # that we can compute with, say
+    class SomeSolver(PrmDictBase):
+        def __init__(self, **kwargs):
+            PrmDictBase.__init__(self)
+            # register parameters in dictionaries:
+            self.physical_prm = {'density': 1.0, 'Cp': 1.0,
+                                       'k': 1.0, 'L': 1.0}
+            self.numerical_prm =  {'n': 10, 'dt': 0.1, 'tstop': 3}
 
-        Q = k/Cp
-        dt = 0.9*dt
+            # attach dictionaries to base class list (required):
+            self._prm_list = [self.physical_prm, self.numerical_prm]
 
-        # if some of the local variables are changed, say dt, they must
-        # be inserted back into the parameter dictionaries:
-        self.variables2dicts(self.numerical_prm, dt=dt)    
+            # specify parameters to be type checked when set:
+            self._type_check.update({'n': True, 'dt': (float,),
+                  'k': lambda k: isinstance(int,float) and k>0})
+
+            # disallow arbitrary meta data
+            self.user_prm = None # set to {} if meta data are allowed
+
+            # initialize parameters according to keyword arguments:
+            self.set(**kwargs)
+
+
+        def _update(self):
+            # dt depends on n, L, k; update dt in case the three
+            # others parameters have been changed
+            # (in general this method is used to check consistency
+            # between parameters and perform updates if necessary)
+            n = self.numerical_prm['n']
+            L = self.physical_prm['L']
+            k = self.physical_prm['k']
+
+            self.u = zeros(n+1, Float)
+            h = L/float(n)
+            dt_limit = h**2/(2*k)
+            if self.numerical_prm['dt'] > dt_limit:
+                self.numerical_prm['dt'] = dt_limit
+
+        def compute1(self):
+            # compute something
+            return self.physical_prm['k']/self.physical_prm['Cp']
+
+        def compute2(self):
+            # turn numerical parameters into local variables:
+            exec self.dicts2variables(self._prm_list)
+            # or exec self.dicts2variables(self.numerical_prm)  # selected prms
+
+            # now we have local variables n, dt, tstop, density, Cp, k, L
+            # that we can compute with, say
+
+            Q = k/Cp
+            dt = 0.9*dt
+
+            # if some of the local variables are changed, say dt, they must
+            # be inserted back into the parameter dictionaries:
+            self.variables2dicts(self.numerical_prm, dt=dt)    
 
     """
     

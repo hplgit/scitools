@@ -99,7 +99,7 @@ def load_config_file(name, locations=[]):
     A config file is searched for as follows (in the listed order):
 
       1. name.cfg files for each directory in locations list,
-      2. name.cfg.py in the same directory as this module,
+      2. name.cfg in the same directory as this module,
       3. name.cfg in the directory where the main script is running,
       4. name.cfg in the user's home directory.
     """
@@ -109,8 +109,8 @@ def load_config_file(name, locations=[]):
     _default_config_file = os.path.join(os.path.dirname(__file__),
                                         '%s.cfg' % name)
     config.readfp(open(_default_config_file))
-    _files = config.read(locations + ['.scitools.cfg',
-                                      os.path.expanduser('~/.scitools.cfg')])
+    _files = config.read(locations + ['.%s.cfg' % name,
+                                      os.path.expanduser('~/.%s.cfg' % name)])
     return config
 
                      
@@ -761,10 +761,10 @@ def checkmathfunc(f, args):
     """
     Investigate the (mathematical) function f(*args):
 
-    * Check that f works with scalar and array arguments
+      - Check that f works with scalar and array arguments
 
-    * Check if args are scalars and if basic functions in
-    f apply NumPy versions and not math
+      - Check if args are scalars and if basic functions in
+        f apply NumPy versions and not math
     """
     import numarray, Numeric
     # local import:

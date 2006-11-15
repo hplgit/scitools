@@ -6,15 +6,17 @@ This module provides functions for
 1) reading row-column table data from file into NumPy arrays, and
 2) writing two-dimensional NumPy arrays to file in a table fashion.
 
-read: Load a table with numbers into a two-dim. NumPy array.
+  - read: Load a table with numbers into a two-dim. NumPy array.
 
-write: Write a two-dim. NumPy array a in tabular form.
+  - write: Write a two-dim. NumPy array a in tabular form.
 
-read_columns: As read, but the columns are returned as separate arrays instead
-of a two-dimensional array.
+  - read_columns:
+    As read, but the columns are returned as separate arrays instead
+    of a two-dimensional array.
 
-write_columns: As write, but the arguments are comma-separated one-dimensional
-arrays, one for each column, instead of a two-dimensional array.
+  - write_columns:
+    As write, but the arguments are comma-separated one-dimensional
+    arrays, one for each column, instead of a two-dimensional array.
 """
 # author: Hans Petter Langtangen <hpl@ifi.uio.no>
 
