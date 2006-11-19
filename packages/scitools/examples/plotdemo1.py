@@ -1,10 +1,4 @@
-from scitools import *
-from scitools.easyviz import *
-
-def pic(fname):
-    print 'Click on the plot window to proceed!'
-    os.system('import %s' % fname)
-    
+from scitools.all import *
 
 x = seq(0, 15, 0.2)
 y = sin(x)*x

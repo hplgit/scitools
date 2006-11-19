@@ -15,8 +15,23 @@ so the command is ended.
 
 from code import InteractiveInterpreter
 # see InteractiveConsole for example on using InteractiveInterpreter
-import sys
+import sys, random, time
 
+def printline(prompt, line, human_typing=False):
+    if not human_typing:
+        print prompt, line
+    else:
+        print prompt,
+        # type one and one character with a random sleep in between
+        max_delay = 0.6  # seconds
+        for char in line:
+            delay = random.uniform(0, max_delay)
+            time.sleep(delay)
+            sys.stdout.write(char)
+            sys.stdout.flush()
+        dummy = raw_input('')
+        
+        
 class RunFileInInterpreter(InteractiveInterpreter):
     def __init__(self, locals=None):
         self._ip = InteractiveInterpreter(locals=locals)
@@ -26,7 +41,7 @@ class RunFileInInterpreter(InteractiveInterpreter):
         prompt = '>>>'
         for line in source_code.split('\n'):
             #line = line.rstrip()  # indicates wrong end of buffer list
-            print prompt, line
+            printline(prompt, line, human_typing)
             buffer.append(line)
             source = '\n'.join(buffer)
             try:
@@ -43,17 +58,9 @@ class RunFileInInterpreter(InteractiveInterpreter):
                 prompt = '>>>'
                 buffer = []
 
-if __name__ == '__main__':        
-    try:
-        _filename = sys.argv[1]
-    except:
-        print 'Usage: interpret.py filename'
-        sys.exit(1)
-
-    # define the complete source code file as _sc string:
-    if _filename == 'demo':
-        # just provide some demo code for testing:
-        _sc = """
+def _test():
+    # just provide some demo code for testing:
+    _sc = """
 a = 1
 def f(x):
     x = x + 2
@@ -63,6 +70,25 @@ b = f(2)
 dir()
 print 'correct?', b == 4
     """
+    return _sc
+    
+if __name__ == '__main__':        
+    try:
+        _filename = sys.argv[1]
+    except:
+        print 'Usage: interpret.py filename'
+        sys.exit(1)
+
+    human_typing = False
+    try:
+        if sys.argv[2] == 'human':
+            human_typing = True
+    except:
+        pass
+        
+    # define the complete source code file as _sc string:
+    if _filename == 'demo':
+        _sc = _test()
     else:
         _sc = open(_filename, 'r').read()
     del _filename

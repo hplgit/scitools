@@ -9,11 +9,6 @@ Easyviz is copied from the original source to scitools/easyviz.
 py4cs is replaced by scitools, and easyviz.numpytools is replaced by
 scitools.numpytools, and easyviz/numpytools.py is removed (resides
 only in the scitools/ parent directory).
-
-pyPDE is copied from the original source to scitools/pyPDE.
-
-Future changes may remove the easyviz original source and put it (and pyPDE)
-directly under scitools.
 """
 
 import os, glob, sys, shutil
@@ -59,18 +54,18 @@ os.makedirs(libdir)
 os.makedirs(bindir)
 os.makedirs(scitools_dir)
 
-from scitools.misc import os_system
+from scitools.misc import system
         
 def clean(root, filetypes=['*.pyc', '*~', '*.pyo']):
     for type in filetypes:
-        os_system("find %s -name '%s' -exec rm -f {} \;" % (root, type))
+        system("find %s -name '%s' -exec rm -f {} \;" % (root, type))
         
 def copy_pure_scitools_files():
     """Copy pure scitools files from original place to new scitools++ tree."""
     print '********* copy pure scitools files **************'
     # run _update.py locally in scitools dir:
     os.chdir(st_src)
-    os_system('python _update.py')
+    system('python _update.py')
     os.chdir(thisdir)
     
     clean(root=st_src)
@@ -78,14 +73,14 @@ def copy_pure_scitools_files():
     # (shutil.copytree does not work properly for this type of copy)
     cmd = 'cp -r ' + ' '.join(files) + ' ' + scitools_dir
     print cmd
-    os_system(cmd)
+    system(cmd)
 
     # copy bin files:
     bin = join('bin')
     files = glob.glob(join(bin, '*'))
     cmd = 'cp -r ' + ' '.join(files) + ' ' + bindir
     print cmd
-    os_system(cmd)
+    system(cmd)
         
 
 def copy_package(package):
@@ -97,13 +92,13 @@ def copy_package(package):
     # (shutil.copytree does not work properly for this type of copy)
     cmd = 'cp -r ' + dir + ' ' + scitools_dir
     print cmd
-    os_system(cmd)
+    system(cmd)
 
 def rename(directory, from_name='py4cs', to_name='scitools'):
     # not used anymore
     """Rename py4cs to scitools in directory/*.py files."""
     pyfiles = ' '.join(glob.glob(join(directory, '*.py')))
-    os_system(r"subst.py '%s\.' %s. " % (from_name, to_name) + pyfiles)
+    system(r"subst.py '%s\.' %s. " % (from_name, to_name) + pyfiles)
     # (some of the "from scitools.... import ..." could be replaced by
     # the standard "from scitools import *")
     for f in glob.glob(join(directory, '*.old~')):
@@ -147,10 +142,10 @@ def copy_py4cs():
 def remove_svn_files(root=newdir):
     print '********* remove svn directories **************'
     cmd = 'find %s -name ".svn" -print' % root
-    res = os_system(cmd)
+    res = system(cmd)
     cmd = 'find %s -name ".svn" -exec rm -rf {} \;' % root
     # drop testing and hide output since this removal is always failure
-    os_system(cmd, grab_output=True, failure_handling='silent')  
+    system(cmd, grab_output=True, failure_handling='silent')  
 
 def copy_third_party_modules():
     """
@@ -170,7 +165,7 @@ def copy_third_party_modules():
     pmw = join(py_package_src, 'Pmw')
     cmd = 'cp -r ' + ' '.join(files) + ' ' + pmw + ' ' + libdir
     print cmd
-    os_system(cmd)
+    system(cmd)
     clean(root=join(libdir, 'Pmw'))
 
 def copy_third_party_scripts():
@@ -178,13 +173,22 @@ def copy_third_party_scripts():
     Copy third party executable scripts to the scitools++/bin directory.
     """
     print '********* copy third-party executable scripts **************'
-    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui', 'preprocess')
+    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui',)
     print scripts
     for script in scripts:
-        os_system("cp `which %s` %s" % (script, bindir))
+        system("cp `which %s` %s" % (script, bindir))
+    # treat preprocess separately since it has a data file:
+    script = 'preprocess'
+    import commands
+    failure, preprocess_path = commands.getstatusoutput('which %s' % script)
+    preprocess_dir = os.path.dirname(preprocess_path)
+    cmd = "cp %s %s %s" % \
+          (preprocess_path, join(preprocess_dir, 'content.types'), bindir)
+    system(cmd)
+
     # fix headers:
     for f in scripts:
-        os_system(r'subst.py "#!.+" "#!/usr/bin/env python" %s' % \
+        system(r'subst.py "#!.+" "#!/usr/bin/env python" %s' % \
                   join(bindir, f))
     for f in glob.glob(join(bindir, '*.old~')):
         os.remove(f)
@@ -204,7 +208,7 @@ def fix_easyviz_numpytools():
     dir = join(scitools_dir, 'easyviz')
     os.remove(join(dir, 'numpytools.py'))
     pyfiles = ' '.join(glob.glob(join(dir, '*.py')))
-    os_system(r"subst.py 'easyviz.numpytools' 'scitools.numpytools' " + pyfiles)
+    system(r"subst.py 'easyviz.numpytools' 'scitools.numpytools' " + pyfiles)
     for f in glob.glob(join(dir, '*.old~')):
         os.remove(f)
     
@@ -235,6 +239,7 @@ def main():
     copy_third_party_scripts()
     shutil.copy('scitools++_setup.py', join(newdir, 'setup.py'))
     print '\nSciTools++ umbrella was successfully made'
+    print 'Go to the build/ directory and tarpack scitools++'
 
 if __name__ == '__main__':
     main()
