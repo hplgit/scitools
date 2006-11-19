@@ -6,7 +6,7 @@ A collection of Python utilities originally developed for the
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 
-def system(command, verbose=True, failure_handling='exit')
+def system(command, verbose=True, failure_handling='exit'):
     """
     Wrapping of the os.system command. Actually, the
     commands.getstatusoutput function is used, and the output
