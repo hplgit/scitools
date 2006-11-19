@@ -3,45 +3,36 @@ A collection of Python utilities originally developed for the
 "Python for Computational Science" book.
 """
 
-import time, sys, os, re, getopt, math, threading, shutil
+import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 
-def os_system(command, verbose=0, failure_handling='exit',
-              grab_output=0):
+def system(command, verbose=True, failure_handling='exit')
     """
-    Wrapping of the os.system command. This function checks the
-    return value and issues a warning of exception.
+    Wrapping of the os.system command. Actually, the
+    commands.getstatusoutput function is used, and the output
+    from the system command is fetched.
 
     @param command: operating system command to be executed.
     @param verbose: False: no output, True: print command.
     @param failure_handling: one of 'exit', 'warning', 'exception',
     or 'silent'.
-    @param grab_output: 1: return list of lines in output,
-    2: return list of lines in output and standard error (two lists),
-    0: do not return any output. If execution failed, False is returned
-    in any case.
-    @return: see the grab_output parameter.
+    In case of failure, the output from the command is always displayed.
+    @return: the same as commands.getstatusoutput, i.e.,
+    a boolean failure variable and the output string (result of command).
     """
     if verbose:
         print 'Running operating system command\n   %s' % command
-        
-    if grab_output:
-        import popen2
-        stdout, stdin, stderr = popen2.popen3(command)
-        res = stdout.readlines()
-        errors = stderr.readlines()
-        failure = stdout.close()
-        stdin.close()
-        stderr.close()
-    else:
-        failure = os.system(command)
 
+    failure, output = commands.getstatusoutput(command)
+    
     if failure:
-        msg = 'Failure when running operating system command\n  %s' % command
+        msg = 'Failure when running operating system command'\
+              '\n  %s\nOutput:\n%s' % (command, output)
+        if failure_handling == 'exit':
+            print msg, '\nExecution aborted!'
+            sys.exit(1)
         if failure_handling == 'warning':
             print 'Warning:', msg
-        elif failure_handling == 'exit':
-            print msg, '\nExecution aborted!'
         elif failure_handling == 'exception':
             raise OSError, msg
         elif failure_handling == 'silent':
@@ -50,15 +41,7 @@ def os_system(command, verbose=0, failure_handling='exit',
             raise ValueError, 'wrong value "%s" of failure_handling' % \
                   failure_handling
 
-    if not failure:
-        if grab_output == 1:
-            return res
-        elif grab_output == 2:
-            return res, errors
-        elif grab_output:
-            return res
-
-    return not bool(failure)
+    return failure, output
 
 def get_from_commandline(option, default=None, argv=sys.argv):
     """
@@ -143,9 +126,7 @@ def preprocess_all_files(rootdir, options=''):
                 outpath = os.path.join(d, outfilename)
                 cmd = 'preprocess %s %s > %s' % (options, path, outpath)
                 #print cmd
-                failure = os.system(cmd)
-                if failure:
-                    print 'WARNING: could not run\n  %s' %  cmd
+                failure, output = system(cmd, failure_handling='warning')
                 fileinfo.append( ((d, f, outfilename), not failure))
                 # add warning header:
                 _warning = warning % f

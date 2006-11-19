@@ -131,6 +131,7 @@ fd.close()
 """
 
 import os, time, sys, string, re
+from scitools.misc import system as os_system
 from types import *
 try:
     import Tkinter, Pmw
@@ -215,21 +216,21 @@ class TestRun:
         vfile.close()
 
         # do not use time.clock() to measure CPU time; it will not
-        # notice the CPU time(here waiting time) of an os.system command
+        # notice the CPU time(here waiting time) of a system command
         t0 = os.times()  # [user,system,cuser,csystem,elapsed]
         if inputfile == '':
             cmd = '%s %s >> %s' % (program,options,self.logfile)
         else:
             cmd = '%s %s < %s >> %s' % (program,options,inputfile,self.logfile)
-        failure = os.system(cmd)
+        failure, output = os_system(cmd, failure_handling='silent')
         if failure:
             vfile = open(self.logfile, 'a')
             msg = 'ERROR in %s: execution failure arose from the ' \
-                  'command\n  %s\n\n' % (self.scriptfilename,cmd)
+                  'command\n  %s\n\n%s\n\n' % (self.scriptfilename,cmd,output)
             vfile.write(msg)
             vfile.close()
             print msg
-        # write CPU time of os.system command(user+system time
+        # write CPU time of system command(user+system time
         # of child processes):
         t1 = os.times(); tm = t1[2] - t0[2] + t1[3] - t0[3]
         vfile = open(self.logfile, 'a')
@@ -310,11 +311,12 @@ class TestRun:
         """
         batch = int(os.environ.get('BATCH_REGRESSION', 0))
         if not batch:
-            failure = os.system('%s %s' % (program,options))
+            failure, output = os_system('%s %s' % (program,options),
+                                        failure_handling='silent')
             if failure:
                 vfile = open(self.logfile, 'a')
-                msg = 'ERROR in %s: execution failure with %s %s\n' % \
-                      (self.scriptfilename,program,options)
+                msg = 'ERROR in %s: execution failure with %s %s\n%s\n' % \
+                      (self.scriptfilename,program,options,output)
                 vfile.write(msg)
                 print msg
 
@@ -365,7 +367,7 @@ class TestRun:
         # convert to gif:
         filestem = re.sub(r'(.*)\.[e]?ps', '', psfile)
         print 'picture: psfile=',psfile,'filestem=',filestem
-        os.system('convert %s gif:%s.gif' % (psfile, filestem))
+        os_system('convert %s gif:%s.gif' % (psfile, filestem))
         pid = os.getpid()  # use pid to makea unique giffile name
         giffile_with_full_path = '%s/%s-%d.gif' % \
                                 (self.scratchdir,pid,filestem)
@@ -380,7 +382,7 @@ class TestRun:
         giffile_with_full_path = '%s/anim-%d.gif' % \
                                 (self.scratchdir,pid)
         print 'making an animated gif sequence of psfiles:',filelist
-        os.system('convert -loop 60 -delay 10 %s %s' % \
+        os_system('convert -loop 60 -delay 10 %s %s' % \
                   (filelist,giffile_with_full_path)) 
         self._insertgif (giffile_with_full_path)
         
@@ -474,10 +476,10 @@ class TestRunNumerics(TestRun):
             ff = open(self.floatlogfile, 'w'); ff.close()
 
         cmd = '%s %s >> %s' % (program,options,self.floatlogfile)
-        failure = os.system(cmd)
+        failure, output = os_system(cmd, failure_handling='silent')
         if failure:
             msg = 'ERROR in %s: execution failure arose from the ' \
-                  'command\n  %s\n\n' % (self.scriptfilename,cmd)
+                  'command\n  %s\n%s\n\n' % (self.scriptfilename,cmd,output)
             print msg
 
         # improvement: load output from system command into a list
@@ -748,7 +750,7 @@ class Verify:
         # recall that os.chdir has been taken to the scriptfiles's dir
         path = os.path.join(os.curdir, scriptfile)
         # path is executable since we made an os.chmod in self._diff
-        failure = os.system(path)
+        failure, output = os_system(path, failure_handling='silent')
         if failure: print 'Failure in regression test', path
 
     def clean(self, dirname):
@@ -781,7 +783,8 @@ class VerifyDiffpack(Verify):
             print '\n...compile app in', os.getcwd()
             if os.path.isfile('Makefile'):
                 # yes, we have a makefile!
-                failure = os.system('Make MODE=%s' % self.makemode)
+                failure, output = os_system('Make MODE=%s' % self.makemode,
+                                            failure_handling='silent')
                 if failure:
                     print 'Could not compile in directory', os.getcwd()
             os.chdir(thisdir) # back to Verify dir
@@ -798,7 +801,8 @@ class VerifyDiffpack(Verify):
             thisdir = os.getcwd();  os.chdir(os.pardir)
             if os.path.isfile('Makefile'):
                 # yes, we have a makefile!
-                failure = os.system('Make clean')
+                failure, output = os_system('Make clean',
+                                            failure_handling='silent')
                 if failure:
                     print 'Could not run Make clean in directory', os.getcwd()
             os.chdir(thisdir)
