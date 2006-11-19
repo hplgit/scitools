@@ -1,4 +1,4 @@
-from scitools.easyviz.gnuplot_ import *
+from scitools.all import *
 from time import sleep
 
 x = seq(0, 15, 0.2)
