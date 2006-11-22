@@ -595,7 +595,7 @@ class GnuplotBackend(BaseClass):
         terminal = ext2term.get(ext, 'postscript')
         
         self.set(**kwargs)
-        fontname = kwargs.get('fontname', 'Times-Roman')
+        fontname = kwargs.get('fontname', 'Helvetica')
         fontsize = kwargs.get('fontsize', 20)
         color = self.get('color')
                   
@@ -610,7 +610,7 @@ class GnuplotBackend(BaseClass):
                 if ext == '.eps':
                     kwargs['mode'] = 'eps'
                 else:
-                    kwargs['mode'] = 'portrait'
+                    kwargs['mode'] = 'eps' # 'portrait'
             self._g.hardcopy(**kwargs)
         else: # Manually set terminal and don't show windows
             if color:
@@ -629,7 +629,7 @@ class GnuplotBackend(BaseClass):
                     kwargs['mode'] = 'eps'
                 else:
                     self._g('set term postscript portrait %s' % colortype)
-                    kwargs['mode'] = 'portrait'
+                    kwargs['mode'] = 'eps'  # 'portrait'
             elif terminal == 'png':
                 self._g('set term png')
             self._g('set output "%s"' % filename)

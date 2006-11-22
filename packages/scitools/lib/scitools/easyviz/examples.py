@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
 import glob, os, time
-from scitools.numpytools import *
-from scipy import linspace
-from utils import *
+from scitools.all import *
 
 import sys
-backend = os.environ.get('easyviz_backend','vtk_') # vtk backend default
-legal_backends = 'vtk_ gnuplot_ pyx_ blt_'.split()
+print 'default backend:', backend
+legal_backends = 'gnuplot_ vtk_  pyx_ blt_'.split()
 if len(sys.argv) > 1:
     if not sys.argv[1] in legal_backends:
         print "no such backend as %s, using default (vtk_)" % sys.argv[1]
@@ -682,37 +680,38 @@ def get_data(step=.1):
     return xx,yy,zz    
 
 def _tests(clear_figure, prompt, pause, psplot):
-    _test_labels(); next(clear_figure, prompt, pause, psplot)
-    _test_axis(); next(clear_figure, prompt, pause, psplot)
-    _test_view(); next(clear_figure, prompt, pause, psplot)
-    _test_quiver(); next(clear_figure, prompt, pause, psplot)
-    _test_contours(); next(clear_figure, prompt, pause, psplot)
-    _test_colormaps(); next(clear_figure, prompt, pause, psplot)
-    _test_caxis(); next(clear_figure, prompt, pause, psplot)
-    _test_box(); next(clear_figure, prompt, pause, psplot)
-    _test_grid(); next(clear_figure, prompt, pause, psplot)
-    _test_colorbar(); next(clear_figure, prompt, pause, psplot)
-    _test_figure(); next(clear_figure, prompt, pause, psplot)
-    _test_hardcopy_only(); next(clear_figure, prompt, pause, psplot)
+    n = lambda: next(clear_figure, prompt, pause, psplot)  # short form
+    _test_labels(); n()
+    _test_axis(); n()
+    _test_view(); n()
+    _test_quiver(); n()
+    _test_contours(); n()
+    _test_colormaps(); n()
+    _test_caxis(); n()
+    _test_box(); n()
+    _test_grid(); n()
+    _test_colorbar(); n()
+    _test_figure(); n()
+    _test_hardcopy_only(); n()
 
     if backend in ['vtk_', 'gnuplot_']:
-        _test_plot3(); next(clear_figure, prompt, pause, psplot)
-        _test_subplot(); next(clear_figure, prompt, pause, psplot)
+        _test_plot3(); n()
+        _test_subplot(); n()
 
     if backend in ['vtk_']:
-        _test_pcolor(); next(clear_figure, prompt, pause, psplot)
-        _test_quiver3(); next(clear_figure, prompt, pause, psplot)
-        _test_shading(); next(clear_figure, prompt, pause, psplot)
-        _test_streamline(); next(clear_figure, prompt, pause, psplot)
-        _test_slice_(); next(clear_figure, prompt, pause, psplot)
-        _test_isosurface(); next(clear_figure, prompt, pause, psplot)
-        _test_subplot2(); next(clear_figure, prompt, pause, psplot)
-        _test_streamribbon(); next(clear_figure, prompt, pause, psplot)
-        _test_streamtube(); next(clear_figure, prompt, pause, psplot)
-        _test_lights(); next(clear_figure, prompt, pause, psplot)
+        _test_pcolor(); n()
+        _test_quiver3(); n()
+        _test_shading(); n()
+        _test_streamline(); n()
+        _test_slice_(); n()
+        _test_isosurface(); n()
+        _test_subplot2(); n()
+        _test_streamribbon(); n()
+        _test_streamtube(); n()
+        _test_lights(); n()
         # why is the streamribbon object still present in ax.plotitems???
         gca()._prop['plotitems'] = []
-        _test_legend(); next(clear_figure, prompt, pause, psplot)
+        _test_legend(); n()
     
 if __name__ == '__main__':
     # command-line arguments: n screenplot flash psplot

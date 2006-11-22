@@ -75,6 +75,7 @@ Case::
 -b 0 -func 'siny' -w 1.3
 
 """
+# see also http://pyslice.sourceforge.net/HomePage
 
 import re, operator
 from scitools.misc import str2obj
