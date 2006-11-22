@@ -75,25 +75,26 @@ def load_config_file(name, locations=[]):
     Load a config file with the format implied by the ConfigParser
     module (Windows .INI files).
 
-    @param name: name stem of config file, e.g., "mytools".
-    @param locations: optional list of directories with name.cfg files.
+    @param name: name stem of config file, e.g., "mytools" (then
+    "mytools.ini" is the complete name of the config file).
+    @param locations: optional list of directories with name.ini files.
     @return: a ConfigParser object.
 
     A config file is searched for as follows (in the listed order):
 
-      1. name.cfg files for each directory in locations list,
-      2. name.cfg in the same directory as this module,
-      3. name.cfg in the directory where the main script is running,
-      4. name.cfg in the user's home directory.
+      1. name.ini files for each directory in locations list,
+      2. name.ini in the same directory as this module,
+      3. name.ini in the directory where the main script is running,
+      4. name.ini in the user's home directory.
     """
     import ConfigParser
     config = ConfigParser.ConfigParser()
 
     _default_config_file = os.path.join(os.path.dirname(__file__),
-                                        '%s.cfg' % name)
+                                        '%s.ini' % name)
     config.readfp(open(_default_config_file))
-    _files = config.read(locations + ['.%s.cfg' % name,
-                                      os.path.expanduser('~/.%s.cfg' % name)])
+    _files = config.read(locations + ['.%s.ini' % name,
+                                      os.path.expanduser('~/.%s.ini' % name)])
     return config
 
 

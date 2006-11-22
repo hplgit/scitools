@@ -52,14 +52,15 @@ OPTIMIZATION = scitools_config.get('modes', 'OPTIMIZATION')
 VERBOSE = int(scitools_config.get('modes', 'VERBOSE'))
 
 _load_scipy = scitools_config.getboolean('scipy', 'load')
+_load_numpytools = scitools_config.getboolean('numpy', 'numpytools')
 
 _t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
 
-#from numpytools import *  # now we use numpy only in scitools
 
 # *** try to import SciPy if it is installed ***
-has_scipy = False
-#print '....before from scipy import *.....'
+# idea: load scipy, if not, load numpy or numpytools
+
+has_scipy = False   # indicates for all application scripts if one has scipy
 if _load_scipy:
     try:
         from scipy import *
@@ -68,18 +69,26 @@ if _load_scipy:
         if VERBOSE >= 2: print 'from scipy import *'
     except ImportError:
         # no SciPy package, NumPy only
+        if VERBOSE >= 2: print 'tried to import scipy, but could not find it'
         pass
     _t2 = _time.clock(); _import_times += 'scipy=%g ' % (_t2 - _t1)
 
 if not has_scipy:
-    try:
-        from numpy import *
-        if VERBOSE >= 2: print 'from numpy import *'
-    except ImportError:
-        raise ImportError, 'You must install the numpy package!'
+    if _load_numpytools:
+        from numpytools import *
+    else:
+        # load numpy and numpyutils
+        try:
+            from numpyutils import *   # loads numpy too
+            if VERBOSE >= 2: print 'from numpy import *'
+            if VERBOSE >= 2: print 'from numpyutils import *'
+        except ImportError:
+            raise ImportError, \
+                  'numpy was requested, but it could not be found'
     _t3 = _time.clock();  _import_times += 'numpy=%g ' % ( _t3 - _t1)
 
 import os, sys, operator, math, StringFunction
+if VERBOSE >= 2: print 'import os, sys, operator, math, StringFunction'
 from glob import glob   # nice to have
 
 if VERBOSE >= 3:
