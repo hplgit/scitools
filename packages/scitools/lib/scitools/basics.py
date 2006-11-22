@@ -73,9 +73,12 @@ if _load_scipy:
         pass
     _t2 = _time.clock(); _import_times += 'scipy=%g ' % (_t2 - _t1)
 
+# didn't want our couldn' load scipy:
 if not has_scipy:
     if _load_numpytools:
         from numpytools import *
+        if VERBOSE >= 2: print 'from numpytools import *'
+        _t2 = _time.clock(); _import_times += 'numpytools=%g ' % (_t2 - _t1)
     else:
         # load numpy and numpyutils
         try:
@@ -85,7 +88,7 @@ if not has_scipy:
         except ImportError:
             raise ImportError, \
                   'numpy was requested, but it could not be found'
-    _t3 = _time.clock();  _import_times += 'numpy=%g ' % ( _t3 - _t1)
+        _t2 = _time.clock(); _import_times += 'numpy=%g ' % (_t2 - _t1)
 
 import os, sys, operator, math, StringFunction
 if VERBOSE >= 2: print 'import os, sys, operator, math, StringFunction'
