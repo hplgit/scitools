@@ -82,10 +82,10 @@ def load_config_file(name, locations=[]):
 
     A config file is searched for as follows (in the listed order):
 
-      1. name.ini files for each directory in locations list,
-      2. name.ini in the same directory as this module,
-      3. name.ini in the directory where the main script is running,
-      4. name.ini in the user's home directory.
+      1. .name.ini files for each directory in locations list,
+      2. .name.ini in the same directory as this (misc) module,
+      3. .name.ini in the directory where the main script is running,
+      4. .name.ini in the user's home directory.
     """
     import ConfigParser
     config = ConfigParser.ConfigParser()

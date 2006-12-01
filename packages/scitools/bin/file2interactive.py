@@ -17,7 +17,20 @@ from code import InteractiveInterpreter
 # see InteractiveConsole for example on using InteractiveInterpreter
 import sys, random, time
 
-def printline(prompt, line, human_typing=False):
+def printline(prompt, line, human_typing=0):
+    """
+    Print a line with Python code in the interpreter.
+    If human_typing is not 0, the line will be printed as if
+    a human types it. human_typing=1: characters are written
+    with a random delay, human_typing=2: characters are written
+    when the user hits any character on the keyboard
+    (not yet implemented).
+    """
+    # human_typing=2 can make use of a getch()-like function from
+    # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/134892
+    # or
+    # http://www.freenetpages.co.uk/hp/alan.gauld/tutevent.htm
+    
     if not human_typing:
         print prompt, line
     else:
@@ -79,10 +92,10 @@ if __name__ == '__main__':
         print 'Usage: interpret.py filename'
         sys.exit(1)
 
-    human_typing = False
+    human_typing = 0  # global variable
     try:
         if sys.argv[2] == 'human':
-            human_typing = True
+            human_typing = 1
     except:
         pass
         

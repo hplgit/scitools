@@ -11,9 +11,11 @@ _import_times = 'easyviz import time: '
 # which backend? load config file, check command line
 backend = 'gnuplot_'
 # load configuration file:
-from scitools.misc import load_config_file
-_scitools_config = load_config_file('scitools')
+from scitools.misc import load_config_file as _load_config_file
+_scitools_config = _load_config_file('scitools')
 backend = _scitools_config.get('easyviz', 'backend')
+import os as _os
+backend = _os.environ.get('SCITOOLS_easyviz_backend', backend)
 
 import sys
 if '--easyviz' in sys.argv:
@@ -36,6 +38,7 @@ _t3 = _time.clock(); _import_times += 'utils: %s ' % (_t3 - _t2)
 # ----
 
 VERBOSE = int(_scitools_config.get('modes', 'VERBOSE'))
+VERBOSE = int(os.environ.get('SCITOOLS_VERBOSE', VERBOSE))
 if VERBOSE >= 3:
     print _import_times
 if VERBOSE >= 1:
