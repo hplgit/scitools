@@ -7,7 +7,7 @@ __version__ = "0.1"
 import time as _time; _t0 = _time.clock();
 _import_times = 'easyviz import time: '
 
-from globaldata import backend   # read-only import
+from scitools.globaldata import backend, VERBOSE   # read-only import
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
@@ -19,10 +19,6 @@ from movie import movie
 
 _t3 = _time.clock(); _import_times += 'utils: %s ' % (_t3 - _t2)
 
-# ----
-
-VERBOSE = int(_scitools_config.get('modes', 'VERBOSE'))
-VERBOSE = int(os.environ.get('SCITOOLS_VERBOSE', VERBOSE))
 if VERBOSE >= 3:
     print _import_times
 if VERBOSE >= 1:
