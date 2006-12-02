@@ -60,7 +60,8 @@ import os
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.ini')).read()
 
 from globaldata import *   # read-only import of global variables
-import globaldata as _globaldata
+#import globaldata as _globaldata
+#import pprint; pprint.pprint(_globaldata._config_data)
 
 _t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
 
