@@ -1,29 +1,13 @@
 """
 """
 
-__author__ = "Rolv Erlend Bredesen, Hans Petter Langtangen, Johannes H. Ring"
+__author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
 __version__ = "0.1"
 
 import time as _time; _t0 = _time.clock();
 _import_times = 'easyviz import time: '
 
-# ----
-# which backend? load config file, check command line
-backend = 'gnuplot_'
-# load configuration file:
-from scitools.misc import load_config_file as _load_config_file
-_scitools_config = _load_config_file('scitools')
-backend = _scitools_config.get('easyviz', 'backend')
-import os as _os
-backend = _os.environ.get('SCITOOLS_easyviz_backend', backend)
-
-import sys
-if '--easyviz' in sys.argv:
-    try:
-        backend = sys.argv[sys.argv.index('--easyviz') + 1]
-    except:
-        print '--easyviz option must be followed by backend name\n'\
-              '(gnuplot_, vtk_, matplotlib_, etc.)'
+from globaldata import backend   # read-only import
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 

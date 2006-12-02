@@ -17,29 +17,30 @@ class UniformBoxGrid(object):
     Simple uniform grid on an interval, rectangle or box.
 
     Accessible attributes (after initialization):
-    nsd          : no of space dimensions
-    xmin, xmax   : extent of grid in x dir.
-    ymin, ymax   : extent of grid in y dir.
-    zmin, zmax   : extent of grid in z dir.
-    nx, ny, nz   : no of cells in each dir.
-    dx, dy, dz   : grid spacings
-    dirnames     : names of the space dir. ('x', 'y', etc.)
     
-    shape        : (nx+1, ny+1, ...); dimension of array over grid
-    coor         : list of coordinates; coor[i]  holds coordinates
-                   in direction i (X,Y,Z); the k-th coordinate in
-                   direction 0 can be accessed as
-                   self.coor[0][k]
-                   self.coor[X][k]
-                   self.coor[self.dirnames['x']][k]
-                   Note that X, Y, Z are predefined constants 0, 1, 2
+    @ivar nsd          : no of space dimensions
+    @ivar xmin, xmax   : extent of grid in x dir.
+    @ivar ymin, ymax   : extent of grid in y dir.
+    @ivar zmin, zmax   : extent of grid in z dir.
+    @ivar nx, ny, nz   : no of cells in each dir.
+    @ivar dx, dy, dz   : grid spacings
+    @ivar dirnames     : names of the space dir. ('x', 'y', etc.)
+    
+    @ivar shape        : (nx+1, ny+1, ...); dimension of array over grid
+    @ivar coor         : list of coordinates; coor[i]  holds coordinates
+                         in direction i (X,Y,Z); the k-th coordinate in
+                         direction 0 can be accessed as
+                         self.coor[0][k]
+                         self.coor[X][k]
+                         self.coor[self.dirnames['x']][k]
+                         Note that X, Y, Z are predefined constants 0, 1, 2
                    
-    xcoor        : nickname for self.coor[0] (self.coor[X])
-    ycoor, zcoor : nicknames for self.coor[1] and self.coor[2]
+    @ivar xcoor        : nickname for self.coor[0] (self.coor[X])
+    @ivar ycoor, zcoor : nicknames for self.coor[1] and self.coor[2]
 
-    coorv        : expanded version of coor for vectorized expressions
-                   (in 2D, self.coorv[0] = self.coor[0][:,NewAxis,NewAxis])
-    xcoorv, ycoorv, zcoorv: nickname for self.coorv[i], i=0,1,2
+    @ivar coorv        : expanded version of coor for vectorized expressions
+                         (in 2D, self.coorv[0] = self.coor[0][:,NewAxis,NewAxis])
+    @ivar xcoorv, ycoorv, zcoorv: nickname for self.coorv[i], i=0,1,2
     """
     def __init__(self,
                  x=None, nx=None,

@@ -70,35 +70,6 @@ def get_from_commandline(option, default=None, argv=sys.argv):
         raise IndexError, 'array of command-line arguments is too short; '\
               'no value after %s option' % option
 
-def load_config_file(name, locations=[]):
-    """
-    Load a config file with the format implied by the ConfigParser
-    module (Windows .INI files).
-
-    @param name: name stem of config file, e.g., "mytools" (then
-    "mytools.ini" is the complete name of the config file).
-    @param locations: optional list of directories with name.ini files.
-    @return: a ConfigParser object.
-
-    A config file is searched for as follows (in the listed order):
-
-      1. .name.ini files for each directory in locations list,
-      2. .name.ini in the same directory as this (misc) module,
-      3. .name.ini in the directory where the main script is running,
-      4. .name.ini in the user's home directory.
-    """
-    import ConfigParser
-    config = ConfigParser.ConfigParser()
-
-    _default_config_file = os.path.join(os.path.dirname(__file__),
-                                        '%s.ini' % name)
-    config.readfp(open(_default_config_file))
-    _files = config.read(locations + ['.%s.ini' % name,
-                                      os.path.expanduser('~/.%s.ini' % name)])
-    return config
-
-
-
 
 def str2obj(s, globals=globals(), locals=locals()):
     """
@@ -691,61 +662,8 @@ def movefiles(files, destdir, confirm=True, verbose=True, copy=True):
             if verbose:
                 print s, file, 'to', newpath
 
-
-def debugregex(pattern, string):
-    "debugging of regular expressions: write the match and the groups"
-    s = "does '" + pattern + "' match '" + string + "'?\n"
-    match = re.search(pattern, string)
-    if match:
-        s += string[:match.start()] + '[' + \
-             string[match.start():match.end()] + \
-             ']' + string[match.end():]
-        if len(match.groups()) > 0:
-            for i in range(len(match.groups())):
-                s += '\ngroup %d: [%s]' % (i+1,match.groups()[i])
-    else:
-        s += 'No match'
-    return s
-                                     
-
-    
-def dump(obj, hide_nonpublic=True):
-    """
-    Inspect an object obj by the dir function.
-    This function first prints the repr(obj) of the object,
-    then all data attributes and their values are
-    listed, and finally a line listing all functions/methods
-    is printed.
-    """
-    print '\n', '*'*60, '\n'
-    try:  # dump class name if it exists
-        print 'object of class', obj.__class__.__name__
-    except:
-        pass
-    try:
-        print 'object with name %s' % obj.__name__
-    except:
-        pass
-    methods = [];  attrs = []
-    for a in dir(obj):
-        if a.startswith('_') and hide_nonpublic:
-            pass
-        else:
-            try:
-                s = a + '=' + str(getattr(obj,a))
-                if s.find(' method ') != -1 or \
-                   s.find('function ') != -1 or \
-                   s.find('method-wrapper ') != -1 or \
-                   s.find('ufunc ') != -1:
-                    methods.append(a) # skip function addresses
-                else:
-                    s += '  ' + str(type(eval('obj.'+a)))
-                    attrs.append(s)  # variable=value
-            except Exception, msg:
-                pass
-    print '******** attributes:\n', '\n'.join(attrs)
-    print '\n******** methods:\n', '\n'.join(methods)
-    print '*'*60, '\n\n\n', 
+# backward compatibility:
+from debug import debugregex, dump
 
 
 

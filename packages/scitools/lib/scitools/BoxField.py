@@ -55,20 +55,19 @@ class BoxField(Field):
     """
     Field over a BoxGrid or UniformBoxGrid grid.
 
-    Attributes:
-    grid  : reference to the underlying grid object
-    values: array holding field values at the grid points
+    @ivar grid : reference to the underlying grid instance.
+    @ivar values: array holding field values at the grid points.
     """
     def __init__(self, grid, name, vector=0, **kwargs):
         """
         Initialize scalar or vector field over a BoxGrid/UniformBoxGrid.
 
-        grid:     grid object
-        name:     name of the field
-        vector=0: scalar field
-        vector=n: vector field with n components
-        kwargs:   optional keyword arguments, stored as metadata in
-                  the field (see class Field)
+        @param grid: grid instance.
+        @param name: name of the field.
+        @param vector: scalar field if 0, otherwise the no of vector
+        components (dimensions).
+        @param kwargs: optional keyword arguments, stored as metadata in
+        the field (see class Field)
         """
         Field.__init__(self, grid, name, **kwargs)
         

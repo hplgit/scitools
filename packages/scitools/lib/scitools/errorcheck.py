@@ -3,7 +3,6 @@ Functions for checking compatibility of data structures,
 right type of data etc.
 """
 
-from numpytools import NumPyArray
 import types
 
 __all__ = ['right_length', 'right_size1', 'right_size2',
@@ -33,7 +32,7 @@ def right_size1(a, a_name, shape):
     @param a_name: the name of variable a.
     @param shape: the expected shape of a. @type shape: int or tuple
     """
-    if not isinstance(a, NumPyArray):
+    if not hasattr(a, 'shape'):
         raise TypeError, '%s is %s and not a NumPy array' % \
               (a_name, type(a))
     if isinstance(shape, int):
@@ -52,8 +51,8 @@ def right_size2(a1, a1_name, a2, a2_name):
     @param a1,a2: NumPy arrays.
     @param a1_name, a2_name: names of a1 and a2 (strings).
     """
-    if isinstance(a1, NumPyArray) and isinstances(a2, NumPyArray):
-        pass # ok
+    if hasattr(a1, 'shape') and hasattr(a2, 'shape'):
+        pass # ok, a1 and a2 are NumPy arrays
     else:
         raise TypeError, '%s is %s and %s is %s - both must be NumPy arrays' \
               % (a1_name, type(a1), a2_name, type(a2))

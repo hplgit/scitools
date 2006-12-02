@@ -195,9 +195,7 @@ if basic_NumPy is None:
         elif os.environ['NUMPYARRAY'] == 'Numeric':
             basic_NumPy = 'Numeric'
 
-# final default choice:
-if basic_NumPy is None:
-    basic_NumPy = 'numpy'
+if basic_NumPy is None:  basic_NumPy = 'numpy' # final default choice
 
 if basic_NumPy not in ('Numeric', 'numarray', 'numpy'):
     raise ImportError, 'cannot decide which Numerical Python '\
