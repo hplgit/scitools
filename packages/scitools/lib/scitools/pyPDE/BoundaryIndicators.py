@@ -1,5 +1,5 @@
 
-from scitools_core.errorcheck import right_type
+from scitools.errorcheck import right_type
 __all__ = ['BoundaryIndicators', 'to_FEM_array', 'to_FDM_array']
 
 class BoundaryIndicators:

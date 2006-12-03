@@ -2,8 +2,8 @@
 Finite element grid class.
 """
 
-from scitools_core.errorcheck import *
-from scitools_core import arr, seq, Int, OPTIMIZATION, SAFECODE, check
+from scitools.errorcheck import *
+from scitools.basics import arr, seq, Int, OPTIMIZATION, SAFECODE, check
 import Element
 import pprint
 
@@ -54,8 +54,7 @@ class Grid:
         self.loc2glob = arr(data=loc2glob, copy=False)
         nel = loc2glob.shape[0]
 
-        right_type(element_types, 'element_types',
-                   (None,Element.Element,list,tuple))
+        right_type(element_types, (None,Element.Element,list,tuple))
         if element_types is None:
             print 'No default mapping yet from nsd, loc_nno to elm tp'
         elif isinstance(element_types, Element.Element):
@@ -76,7 +75,7 @@ class Grid:
         if isinstance(materials, int):
             self.mat = arr(self.nel, element_type=Int) + int
         else:  # assume materials is a sequence
-            right_size1(materials, 'materials', loc2glob.shape[0])
+            right_size1(materials, loc2glob.shape[0])
             self.mat = arr(data=materials, copy=False, element_type=Int)
             
         if material_names:

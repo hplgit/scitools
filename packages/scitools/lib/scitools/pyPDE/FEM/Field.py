@@ -1,8 +1,8 @@
 """
 Finite element field.
 """
-from scitools_core import arr, arrmax, size, put
-from scitools_core.errorcheck import *
+from scitools.basics import arr, arrmax, size, put
+from scitools.errorcheck import *
 
 __all__ = ['Field',]
 
@@ -35,8 +35,7 @@ class Field:
         elif isinstance(basis_function_types, Element):
             self.basis_function_types = [basis_function_types]*self.grid.nel
         elif isinstance(basis_function_types, (list,tuple)):
-            right_length(basis_function_types, 'basis_function_types',
-                         len(self.grid.elm_tp))
+            right_length(basis_function_types, len(self.grid.elm_tp))
             self.basis_function_types = basis_function_types
 
         if loc2dof is not None:
