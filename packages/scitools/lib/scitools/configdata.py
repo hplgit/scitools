@@ -39,7 +39,7 @@ def _option_interpolation_error(files, section, option, value,
           'substituted in other options: %s' % \
           (files, section, option, r, str2type, value)
     
-def load_config_file(name, extension='.ini',
+def load_config_file(name, extension='.cfg',
                      default_file_location=None,
                      other_locations=[],
                      case_sensitive_options=True):
@@ -49,17 +49,17 @@ def load_config_file(name, extension='.ini',
 
     A config file is searched for and read in as follows (in the listed order):
 
-      1. name.ini in the default_file_location directory,
-      2. .name.ini files for each directory in other_locations list,
-      3. .name.ini in the directory where the main script is running,
-      4. .name.ini in the user's home directory.
+      1. name.cfg in the default_file_location directory,
+      2. .name.cfg files for each directory in other_locations list,
+      3. .name.cfg in the directory where the main script is running,
+      4. .name.cfg in the user's home directory.
 
     This priority implies that the user's config file will override
     any other system settings.
 
     @param name: name stem of config file, e.g., "mytools" (then
-    "mytools.ini" is the complete name of the config file if extension
-    is ".ini").
+    "mytools.cfg" is the complete name of the config file if extension
+    is ".cfg").
     @param extension: extension of config file (name.extension is the
     complete name).
     @param default_file_location: name of directory containing a
@@ -102,7 +102,7 @@ def load_config_file(name, extension='.ini',
     return config, read_files
 
 
-def config_parser_frontend(basename, extension='.ini',
+def config_parser_frontend(basename, extension='.cfg',
                            default_file_location=os.curdir,
                            other_locations=[], globals_=None):
     """
@@ -181,17 +181,17 @@ def config_parser_frontend(basename, extension='.ini',
     A configuration file is searched for and read in as follows
     (in the listed order):
 
-      1. basename.ini in the default_file_location directory,
-      2. .basename.ini files for each directory in other_locations list,
-      3. .basename.ini in the directory where the main script is running,
-      4. .basename.ini in the user's home directory.
+      1. basename.cfg in the default_file_location directory,
+      2. .basename.cfg files for each directory in other_locations list,
+      3. .basename.cfg in the directory where the main script is running,
+      4. .basename.cfg in the user's home directory.
 
     This priority implies that the user's config file will override
     any other system settings.
 
     @param name: name stem of config file, e.g., "mytools" (then
-    "mytools.ini" is the complete name of the config file if extension
-    is ".ini").
+    "mytools.cfg" is the complete name of the config file if extension
+    is ".cfg").
     @param extension: extension of config file (name.extension is the
     complete name).
     @param default_file_location: name of directory containing a

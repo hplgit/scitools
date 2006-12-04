@@ -9,7 +9,7 @@ The default configuration file looks like this:
 __all__ = ['SAFECODE', 'VERBOSE', 'DEBUG', 'OPTIMIZATION', 'backend']
 __doc__ = __doc__ % ', '.join(__all__)
 import os
-__doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.ini')).read()
+__doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 
 if hasattr(__name__, 'VERBOSE'):
