@@ -42,7 +42,8 @@ def _option_interpolation_error(files, section, option, value,
 def load_config_file(name, extension='.cfg',
                      default_file_location=None,
                      other_locations=[],
-                     case_sensitive_options=True):
+                     case_sensitive_options=True,
+                     default_dict4intpl={}):
     """
     Load a config file with the format implied by the ConfigParser
     module (Windows .INI files).
@@ -72,11 +73,13 @@ def load_config_file(name, extension='.cfg',
     @param case_sensitive_options: by default, the options in configuration
     files are transformed to lower case, so setting this parameter to True,
     makes options case sensitive.
+    @param default_dict4intpl: dictionary with variable names and values
+    for use in variable interpolation in the configuration file.
     @return: a SafeConfigParser object and a list of filenames of the
     files that were read to set parameters in the SafeConfigParser object.
     """
     import ConfigParser
-    config = ConfigParser.SafeConfigParser()
+    config = ConfigParser.SafeConfigParser(default_dict4intpl)
     if case_sensitive_options:
         config.optionxform = str
 
@@ -104,7 +107,9 @@ def load_config_file(name, extension='.cfg',
 
 def config_parser_frontend(basename, extension='.cfg',
                            default_file_location=os.curdir,
-                           other_locations=[], globals_=None):
+                           other_locations=[],
+                           default_dict4intpl={},
+                           globals_=None):
     """
     User-friendly reading of configuration files with an extended
     Windows .INI syntax.
@@ -171,12 +176,15 @@ def config_parser_frontend(basename, extension='.cfg',
     is possible(see the documentation of ConfigParser in the Python
     Library Reference). Here is an example::
 
-      [default]
+      [DEFAULT]
       path = /my/home/dir/
 
       [storage]
       datapath = %(path)s/data
       input = %(path)s/%(datapath)s/input
+
+    One can also provide variables for being used in variable interpolation
+    throught the default_dict4intpl argument to this function.
       
     A configuration file is searched for and read in as follows
     (in the listed order):
@@ -201,6 +209,8 @@ def config_parser_frontend(basename, extension='.cfg',
     from a package module is os.path.dirname(__file__) (the module's
     directory).
     @param other_locations: list of directories with .name.extension files.
+    @param default_dict4intpl: dictionary with variable names and values
+    for use in variable interpolation in the configuration file.
     @param globals_: dictionary of global names that are used when
     running eval on option values. If None, the global names in this
     module are used.
@@ -216,7 +226,8 @@ def config_parser_frontend(basename, extension='.cfg',
     # load configuration file:
     config, files = load_config_file(basename, extension,
                                      default_file_location,
-                                     other_locations)
+                                     other_locations,
+                                     default_dict4intpl)
 
     # dictionary with [section][option] keys and values as a
     # list [value, str2type, readonly]
@@ -253,6 +264,10 @@ def config_parser_frontend(basename, extension='.cfg',
                 gt = value.find('>')
                 str2type = value[1:gt]
                 value = value[gt+1:].strip()
+                # variable interpolation are destroyed by <str> specs;
+                # could process all values without %(...)s first and
+                # then remove all <type> specifications to make
+                # variable interpolation correct
                 if '<%s>' % str2type in value:
                     _option_interpolation_error(files, section, option,
                                                 value, str2type, False)
@@ -261,6 +276,9 @@ def config_parser_frontend(basename, extension='.cfg',
                 gt = value.find('>')
                 str2type = value[2:gt]
                 value = value[gt+1:].strip()
+                # set this option in the config file so that
+                # variable interpolation may work:
+                config.set(section, option, value)
                 if 'r<%s>' % str2type in value:
                     _option_interpolation_error(files, section, option,
                                                 value, str2type, True)

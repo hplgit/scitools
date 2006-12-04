@@ -20,7 +20,7 @@ modules can monitor their debugging by setting debug.DEBUG = 0
 or debug.DEBUG = 1 (note that a single such setting has a "global" effect;
 it turns off debugging everywhere).
 """
-import os, sys, string
+import os, sys, string, re
 
 __all__ = ['watch', 'trace', 'dump', 'debugregex']
 
@@ -46,11 +46,12 @@ def watch(variable, output_medium=sys.stdout):
       File "myscript.py", line 56, in myfunction
         myprm, type "int" = 3
 
-    Taken from the online Python Cookbook::
+    (This function is a modified version of a function taken
+    from the online Python Cookbook::
 
       http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52314/index_txt
       
-    (original code written by Olivier Dagenais)
+    The original code was written by Olivier Dagenais).
     """
     if not DEBUG:
         return
@@ -91,6 +92,9 @@ def trace(message='', output_medium=sys.stdout):
 
         def write(self):
           debug.trace(self.__class__.__name__)
+
+    (This function is a modified version of one taken from the
+     Python Cookbook, see the watch function.)
   """
     if not DEBUG:
         return
@@ -158,3 +162,33 @@ def debugregex(pattern, string):
         s += 'No match'
     return s
 
+def setprofile(include='', exclude=None, output=sys.stdout):
+    """
+    Print a message on method call/return/exception.
+
+    @param include: A regular expression for output filtering. The regular
+    expression is applied to the output string, which is on the format 'event
+    filename(line): classname.methodname'.
+    
+    For example, setprofile(os.getcwd()) prints only methods that are defined
+    in python files in this directory and subdirectories. setprofile('^c_')
+    prints only C invocations. And so on.
+
+    @param exclude: Another regular expression.
+    """
+    include = re.compile(include)
+    exclude = exclude and re.compile(exclude)
+    def prof(frame, event, arg):
+        meth = frame.f_code.co_name
+        try:
+            cls = frame.f_locals['self']
+            meth = '.'.join([type(cls).__name__, meth])
+        except KeyError:
+            pass
+        s = '%s %s(%s): %s\n' % (event, frame.f_code.co_filename,
+                                 frame.f_lineno, meth)
+        if include.search(s) and not (exclude and exclude.search(s)):
+            output.write(s)
+            if arg:
+                output.writelines([' -> ', str(arg), '\n'])
+    sys.setprofile(prof)
