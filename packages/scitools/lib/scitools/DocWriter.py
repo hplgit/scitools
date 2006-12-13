@@ -1,29 +1,26 @@
 """
 DocWriter is a tool for writing documents in ASCII, HTML, 
 LaTeX, and other formats based on input from Python
-datastructures. The base class DocWriter defines common
-functions and data structures, while subclasses implement
-(i.e., write to) various formats.
-"""
-
-"""
-Other ideas:
-Make class URL, Section, Table, Figure, etc., each with a repr()
-to recreate the object (or perhaps not necessary).
-Make a nested data structure of URL, Section, etc. (document writing).
-Process the data structure and translate to dialects (HTML, LaTeX, ASCII)
-(document formatting).
+datastructures. The base class _BaseWriter defines common
+functions and data structures, while subclasses HTML, etc.
+implement (i.e., write to) various formats.
 """
 
 from StringIO import StringIO
 import re, os, glob, commands
 
-class DocWriter:
+class _BaseWriter:
+    """
+    Base class for document writing classes.
+    Each subclass implements a specific format (HTML, LaTeX,
+    reStructuredText, etc.).
+    """
     def __init__(self, format, filename_extension):
         # use StringIO as a string "file" for writing the document:
         self.file = StringIO()
         self.filename_extension = filename_extension
         self.format = format
+        self._footer_called = False
         
     document = property(fget=lambda self: self.file.getvalue(),
                         doc='Formatted document as a string')
@@ -35,6 +32,11 @@ class DocWriter:
         the extension will be automatically added (depending on the
         document format).
         """
+        # footer?
+        if not self._footer_called:
+            self.footer()
+            self._footer_called = True
+            
         f = open(filename + self.filename_extension, 'w')
         f.write(self.document)
         f.close()
@@ -44,9 +46,11 @@ class DocWriter:
         return self.document
 
     def header(self):
+        """Header as required by format. Called in constructor."""
         pass
     
     def footer(self):
+        """Footer as required by format. Called in write_to_file."""
         pass
     
     def not_impl(self, method):
@@ -94,12 +98,18 @@ class DocWriter:
         """
         self.not_impl('subsubsection')
 
-    def paragraph(self, title, label=None):
+    def paragraph(self, title, ending='.', label=None):
         """
-        Write a paragraph heading with the given title and an optional
-        label (for navigation).
+        Write a paragraph heading with the given title and an ending
+        (period, question mark, colon) and an optional label (for navigation).
         """
         self.not_impl('paragraph')
+
+    def paragraph_separator(self):
+        """
+        Add a (space) separator between running paragraphs.
+        """
+        self.not_impl('paragraph_separator')
 
     def text(self, text, indent=0):
         """
@@ -143,55 +153,54 @@ class DocWriter:
         @param items: list of items.
         @param listtype: 'itemize', 'enumerate', or 'description'.
         """
-        # call DocWriter.unfold_list to traverse the list
+        # call _BaseWriter.unfold_list to traverse the list
         # and use self.item_handler to typeset each item
         self.not_impl('list')
         
-    def unfold_list(self, items, item_handler, listtype):
+    def unfold_list(self, items, item_handler, listtype, level=0):
         """
         Traverse a possibly nested list and call item_handler for
         each item. To be used in subclasses for easy list handling.
 
         @param items: list to be processed.
-        @param item_handler: callable taking the item text as
-        first argument; a second argument which is 'begin', 'item',
-        or 'end', depending on the position of the current item in the list;
-        a third argument reflecting the list type ('enumerate', 'description',
-        or 'itemize'); and an optional fourth argument 'keyword' holds
-        the keyword in case the item belongs to a 'description' list.
+        @param item_handler: callable, see that method for doc of arguments.
+        @param listtype: 'itemize', 'enumerate', or 'description'.
+        @param level: the level of a sublist (0 is main list, increased by 1
+        for each sublevel).
         """
-        # position: mapping from items index number to 'begin', 'end', 'item'
-        position = ['item' for i in range(1,len(items)-1)]
-        position.insert(0, 'begin')
-        position.append('end')
+        # check for common error (a trailing comma...):
+        if isinstance(items, tuple) and len(items) == 1:
+            raise ValueError, 'list is a 1-tuple, error? If there is '\
+                  'only one item in the list, make a real Python list '\
+                  'object instead - current list is\n(%s,)' % items
+        item_handler('_begin', listtype, level)
         for i, item in enumerate(items):
             if isinstance(item, (list,tuple)):
-                self.unfold_list(item, item_handler, listtype)
-                if i == len(items)-1:
-                    # sublist as last item, need to end list:
-                    item_handler(None, 'end', listtype, None)
+                self.unfold_list(item, item_handler, listtype, level+1)
             elif isinstance(item, basestring):
                 if listtype == 'description':
                     # split out keyword in a description list:
                     parts = item.split(':')
                     keyword = parts[0]
                     item = ':'.join(parts[1:])
-                    item_handler(item, position[i], listtype, keyword)
+                    item_handler(item, listtype, level, keyword)
                 else:
-                    item_handler(item, position[i], listtype)
+                    item_handler(item, listtype, level)
             else:
                 raise TypeError, 'wrong %s for item' % type(item)
+        item_handler('_end', listtype, level)
 
-    def item_handler(self, item, position, listtype, keyword=None):
+    def item_handler(self, item, listtype, level, keyword=None):
         """
         Write out the syntax for an item in a list.
 
-        @item: text assoicated with the current list item. If None,
-        no item, just end of list.
-        @param position: position in list, 'begin' means the 1st item,
-        'end' the last, and 'item' signifies an item in between.
-        @listtype: 'itemize, 'enumerate', or 'description'.
-        @keyword: the keyword of the item in a 'description' list.
+        @param item: text assoicated with the current list item. If item
+        equals '_begin' or '_end', appropriate begin/end formatting of
+        the list is written instead of an ordinary item.
+        @param listtype: 'itemize, 'enumerate', or 'description'.
+        @param level: list level number, 0 is the mainlist, increased by 1
+        for each sublist (the level number implies the amount of indentation).
+        @param keyword: the keyword of the item in a 'description' list.
         """
         self.not_impl('item_handler')
                     
@@ -203,7 +212,7 @@ class DocWriter:
         self.not_impl('verbatim')
 
     def math(self, text):
-        """Write mathematical text."""
+        """Write block of mathematical text (equations)."""
         # default: dump raw
         self.raw(text)
 
@@ -263,9 +272,12 @@ class DocWriter:
         Translates a two-dimensional list of data, containing strings or
         numbers, to a suitable "tabular" environment in the output.
 
-        column_pos   : specify the l/c/r position of data entries in columns,
-                       give either (e.g.) 'llrrc' or one char (if all are equal)
-        column_headline_pos : position l/c/r for the headline row
+        @param table: list of list with rows/columns in table, including
+        (optional) column-headline 1st row and row-headline 1st column.
+        @param column_pos: specify the l/c/r position of data
+        entries in columns, give either (e.g.) 'llrrc' or one char
+        (if all are equal).
+        @param column_headline_pos : position l/c/r for the headline row
         """
         self.not_impl('table')
 
@@ -273,6 +285,11 @@ class DocWriter:
         """Typeset an URL (with an optional link)."""
         self.not_impl('url')
 
+    def link(self, link_text, link_target):
+        """Typeset a hyperlink."""
+        self.not_impl('link')
+
+    # what about LaTeX references to labels in equations, pages, labels?
 
 def makedocstr(parent_class, subclass_method):
     """
@@ -280,8 +297,8 @@ def makedocstr(parent_class, subclass_method):
     doc string in a parent class and an additional doc string
     in a subclass version of the method.
 
-    @parent_class: class object for parent class.
-    @subclass_method: method object for subclass.
+    @param parent_class: class object for parent class.
+    @param subclass_method: method object for subclass.
     @return: parent_class.method.__doc__ + subclass_method.__doc__
     """
     parent_method = getattr(parent_class, subclass_method.__name__)
@@ -294,7 +311,7 @@ def makedocstr(parent_class, subclass_method):
 
 # regular expressions for inline tags:
 inline_tag_begin = r'(?P<begin>(^|[(\s]))'
-inline_tag_end = r'(?P<end>[.,?!;:)\s])'
+inline_tag_end = r'(?P<end>($|[.,?!;:)\s]))'
 INLINE_TAGS = {
     # math: text inside $ signs, as in $a = b$, with space before the
     # first $ and space, comma, period, colon, semicolon, or question
@@ -316,10 +333,121 @@ INLINE_TAGS = {
     (inline_tag_begin, inline_tag_end),
     }
 
-class Doconce(DocWriter):
-    pass
+class Doconce(_BaseWriter):
+    def __init__(self):
+        _BaseWriter.__init__(self, 'Doconce', '.dco')
+    
+    def title(self, title, authors_and_institutions=[], date='today'):
+        s = '\nTITLE: %s\n' % title
+        for ai in authors_and_institutions:
+            authorinfo = '; '.join(ai)
+            s += 'AUTHOR: %s\n' % authorinfo
+        if date is not None:
+            if date == 'today':
+                date = self.today_date()
+            s += 'DATE: %s\n' % date
+        self.file.write(s)
+        self.paragraph_separator()
 
-class HTML(DocWriter):
+    def heading(self, underscores, title, label=None):
+        underscores = '_'*underscores
+        self.file.write('\n%s%s%s\n\n' % (underscores, title, underscores))
+
+    def section(self, title, label=None):
+        self.heading(7, title, label)
+
+    def subsection(self, title, label=None):
+        self.heading(5, title, label)
+
+    def subsubsection(self, title, label=None):
+        self.heading(3, title, label)
+
+    def paragraph(self, title, ending='.', label=None):
+        s = '\n\n__%s%s__ ' % (title, ending)
+        self.file.write(s)
+
+    def paragraph_separator(self):
+        self.file.write('\n\n')
+
+    def text(self, text, indent=0):
+        text = _BaseWriter.text(self, text, indent)
+        # not necessary since Doconce is the format for text:
+        #text = _BaseWriter.expandtext(self, text,
+        #                              INLINE_TAGS, HTML.INLINE_TAGS_SUBST)
+        self.file.write(text)
+        
+    def list(self, items, listtype='itemize'):
+        self.unfold_list(items, self.item_handler, listtype)
+
+    def item_handler(self, item, listtype, level, keyword=None):
+        indent = '  '*level
+        s = ''
+        if item == '_begin':
+            if level == 1:
+                s += '\n'
+        elif item == '_end':
+            if level == 1:
+                s += '\n'
+        else:
+            # ordinary item:
+            if item is not None:
+                if listtype == 'itemize':
+                    s += '\n%s%s* %s' % (indent, indent, item)
+                elif listtype == 'enumerate':
+                    s += '\n%s%so %s' % (indent, indent, item)
+                elif listtype == 'description':
+                    s += '\n%s%s- %s: %s' % (indent, indent, keyword, item)
+        self.file.write(s)
+                    
+    def verbatim(self, code):
+        self.file.write('\n!bc\n' + r'%s' % code + '\n!ec\n')
+
+    def figure(self, filename, caption, width=None, height=None, label=None):
+        filename = self.figure_conversion(filename, \
+                            ('.jpg', '.gif', '.png', '.ps', '.eps'))
+        s = '\nFIGURE:[%s,' % filename
+        if width:
+            s += '  width=%s ' % width
+        if height:
+            s += '  height=%s ' % width
+        s += '] ' + caption + '\n'
+        self.file.write(s)
+
+    def table(self, table, column_headline_pos='c', column_pos='c'):
+        # find max column width
+        mcw = 0
+        for row in table:
+            mcw = max(mcw, max([len(str(c)) for c in row]))
+        formatted_table = []  # table where all columns have equal width
+        column_format = '%%-%ds' % mcw
+        for row in table:
+            formatted_table.append([column_format % c for c in row])
+        s = '\n\n'
+        for row in formatted_table:
+            s += '   | ' + ' | '.join(row) + ' |\n'
+        s += '\n'
+        self.file.write(s)
+    
+    def url(self, url_address, link_text=None):
+        if link_text is None:
+            link_text = 'link'  # problems with Doconce and empty link text
+        self.file.write(' %s<%s>' % (url_address, link_text))
+
+    def link(self, link_text, link_target):
+        self.file.write('%s (%s)' % (link_text, link_target))
+
+    # autogenerate doc strings by combining parent class doc strings
+    # with subclass doc strings:
+    for method in [title, section, subsection, subsubsection,
+                   paragraph, text,
+                   verbatim, # not defined here: math, raw,
+                   figure, table, url,
+                   list, item_handler,]:
+        method.__doc__ = makedocstr(_BaseWriter, method)
+
+
+
+class HTML(_BaseWriter):
     # class variables:
     table_border = '2'
     table_cellpadding = '5'
@@ -334,8 +462,9 @@ class HTML(DocWriter):
         }
     
     def __init__(self):
-        DocWriter.__init__(self, 'HTML', '.html')
-        
+        _BaseWriter.__init__(self, 'HTML', '.html')
+        self.header()
+
     def header(self):
         s = """\
 <!-- HTML document generated by %s.%s -->
@@ -369,14 +498,14 @@ class HTML(DocWriter):
             if date == 'today':
                 date = self.today_date()
             s += """<CENTER>%s</CENTER>\n\n\n""" % date
-
         self.file.write(s)
+        self.paragraph_separator()
 
     def heading(self, level, title, label=None):
         if label is None:
-            s = """\n\n\n<H%d>%s</H%d>\n\n""" % (level, title, level)
+            s = """\n<H%d>%s</H%d>\n""" % (level, title, level)
         else:
-            s = """\n\n\n<H%d><A HREF="%s">%s</H%d>\n\n""" % \
+            s = """\n<H%d><A HREF="%s">%s</H%d>\n""" % \
                 (level, label, title, level)
         self.file.write(s)
 
@@ -389,58 +518,73 @@ class HTML(DocWriter):
     def subsubsection(self, title, label=None):
         self.heading(4, title, label)
 
-    def paragraph(self, title, label=None):
-        s = """\n\n<P>\n<B>%s.</B>\n""" % title
+    def paragraph(self, title, ending='.', label=None):
+        s = '\n\n<P><!-- paragraph with heading -->\n<B>%s%s</B>\n' \
+            % (title, ending)
         if label is not None:
-            s += """<A NAME="%s">\n""" % label
+            s += '<A NAME="%s">\n' % label
         self.file.write(s)
 
+    def paragraph_separator(self):
+        self.file.write('\n<P>\n')
+
     def text(self, text, indent=0):
-        text = DocWriter.text(self, text, indent)
-        text = DocWriter.expandtext(self, text,
-                                    INLINE_TAGS, HTML.INLINE_TAGS_SUBST)
+        text = _BaseWriter.text(self, text, indent)
+        text = _BaseWriter.expandtext(self, text,
+                                      INLINE_TAGS, HTML.INLINE_TAGS_SUBST)
         self.file.write(text)
         
     def list(self, items, listtype='itemize'):
-        self.file.write("\n<!-- list -->\n")
         self.unfold_list(items, self.item_handler, listtype)
-        self.file.write("<!-- end of list -->\n\n")
 
-    def item_handler(self, item, position, listtype, keyword=None):
+    def item_handler(self, item, listtype, level, keyword=None):
+        indent = '  '*level
         s = ''
-        if position == 'begin':
+        if item == '_begin':
             if listtype == 'itemize':
-                s += '\n<UL>\n'
+                s += '\n%s<UL>' % indent
             elif listtype == 'enumerate':
-                s += '\n<OL>\n'
+                s += '\n%s<OL>' % indent
             elif listtype == 'description':
-                s += '\n<DL>\n'
-        # item:
-        if item is not None:
-            if listtype in ('itemize', 'enumerate'):
-                s += '<P><LI> ' + item + '\n'
-            else:
-                s += '<P><DT>%s</DT><DD>%s</DD>\n' % (keyword, item)
-        if position == 'end':
+                s += '\n%s<DL>' % indent
+            s += ' <!-- start of "%s" list -->\n' % listtype
+        elif item == '_end':
             if listtype == 'itemize':
-                s += '</UL>\n'
+                s += '%s</UL>' % indent
             elif listtype == 'enumerate':
-                s += '</OL>\n'
+                s += '%s</OL>' % indent
             elif listtype == 'description':
-                s += '</DL>\n'
+                s += '%s</DL>' % indent
+            s += ' <!-- end of "%s" list -->\n' % listtype
+        else:
+            # ordinary item:
+            if item is not None:
+                if listtype in ('itemize', 'enumerate'):
+                    s += '%s%s<P><LI> %s\n' % (indent, indent, item)
+                else:
+                    s += '%s%s<P><DT>%s</DT><DD>%s</DD>\n' % \
+                         (indent, indent, keyword, item)
         self.file.write(s)
                     
     def verbatim(self, code):
         self.file.write('\n<PRE>' + r'%s' % code + '\n</PRE>\n')
 
     def figure(self, filename, caption, width=None, height=None, label=None):
-        # unfinished
-        s = '\n<IMG SRC="%s">\n' % filename
-        s += caption
+        filename = self.figure_conversion(filename, ('.jpg', '.gif', '.png'))
+        if width:
+            width = ' WIDTH=%s ' % width
+        else:
+            width = ''
+        if height:
+            height = ' WIDTH=%s ' % width
+        else:
+            height = ''
+        s = '\n<HR><IMG SRC="%s"%s%s>\n<P><EM>%s</EM>\n<HR><P>\n' % \
+            (filename, width, height, caption)
         self.file.write(s)
 
     def table(self, table, column_headline_pos='c', column_pos='c'):
-        s = '\n\n<TABLE BORDER="%s" CELLPADDING="%s" CELLSPACING="%s">\n' % \
+        s = '\n<P>\n<TABLE BORDER="%s" CELLPADDING="%s" CELLSPACING="%s">\n' %\
             (HTML.table_border, HTML.table_cellpadding, HTML.table_cellspacing)
         for line in table:
             s += '<TR>'
@@ -455,6 +599,9 @@ class HTML(DocWriter):
             link_text = url_address
         self.file.write('\n<A HREF="%s">%s</A>\n' % (url_address, link_text))
 
+    def link(self, link_text, link_target):
+        self.file.write('\n<A HREF="%s">%s</A>\n' % (link_text, link_target))
+
     # autogenerate doc strings by combining parent class doc strings
     # with subclass doc strings:
     for method in [title, section, subsection, subsubsection,
@@ -462,13 +609,105 @@ class HTML(DocWriter):
                    verbatim, # not defined here: math, raw,
                    figure, table, url,
                    list, item_handler,]:
-        method.__doc__ = makedocstr(DocWriter, method)
-        
+        method.__doc__ = makedocstr(_BaseWriter, method)
 
-def _test(formatclass):
-    d = formatclass()
-    d.header()
-    d.title('My Test of DocWriter',
+
+
+# Efficient way of generating class DocWriter.
+# A better way (for pydoc and other API references) is to
+# explicitly list all methods and their arguments and then add
+# the body for writer in self.writers: writer.method(arg1, arg2, ...)
+
+class DocWriter:
+    """
+    DocWriter can write documents in several formats at once.
+    """
+    methods = 'title', 'section', 'subsection', 'subsubsection', \
+              'paragraph', 'paragraph_separator', 'text', 'list', \
+              'verbatim', 'math', 'raw', 'url', 'link', \
+              'write_to_file', 'figure', 'table', 
+    
+        
+    def __init__(self, *formats):
+        """
+        @param formats: sequence of strings specifying the desired formats.
+        """
+        self.writers = [eval(format)() for format in formats]
+
+    def documents(self):
+        return [writer.document for writer in self.writers]
+
+    def __str__(self):
+        s = ''
+        for writer in self.writers:
+            s += '*'*60 + \
+                  '\nDocWriter: format=%s (without footer)\n' % \
+                  writer.__class__.__name__ + '*'*60
+            s += str(writer)
+        return s
+            
+    def dispatcher(self, *args, **kwargs):
+        #print 'in dispatcher for', self.method_name, 'with args', args, kwargs
+        #self.history = (self.method_name, args, kwargs)
+        for writer in self.writers:
+            s = getattr(writer, self.method_name)(*args, **kwargs)
+
+    '''
+    Alternative to attaching separate global functions:
+    def __getattribute__(self, name):
+        print 'calling __getattribute__ with', name
+        if name in DocWriter.methods:
+            self.method_name = name
+            return self.dispatcher
+        else:
+            return object.__getattribute__(self, name)
+
+    # can use inspect module to extract doc of all methods and
+    # put this doc in __doc__
+    '''
+    
+# Autogenerate methods in class DocWriter (with right
+# method signature and doc strings stolen from class _BaseWriter (!)):
+
+import inspect
+
+def func_to_method(func, class_, method_name=None):
+    setattr(class_, method_name or func.__name__, func)
+
+for method in DocWriter.methods:
+    docstring = eval('_BaseWriter.%s.__doc__' % method)
+    # extract function signature:
+    a = inspect.getargspec(eval('_BaseWriter.%s' % method))
+    if a[3] is not None:  # keyword arguments?
+        kwargs = ['%s=%r' % (arg, value) \
+                  for arg, value in zip(a[0][-len(a[3]):], a[3])]
+        args = a[0][:-len(a[3])]
+        allargs = args + kwargs
+    else:
+        allargs = a[0]
+    #print method, allargs, '\n', a
+    signature_def = '%s(%s)' % (method, ', '.join(allargs))
+    signature_call = '%s(%s)' % (method, ', '.join(a[0][1:]))  # exclude self
+    code = """\
+def _%s:
+    '''\
+%s
+    '''
+    for writer in self.writers:
+        writer.%s
+
+func_to_method(_%s, DocWriter, '%s')
+""" % (signature_def, docstring, signature_call, method, method)
+    #print 'Autogenerating\n', code
+    exec code
+  
+
+def _test(d):
+    # d is formatclass() or DocWriter(HTML, LaTeX, ...)
+    print '\n\n', '*'*70, \
+          '\n*** Testing class "%s"\n' % d.__class__.__name__, '*'*70
+    
+    d.title('My Test of Class %s' % d.__class__.__name__,
             [('Hans Petter Langtangen',
               'Simula Research Laboratory',
               'Dept. of Informatics, Univ. of Oslo'),
@@ -487,12 +726,33 @@ in plain text.
     d.subsection('First Subsection')
     d.text('Some text for the subsection.')
     d.paragraph('Test of a Paragraph')
-    d.text('Some paragraph text.....')
-    d.list(['item1', 'item2',
-            ['subitem1', 'subitem2'],
-            'item3',
-            ['subitem3', 'subitem4']],
-           listtype='enumerate')
+    d.text("""
+Some paragraph text taken from "Documenting Python": The Python language
+has a substantial body of documentation, much of it contributed by various
+authors. The markup used for the Python documentation is based on
+LaTeX and requires a significant set of macros written specifically
+for documenting Python. This document describes the macros introduced
+to support Python documentation and how they should be used to support
+a wide range of output formats.
+
+This document describes the document classes and special markup used
+in the Python documentation. Authors may use this guide, in
+conjunction with the template files provided with the distribution, to
+create or maintain whole documents or sections.
+
+If you're interested in contributing to Python's documentation,
+there's no need to learn LaTeX if you're not so inclined; plain text
+contributions are more than welcome as well.
+""")
+    d.text('Here is an enumerate list:')
+    samplelist = ['item1', 'item2',
+                  ['subitem1', 'subitem2'],
+                  'item3',
+                  ['subitem3', 'subitem4']]
+    d.list(samplelist, listtype='enumerate')
+    d.text('...with some trailing text.')
+    d.subsubsection('First Subsubsection with an Itemize List')
+    d.list(samplelist, listtype='itemize')
     d.text('Here is some Python code:')
     d.verbatim("""
 class A:
@@ -505,56 +765,23 @@ b = B()
 b.item = 0  # create a new attribute
 """)
     d.section('Second Section')
+    d.text('Here is a description list:')
     d.list(['keyword1: item1', 'keyword2: item2 goes here, with a colon : and some text after',
         ['key3: subitem1', 'key4: subitem2'],
         'key5: item3',
         ['key6: subitem3', 'key7: subitem4']],
            listtype='description')
-    d.table([['a', 'b'], ['c', 'd'], ['e', 'f']])
-    d.footer()
+    d.paragraph_separator()
+    d.text('And here is a table:')
+    d.table([['a', 'b'], ['c', 'd'], ['e', 'f', 'and a longer text']])
     print d
+    d.write_to_file('tmp_%s' % d.__class__.__name__)
         
-'''
-    def figure(self, filename, caption, width=None, height=None, label=None):
-        filename = self.figure_conversion(filename, ('.jpg', '.gif', '.png'))
-        if width:
-            width = ' WIDTH=%s ' % width
-        else:
-            width = ''
-        if height:
-            height = ' WIDTH=%s ' % width
-        else:
-            height = ''
-        s = '\n<HR><IMG SRC="%s"%s%s>\n<P><EM>%s</EM>\n<HR><P>\n' % \
-            (filename, width, height, caption)
-        return s
-    
-# note: DocFactor does not allow nested calls (d.raw(d.list...))
-class DocFactory:
-    def __init__(self, *formats):
-        self.formats = []
-        for format in formats:
-            self.formats.append(eval(format+'()'))
-        self.history = []
-        
-
-    def dispatcher(self, *args, **kwargs):
-        #print 'in dispatcher for', self.method_name, 'with args', args, kwargs
-        self.history = (self.method_name, args, kwargs)
-        for format in self.formats:
-            s = getattr(format, self.method_name)(*args, **kwargs)
-        
-    def __getattr__(self, name):
-        print 'calling __getattr__ with', name
-        self.method_name = name
-        return self.dispatcher
-
-    # simpler solution in case all calls are to be directed to one other format
-    #def __getattr__(self, name):
-    #    return getattr(some_other_instance, name)
-'''
-
 if __name__ == '__main__':
-    _test(HTML)
-
-    
+    formats = HTML, Doconce
+    for format in formats:
+        d = format()
+        _test(d)
+    formats_str = [format.__name__ for format in formats]
+    d = DocWriter(*formats_str)
+    _test(d)
