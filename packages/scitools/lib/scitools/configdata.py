@@ -65,13 +65,17 @@ def load_config_file(name, extension='.cfg',
     is ".cfg").
     @param extension: extension of config file (name.extension is the
     complete name).
+    @param extension: extension of config file (name.extension is the
+    complete name).
     @param default_file_location: name of directory containing a
-    file basename.extension with default values (to be read before other
+    file name.extension with default values (to be read before other
     configuration files). If None, the directory where this module
-    (configdata) resides will be tried. A typical value is when called
-    from a package module is os.path.dirname(__file__) (the module's
-    directory).
-    @param other_locations: list of directories with .basename.extension files.
+    (configdata) resides will be tried. A typical value for a system
+    configuration file is os.path.dirname(__file__) (i.e., the same
+    directory as the calling module in the package).
+    @param other_locations: list of directories with name.extension files.
+    @param default_dict4intpl: dictionary with variable names and values
+    for use in variable interpolation in the configuration file.
     @param case_sensitive_options: by default, the options in configuration
     files are transformed to lower case, so setting this parameter to True,
     makes options case sensitive.
@@ -108,8 +112,9 @@ def load_config_file(name, extension='.cfg',
     return config, read_files
 
 
-def config_parser_frontend(basename, extension='.cfg',
-                           default_file_location=os.curdir,
+def config_parser_frontend(basename, 
+                           default_file_location,
+                           extension='.cfg',
                            other_locations=[],
                            default_dict4intpl={},
                            globals_=None):
@@ -200,26 +205,27 @@ def config_parser_frontend(basename, extension='.cfg',
     This priority implies that the a config file in the current working
     directory will override any user or any other system settings.
 
-    @param name: name stem of config file, e.g., "mytools" (then
+    @param basename: name stem of config file, e.g., "mytools" (then
     "mytools.cfg" is the complete name of the config file if extension
     is ".cfg").
-    @param extension: extension of config file (name.extension is the
+    @param extension: extension of config file (basename.extension is the
     complete name).
     @param default_file_location: name of directory containing a
-    file name.extension with default values (to be read before other
+    file basename.extension with default values (to be read before other
     configuration files). If None, the directory where this module
-    (configdata) resides will be tried. A typical value is when called
-    from a package module is os.path.dirname(__file__) (the module's
-    directory).
-    @param other_locations: list of directories with .name.extension files.
+    (configdata) resides will be tried. A typical value for a system
+    configuration file is os.path.dirname(__file__) (i.e., the same
+    directory as the calling module in the package).
+    @param other_locations: list of directories with basename.extension files.
     @param default_dict4intpl: dictionary with variable names and values
     for use in variable interpolation in the configuration file.
     @param globals_: dictionary of global names that are used when
     running eval on option values. If None, the global names in this
     module are used.
-    @return: a dictionary with [section][option] keys a three-element
-    list holding the option value, the string to right type conversion
-    function, and a bool indicator if the value is read-only.
+    @return: a dictionary with [section][option] keys and a values of
+    the form of a three-element list holding the option value, the
+    string to right type conversion function (callable), and a bool
+    indicator if the value is read-only.
     The other returned object is a list of filenames of the configuration
     files that were loaded.
     """
@@ -326,6 +332,51 @@ def config_parser_frontend(basename, extension='.cfg',
 
     return data, files
 
+def dict2xml(data, syntax='gnosis',
+             section_name='section', option_name='option'):
+    """
+    Takes a data dictionary, as output from the config_parser_frontend
+    function, and stores in a string with XML syntax.
+
+    @param data: dictionary of the form data[section][option] = (v, s2t, ro),
+    where v is a Python object (value), s2t is a callable, and ro is
+    a bool.
+    @param syntax: 'gnosis' gives gnosis XML_Pickler syntax, 'plain' gives
+    a simpler to read syntax.
+    @param section_name: the name of sections (highest key level) in the
+    data dictionary to be used as XML tagname.
+    @param option_name: the name of options (lowest key level) in the
+    data dictionary to be used as XML tagname.
+    @return: a string with XML syntax.
+    """
+    if syntax == 'gnosis':
+        from gnosis.xml.pickle import XML_Pickler
+        class ClassWrapper(XML_Pickler):
+            def __init__(self, data):
+                self.data = data
+
+        datawrap = ClassWrapper(data)
+        return datawrap
+    else:
+        # simpler XML syntax:
+        from errorcheck import get_type
+        s = '<data dictionary>\n'
+        indent = 4
+        for section in data:
+            current_indent = ' '*indent
+            s += '%s<%s>%s</%s>\n' % \
+                 (current_indent, section_name, section, section_name)
+            for option in data[section]:
+                value, str2type, read_only = data[section][option]
+                current_indent = ' '*indent*2
+                s += '%s<%s>%s</%s>\n' % \
+                     (current_indent, option_name, option, option_name)
+                current_indent = ' '*indent*3
+                s += '%s<value type="%s" readonly="%s">%s</value>\n' % \
+                (current_indent, get_type(value), read_only, value)
+        s += '</data dictionary>\n'
+        return s
+        
 def values_only(data):
     """
     Strip the three-tuple (value, str2type, readonly) in the dictionary
@@ -338,3 +389,50 @@ def values_only(data):
         for option in rdata[section]:
             rdata[section][option] = rdata[section][option][0]
     return rdata
+
+def _test():
+    configdata = """
+[modes]
+; Enable setting variables by environment variables with
+; prefix_variablename, e.g., IGMenvir_section_option
+envir prefix = IGMenvir
+
+; Enable reading from command line through --IGMenvir_section_option
+command line arguments = on  
+
+[global directories]
+projects = r<str> projects
+templates = r<str> templates
+project template = r<str> %(templates)s/project
+
+[file extensions]
+project = .igm
+report = r<eval> ['.html', '.htm']
+
+[debugging]
+DEBUG = <int> 0
+VERBOSE = <int> 1
+
+[system messages]
+run.warning.text = <str>
+    Not all parent worksteps are checked in.
+    Since the results must be reproducible, only those that are checked in will
+    be used as data sources.
+
+unknowndir.overwrite.title = <str> Overwrite selected directory?
+
+[data files]
+data glob = <str> *_simulation_results.*
+"""
+    f = open('tmp.cfg', 'w'); f.write(configdata); f.close()
+
+    data, files = config_parser_frontend('tmp', os.curdir)
+    import pprint
+    pprint.pprint(data)
+    data_values = values_only(data)
+    pprint.pprint(data_values)
+    print dict2xml(data)
+    print dict2xml(data, syntax='plain')
+
+if __name__ == '__main__':
+    _test()
