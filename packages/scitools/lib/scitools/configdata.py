@@ -11,12 +11,14 @@ __all__ = ['tobool', 'config_parser_frontend', 'values_only']
 
 def tobool(value):
     """
-    Convert value (1, '1', 0, '0', 'yes', 'true', 'no', 'false', 'on', 'off')
-    to a bool object. The string values are treated in a case-insensitive way.
+    Convert value (1, '1', 0, '0', 'yes', 'true', 'no', 'false', 'on',
+    'off', or any integer) to a bool object. The string values are
+    treated in a case-insensitive way.
     """
-    trues  = "1", "yes", "true", "on", 1
-    falses = "0", "no", "false", "off", 0
+    trues  = "1", "yes", "Yes", "YES", "true",  "True",  "on",  1
+    falses = "0", "no",  "No",  "NO",  "false", "False", "off", 0
     value = value.lower() # case-insensitive check
+
     if value in trues:   
         value = True
     elif value in falses:
@@ -51,12 +53,12 @@ def load_config_file(name, extension='.cfg',
     A config file is searched for and read in as follows (in the listed order):
 
       1. name.cfg in the default_file_location directory,
-      2. .name.cfg files for each directory in other_locations list,
-      3. .name.cfg in the directory where the main script is running,
-      4. .name.cfg in the user's home directory.
+      2. name.cfg files for each directory in other_locations list,
+      4. .name.cfg in the user's home directory,
+      3. .name.cfg in the directory where the main script is running.
 
-    This priority implies that the user's config file will override
-    any other system settings.
+    This priority implies that the a config file in the current working
+    directory will override any user or any other system settings.
 
     @param name: name stem of config file, e.g., "mytools" (then
     "mytools.cfg" is the complete name of the config file if extension
@@ -95,10 +97,11 @@ def load_config_file(name, extension='.cfg',
         read_files.append(default_config_file)
     #else:
     #    print 'No data in', default_config_file
-    dirs = other_locations + [os.curdir]
+    dirs = other_locations 
     candidate_files = [os.path.join(loc, '.%s%s' % (name, extension)) \
                        for loc in dirs] + \
-                       [os.path.expanduser('~/.%s%s' % (name, extension))]
+                       [os.path.expanduser('~/.%s%s' % (name, extension))] + \
+                       [os.path.join(os.curdir, '.%s%s' % (name, extension))]
     #print candidate_files
     files = config.read(candidate_files)
     read_files = read_files + files
@@ -190,12 +193,12 @@ def config_parser_frontend(basename, extension='.cfg',
     (in the listed order):
 
       1. basename.cfg in the default_file_location directory,
-      2. .basename.cfg files for each directory in other_locations list,
-      3. .basename.cfg in the directory where the main script is running,
-      4. .basename.cfg in the user's home directory.
+      2. basename.cfg files for each directory in other_locations list,
+      4. .basename.cfg in the user's home directory,
+      3. .basename.cfg in the directory where the main script is running.
 
-    This priority implies that the user's config file will override
-    any other system settings.
+    This priority implies that the a config file in the current working
+    directory will override any user or any other system settings.
 
     @param name: name stem of config file, e.g., "mytools" (then
     "mytools.cfg" is the complete name of the config file if extension
@@ -285,7 +288,7 @@ def config_parser_frontend(basename, extension='.cfg',
             if str2type is not None:
                 if str2type == 'bool' or str2type == 'tobool':
                     value = tobool(value)
-                    data[section][option] = [value, tobool, read_only]
+                    data[section][option] = [value, bool, read_only]
                 elif str2type == 'float':
                     data[section][option] = [float(value), float, read_only]
                 elif str2type == 'int':
@@ -329,8 +332,9 @@ def values_only(data):
     returned from config_parser_frontend to a dictionary with option
     values only.
     """
-    rdata = data.copy()
-    for section in data:
-        for option in data[section]:
+    import copy
+    rdata = copy.deepcopy(data)   # data.copy() is only shallow copy!
+    for section in rdata:
+        for option in rdata[section]:
             rdata[section][option] = rdata[section][option][0]
     return rdata

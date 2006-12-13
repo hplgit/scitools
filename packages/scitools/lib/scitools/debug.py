@@ -20,7 +20,7 @@ modules can monitor their debugging by setting debug.DEBUG = 0
 or debug.DEBUG = 1 (note that a single such setting has a "global" effect;
 it turns off debugging everywhere).
 """
-import os, sys, string, re
+import os, sys, string, re, inspect
 
 __all__ = ['watch', 'trace', 'dump', 'debugregex']
 
@@ -43,8 +43,14 @@ def watch(variable, output_medium=sys.stdout):
     Used to monitor variables during debugging.
     As an example, watch(myprm) may lead to this output::
 
-      File "myscript.py", line 56, in myfunction
-        myprm, type "int" = 3
+      myprm <int> in ./myscript.py(56): myfunction
+        = 3
+
+    The variable is returned to the caller, thus it can be used
+    inside expressions:
+      myobj.setCallback(lambda self: self.setstate(watch(self.mystate)))
+    or
+      dosomething(*watch((arg1, arg2, arg3)))
 
     (This function is a modified version of a function taken
     from the online Python Cookbook::
@@ -54,7 +60,7 @@ def watch(variable, output_medium=sys.stdout):
     The original code was written by Olivier Dagenais).
     """
     if not DEBUG:
-        return
+        return variable
     stack = traceback.extract_stack()[-2:][0]
     actual_call = stack[3]
     if actual_call is None:
@@ -66,17 +72,37 @@ def watch(variable, output_medium=sys.stdout):
     # everything between '(' and ')'
     prm["variable_name"] = string.strip(actual_call[left+1:right])  
     prm["variable_type"] = errorcheck.get_type(variable)  # str(type(variable))[7:-2]
-    prm["value"]       = repr(variable)
+    if isinstance(variable, basestring):
+        print_variable = str(variable)
+    else:
+        print_variable = repr(variable)
+    prm["value"]       = print_variable
     prm["method_name"]  = stack[2]
     prm["line_number"] = stack[1]
     prm["filename"]    = stack[0]
-    outstr = 'watch: file "%(filename)s", line %(line_number)d, '\
-             'in %(method_name)s\n  %(variable_name)s, '\
-             'type "%(variable_type)s" = %(value)s\n\n'
+    prm["shortfile"]   = shorten_path(stack[0])
+    if prm["method_name"] == '?':
+        prm["method_name"] = 'main'
+        #outstr = 'watch: %(shortfile)s(%(line_number)d): '\
+        #     '%(method_name)s\n  %(variable_name)s '\
+        #     '<%(variable_type)s> = %(value)s\n'
+    outstr = '%(variable_name)s <%(variable_type)s>'\
+             ' in %(shortfile)s(%(line_number)d): %(method_name)s\n'\
+             '  = %(value)s\n'
     output_medium.write(outstr % prm)
+    return variable
+
+def shorten_path(path, abb_len=20):
+    """Shorten a path to relative (./rel_path) or abbreviated (...rest_of_path)
+    form. abb_len=0 for no abbreviation of the second form."""
+    cwd = os.environ.get('PWD') or os.getcwd()
+    if path.startswith(cwd):
+        return "."+path[len(cwd):]
+    else:
+        return path[-abb_len:]
 
 
-def trace(message='', output_medium=sys.stdout):
+def trace(message='', output_medium=sys.stdout, frameno=-2):
     """
     Print a message and where in the program this
     message was requested (as in the function watch).
@@ -93,19 +119,34 @@ def trace(message='', output_medium=sys.stdout):
         def write(self):
           debug.trace(self.__class__.__name__)
 
+    With frameno=-2 the place where this debug.trace function is called is
+    printed, while smaller values gives printout of previous calls on the call
+    stack. In the previous example, we could look further back to say:
+
+      class A:
+        def __init__(self):
+            debug.trace('Instantiation of '+self.__class__.__name__, frameno=-3)
+
+        def write(self):
+            debug.trace('A.write() call', frameno=-3)
+
+    Setting frameno=-4 may also be useful in some particular cases, for example
+    in a baseclass __init__ which is usually overridden. But there is danger
+    that we then look too far back in the call stack.
+
     (This function is a modified version of one taken from the
      Python Cookbook, see the watch function.)
   """
     if not DEBUG:
         return
-    stack = traceback.extract_stack()[-2:][0]
+    stack = traceback.extract_stack()[frameno:][0]
     prm = {}
     prm["method_name"] = stack[2]
     prm["line_number"] = stack[1]
     prm["filename"]    = stack[0]
+    prm["shortfile"]   = shorten_path(stack[0])
     prm["message"]     = message
-    outstr = 'trace: file "%(filename)s", line %(line_number)d, '\
-             'in %(method_name)s: %(message)s\n\n'
+    outstr = '%(shortfile)s(%(line_number)d) %(method_name)s: %(message)s\n'
     output_medium.write(outstr % prm)
 
 def dump(obj, hide_nonpublic=True):
@@ -131,14 +172,20 @@ def dump(obj, hide_nonpublic=True):
             pass
         else:
             try:
-                s = a + '=' + str(getattr(obj,a))
+                attr = getattr(obj, a)
+                s = a + '=' + str(attr)
                 if s.find(' method ') != -1 or \
                    s.find('function ') != -1 or \
                    s.find('method-wrapper ') != -1 or \
                    s.find('ufunc ') != -1:
+                    try:
+                        # add argument list (args, varargs, kwargs, defaults)
+                        a = '%-15s%s' % (a, inspect.formatargspec(inspect.getargspec(attr)))
+                    except:
+                        pass
                     methods.append(a) # skip function addresses
                 else:
-                    s += '  (' + errorcheck.get_type(getattr(obj,a)) + ')'
+                    s += '  (' + errorcheck.get_type(attr) + ')'
                     attrs.append(s)  # variable=value
             except Exception, msg:
                 pass
@@ -182,13 +229,13 @@ def setprofile(include='', exclude=None, output=sys.stdout):
         meth = frame.f_code.co_name
         try:
             cls = frame.f_locals['self']
-            meth = '.'.join([type(cls).__name__, meth])
+            if isinstance(cls, object):
+                cls = cls.__class__
+            meth = '.'.join([cls.__name__, meth])
         except KeyError:
             pass
-        s = '%s %s(%s): %s\n' % (event, frame.f_code.co_filename,
-                                 frame.f_lineno, meth)
+        s = '%s: %s(%s): %s\n' % (event, frame.f_code.co_filename,
+                                  frame.f_lineno, meth)
         if include.search(s) and not (exclude and exclude.search(s)):
             output.write(s)
-            if arg:
-                output.writelines([' -> ', str(arg), '\n'])
     sys.setprofile(prof)
