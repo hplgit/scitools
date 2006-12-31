@@ -41,8 +41,9 @@ def _option_interpolation_error(files, section, option, value,
           'substituted in other options: %s' % \
           (files, section, option, r, str2type, value)
     
-def load_config_file(name, extension='.cfg',
+def load_config_file(name, 
                      default_file_location=None,
+                     extension='.cfg',
                      other_locations=[],
                      case_sensitive_options=True,
                      default_dict4intpl={}):
@@ -63,16 +64,14 @@ def load_config_file(name, extension='.cfg',
     @param name: name stem of config file, e.g., "mytools" (then
     "mytools.cfg" is the complete name of the config file if extension
     is ".cfg").
-    @param extension: extension of config file (name.extension is the
-    complete name).
-    @param extension: extension of config file (name.extension is the
-    complete name).
     @param default_file_location: name of directory containing a
     file name.extension with default values (to be read before other
     configuration files). If None, the directory where this module
     (configdata) resides will be tried. A typical value for a system
     configuration file is os.path.dirname(__file__) (i.e., the same
     directory as the calling module in the package).
+    @param extension: extension of config file (name.extension is the
+    complete name).
     @param other_locations: list of directories with name.extension files.
     @param default_dict4intpl: dictionary with variable names and values
     for use in variable interpolation in the configuration file.
@@ -233,10 +232,13 @@ def config_parser_frontend(basename,
         globals_ = globals()
         
     # load configuration file:
-    config, files = load_config_file(basename, extension,
-                                     default_file_location,
-                                     other_locations,
-                                     default_dict4intpl)
+    config, files = \
+            load_config_file(basename, 
+                             default_file_location=default_file_location,
+                             extension=extension,
+                             other_locations=other_locations,
+                             case_sensitive_options=True,
+                             default_dict4intpl=default_dict4intpl)
 
     # dictionary with [section][option] keys and values as a
     # list [value, str2type, readonly]
@@ -344,7 +346,8 @@ def dict2xml(data, syntax='gnosis',
     @param syntax: 'gnosis' gives gnosis XML_Pickler syntax, 'plain' gives
     a simpler to read syntax.
     @param section_name: the name of sections (highest key level) in the
-    data dictionary to be used as XML tagname.
+    data dictionary to be used as XML tagname. ("section" and "option" are
+    the terms used by the Python ConfigParser tool.)
     @param option_name: the name of options (lowest key level) in the
     data dictionary to be used as XML tagname.
     @return: a string with XML syntax.
@@ -394,10 +397,10 @@ def _test():
     configdata = """
 [modes]
 ; Enable setting variables by environment variables with
-; prefix_variablename, e.g., IGMenvir_section_option
-envir prefix = IGMenvir
+; prefix_variablename, e.g., MyProject_section_option
+envir prefix = MyProject
 
-; Enable reading from command line through --IGMenvir_section_option
+; Enable reading from command line through --MyProject_section_option
 command line arguments = on  
 
 [global directories]

@@ -25,7 +25,7 @@ else:
     # None implies the directory where configdata.py resides
 
     # make SciTools global variables:
-
+    #import pprint; pprint.pprint(_config_data)
     SAFECODE = _config_data['globals']['SAFECODE'][0]
     # override:
     if not __debug__:  # python -O (optimized mode)

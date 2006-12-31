@@ -57,7 +57,7 @@ import time as _time   # measure how much time various imports take
 _t0 = _time.clock()
 
 import os
-__doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.ini')).read()
+__doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 from globaldata import *   # read-only import of global variables
 import globaldata as _globaldata
