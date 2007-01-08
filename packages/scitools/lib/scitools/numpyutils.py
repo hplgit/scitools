@@ -461,7 +461,7 @@ def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
     """
     Approximate test a==b for float variables.
     Returns true if abs(a-b) < atol + rtol*abs(b).
-    atol comes into play when abs(b) is very small.
+    atol comes into play when abs(b) is large.
     When a and b are NumPy arrays, NumPy's allclose function is called
     (but float_eq's default tolerances are much stricter than those of
     allclose).

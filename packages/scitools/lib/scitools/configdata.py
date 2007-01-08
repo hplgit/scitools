@@ -7,7 +7,7 @@ import os, sys
 
 VALUE=0; STR2TYPE=1; READONLY=2  # logical names for list indices
 
-__all__ = ['tobool', 'config_parser_frontend', 'values_only']
+__all__ = ['tobool', 'config_parser_frontend', 'values_only', 'dict2xml']
 
 def tobool(value):
     """
@@ -296,7 +296,7 @@ def config_parser_frontend(basename,
             if str2type is not None:
                 if str2type == 'bool' or str2type == 'tobool':
                     value = tobool(value)
-                    data[section][option] = [value, bool, read_only]
+                    data[section][option] = [value, tobool, read_only]
                 elif str2type == 'float':
                     data[section][option] = [float(value), float, read_only]
                 elif str2type == 'int':

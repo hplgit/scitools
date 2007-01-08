@@ -448,6 +448,7 @@ class GnuplotBackend(BaseClass):
                 fig._g = Gnuplot.Gnuplot() # Persist is not supported under win
 
         self._g = fig._g # Creates link for faster access
+
         
     def _replot_old(self):
         fig = self.gcf()
@@ -510,6 +511,10 @@ class GnuplotBackend(BaseClass):
         fig = self.gcf()
         fig_axes = fig.get('axes')
         self._g.reset() # reset everytime
+        # default set-up for Gnuplot:
+        #self._g('set key left box; set border 31 lt -1 lw 2.000')
+        # could be read in from the configuration file
+
         self._ismultiplot = False
         self._g('unset multiplot')
         for ax in fig_axes.values():

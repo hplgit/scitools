@@ -81,7 +81,7 @@ if _globaldata._load_scipy:
         pass
     _t2 = _time.clock(); _import_times += 'scipy=%g ' % (_t2 - _t1)
 
-# didn't want our couldn' load scipy:
+# didn't want, or couldn't load, scipy:
 if not has_scipy:
     if _globaldata._load_numpytools:
         from numpytools import *
