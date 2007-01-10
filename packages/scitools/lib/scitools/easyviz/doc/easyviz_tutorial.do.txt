@@ -1,0 +1,475 @@
+_____Plotting a Single Curve______
+
+
+Let us plot the curve $y = t^2\exp(-t^2)$ for $t$ values between 0 and 3.
+First we generate equally spaced coordinates for $t$, say 51 values (50
+intervals). Then we compute the corresponding $y$ values at these
+points, before we can call the `plot(t,y)` command.
+Here is the complete program:
+
+!bc
+from scitools.all import *
+
+def f(t):
+    return t**2*exp(-t**2)
+
+t = linspace(0, 3, 51)    # 51 points between 0 and 3
+y = zeros(len(t), 'd')    # 51 doubles ('d')
+for i in xrange(len(t)):
+    y[i] = f(t[i])
+
+plot(t, y)
+!ec
+
+The first line imports all of SciTools and Easyviz that can be handy
+to have when doing scientific computations. In this program we
+pre-allocate the `y` array and fill it with values, element by
+element, in a (slow) Python loop. Operations on the whole `t` at once
+is legal and yields faster and shorter code:
+
+!bc
+from scitools.all import *
+
+def f(t):
+    return t**2*exp(-t**2)
+
+t = linspace(0, 3, 51)    # 51 points between 0 and 3
+y = f(t)                  # compute all f values at once
+plot(t, y)
+!ec
+The `f` function can also be skipped, if desired:
+!bc
+y = t**2*exp(-t**2)
+!ec
+
+To include the plot in reports, we need 
+a hardcopy of the figure in PostScript, PNG, or another image format.
+The `hardcopy` command produces files with images in various formats
+
+!bc
+hardcopy('tmp1.ps')  # produce PostScript
+hardcopy('tmp1.png') # produce PNG
+!ec
+
+The filename extension determines the format: \emp{.ps} or
+\emp{.eps} for PostScript, and \emp{.png} for PNG.
+
+FIGURE:[fig_plot1a.eps] The result of `hardcopy('tmp1.ps')`.
+
+
+_____Decorating the Plot______
+
+The $x$ and $y$ axis in curve plots should have labels, here $t$ and
+$y$, respectively. Also the curve should be identified with a label
+(or legend as it is often called).  A title above the plot is also
+common.  All such things are easily added after the `plot` command:
+
+!bc
+xlabel('t')
+ylabel('y')
+legend('t^2*exp(-t^2)')
+axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
+title('My First Easyviz Demo')
+!ec
+
+This syntax is inspired by Matlab to make the switch between
+SciTools/Easyviz and Matlab almost trivial.
+Easyviz has also introduced a more "Pythonic" `plot` command where
+all the plot properties can be set at once:
+
+!bc
+plot(t, y,
+     xlabel='t',
+     ylabel='y',
+     legend='t^2*exp(-t^2)',
+     axis=[0, 3, -0.05, 0.6],
+     title='My First Easyviz Demo',
+     hardcopy='tmp1.ps',
+     show=True)
+!ec
+
+With `show=False` one can avoid the plot window on the screen and
+just make the hardcopy.
+
+Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
+rather than `t**2` (program style).
+
+FIGURE:[fig_plot1c.eps] A single curve with label, title, and axis adjusted.
+
+
+_____Plotting Multiple Curves_____
+
+One often wants to compare curves to each other, and this requires
+multiple curves to be drawn in the same plot.
+Suppose we want to plot the two functions $f_1(t)=t^2\exp(-t^2)$
+and $f_2(t)=t^4\exp(-t^2)$. If we issue two `plot` commands after
+each other, two separate plots will be made. To make the second
+`plot` command draw the curve in the previous plot, we need to
+issue a `hold('on')` command. Alternatively, we can provide all
+data in a single `plot` command. A complete program illustrates the
+different approaches:
+
+!bc
+from scitools.all import *   # for curve plotting
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+y2 = f2(t)
+
+# Matlab-style syntax:
+plot(t, y1)
+hold('on')
+plot(t, y2)
+
+xlabel('t')
+ylabel('y')
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
+title('Plotting two curves in the same plot')
+hardcopy('tmp2.ps')
+
+# alternative:
+plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     title='Plotting two curves in the same plot',
+     hardcopy='tmp2.ps')
+!ec
+The sequence of the multiple legends is such that the first legend 
+corresponds to the first curve, the second legend to the second curve,
+and so on.
+
+
+FIGURE:[fig_plot2a.eps] Two curves in the same plot.
+
+
+_____Controlling Axis and Line Styles_____
+
+A plotting program will normally compute sensible ranges of
+the axis. For example, the Gnuplot program has in our examples
+so far used an $y$ axis from 0 to 0.6 while the $x$ axis goes from
+0 to 3. Sometimes it is desired to adjust the range
+of the axis. Say we want the $x$ axis to go from 0 to 4 (although the
+data stops at $x=3$), while $y$ axis goes from -0.1 to 0.6.
+In the Matlab-like syntax new axis specifications are 
+done by the `axis` command:
+
+!bc
+axis([0, 4, -0.1, 0.6])
+!ec
+
+In a single `plot` command we must use the `axis` keyword:
+
+!bc
+plot(t, y1, t, y2, ...
+     axis=[0, 4, -0.1, 0.6],
+     ...)
+!ec
+
+In both cases, the axis specification is a list of the
+$x_{\rm min}$, $x_{\rm max}$, $y_{\rm min}$, and $y_{\rm max}$
+values.
+
+The two curves get distinct default line styles, depending on the
+program that is used to produce the curve (and the settings for this
+program). It might well happen that you get a green and a red curve
+(which is bad for a significant portion of the male population).  We
+therefore often want to control the line style in detail. Say we want
+the first curve (`t` and `y1`) to be drawn as a red solid line and the
+second curve (`t` and `y2`) as blue circles at the discrete data
+points.  The Matlab-inspired syntax for specifying line types applies
+a letter for the color and a symbol from the keyboard for the line
+type. For example, `r-` represents a red (`r`) line (`-`), while `bo`
+means blue (`b`) circles (`o`). The line style specification is added
+as an argument after the $x$ and $y$ coordinate arrays of the curve:
+
+!bc
+plot(t, y1, 'r-')
+hold('on')
+plot(t, y2, 'bo')
+
+# or
+plot(t, y1, 'r-', t, y2, 'bo')
+!ec
+
+FIGURE:[fig_plot2c.eps] Two curves in the same plot, with controlled line styles.
+
+Assume now that we want to plot the blue circles at only each 4 points.
+We can grab each 4 points out of the `t` array by using an appropriate
+slice: `t2 = t[::4]`. Note that the first colon means the range from the
+first to the last data point, while the second colon separates this
+range from the stride, i.e., how many points we should "jump over"
+when we pick out a set of values of the array.
+
+!bc
+from scitools.all import *
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+t2 = t[::4]
+y2 = f2(t2)
+
+plot(t, y1, 'r-', t2, y2, 'bo',
+     xlabel='t', ylabel='y',
+     axis=[0, 4, -0.1, 0.6],
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     title='Plotting two curves in the same plot',
+     hardcopy='tmp2.ps')
+!ec
+
+The different available line colors include 
+  * yellow:   `'y'`
+  * magenta:  `'m'`
+  * cyan:     `'c'`
+  * red:      `'r'`
+  * green:    `'g'`
+  * blue:     `'b'`
+  * white:    `'w'`
+  * black:    `'k'`
+
+The different available line types are
+  * solid line:      `'-'`
+  * dashed line:     `'--'`
+  * dotted line:     `':'`
+  * dash-dot line:   `'-.'`
+
+Lots of markers at data points are available:
+  * plus sign:                     `'+'`
+  * circle:                        `'o'`
+  * asterix:                       `'*'`
+  * point:                         `'.'`
+  * cross:                         `'x'`
+  * square:                        `'s'`
+  * diamond:                       `'d'`
+  * upward-pointing triangle:      `'^'`
+  * downward-pointing triangle:    `'v'`
+  * right-pointing triangle:       `'>'`
+  * left-pointing triangle:        `'<'`
+  * five-point star (pentagram):   `'p'`
+  * six-point star (hexagram):     `'h'`
+  * no marker (default): `None`
+
+Symbols and line styles may be combined, for instance as in `'kx-'`,
+which means a black solid line with black crosses at the data points.
+
+The line thickness can be added as a number in the line style specification
+string. For example, `'r-2'` means red solid line with thickness 2.
+
+__Another Example__. 
+Let us extend the previous example with a third curve where the data
+points are slightly randomly distributed around the $f_2(t)$ curve:
+
+!bc
+from scitools.all import *
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+y2 = f2(t)
+
+# pick out each 4 points and add random noise:
+t3 = t[::4]      # slice, stride 4
+random.seed(11)  # fix random sequence
+noise = random.normal(loc=0, scale=0.02, size=len(t3))
+y3 = y2[::4] + noise
+
+plot(t, y1, 'r-')
+hold('on')
+plot(t, y2, 'ks-')   # black solid line with squares at data points
+plot(t3, y3, 'bo')
+
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
+title('Simple Plot Demo')
+axis([0, 3, -0.05, 0.6])
+xlabel('t')
+ylabel('y')
+show()
+hardcopy('tmp3.ps') 
+hardcopy('tmp3.png')
+!ec
+
+FIGURE:[fig_plot3.eps] A plot with three curves.
+
+__Minimalistic Plotting__. 
+When exploring mathematics in the interactive Python shell, most of us
+are interested in the quickest possible commands.
+Here is an example on minimalistic syntax for
+comparing the two sample functions we have used in the previous examples:
+
+!bc
+t = linspace(0, 3, 51)
+plot(t**2*exp(-t**2), t**4*exp(-t**2))
+!ec
+
+# piecewise linear functions?
+
+___Importing Just Easyviz___
+
+The `from scitools.all import *` statement imports many modules and packages:
+  * Easyviz
+  * SciPy (if it exists)
+  * NumPy (if SciPy is not installed)
+  * the Python modules `sys`, `os`, `math`, `operator`
+  * the SciTools module `StringFunction` and the SciTools 
+    functions `watch` and `trace` for debugging
+
+The `scipy` import can take some time and lead to slow start-up of plot 
+scripts. A more minimalistic import for curve plotting is 
+!bc
+from scitools.easyviz import *
+from numpy import *
+!ec
+Alternatively, one can edit the `scitools.cfg` configure file or add
+one's own `.scitools.cfg` file with redefinition of selected options,
+such as `load` in the `scipy` section. The user `.scitools.cfg` must 
+be placed in the directory where the plotting script in action resides, 
+or in the user's home directory. Instead of editing a configuration
+file, one can just add the command-line argument `--SCITOOLS_scipy_load no`
+to the curve plotting script (all sections/options in the configuration
+file can also be set by such command-line arguments).
+
+
+_____Advanced Easyviz Topics_____
+
+
+___Working with the Plotting Program Directly___
+
+Easyviz supports just the most common plotting commands, typically the
+commands you use "95 percent" of the time when exploring curves.
+Various plotting packages have lots of additional commands for
+different advanced features.  When Easyviz does not have a command
+that supports a particular feature, one must grab the Python object
+that communicates with the underlying plotting program and work with
+this object directly, using the plotting program-specific command
+syntax.  Let us illustrate this principle with an example where we add
+a text and an arrow in the plot.
+
+FIGURE:[fig_plot2i.eps] A plot with three curves.
+
+Easyviz does not support text and arrows at arbitrary places inside the
+plot, but Gnuplot does. If we use Gnuplot as backend, we may
+grab the `Gnuplot` object and issue Gnuplot commands to this object
+directly:
+
+!bc
+g = get_backend()
+if g.__class__.__name__ == 'Gnuplot':
+    # g is a Gnuplot object, work with Gnuplot commands directly:
+    g('set label "local maximum" at 0.1,0.5 font "Times,18"')
+    g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
+g.refresh()
+g.hardcopy('tmp2.ps')  # make new hardcopy
+!ec
+
+We refer to the Gnuplot manual for the features of this package and
+the syntax of the commands. The idea is that you can quickly generate
+plots with Easyviz, using standard commands that are independent of
+the underlying plotting package. However, when you need to advanced
+features, you have to write plotting package-specific code as shown
+above. This principle makes Easyviz a light-weight interface, but
+without limiting the available functionality of various plotting programs.
+
+
+___Working with Axis and Figure Objects___
+
+Easyviz supports the concept of Axis objects, as in Matlab.
+The Axis object represent a set of axis, with curves drawn in the
+associated coordinate system. A figure is the complete physical plot.
+One may have several axis in one figure, each axis representing a subplot.
+One may also have several figures, represented by different
+windows on the screen or separate hardcopies.
+
+__Axis Objects__.  Users with Matlab experience may prefer to set axis
+labels, ranges, and the title using an Axis object instead of
+providing the information in separate commands or as part of a `plot`
+command. The `gca` (get current axis) command returns an `Axis`
+object, whose `set` method can be used to set axis properties:
+
+!bc
+plot(t, y1, 'r-', t, y2, 'bo',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     hardcopy='tmp2.ps')
+
+ax = gca()   # get current Axis object
+ax.set(xlabel='t', ylabel='y',
+       axis=[0, 4, -0.1, 0.6],
+       title='Plotting two curves in the same plot')
+show()  # show the plot again after ax.set actions
+!ec
+
+__Figure Objects___. The `figure()` call makes a new figure, i.e., a
+new window with curve plots. Figures are numbered as 1, 2, and so on.
+The command `figure(3)` sets the current figure object to figure number
+3. 
+
+Suppose we want to plot our `y1` and `y2` data in two separate windows:
+!bc
+plot(t, y1, 'r-', xlabel='t', ylabel='y',
+     axis=[0, 4, -0.1, 0.6])
+
+figure()  # new figure
+
+plot(t, y2, 'bo', xlabel='t', ylabel='y')
+!ec
+We may then go back to the first figure (with the `y1` data) and
+set a title and legends in this plot, show the plot, and make a PostScript
+version of the plot:
+!bc
+figure(1)  # go back to first figure
+title('One curve')
+legend('t^2*exp(-t^2)')
+show()
+hardcopy('tmp2_1.ps')
+!ec
+We can also adjust figure 2:
+!bc
+figure(2)  # go to second figure
+title('Another curve')
+hardcopy('tmp2_2.ps')
+show()
+!ec
+
+Let us then make a third figure with two plots, or more precisely, two
+axes: one with `y1` data and one with `y2` data.
+As in Matlab, we have a command `subplot(r,c,a)` for creating `r`
+rows and `c` columns and set the current axis to axis number `a`.
+In the present case `subplot(2,1,1)` sets the current axis to
+the first set of axis in a "table" with two rows and one column.
+Here is the code for this third figure:
+!bc
+figure()  # new, third figure
+# plot y1 and y2 as two axis in the same figure:
+subplot(2, 1, 1)
+plot(t, y1, xlabel='t', ylabel='y')
+subplot(2, 1, 2)
+plot(t, y2, xlabel='t', ylabel='y')
+title('A figure with two plots')
+show()
+hardcopy('tmp2_3.ps')
+!ec
+We remark that the `hardcopy` command does not work with the Gnuplot backend
+in this case with multiple axes in a figure.
+
+If we need to place an axis at an arbitrary position in the figure, we
+must use the
+!bc
+ax = axes(viewport=[left, bottom, width, height])
+!ec
+command. The four parameteres `left`, `bottom`, `width`, `height`
+are location values between 0 and 1 ((0,0) is the lower-left corner 
+and (1,1) is the upper-right corner).

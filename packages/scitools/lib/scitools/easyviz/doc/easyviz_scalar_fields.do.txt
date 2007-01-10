@@ -1,0 +1,23 @@
+_____Visualization of Scalar Fields_____
+
+A scalar field is a function from space or space-time to a real value,
+typically used to express the value of a scalar physical parameter
+a every point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.
+In a visualization context, we work with discrete scalar fields that are
+defined on a grid. Each point in the grid is then associated with a
+scalar value.
+
+There are several ways to visualize a scalar field in Easyviz. Both
+two- and three-dimensional scalar fields are supported. In 2D we can
+create elevated surface plots, contour plots, and pseudocolor plots,
+while in 3D we can create isosurface plots, volumetric slice plots,
+and contour slice plots.
+
+___Elevated Surface Plots___
+
+To create elevated surface plots
+we can use either the `surf` or the `mesh` command. Both
+commands have the same syntax, but the `mesh` command creates a
+wireframe mesh while the `surf` command creates a solid colored
+surface. We will first look at the `mesh` command. 

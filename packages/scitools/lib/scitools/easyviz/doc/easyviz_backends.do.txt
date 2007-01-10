@@ -1,0 +1,47 @@
+_____Easyviz Backends_____
+
+Easyviz is a unified interface to other plotting packages, referred to
+as backends. Several backends have been implemented to support various
+plotting packages such as Gnuplot, Pyx, Pmw.Blt.Graph, Matplotlib,
+Veusz, and VTK. Support for several other plotting packages are
+planned in the future (including VisIt and OpenDX).
+
+Because of limitations in many plotting packages, not all available
+features in Easyviz are supported by every backend. For example, both
+Gnuplot and VTK backends support visualization of 2D vector fields,
+but Gnuplot does not support visualization of 3D vector fields, so
+neither does the Gnuplot backend. The currently supported backends and
+their corresponding requirements and limitations are described next.
+
+__Gnuplot__. Gnuplot is a command-line driven interactive plotting
+utility that works on most platforms. The software is freely
+distributed and easy to install. Gnuplot supports many types of plots
+in both 2D and 3D, including lines, contours, vector fields, and
+surfaces. Curve plots and surface plots of 2D scalar fields can be
+tuned to an excellent result, while 3D scalar and vector fields are
+not supported.  To access Gnuplot from Python and send Numerical
+Python arrays to Gnuplot, we use the Python module `Gnuplot`.
+
+__PyX__. Description + state.
+
+__Pmw.Blt.Graph.__ Pmw (Python Mega Widgets) extends the Tkinter
+package with more sophisticated widgets, included an interactive
+widget for curve plotting. This widget is based on the BLT package
+(an extension of Tk written in C).
+
+__Matplotlib__. Matplotlib is (at the time of this writing) quickly
+gaining wide popularity in the scientific Python community.
+The interface to Matplotlib is Matlab-insipired, and different
+backends are used to create the plots (Gtk, Tk, ...?). Easyviz
+applies the same ideas with a unified Matlab-like interface to various
+backends, but Matplotlib is a much more comprehensive interface and
+a very much larger package than Easyviz.
+
+__VTK__. VTK (Visualization ToolKit) is a package primarily aimed at
+visualizing 2D and 3D scalar and vector fields by a range of techniques.
+
+__Veusz__.
+
+
+
+
