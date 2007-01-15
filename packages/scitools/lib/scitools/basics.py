@@ -19,10 +19,10 @@ Import of Numerical Python
 
       1. from numpytools import *
          which allows the user to transparently use Numeric, numarray,
-         and numpy, plus lots of utility functions from numpyutils
+         and numpy
          (configuration file: numpytools = yes)
 
-      2. from numpy import * and from numpyutils import *
+      2. from numpy import *
          (configuration file: numpytools = no)
     
 Definition of variables
@@ -71,7 +71,8 @@ _t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
 has_scipy = False   # indicates for all application scripts if one has scipy
 if _globaldata._load_scipy:
     try:
-        from scipy import *
+        from numpyutils import *   # loads numpy too
+        from scipy import *        # overrides some numpy functions
         has_scipy = True
         from numpy.lib.scimath import *    # will be part of scipy import
         if VERBOSE >= 2: print 'from scipy import *'

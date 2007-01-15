@@ -211,6 +211,12 @@ first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
 
+In this plot we also adjust the size of the line and the circles by
+adding an integer: `r-6` means a red line with thickness 6 and `bo5`
+means red circles with size 5. The effect of the given line thickness
+and symbol size depends on the underlying plotting program. For
+the Gnuplot backend one can view the effect in Figure ref{fig:plot2g}.
+
 !bc
 from scitools.all import *
 
@@ -225,13 +231,16 @@ y1 = f1(t)
 t2 = t[::4]
 y2 = f2(t2)
 
-plot(t, y1, 'r-', t2, y2, 'bo',
+plot(t, y1, 'r-6', t2, y2, 'bo3',
      xlabel='t', ylabel='y',
      axis=[0, 4, -0.1, 0.6],
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
      hardcopy='tmp2.ps')
 !ec
+
+FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
+
 
 The different available line colors include 
   * yellow:   `'y'`
@@ -248,6 +257,11 @@ The different available line types are
   * dashed line:     `'--'`
   * dotted line:     `':'`
   * dash-dot line:   `'-.'`
+
+We remark that in the Gnuplot backend all the different line types are
+drawn as solid lines on the screen. The hardcopy chooses automatically
+different line types (solid, dashed, etc.) and not in accordance with
+the line type specification.
 
 Lots of markers at data points are available:
   * plus sign:                     `'+'`

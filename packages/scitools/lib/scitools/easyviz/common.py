@@ -88,7 +88,7 @@ class PlotProperties(object):
     """
     _colors = "b g r m c y k w".split()
     _markers = "o + x * s d v ^ < > p h .".split()
-    _linestyles = "- : -. --".split()
+    _linestyles = ": -. -- -".split()
     _sizes = "1 2 3 4 5 6 7 8 9".split()
     _styledoc = {'y': 'yellow',
                  'm': 'magenta',
@@ -116,7 +116,8 @@ class PlotProperties(object):
                  '-': 'solid',
                  ':': 'dotted',
                  '-.':'dashdot',
-                 '--':'dashed'}
+                 '--':'dashed',
+                 }
     __doc__ += '\nColors: %s\nMarkers: %s\nLinestyles: %s\nSizes: %s' \
                '\nStyles:\n%s' % (_colors, _markers, _linestyles,
                                   _sizes, pprint.pformat(_styledoc))
@@ -153,6 +154,15 @@ class PlotProperties(object):
             else:
                 props[key] = self._prop[key]
         return pprint.pformat(props)
+
+    # repr is maybe not smart since
+    # >>> plot(...)
+    # will then return Line, Surface,
+    # etc which automatically gets printed.
+    # Better to make a dump function
+    # that one can call on the current figure f.ex.
+    #def __repr__(self):
+    #    return self.__str__()
     
     def set(self, **kwargs):
         """
@@ -232,9 +242,12 @@ class PlotProperties(object):
             marker = ""
             linewidth = ""
             pointsize = ""
-            # Notice that '--' is after '-' and '-.' in the _linestyle alphabet
+            # Notice that '--' and '-.' are before '_' in the _linestyles alphabet
             for item in self._linestyles:
-                if item in format: linetype = item
+                if item in format:
+                    linetype = item
+                    break
+            
             for item in format:
                 if item in self._colors:
                     color = item
@@ -250,12 +263,12 @@ class PlotProperties(object):
                     # this int describes pointsize or linewidth
                     self._prop['pointsize'] = item
                     self._prop['linewidth'] = item
-                        
-            if (color in self._colors) or (color == ""):
+
+            if color in self._colors or color == "":
                 self._prop['linecolor'] = color
             else:
                 print "Illegal line color choice, %s is not known" % color
-            if (linetype != "") or (marker != ""):
+            if linetype != "" or marker != "":
                 if linetype in self._linestyles:
                     self._prop['linetype'] = linetype
                 elif linetype == "":

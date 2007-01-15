@@ -39,11 +39,11 @@ class GnuplotBackend(BaseClass):
                         'y': 7,  # Yellow-->Orange    
                         }
         
-        self._line_types = {'': None,           # No line --> point
-                            '-': 'lines',       # Solid 
-                            ':': 'lines',       # Dotted line -->solid
-                            '-.':'lines',       # Dot-dashed line -->solid
-                            '--':'lines',       # Dashed line -->solid
+        self._line_types = {'': None,           # no line --> point
+                            '-': 'lines',       # solid 
+                            ':': 'lines',       # dotted line --> solid
+                            '-.':'lines',       # dot-dashed line --> solid
+                            '--':'lines',       # dashed line --> solid
                             }
         
         self._point_types = {'':  None,
@@ -258,6 +258,11 @@ class GnuplotBackend(BaseClass):
   
     def _get_withstring(self, item):
         linetype = self._line_types[item.get('linetype')]
+        linewidth = item.get('linewidth')
+        if linewidth == '':
+            linewidth = 1
+        else:
+            linewidth = int(linewidth)
         color = self._colors[item.get('linecolor')]
         pointtype = self._point_types[item.get('linemarker')]
         try: pointsize = int(item.get('pointsize')) # "" gives error
@@ -273,20 +278,21 @@ class GnuplotBackend(BaseClass):
                     withstring = "points lt %d pt %d ps %d " \
                                  % (color, pointtype, pointsize)
                 else:
-                    withstring = "lines lt %d" % color # Lines is default
+                    withstring = "lines lt %d lw %d" % (color, linewidth)
             elif linetype == 'lines':
                 if pointtype == None: # Pointtype is not set
-                    withstring = "lines lt %d " % color
+                    withstring = "lines lt %d lw %d" % (color, linewidth)
                 else: 
-                    withstring = "linespoints lt %d pt %d" % (color, pointtype)
-        else: # No color
+                    withstring = "linespoints lt %d lw %d pt %d" % \
+                                 (color, linewidth, pointtype)
+        else: # no color
             if linetype == None:
                 if pointtype:
                     withstring = "points pt %d ps %d " % (pointtype, pointsize)
                 else:
-                    withstring = "lines" # No color, no linestyle, no marker
+                    withstring = "lines" # no color, no linestyle, no marker
             elif linetype == 'lines':
-                if pointtype == None: # Pointtype is not set
+                if pointtype == None: # pointtype is not set
                     withstring = "lines" 
                 else: 
                     withstring = "linespoints pt %d" % pointtype

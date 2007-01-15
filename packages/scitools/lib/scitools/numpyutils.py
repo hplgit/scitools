@@ -44,6 +44,9 @@ The following extensions to Numerical Python are also defined:
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf: 
            norms for multi-dimensional arrays viewed as vectors
 
+ - compute_historgram:
+           returns x and y arrays of a histogram, given a vector of samples
+
 """
 
 if __name__ == 'numpyutils':
@@ -982,3 +985,18 @@ def NumPy_array_iterator(a, **kwargs):
         code += indent + 'yield ' + 'a[%s]' % index + ', (' + index + ')'
     exec code
     return nested_loops, code
+
+def compute_histogram(samples, nbins=50):
+    """
+    Given a NumPy array samples with random samples, this function
+    returns a histogram x, y, where x is a NumPy array with the
+    center points of the bins in the histogram and y is the
+    corresponding frequency. nbins is the number of bins.
+    """
+    from Scientific.Statistics.Histogram import Histogram
+    h = Histogram(samples, nbins)
+    #h.normalize() # let h be a density (unit area)
+    #feil: h.array = h.array/len(samples)
+    print h.array[:,0], '\n', h.array[:,1]
+    return h.array[:,0], h.array[:,1]
+
