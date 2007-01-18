@@ -62,6 +62,7 @@ def clean(root, filetypes=['*.pyc', '*~', '*.pyo']):
         system("find %s -name '%s' -exec rm -f {} \;" % (root, type))
         
 def copy_pure_scitools_files():
+    # not used anymore
     """Copy pure scitools files from original place to new scitools++ tree."""
     print '********* copy pure scitools files **************'
     # run _update.py locally in scitools dir:
@@ -146,7 +147,7 @@ def remove_svn_files(root=newdir):
     res = system(cmd)
     cmd = 'find %s -name ".svn" -exec rm -rf {} \;' % root
     # drop testing and hide output since this removal is always failure
-    system(cmd, grab_output=True, failure_handling='silent')  
+    system(cmd, failure_handling='silent')  
 
 def copy_installed_modules():
     """
@@ -158,37 +159,48 @@ def copy_installed_modules():
     """
     print '********* copy installed modules to scitools++ **************'
     path = join(sys.prefix, 'lib', 'python' + sys.version[:3], 'site-packages')
-    clean(root=path)
-    files = ['doconce', 'Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess']
-    files = ['Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess.py']
+    #clean(root=path) # we clean up the copy instead
+    files = ['doconce', 'scitools', 'Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess']
     print files
-    # shutil.copytree does not work properly for this type of copy
+    
     files = [join(path, file) for file in files]
     pmw = join(py_package_src, 'Pmw')
-    cmd = 'cp -r ' + ' '.join(files) + ' ' + pmw + ' ' + libdir
+    files.append(pmw)
+    # copy files to libdir:
+    # (shutil.copytree does not work properly for this type of copy)
+    cmd = 'cp -r ' + ' '.join(files) + ' ' + libdir
     print cmd
     system(cmd)
-    clean(root=join(libdir, 'Pmw'))
+    clean(root=libdir)
 
 def copy_installed_scripts():
     """
-    Copy third party executable scripts to the scitools++/bin directory.
+    Copy installed executable scripts to the scitools++/bin directory.
     """
     print '********* copy installed executable scripts **************'
-    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui', 'insertdocstr',
-               'doconce2format',)
-    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui',)
+    scripts = ('ipython',
+               'f2py',
+               'epydoc',
+               'epydocgui',
+               'preprocess',
+               'insertdocstr',
+               'doconce2format',
+               'diff.pl',
+               'diff.py',
+               'file2interactive.py',
+               'floatdiff.py',
+               'gnuplot.bat',
+               '_gnuplot.py',
+               'locate_pdb.py',
+               'pdb',
+               'ps2mpeg.py',
+               'regression.py',
+               'subst.py',
+               'timer.py',
+               )
     print scripts
     for script in scripts:
         system("cp `which %s` %s" % (script, bindir))
-    # treat preprocess separately since it has a data file:
-    script = 'preprocess'
-    import commands
-    failure, preprocess_path = commands.getstatusoutput('which %s' % script)
-    preprocess_dir = os.path.dirname(preprocess_path)
-    cmd = "cp %s %s %s" % \
-          (preprocess_path, join(preprocess_dir, 'content.types'), bindir)
-    system(cmd)
 
     # fix headers:
     for f in scripts:
@@ -229,7 +241,7 @@ def main():
     # a scitools++ directory and removing .svn directories.
 
     #check_numpytools()
-    copy_pure_scitools_files()
+    #copy_pure_scitools_files()
 
     #copy_package('pyPDE')
     #copy_package('easyviz')
@@ -238,6 +250,7 @@ def main():
     
     #copy_scriptingbook_tools()
     #copy_py4cs()
+
     remove_svn_files(newdir)
     copy_installed_modules()
     copy_installed_scripts()

@@ -10,8 +10,12 @@ __author__ = 'Hans Petter Langtangen <hpl@simula.no>, Rolv E. Bredesen <rolv@sim
 from distutils.core import setup
 import os, glob
 
-external_packages = ['epydoc', 'Gnuplot', 'IPython', 'Pmw', 'Scientific']
-internal_packages = ['doconce',]
+# this script applies to a directory tree with the SciTools++ suite
+external_packages = ['preprocess', 'epydoc', 'Gnuplot', 'IPython',
+                     'Pmw', 'Scientific']
+internal_packages = ['doconce',
+                     'scitools', 'scitools.easyviz', 'scitools.pyPDE',
+                     ]
 
 setup(
     version = "1.0",
@@ -23,9 +27,7 @@ setup(
     url = "",
     package_dir = {'': 'lib'},
     # packages to install:
-    packages = ["scitools", "scitools.easyviz", "scitools.pyPDE",] + \
-               internal_packages + external_packages,
-    py_modules = ["preprocess",],   # will be package! (->external_packages)
+    packages = internal_packages + external_packages,
     # standalone scripts :
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
