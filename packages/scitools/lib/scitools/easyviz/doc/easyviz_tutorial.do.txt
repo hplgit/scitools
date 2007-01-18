@@ -353,6 +353,7 @@ Consider the "Gaussian bell" function
 {1\over\sqrt{2\pi }s} 
 \exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
 \]
+!et
 which is a "wide" function for large $s$ and "peak-formed" for small $s$,
 see Figure ref{fig:plot4},
 Our goal is to make an animation where we see how this function evolves
