@@ -20,6 +20,7 @@ join = os.path.join
 #    previous-build-of-scitools++
 #    scitools++
 #       lib
+#          doconce
 #          scitools
 #          IPython
 #          epydoc
@@ -147,7 +148,7 @@ def remove_svn_files(root=newdir):
     # drop testing and hide output since this removal is always failure
     system(cmd, grab_output=True, failure_handling='silent')  
 
-def copy_third_party_modules():
+def copy_installed_modules():
     """
     Copy installed modules to scitools++.
     An alternative is to copy the source of these modules and
@@ -155,9 +156,10 @@ def copy_third_party_modules():
     The set-up now is that scitools++ should just be in PYTHONPATH and
     then everything is correctly installed.
     """
-    print '********* copy third-party modules to scitools++ **************'
+    print '********* copy installed modules to scitools++ **************'
     path = join(sys.prefix, 'lib', 'python' + sys.version[:3], 'site-packages')
     clean(root=path)
+    files = ['doconce', 'Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess']
     files = ['Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess.py']
     print files
     # shutil.copytree does not work properly for this type of copy
@@ -168,11 +170,13 @@ def copy_third_party_modules():
     system(cmd)
     clean(root=join(libdir, 'Pmw'))
 
-def copy_third_party_scripts():
+def copy_installed_scripts():
     """
     Copy third party executable scripts to the scitools++/bin directory.
     """
-    print '********* copy third-party executable scripts **************'
+    print '********* copy installed executable scripts **************'
+    scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui', 'insertdocstr',
+               'doconce2format',)
     scripts = ('ipython', 'f2py', 'epydoc', 'epydocgui',)
     print scripts
     for script in scripts:
@@ -221,7 +225,7 @@ def main():
     # Now the official versions are stored under scitools and other packages
     # (like py4cs) must make a copy from scitools.
     
-    # The only thing left is copying scitools and third-party modules to
+    # The only thing left is copying scitools and installed modules to
     # a scitools++ directory and removing .svn directories.
 
     #check_numpytools()
@@ -235,8 +239,8 @@ def main():
     #copy_scriptingbook_tools()
     #copy_py4cs()
     remove_svn_files(newdir)
-    copy_third_party_modules()
-    copy_third_party_scripts()
+    copy_installed_modules()
+    copy_installed_scripts()
     shutil.copy('scitools++_setup.py', join(newdir, 'setup.py'))
     print '\nSciTools++ umbrella was successfully made'
     print 'Go to the build/ directory and tarpack scitools++'

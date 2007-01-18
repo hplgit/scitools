@@ -8,13 +8,13 @@ def f(x, t):
 
 dt = 0.1    # time step
 tstop = 15  # end time
-# always keep the y axis fixed in animations:
-#axis(ymin=0, ymax=1.1)
-axis(0, 15, -0.1, 1.1)
+# animation requires axis keyword in plot command, not separate axis
+# function call
+
 t = 0
 while t <= tstop:
     y = f(x, t)
-    plot(x, y)
+    plot(x, y, axis=[0, 15, -0.1, 1.1])
     t += dt
     sleep(0.2) # control speed
 
@@ -26,7 +26,7 @@ t = 0
 while t <= tstop:
     y = f(x, t)
     y2 = f2(x, t)
-    plot(x, y, 'r-', x, y2, 'b-')
+    plot(x, y, 'r-', x, y2, 'b-', axis=[0, 15, -0.1, 1.1])
     t += dt
 
 # draw a line for the top of the f curve:
@@ -37,7 +37,7 @@ while t <= tstop:
     y2 = f2(x, t)
     xtop.append(t)  # top point corresponds to x=t
     ytop.append(f(t,t))
-    plot(x, y, 'r-', x, y2, 'b-', xtop, ytop, 'y--')
+    plot(x, y, 'r-', x, y2, 'b-', xtop, ytop, 'y--', axis=[0, 15, -0.1, 1.1])
     t += dt
 
 # make hardcopy of the animation:
@@ -52,7 +52,7 @@ while t <= tstop:
     y2 = f2(x, t)
     filename = 'tmp_%04d.ps' % frame_counter
     frame_counter += 1
-    plot(x, y, 'r-', x, y2, 'b-', hardcopy=filename)
+    plot(x, y, 'r-', x, y2, 'b-', hardcopy=filename, axis=[0, 15, -0.1, 1.1])
     t += dt
 
 cmd1 = 'ps2mpeg.py tmp_*.ps tmp.mpeg'

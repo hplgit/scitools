@@ -45,12 +45,13 @@ The following extensions to Numerical Python are also defined:
            norms for multi-dimensional arrays viewed as vectors
 
  - compute_historgram:
-           returns x and y arrays of a histogram, given a vector of samples
+           return x and y arrays of a histogram, given a vector of samples
 
 """
 
-if __name__ == 'numpyutils':
+if __name__.find('numpyutils') != -1:
     from numpy import *
+
 #else if name is some other module name:
 # this file is included in numpytools.py (through a preprocessing step)
 # and the code below then relies on previously imported Numerical Python
@@ -995,8 +996,7 @@ def compute_histogram(samples, nbins=50):
     """
     from Scientific.Statistics.Histogram import Histogram
     h = Histogram(samples, nbins)
-    #h.normalize() # let h be a density (unit area)
-    #feil: h.array = h.array/len(samples)
+    h.normalizeArea() # let h be a density (unit area)
     print h.array[:,0], '\n', h.array[:,1]
     return h.array[:,0], h.array[:,1]
 

@@ -37,6 +37,8 @@ Definition of variables
 Debug functions 
 ---------------
 
+The following functions are imported from the debug module:
+
   - watch(var): print out the name, type, and value of a variable and
     where in a program this output was requested (used to monitor variables).
 
@@ -49,9 +51,10 @@ These debug functions require the DEBUG variable to be different from 0.
 Default configuration file
 --------------------------
 """
-# avoid integer division (for safety):
+# avoid integer division (for safety - applies only to this file):
 from __future__ import division  # must appear in each application file too
 
+_import_list = []  # list of import statements actually done by this module
 _import_times = 'scitools import times: '
 import time as _time   # measure how much time various imports take
 _t0 = _time.clock()
@@ -60,6 +63,7 @@ import os
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 from globaldata import *   # read-only import of global variables
+_import_list.append("from globaldata import *")
 import globaldata as _globaldata
 #import pprint; pprint.pprint(_globaldata._config_data)
 
@@ -72,10 +76,13 @@ has_scipy = False   # indicates for all application scripts if one has scipy
 if _globaldata._load_scipy:
     try:
         from numpyutils import *   # loads numpy too
+        _import_list.append("from numpy import *")
+        _import_list.append("from numpyutils import *")
         from scipy import *        # overrides some numpy functions
         has_scipy = True
         from numpy.lib.scimath import *    # will be part of scipy import
-        if VERBOSE >= 2: print 'from scipy import *'
+        del _import_list[-2]       # del the numpy entry (scipy overrides)
+        _import_list.append("from scipy import *")
     except ImportError:
         # no SciPy package, NumPy only
         if VERBOSE >= 2: print 'tried to import scipy, but could not find it'
@@ -86,14 +93,13 @@ if _globaldata._load_scipy:
 if not has_scipy:
     if _globaldata._load_numpytools:
         from numpytools import *
-        if VERBOSE >= 2: print 'from numpytools import *'
         _t2 = _time.clock(); _import_times += 'numpytools=%g ' % (_t2 - _t1)
+        _import_list.append("from numpytools import *")
     else:
         # load numpy and numpyutils
         try:
             from numpyutils import *   # loads numpy too
-            if VERBOSE >= 2: print 'from numpy import *'
-            if VERBOSE >= 2: print 'from numpyutils import *'
+            _import_list.append("from numpy import *\nfrom numpyutils import *")
         except ImportError:
             raise ImportError, \
                   'numpy was requested, but it could not be found'
@@ -102,11 +108,19 @@ if not has_scipy:
 # nice to have imports:
 import sys, operator, math, StringFunction
 from glob import glob
-
-if VERBOSE >= 2: print 'import os, sys, operator, math, StringFunction'
-if VERBOSE >= 3:
-    print _import_times
+_import_list.append("import sys, operator, math, StringFunction")
+_import_list.append("from glob import glob")
 
 import debug
 debug.DEBUG = DEBUG
 from debug import watch, trace
+_import_list.append("from debug import watch, trace")
+
+if VERBOSE >= 2:
+    for i in _import_list:
+        print i
+
+if VERBOSE >= 3:
+    print _import_times
+
+__doc__ += '\nImport statements in this module:\n' + '\n'.join(_import_list)

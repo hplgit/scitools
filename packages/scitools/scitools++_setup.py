@@ -11,6 +11,7 @@ from distutils.core import setup
 import os, glob
 
 external_packages = ['epydoc', 'Gnuplot', 'IPython', 'Pmw', 'Scientific']
+internal_packages = ['doconce',]
 
 setup(
     version = "1.0",
@@ -23,8 +24,8 @@ setup(
     package_dir = {'': 'lib'},
     # packages to install:
     packages = ["scitools", "scitools.easyviz", "scitools.pyPDE",] + \
-               external_packages,
-    py_modules = ["preprocess",],
+               internal_packages + external_packages,
+    py_modules = ["preprocess",],   # will be package! (->external_packages)
     # standalone scripts :
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],

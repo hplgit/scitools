@@ -350,20 +350,92 @@ process with an example.
 Consider the "Gaussian bell" function
 !bt
 \[ f(x; m, s) = 
-{1\over\sqrt{2\pi s}} e^{-{1\over2}\left({x-m\over s}\right)^2}, \]
-which is a "wide" function for large $s$ and "peak-formed" for small $s$.
+{1\over\sqrt{2\pi }s} 
+\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
+\]
+which is a "wide" function for large $s$ and "peak-formed" for small $s$,
+see Figure ref{fig:plot4},
 Our goal is to make an animation where we see how this function evolves
-as $s$ is increased.
+as $s$ is increased. In Python we implement the formula above as
+a function `f(x, m, s)`. 
 
-The process of generating a series of plots corresponding to a series
-of $s$ values is done in the Python code below.
+FIGURE:[figs/plot4.eps] Different shapes of a Gaussian bell function.
+
+The animation is created by varying $s$ in a loop and for each $s$
+issue a `plot` command. A moving curve is then visible on the screen.
+One can also make a movie file that can be played as any other
+computer movie using a standard movie player. To this end, each plot
+is saved to a file, and all the files are combined together using some
+suitable tool, which is reached through the `movie` function in
+Easyviz. All necessary steps will be apparent in the complete program
+below, but before diving into the code we need to comment upon a
+couple of issues with setting up the `plot` command for animations.
+
+The underlying plotting program will normally adjust the axis to the
+maximum and minimum values of the curve if we do not specify the axis
+ranges explicitly. For an animation such automatic axis adjustment is
+misleading - the axis ranges must be fixed to avoid a jumping
+axis. The relevant values for the axis range is the minimum and
+maximum value of $f$. The minimum value is zero, while the maximum
+value appears for $x=m$ and increases with decreasing $s$. The range
+of the $y$ axis must therefore be $[0,f(m; m, \min s)]$.
+
+The function $f$ is defined for all $-\infty < x < \infty$, but the
+function value is very small already $3s$ away from $x=m$. We may therefore
+limit the $x$ coordinates to $[m-3s,m+3s]$.
+
+Now we are ready to take a look at the complete code
+for animating how the Gaussian bell curve evolves as the $s$ parameter
+decreases from 2 to 0.2:
+
 !bc
 from scitools.all import *
+import time
 
 def f(x, m, s):
-    return 1/sqrt(2*pi*s)*exp(-0.5*((x-m)/s)**2)
+    return (1.0/(sqrt(2*pi)*s))*exp(-0.5*((x-m)/s)**2)
 
+m = 0
+s_start = 2
+s_stop = 0.2
+s_values = linspace(s_start, s_stop, 30)
+x = linspace(m -3*s_start, m + 3*s_start, 1000)
+# f is max for x=m; smaller s gives larger max value
+max_f = f(m, m, s_stop)
+
+# show the movie, and make hardcopies of frames simulatenously:
+counter = 0
+for s in s_values:
+    y = f(x, m, s)
+    plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
+         xlabel='x', ylabel='f', legend='s=%4.2f' % s,
+         hardcopy='tmp_%04d.ps' % counter)
+    counter += 1
+    #time.sleep(0.2)  # can insert a pause to control movie speed
+
+# make movie file:
+movie('tmp_*.ps')
 !ec
+
+First note that the $s$ values are decreasing (`linspace` handles this
+automatically if the start value is greater than the stop value).
+Also note that we, simply because we think it is visually more
+attractive, let the $y$ axis go from -0.1 although the $f$ function is
+always greater than zero.
+
+For each frame (plot) in the movie we store the plot in a file.  The
+different files need different names and an easy way of referring to
+the set of files in right order. We therefore suggest to use filenames
+of the form `stem0001.ext`, `stem0002.ext`, `stem0003.ext`, etc.,
+since the expression `stem*.ext` then lists all files in the right
+order. In our example, `stem` is `tmp_`, and `.ext` is `.ps`
+(PostScript format in the hardcopy).
+
+Having a set of `stem*.ext` files, one can simply generate a movie
+by a `movie('stem*.ext')` call. When a movie file is not wanted (it may
+take some time to generate it), one can simply skip the `hardcopy`
+argument and the call to `movie`.
+
 
 _____Importing Just Easyviz_____
 
