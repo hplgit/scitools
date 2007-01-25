@@ -4,7 +4,7 @@ _____Plotting a Single Curve_____
 Let us plot the curve $y = t^2\exp(-t^2)$ for $t$ values between 0 and 3.
 First we generate equally spaced coordinates for $t$, say 51 values (50
 intervals). Then we compute the corresponding $y$ values at these
-points, before we can call the `plot(t,y)` command.
+points, before we call the `plot(t,y)` command to make the curve plot.
 Here is the complete program:
 
 !bc
@@ -20,12 +20,11 @@ for i in xrange(len(t)):
 
 plot(t, y)
 !ec
-
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. In this program we
 pre-allocate the `y` array and fill it with values, element by
-element, in a (slow) Python loop. Operations on the whole `t` at once
-is legal and yields faster and shorter code:
+element, in a (slow) Python loop. Alternatively, we may operate
+on the whole `t` at once, which yields faster and shorter code:
 
 !bc
 from scitools.all import *
@@ -37,20 +36,19 @@ t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
 !ec
-The `f` function can also be skipped, if desired:
+The `f` function can also be skipped, if desired, so that we can write
+directly
 !bc
 y = t**2*exp(-t**2)
 !ec
 
 To include the plot in reports, we need 
 a hardcopy of the figure in PostScript, PNG, or another image format.
-The `hardcopy` command produces files with images in various formats
-
+The `hardcopy` command produces files with images in various formats:
 !bc
 hardcopy('tmp1.ps')  # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 !ec
-
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG. 
 Figure ref{fig:plot1a} displays the resulting plot.
@@ -61,8 +59,8 @@ FIGURE:[figs/plot1a.eps] A simple plot in PostScript format.
 _____Decorating the Plot_____
 
 The $x$ and $y$ axis in curve plots should have labels, here $t$ and
-$y$, respectively. Also the curve should be identified with a label
-(or legend as it is often called).  A title above the plot is also
+$y$, respectively. Also, the curve should be identified with a label,
+or legend as it is often called.  A title above the plot is also
 common.  All such things are easily added after the `plot` command:
 
 !bc
@@ -72,7 +70,6 @@ legend('t^2*exp(-t^2)')
 axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
 title('My First Easyviz Demo')
 !ec
-
 This syntax is inspired by Matlab to make the switch between
 SciTools/Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" `plot` command where
@@ -90,11 +87,15 @@ plot(t, y,
 !ec
 
 With `show=False` one can avoid the plot window on the screen and
-just make the hardcopy.
+just make the hardcopy. This feature is particularly useful if
+you generate a large number of plots in a loop.
 
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
-rather than `t**2` (program style).
-The modified plot appears in Figure ref{fig:plot1c}.
+rather than `t**2` (program style). Whichever form you choose is up to
+you, but the LaTeX form sometimes looks better in some plotting
+programs (Gnuplot is one example). 
+See Figure ref{fig:plot1c} for how the modified
+plot looks like and how `t^2` is typeset in Gnuplot.
 
 
 FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted.
@@ -102,12 +103,12 @@ FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted.
 
 _____Plotting Multiple Curves_____
 
-One often wants to compare curves to each other, and this requires
-multiple curves to be drawn in the same plot.
+A common plotting task is to compare two or more curves, which
+requires multiple curves to be drawn in the same plot.
 Suppose we want to plot the two functions $f_1(t)=t^2\exp(-t^2)$
 and $f_2(t)=t^4\exp(-t^2)$. If we issue two `plot` commands after
 each other, two separate plots will be made. To make the second
-`plot` command draw the curve in the previous plot, we need to
+`plot` command draw the curve in the first plot, we need to
 issue a `hold('on')` command. Alternatively, we can provide all
 data in a single `plot` command. A complete program illustrates the
 different approaches:
@@ -151,6 +152,7 @@ and so on. The visual result appears in Figure ref{fig:plot2a}.
 FIGURE:[figs/plot2a.eps] Two curves in the same plot.
 
 
+
 _____Controlling Axis and Line Styles_____
 
 A plotting program will normally compute sensible ranges of
@@ -161,19 +163,15 @@ of the axis. Say we want the $x$ axis to go from 0 to 4 (although the
 data stops at $x=3$), while $y$ axis goes from -0.1 to 0.6.
 In the Matlab-like syntax new axis specifications are 
 done by the `axis` command:
-
 !bc
 axis([0, 4, -0.1, 0.6])
 !ec
-
-In a single `plot` command we must use the `axis` keyword:
-
+With a single `plot` command we must use the `axis` keyword:
 !bc
 plot(t, y1, t, y2, ...
      axis=[0, 4, -0.1, 0.6],
      ...)
 !ec
-
 In both cases, the axis specification is a list of the
 $x_{\rm min}$, $x_{\rm max}$, $y_{\rm min}$, and $y_{\rm max}$
 values.
@@ -182,14 +180,15 @@ The two curves get distinct default line styles, depending on the
 program that is used to produce the curve (and the settings for this
 program). It might well happen that you get a green and a red curve
 (which is bad for a significant portion of the male population).  We
-therefore often want to control the line style in detail. Say we want
-the first curve (`t` and `y1`) to be drawn as a red solid line and the
-second curve (`t` and `y2`) as blue circles at the discrete data
-points.  The Matlab-inspired syntax for specifying line types applies
-a letter for the color and a symbol from the keyboard for the line
-type. For example, `r-` represents a red (`r`) line (`-`), while `bo`
-means blue (`b`) circles (`o`). The line style specification is added
-as an argument after the $x$ and $y$ coordinate arrays of the curve:
+may therefore often want to control the line style in detail. Say we
+want the first curve (`t` and `y1`) to be drawn as a red solid line
+and the second curve (`t` and `y2`) as blue circles at the discrete
+data points.  The Matlab-inspired syntax for specifying line types
+applies a letter for the color and a symbol from the keyboard for the
+line type. For example, `r-` represents a red (`r`) line (`-`), while
+`bo` means blue (`b`) circles (`o`). The line style specification is
+added as an argument after the $x$ and $y$ coordinate arrays of the
+curve:
 
 !bc
 plot(t, y1, 'r-')
@@ -337,14 +336,42 @@ t = linspace(0, 3, 51)
 plot(t**2*exp(-t**2), t**4*exp(-t**2))
 !ec
 
-# piecewise linear functions?
+
+_____Interactive Plotting Sessions_____
+
+All the Easyviz commands can of course be issued in an interactive
+Python session. The only thing to comment is that the `plot` command
+returns an argument:
+\bccq
+>>> plot(x, y)
+[<scitools.easyviz.common.Line object at 0xb5727f6c>]
+\eccq
+Most users will just ignore this output line.
+
+All Easyviz commands that produce a plot return an object reflecting the
+particular type of plot. The `plot` command returns a list of
+`Line` objects, one for each curve in the plot. These `Line`
+objects can be invoked to see, for instance, the value of different
+parameters in the plot (`Line.get()`):
+\bccq
+>>> lines = plot(x, y, 'b')
+>>> pprint.pprint(lines[0].get())
+{'description': '',
+ 'dims': (4, 1, 1),
+ 'legend': '',
+ 'linecolor': 'b',
+ 'pointsize': 1.0,
+ ...
+\eccq
+Such output is mostly of interest to advanced users.
+
 
 _____Making Animations_____
 
 A sequence of plots can be combined into an animation and stored in a
-movie file. First we need to generate a series of plots stored in
-files, i.e., hardcopies. Thereafter we must use a tool to combine
-the individual plot files into a movie file. We shall illustrate the
+movie file. First we need to generate a series of hardcopies, i.e.,
+plots stored in files. Thereafter we must use a tool to combine the
+individual plot files into a movie file. We shall illustrate the
 process with an example.
 
 Consider the "Gaussian bell" function
@@ -357,7 +384,7 @@ Consider the "Gaussian bell" function
 which is a "wide" function for large $s$ and "peak-formed" for small $s$,
 see Figure ref{fig:plot4},
 Our goal is to make an animation where we see how this function evolves
-as $s$ is increased. In Python we implement the formula above as
+as $s$ is decreased. In Python we implement the formula above as
 a function `f(x, m, s)`. 
 
 FIGURE:[figs/plot4.eps] Different shapes of a Gaussian bell function.
@@ -438,7 +465,19 @@ take some time to generate it), one can simply skip the `hardcopy`
 argument and the call to `movie`.
 
 
-_____Importing Just Easyviz_____
+
+_____Advanced Easyviz Topics_____
+
+The information in the previous sections aims at being sufficient for
+the daily work with plotting curves. Sometimes, however, one wants
+to fine-control the plot or how Easyviz behaves. First, we explain
+how to speed up the `from scitools.all import *` statement. 
+Second, we show how to operate with the plotting program directly and
+using plotting program-specific advanced features. Third, we explain
+how the user can grab `Figure` and `Axis` objects that Easyviz
+produces "behind the curtain".
+
+___Importing Just Easyviz___
 
 The `from scitools.all import *` statement imports many modules and packages:
   * Easyviz
@@ -464,43 +503,39 @@ to the curve plotting script (all sections/options in the configuration
 file can also be set by such command-line arguments).
 
 
-_____Advanced Easyviz Topics_____
-
-
 ___Working with the Plotting Program Directly___
 
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
-that supports a particular feature, one must grab the Python object
+that supports a particular feature, one can grab the Python object
 that communicates with the underlying plotting program and work with
-this object directly, using the plotting program-specific command
+this object directly, using plotting program-specific command
 syntax.  Let us illustrate this principle with an example where we add
 a text and an arrow in the plot, see Figure ref{fig:plot2i}.
 
-FIGURE:[figs/plot2i.eps] A plot with three curves.
+FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands.
 
-Easyviz does not support text and arrows at arbitrary places inside the
-plot, but Gnuplot does. If we use Gnuplot as backend, we may
-grab the `Gnuplot` object and issue Gnuplot commands to this object
-directly:
+Easyviz does not support text and arrows at arbitrary places inside
+the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
+the `Gnuplot` object (a Python module) and issue Gnuplot commands to
+this object directly:
 
 !bc
 g = get_backend()
 if g.__class__.__name__ == 'Gnuplot':
     # g is a Gnuplot object, work with Gnuplot commands directly:
-    g('set label "local maximum" at 0.1,0.5 font "Times,18"')
+    g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
 g.refresh()
 g.hardcopy('tmp2.ps')  # make new hardcopy
 !ec
-
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
 plots with Easyviz, using standard commands that are independent of
-the underlying plotting package. However, when you need to advanced
-features, you have to write plotting package-specific code as shown
+the underlying plotting package. However, when you need advanced
+features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
@@ -537,7 +572,8 @@ new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command `figure(3)` sets the current figure object to figure number
 3. 
 
-Suppose we want to plot our `y1` and `y2` data in two separate windows:
+Suppose we want to plot our `y1` and `y2` data in two separate windows.
+We need in this case to work with two `Figure` objects:
 !bc
 plot(t, y1, 'r-', xlabel='t', ylabel='y',
      axis=[0, 4, -0.1, 0.6])
@@ -546,7 +582,7 @@ figure()  # new figure
 
 plot(t, y2, 'bo', xlabel='t', ylabel='y')
 !ec
-We may then go back to the first figure (with the `y1` data) and
+We may now go back to the first figure (with the `y1` data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot:
 !bc
@@ -563,10 +599,18 @@ title('Another curve')
 hardcopy('tmp2_2.ps')
 show()
 !ec
+The current `Figure` object is reached by `gcf` (get current figure),
+and the `dump` method dumps the internal parameters in the `Figure`
+object:
+!bc
+fig = gcf(); print fig.dump()
+!ec
+These parameters may be of interest for troubleshooting when Easyviz
+does not produce what you expect.
 
 Let us then make a third figure with two plots, or more precisely, two
 axes: one with `y1` data and one with `y2` data.
-As in Matlab, we have a command `subplot(r,c,a)` for creating `r`
+Easyviz has a command `subplot(r,c,a)` for creating `r`
 rows and `c` columns and set the current axis to axis number `a`.
 In the present case `subplot(2,1,1)` sets the current axis to
 the first set of axis in a "table" with two rows and one column.
@@ -586,10 +630,10 @@ We remark that the `hardcopy` command does not work with the Gnuplot backend
 in this case with multiple axes in a figure.
 
 If we need to place an axis at an arbitrary position in the figure, we
-must use the
+must use the command
 !bc
 ax = axes(viewport=[left, bottom, width, height])
 !ec
-command. The four parameteres `left`, `bottom`, `width`, `height`
+The four parameteres `left`, `bottom`, `width`, `height`
 are location values between 0 and 1 ((0,0) is the lower-left corner 
 and (1,1) is the upper-right corner).

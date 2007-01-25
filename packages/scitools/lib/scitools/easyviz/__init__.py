@@ -1,4 +1,5 @@
 """
+
 Easyviz
 =======
 
@@ -7,22 +8,21 @@ visualization and plotting.  The Easyviz interface is written in
 Python with the purpose of making it very easy to visualize data in
 Python scripts. Both curve plots and more advanced 2D/3D visualization
 of scalar and vector fields are supported.  The Easyviz interface was
-designed with three ideas in mind: 1) a simple, Matlab-like syntax, 2)
+designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
 a unified interface to lots of visualization engines (called backends
-later): Gnuplot, Vtk, Matlab, Matplotlib, PyX, etc., and 3) a
+later): Gnuplot, Vtk, Matlab, Matplotlib, PyX, etc.; and 3) a
 minimalistic interface which offers only basic control of plots
 (fine-tuning is left to programming in the specific backend directly).
 
 Guiding Principles
 ------------------
 
-*First principle* Array data can be plotted with a minimal
+*First principle.* Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple::
 
       t = linspace(0, 3, 51)    # 51 points between 0 and 3
       y = t**2*exp(-t**2)
       plot(t, y) 
-
 
 plots the data in (the NumPy array) t versus the data in (the NumPy
 array) y. If you need legends, control of the axis, as well as
@@ -76,7 +76,7 @@ as an elevated surface with colors using these commands::
             show=True)
 
 
-*Second princple* Easyviz is just a unified interface to other plotting
+*Second princple.* Easyviz is just a unified interface to other plotting
 packages that can be called from Python. Such plotting packages are
 referred to as backends. Several backends are supported: Gnuplot,
 Matplotlib, Pmw.Blt.Graph, PyX, Matlab, Vtk. In other words, scripts
@@ -95,7 +95,7 @@ plotting backend can remain flexible. This will also allow old scripts
 to work with new fancy plotting packages in the future if Easyviz
 backends are written for those packages.
 
-*Third principle* The Easyviz interface is minimalistic, aimed at
+*Third principle.* The Easyviz interface is minimalistic, aimed at
 rapid prototyping of plots. This makes the Easyviz code easy to read
 and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
@@ -114,11 +114,12 @@ Controlling the Backend
 -----------------------
 
 The Easyviz backend can either be set in a config file (see Config File
-below) or by a command-line option --easyviz, followed by the name
-of the backend.
+below) or by a command-line option::
 
-There are several available backends: "Gnuplot", "Vtk", "Matplotlib",
-"BLT" (using the Pmw.Blt.Graph widget), etc. Which backend you
+       --SCITOOLS_easyviz_backend name
+
+where name is the name of the backend: gnuplot, vtk, matplotlib,
+blt. Which backend you
 choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
 
@@ -141,6 +142,19 @@ user in question.
 
 Tutorial
 ========
+
+This tutorial starts with plotting a single curve with a simple
+plot(x,y) command. Then we add a legend, axis labels, a title, etc.
+Thereafter we show how multiple curves are plotted together. We also
+explain how line styles and axis range can be controlled. The
+next section deals with animations and making movie files. More advanced
+topics such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects close the curve
+plotting part of the tutorial.
+
+Various methods for visualization of scalar fields in 2D are treated
+next, before we show how 2D vector fields can be handled.
+
 
 Plotting a Single Curve
 -----------------------
@@ -290,6 +304,7 @@ and so on. The visual result appears in Figure fig:plot2a.
 
 
 FIGURE:[figs/plot2a.eps] Two curves in the same plot.
+
 
 
 Controlling Axis and Line Styles
@@ -473,6 +488,36 @@ comparing the two sample functions we have used in the previous examples::
 
 
 
+Interactive Plotting Sessions
+-----------------------------
+
+All the Easyviz commands can of course be issued in an interactive
+Python session. The only thing to comment is that the plot command
+returns an argument:
+\bccq
+>>> plot(x, y)
+[<scitools.easyviz.common.Line object at 0xb5727f6c>]
+\eccq
+Most users will just ignore this output line.
+
+All Easyviz commands that produce a plot return an object reflecting the
+particular type of plot. The plot command returns a list of
+Line objects, one for each curve in the plot. These Line
+objects can be invoked to see, for instance, the value of different
+parameters in the plot (Line.get()):
+\bccq
+>>> lines = plot(x, y, 'b')
+>>> pprint.pprint(lines[0].get())
+{'description': '',
+ 'dims': (4, 1, 1),
+ 'legend': '',
+ 'linecolor': 'b',
+ 'pointsize': 1.0,
+ ...
+\eccq
+Such output is mostly of interest to advanced users.
+
+
 Making Animations
 -----------------
 
@@ -484,10 +529,11 @@ process with an example.
 
 Consider the "Gaussian bell" function::
 
-\[ f(x; m, s) = 
-{1\over\sqrt{2\pi }s} 
-\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
-\]
+      \[ f(x; m, s) = 
+      {1\over\sqrt{2\pi }s} 
+      \exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
+      \]
+
 which is a "wide" function for large s and "peak-formed" for small s,
 see Figure fig:plot4,
 Our goal is to make an animation where we see how this function evolves
@@ -699,10 +745,18 @@ We can also adjust figure 2:
       hardcopy('tmp2_2.ps')
       show()
 
+The current Figure object is reached by gcf (get current figure),
+and the dump method dumps the internal parameters in the Figure
+object::
+
+      fig = gcf(); print fig.dump()
+
+These parameters may be of interest for troubleshooting when Easyviz
+does not produce what you expect.
 
 Let us then make a third figure with two plots, or more precisely, two
 axes: one with y1 data and one with y2 data.
-As in Matlab, we have a command subplot(r,c,a) for creating r
+Easyviz has a command subplot(r,c,a) for creating r
 rows and c columns and set the current axis to axis number a.
 In the present case subplot(2,1,1) sets the current axis to
 the first set of axis in a "table" with two rows and one column.
@@ -729,6 +783,8 @@ must use the::
 command. The four parameteres left, bottom, width, height
 are location values between 0 and 1 ((0,0) is the lower-left corner 
 and (1,1) is the upper-right corner).
+
+
 Visualization of Scalar Fields
 ------------------------------
 
@@ -860,7 +916,7 @@ _import_list.append("from scitools.globaldata import backend, VERBOSE")
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
-cmd = 'from %s import *' % backend
+cmd = 'from %s_ import *' % backend
 exec(cmd)
 _t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
 _import_list.append(cmd)

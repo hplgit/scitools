@@ -14,7 +14,7 @@ _import_list.append("from scitools.globaldata import backend, VERBOSE")
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
-cmd = 'from %s import *' % backend
+cmd = 'from %s_ import *' % backend
 exec(cmd)
 _t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
 _import_list.append(cmd)

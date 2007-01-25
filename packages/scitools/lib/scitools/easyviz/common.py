@@ -163,6 +163,10 @@ class PlotProperties(object):
     # that one can call on the current figure f.ex.
     #def __repr__(self):
     #    return self.__str__()
+
+    def dump(self):
+        """Dump the parameters of this object."""
+        return str(self)
     
     def set(self, **kwargs):
         """
@@ -218,12 +222,20 @@ class PlotProperties(object):
         # set material properties:
         self._prop['material'].set(**kwargs)
 
-    def get(self, prm_name):
-        try:
-            return self._prop[prm_name]
-        except:
-            raise KeyError, '%s.get: no parameter with name "%s"' % \
-                  (self.__class__.__name__, prm_name)
+    def get(self, prm_name=None):
+        """
+        Return the value of the parameter with name prm_name.
+        If the name is None, the dictionary with all parameters
+        is returned.
+        """
+        if prm_name is None:
+            return self._prop
+        else:
+            try:
+                return self._prop[prm_name]
+            except:
+                raise KeyError, '%s.get: no parameter with name "%s"' % \
+                      (self.__class__.__name__, prm_name)
 
     def setformat(self, format):
         """
@@ -1199,6 +1211,10 @@ class Axis(object):
 
     def __str__(self):
         return pprint.pformat(self._prop)
+
+    def dump(self):
+        """Dump the parameters of this object."""
+        return str(self)
     
     def set(self, **kwargs):
         if 'mode' in kwargs:
@@ -1501,7 +1517,7 @@ class Axis(object):
                             
 
 class Figure(object):
-    """Holds figure attributtes like axes, size, ..."""
+    """Hold figure attributtes like axes, size, ...."""
 
     _local_prop = {
         'axes': None,     # dictionary of axis instances
@@ -1516,11 +1532,22 @@ class Figure(object):
         self._prop.update(Figure._local_prop)
         # store a copy of the default values for use when figure is reset:
         self._defaults = self._prop.copy()
-        self._prop['axes'] = {1:Axis()}
+        self._prop['axes'] = {1: Axis()}
         self.set(**kwargs)
 
     def __str__(self):
         return pprint.pformat(self._prop)
+
+    def dump(self):
+        """Dump the contents of the figure (all axes)."""
+        s = '\nFigure object:\n'
+        if self._prop['size'] is not None:
+            s += pprint.pformat(self._prop['size']) + '\n'
+        for ax in self._prop['axes']:
+            s += 'axis %d:\n' % ax
+            #s += pprint.pformat(str(self._prop['axes'][ax]))
+            s += pprint.pformat(self._prop['axes'][ax]._prop)
+        return s
     
     def gca(self):
         """Return current axis."""
@@ -1529,7 +1556,7 @@ class Figure(object):
     def reset(self):
         """Reset figure attributes and backend to defaults."""
         self._prop = self._defaults.copy()
-        self._prop['axes'] = {1:Axis()}
+        self._prop['axes'] = {1: Axis()}
         self._prop['axes'][1].reset()
 
     def set(self, **kwargs):

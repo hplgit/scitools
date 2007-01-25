@@ -108,11 +108,12 @@ commands - and jump to complicated fine-tuning only when strictly needed.
 _____Controlling the Backend_____
 
 The Easyviz backend can either be set in a config file (see Config File
-below) or by a command-line option --easyviz, followed by the name
-of the backend.
-
-There are several available backends: "Gnuplot", "Vtk", "Matplotlib",
-"BLT" (using the `Pmw.Blt.Graph` widget), etc. Which backend you
+below) or by a command-line option
+!bc
+ --SCITOOLS_easyviz_backend name
+!ec
+where `name` is the name of the backend: `gnuplot`, `vtk`, `matplotlib`,
+`blt`. Which backend you
 choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
 

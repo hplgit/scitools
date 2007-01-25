@@ -1,10 +1,10 @@
 _____Visualization of Scalar Fields_____
 
-A scalar field is a function from space or space-time to a real value,
-typically used to express the value of a scalar physical parameter
-a every point in space (or in space and time). One example is temperature,
-which is a scalar quantity defined everywhere in space and time.
-In a visualization context, we work with discrete scalar fields that are
+A scalar field is a function from space or space-time to a real value.
+This real value typically reflects a scalar physical parameter a every
+point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.  In a
+visualization context, we work with discrete scalar fields that are
 defined on a grid. Each point in the grid is then associated with a
 scalar value.
 
