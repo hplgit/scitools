@@ -163,7 +163,7 @@ Plotting a Single Curve
 Let us plot the curve y = t^2\exp(-t^2) for t values between 0 and 3.
 First we generate equally spaced coordinates for t, say 51 values (50
 intervals). Then we compute the corresponding y values at these
-points, before we can call the plot(t,y) command.
+points, before we call the plot(t,y) command to make the curve plot.
 Here is the complete program::
 
       from scitools.all import *
@@ -178,12 +178,11 @@ Here is the complete program::
       
       plot(t, y)
 
-
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. In this program we
 pre-allocate the y array and fill it with values, element by
-element, in a (slow) Python loop. Operations on the whole t at once
-is legal and yields faster and shorter code::
+element, in a (slow) Python loop. Alternatively, we may operate
+on the whole t at once, which yields faster and shorter code::
 
       from scitools.all import *
       
@@ -194,7 +193,8 @@ is legal and yields faster and shorter code::
       y = f(t)                  # compute all f values at once
       plot(t, y)
 
-The f function can also be skipped, if desired::
+The f function can also be skipped, if desired, so that we can write
+directly::
 
       y = t**2*exp(-t**2)
 
@@ -205,7 +205,6 @@ The hardcopy command produces files with images in various formats::
 
       hardcopy('tmp1.ps')  # produce PostScript
       hardcopy('tmp1.png') # produce PNG
-
 
 The filename extension determines the format: .ps or
 .eps for PostScript, and .png for PNG. 
@@ -218,8 +217,8 @@ Decorating the Plot
 -------------------
 
 The x and y axis in curve plots should have labels, here t and
-y, respectively. Also the curve should be identified with a label
-(or legend as it is often called).  A title above the plot is also
+y, respectively. Also, the curve should be identified with a label,
+or legend as it is often called.  A title above the plot is also
 common.  All such things are easily added after the plot command::
 
       xlabel('t')
@@ -227,7 +226,6 @@ common.  All such things are easily added after the plot command::
       legend('t^2*exp(-t^2)')
       axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
       title('My First Easyviz Demo')
-
 
 This syntax is inspired by Matlab to make the switch between
 SciTools/Easyviz and Matlab almost trivial.
@@ -245,11 +243,15 @@ all the plot properties can be set at once::
 
 
 With show=False one can avoid the plot window on the screen and
-just make the hardcopy.
+just make the hardcopy. This feature is particularly useful if
+you generate a large number of plots in a loop.
 
 Note that we in the curve legend write t square as t^2 (LaTeX style)
-rather than t**2 (program style).
-The modified plot appears in Figure fig:plot1c.
+rather than t**2 (program style). Whichever form you choose is up to
+you, but the LaTeX form sometimes looks better in some plotting
+programs (Gnuplot is one example). 
+See Figure fig:plot1c for how the modified
+plot looks like and how t^2 is typeset in Gnuplot.
 
 
 FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted.
@@ -258,12 +260,12 @@ FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted.
 Plotting Multiple Curves
 ------------------------
 
-One often wants to compare curves to each other, and this requires
-multiple curves to be drawn in the same plot.
+A common plotting task is to compare two or more curves, which
+requires multiple curves to be drawn in the same plot.
 Suppose we want to plot the two functions f_1(t)=t^2\exp(-t^2)
 and f_2(t)=t^4\exp(-t^2). If we issue two plot commands after
 each other, two separate plots will be made. To make the second
-plot command draw the curve in the previous plot, we need to
+plot command draw the curve in the first plot, we need to
 issue a hold('on') command. Alternatively, we can provide all
 data in a single plot command. A complete program illustrates the
 different approaches::
@@ -321,13 +323,11 @@ done by the axis command::
 
       axis([0, 4, -0.1, 0.6])
 
-
-In a single plot command we must use the axis keyword::
+With a single plot command we must use the axis keyword::
 
       plot(t, y1, t, y2, ...
            axis=[0, 4, -0.1, 0.6],
            ...)
-
 
 In both cases, the axis specification is a list of the
 x_{\rm min}, x_{\rm max}, y_{\rm min}, and y_{\rm max}
@@ -337,14 +337,15 @@ The two curves get distinct default line styles, depending on the
 program that is used to produce the curve (and the settings for this
 program). It might well happen that you get a green and a red curve
 (which is bad for a significant portion of the male population).  We
-therefore often want to control the line style in detail. Say we want
-the first curve (t and y1) to be drawn as a red solid line and the
-second curve (t and y2) as blue circles at the discrete data
-points.  The Matlab-inspired syntax for specifying line types applies
-a letter for the color and a symbol from the keyboard for the line
-type. For example, r- represents a red (r) line (-), while bo
-means blue (b) circles (o). The line style specification is added
-as an argument after the x and y coordinate arrays of the curve::
+may therefore often want to control the line style in detail. Say we
+want the first curve (t and y1) to be drawn as a red solid line
+and the second curve (t and y2) as blue circles at the discrete
+data points.  The Matlab-inspired syntax for specifying line types
+applies a letter for the color and a symbol from the keyboard for the
+line type. For example, r- represents a red (r) line (-), while
+bo means blue (b) circles (o). The line style specification is
+added as an argument after the x and y coordinate arrays of the
+curve::
 
       plot(t, y1, 'r-')
       hold('on')
@@ -522,9 +523,9 @@ Making Animations
 -----------------
 
 A sequence of plots can be combined into an animation and stored in a
-movie file. First we need to generate a series of plots stored in
-files, i.e., hardcopies. Thereafter we must use a tool to combine
-the individual plot files into a movie file. We shall illustrate the
+movie file. First we need to generate a series of hardcopies, i.e.,
+plots stored in files. Thereafter we must use a tool to combine the
+individual plot files into a movie file. We shall illustrate the
 process with an example.
 
 Consider the "Gaussian bell" function::
@@ -537,7 +538,7 @@ Consider the "Gaussian bell" function::
 which is a "wide" function for large s and "peak-formed" for small s,
 see Figure fig:plot4,
 Our goal is to make an animation where we see how this function evolves
-as s is increased. In Python we implement the formula above as
+as s is decreased. In Python we implement the formula above as
 a function f(x, m, s). 
 
 FIGURE:[figs/plot4.eps] Different shapes of a Gaussian bell function.
@@ -618,8 +619,21 @@ take some time to generate it), one can simply skip the hardcopy
 argument and the call to movie.
 
 
+
+Advanced Easyviz Topics
+-----------------------
+
+The information in the previous sections aims at being sufficient for
+the daily work with plotting curves. Sometimes, however, one wants
+to fine-control the plot or how Easyviz behaves. First, we explain
+how to speed up the from scitools.all import * statement. 
+Second, we show how to operate with the plotting program directly and
+using plotting program-specific advanced features. Third, we explain
+how the user can grab Figure and Axis objects that Easyviz
+produces "behind the curtain".
+
 Importing Just Easyviz
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 The from scitools.all import * statement imports many modules and packages:
   * Easyviz
@@ -645,10 +659,6 @@ to the curve plotting script (all sections/options in the configuration
 file can also be set by such command-line arguments).
 
 
-Advanced Easyviz Topics
------------------------
-
-
 Working with the Plotting Program Directly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -656,33 +666,32 @@ Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
-that supports a particular feature, one must grab the Python object
+that supports a particular feature, one can grab the Python object
 that communicates with the underlying plotting program and work with
-this object directly, using the plotting program-specific command
+this object directly, using plotting program-specific command
 syntax.  Let us illustrate this principle with an example where we add
 a text and an arrow in the plot, see Figure fig:plot2i.
 
-FIGURE:[figs/plot2i.eps] A plot with three curves.
+FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands.
 
-Easyviz does not support text and arrows at arbitrary places inside the
-plot, but Gnuplot does. If we use Gnuplot as backend, we may
-grab the Gnuplot object and issue Gnuplot commands to this object
-directly::
+Easyviz does not support text and arrows at arbitrary places inside
+the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
+the Gnuplot object (a Python module) and issue Gnuplot commands to
+this object directly::
 
       g = get_backend()
       if g.__class__.__name__ == 'Gnuplot':
           # g is a Gnuplot object, work with Gnuplot commands directly:
-          g('set label "local maximum" at 0.1,0.5 font "Times,18"')
+          g('set label "global maximum" at 0.1,0.5 font "Times,18"')
           g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
       g.refresh()
       g.hardcopy('tmp2.ps')  # make new hardcopy
 
-
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
 plots with Easyviz, using standard commands that are independent of
-the underlying plotting package. However, when you need to advanced
-features, you have to write plotting package-specific code as shown
+the underlying plotting package. However, when you need advanced
+features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
@@ -719,7 +728,8 @@ new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command figure(3) sets the current figure object to figure number
 3. 
 
-Suppose we want to plot our y1 and y2 data in two separate windows::
+Suppose we want to plot our y1 and y2 data in two separate windows.
+We need in this case to work with two Figure objects::
 
       plot(t, y1, 'r-', xlabel='t', ylabel='y',
            axis=[0, 4, -0.1, 0.6])
@@ -728,7 +738,7 @@ Suppose we want to plot our y1 and y2 data in two separate windows::
       
       plot(t, y2, 'bo', xlabel='t', ylabel='y')
 
-We may then go back to the first figure (with the y1 data) and
+We may now go back to the first figure (with the y1 data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot::
 
@@ -776,11 +786,11 @@ We remark that the hardcopy command does not work with the Gnuplot backend
 in this case with multiple axes in a figure.
 
 If we need to place an axis at an arbitrary position in the figure, we
-must use the::
+must use the command::
 
       ax = axes(viewport=[left, bottom, width, height])
 
-command. The four parameteres left, bottom, width, height
+The four parameteres left, bottom, width, height
 are location values between 0 and 1 ((0,0) is the lower-left corner 
 and (1,1) is the upper-right corner).
 
@@ -788,11 +798,11 @@ and (1,1) is the upper-right corner).
 Visualization of Scalar Fields
 ------------------------------
 
-A scalar field is a function from space or space-time to a real value,
-typically used to express the value of a scalar physical parameter
-a every point in space (or in space and time). One example is temperature,
-which is a scalar quantity defined everywhere in space and time.
-In a visualization context, we work with discrete scalar fields that are
+A scalar field is a function from space or space-time to a real value.
+This real value typically reflects a scalar physical parameter a every
+point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.  In a
+visualization context, we work with discrete scalar fields that are
 defined on a grid. Each point in the grid is then associated with a
 scalar value.
 

@@ -333,7 +333,7 @@ comparing the two sample functions we have used in the previous examples:
 
 !bc
 t = linspace(0, 3, 51)
-plot(t**2*exp(-t**2), t**4*exp(-t**2))
+plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 !ec
 
 
@@ -343,7 +343,8 @@ All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the `plot` command
 returns an argument:
 \bccq
->>> plot(x, y)
+>>> t = linspace(0, 3, 51)
+>>> plot(t, t**2*exp(-t**2))
 [<scitools.easyviz.common.Line object at 0xb5727f6c>]
 \eccq
 Most users will just ignore this output line.
