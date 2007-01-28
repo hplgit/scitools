@@ -1533,6 +1533,49 @@ def compute_histogram(samples, nbins=50):
     print h.array[:,0], '\n', h.array[:,1]
     return h.array[:,0], h.array[:,1]
 
+def factorial(n, method='reduce'):
+    """
+    Compute the factorial n! using long integers.
+    and various methods (see source code for the methods).
+    """
+    if not isinstance(n, (int, long, float)):
+        raise TypeError, 'factorial(n): n must be integer not %s' % type(n)
+    n = long(n)
+    
+    if method == 'plain recursive':
+        if n == 1:
+            return 1
+        else:
+            return n*factorial(n, method)
+    elif method == 'lambda recursive':
+        fc = lambda n: n and f(n-1)*long(n) or 1
+        return fc(n)
+    elif method == 'lambda functional':
+        fc = lambda n: n<=0 or \
+             reduce(lambda a,b: long(a)*long(b),xrange(1,n+1))
+        return fc(n)
+    elif method == 'lambda list comprehension':
+        fc = lambda n: [j for j in [1] for i in range(2,n+1) \
+                        for j in [j*i]] [-1]
+        return fc(n)
+    elif method == 'reduce':
+        import operator
+        return reduce(operator.mul, xrange(2, n+1))
+    elif method == 'scipy':
+        try:
+            import scipy.misc.common as sc
+            return sc.factorial(n)
+        except ImportError:
+            print 'numpyutils.factorial: scipy is not available'
+            # rely on reduce:
+            return reduce(operator.mul, xrange(2, n+1))
+    else:
+        raise ValueError, 'factorial: method="%s" is not supported' % method
+
+
+
+    
+    
 
 #---- build doc string from numpyload/util doc strings ----
 
