@@ -27,7 +27,7 @@ setup(
                 os.path.join("scitools", "easyviz"), 
 		os.path.join("scitools", "pyPDE"),
 		],
-    package_data={'': ['scitools.ini']}, 
+    package_data={'': ['scitools.ini', 'scitools.cfg']},
     scripts = [os.path.join('bin', f) \
                for f in os.listdir('bin') if not f.startswith('.')],
 	       )
