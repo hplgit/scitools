@@ -173,9 +173,13 @@ class GnuplotBackend(BaseClass):
         else: # use autoranging
             self._g('set cbrange [*:*]')            
 
-    def _set_wireframe_state(self, plotitem):
+    def _set_wireframe_state(self, ax, plotitem):
+        self._g('set surface')
         if not plotitem.get('wireframe'):
             self._g('set pm3d at s solid')
+            if ax.get('shading') == 'faceted':
+                self._g('set pm3d solid hidden3d 100')
+                self._g('set style line 100 lt -1 lw 0.5')
         else: 
             self._g('unset pm3d')
 
@@ -303,7 +307,7 @@ class GnuplotBackend(BaseClass):
         self._set_hidden_state(ax)
         self._set_colorbar_state(ax)
         self._set_colormap(ax)
-        self._set_wireframe_state(item)
+        self._set_wireframe_state(ax, item)
         self._set_contour_state(item)
         self._set_grid_state(ax)
         self._set_box_state(ax)
@@ -329,11 +333,7 @@ class GnuplotBackend(BaseClass):
                                               with=withstring))
             elif isinstance(item, Surface):
                 self._use_splot = True
-                self._set_wireframe_state(item)
-                self._g('set surface')
-                if ax.get('shading') == 'faceted':
-                    self._g('set pm3d solid hidden3d 100')
-                    self._g('set style line 100 lt -1 lw 0.5')
+                self._set_wireframe_state(ax, item)
                 x = asarray(item.get('xdata'))
                 y = asarray(item.get('ydata'))
                 z = asarray(item.get('zdata'))
