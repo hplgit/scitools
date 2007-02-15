@@ -331,6 +331,9 @@ class GnuplotBackend(BaseClass):
                 self._use_splot = True
                 self._set_wireframe_state(item)
                 self._g('set surface')
+                if ax.get('shading') == 'faceted':
+                    self._g('set pm3d solid hidden3d 100')
+                    self._g('set style line 100 lt -1 lw 0.5')
                 x = asarray(item.get('xdata'))
                 y = asarray(item.get('ydata'))
                 z = asarray(item.get('zdata'))
