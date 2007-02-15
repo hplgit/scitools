@@ -1153,7 +1153,7 @@ class Axis(object):
         'method': 'normal',
         'direction': 'xy',
         'hold': False,
-        'hidden': False,
+        'hidden': True,
         'box': False,
         'grid': False,
         'camera': None,
