@@ -6,7 +6,7 @@ A collection of Python utilities originally developed for the
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 
-def system(command, verbose=True, failure_handling='exit'):
+def system(command, verbose=True, failure_handling='exit', fake=False):
     """
     Wrapping of the os.system command. Actually, the
     commands.getstatusoutput function is used, and the output
@@ -17,11 +17,14 @@ def system(command, verbose=True, failure_handling='exit'):
     @param failure_handling: one of 'exit', 'warning', 'exception',
     or 'silent'.
     In case of failure, the output from the command is always displayed.
+    @param fake: if True, the command is printed but not run (for testing).
     @return: the same as commands.getstatusoutput, i.e.,
     a boolean failure variable and the output string (result of command).
     """
     if verbose:
         print 'Running operating system command\n   %s' % command
+    if fake:
+        return 0, 'testing "%s"' % command
 
     failure, output = commands.getstatusoutput(command)
     

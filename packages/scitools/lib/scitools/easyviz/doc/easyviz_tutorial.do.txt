@@ -497,8 +497,8 @@ from numpy import *
 Alternatively, one can edit the `scitools.cfg` configure file or add
 one's own `.scitools.cfg` file with redefinition of selected options,
 such as `load` in the `scipy` section. The user `.scitools.cfg` must 
-be placed in the directory where the plotting script in action resides, 
-or in the user's home directory. Instead of editing a configuration
+be placed in the folder where the plotting script in action resides, 
+or in the user's home folder. Instead of editing a configuration
 file, one can just add the command-line argument `--SCITOOLS_scipy_load no`
 to the curve plotting script (all sections/options in the configuration
 file can also be set by such command-line arguments).

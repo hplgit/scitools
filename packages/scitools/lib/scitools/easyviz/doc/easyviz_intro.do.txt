@@ -127,8 +127,8 @@ file, called `scitools.cfg` has a section `[easyviz]` where the
 [easyviz]
 backend = vtk_
 !ec
-A `scitools.cfg` can be placed in the current working directory, thereby
-affecting plots made in this directory, or it can be located in the
-user's home directory, which will affect all plotting sessions for the
+A `scitools.cfg` can be placed in the current working folder, thereby
+affecting plots made in this folder, or it can be located in the
+user's home folder, which will affect all plotting sessions for the
 user in question.
 
