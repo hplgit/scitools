@@ -21,3 +21,159 @@ we can use either the `surf` or the `mesh` command. Both
 commands have the same syntax, but the `mesh` command creates a
 wireframe mesh while the `surf` command creates a solid colored
 surface. We will first look at the `mesh` command. 
+
+
+Our examples will make use of the scalar field
+$f(x,y) = \sin r$:$f(x,y)=sin(r)$, 
+where $r$ is the distance in the plane from the origin, i.e.,
+$r=\sqrt{x^2+y^2}$:$r=sqrt(x**2+y**2)$.
+The $x$ and $y$ values in our 2D domain lie between -5 and 5.
+
+The following interactive session first
+creates the necessary data arrays: the coordinates in each direction,
+extensions of these arrays to form a `meshgrid`, and the 
+function values. The latter is computed in a vectorized operation which
+requires the extended coordinate arrays from `meshgrid`.
+The `mesh` command can then produce the plot.
+!bc
+>>> from easyviz import *
+>>> x = y = linspace(-5, 5, 21)
+>>> xv, yv = meshgrid(x, y)
+>>> values = sin(sqrt(xv**2 + yv**2))
+>>> mesh(xv, yv, values, hidden='on')
+<easyviz.common.Surface object at 0xb659feec>
+>>>
+!ec
+As seen, the
+`mesh` command returns a reference to a new `Surface`
+object. This reference can be used to set or get properties in the
+object at a later stage if needed. Also note that we have given the
+`hidden` keyword argument with value `'on'` to the `mesh`
+command. This will ensure that all hidden lines are removed from the
+plot (whether the lines are moved in reality depends on the underlying
+backend - hidden lines removal does not currently work in the VTK backend).
+The resulting plot can be seen in Figure ref{fig:mesh_ex1}, where we have
+used the Gnuplot backend.
+
+FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field.
+
+Let us now look at `surf` command. By
+continuing the interactive session above, we can illustrate the
+difference between the `mesh` and `surf` commands:
+!bc
+>>> surf(xv, yv, values, hidden='on')
+<easyviz.common.Surface object at 0xb6658c4c>
+!ec
+The last command will replace the current figure with the plot shown in
+figure ref{surf_ex1}.
+
+FIGURE:[figs/surf_ex1.eps] Result of the surf command using the Gnuplot backend.
+The `surf` command offers many possibilities to adjust the resulting
+plot:
+!bc
+>>> set(interactive=False)
+>>> surf(xv, yv, values)
+<easyviz.common.Surface object at 0xb7cfa26c>
+>>> shading('interp')
+>>> colorbar()
+>>> colormap(jet())
+>>> ax = gca()
+>>> ax.set(axis=[-6,6,-6,6,-1.5,1.5])
+>>> view(-45, 35)
+>>> show()
+!ec
+The same plot can also be accomplished with one single more compound
+statement: 
+!bc
+>>> surf(v, yv, values,
+...  shading='interp',
+...  colorbar='on',
+...  colormap=jet(),
+...  axis=[-6,6,-6,6,-1.5,1.5],
+...  view=[-35,35])
+!ec
+See figure ref{surf_ex2} for the result.
+
+FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend).
+
+
+___Contour Plots___ 
+
+A contour plot is another useful technique for visualizing scalar
+fields. It is for example used for isobars at weather maps, level
+curves in geographical maps, and so on. The basic thing about a
+contour plot, is that it connects points at particular levels into
+curves.
+
+In Easyviz we have several commands for creating different kinds of
+contour plots:
+
+  * `contour`: Draw a contour plot in 2D where the values in
+     the scalar field is treated as heights above a plane.
+
+  * `contourf`: Draw a filled 2D contour plot.
+
+  * `contour3`: Same as `contour` except that the curves
+     are drawn at their corresponding height level.
+
+  * `meshc`: Works in the same way as `mesh` except that a
+     contour plot is drawn beneath the mesh. 
+
+  * `surfc`: Same as `meshc` except that a solid surface is
+    drawn instead of a wireframe mesh.
+
+We start with illustrating the plain `contour` command, assuming that
+the interactive session has computed the `xv`, `yv`, and `values`
+arrays as shown in our first example on scalar field plotting.
+!bc
+>>> contour(xv, yv, values)
+<easyviz.common.Contours object at 0xb666442c>
+!ec
+This command draws a contour plot with 5 level curves (the default), which
+are automatically selected from a uniform partition of the range
+of the values in the scalar field array `values`. The corresponding
+plot is shown in figure ref{contour_ex1}. 
+
+FIGURE:[figs/contour_ex1.eps] Result of the simplest possible contour command for plotting a 2D scalar field with the Gnuplot backend.
+
+The number of levels in a contour plot can be specified with an additional
+argument:
+!bc
+>>> n = 15   # number of desired contour levels
+>>> contour(xv, yv, values, n)
+<easyviz.common.Contours object at 0xb66640ac>
+!ec
+
+The result can be seen in Figure ref{contour_ex2}. 
+
+FIGURE:[figs/contour_ex2.eps] 15 levels in a contour plot (Gnuplot backend).
+
+Sometimes one wants contour levels that are not eqvidistant or not
+distributed throughout the range of the function. Individual
+contour levels to be drawn can easily be specified as a list:
+!bc
+>>> curves = [-0.5, 0.1, 0.3, 0.9]
+>>> contour(xv, yv, values, curves, clabels='on')
+<easyviz.common.Contours object at 0xb666458c>
+!ec
+Now, the `curves` list specify the contour levels, and the `clabel`
+keyword allows the level values to be inserted in the plot.
+Figure ref{contour_ex3} shows the result.
+
+FIGURE:[figs/contour_ex3.eps] Four individually specified contour levels (Gnuplot backend).
+
+The `contourf` command has the exact same syntax as the
+`contour` command, but the latter creates a filled contour plot.
+Figure ref{contourf_ex1} displays the plot from the following command:
+!bc
+>>> contourf(xv, yv, values)
+<easyviz.common.Contours object at 0x11baf80c>
+!ec
+
+FIGURE:[figs/contourf_ex1.eps] Filled contour plot (contourf command, using Gnuplot backend).
+
+We can also create contour plots in three dimensions with the
+`contour3` command, which has exactly the same
+syntax as the `contour` command. The countours will then be lifted
+up in the third direction rather than lying in a plane viewed from
+above.
