@@ -342,11 +342,11 @@ _____Interactive Plotting Sessions_____
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the `plot` command
 returns an argument:
-\bccq
+!bc
 >>> t = linspace(0, 3, 51)
 >>> plot(t, t**2*exp(-t**2))
 [<scitools.easyviz.common.Line object at 0xb5727f6c>]
-\eccq
+!ec
 Most users will just ignore this output line.
 
 All Easyviz commands that produce a plot return an object reflecting the
@@ -354,7 +354,7 @@ particular type of plot. The `plot` command returns a list of
 `Line` objects, one for each curve in the plot. These `Line`
 objects can be invoked to see, for instance, the value of different
 parameters in the plot (`Line.get()`):
-\bccq
+!bc
 >>> lines = plot(x, y, 'b')
 >>> pprint.pprint(lines[0].get())
 {'description': '',
@@ -363,7 +363,7 @@ parameters in the plot (`Line.get()`):
  'linecolor': 'b',
  'pointsize': 1.0,
  ...
-\eccq
+!ec
 Such output is mostly of interest to advanced users.
 
 
@@ -376,12 +376,7 @@ individual plot files into a movie file. We shall illustrate the
 process with an example.
 
 Consider the "Gaussian bell" function
-!bt
-\[ f(x; m, s) = 
-{1\over\sqrt{2\pi }s} 
-\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
-\]
-!et
+$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$,
 which is a "wide" function for large $s$ and "peak-formed" for small $s$,
 see Figure ref{fig:plot4},
 Our goal is to make an animation where we see how this function evolves
