@@ -29,7 +29,7 @@ the `gcf()` call. Similarly, the current axes are accessed by calling
 It is
 natural to have one class for figures and one for axes. Class `Figure`
 contains a dictionary with one (default) or more `Axis` objects in
-addition to several properties such as figure width/height. Class `Axis`
+addition to several properties such as figure width and height. Class `Axis`
 has another dictionary with the plot data as well as lots of
 parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
 For example, when adding an

@@ -1,7 +1,7 @@
 _____Visualization of Scalar Fields_____
 
 A scalar field is a function from space or space-time to a real value.
-This real value typically reflects a scalar physical parameter a every
+This real value typically reflects a scalar physical parameter at every
 point in space (or in space and time). One example is temperature,
 which is a scalar quantity defined everywhere in space and time.  In a
 visualization context, we work with discrete scalar fields that are
@@ -160,9 +160,9 @@ contourf(xv, yv, values)
 !ec
 gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
 Only the Matplotlib and VTK backends currently supports filled
-contour plots. JOHANNES: WHICH BACKEND in that figure?
+contour plots. 
 
-FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (??????????????? backend).
+FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (VTK backend).
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
 ref{fig:contour3_ex1}, using the `contour3` command:
@@ -207,7 +207,7 @@ pcolor(xv, yv, values)
 We can set the color shading in a pseudocolor plot either by giving
 the `shading` keyword argument to `pcolor` or by calling the `shading`
 command. The color shading is specified by a string that can be either
-`'faceted'`, `'flat'`, or `'interp'` (interpolated). The Gnuplot and
+`'faceted'` (default), `'flat'`, or `'interp'` (interpolated). The Gnuplot and
 Matplotlib backends support `'faceted'` and `'flat'` only, while the
 VTK backend supports all of them.
 
@@ -425,7 +425,7 @@ hold('on')
 quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
 !ec
 The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
-Figure ref{fig:quiver_ex3}. 
+ref{fig:quiver_ex3}. 
 
 # TODO: make this work: quiver(xx, yy, uu, vv, 'filled', 'k', 3)
 
@@ -476,7 +476,7 @@ currents over a region of North America and is suitable for testing
 the different stream plot commands. The following commands will load
 the `wind` data set and then draw some stream lines from it:
 !bc
-import scipy  # we need scipy to load binary .mat-files
+import scipy  # need scipy to load binary .mat-files
 
 # load the wind data set and create variables:
 wind = scipy.io.loadmat('wind.mat')
@@ -511,7 +511,7 @@ point coordinates for the stream lines. In this example, we have used
 the `meshgrid` command to define the starting points with the line:
 !bc 
 sx, sy, sz = meshgrid([80]*4, seq(20,50,10), seq(0,15,5))
-!ec 
+!ec
 This command defines starting points which all lie on $x=80$,
 $y=20,30,40,50$, and $z=0,5,10,15$. We now have all the data we need
 for calling the `streamline` command. The first six arguments to the
