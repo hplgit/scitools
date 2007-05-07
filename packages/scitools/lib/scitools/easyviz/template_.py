@@ -1,115 +1,82 @@
-"""Show how a template is implemented"""
+"""This is a template file for writing new backends.
+
+When writing a new backend, one can copy this file to xxx_.py, where 
+'xxx' is the name of the new backend.
+
+"""
+
+from __future__ import division
+
 from common import *
+from scitools.globaldata import DEBUG, VERBOSE
 
 
-
-class DerivedClass(BaseClass):
-    """Template for creating new backends."""
-    
+class TemplateBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self.init()
         
-    def init(self):
+    def init(self, *args, **kwargs):
+        # Do initialization special for this backend
+        
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
         # Alex had a nice function for this.
         
-        #Do initialization special for this backend
-        pass
-    
-    def _replot(self):
-        """
-        Update backend
-        """
-        #Write backend specific plot commands
-
-        # the old (easyplot) way:
-        '''
-        currentfignumber=self._attr('curfig')
-        currentfig=self._figs{currentfignumber}
-        1. set correct attributes in backend
-
-        for line in currentfig.lines:
-            2 check attributes of line
-            3 plot data.
-        
-        '''
-
-        # the new (easyviz) way:
-        '''
-        ax = self.gca() # the current axis
-        1. set correct properties in backend for the current axis (like axis
-           limits, camera view, box, grid, ...), and for the current figure
-           (like window size, subplots, ...).
-
-        for item in ax.get('plotitems'):
-            2. check the kind of the item object (that is, if it is a Line
-               instance, a Surface instance, ...) and act accordingly.
-            3. plot data.
-        '''
-        pass
-        
-    def hardcopy(self, file='file.ps', **kwargs):
-        """
-        Save current figure to file
-        """
-        pass
-    
-    #def somefunc(self,*args,**kwargs):
-    #    BaseClass.somefunc(self,*args,**kwargs)
-    #    #Add extra functionality here
-
-debug_ = debug
-debug = True
-
-class TemplateBackend(BaseClass):
-    def __init__(self):
-        BaseClass.init(self)
-        self.init()
-        
-    def init(self, *args, **kwargs):
         # Problem: calling figure method here makes the program halt
-        #self.figure(self._attrs['curfig'])
+        self.figure(self.get('curfig'))
 
+        # convert tables for formatstrings:
         self._markers = {
-            '':  'none',
-            '.': 'dot',
-            'o': 'circle',
-            'x': 'cross',    # or 'linecross'?
-            '+': 'plus',     # or 'lineplus'?
-            '*': 'asterix',
-            's': 'square',
-            'd': 'diamond',
-            '^': 'triangle',
-            'p': 'pentagon', 
-            # Some of the markers must be casted:
-            'v': 'triangle', # triangle (down) --> triangle
-            '<': 'triangle', # triangle (left) --> triangle
-            '>': 'triangle', # triangle (right)--> triangle
-            'h': 'square',   # hexgram --> square
+            '': None,   # no marker
+            '.': None,  # dot
+            'o': None,  # circle
+            'x': None,  # cross
+            '+': None,  # plus sign
+            '*': None,  # asterisk
+            's': None,  # square
+            'd': None,  # diamond
+            '^': None,  # triangle (up)
+            'v': None,  # triangle (down)
+            '<': None,  # triangle (left)
+            '>': None,  # triangle (right)
+            'p': None,  # pentagram
+            'h': None,  # hexagram
             }
                         
         self._colors = {
-            'y': 'yellow',
-            'm': 'magenta',
-            'c': 'cyan',
-            'r': 'red',
-            'g': 'green',
-            'b': 'blue',
-            'w': 'white',
-            'k': 'black',
+            '': None,   # no color --> blue
+            'r': None,  # red
+            'g': None,  # green
+            'b': None,  # blue
+            'c': None,  # cyan
+            'm': None,  # magenta
+            'y': None,  # yellow
+            'k': None,  # black
+            'w': None,  # white
             }
         
         self._line_styles = {
-            '': 'solid',
-            '-': 'solid',
-            ':': 'dotted',
-            '-.': 'dash-dot',
-            '--': 'dashed',
+            '': None,    # no line 
+            '-': None,   # solid line
+            ':': None,   # dotted line
+            '-.': None,  # dash-dot line
+            '--': None,  # dashed line
             }
 
-        if debug:
+        # convert table for colorbar location:
+        self._colorbar_locations = {
+            'North': None,
+            'South': None,
+            'East': None,
+            'West': None,
+            'NorthOutside': None,
+            'SouthOutside': None,
+            'EastOutside': None,
+            'WestOutside': None,
+            }
+
+        if DEBUG:
             print "Setting backend standard variables"
             for disp in 'self._markers self._colors self._line_styles'.split():
                 print disp, eval(disp)
@@ -123,241 +90,464 @@ class TemplateBackend(BaseClass):
         except:
             name = 'Fig ' + str(self._attrs['curfig'])
 
-            # Create figure and save backend figure instance as fig._g
-            if debug:
-                print "creating figure %s in backend" %name
+            # create figure and save backend figure instance as fig._g
+            if DEBUG:
+                print "creating figure %s in backend" % name
 
             class fig__:
                 pass
             fig._g = fig__()
             
-        self._g = fig._g # Creates link for faster access
+        self._g = fig._g # link for faster access
 
-    def _set_graph_margins(self, ax):
-        left, bottom, right, top = ax.get('viewport')
-        left_margin = left + 0.1
-        if left_margin < 0 or left_margin > 1:
-            left_margin = 0.1
-        right_margin = 1.0 - right + 0.01
-        if right_margin < 0 or right_margin > 1:
-            right_margin = 0.01
-        top_margin = 1.0 - top - 0.01
-        if top_margin < 0 or top_margin > 1:
-            top_margin = 0.01
-        bottom_margin = bottom + 0.1
-        if bottom_margin < 0 or bottom_margin > 1:
-            bottom_margin = 0.1
-
-        if debug:
-            print "Setting figure margins in self._g"
-            print 'left:', left, left_margin
-            print 'bottom:', bottom, bottom_margin
-            print 'right:', right, right_margin
-            print 'top:', top, top_margin
-          
     def _set_scale(self, ax):
-        if debug:
+        # set linear or logarithmic (base 10) axis scale
+        if DEBUG:
             print "Setting scales"
-        implement = """
         scale = ax.get('scale')
         if scale == 'loglog':
-            self._g.Set('x/log', True)
-            self._g.Set('y/log', True)
+            # use logarithmic scale on both x- and y-axis
+            pass
         elif scale == 'logx':
-            self._g.Set('x/log', True)
-            self._g.Set('y/log', False)
+            # use logarithmic scale on x-axis and linear scale on y-axis
+            pass
         elif scale == 'logy':
-            self._g.Set('x/log', False)
-            self._g.Set('y/log', True)
+            # use linear scale on x-axis and logarithmic scale on y-axis
+            pass
         elif scale == 'linear':
-            self._g.Set('x/log', False)
-            self._g.Set('y/log', False)
-        """
+            # use linear scale on both x- and y-axis
+            pass
 
     def _set_labels(self, ax):
-        if debug:
+        # add text labels for x-, y-, and z-axis
+        if DEBUG:
             print "Setting labels"
-        implement = """
-        self._g.Set('x/label', ax.get('xlabel'))
-        self._g.Set('y/label', ax.get('ylabel'))
-        """
+        xlabel = ax.get('xlabel')
+        ylabel = ax.get('ylabel')
+        zlabel = ax.get('zlabel')
+        if xlabel:
+            # add a text label on x-axis
+            pass
+        if ylabel:
+            # add a text label on y-axis
+            pass
+        if zlabel:
+            # add a text label on z-axis
+            pass
         
     def _set_title(self, ax):
-        if debug:
-            print "Setting title:"
-        implement = """
-        label = self._g.Add('label')
-        self._g.Set('%s/label' % label, ax.get('title'))
-        self._g.Set('%s/xPos' % label, 0.4)
-        self._g.Set('%s/yPos' % label, 0.9)
-        """
+        # add a title at the top of the axis
+        if DEBUG:
+            print "Setting title"
+        title = ax.get('title')
+        if title:
+            pass  # set title
+    
     def _set_limits(self, ax):
-        if debug:
+        # set axis limits in x, y, and z direction
+        if DEBUG:
             print "Setting axis limits"
-        implement = """
-        fail = False
-        for item in ['xmin', 'xmax']:
-            if not isinstance(ax.get(item), (float, int)):
-                fail = True;  break        
-        if not fail:
-            self._g.Set('x/min', ax.get('xmin'))
-            self._g.Set('x/max', ax.get('xmax'))
+        xmin = ax.get('xmin')
+        xmax = ax.get('xmax')
+        if xmin and xmax:
+            # set x-axis limits
+            pass
+        else:
+            # let plotting package set x-axis limits
+            pass
 
-        fail = False
-        for item in ['ymin', 'ymax']:
-            if not isinstance(ax.get(item), (float, int)):
-                fail = True;  break
-        if not fail:
-            self._g.Set('y/min', ax.get('ymin'))
-            self._g.Set('y/max', ax.get('ymax'))
-        """
+        ymin = ax.get('ymin')
+        ymax = ax.get('ymax')
+        if ymin and ymax:
+            # set y-axis limits
+            pass
+        else:
+            # let plotting package set y-axis limits
+            pass
+
+        zmin = ax.get('zmin')
+        zmax = ax.get('zmax')
+        if zmin and zmax:
+            # set z-axis limits
+            pass
+        else:
+            # let plotting package set z-axis limits
+            pass
+
+    def _set_box(self, ax):
+        # turn box around axes border on or off
+        if DEBUG:
+            print "Setting box"
+        if ax.get('box'):
+            # display box 
+            pass
+        else:
+            # do not display box
+            pass
         
     def _set_grid(self, ax):
-        if debug:
+        # turn grid lines on or off
+        if DEBUG:
             print "Setting grid"
-        implement = """
-        hide_grid = not ax.get('grid')
-        self._g.Set('x/GridLines/hide', hide_grid)
-        self._g.Set('y/GridLines/hide', hide_grid)
-        """
+        if ax.get('grid'):
+            # turn grid lines on
+            pass
+        else:
+            # turn grid lines off
+            pass
+
+    def _set_hidden_line_removal(self, ax):
+        # turn on/off hidden line removal for meshes
+        if DEBUG:
+            print "Setting hidden line removal"
+        if ax.get('hidden'):
+            # turn hidden line removal on
+            pass
+        else:
+            # turn hidden line removal off
+            pass
+
+    def _set_colorbar(self, ax):
+        # add a colorbar to the axis
+        if DEBUG:
+            print "Setting colorbar"
+        cbar = ax.get('colorbar')
+        if cbar.get('visible'):
+            # turn on colorbar
+            cbar_title = cbar.get('cbtitle')
+            cbar_location = self._colorbar_locations(ax.get('cblocation'))
+            # ...
+        else:
+            # turn off colorbar
+            pass
+
+    def _set_caxis(self, ax):
+        # set the color axis scale
+        if DEBUG:
+            print "Setting caxis"
+        if ax.get('caxismode') == 'manual':
+            cmin, cmax = ax.get('caxis')
+            # NOTE: cmin and cmax might be None:
+            if not cmin and not cmax:
+                cmin, cmax = [0,1]
+            # set color axis scaling according to cmin and cmax
+            pass
+        else:
+            # use autoranging for color axis scale
+            pass
+
+    def _set_view(self, ax):
+        # set viewpoint specification
+        if DEBUG:
+            print "Setting view"
+        cam = ax.get('camera')
+        view = cam.get('view')
+        if view == 2:
+            # setup a default 2D view
+            pass
+        elif view == 3:
+            az = cam.get('azimuth')
+            el = cam.get('elevation')
+            if not az or not el:
+                # azimuth or elevation is not given. Set up a default
+                # 3D view (az=-37.5 and el=30 is the default 3D view in
+                # Matlab).
+                pass
+            else:
+                # set a 3D view according to az and el
+                pass
+            
+            if cam.get('cammode') == 'manual':
+                # for advanced camera handling:
+                roll = cam.get('camroll')
+                zoom = cam.get('camzoom')
+                dolly = cam.get('camdolly')
+                target = cam.get('camtarget')
+                position = cam.get('campos')
+                up_vector = cam.get('camup')
+                view_angle = cam.get('camva')
+                projection = cam.get('camproj')
+
+
+    def _set_axis_props(self, ax):
+        if DEBUG:
+            print "Setting axis properties"
+        self._set_title(ax)
+        self._set_scale(ax)
+        self._set_limits(ax)
+        self._set_hidden_line_removal(ax)
+        self._set_colorbar(ax)
+        self._set_view(ax)
+        if ax.get('visible'):
+            self._set_labels(ax)
+            self._set_box(ax)
+            self._set_grid(ax)
+        else:
+            # turn off all axis labeling, tickmarks, and background
+            pass
+
+    def _get_linespecs(self, item):
+        # return the item's line marker, line color, line style, and
+        # line width.
+        marker = self._markers[item.get('linemarker')]
+        color = self._colors[item.get('linecolor')]
+        style = self._line_styles[item.get('linetype')]
+        width = item.get('linewidth')
+        return marker, color, style, width
+
+    def _add_line(self, item):
+        # add a 2D or 3D curve to the scene
+        if DEBUG:
+            print "Adding a line"
+        # get data:
+        x = item.get('xdata')
+        y = item.get('ydata')
+        z = item.get('zdata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        if z is not None:
+            # zdata is given, add a 3D curve:
+            pass
+        else:
+            # no zdata, add a 2D curve:
+            pass
+
+    def _add_surface(self, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a surface"
+        x = item.get('xdata')  # grid component in x-direction
+        y = item.get('ydata')  # grid component in y-direction
+        z = item.get('zdata')  # scalar field
+        c = item.get('cdata')  # pseudocolor data (can be None)
+        
+        contours = item.get('contours')
+        if contours:
+            # the current item is produced by meshc or surfc and we
+            # should therefore add contours at the bottom:
+            self._add_contours(contours, placement='bottom')
+
+        if item.get('wireframe'):
+            # wireframe mesh (as produced by mesh or meshc)
+            pass
+        else:
+            # colored surface (as produced by surf, surfc, or pcolor)
+            # use keyword argument shading to set the color shading mode
+            pass
+
+    def _add_contours(self, item, placement=None):
+        # The placement keyword can be either None or 'bottom'. The
+        # latter specifies that the contours should be placed at the
+        # bottom (as in meshc or surfc).
+        if DEBUG:
+            print "Adding contours"
+        x = item.get('xdata')  # grid component in x-direction
+        y = item.get('ydata')  # grid component in y-direction
+        z = item.get('zdata')  # scalar field
+
+        # draw a filled contour plot (as in contourf) if this variable
+        # is True:
+        filled = item.get('filled')
+
+        cvector = item.get('cvector')
+        if cvector is None:
+            # the contour levels are chosen automatically
+            clevels = item.get('clevels')  # number of contour levels
+            #cvector = 
+        else:
+            # cvector specifies the contour lines
+            clevels = len(cvector)
+
+        location = item.get('clocation')
+        if location == 'surface':
+            # place the contours at the corresponding z level (contour3)
+            pass
+        elif location == 'base':
+            if placement == 'bottom':
+                # place the contours at the bottom (as in meshc or surfc)
+                pass
+            else:
+                # standard contour plot
+                pass
+
+        if item.get('clabels'):
+            # add labels on the contour curves
+            pass
+    
+    def _add_vectors(self, item):
+        if DEBUG:
+            print "Adding vectors"
+        # grid components:
+        x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
+        # vector components:
+        u, v, w = item.get('udata'), item.get('vdata'), item.get('wdata')
+        # get line specifiactions (marker='.' means no marker):
+        marker, color, style, width = self._get_linespecs(item)
+
+        # scale the vectors according to this variable (scale=0 should
+        # turn off automatic scaling):
+        scale = item.get('arrowscale')
+
+        # uncomment the following command if there is no support for
+        # automatic scaling of vectors in the current plotting package:
+        #item.arrow_scale()
+
+        # draw filled arrows if this variable is True:
+        filled = item.get('filledarrows')
+
+        if z is not None and w is not None:
+            # draw velocity vectors as arrows with components (u,v,w) at
+            # points (x,y,z):
+            pass
+        else:
+            # draw velocity vectors as arrows with components (u,v) at
+            # points (x,y):
+            pass
+
+    def _add_streams(self, item):
+        if DEBUG:
+            print "Adding streams"
+        # grid components:
+        x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
+        # vector components:
+        u, v, w = item.get('udata'), item.get('vdata'), item.get('wdata')
+        # starting positions for streams:
+        sx, sy, sz = item.get('startx'), item.get('starty'), item.get('startz')
+
+        if item.get('tubes'):
+            # draw stream tubes from vector data (u,v,w) at points (x,y,z)
+            n = item.get('n') # no points along the circumference of the tube
+            scale = item.get('tubescale')
+            pass
+        elif item.get('ribbons'):
+            # draw stream ribbons from vector data (u,v,w) at points (x,y,z)
+            width = item.get('ribbonwidth')
+            pass
+        else:
+            # draw stream lines from vector data (u,v,w) at points
+            # (x,y,z) or vector data (u,v) at points (x,y).
+            pass
+        
+
+    def _add_isosurface(self, item):
+        if DEBUG:
+            print "Adding a isosurface"
+        # grid components:
+        x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
+        v = item.get('vdata')  # volume
+        c = item.get('cdata')  # pseudocolor data
+        isovalue = item.get('isovalue')
+
+    def _add_slices(self, item):
+        if DEBUG:
+            print "Adding slices in a volume"
+        # grid components:
+        x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
+        v = item.get('vdata')  # volume
+
+        
+        sx, sy, sz = item.get('slices')
+
+    def _add_contourslices(self, item):
+        if DEBUG:
+            print "Adding contours in slice planes"
+        # grid components:
+        x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
+        v = item.get('vdata')  # volume
+
+        sx, sy, sz = item.get('slices')
+        # sx, sy, and sz is either list
+
+        
+        cvector = item.get('cvector')
+        clevels = item.get('clevels')  # number of contour levels per plane
+
+
+    def _set_figure_size(self, fig):
+        if DEBUG:
+            print "Setting figure size"
+##         width, height = fig.get('size')
+##         if width and height:
+##             # set figure width and height
+##             pass
+##         else:
+##             # use the default width and height in plotting package
+##             pass
         
     def _replot(self):
+        # Replot all axes and all plotitems in the backend.
+        # NOTE: only the current figure (gcf) is redrawn.
+        if DEBUG:
+            print "Doing replot in backend"
+        
         fig = self.gcf()
+##         # hack for fixing problem when calling figure() in init:
+##         try:
+##             fig._g
+##         except:
+##             figure(self.get('curfig'))
+            
+        # reset fig._g now if needed
         
-        # hack for fixing problem when calling figure() in init:
-        try: fig._g
-        except: figure(self._attrs['curfig'])
-
-        if debug:
-            print "Doing replot it backend"
-            if self.get('show'):
-                print "\nDumping plot data to screen\n"
-                debug_(self)
-        implement ="""
-        # set figure size:
-        self._g.Set('/width', str(fig.get('width')/2.))
-        self._g.Set('/height', str(fig.get('height')/2.))
-
-        self._g.To('/page1') # makeing sure we are at page1
+        self._set_figure_size(fig)
         
-        # remove all old graphs (if any):
-        i = 1 # counter
-        while True:
-            try: self._g.Remove('/page1/graph%d' % i)
-            except ValueError: break
-
-        i = 1
         for ax in fig.get('axes').values():
-            use_legends = False
-            plotitems = ax.get('plotitems')
-            if len(plotitems) > 0:
-                self._g.To(self._g.Add('graph'))
-                self._set_graph_margins(ax)
-                self._set_scale(ax)
-                self._set_labels(ax)
-                self._set_limits(ax)
-                self._set_grid(ax)
-                self._set_title(ax)
-            
-            for item in plotitems:
+            for item in ax.get('plotitems'):
+                func = item.get('function') # function that produced this item
                 if isinstance(item, Line):
-                    xy = self._g.Add('xy')
-                
-                    # set line marker:
-                    marker = self._markers[item.get('linemarker')]
-                    self._g.Set('%s/marker' % xy, marker)
-
-                    # set line color:
-                    color = self._colors.get(item.get('linecolor'), None)
-                    if color:
-                        self._g.Set('%s/PlotLine/color' % xy, color)
-                        self._g.Set('%s/MarkerFill/color' % xy, color)
-
-                    # set line type:
-                    style = self._line_styles.get(item.get('linetype'), None)
-                    if style:
-                        self._g.Set('%s/PlotLine/style' % xy, style)
-                    else:
-                        self._g.Set('%s/PlotLine/hide' % xy, True)
-
-                    # set data:
-                    self._g.SetData('x%d' % i, item.get('xdata'))
-                    self._g.SetData('y%d' % i, item.get('ydata'))
-                    self._g.Set('%s/xData' % xy, 'x%d' % i)
-                    self._g.Set('%s/yData' % xy, 'y%d' % i)
-
-                    # set legend:
-                    legend = item.get('legend')
-                    if legend:
-                        self._g.Set('%s/key' % xy, legend)
-                        use_legends = True
+                    self._add_line(item)
+                elif isinstance(item, Surface):
+                    self._add_surface(item, shading=ax.get('shading'))
                 elif isinstance(item, Contours):
-                    cntr = self._g.Add('contour')
+                    self._add_contours(item)
+                elif isinstance(item, VelocityVectors):
+                    self._add_vectors(item)
+                elif isinstance(item, Streams):
+                    self._add_streams(item)
+                elif isinstance(item, Volume):
+                    if func == 'isosurface':
+                        self._add_isosurface(item)
+                    elif func == 'slice_':
+                        self._add_slices(item)
+                    elif func == 'contourslice':
+                        self._add_contourslices(item)
+                legend = item.get('legend')
+                if legend:
+                    # add legend to plot
+                    pass
 
-                    # set data:
-                    self._g.SetData2D('values%d' % i, item.get('zdata'))
-                    self._g.Set('%s/data' % cntr, 'values%d' % i)
-
-                    # set contour levels:
-                    cvector = item.get('cvector')
-                    if cvector:
-                        cvector = ','.join([str(a) for a in cvector])
-                        print cvector
-                        self._g.Set('%s/manualLevels' % cntr, cvector)
-                    else:
-                        self._g.Set('%s/numLevels' % cntr, item.get('clevels'))
-
-##                     self._g.Set('%s/lines' % cntr,
-##                                 [('solid', '1pt', u'#5500ff', False),
-##                                  ('dotted', '1pt', u'#aa557f', False)])
-                else:
-                    print "%s is not supported in the Veusz backend" % \
-                          type(item)
-                i += 1
-
-            if use_legends:
-                self._g.Add('key')
-
-            self._g.To('/page1')
-            
+            self._set_axis_props(ax)
+                    
         if self.get('show'):
-            self._g.window.showNormal()
-        else:
-            self._g.window.hide()
-
-##         # for full gui, we can do something like this:
-##         import tempfile, os
-##         tempfname = tempfile.mktemp(suffix='.vsz')
-##         print "saving file..."
-##         self.save(tempfname)
-##         print "saved"
-##         os.system('veusz %s' % tempfname)
-        """
+            # display plot on the screen
+            if DEBUG:
+                print "\nDumping plot data to screen\n"
+                debug(self)
+            pass
 
     def hardcopy(self, filename, **kwargs):
-        """Supported extensions: '.eps', '.svg', and '.png'."""
-        if 'color' in kwargs:
-            self.set(color=kwargs['color'])
+        """
+        Supported extensions: <fill in extensions for this backend>
+        """
+        self.set(**kwargs)
         color = self.get('color')
         self._replot()
 
-        if debug:
-            print "Hardcopy to %s" %filename
-        implement = """
-        self._g.Export(filename, color=color)
-        """
+        if DEBUG:
+            print "Hardcopy to %s" % filename
 
-    #????    
-    #def save(self, filename):
-    #    """Save the current Veusz settings to file."""
-    #    self._g.Save(filename)
+    hardcopy.__doc__ = BaseClass.hardcopy.__doc__ + hardcopy.__doc__
 
-plt = TemplateBackend()
-use(plt, globals()) # Export public namespace of plt to globals()
+    # implement colormap functions here
+    def jet(self, m=None):
+        """Variant of hsv."""
+        pass
+    
+
+plt = TemplateBackend()  # create backend instance
+use(plt, globals())      # export public namespace of plt to globals()
 
 def get_backend():
-    if debug:
+    if DEBUG:
         print "Should now return plt._g"
-    implement = """
     return plt._g
-    """
