@@ -1403,7 +1403,7 @@ class Axis(object):
             items = (items,)
         for item in items:
             if not isinstance(item, PlotProperties):
-                raise ValError, "item must be %s (or a subclass), not %s" % \
+                raise ValueError, "item must be %s (or a subclass), not %s" % \
                       (type(PlotProperties), type(item))
             self._prop['plotitems'].append(item)
         self.update()
@@ -1523,7 +1523,7 @@ class Figure(object):
         'axes': None,     # dictionary of axis instances
         'curax': 1,       # current axis
         'axshape': (1,1), # shape of axes
-        'size': None,     # size of figure (given as a list [width, height])
+        'size': [None]*2, # size of figure ([width, height])
         }
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 

@@ -1,7 +1,31 @@
-"""This is a template file for writing new backends.
+"""
+This is a template file for writing new backends. It is a fully functional
+backend, but no output is produced. One can use this backend by
 
-When writing a new backend, one can copy this file to xxx_.py, where 
-'xxx' is the name of the new backend.
+  python somefile.py --SCITOOLS_easyviz_backend template
+
+or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section
+
+  [easyviz]
+  backend = template
+
+and then
+
+  from scitools.all import *
+
+or if just easyviz is needed
+
+  from scitools.easyviz import *
+
+When writing a new backend, one can copy this file to xxx_.py (note the
+underscore), where 'xxx' is the name of the new backend. Then replace all
+instances of 'template' with 'xxx' and start implementing the class
+methods below. The most important methods are figure, _replot, and hardcopy.
+
+REQUIREMENTS:
+
+<fill in requirements for backend>
 
 """
 
@@ -9,21 +33,20 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-
+from misc import _cmpPlotProperties
 
 class TemplateBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
-        self.init()
+        self._init()
         
-    def init(self, *args, **kwargs):
-        # Do initialization special for this backend
+    def _init(self, *args, **kwargs):
+        # Do initialization that is special for this backend
         
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
         # Alex had a nice function for this.
         
-        # Problem: calling figure method here makes the program halt
         self.figure(self.get('curfig'))
 
         # convert tables for formatstrings:
@@ -80,25 +103,6 @@ class TemplateBackend(BaseClass):
             print "Setting backend standard variables"
             for disp in 'self._markers self._colors self._line_styles'.split():
                 print disp, eval(disp)
-                
-    def figure(self, *args, **kwargs):
-        """Extension of BaseClass.figure:"""        
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
-        try:
-            fig._g
-        except:
-            name = 'Fig ' + str(self._attrs['curfig'])
-
-            # create figure and save backend figure instance as fig._g
-            if DEBUG:
-                print "creating figure %s in backend" % name
-
-            class fig__:
-                pass
-            fig._g = fig__()
-            
-        self._g = fig._g # link for faster access
 
     def _set_scale(self, ax):
         # set linear or logarithmic (base 10) axis scale
@@ -147,35 +151,113 @@ class TemplateBackend(BaseClass):
         # set axis limits in x, y, and z direction
         if DEBUG:
             print "Setting axis limits"
-        xmin = ax.get('xmin')
-        xmax = ax.get('xmax')
-        if xmin and xmax:
-            # set x-axis limits
+        mode = ax.get('mode')
+        if mode == 'auto':
+            # let plotting package set 'nice' axis limits in the x, y,
+            # and z direction. If this is not automated in the plotting
+            # package, one can use the following limits:
+            #xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
             pass
-        else:
-            # let plotting package set x-axis limits
+        elif mode == 'manual':
+            # (some) axis limits are frozen
+            xmin = ax.get('xmin')
+            xmax = ax.get('xmax')
+            if xmin and xmax:
+                # set x-axis limits
+                pass
+            else:
+                # let plotting package set x-axis limits or use
+                #xmin, xmax = ax.get('xlim')
+                pass
+
+            ymin = ax.get('ymin')
+            ymax = ax.get('ymax')
+            if ymin and ymax:
+                # set y-axis limits
+                pass
+            else:
+                # let plotting package set y-axis limits or use
+                #ymin, ymax = ax.get('ylim')
+                pass
+
+            zmin = ax.get('zmin')
+            zmax = ax.get('zmax')
+            if zmin and zmax:
+                # set z-axis limits
+                pass
+            else:
+                # let plotting package set z-axis limits or use
+                #zmin, zmax = ax.get('zlim')
+                pass
+        elif mode == 'tight':
+            # set the limits on the axis to the range of the data. If
+            # this is not automated in the plotting package, one can
+            # use the following limits:
+            #xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
+            pass
+        elif mode == 'fill':
+            # not sure about this
             pass
 
-        ymin = ax.get('ymin')
-        ymax = ax.get('ymax')
-        if ymin and ymax:
-            # set y-axis limits
-            pass
-        else:
-            # let plotting package set y-axis limits
+    def _set_position(self, ax):
+        # set axes position
+        rect = ax.get('viewport')
+        if rect:
+            # axes position is defined. In Matlab rect is defined as
+            # [left,bottom,width,height], where the four parameters are
+            # location values between 0 and 1 ((0,0) is the lower-left
+            # corner and (1,1) is the upper-right corner).
+            # NOTE: This can be different in the plotting package.
             pass
 
-        zmin = ax.get('zmin')
-        zmax = ax.get('zmax')
-        if zmin and zmax:
-            # set z-axis limits
+    def _set_daspect(self, ax):
+        # set data aspect ratio
+        if ax.get('daspectmode') == 'manual':
+            dar = ax.get('daspect')  # dar is a list (len(dar) is 3).
             pass
         else:
-            # let plotting package set z-axis limits
+            # daspectmode is 'auto'. Plotting package handles data
+            # aspect ratio automatically.
+            pass
+        
+    def _set_axis_method(self, ax):
+        method = ax.get('method')
+        if method == 'equal':
+            # tick mark increments on the x-, y-, and z-axis should
+            # be equal in size.
+            pass
+        elif method == 'image':
+            # same effect as axis('equal') and axis('tight')
+            pass
+        elif method == 'square':
+            # make the axis box square in size
+            pass
+        elif method == 'normal':
+            # full size axis box
+            pass
+        elif method == 'vis3d':
+            # freeze data aspect ratio when rotating 3D objects
+            pass
+
+    def _set_coordinate_system(self, ax):
+        # use either the default Cartesian coordinate system or a
+        # matrix coordinate system.
+        direction = ax.get('direction')
+        if direction == 'ij':
+            # use matrix coordinates. The origin of the coordinate
+            # system is the upper-left corner. The i-axis should be
+            # vertical and numbered from top to bottom, while the j-axis
+            # should be horizontal and numbered from left to right.
+            pass
+        elif direction == 'xy':
+            # use the default Cartesian axes form. The origin is at the
+            # lower-left corner. The x-axis is vertical and numbered
+            # from left to right, while the y-axis is vertical and
+            # numbered from bottom to top.
             pass
 
     def _set_box(self, ax):
-        # turn box around axes border on or off
+        # turn box around axes boundary on or off
         if DEBUG:
             print "Setting box"
         if ax.get('box'):
@@ -228,13 +310,20 @@ class TemplateBackend(BaseClass):
         if ax.get('caxismode') == 'manual':
             cmin, cmax = ax.get('caxis')
             # NOTE: cmin and cmax might be None:
-            if not cmin and not cmax:
+            if not cmin or not cmax:
                 cmin, cmax = [0,1]
             # set color axis scaling according to cmin and cmax
             pass
         else:
             # use autoranging for color axis scale
             pass
+
+    def _set_colormap(self, ax):
+        # set the colormap
+        if DEBUG:
+            print "Setting colormap"
+        cmap = ax.get('colormap')
+        # cmap is plotting package dependent
 
     def _set_view(self, ax):
         # set viewpoint specification
@@ -268,15 +357,19 @@ class TemplateBackend(BaseClass):
                 view_angle = cam.get('camva')
                 projection = cam.get('camproj')
 
-
     def _set_axis_props(self, ax):
         if DEBUG:
             print "Setting axis properties"
         self._set_title(ax)
         self._set_scale(ax)
         self._set_limits(ax)
+        self._set_position(ax)
+        self._set_axis_method(ax)
+        self._set_daspect(ax)
+        self._set_coordinate_system(ax)
         self._set_hidden_line_removal(ax)
         self._set_colorbar(ax)
+        self._set_colormap(ax)
         self._set_view(ax)
         if ax.get('visible'):
             self._set_labels(ax)
@@ -345,18 +438,14 @@ class TemplateBackend(BaseClass):
         y = item.get('ydata')  # grid component in y-direction
         z = item.get('zdata')  # scalar field
 
-        # draw a filled contour plot (as in contourf) if this variable
-        # is True:
-        filled = item.get('filled')
+        filled = item.get('filled')  # draw filled contour plot if True
 
         cvector = item.get('cvector')
+        clevels = item.get('clevels')  # number of contour levels
         if cvector is None:
             # the contour levels are chosen automatically
-            clevels = item.get('clevels')  # number of contour levels
-            #cvector = 
-        else:
-            # cvector specifies the contour lines
-            clevels = len(cvector)
+            #cvector =
+            pass
 
         location = item.get('clocation')
         if location == 'surface':
@@ -392,8 +481,7 @@ class TemplateBackend(BaseClass):
         # automatic scaling of vectors in the current plotting package:
         #item.arrow_scale()
 
-        # draw filled arrows if this variable is True:
-        filled = item.get('filledarrows')
+        filled = item.get('filledarrows') # draw filled arrows if True
 
         if z is not None and w is not None:
             # draw velocity vectors as arrows with components (u,v,w) at
@@ -424,10 +512,13 @@ class TemplateBackend(BaseClass):
             width = item.get('ribbonwidth')
             pass
         else:
-            # draw stream lines from vector data (u,v,w) at points
-            # (x,y,z) or vector data (u,v) at points (x,y).
+            if z is not None and w is not None:
+                # draw stream lines from vector data (u,v,w) at points (x,y,z)
+                pass
+            else:
+                # draw stream lines from vector data (u,v) at points (x,y)
+                pass
             pass
-        
 
     def _add_isosurface(self, item):
         if DEBUG:
@@ -445,8 +536,14 @@ class TemplateBackend(BaseClass):
         x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
         v = item.get('vdata')  # volume
 
-        
         sx, sy, sz = item.get('slices')
+        if rank(sz) == 2:
+            # sx, sy, and sz defines a surface
+            pass
+        else:
+            # sx, sy, and sz is either numbers or vectors with numbers
+            pass
+        pass
 
     def _add_contourslices(self, item):
         if DEBUG:
@@ -456,23 +553,54 @@ class TemplateBackend(BaseClass):
         v = item.get('vdata')  # volume
 
         sx, sy, sz = item.get('slices')
-        # sx, sy, and sz is either list
+        if rank(sz) == 2:
+            # sx, sy, and sz defines a surface
+            pass
+        else:
+            # sx, sy, and sz is either numbers or vectors with numbers
+            pass
 
-        
         cvector = item.get('cvector')
         clevels = item.get('clevels')  # number of contour levels per plane
-
+        if cvector is None:
+            # the contour levels are chosen automatically
+            #cvector =
+            pass
+        pass
 
     def _set_figure_size(self, fig):
         if DEBUG:
             print "Setting figure size"
-##         width, height = fig.get('size')
-##         if width and height:
-##             # set figure width and height
-##             pass
-##         else:
-##             # use the default width and height in plotting package
-##             pass
+        width, height = fig.get('size')
+        if width and height:
+            # set figure width and height
+            pass
+        else:
+            # use the default width and height in plotting package
+            pass
+
+    def figure(self, *args, **kwargs):
+        # Extension of BaseClass.figure:
+        # add a plotting package figure instance as fig._g and create a
+        # link to it as object._g
+        BaseClass.figure(self, *args, **kwargs) 
+        fig = self.gcf()
+        try:
+            fig._g
+        except:
+            # create plotting package figure and save figure instance
+            # as fig._g
+            if DEBUG:
+                name = 'Fig ' + str(self.get('curfig'))
+                print "creating figure %s in backend" % name
+
+            class fig__:
+                pass
+            fig._g = fig__()
+            
+        self._g = fig._g # link for faster access
+
+    figure.__doc__ = BaseClass.figure.__doc__
         
     def _replot(self):
         # Replot all axes and all plotitems in the backend.
@@ -481,18 +609,19 @@ class TemplateBackend(BaseClass):
             print "Doing replot in backend"
         
         fig = self.gcf()
-##         # hack for fixing problem when calling figure() in init:
-##         try:
-##             fig._g
-##         except:
-##             figure(self.get('curfig'))
-            
-        # reset fig._g now if needed
+        # reset the plotting package instance in fig._g now if needed
         
         self._set_figure_size(fig)
         
-        for ax in fig.get('axes').values():
-            for item in ax.get('plotitems'):
+        nrows, ncolumns = fig.get('axshape')
+        for axnr, ax in fig.get('axes').items():
+            if nrows != 1 or ncolumns != 1:
+                # create axes in tiled position like
+                # subplot(nrows,ncolumns,axnr)
+                pass
+            plotitems = ax.get('plotitems')
+            plotitems.sort(_cmpPlotProperties)
+            for item in plotitems:
                 func = item.get('function') # function that produced this item
                 if isinstance(item, Line):
                     self._add_line(item)
@@ -538,16 +667,13 @@ class TemplateBackend(BaseClass):
 
     hardcopy.__doc__ = BaseClass.hardcopy.__doc__ + hardcopy.__doc__
 
+    # reimplement methods like clf, closefig, closefigs
+
     # implement colormap functions here
-    def jet(self, m=None):
-        """Variant of hsv."""
-        pass
+    #def jet(self, m=None):
+    #    """Variant of hsv."""
+    #    pass
     
 
 plt = TemplateBackend()  # create backend instance
 use(plt, globals())      # export public namespace of plt to globals()
-
-def get_backend():
-    if DEBUG:
-        print "Should now return plt._g"
-    return plt._g

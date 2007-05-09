@@ -276,3 +276,12 @@ def arrayconverter(a):
         return Numeric.array(a.tolist())
     else:
         return a
+
+def _cmpPlotProperties(a,b):
+    """Sort cmp-function for PlotProperties"""
+    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
+    assert isinstance(a, PlotProperties)
+    assert isinstance(b, PlotProperties)
+    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
+               len(plotorder) # Check all subclasses is in plotorder
+    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
