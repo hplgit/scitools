@@ -297,7 +297,7 @@ class TemplateBackend(BaseClass):
         if cbar.get('visible'):
             # turn on colorbar
             cbar_title = cbar.get('cbtitle')
-            cbar_location = self._colorbar_locations[ax.get('cblocation')]
+            cbar_location = self._colorbar_locations[cbar.get('cblocation')]
             # ...
         else:
             # turn off colorbar
