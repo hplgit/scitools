@@ -297,7 +297,7 @@ class TemplateBackend(BaseClass):
         if cbar.get('visible'):
             # turn on colorbar
             cbar_title = cbar.get('cbtitle')
-            cbar_location = self._colorbar_locations(ax.get('cblocation'))
+            cbar_location = self._colorbar_locations[ax.get('cblocation')]
             # ...
         else:
             # turn off colorbar
@@ -369,6 +369,7 @@ class TemplateBackend(BaseClass):
         self._set_coordinate_system(ax)
         self._set_hidden_line_removal(ax)
         self._set_colorbar(ax)
+        self._set_caxis(ax)
         self._set_colormap(ax)
         self._set_view(ax)
         if ax.get('visible'):
@@ -466,6 +467,10 @@ class TemplateBackend(BaseClass):
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
+        # uncomment the following command if there is no support for
+        # automatic scaling of vectors in the current plotting package:
+        #item.scale_vectors()
+
         # grid components:
         x, y, z = item.get('xdata'), item.get('ydata'), item.get('zdata')
         # vector components:
@@ -476,10 +481,6 @@ class TemplateBackend(BaseClass):
         # scale the vectors according to this variable (scale=0 should
         # turn off automatic scaling):
         scale = item.get('arrowscale')
-
-        # uncomment the following command if there is no support for
-        # automatic scaling of vectors in the current plotting package:
-        #item.arrow_scale()
 
         filled = item.get('filledarrows') # draw filled arrows if True
 
@@ -616,8 +617,8 @@ class TemplateBackend(BaseClass):
         nrows, ncolumns = fig.get('axshape')
         for axnr, ax in fig.get('axes').items():
             if nrows != 1 or ncolumns != 1:
-                # create axes in tiled position like
-                # subplot(nrows,ncolumns,axnr)
+                # create axes in tiled position
+                # this is subplot(nrows,ncolumns,axnr)
                 pass
             plotitems = ax.get('plotitems')
             plotitems.sort(_cmpPlotProperties)
