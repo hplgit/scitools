@@ -1186,6 +1186,7 @@ class Axis(object):
         'ambientcolor': None,
         'diffusecolor': None,
         'speculartcolor': None,
+        'pth': None, # this is the p-th axis in subplot(m,n,p)
         }
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
@@ -1365,6 +1366,11 @@ class Axis(object):
             #    _check_type(viewport[i], 'viewport coor', (int,float))
             self._prop['viewport'] = viewport
 
+        if 'pth' in kwargs:
+            pth = kwargs['pth']
+            _check_type(pth, 'pth', int)
+            self._prop['pth'] = pth
+
         # set properties for camera and colorbar:
         self._prop['camera'].set(**kwargs)
         self._prop['colorbar'].set(**kwargs)
@@ -1383,8 +1389,10 @@ class Axis(object):
     def reset(self):
         """Reset axis attributes to default values."""
         viewport = self._prop['viewport'] # don't reset viewport coords
+        pth = self._prop['pth'] # don't reset p-th axis information
         self._prop = self._defaults.copy()
         self._prop['viewport'] = viewport
+        self._prop['pth'] = pth
         self._prop['plotitems'] = []
         #self._prop['camera'].reset()
         del self._prop['camera']
@@ -1582,6 +1590,7 @@ class Figure(object):
                 ax = Axis()
                 ax.set(viewport=viewport_coords[i-1])
                 self._prop['axes'][i] = ax
+                ax.set(pth=i)
 
         if 'curax' in kwargs:
             curax = kwargs['curax']

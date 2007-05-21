@@ -98,17 +98,17 @@ class VtkBackend(BaseClass):
         renwin_frame.pack(side='left', fill='both', expand=1)
         frame = Tkinter.Frame(renwin_frame)
         frame.pack(side='top', fill='both', expand=1)
-        try:
-            width, height = fig.get('size')
-        except TypeError:
-            width, height = (640, 480)
+        width, height = fig.get('size')
+        if width is None or height is None:
+            width = 640;  height = 480
         tkw = vtkTkRenderWidget.vtkTkRenderWidget(frame,
                                                   width=width,
                                                   height=height)
         tkw.pack(expand='true', fill='both')
         renwin = tkw.GetRenderWindow()
-        #renwin.SetSize(width, height)
-        renwin.SetSize(width+1, height+1)
+        renwin.SetSize(width, height)
+        #renwin.SetSize(width+1, height+1)
+        #renwin.SetSize(width-1, height-1)
         #renwin.LineSmoothingOn()
         #tkw.UpdateRenderer(0.0, 0.0)
         #renwin.Render()
