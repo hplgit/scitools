@@ -375,9 +375,10 @@ plots stored in files. Thereafter we must use a tool to combine the
 individual plot files into a movie file. We shall illustrate the
 process with an example.
 
-Consider the "Gaussian bell" function
+The function
 $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$,
-which is a "wide" function for large $s$ and "peak-formed" for small $s$,
+known as the "Gaussian bell function",
+is a "wide" function for large $s$ and "peak-formed" for small $s$,
 see Figure ref{fig:plot4},
 Our goal is to make an animation where we see how this function evolves
 as $s$ is decreased. In Python we implement the formula above as
@@ -451,9 +452,11 @@ For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
 of the form `stem0001.ext`, `stem0002.ext`, `stem0003.ext`, etc.,
-since the expression `stem*.ext` then lists all files in the right
-order. In our example, `stem` is `tmp_`, and `.ext` is `.ps`
-(PostScript format in the hardcopy).
+since an alphabetic sort of the filenames then gives the right
+sequence of the files (and so does the expression `stem*.ext` used
+in the operating system or in Python's `fnmatch` module).
+In our example, `stem` is `tmp_`, and `.ext` is `.ps`
+(which implies the PostScript format in the hardcopy).
 
 Having a set of `stem*.ext` files, one can simply generate a movie
 by a `movie('stem*.ext')` call. When a movie file is not wanted (it may
@@ -476,9 +479,9 @@ produces "behind the curtain".
 ___Importing Just Easyviz___
 
 The `from scitools.all import *` statement imports many modules and packages:
-  * Easyviz
-  * SciPy (if it exists)
-  * NumPy (if SciPy is not installed)
+  * `scitools.easyviz`
+  * `scipy` (if it exists)
+  * `numpy` (if `scipy` is not installed)
   * the Python modules `sys`, `os`, `math`, `operator`
   * the SciTools module `StringFunction` and the SciTools 
     functions `watch` and `trace` for debugging
