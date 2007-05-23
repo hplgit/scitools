@@ -69,17 +69,6 @@ class BltBackend(BaseClass):
 
         self._master = Tkinter.Tk()
         self._master.withdraw()
-##         self._master = Pmw.initialise()
-##         def _close_fig(event=None):
-##             self.clf()
-##             self._master.withdraw()
-##         self._master.protocol("WM_DELETE_WINDOW", _close_fig)
-##         self._master.minsize(200, 200)
-##         self._master.geometry('640x480')
-##         self._master.bind("<KeyPress-q>", _close_fig)
-##         self._master.withdraw()  # hide window
-##         self._nb = Pmw.NoteBook(self._master)
-##         self._nb.pack(fill='both', expand=1, padx=10, pady=10)
         self.figure(self.get('curfig'))
 
         # convert tables for formatstrings:
@@ -686,32 +675,6 @@ class BltBackend(BaseClass):
             fig._g = Pmw.Blt.Graph(frame)
             fig._g.pack(expand=1, fill='both')
             
-        self._g = fig._g # link for faster access
-
-    def figure_old(self, *args, **kwargs):
-        # Extension of BaseClass.figure:
-        # add a plotting package figure instance as fig._g and create a
-        # link to it as object._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
-        name = 'Fig ' + str(self.get('curfig'))
-        try:
-            fig._g
-        except:
-            # create plotting package figure and save figure instance
-            # as fig._g
-            if DEBUG:
-                print "creating figure %s in backend" % name
-
-            try:
-                self._nb.delete(name)
-            except:
-                pass
-            page = self._nb.add(name)
-            fig._g = Pmw.Blt.Graph(page)
-            fig._g.pack(expand=1, fill='both')
-            
-        self._nb.tab(name).focus_set()
         self._g = fig._g # link for faster access
 
     figure.__doc__ = BaseClass.figure.__doc__
