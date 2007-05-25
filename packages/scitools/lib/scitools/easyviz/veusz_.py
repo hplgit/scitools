@@ -89,7 +89,7 @@ class VeuszBackend(BaseClass):
         # Alex had a nice function for this.
 
         # Calling figure method here makes the program halt.
-        self.figure(self.get('curfig'))
+        #self.figure(self.get('curfig'))
 
         # convert tables for formatstrings:
         self._markers = {
@@ -175,14 +175,15 @@ class VeuszBackend(BaseClass):
         xlabel = ax.get('xlabel')
         ylabel = ax.get('ylabel')
         zlabel = ax.get('zlabel')
+        fontsize = ax.get('fontsize')
         if xlabel:
             # add a text label on x-axis
             self._g.Set('x/label', xlabel)
-            self._g.Set('x/Label/size', ax.get('fontsize'))
+            self._g.Set('x/Label/size', str(fontsize))
         if ylabel:
             # add a text label on y-axis
             self._g.Set('y/label', ylabel)
-            self._g.Set('y/Label/size', ax.get('fontsize'))
+            self._g.Set('y/Label/size', str(fontsize))
         if zlabel:
             # add a text label on z-axis
             pass
