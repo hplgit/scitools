@@ -1471,10 +1471,14 @@ class Axis(object):
     def _check_lim(self, l1, l2):
         """Return a tuple with the "larger" values of 'l1' and 'l2'."""
         lim = [None]*2
-        if l1[0] > l2[0]: lim[0] = l2[0]
-        else: lim[0] = l1[0]
-        if l1[1] < l2[1]: lim[1] = l2[1]
-        else: lim[1] = l1[1]
+        if l1[0] > l2[0]:
+            lim[0] = l2[0]
+        else:
+            lim[0] = l1[0]
+        if l1[1] < l2[1]:
+            lim[1] = l2[1]
+        else:
+            lim[1] = l1[1]
         return tuple(lim)
 
     def _update_limits(self, item):
@@ -1484,13 +1488,12 @@ class Axis(object):
         xlim = item.get('xlim')
         ylim = item.get('ylim')
         zlim = item.get('zlim')
-        if self._prop['hold']: # update limits as necessary:
-            if not None in self._prop['xlim']:
-                xlim = self._check_lim(self._prop['xlim'], xlim)
-            if not None in self._prop['ylim']:
-                ylim = self._check_lim(self._prop['ylim'], ylim)
-            if not None in self._prop['zlim']:
-                zlim = self._check_lim(self._prop['zlim'], zlim)
+        if not None in self._prop['xlim']:
+            xlim = self._check_lim(self._prop['xlim'], xlim)
+        if not None in self._prop['ylim']:
+            ylim = self._check_lim(self._prop['ylim'], ylim)
+        if not None in self._prop['zlim']:
+            zlim = self._check_lim(self._prop['zlim'], zlim)
         self._prop['xlim'] = xlim
         self._prop['ylim'] = ylim
         self._prop['zlim'] = zlim
