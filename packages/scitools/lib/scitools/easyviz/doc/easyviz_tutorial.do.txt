@@ -42,9 +42,9 @@ directly
 y = t**2*exp(-t**2)
 !ec
 
-To include the plot in reports, we need 
-a hardcopy of the figure in PostScript, PNG, or another image format.
-The `hardcopy` command produces files with images in various formats:
+To include the plot in electronic documents, we need a hardcopy of the
+figure in PostScript, PNG, or another image format.  The `hardcopy`
+command produces files with images in various formats:
 !bc
 hardcopy('tmp1.ps')  # produce PostScript
 hardcopy('tmp1.png') # produce PNG
@@ -203,8 +203,8 @@ Figure ref{fig:plot2c}.
 
 FIGURE:[figs/plot2c.eps] Two curves in the same plot, with controlled line styles.
 
-Assume now that we want to plot the blue circles at only each 4 points.
-We can grab each 4 points out of the `t` array by using an appropriate
+Assume now that we want to plot the blue circles at every 4 points only.
+We can grab every 4 points out of the `t` array by using an appropriate
 slice: `t2 = t[::4]`. Note that the first colon means the range from the
 first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
@@ -379,7 +379,8 @@ The function
 $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$,
 known as the "Gaussian bell function",
 is a "wide" function for large $s$ and "peak-formed" for small $s$,
-see Figure ref{fig:plot4},
+see Figure ref{fig:plot4}. The function is symmetric around $x=m$
+($m=0$ in the figure).
 Our goal is to make an animation where we see how this function evolves
 as $s$ is decreased. In Python we implement the formula above as
 a function `f(x, m, s)`. 
@@ -476,8 +477,7 @@ using plotting program-specific advanced features. Third, we explain
 how the user can grab `Figure` and `Axis` objects that Easyviz
 produces "behind the curtain".
 
-___Importing Just Easyviz___
-
+__Importing Just Easyviz.__
 The `from scitools.all import *` statement imports many modules and packages:
   * `scitools.easyviz`
   * `scipy` (if it exists)
@@ -502,8 +502,7 @@ to the curve plotting script (all sections/options in the configuration
 file can also be set by such command-line arguments).
 
 
-___Working with the Plotting Program Directly___
-
+__Working with the Plotting Program Directly.__
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
@@ -539,8 +538,7 @@ above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
 
-___Working with Axis and Figure Objects___
-
+__Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represent a set of axis, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
@@ -548,7 +546,7 @@ One may have several axis in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
 windows on the screen or separate hardcopies.
 
-__Axis Objects.__  Users with Matlab experience may prefer to set axis
+Users with Matlab experience may prefer to set axis
 labels, ranges, and the title using an Axis object instead of
 providing the information in separate commands or as part of a `plot`
 command. The `gca` (get current axis) command returns an `Axis`
@@ -566,7 +564,7 @@ ax.set(xlabel='t', ylabel='y',
 show()  # show the plot again after ax.set actions
 !ec
 
-__Figure Objects.__ The `figure()` call makes a new figure, i.e., a
+The `figure()` call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command `figure(3)` sets the current figure object to figure number
 3. 
