@@ -162,7 +162,7 @@ class TemplateBackend(BaseClass):
             # (some) axis limits are frozen
             xmin = ax.get('xmin')
             xmax = ax.get('xmax')
-            if xmin and xmax:
+            if xmin is not None and xmax is not None:
                 # set x-axis limits
                 pass
             else:
@@ -172,7 +172,7 @@ class TemplateBackend(BaseClass):
 
             ymin = ax.get('ymin')
             ymax = ax.get('ymax')
-            if ymin and ymax:
+            if ymin is not None and ymax is not None:
                 # set y-axis limits
                 pass
             else:
@@ -182,7 +182,7 @@ class TemplateBackend(BaseClass):
 
             zmin = ax.get('zmin')
             zmax = ax.get('zmax')
-            if zmin and zmax:
+            if zmin is not None and zmax is not None:
                 # set z-axis limits
                 pass
             else:
