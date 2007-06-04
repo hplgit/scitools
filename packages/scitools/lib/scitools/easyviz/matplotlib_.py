@@ -160,7 +160,7 @@ class MatplotlibBackend(BaseClass):
             # (some) axis limits are frozen
             xmin = ax.get('xmin')
             xmax = ax.get('xmax')
-            if xmin and xmax:
+            if xmin is not None and xmax is not None:
                 # set x-axis limits
                 self._g.gca().set_xlim(xmin, xmax)
             else:
@@ -170,7 +170,7 @@ class MatplotlibBackend(BaseClass):
 
             ymin = ax.get('ymin')
             ymax = ax.get('ymax')
-            if ymin and ymax:
+            if ymin is not None and ymax is not None:
                 # set y-axis limits
                 self._g.gca().set_ylim(ymin, ymax)
             else:
@@ -180,7 +180,7 @@ class MatplotlibBackend(BaseClass):
 
             zmin = ax.get('zmin')
             zmax = ax.get('zmax')
-            if zmin and zmax:
+            if zmin is not None and zmax is not None:
                 # set z-axis limits
                 pass
             else:
@@ -313,7 +313,7 @@ class MatplotlibBackend(BaseClass):
         if ax.get('caxismode') == 'manual':
             cmin, cmax = ax.get('caxis')
             # NOTE: cmin and cmax might be None:
-            if not cmin or not cmax:
+            if cmin is None or cmax is None:
                 cmin, cmax = [0,1]
             # set color axis scaling according to cmin and cmax
             self._g.clim(cmin,cmax)
@@ -341,7 +341,7 @@ class MatplotlibBackend(BaseClass):
         elif view == 3:
             az = cam.get('azimuth')
             el = cam.get('elevation')
-            if not az or not el:
+            if az is None or el is None:
                 # azimuth or elevation is not given. Set up a default
                 # 3D view (az=-37.5 and el=30 is the default 3D view in
                 # Matlab).

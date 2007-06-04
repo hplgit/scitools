@@ -340,7 +340,7 @@ class BltBackend(BaseClass):
         if ax.get('caxismode') == 'manual':
             cmin, cmax = ax.get('caxis')
             # NOTE: cmin and cmax might be None:
-            if not cmin or not cmax:
+            if cmin is None or cmax is None:
                 cmin, cmax = [0,1]
             # set color axis scaling according to cmin and cmax
             pass
@@ -367,7 +367,7 @@ class BltBackend(BaseClass):
         elif view == 3:
             az = cam.get('azimuth')
             el = cam.get('elevation')
-            if not az or not el:
+            if az is None or el is None:
                 # azimuth or elevation is not given. Set up a default
                 # 3D view (az=-37.5 and el=30 is the default 3D view in
                 # Matlab).
