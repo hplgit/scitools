@@ -61,8 +61,11 @@ class GnuplotBackend(BaseClass):
         self._init()
         
     def _init(self, *args, **kwargs):
-        # Necessary to add a Gnuplot Session  as _g to the Figure instance
-        # self._g will now point to the correct intance saved as _g in curfig 
+        # Do initialization that is special for this backend
+        
+        # Necessary to add a Gnuplot Session as _g to the Figure instance.
+        # self._g will now point to the correct instance saved as _g in
+        # curfig.
         self.figure(self.get('curfig'))
         
         # convert tables for formatstrings:
@@ -119,25 +122,6 @@ class GnuplotBackend(BaseClass):
             print "Setting backend standard variables"
             for disp in 'self._markers self._colors self._line_styles'.split():
                 print disp, eval(disp)
-
-    def _set_scale(self, ax):
-        scale = ax.get('scale')
-        if scale == 'loglog':
-            self._g('set logscale x')
-            self._g('set logscale y')
-            self._g('set autoscale')
-        elif scale == 'logx':
-            self._g('set logscale x')
-            self._g('set nologscale y')
-            self._g('set autoscale')
-        elif scale == 'logy':
-            self._g('set logscale y')
-            self._g('set nologscale x')
-            self._g('set autoscale')
-        elif scale == 'linear':
-            self._g('set nologscale y')
-            self._g('set nologscale x')
-            self._g('set autoscale')
 
     def _set_scale(self, ax):
         # set linear or logarithmic (base 10) axis scale
