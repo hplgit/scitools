@@ -1646,13 +1646,32 @@ class BaseClass(object):
     This base class saves info about plotting to instances of class Figure,
     Line, and PlotItem.
     
-    List of "Matlab-like" interface functions (for the user):
-    ...
     List of internal helper functions (for subclasses):
     ...
     
 
     """
+    _matlab_like_cmds = ['autumn', 'axes', 'axis', 'bone', 'box', 'brighten',
+                         'camdolly', 'camlight', 'camlookat', 'campos',
+                         'camproj', 'camroll', 'camtarget', 'camup', 'camva',
+                         'camzoom', 'caxis', 'cla', 'clabel', 'clf',
+                         'closefig', 'closefigs', 'coneplot', 'colorbar',
+                         'colorcube', 'colormap', 'contour', 'contour3',
+                         'contourf', 'contourslice', 'cool', 'copper',
+                         'daspect', 'figure', 'fill', 'fill3', 'flag', 'gca',
+                         'gcf', 'get', 'gray', 'grid', 'hardcopy', 'hidden',
+                         'hold', 'hot', 'hsv', 'ishold', 'isocaps',
+                         'isosurface', 'jet', 'legend', 'light', 'lines',
+                         'loglog', 'material', 'mesh', 'meshc', 'openfig',
+                         'savefig', 'pcolor', 'pink', 'plot', 'plot3', 'prism',
+                         'quiver', 'quiver3', 'reducevolum', 'semilogx',
+                         'semilogy', 'set', 'shading', 'show', 'slice_',
+                         'spring', 'streamline', 'streamribbon', 'streamslice',
+                         'streamtube', 'subplot', 'subvolume', 'summer',
+                         'surf', 'surfc', 'surfl', 'title', 'vga', 'view',
+                         'white', 'winter', 'xlabel', 'ylabel', 'zlabel']
+    __doc__ += docadd('List of "Matlab-like" interface functions (for ' + \
+                      'the user)', _matlab_like_cmds)
     
     _local_attrs = {
         'curfig': 1,  # Current figure
@@ -1848,9 +1867,9 @@ class BaseClass(object):
     def savefig(self, filename='figspickle.txt'): 
         """
         Save all current figures to a file (with the given filename).
-        The file has standard Python pickle format (dict of Figure instances).
-
-        Later, the figures can be reloaded by the openfig method.
+        The file has standard Python pickle format (dict of Figure
+        instances). The figures can later be reloaded by the openfig
+        method.
         """
         handle = open(filename, 'w')
         pickle.dump(self._figs, handle)
@@ -1859,9 +1878,8 @@ class BaseClass(object):
     def hardcopy(self, filename=''): 
         """
         Save a hardcopy of the current figure to file (with the given
-        filename).
-        The file format (image type) is determined from the extension of
-        the filename. 
+        filename). The file format (image type) is determined from the
+        extension of the filename. 
         """
         # must be implemented in subclass
         raise NotImplementedError, 'hardcopy not implemented in class %s' % \

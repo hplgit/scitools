@@ -43,10 +43,6 @@ class TemplateBackend(BaseClass):
     def _init(self, *args, **kwargs):
         # Do initialization that is special for this backend
         
-        # Set docstrings of all functions to the docstrings of BaseClass
-        # The exception is if something is very different
-        # Alex had a nice function for this.
-        
         self.figure(self.get('curfig'))
 
         # convert tables for formatstrings:
@@ -601,8 +597,6 @@ class TemplateBackend(BaseClass):
             
         self._g = fig._g # link for faster access
 
-    figure.__doc__ = BaseClass.figure.__doc__
-        
     def _replot(self):
         # Replot all axes and all plotitems in the backend.
         # NOTE: only the current figure (gcf) is redrawn.
@@ -666,15 +660,28 @@ class TemplateBackend(BaseClass):
         if DEBUG:
             print "Hardcopy to %s" % filename
 
-    hardcopy.__doc__ = BaseClass.hardcopy.__doc__ + hardcopy.__doc__
+    # reimplement color maps and other methods (if necessary) like clf,
+    # closefig, and closefigs here.
 
-    # reimplement methods like clf, closefig, closefigs
 
-    # implement colormap functions here
-    #def jet(self, m=None):
-    #    """Variant of hsv."""
-    #    pass
+    # Now we add the doc string from the methods in BaseClass to the
+    # methods that are reimplemented in this backend:
+    for cmd in BaseClass._matlab_like_cmds:
+        if cmd == 'set':
+            # This fails below since set is a built-in function in Python.
+            continue  # just skip this
+        if not '__' in cmd and hasattr(BaseClass, cmd):
+            m1 = eval('BaseClass.%s' % cmd)
+            try:
+                m2 = eval('%s' % cmd)
+            except NameError:
+                pass
+            else:
+                if m1.__doc__ != m2.__doc__:
+                    if m2.__doc__ is None:
+                        m2.__doc__ = ""
+                    m2.__doc__ = m1.__doc__ + m2.__doc__
+
     
-
 plt = TemplateBackend()  # create backend instance
 use(plt, globals())      # export public namespace of plt to globals()
