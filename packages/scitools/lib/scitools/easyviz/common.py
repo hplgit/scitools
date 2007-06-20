@@ -1674,25 +1674,19 @@ class BaseClass(object):
                       'the user)', _matlab_like_cmds)
     
     _local_attrs = {
-        'curfig': 1,  # Current figure
-        'show': True, # Screenplot after each plot command
-        #'replot_mode':'Active', # Update backend after each change
-        #'changed':False,        # sync state       
-        'interactive': True, 
-        #'hold': None,
-        #'movie':None,            # Axis are locked
-        'color': False,           # Hardcopy with color?
+        'curfig': 1,         # current figure
+        'show': True,        # screenplot after each plot command
+        #'changed': False,    # sync state       
+        'interactive': True, # update backend after each change
+        'color': False,      # hardcopy with color?
         }
     __doc__ += docadd('Keywords for the set method', _local_attrs.keys())
 
     # Dictionary of functions testing legal types
     _attrs_type = {'curfig': lambda arg: isinstance(arg, (int)),
-                   'show':lambda arg: isinstance(arg, (bool)),
-                   #'replot_mode':lambda arg: arg in ('Passive', 'Active'),
+                   'show': lambda arg: isinstance(arg, (bool)),
                    'interactive': lambda arg: isinstance(arg,(bool)),
                    #'changed': lambda arg: isinstance(arg, (bool)),
-                   #'hold': lambda arg: arg in ('on', 'off', None),
-                   #'movie': lambda arg: arg in ('on', 'off', None),
                    'color': lambda arg: isinstance(arg,(bool))
                    }
     
@@ -1702,7 +1696,7 @@ class BaseClass(object):
     def init(self):
         """Initialize internal data structures."""
         self._g = None  # Pointer to the backend for manual labour.
-        self._figs = {1: Figure()} # Dictionary of figureinstances
+        self._figs = {1: Figure()}  # dictionary of figure instances
         self._attrs = {}
         self._attrs.update(BaseClass._local_attrs)
     
@@ -1711,8 +1705,17 @@ class BaseClass(object):
     
     def set(self, *args, **kwargs):
         """
-        Set an attribute in this backend instance.
+        Set object properties or an attribute in this backend instance.
+
+        Calling set([obj,] name1=value1, name2=value2, ...) will set the
+        attributes as given in this backend instance. If the optional
+        positional argument obj is a given object with a set method (like
+        Figure, Axis, and PlotProperties objects), the properties and values
+        are also set in this object.
         """
+        nargs = len(args)
+        if nargs > 0 and hasattr(args[0], 'set'):
+            args[0].set(**kwargs)
 
         for key in kwargs:
             value = kwargs[key]
@@ -1735,27 +1738,49 @@ class BaseClass(object):
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
                     
-    def get(self, prm_name): 
+    def get(self, *args): 
         """
-        Return the value of an attribute in this backend instance.
-        """
-        try:
-            return self._attrs[prm_name]
-        except:
-            raise KeyError, '%s.get: no parameter with name "%s"' % \
-                  (self.__class__.__name__, prm_name)
+        Get object properties or attributes in this backend instance.
 
-        __getitem__ = get   # allow dict-like indexing
-
-        #def __setitem__(self, name, value):  self.set({name:value})
+        Calling get('name') returns the attribute with name 'name' in this
+        backend instance.
         
+        Calling get(obj, 'name') returns the property with name 'name' of the
+        object given in obj. This object must have a get method (like Figure,
+        Axis, or PlotProperties objects).
+        
+        Calling get(obj) displays all property names and values for the object
+        given in obj.
+        """
+        nargs = len(args)
+        if nargs > 0:
+            if hasattr(args[0], 'get'):
+                obj = args[0]
+                if nargs == 1:
+                    print obj
+                else:
+                    return obj.get(args[1])
+            else:
+                prm_name = args[0]
+                try:
+                    return self._attrs[prm_name]
+                except:
+                    raise KeyError, '%s.get: no parameter with name "%s"' % \
+                          (self.__class__.__name__, prm_name)
+        else:
+            raise TypeError, "get: wrong number of arguments"
+            
         # subclasses should extend the doc string like this:
         #get.__doc__ += docadd('Keywords for the set method',
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
 
+    #def __getitem__(self, name):  self.get(name)
+
+    #def __setitem__(self, name, value):  self.set({name:value})
         
-    def _replot(self, forceupdate=True, *args, **kwargs): 
+        
+    def _replot(self, *args, **kwargs): 
         """
         Update backend after change in data.
         This is a key routine and must be implemented in the backend.
@@ -3550,9 +3575,9 @@ class BaseClass(object):
         - material(mode)
           mode can be either 'shiny', 'dull', 'metal', or 'default'.
         """
-        modes = {'shiny':   (None, None, None, None, None),
-                 'dull':    (None, None, None, None, None),
-                 'metal':   (None, None, None, None, None),
+        modes = {'shiny': (None, None, None, None, None),
+                 'dull': (None, None, None, None, None),
+                 'metal': (None, None, None, None, None),
                  'default': (None, None, None, None, None),
                  }
         ka, kd, ks, n, sc = modes['default']
@@ -3574,11 +3599,16 @@ class BaseClass(object):
             raise ValueError, "material: wrong nmumber of arguments"
 
         kwargs = {}
-        if ka is not None: kwargs['ambient'] = ka
-        if kd is not None: kwargs['diffuse'] = kd
-        if ks is not None: kwargs['specular'] = ks
-        if n is not None: kwargs['specularpower'] = n
-        #if sc is not None: kwargs['specularcolorreflectance'] = sc
+        if ka is not None:
+            kwargs['ambient'] = ka
+        if kd is not None:
+            kwargs['diffuse'] = kd
+        if ks is not None:
+            kwargs['specular'] = ks
+        if n is not None:
+            kwargs['specularpower'] = n
+        #if sc is not None:
+            #kwargs['specularcolorreflectance'] = sc
 
         ax = self.gca()
         items = ax.get('plotitems')
