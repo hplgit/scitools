@@ -1705,13 +1705,13 @@ class BaseClass(object):
     
     def set(self, *args, **kwargs):
         """
-        Set object properties or an attribute in this backend instance.
+        Set object properties or attributes in this backend instance.
 
-        Calling set([obj,] name1=value1, name2=value2, ...) will set the
+        Calling set([obj,] prop1=value1, prop2=value2, ...) will set the
         attributes as given in this backend instance. If the optional
         positional argument obj is a given object with a set method (like
-        Figure, Axis, and PlotProperties objects), the properties and values
-        are also set in this object.
+        Figure, Axis, and PlotProperties objects), the (relevant) properties
+        and values are also set in this object.
         """
         nargs = len(args)
         if nargs > 0 and hasattr(args[0], 'set'):
@@ -1740,7 +1740,7 @@ class BaseClass(object):
                     
     def get(self, *args): 
         """
-        Get object properties or attributes in this backend instance.
+        Get object properties or an attribute in this backend instance.
 
         Calling get('name') returns the attribute with name 'name' in this
         backend instance.
