@@ -628,8 +628,10 @@ class WrapNo2Callable:
         w(xv, yv, t) is fine, but w(t, xv, yv) will return 4.4,
         not the desired array!
         """
-        if operator.isNumberType(args[0]):
+        if isinstance(args[0], (float, int, complex)):
             # scalar version:
+            # (operator.isNumberType(args[0]) cannot be used as it is
+            # true also for NumPy arrays
             return self.constant
         else: # assume NumPy array
             if self._array_shape is None:
@@ -690,7 +692,10 @@ class WrapNo2Callable:
         not the desired array!
                
         """
-        if isinstance(args[0], NumPyArray):
+        if isinstance(args[0], (float, int, complex)):
+            # scalar version:
+            return self.constant
+        else:
             # vectorized version:
             r = args[0].copy()
             # to get right dimension of the return array,
@@ -700,9 +705,6 @@ class WrapNo2Callable:
                 # (handles x,y,t - the last t just adds a constant)
             r[:] = self.constant
             return r
-        else:
-            # scalar version:
-            return self.constant
 
 
 class WrapDiscreteData2Callable:
@@ -730,7 +732,7 @@ class WrapDiscreteData2Callable:
         # allow more arguments (typically time) after spatial pos.:
         args = args[:self.ndims]
         # args can be tuple of scalars (point) or tuple of vectors
-        if isinstance(args[0], (float, int)):
+        if isinstance(args[0], (float, int, complex)):
             return self.interpolating_function(*args)
         else:
             # args is tuple of vectors; Interpolation must work
@@ -822,7 +824,7 @@ def wrap2callable(f, **kwargs):
         
        TypeError: only rank-0 arrays can be converted to Python scalars.
     
-    You must then make the right::
+    You must then make the right import (numpy is recommended)::
 
        from Numeric/numarray/numpy/scitools.numpytools import *
        
@@ -839,7 +841,7 @@ def wrap2callable(f, **kwargs):
         # but then the additional info in the StringFunction instance
         # is lost in the calling code:
         # return StringFunction(f, **kwargs).__call__
-    elif isinstance(f, (float, int)):
+    elif isinstance(f, (float, int, complex)):
         return WrapNo2Callable(f)
     elif isinstance(f, (list,tuple)):
         return WrapDiscreteData2Callable(f)
@@ -987,18 +989,48 @@ def NumPy_array_iterator(a, **kwargs):
     exec code
     return nested_loops, code
 
-def compute_histogram(samples, nbins=50):
+def compute_histogram(samples, nbins=50, piecewise_constant=True):
     """
     Given a NumPy array samples with random samples, this function
-    returns a histogram x, y, where x is a NumPy array with the
-    center points of the bins in the histogram and y is the
-    corresponding frequency. nbins is the number of bins.
+    returns the (x,y) arrays in a plot-ready version of the histogram.
+    If piecewise_constant is True, the (x,y) arrays gives a piecewise
+    constant curve when plotted, otherwise the (x,y) arrays gives a
+    piecewise linear curve where the x coordinates coincide with the
+    center points in each bin.
     """
-    from Scientific.Statistics.Histogram import Histogram
-    h = Histogram(samples, nbins)
-    h.normalizeArea() # let h be a density (unit area)
-    print h.array[:,0], '\n', h.array[:,1]
-    return h.array[:,0], h.array[:,1]
+    # old primitive code based on ScientificPython:
+    #from Scientific.Statistics.Histogram import Histogram
+    #h = Histogram(samples, nbins)
+    #h.normalizeArea() # let h be a density (unit area)
+    #print h.array[:,0], '\n', h.array[:,1]
+    #return h.array[:,0], h.array[:,1]
+    # new code based on numpy:
+    import sys
+    if 'numpy' in sys.modules:
+        y0, xleft = histogram(samples, bins=nbins, normed=True)
+        h = xleft[1] - xleft[0]  # bin width
+        if piecewise_constant:
+            x = zeros(2*len(xleft) + 2, type(xleft[0]))
+            y = x.copy()
+            for i in range(len(xleft)):
+                x[2*i+1] = xleft[i]
+                x[2*i+2] = xleft[i] + h
+                y[2*i+1] = y0[i]
+                y[2*i+2] = y0[i]
+            y[0] = 0
+            x[0] = xleft[0]
+            y[-1] = 0
+            y[-2] = y0[-1]
+            x[-1] = xleft[-1] + h
+            x[-2] = x[-1]
+        else:
+            x = zeros(len(xleft), type(xleft[0]))
+            y = y0.copy()
+            for i in range(len(xleft)):
+                x[i] = xleft[i] + h/2.0
+    return x, y
+
+        
 
 def factorial(n, method='reduce'):
     """
