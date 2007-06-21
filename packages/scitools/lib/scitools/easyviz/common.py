@@ -1707,11 +1707,14 @@ class BaseClass(object):
         """
         Set object properties or attributes in this backend instance.
 
-        Calling set([obj,] prop1=value1, prop2=value2, ...) will set the
-        attributes as given in this backend instance. If the optional
-        positional argument obj is a given object with a set method (like
-        Figure, Axis, and PlotProperties objects), the (relevant) properties
-        and values are also set in this object.
+        Calling
+
+            set([obj,] prop1=value1, prop2=value2, ...)
+
+        will set the attributes as given in this backend instance. If the
+        optional positional argument obj is a given object with a set method
+        (like Figure, Axis, and PlotProperties objects), the (relevant)
+        properties and values are also set in this object.
         """
         nargs = len(args)
         if nargs > 0 and hasattr(args[0], 'set'):
@@ -1742,15 +1745,25 @@ class BaseClass(object):
         """
         Get object properties or an attribute in this backend instance.
 
-        Calling get('name') returns the attribute with name 'name' in this
-        backend instance.
+        Calling
+
+            get('name')
+
+        returns the attribute with name 'name' in this backend instance.
         
-        Calling get(obj, 'name') returns the property with name 'name' of the
-        object given in obj. This object must have a get method (like Figure,
-        Axis, or PlotProperties objects).
+        Calling
+
+            get(obj, 'name')
+
+        returns the property with name 'name' of the object given in obj. This
+        object must have a get method (like Figure, Axis, or PlotProperties
+        objects).
         
-        Calling get(obj) displays all property names and values for the object
-        given in obj.
+        Calling
+
+            get(obj)
+
+        displays all property names and values for the object given in obj.
         """
         nargs = len(args)
         if nargs > 0:
@@ -1800,8 +1813,18 @@ class BaseClass(object):
         """Create axes in arbitrary positions.
 
         Calling axes() returns a default axis (Axis()).
+        
         Calling axes(ax) sets axes in the Axis instance ax as the current axis.
-        Calling axes(viewport=RECT) returns a axis at the position given in RECT.
+        
+        Calling
+
+            axes(viewport=RECT)
+
+        returns a axis at the position given in RECT. RECT is normally a list
+        [left,bottom,width,height], where the four parameters (values between
+        0 and 1) specifies the location and size of the axis box ((0,0) is the
+        lower-left corner and (1,1) is the upper-right corner). However, this
+        is backend-dependent.
         """
         nargs = len(args)
         if nargs == 0:
@@ -1827,11 +1850,18 @@ class BaseClass(object):
             subplot(m,n,p)
 
         breaks the Figure window into an m-by-n matrix of small axes,
-        selects the p-th axes for for the current plot, and returns the
-        axis handle.
+        selects the p-th axes for the current plot, and returns the axis
+        object. One can omit the commas as long as m<=n<=p<10. For instance,
+        subplot(221) is the same as subplot(2,2,1).
         """
         fig = self.gcf()
         nargs = len(args)
+        if nargs == 1:
+            sp = str(args[0])
+            if len(sp) != 3:
+                raise TypeError, "subplot: '%s' is not a valid subplot" % sp
+            args = [int(a) for a in sp]
+            nargs = 3
         if nargs == 3:
             m, n, p = args
             if fig.get('axshape') == (m,n):
@@ -1839,10 +1869,32 @@ class BaseClass(object):
             else:
                 fig.set(axshape=(m,n), curax=p)
             self.gca().set(**kwargs)
+        else:
+            raise TypeError, "subplot: wrong number of arguments"
         return self.gca()
 
     def daspect(self, *args):
-        """Change data aspect ratio."""
+        """Change data aspect ratio.
+
+        Calling daspect() returns the data aspect ratio of the current axis.
+
+        Calling daspect([x,y,z]) sets the data aspect ratio.
+
+        Calling daspect('mode') returns the data aspect ratio mode.
+
+        Calling
+
+            daspect(mode)
+
+        sets the data aspect ratio mode (mode can be either 'auto' or
+        'manual').
+
+        Calling
+
+            daspect(ax, ...)
+
+        uses the axes in ax instead of the current axes.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -1852,10 +1904,14 @@ class BaseClass(object):
             #return (ax.get('daspect'), ax.get('daspectmode'))
             return ax.get('daspect')
         elif nargs == 1:
-            if isinstance(args[0], str):
-                ax.set(daspcetmode=args[0])
+            arg = args[0]
+            if isinstance(arg, str):
+                if arg == 'mode':
+                    return ax.get('daspectmode')
+                else:
+                    ax.set(daspcetmode=arg)
             else:
-                ax.set(daspect=args[0])
+                ax.set(daspect=arg)
         else:
             raise TypeError, "daspect: wrong number of arguments"
         
