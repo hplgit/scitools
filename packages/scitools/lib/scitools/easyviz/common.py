@@ -1967,7 +1967,34 @@ class BaseClass(object):
               self.__class__.__name__
 
     def hold(self, *args): 
-        """Change the hold state of current figure."""
+        """Change the hold state of the current axis.
+
+        Calling
+
+            hold('on')
+
+        will hold the current plot and all axis properties so that the result
+        from subsequent plotting commands is added to the existing plot. Note
+        that this will not affect the autoranging of the axis.
+
+        Calling
+
+            hold('off')
+
+        returns to the default state where every plotting command erases the
+        previous plot before the new plot is drawn.
+
+        Calling hold() toggles the hold state of the current axis.
+
+        Calling
+
+            hold(ax, ...)
+
+        affects the Axis object ax instead of the current axis.
+
+        Note that one can use hold(True) and hold(False) instead of
+        hold('on') and hold('off'), respectively.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -1992,7 +2019,8 @@ class BaseClass(object):
         Create a new figure or switch between figures.
         num is the figure number of the new or existing figure.
         """
-        try: num = int(num)
+        try:
+            num = int(num)
         except:
             # print str(num),' is not an integer'
             if len(self._figs) == 0: # No figures left
@@ -2009,28 +2037,40 @@ class BaseClass(object):
         self._attrs['curfig'] = num
     
     def clf(self): 
-        """Clear current figure."""
+        """Clear the current figure."""
         #self.gcf().reset()
         del self._figs[self._attrs['curfig']]
         self.figure(self._attrs['curfig'])
 
-    def cla(self):
-        """Clear axes."""
-        self.gca().reset()
+    def cla(self, *args):
+        """Clear the current axis.
+
+        Calling cla() clears the current axis.
+
+        Calling cla(ax) clears the Axis object ax instead of the current axis.
+        """
+        ax = self.gca()
+        nargs = len(args)
+        if nargs > 0 and isinstance(args[0], Axis):
+            ax = args[0];  args = args[1:];  nargs -= 1
+        ax.reset()
 
     def axis(self, *args, **kwargs): 
         """Choose the axis limits.
 
-        Different arguments are allowed:
-        
         - axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
-          sets the scaling for the x-, y- and z-axes in the current plot.
+          sets the limits on the x-, y- and z-axes in the current plot.
 
         - axis(xmin, xmax, ymin, ymax[, zmin, zmax])
           same as above.
+
+        - axis()
+          returns the limits for the current plot. If the view in the
+          current plot is a 2D view, only the limits on the x- and y-axis
+          are returned.
         
         - axis(mode)
-          sets axis scaling to 'mode', where 'mode' can be 
+          sets axis scaling to mode, where mode can be 
 
              'auto'   - autoscaling is used
              'manual' - freeze the scaling at the current limits
@@ -2049,12 +2089,25 @@ class BaseClass(object):
 
         - axis('on') or axis('off')
           turn axis on or off
+
+        - axis(ax, ...)
+          affects the Axis object ax instead of the current axis.
         """
-        ax = self.gca() 
-        limits = Axis._ranges
+        ax = self.gca()
         nargs = len(args)
+        if nargs > 0 and isinstance(args[0], Axis):
+            ax = args[0];  args = args[1:];  nargs -= 1
+
+        if nargs == 0:
+            xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
+            if ax.get('camera').get('view') == 2:
+                return xmin, xmax, ymin, ymax
+            return xmin, xmax, ymin, ymax, zmin, zmax
+            
+        limits = Axis._ranges
         
-        # Allow both axis(xmin,xmax,ymin,ymax[,zmin,zmax]) and axis([xmin,...])
+        # Allow both axis(xmin,xmax,ymin,ymax[,zmin,zmax]) and
+        # axis([xmin,xmax,ymin,ymax[,zmin,zmax]])
         if nargs == 1:
             if isinstance(args[0], (tuple,list)):
                 args = args[0];  nargs = len(args)
@@ -2086,6 +2139,28 @@ class BaseClass(object):
     axis.__doc__ = axis.__doc__ % docadd('Legal values for method are',
                                          Axis._methods, indent=10)
 
+    def close(self, *args):
+        """Close figure.
+
+        Calling close() closes the current figure.
+
+        Calling close(i) closes the figure with number i.
+
+        Calling close(fig) closes the figure fig where fig is a Figure object.
+
+        Calling close('all') closes all figures.
+        """
+        nargs = len(args)
+        if nargs == 0:
+            self.closefig(self._attrs['curfig'])
+        elif nargs == 1:
+            if args[0] == 'all':
+                self.closefigs()
+            else:
+                self.closefig(args[0])
+        else:
+            raise TypeError, "close: wrong number of arguments"
+
     def closefig(self, arg): 
         """Close figure window."""
         raise NotImplementedError, 'closefig not implemented in class %s' % \
@@ -2099,7 +2174,19 @@ class BaseClass(object):
         # the rest should be written in subclass
 
     def grid(self, *args):
-        """Toggle the display of grid lines."""
+        """Toggle the display of grid lines.
+
+        Calling grid('on') displays grid lines in the current axis.
+
+        Calling grid('off') removes the grid lines from the current axis.
+
+        Calling grid() toggles the display of grid lines in the current axis.
+
+        Calling grid(ax, ...) uses Axis object ax instead of the current axis.
+
+        Note that calling grid(True) and grid(False) is the same as calling
+        grid('on') and grid('off'), respectively.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2116,7 +2203,30 @@ class BaseClass(object):
             self._replot()
         
     def legend(self, *args): 
-        """Add legend(s) to graph."""
+        """Add legend(s) to the current plot.
+
+        Calling
+
+            legend(string1,string2,string3,...)
+
+        adds legends to the current plot using the given strings as labels.
+        Note that the number of strings must match the number of items in
+        the current axis (i.e. gca().get('numberofitems')).
+
+        Calling
+
+            legend(string)
+
+        adds the given string as a legend to the last item added to the
+        current axis.
+
+        Calling
+
+            legend(ax, ...)
+
+        adds legend(s) to the plot in the Axis object ax instead of the
+        current axis.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2127,7 +2237,7 @@ class BaseClass(object):
             print 'plot is empty, cannot add legend'
             return
         if nargs > 1:
-            # Consistency check of len(args) and number of items in fig
+            # Consistency check of len(args) and number of items in axis
             if len(items) == nargs:
                 # Iterate over items and set legend
                 for i in range(nargs):
@@ -2141,7 +2251,16 @@ class BaseClass(object):
             self._replot()
 
     def title(self, *args): 
-        """Title a graph."""
+        """Title a graph.
+
+        Calling
+
+            title('text')
+
+        adds the given text at the top of the current axis.
+
+        Calling title(ax, ...) adds a title to the Axis object ax.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2155,7 +2274,16 @@ class BaseClass(object):
             self._replot()
     
     def xlabel(self, *args): 
-        """Label the x-axis."""
+        """Label the x-axis.
+
+        Calling
+
+            xlabel('text')
+
+        adds the given text beside the x-axis on the current axis.
+
+        Calling xlabel(ax, ...) adds the xlabel to the Axis object ax.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2169,7 +2297,16 @@ class BaseClass(object):
             self._replot()
             
     def ylabel(self, *args): 
-        """Label the y-axis."""
+        """Label the y-axis.
+
+        Calling
+
+            ylabel('text')
+
+        adds the given text beside the y-axis on the current axis.
+
+        Calling ylabel(ax, ...) adds the ylabel to the Axis object ax.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2183,7 +2320,16 @@ class BaseClass(object):
             self._replot()
             
     def zlabel(self, *args): 
-        """Label the z-axis."""
+        """Label the z-axis.
+
+        Calling
+
+            zlabel('text')
+
+        adds the given text beside the z-axis on the current axis.
+
+        Calling zlabel(ax, ...) adds the zlabel to the Axis object ax.
+        """
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -2200,35 +2346,40 @@ class BaseClass(object):
     def plot(self, *args, **kwargs):
         """Draw line and scatter plots. 
  
-            - plot(y)
-              plots values in 'y' on y-axis (same as plot(range(len(y)),y) )  
- 
             - plot(x, y)
-              plots 'y' against 'x', i.e. if 'x' and 'y' are vectors of
-              length n, then this will plot all the points (x[i], y[i])
-              for 0<=i<n. 
+              plots y against x, i.e., if x and y are vectors of length n,
+              then this will plot all the points (x[i], y[i]) for 0<=i<n.
+ 
+            - plot(y)
+              plots values in y on y-axis (same as plot(range(len(y)),y))
  
             - plot(y, fmt)
-              plots values in 'y' on y-axis formated like fmt (see below).
+              plots values in y on y-axis formated like fmt (see below).
  
             - plot(x1,y1,fmt1, x2,y2,fmt2, ...)
-              same as hold(1) followed by multiple plot(x,y,fmt).
+              same as hold(True) followed by multiple plot(x,y,fmt).
  
             - plot(x1,y1,x2,y2,...)
-              like above, but automatically chooses different colours.
+              like above, but automatically chooses different colors.
                 
             - plot(y1,y2,...,x=x)
-              uses 'x' as the x values for all the supplied curves.
+              uses x as the x values for all the supplied curves.
               x='auto' has the same effect as x=range(len(y1)).
- 
+
+            - plot(...,log='x'), plot(...,log='y'), or plot(...,log='xy')
+              uses a logarithmic (base 10) scale for the x-, y-, and z-axis,
+              respectively.
+              
             - plot(...,log='x'), plot(...,log='xy') etc.
               draw logarithmic axes.
 
             - plot(...)
               returns a list a of all Line objects created.
+
+            - plot(ax, ...)
+              plots into the Axis object ax instead of the current axis.
             
- 
-        the following format specifiers exist:
+        The following format specifiers exist:
  
             y     yellow        .     point              -     solid
             m     magenta       o     circle             :     dotted
@@ -2251,9 +2402,16 @@ class BaseClass(object):
  
         draws 3 red 'x'
         >>> plot([1,2,3], 'rx')
+
+        a larger example
+        >>> x = seq(0, 15, 0.2)   # 0, 0.2, 0.4, ..., 15
+        >>> y1 = sin(x)*x
+        >>> y2 = sin(x)*sqrt(x)
+        >>> plot(x, y1, 'b-', x, y2, 'ro',
+        ...      legend=('x*sin(x)', 'sqrt(x)*sin(x)'))
  
-        Note: loglog, semilogy, semilogx are like plot(...,log='xy'),
-        plot(...,log='y') and plot(...,log='x').
+        Note: loglog, semilogy, and semilogx are like plot(...,log='xy'),
+        plot(...,log='y'), and plot(...,log='x'), respectively.
         """
         kwargs['description'] = 'plot: 2D curve plot'
         ax = self.gca()
@@ -2337,7 +2495,8 @@ class BaseClass(object):
                                           format=args[i+1]))
                         i = i+2
                     # These last cases could be run outside the while loop
-                    if i == nargs-2: # Either y and format or x and y value left   
+                    if i == nargs-2:
+                        # Either y and format or x and y value left   
                         if isinstance(args[i+1], str):
                             lines.append(Line(y=args[i],
                                               x='auto',
@@ -2346,7 +2505,8 @@ class BaseClass(object):
                             lines.append(Line(x=args[i],
                                               y=args[i+1],
                                               format=''))
-                    elif i == nargs-1: # In this case we have only an y value left
+                    elif i == nargs-1:
+                        # In this case we have only an y value left
                         lines.append(Line(y=args[i],
                                           x='auto',
                                           format=''))
@@ -2372,9 +2532,14 @@ class BaseClass(object):
                           (len(legends), no_lines)
             elif isinstance(legends,str): # only one legend
                 ax.get('plotitems')[-1].set(legend=legends)
+            del kwargs['legend']
 
         if not ax.get('hold') and not 'box' in kwargs:
             kwargs['box'] = True
+            
+        # set keyword arguments in all the added lines
+        for line in lines:
+            line.set(**kwargs)
         ax.set(**kwargs)
         self.gcf().set(**kwargs)
         self.set(**kwargs)
@@ -2388,7 +2553,8 @@ class BaseClass(object):
         """Log-log scale plot.
 
         - loglog(...) is the same as plot(...) except that a logarithmic
-          scale is used for both the x- and y-axis."""
+          (base 10) scale is used for both the x- and y-axis.
+        """
         kwargs['log'] = 'xy'
         return self.plot(*args, **kwargs)
 
@@ -2396,7 +2562,8 @@ class BaseClass(object):
         """Semi-log scale plot.
 
         - semilogx(...) is the same as plot(...) except that a logarithmic
-          scale is used for the x-axis."""
+          (base 10) scale is used for the x-axis.
+        """
         kwargs['log'] = 'x'
         return self.plot(*args, **kwargs)
 
@@ -2404,7 +2571,8 @@ class BaseClass(object):
         """Semi-log scale plot.
 
         - semilogy(...) is the same as plot(...) except that a logarithmic
-          scale is used for the y-axis."""
+          (base 10) scale is used for the y-axis.
+        """
         kwargs['log'] = 'y'
         return self.plot(*args, **kwargs)    
             
@@ -2412,30 +2580,34 @@ class BaseClass(object):
         """Draw lines and points in 3D space.
  
             - plot3(x, y, z)
-              plots 'z' against 'x' and 'y', i.e. if 'x', 'y', and 'z' are
-              vectors of length n, then this will plot all the points
+              plots z against x and y, i.e., if x, y, and z are vectors of
+              length n, then this will plot all the points
               (x[i], y[i], z[i]) for 0<=i<n. 
   
             - plot3(z)
-              plots values in 'z' on x and y-axis
+              plots values in z on the z-axis
               (same as plot3(range(len(z)), range(len(z)), z))
 
             - plot3(z, fmt)
-              plots values in 'z' on z-axis formated like fmt (see plot).
+              plots values in z on z-axis formated like fmt (see plot).
  
-            - plot3(x1,y1,z1,fmt1, x2,y2,z2,fmt2, ...)
-              same as hold(1) followed by multiple plot3(x,y,z,fmt).
+            - plot3(x1,y1,z1,fmt1,x2,y2,z2,fmt2,...)
+              same as hold(True) followed by multiple plot3(x,y,z,fmt).
  
             - plot3(x1,y1,z1,x2,y2,z2,...)
-              like above, but automatically chooses different colours.
+              like above, but automatically chooses different colors.
                 
             - plot3(z1,z2,...,x=x,y=y)
-              uses 'x' as the x values and 'y' as the y values for all the
-              supplied curves. x='auto' and y='auto' has the same effect as
-              x=range(len(z1)) and y=range(len(z1)) respectively.
+              uses x as the values on the x-axis and y as the values for the
+              y-axis for all the supplied curves. x='auto' and y='auto' has
+              the same effect as x=range(len(z1)) and y=range(len(z1)),
+              respectively.
  
             - plot3(...)
               returns a list a of all created Line objects.
+
+            - plot3(ax, ...)
+              plots into the Axis object ax instead of the current axis.
         """
         kwargs['description'] = 'plot3: 3D line plot'
         ax = self.gca()
@@ -2581,9 +2753,14 @@ class BaseClass(object):
                           (len(legends), no_lines)
             elif isinstance(legends,str): # only one legend
                 ax.get('plotitems')[-1].set(legend=legends)
+            del kwargs['legend']
 
         if not ax.get('hold') and not 'view' in kwargs:
             kwargs['view'] = 3
+            
+        # set keyword arguments in all the added lines:
+        for line in lines:
+            line.set(**kwargs)
         ax.set(**kwargs)
         self.gcf().set(**kwargs)
         self.set(**kwargs)
@@ -2593,7 +2770,6 @@ class BaseClass(object):
             
         return lines
         
-    
     def fill(self):
         """Draw filled 2D polygons."""
         raise NotImplementedError, "'fill' is not implemented"
@@ -2609,7 +2785,7 @@ class BaseClass(object):
 
         - quiver(U, V)
           plots velocity vectors at equally spaced points in the x-y plane.
-          (same as quiver(range(m),range(n),U,V) )
+          (same as quiver(range(m),range(n),U,V) where m,n=shape(u))
 
         - quiver(..., 'filled')
           draw filled arrows
@@ -2619,11 +2795,29 @@ class BaseClass(object):
 
         Examples:
 
-        >>> xx, yy = meshgrid(seq(-2,2,.2))
-        >>> zz = peaks(xx, yy)
-        >>> contour(xx, yy, zz, 10, hold='on')
-        >>> uu, vv = gradient(zz, .2)
-        >>> quiver(xx, yy, uu, vv)
+        Plot the gradient field of the function z = x**2 + y**2:
+        >>> x = y = seq(-2,2,0.2)
+        >>> xv, yv = meshgrid(x,y)
+        >>> values = xv**2 + yv**2
+        >>> contour(xv, yv, values, 10, hold='on')
+        <scitools.easyviz.common.Contours object at 0xb45f374c>
+        >>> uv, vv = gradient(values, 0.2)
+        >>> quiver(xv, yv, uv, vv)
+        <scitools.easyviz.common.VelocityVectors object at 0xb45435cc>
+        >>> hold('off')
+
+        Another example:
+        >>> x = linspace(0,3,80)
+        >>> y = sin(2*pi*x)
+        >>> theta = 2*pi*x+pi/2
+        >>> u = sin(theta)/10
+        >>> v = cos(theta)/10
+        >>> quiver(x,y,u,v,0.04,'b')
+        <scitools.easyviz.common.VelocityVectors object at 0xb768e1cc>
+        >>> hold('on')
+        >>> plot(x,y,'r')
+        [<scitools.easyviz.common.Line object at 0xb768e36c>]
+        >>> hold('off')
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'quiver: 2D vector field'
@@ -2653,23 +2847,40 @@ class BaseClass(object):
         """Draw a 2D contour plot.
  
         - contour(X, Y, Z[, n])
-          draw a contour plot were the values in the matrix 'Z' are treated
-          as heights above a plane.
+          draw a contour plot where the values in the matrix Z are treated
+          as heights above a plane. The value n specifies the number of
+          contour lines.
         
         - contour(Z[, n])
-          same as contour(range(n), range(m), Z[, n]) were m,n = shape(Z).
+          same as contour(range(n), range(m), Z[, n]) where m,n = shape(Z).
         
         - contour(Z[, v])
-          draw contours at levels specifyed in vector 'v'.
+          draw contours at levels specified in vector v.
 
         - contour(..., LineSpec)
-          sets the line specification as given in LineSpec.
+          uses the color and line style as given in LineSpec on the contour
+          lines. See the plot command for more information on LineSpec.
 
         - contours(ax,...)
-          use axis
+          draw a contour plot in the Axis object ax instead of the current
+          axes.
           
         - contour(...,clabels='on')
           same as contour(...) followed by clabel('on')
+
+        Examples:
+
+        >>> #Draw a contour plot of the peaks function:
+        >>> x = y = seq(-3,3,0.5)
+        >>> xv, yv = meshgrid(x, y)
+        >>> values = peaks(xv, yv)
+        >>> contour(xv, yv, values)
+
+        Draw 10 red contour lines with double line width:
+        >>> contour(xv, yv, values, 10, 'r', linewidth=2)
+
+        Draw contour lines at -2, 0, 2, and 5:
+        >>> contour(xv, yv, values, [-2,0,2,5])
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'contour: 2D contours at base'
