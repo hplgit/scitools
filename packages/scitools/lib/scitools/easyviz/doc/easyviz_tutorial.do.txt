@@ -46,7 +46,7 @@ To include the plot in electronic documents, we need a hardcopy of the
 figure in PostScript, PNG, or another image format.  The `hardcopy`
 command produces files with images in various formats:
 !bc
-hardcopy('tmp1.ps')  # produce PostScript
+hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 !ec
 The filename extension determines the format: `.ps` or
@@ -82,7 +82,7 @@ plot(t, y,
      legend='t^2*exp(-t^2)',
      axis=[0, 3, -0.05, 0.6],
      title='My First Easyviz Demo',
-     hardcopy='tmp1.ps',
+     hardcopy='tmp1.eps',
      show=True)
 !ec
 
@@ -135,13 +135,13 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-hardcopy('tmp2.ps')
+hardcopy('tmp2.eps')
 
 # alternative:
 plot(t, y1, t, y2, xlabel='t', ylabel='y',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
-     hardcopy='tmp2.ps')
+     hardcopy='tmp2.eps')
 !ec
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
@@ -235,7 +235,7 @@ plot(t, y1, 'r-6', t2, y2, 'bo3',
      axis=[0, 4, -0.1, 0.6],
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
-     hardcopy='tmp2.ps')
+     hardcopy='tmp2.eps')
 !ec
 
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
@@ -318,7 +318,7 @@ axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
 show()
-hardcopy('tmp3.ps') 
+hardcopy('tmp3.eps') 
 hardcopy('tmp3.png')
 !ec
 The plot is shown in Figure ref{fig:plot3}.
@@ -435,12 +435,12 @@ for s in s_values:
     y = f(x, m, s)
     plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
          xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-         hardcopy='tmp_%04d.ps' % counter)
+         hardcopy='tmp_%04d.eps' % counter)
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
 
 # make movie file:
-movie('tmp_*.ps')
+movie('tmp_*.eps')
 !ec
 
 First note that the $s$ values are decreasing (`linspace` handles this
@@ -456,7 +456,7 @@ of the form `stem0001.ext`, `stem0002.ext`, `stem0003.ext`, etc.,
 since an alphabetic sort of the filenames then gives the right
 sequence of the files (and so does the expression `stem*.ext` used
 in the operating system or in Python's `fnmatch` module).
-In our example, `stem` is `tmp_`, and `.ext` is `.ps`
+In our example, `stem` is `tmp_`, and `.ext` is `.eps`
 (which implies the PostScript format in the hardcopy).
 
 Having a set of `stem*.ext` files, one can simply generate a movie
@@ -527,7 +527,7 @@ if g.__class__.__name__ == 'Gnuplot':
     g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
 g.refresh()
-g.hardcopy('tmp2.ps')  # make new hardcopy
+g.hardcopy('tmp2.eps')  # make new hardcopy
 !ec
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
@@ -555,7 +555,7 @@ object, whose `set` method can be used to set axis properties:
 !bc
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-     hardcopy='tmp2.ps')
+     hardcopy='tmp2.eps')
 
 ax = gca()   # get current Axis object
 ax.set(xlabel='t', ylabel='y',
@@ -587,13 +587,13 @@ figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
 show()
-hardcopy('tmp2_1.ps')
+hardcopy('tmp2_1.eps')
 !ec
 We can also adjust figure 2:
 !bc
 figure(2)  # go to second figure
 title('Another curve')
-hardcopy('tmp2_2.ps')
+hardcopy('tmp2_2.eps')
 show()
 !ec
 The current `Figure` object is reached by `gcf` (get current figure),
@@ -621,7 +621,7 @@ subplot(2, 1, 2)
 plot(t, y2, xlabel='t', ylabel='y')
 title('A figure with two plots')
 show()
-hardcopy('tmp2_3.ps')
+hardcopy('tmp2_3.eps')
 !ec
 We remark that the `hardcopy` command does not work with the Gnuplot backend
 in this case with multiple axes in a figure.

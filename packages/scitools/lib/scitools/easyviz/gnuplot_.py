@@ -1,6 +1,6 @@
 """
 This backend uses the Gnuplot plotting program together with the
-Gnuplot.py Python module. One can use this backend by
+Gnuplot.py Python module. One can specify this backend by
 
   python somefile.py --SCITOOLS_easyviz_backend gnuplot
 
@@ -61,14 +61,14 @@ class GnuplotBackend(BaseClass):
         self._init()
         
     def _init(self, *args, **kwargs):
-        # Do initialization that is special for this backend
+        """Perform initialization that is special for this backend."""
         
         # Necessary to add a Gnuplot Session as _g to the Figure instance.
         # self._g will now point to the correct instance saved as _g in
         # curfig.
         self.figure(self.get('curfig'))
         
-        # convert tables for formatstrings:
+        # convert tables for format strings:
         self._markers = {
             '': None,   # no marker
             '.': 0,  # dot
@@ -124,7 +124,7 @@ class GnuplotBackend(BaseClass):
                 print disp, eval(disp)
 
     def _set_scale(self, ax):
-        # set linear or logarithmic (base 10) axis scale
+        """Set linear or logarithmic (base 10) axis scale."""
         if DEBUG:
             print "Setting scales"
         scale = ax.get('scale')
@@ -149,7 +149,7 @@ class GnuplotBackend(BaseClass):
             self._g('set autoscale')
 
     def _set_labels(self, ax):
-        # add text labels for x-, y-, and z-axis
+        """Add text labels for x-, y-, and z-axis."""
         if DEBUG:
             print "Setting labels"
         xlabel = ax.get('xlabel')
@@ -172,7 +172,7 @@ class GnuplotBackend(BaseClass):
             self._g('unset zlabel')
         
     def _set_title(self, ax):
-        # add a title at the top of the axis
+        """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
         title = ax.get('title')
@@ -182,7 +182,7 @@ class GnuplotBackend(BaseClass):
             self._g('unset title')
     
     def _set_limits(self, ax):
-        # set axis limits in x, y, and z direction
+        """Set axis limits in x, y, and z direction."""
         if DEBUG:
             print "Setting axis limits"
         mode = ax.get('mode')
@@ -238,7 +238,7 @@ class GnuplotBackend(BaseClass):
             pass
 
     def _set_position(self, ax):
-        # set axes position
+        """Set axes position."""
         rect = ax.get('viewport')
         if rect:
             # axes position is defined. In Matlab rect is defined as
@@ -249,7 +249,7 @@ class GnuplotBackend(BaseClass):
             pass
 
     def _set_daspect(self, ax):
-        # set data aspect ratio
+        """Set data aspect ratio."""
         if ax.get('daspectmode') == 'manual':
             dar = ax.get('daspect')  # dar is a list (len(dar) is 3).
             pass
@@ -279,11 +279,14 @@ class GnuplotBackend(BaseClass):
             pass
 
     def _set_coordinate_system(self, ax):
-        # use either the default Cartesian coordinate system or a
-        # matrix coordinate system.
+        """
+        Use either the default Cartesian coordinate system or a
+        matrix coordinate system.
+        """
+        
         direction = ax.get('direction')
         if direction == 'ij':
-            # use matrix coordinates. The origin of the coordinate
+            # Use matrix coordinates. The origin of the coordinate
             # system is the upper-left corner. The i-axis should be
             # vertical and numbered from top to bottom, while the j-axis
             # should be horizontal and numbered from left to right.
@@ -296,7 +299,7 @@ class GnuplotBackend(BaseClass):
             self._g('set yrange [] noreverse')
 
     def _set_box(self, ax):
-        # turn box around axes boundary on or off
+        """Turn box around axes boundary on or off."""
         if DEBUG:
             print "Setting box"
         if ax.get('box'):
@@ -307,7 +310,7 @@ class GnuplotBackend(BaseClass):
             pass
         
     def _set_grid(self, ax):
-        # turn grid lines on or off
+        """Turn grid lines on or off."""
         if DEBUG:
             print "Setting grid"
         if ax.get('grid'):
@@ -318,7 +321,7 @@ class GnuplotBackend(BaseClass):
             self._g('unset grid')
 
     def _set_hidden_line_removal(self, ax):
-        # turn on/off hidden line removal for meshes
+        """Turn on/off hidden line removal for meshes."""
         if DEBUG:
             print "Setting hidden line removal"
         if ax.get('hidden'):
@@ -329,7 +332,7 @@ class GnuplotBackend(BaseClass):
             self._g('unset hidden3d')
 
     def _set_colorbar(self, ax):
-        # add a colorbar to the axis
+        """Add a colorbar to the axis."""
         if DEBUG:
             print "Setting colorbar"
         cbar = ax.get('colorbar')
@@ -347,7 +350,7 @@ class GnuplotBackend(BaseClass):
             self._g('unset colorbox')
 
     def _set_caxis(self, ax):
-        # set the color axis scale
+        """Set the color axis scale."""
         if DEBUG:
             print "Setting caxis"
         if ax.get('caxismode') == 'manual':
@@ -362,7 +365,7 @@ class GnuplotBackend(BaseClass):
             self._g('set cbrange [*:*]')
 
     def _set_colormap(self, ax):
-        # set the colormap
+        """Set the colormap."""
         if DEBUG:
             print "Setting colormap"
         cmap = ax.get('colormap')
@@ -388,7 +391,7 @@ class GnuplotBackend(BaseClass):
                     '4 "green", 5 "yellow", 8 "red", 10 "black")')        
 
     def _set_view(self, ax):
-        # set viewpoint specification
+        """Set viewpoint specification."""
         if DEBUG:
             print "Setting view"
         self._g('unset view')
@@ -454,8 +457,11 @@ class GnuplotBackend(BaseClass):
             self._g('unset ztics')
 
     def _get_linespecs(self, item):
-        # return the item's line marker, line color, line style, and
-        # line width.
+        """
+        Return the line marker, line color, line style, and
+        line width of the item.
+        """
+        
         marker = self._markers[item.get('linemarker')]
         color = self._colors[item.get('linecolor')]
         style = self._line_styles[item.get('linetype')]
@@ -484,7 +490,7 @@ class GnuplotBackend(BaseClass):
         return withstring
 
     def _add_line(self, item):
-        # add a 2D or 3D curve to the scene
+        """Add a 2D or 3D curve to the scene."""
         if DEBUG:
             print "Adding a line"
         # get data:
@@ -770,7 +776,7 @@ class GnuplotBackend(BaseClass):
     def figure(self, *args, **kwargs):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
-        # link to it as object._g
+        # link to it as self._g
         BaseClass.figure(self, *args, **kwargs) 
         fig = self.gcf()
         try:
@@ -796,7 +802,7 @@ class GnuplotBackend(BaseClass):
     figure.__doc__ = BaseClass.figure.__doc__
         
     def _replot(self):
-        # Replot all axes and all plotitems in the backend.
+        """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
@@ -951,7 +957,7 @@ class GnuplotBackend(BaseClass):
                     kwargs['mode'] = 'eps'
                 else:
                     self._g('set term postscript %s %s' % \
-                            (orientation,colortype))
+                            (orientation, colortype))
                     kwargs['mode'] = orientation
             elif terminal == 'png':
                 self._g('set term png')

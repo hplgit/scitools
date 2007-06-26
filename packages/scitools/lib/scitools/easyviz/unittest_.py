@@ -204,7 +204,7 @@ class easyvizTest(unittest.TestCase):
             _markers = ['v','+','s','x','^','o'] 
         x = seq(0, 2, 0.2)
         y = sin(x)*x
-        # Generate formatstrings
+        # Generate format strings
         format = []
         for item in _markers:
             format.append(''.join([random.choice(_colors), item,

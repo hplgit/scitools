@@ -1707,7 +1707,7 @@ class BaseClass(object):
         """
         Set object properties or attributes in this backend instance.
 
-        Calling
+        Calling::
 
             set([obj,] prop1=value1, prop2=value2, ...)
 
@@ -1745,13 +1745,13 @@ class BaseClass(object):
         """
         Get object properties or an attribute in this backend instance.
 
-        Calling
+        Calling::
 
             get('name')
 
         returns the attribute with name 'name' in this backend instance.
         
-        Calling
+        Calling::
 
             get(obj, 'name')
 
@@ -1759,7 +1759,7 @@ class BaseClass(object):
         object must have a get method (like Figure, Axis, or PlotProperties
         objects).
         
-        Calling
+        Calling::
 
             get(obj)
 
@@ -1812,11 +1812,18 @@ class BaseClass(object):
     def axes(self, *args, **kwargs):
         """Create axes in arbitrary positions.
 
-        Calling axes() returns a default axis (Axis()).
+        Calling::
+
+            axes()
+
+        returns a default axis (Axis()).
+        Calling::
+
+            axes(ax)
+
+        sets axes in the Axis instance ax as the current axis.
         
-        Calling axes(ax) sets axes in the Axis instance ax as the current axis.
-        
-        Calling
+        Calling::
 
             axes(viewport=RECT)
 
@@ -1845,7 +1852,7 @@ class BaseClass(object):
     def subplot(self, *args, **kwargs):
         """Create axes in tiled positions.
 
-        Calling
+        Calling::
 
             subplot(m,n,p)
 
@@ -1876,20 +1883,28 @@ class BaseClass(object):
     def daspect(self, *args):
         """Change data aspect ratio.
 
-        Calling daspect() returns the data aspect ratio of the current axis.
+        Calling::
 
-        Calling daspect([x,y,z]) sets the data aspect ratio.
+            daspect()
 
-        Calling daspect('mode') returns the data aspect ratio mode.
+        returns the data aspect ratio of the current axis.
+        Calling::
 
-        Calling
+            daspect([x,y,z])
+
+        sets the data aspect ratio.
+        Calling::
+
+            daspect('mode')
+
+        returns the data aspect ratio mode.
+        Calling::
 
             daspect(mode)
 
         sets the data aspect ratio mode (mode can be either 'auto' or
         'manual').
-
-        Calling
+        Calling::
 
             daspect(ax, ...)
 
@@ -2058,40 +2073,40 @@ class BaseClass(object):
     def axis(self, *args, **kwargs): 
         """Choose the axis limits.
 
-        - axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
-          sets the limits on the x-, y- and z-axes in the current plot.
+          - axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
+            sets the limits on the x-, y- and z-axes in the current plot.
 
-        - axis(xmin, xmax, ymin, ymax[, zmin, zmax])
-          same as above.
+          - axis(xmin, xmax, ymin, ymax[, zmin, zmax])
+            same as above.
 
-        - axis()
-          returns the limits for the current plot. If the view in the
-          current plot is a 2D view, only the limits on the x- and y-axis
-          are returned.
+          - axis()
+            returns the limits for the current plot. If the view in the
+            current plot is a 2D view, only the limits on the x- and y-axis
+            are returned.
         
-        - axis(mode)
-          sets axis scaling to mode, where mode can be 
+          - axis(mode)
+            sets axis scaling to mode, where mode can be 
 
-             'auto'   - autoscaling is used
-             'manual' - freeze the scaling at the current limits
-             'tight'  - sets the axis limits to the range of the data
-             'fill'   - 
+             * 'auto'   - autoscaling is used
+             * 'manual' - freeze the scaling at the current limits
+             * 'tight'  - sets the axis limits to the range of the data
+             * 'fill'   - 
 
-        - axis(method)
-          sets the appearance of the current axis as specified by method.
-          %s
+          - axis(method)
+            sets the appearance of the current axis as specified by method.
+            %s
 
-        - axis(direction)
-          sets the direction of the increasing values on the axes.
+          - axis(direction)
+            sets the direction of the increasing values on the axes.
 
-             'ij' - reverse y-axis
-             'xy' - restore y-axis
+             * 'ij' - reverse y-axis
+             * 'xy' - restore y-axis
 
-        - axis('on') or axis('off')
-          turn axis on or off
+          - axis('on') or axis('off')
+            turn axis on or off
 
-        - axis(ax, ...)
-          affects the Axis object ax instead of the current axis.
+          - axis(ax, ...)
+            affects the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2403,8 +2418,8 @@ class BaseClass(object):
         draws 3 red 'x'
         >>> plot([1,2,3], 'rx')
 
-        a larger example
-        >>> x = seq(0, 15, 0.2)   # 0, 0.2, 0.4, ..., 15
+        A larger example:
+        >>> x = linspace(0, 15, 76)   # 0, 0.2, 0.4, ..., 15
         >>> y1 = sin(x)*x
         >>> y2 = sin(x)*sqrt(x)
         >>> plot(x, y1, 'b-', x, y2, 'ro',
@@ -2796,7 +2811,7 @@ class BaseClass(object):
         Examples:
 
         Plot the gradient field of the function z = x**2 + y**2:
-        >>> x = y = seq(-2,2,0.2)
+        >>> x = y = linspace(-2, 2, 21)
         >>> xv, yv = meshgrid(x,y)
         >>> values = xv**2 + yv**2
         >>> contour(xv, yv, values, 10, hold='on')
@@ -2870,8 +2885,8 @@ class BaseClass(object):
 
         Examples:
 
-        >>> #Draw a contour plot of the peaks function:
-        >>> x = y = seq(-3,3,0.5)
+        >>> # draw a contour plot of the peaks function:
+        >>> x = y = linspace(-3, 3, 13)
         >>> xv, yv = meshgrid(x, y)
         >>> values = peaks(xv, yv)
         >>> contour(xv, yv, values)
@@ -2943,12 +2958,12 @@ class BaseClass(object):
 
         - streamline(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
         - streamline(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
           where m, n, p = shape(U)
         ##- streamline(XYZ))
         - streamline(X,Y,U,V,STARTX,STARTY)
         - streamline(U,V,STARTX,STARTY)
-          assumes X,Y = meshgrid(seq(n-1), seq(m-1))
+          assumes X,Y = meshgrid(range(n), range(m))
           where m, n = shape(U)
         - streamline(XY)
         - streamline(ax,...)
@@ -2979,7 +2994,7 @@ class BaseClass(object):
 
         - streamtube(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
         - streamtube(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
           where m, n, p = shape(U)
         ##- streamtube(VERTICES,X,Y,Z,DIVERGENCE)
         ##- streamtube(VERTICES,DIVERGENCE)
@@ -3000,7 +3015,7 @@ class BaseClass(object):
 
         - streamribbon(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
         - streamribbon(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
           where m, n, p = shape(U)
         - streamribbon(VERTICES,X,Y,Z,CAV,SPEED)
         - streamribbon(VERTICES,CAV,SPEED)
@@ -3032,7 +3047,7 @@ class BaseClass(object):
 
         Example:
 
-        >>> x = seq(-2,2,.2)
+        >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = exp(-xx**2)*exp(-yy**2)
         >>> mesh(xx, yy, zz)
@@ -3064,7 +3079,7 @@ class BaseClass(object):
         Examples:
 
         Draw a mesh with contour lines:
-        >>> x = seq(-2,2,.2)
+        >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = peaks(xx, yy)
         >>> meshc(xx, yy, zz) 
@@ -3088,7 +3103,7 @@ class BaseClass(object):
         Examples:
 
         Draw a colored surface:
-        >>> x = seq(-2,2,.2)
+        >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = xx**2 + yy**2
         >>> surf(xx, yy, zz) 
@@ -3111,7 +3126,7 @@ class BaseClass(object):
         
         - quiver3(X, Y, Z, U, V, W)
         - quiver3(Z,U,V,W)
-          assumes X, Y = meshgrid(seq(n-1), seq(m-1)) where m,n = shape(Z)
+          assumes X, Y = meshgrid(range(n), range(m)) where m,n = shape(Z)
         - quiver3(Z, U, V, W, s) or quiver3(X, Y, Z, U, V, W, s)
           scales the vectors by the scale factor given in s.
         - quiver3(..., 'filled')
@@ -3142,7 +3157,7 @@ class BaseClass(object):
         - slice_(X,Y,Z,V,XI,YI,ZI)
 
         - slice_(V,Sx,Sy,Sz) or slice_(V,XI,YI,ZI)
-          same as slice_(seq(n), seq(m), seq(p)) where m,n,p = shape(V)
+          same as slice_(range(n+1), range(m+1), range(p+)) where m,n,p = shape(V)
 
         - slice_(...,'method')
           'method' can be 'linear' (default), 'cubic', or 'nearest'.
@@ -3154,7 +3169,7 @@ class BaseClass(object):
 
         Examples:
 
-        >>> xx, yy, zz = meshgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16))
+        >>> xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17), linspace(-2,2,25))
         >>> vv = x*exp(-xx**2-yy**2-zz**2)
         >>> slice_(xx, yy, zz, vv, [-1.2,.8,2], 2, [-2,-.2])
         """
@@ -3192,7 +3207,7 @@ class BaseClass(object):
           the arrays XI, YI, and ZI.
           
         - contourslice(V,SX,SY,SZ) or contourslice(V,XI,YI,ZI)
-          assumes X,Y,Z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
           where m,n,p = shape(V).
           
         - contourslice(..., n)
@@ -3209,7 +3224,7 @@ class BaseClass(object):
           returns con
         
         Example:
-        xx, yy, zz = meshgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16))
+        xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17), linspace(-2,2,25))
         vv = xx*exp(-xx**2-yy**2-zz**2); # Create volume data
         contourslice(xx, yy, zz, vv, [-.7,.7], [], [0], view=3)
         """
@@ -3248,7 +3263,7 @@ class BaseClass(object):
         """Streamlines in slice planes.
         
         Example:
-        xx,yy = meshgrid(seq(-3,3,.2))
+        xx,yy = meshgrid(linspace(-3,3,31))
         zz = peaks(xx,yy)
         surf(xx,yy,zz)
         shading('interp')
@@ -3271,7 +3286,7 @@ class BaseClass(object):
         - isosurface(X,Y,Z,V,isovalue)
           
         - isosurface(V,isovalue)
-          assumes X,Y,Z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
           where m,n,p = shape(V).
         
         - isosurface(..., colors)
@@ -3907,7 +3922,7 @@ class BaseClass(object):
             except:
                 raise ValueError, \
                       "subvolume: U must be 3D, not %dD" % len(u.shape)
-            x, y, z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+            x, y, z = meshgrid(range(n), range(m), range(p))
         elif nargs == 2: # subvolume(v,limits)
             v = asarray(args[0])
             try:
@@ -3915,7 +3930,7 @@ class BaseClass(object):
             except:
                 raise ValueError, \
                       "subvolume: V must be 3D, not %dD" % len(v.shape)
-            x, y, z = meshgrid(seq(n-1), seq(m-1), seq(p-1))
+            x, y, z = meshgrid(range(n), range(m), range(p))
         else:
             raise TypeError, "subvolume: wrong number of arguments"
 
