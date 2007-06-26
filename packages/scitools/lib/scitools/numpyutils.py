@@ -756,7 +756,7 @@ def wrap2callable(f, **kwargs):
     >>> f2 = wrap2callable('1+2*x')
     >>> f2(0.5)
     2.0
-    >>> f3 = wrap2callable('1+2*t', independent_variables='t')
+    >>> f3 = wrap2callable('1+2*t', independent_variable='t')
     >>> f3(0.5)
     2.0
     >>> f4 = wrap2callable('a+b*t')
@@ -764,7 +764,7 @@ def wrap2callable(f, **kwargs):
     Traceback (most recent call last):
     ...
     NameError: name 'a' is not defined
-    >>> f4 = wrap2callable('a+b*t', independent_variables='t', \
+    >>> f4 = wrap2callable('a+b*t', independent_variable='t', \
                            a=1, b=2)
     >>> f4(0.5)
     2.0
@@ -797,13 +797,14 @@ def wrap2callable(f, **kwargs):
     4.0
     >>> # discrete 3D data:
     >>> y = seq(0,1,0.5); z = seq(-1,0.5,0.1)
-    >>> xc = x[:,NewAxis,NewAxis]; yc = y[NewAxis,:,NewAxis]
-    >>> zc = z[NewAxis,NewAxis,:]
+    >>> xv = reshape(x, (len(x),1,1))
+    >>> yv = reshape(y, (1,len(y),1))
+    >>> zv = reshape(z, (1,1,len(z)))
     >>> def myfunc3(x,y,z):  return 1+2*x+3*y+4*z
 
-    >>> values = myfunc3(xc,yc,zc)
-    >>> f10 = wrap2callable((x,y,z,values))
-    >>> f10(0.5,1/3.,0.25)
+    >>> values = myfunc3(xv, yv, zv)
+    >>> f10 = wrap2callable((x, y, z, values))
+    >>> f10(0.5, 1/3., 0.25)
     4.0
 
     One can also check what the object is wrapped as and do more

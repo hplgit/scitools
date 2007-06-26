@@ -20,60 +20,60 @@ Guiding Principles
 *First principle.* Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple::
 
-      t = linspace(0, 3, 51)    # 51 points between 0 and 3
-      y = t**2*exp(-t**2)
-      plot(t, y) 
+        t = linspace(0, 3, 51)    # 51 points between 0 and 3
+        y = t**2*exp(-t**2)
+        plot(t, y) 
 
 plots the data in (the NumPy array) t versus the data in (the NumPy
 array) y. If you need legends, control of the axis, as well as
 additional curves, all this is obtained by the standard Matlab-style
 commands::
 
-      y2 = t**4*exp(-t**2)
-      # pick out each 4 points and add random noise:
-      t3 = t[::4]
-      random.seed(11)
-      y3 = y2[::4] + random.normal(loc=0, scale=0.02, size=len(t3))
-      
-      plot(t, y1, 'r-')
-      hold('on')
-      plot(t, y2, 'b-')
-      plot(t3, y3, 'bo')
-      legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
-      title('Simple Plot Demo')
-      axis([0, 3, -0.05, 0.6])
-      xlabel('t')
-      ylabel('y')
-      show()
-      
-      hardcopy('tmp0.ps')  # this one can be included in latex
-      hardcopy('tmp0.png') # this one can be included in HTML
+        y2 = t**4*exp(-t**2)
+        # pick out each 4 points and add random noise:
+        t3 = t[::4]
+        random.seed(11)
+        y3 = y2[::4] + random.normal(loc=0, scale=0.02, size=len(t3))
+        
+        plot(t, y1, 'r-')
+        hold('on')
+        plot(t, y2, 'b-')
+        plot(t3, y3, 'bo')
+        legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
+        title('Simple Plot Demo')
+        axis([0, 3, -0.05, 0.6])
+        xlabel('t')
+        ylabel('y')
+        show()
+        
+        hardcopy('tmp0.ps')  # this one can be included in latex
+        hardcopy('tmp0.png') # this one can be included in HTML
 
 Easyviz also allows these additional function calls to be executed
 as a part of the plot call::
 
-      plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
-           legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data'),
-           title='Simple Plot Demo',
-           axis=(0, 3, -0.05, 0.6),
-           xlabel='t', ylabel='y',
-           hardcopy='tmp1.ps',
-           show=True)
-      
-      hardcopy('tmp0.png') # this one can be included in HTML
+        plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
+             legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data'),
+             title='Simple Plot Demo',
+             axis=(0, 3, -0.05, 0.6),
+             xlabel='t', ylabel='y',
+             hardcopy='tmp1.ps',
+             show=True)
+        
+        hardcopy('tmp0.png') # this one can be included in HTML
 
 A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands::
 
-      x = seq(-2, 2, 0.1)      # -2 to 2 with steps of 0.1
-      xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
-      values = f(xv, yv)       # function values
-      surfc(xv, yv, values,
-            shading='interp',
-            clevels=15,
-            clabels='on',
-            hidden='on',
-            show=True)
+        x = seq(-2, 2, 0.1)      # -2 to 2 with steps of 0.1
+        xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
+        values = f(xv, yv)       # function values
+        surfc(xv, yv, values,
+              shading='interp',
+              clevels=15,
+              clabels='on',
+              hidden='on',
+              show=True)
 
 
 *Second princple.* Easyviz is just a unified interface to other plotting
@@ -116,7 +116,7 @@ Controlling the Backend
 The Easyviz backend can either be set in a config file (see Config File
 below) or by a command-line option::
 
-       --SCITOOLS_easyviz_backend name
+         --SCITOOLS_easyviz_backend name
 
 where name is the name of the backend: gnuplot, vtk, matplotlib,
 blt. Which backend you
@@ -131,12 +131,12 @@ Easyviz is a subpackage of SciTools, and the the SciTools configuration
 file, called scitools.cfg has a section [easyviz] where the
 backend in Easyviz can be set::
 
-      [easyviz]
-      backend = vtk_
+        [easyviz]
+        backend = vtk_
 
-A scitools.cfg can be placed in the current working directory, thereby
-affecting plots made in this directory, or it can be located in the
-user's home directory, which will affect all plotting sessions for the
+A scitools.cfg can be placed in the current working folder, thereby
+affecting plots made in this folder, or it can be located in the
+user's home folder, which will affect all plotting sessions for the
 user in question.
 
 
@@ -166,45 +166,45 @@ intervals). Then we compute the corresponding y values at these
 points, before we call the plot(t,y) command to make the curve plot.
 Here is the complete program::
 
-      from scitools.all import *
-      
-      def f(t):
-          return t**2*exp(-t**2)
-      
-      t = linspace(0, 3, 51)    # 51 points between 0 and 3
-      y = zeros(len(t), 'd')    # 51 doubles ('d')
-      for i in xrange(len(t)):
-          y[i] = f(t[i])
-      
-      plot(t, y)
+        from scitools.all import *
+        
+        def f(t):
+            return t**2*exp(-t**2)
+        
+        t = linspace(0, 3, 51)    # 51 points between 0 and 3
+        y = zeros(len(t), float)  # allocate y with float elements
+        for i in xrange(len(t)):
+            y[i] = f(t[i])
+        
+        plot(t, y)
 
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. In this program we
 pre-allocate the y array and fill it with values, element by
 element, in a (slow) Python loop. Alternatively, we may operate
-on the whole t at once, which yields faster and shorter code::
+on the whole t array at once, which yields faster and shorter code::
 
-      from scitools.all import *
-      
-      def f(t):
-          return t**2*exp(-t**2)
-      
-      t = linspace(0, 3, 51)    # 51 points between 0 and 3
-      y = f(t)                  # compute all f values at once
-      plot(t, y)
+        from scitools.all import *
+        
+        def f(t):
+            return t**2*exp(-t**2)
+        
+        t = linspace(0, 3, 51)    # 51 points between 0 and 3
+        y = f(t)                  # compute all f values at once
+        plot(t, y)
 
 The f function can also be skipped, if desired, so that we can write
 directly::
 
-      y = t**2*exp(-t**2)
+        y = t**2*exp(-t**2)
 
 
-To include the plot in reports, we need 
-a hardcopy of the figure in PostScript, PNG, or another image format.
-The hardcopy command produces files with images in various formats::
+To include the plot in electronic documents, we need a hardcopy of the
+figure in PostScript, PNG, or another image format.  The hardcopy
+command produces files with images in various formats::
 
-      hardcopy('tmp1.ps')  # produce PostScript
-      hardcopy('tmp1.png') # produce PNG
+        hardcopy('tmp1.ps')  # produce PostScript
+        hardcopy('tmp1.png') # produce PNG
 
 The filename extension determines the format: .ps or
 .eps for PostScript, and .png for PNG. 
@@ -221,25 +221,25 @@ y, respectively. Also, the curve should be identified with a label,
 or legend as it is often called.  A title above the plot is also
 common.  All such things are easily added after the plot command::
 
-      xlabel('t')
-      ylabel('y')
-      legend('t^2*exp(-t^2)')
-      axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
-      title('My First Easyviz Demo')
+        xlabel('t')
+        ylabel('y')
+        legend('t^2*exp(-t^2)')
+        axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
+        title('My First Easyviz Demo')
 
 This syntax is inspired by Matlab to make the switch between
-SciTools/Easyviz and Matlab almost trivial.
+Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" plot command where
 all the plot properties can be set at once::
 
-      plot(t, y,
-           xlabel='t',
-           ylabel='y',
-           legend='t^2*exp(-t^2)',
-           axis=[0, 3, -0.05, 0.6],
-           title='My First Easyviz Demo',
-           hardcopy='tmp1.ps',
-           show=True)
+        plot(t, y,
+             xlabel='t',
+             ylabel='y',
+             legend='t^2*exp(-t^2)',
+             axis=[0, 3, -0.05, 0.6],
+             title='My First Easyviz Demo',
+             hardcopy='tmp1.ps',
+             show=True)
 
 
 With show=False one can avoid the plot window on the screen and
@@ -270,34 +270,34 @@ issue a hold('on') command. Alternatively, we can provide all
 data in a single plot command. A complete program illustrates the
 different approaches::
 
-      from scitools.all import *   # for curve plotting
-      
-      def f1(t):
-          return t**2*exp(-t**2)
-      
-      def f2(t):
-          return t**2*f1(t)
-      
-      t = linspace(0, 3, 51)
-      y1 = f1(t)
-      y2 = f2(t)
-      
-      # Matlab-style syntax:
-      plot(t, y1)
-      hold('on')
-      plot(t, y2)
-      
-      xlabel('t')
-      ylabel('y')
-      legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
-      title('Plotting two curves in the same plot')
-      hardcopy('tmp2.ps')
-      
-      # alternative:
-      plot(t, y1, t, y2, xlabel='t', ylabel='y',
-           legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-           title='Plotting two curves in the same plot',
-           hardcopy='tmp2.ps')
+        from scitools.all import *   # for curve plotting
+        
+        def f1(t):
+            return t**2*exp(-t**2)
+        
+        def f2(t):
+            return t**2*f1(t)
+        
+        t = linspace(0, 3, 51)
+        y1 = f1(t)
+        y2 = f2(t)
+        
+        # Matlab-style syntax:
+        plot(t, y1)
+        hold('on')
+        plot(t, y2)
+        
+        xlabel('t')
+        ylabel('y')
+        legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
+        title('Plotting two curves in the same plot')
+        hardcopy('tmp2.ps')
+        
+        # alternative:
+        plot(t, y1, t, y2, xlabel='t', ylabel='y',
+             legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+             title='Plotting two curves in the same plot',
+             hardcopy='tmp2.ps')
 
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
@@ -321,13 +321,13 @@ data stops at x=3), while y axis goes from -0.1 to 0.6.
 In the Matlab-like syntax new axis specifications are 
 done by the axis command::
 
-      axis([0, 4, -0.1, 0.6])
+        axis([0, 4, -0.1, 0.6])
 
 With a single plot command we must use the axis keyword::
 
-      plot(t, y1, t, y2, ...
-           axis=[0, 4, -0.1, 0.6],
-           ...)
+        plot(t, y1, t, y2, ...
+             axis=[0, 4, -0.1, 0.6],
+             ...)
 
 In both cases, the axis specification is a list of the
 x_{\rm min}, x_{\rm max}, y_{\rm min}, and y_{\rm max}
@@ -347,20 +347,20 @@ bo means blue (b) circles (o). The line style specification is
 added as an argument after the x and y coordinate arrays of the
 curve::
 
-      plot(t, y1, 'r-')
-      hold('on')
-      plot(t, y2, 'bo')
-      
-      # or
-      plot(t, y1, 'r-', t, y2, 'bo')
+        plot(t, y1, 'r-')
+        hold('on')
+        plot(t, y2, 'bo')
+        
+        # or
+        plot(t, y1, 'r-', t, y2, 'bo')
 
 The effect of controlling the line styles can be seen in 
 Figure fig:plot2c.
 
 FIGURE:[figs/plot2c.eps] Two curves in the same plot, with controlled line styles.
 
-Assume now that we want to plot the blue circles at only each 4 points.
-We can grab each 4 points out of the t array by using an appropriate
+Assume now that we want to plot the blue circles at every 4 points only.
+We can grab every 4 points out of the t array by using an appropriate
 slice: t2 = t[::4]. Note that the first colon means the range from the
 first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
@@ -372,25 +372,25 @@ means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
 the Gnuplot backend one can view the effect in Figure fig:plot2g::
 
-      from scitools.all import *
-      
-      def f1(t):
-          return t**2*exp(-t**2)
-      
-      def f2(t):
-          return t**2*f1(t)
-      
-      t = linspace(0, 3, 51)
-      y1 = f1(t)
-      t2 = t[::4]
-      y2 = f2(t2)
-      
-      plot(t, y1, 'r-6', t2, y2, 'bo3',
-           xlabel='t', ylabel='y',
-           axis=[0, 4, -0.1, 0.6],
-           legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-           title='Plotting two curves in the same plot',
-           hardcopy='tmp2.ps')
+        from scitools.all import *
+        
+        def f1(t):
+            return t**2*exp(-t**2)
+        
+        def f2(t):
+            return t**2*f1(t)
+        
+        t = linspace(0, 3, 51)
+        y1 = f1(t)
+        t2 = t[::4]
+        y2 = f2(t2)
+        
+        plot(t, y1, 'r-6', t2, y2, 'bo3',
+             xlabel='t', ylabel='y',
+             axis=[0, 4, -0.1, 0.6],
+             legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+             title='Plotting two curves in the same plot',
+             hardcopy='tmp2.ps')
 
 
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
@@ -443,37 +443,37 @@ string. For example, 'r-2' means red solid line with thickness 2.
 curve where the data points are slightly randomly distributed around
 the f_2(t) curve::
 
-      from scitools.all import *
-      
-      def f1(t):
-          return t**2*exp(-t**2)
-      
-      def f2(t):
-          return t**2*f1(t)
-      
-      t = linspace(0, 3, 51)
-      y1 = f1(t)
-      y2 = f2(t)
-      
-      # pick out each 4 points and add random noise:
-      t3 = t[::4]      # slice, stride 4
-      random.seed(11)  # fix random sequence
-      noise = random.normal(loc=0, scale=0.02, size=len(t3))
-      y3 = y2[::4] + noise
-      
-      plot(t, y1, 'r-')
-      hold('on')
-      plot(t, y2, 'ks-')   # black solid line with squares at data points
-      plot(t3, y3, 'bo')
-      
-      legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
-      title('Simple Plot Demo')
-      axis([0, 3, -0.05, 0.6])
-      xlabel('t')
-      ylabel('y')
-      show()
-      hardcopy('tmp3.ps') 
-      hardcopy('tmp3.png')
+        from scitools.all import *
+        
+        def f1(t):
+            return t**2*exp(-t**2)
+        
+        def f2(t):
+            return t**2*f1(t)
+        
+        t = linspace(0, 3, 51)
+        y1 = f1(t)
+        y2 = f2(t)
+        
+        # pick out each 4 points and add random noise:
+        t3 = t[::4]      # slice, stride 4
+        random.seed(11)  # fix random sequence
+        noise = random.normal(loc=0, scale=0.02, size=len(t3))
+        y3 = y2[::4] + noise
+        
+        plot(t, y1, 'r-')
+        hold('on')
+        plot(t, y2, 'ks-')   # black solid line with squares at data points
+        plot(t3, y3, 'bo')
+        
+        legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
+        title('Simple Plot Demo')
+        axis([0, 3, -0.05, 0.6])
+        xlabel('t')
+        ylabel('y')
+        show()
+        hardcopy('tmp3.ps') 
+        hardcopy('tmp3.png')
 
 The plot is shown in Figure fig:plot3.
 
@@ -484,8 +484,8 @@ are interested in the quickest possible commands.
 Here is an example on minimalistic syntax for
 comparing the two sample functions we have used in the previous examples::
 
-      t = linspace(0, 3, 51)
-      plot(t**2*exp(-t**2), t**4*exp(-t**2))
+        t = linspace(0, 3, 51)
+        plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 
 
 
@@ -494,28 +494,29 @@ Interactive Plotting Sessions
 
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the plot command
-returns an argument:
-\bccq
->>> plot(x, y)
-[<scitools.easyviz.common.Line object at 0xb5727f6c>]
-\eccq
+returns an argument::
+
+        >>> t = linspace(0, 3, 51)
+        >>> plot(t, t**2*exp(-t**2))
+        [<scitools.easyviz.common.Line object at 0xb5727f6c>]
+
 Most users will just ignore this output line.
 
 All Easyviz commands that produce a plot return an object reflecting the
 particular type of plot. The plot command returns a list of
 Line objects, one for each curve in the plot. These Line
 objects can be invoked to see, for instance, the value of different
-parameters in the plot (Line.get()):
-\bccq
->>> lines = plot(x, y, 'b')
->>> pprint.pprint(lines[0].get())
-{'description': '',
- 'dims': (4, 1, 1),
- 'legend': '',
- 'linecolor': 'b',
- 'pointsize': 1.0,
- ...
-\eccq
+parameters in the plot (Line.get())::
+
+        >>> lines = plot(x, y, 'b')
+        >>> pprint.pprint(lines[0].get())
+        {'description': '',
+         'dims': (4, 1, 1),
+         'legend': '',
+         'linecolor': 'b',
+         'pointsize': 1.0,
+         ...
+
 Such output is mostly of interest to advanced users.
 
 
@@ -528,15 +529,12 @@ plots stored in files. Thereafter we must use a tool to combine the
 individual plot files into a movie file. We shall illustrate the
 process with an example.
 
-Consider the "Gaussian bell" function::
-
-      \[ f(x; m, s) = 
-      {1\over\sqrt{2\pi }s} 
-      \exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]},
-      \]
-
-which is a "wide" function for large s and "peak-formed" for small s,
-see Figure fig:plot4,
+The function
+f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2),
+known as the "Gaussian bell function",
+is a "wide" function for large s and "peak-formed" for small s,
+see Figure fig:plot4. The function is symmetric around x=m
+(m=0 in the figure).
 Our goal is to make an animation where we see how this function evolves
 as s is decreased. In Python we implement the formula above as
 a function f(x, m, s). 
@@ -568,35 +566,34 @@ limit the x coordinates to [m-3s,m+3s].
 
 Now we are ready to take a look at the complete code
 for animating how the Gaussian bell curve evolves as the s parameter
-decreases from 2 to 0.2:
+decreases from 2 to 0.2::
 
-!bc  
-      from scitools.all import *
-      import time
-      
-      def f(x, m, s):
-          return (1.0/(sqrt(2*pi)*s))*exp(-0.5*((x-m)/s)**2)
-      
-      m = 0
-      s_start = 2
-      s_stop = 0.2
-      s_values = linspace(s_start, s_stop, 30)
-      x = linspace(m -3*s_start, m + 3*s_start, 1000)
-      # f is max for x=m; smaller s gives larger max value
-      max_f = f(m, m, s_stop)
-      
-      # show the movie, and make hardcopies of frames simulatenously:
-      counter = 0
-      for s in s_values:
-          y = f(x, m, s)
-          plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
-               xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-               hardcopy='tmp_%04d.ps' % counter)
-          counter += 1
-          #time.sleep(0.2)  # can insert a pause to control movie speed
-      
-      # make movie file:
-      movie('tmp_*.ps')
+        from scitools.all import *
+        import time
+        
+        def f(x, m, s):
+            return (1.0/(sqrt(2*pi)*s))*exp(-0.5*((x-m)/s)**2)
+        
+        m = 0
+        s_start = 2
+        s_stop = 0.2
+        s_values = linspace(s_start, s_stop, 30)
+        x = linspace(m -3*s_start, m + 3*s_start, 1000)
+        # f is max for x=m; smaller s gives larger max value
+        max_f = f(m, m, s_stop)
+        
+        # show the movie, and make hardcopies of frames simulatenously:
+        counter = 0
+        for s in s_values:
+            y = f(x, m, s)
+            plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
+                 xlabel='x', ylabel='f', legend='s=%4.2f' % s,
+                 hardcopy='tmp_%04d.ps' % counter)
+            counter += 1
+            #time.sleep(0.2)  # can insert a pause to control movie speed
+        
+        # make movie file:
+        movie('tmp_*.ps')
 
 
 First note that the s values are decreasing (linspace handles this
@@ -609,9 +606,11 @@ For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
 of the form stem0001.ext, stem0002.ext, stem0003.ext, etc.,
-since the expression stem*.ext then lists all files in the right
-order. In our example, stem is tmp_, and .ext is .ps
-(PostScript format in the hardcopy).
+since an alphabetic sort of the filenames then gives the right
+sequence of the files (and so does the expression stem*.ext used
+in the operating system or in Python's fnmatch module).
+In our example, stem is tmp_, and .ext is .ps
+(which implies the PostScript format in the hardcopy).
 
 Having a set of stem*.ext files, one can simply generate a movie
 by a movie('stem*.ext') call. When a movie file is not wanted (it may
@@ -632,13 +631,10 @@ using plotting program-specific advanced features. Third, we explain
 how the user can grab Figure and Axis objects that Easyviz
 produces "behind the curtain".
 
-Importing Just Easyviz
-~~~~~~~~~~~~~~~~~~~~~~
-
-The from scitools.all import * statement imports many modules and packages:
-  * Easyviz
-  * SciPy (if it exists)
-  * NumPy (if SciPy is not installed)
+*Importing Just Easyviz.* The from scitools.all import * statement imports many modules and packages:
+  * scitools.easyviz
+  * scipy (if it exists)
+  * numpy (if scipy is not installed)
   * the Python modules sys, os, math, operator
   * the SciTools module StringFunction and the SciTools 
     functions watch and trace for debugging
@@ -646,23 +642,20 @@ The from scitools.all import * statement imports many modules and packages:
 The scipy import can take some time and lead to slow start-up of plot 
 scripts. A more minimalistic import for curve plotting is 
 !bc  
-      from scitools.easyviz import *
-      from numpy import *
+        from scitools.easyviz import *
+        from numpy import *
 
 Alternatively, one can edit the scitools.cfg configure file or add
 one's own .scitools.cfg file with redefinition of selected options,
 such as load in the scipy section. The user .scitools.cfg must 
-be placed in the directory where the plotting script in action resides, 
-or in the user's home directory. Instead of editing a configuration
+be placed in the folder where the plotting script in action resides, 
+or in the user's home folder. Instead of editing a configuration
 file, one can just add the command-line argument --SCITOOLS_scipy_load no
 to the curve plotting script (all sections/options in the configuration
 file can also be set by such command-line arguments).
 
 
-Working with the Plotting Program Directly
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Easyviz supports just the most common plotting commands, typically the
+*Working with the Plotting Program Directly.* Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
@@ -679,13 +672,13 @@ the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
 the Gnuplot object (a Python module) and issue Gnuplot commands to
 this object directly::
 
-      g = get_backend()
-      if g.__class__.__name__ == 'Gnuplot':
-          # g is a Gnuplot object, work with Gnuplot commands directly:
-          g('set label "global maximum" at 0.1,0.5 font "Times,18"')
-          g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
-      g.refresh()
-      g.hardcopy('tmp2.ps')  # make new hardcopy
+        g = get_backend()
+        if g.__class__.__name__ == 'Gnuplot':
+            # g is a Gnuplot object, work with Gnuplot commands directly:
+            g('set label "global maximum" at 0.1,0.5 font "Times,18"')
+            g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
+        g.refresh()
+        g.hardcopy('tmp2.ps')  # make new hardcopy
 
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
@@ -696,34 +689,31 @@ above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
 
-Working with Axis and Figure Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Easyviz supports the concept of Axis objects, as in Matlab.
+*Working with Axis and Figure Objects.* Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represent a set of axis, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axis in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
 windows on the screen or separate hardcopies.
 
-*Axis Objects.* Users with Matlab experience may prefer to set axis
+Users with Matlab experience may prefer to set axis
 labels, ranges, and the title using an Axis object instead of
 providing the information in separate commands or as part of a plot
 command. The gca (get current axis) command returns an Axis
 object, whose set method can be used to set axis properties::
 
-      plot(t, y1, 'r-', t, y2, 'bo',
-           legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-           hardcopy='tmp2.ps')
-      
-      ax = gca()   # get current Axis object
-      ax.set(xlabel='t', ylabel='y',
-             axis=[0, 4, -0.1, 0.6],
-             title='Plotting two curves in the same plot')
-      show()  # show the plot again after ax.set actions
+        plot(t, y1, 'r-', t, y2, 'bo',
+             legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+             hardcopy='tmp2.ps')
+        
+        ax = gca()   # get current Axis object
+        ax.set(xlabel='t', ylabel='y',
+               axis=[0, 4, -0.1, 0.6],
+               title='Plotting two curves in the same plot')
+        show()  # show the plot again after ax.set actions
 
 
-*Figure Objects.* The figure() call makes a new figure, i.e., a
+The figure() call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command figure(3) sets the current figure object to figure number
 3. 
@@ -731,35 +721,35 @@ The command figure(3) sets the current figure object to figure number
 Suppose we want to plot our y1 and y2 data in two separate windows.
 We need in this case to work with two Figure objects::
 
-      plot(t, y1, 'r-', xlabel='t', ylabel='y',
-           axis=[0, 4, -0.1, 0.6])
-      
-      figure()  # new figure
-      
-      plot(t, y2, 'bo', xlabel='t', ylabel='y')
+        plot(t, y1, 'r-', xlabel='t', ylabel='y',
+             axis=[0, 4, -0.1, 0.6])
+        
+        figure()  # new figure
+        
+        plot(t, y2, 'bo', xlabel='t', ylabel='y')
 
 We may now go back to the first figure (with the y1 data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot::
 
-      figure(1)  # go back to first figure
-      title('One curve')
-      legend('t^2*exp(-t^2)')
-      show()
-      hardcopy('tmp2_1.ps')
+        figure(1)  # go back to first figure
+        title('One curve')
+        legend('t^2*exp(-t^2)')
+        show()
+        hardcopy('tmp2_1.ps')
 
-We can also adjust figure 2:
-!bc  
-      figure(2)  # go to second figure
-      title('Another curve')
-      hardcopy('tmp2_2.ps')
-      show()
+We can also adjust figure 2::
+
+        figure(2)  # go to second figure
+        title('Another curve')
+        hardcopy('tmp2_2.ps')
+        show()
 
 The current Figure object is reached by gcf (get current figure),
 and the dump method dumps the internal parameters in the Figure
 object::
 
-      fig = gcf(); print fig.dump()
+        fig = gcf(); print fig.dump()
 
 These parameters may be of interest for troubleshooting when Easyviz
 does not produce what you expect.
@@ -772,15 +762,15 @@ In the present case subplot(2,1,1) sets the current axis to
 the first set of axis in a "table" with two rows and one column.
 Here is the code for this third figure::
 
-      figure()  # new, third figure
-      # plot y1 and y2 as two axis in the same figure:
-      subplot(2, 1, 1)
-      plot(t, y1, xlabel='t', ylabel='y')
-      subplot(2, 1, 2)
-      plot(t, y2, xlabel='t', ylabel='y')
-      title('A figure with two plots')
-      show()
-      hardcopy('tmp2_3.ps')
+        figure()  # new, third figure
+        # plot y1 and y2 as two axis in the same figure:
+        subplot(2, 1, 1)
+        plot(t, y1, xlabel='t', ylabel='y')
+        subplot(2, 1, 2)
+        plot(t, y2, xlabel='t', ylabel='y')
+        title('A figure with two plots')
+        show()
+        hardcopy('tmp2_3.ps')
 
 We remark that the hardcopy command does not work with the Gnuplot backend
 in this case with multiple axes in a figure.
@@ -788,7 +778,7 @@ in this case with multiple axes in a figure.
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command::
 
-      ax = axes(viewport=[left, bottom, width, height])
+        ax = axes(viewport=[left, bottom, width, height])
 
 The four parameteres left, bottom, width, height
 are location values between 0 and 1 ((0,0) is the lower-left corner 
@@ -799,7 +789,7 @@ Visualization of Scalar Fields
 ------------------------------
 
 A scalar field is a function from space or space-time to a real value.
-This real value typically reflects a scalar physical parameter a every
+This real value typically reflects a scalar physical parameter at every
 point in space (or in space and time). One example is temperature,
 which is a scalar quantity defined everywhere in space and time.  In a
 visualization context, we work with discrete scalar fields that are
@@ -815,11 +805,548 @@ and contour slice plots.
 Elevated Surface Plots
 ~~~~~~~~~~~~~~~~~~~~~~
 
-To create elevated surface plots
-we can use either the surf or the mesh command. Both
-commands have the same syntax, but the mesh command creates a
-wireframe mesh while the surf command creates a solid colored
-surface. We will first look at the mesh command. 
+To create elevated surface plots we can use either the surf or the
+mesh command. Both commands have the same syntax, but the mesh
+command creates a wireframe mesh while the surf command creates a
+solid colored surface. 
+
+Our examples will make use of the scalar field
+f(x,y)=sin(r), 
+where r is the distance in the plane from the origin, i.e.,
+r=sqrt(x**2+y**2).
+The x and y values in our 2D domain lie between -5 and 5.
+
+The example first creates the necessary data arrays for 2D scalar
+field plotting: the coordinates in each direction, extensions of these
+arrays to form a *meshgrid*, and the function values. The latter array
+is computed in a vectorized operation which requires the extended
+coordinate arrays from the meshgrid function.  The mesh command
+can then produce the plot with a syntax that mirrors the simplicity of
+the plot command for curves::
+
+        x = y = linspace(-5, 5, 21)
+        xv, yv = meshgrid(x, y)
+        values = sin(sqrt(xv**2 + yv**2))
+        h = mesh(xv, yv, values)
+
+The mesh command returns a reference to a new Surface object, here
+stored in a variable h. This reference can be used to set or get
+properties in the object at a later stage if needed.  The resulting
+plot can be seen in Figure fig:mesh_ex1.
+
+FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
+
+The surf command employs the same syntax, but results in a different
+plot (see Figure fig:surf_ex1)::
+
+        surf(xv, yv, values)
+
+
+FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend).
+
+The surf command offers many possibilities to adjust the resulting plot::
+
+        set(interactive=False)
+        surf(xv, yv, values)
+        shading('flat')
+        colorbar()
+        colormap(hot())
+        axis([-6,6,-6,6,-1.5,1.5])
+        view(35,45)
+        show()
+
+Here we have specified a flat shading model, added a color bar, changed
+the color map to hot, set some suitable axis values, and changed the
+view point. The same plot can also be accomplished with one single, compound
+statement (as Easyviz offers for the plot command)::
+
+        surf(v, yv, values,
+             shading='interp',
+             colorbar='on',
+             colormap=jet(),
+             axis=[-6,6,-6,6,-1.5,1.5],
+             view=[-35,35])
+
+Figure fig:surf_ex2 displays the result.
+
+FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend).
+
+
+Contour Plots
+~~~~~~~~~~~~~
+
+A contour plot is another useful technique for visualizing scalar
+fields. The primary examples on contour plots from everyday life is
+the level curves on geographical maps, reflecting the height of the
+terrain. Mathematically, a contour line, also called isoline, is
+defined as the implicit curve f(x,y)=c. The contour levels c are
+normally uniformly distributed between the extreme values of the
+function f (this is the case in a map: the height difference between
+two contour lines is constant), but in scientific visualization it is
+sometimes useful to use a few carefully selected c values to
+illustrate particular features of a scalar field.
+
+In Easyviz, there are several commands for creating different kinds of
+contour plots:
+
+  * contour: Draw a standard contour plot, i.e., lines in the plane.
+
+  * contourf: Draw a filled 2D contour plot, where the space between
+    the contour lines is filled with colors.
+
+  * contour3: Same as contour, but the curves are drawn at their 
+    corresponding height levels in 3D space.
+
+  * meshc: Works in the same way as mesh except that a
+     contour plot is drawn in the plane beneath the mesh. 
+
+  * surfc: Same as meshc except that a solid surface is
+    drawn instead of a wireframe mesh.
+
+We start with illustrating the plain contour command, assuming that
+we already have computed the xv, yv, and values
+arrays as shown in our first example on scalar field plotting.
+The basic syntax follows mesh and surf::
+
+        contour(xv, yv, values)
+
+By default, five uniformly spaced contour level curves are drawn, see
+Figure fig:contour_ex1. 
+
+FIGURE:[figs/contour_ex1.eps] Result of the simplest possible contour command (Gnuplot backend).
+
+The number of levels in a contour plot can be specified with an additional
+argument::
+
+        n = 15   # number of desired contour levels
+        contour(xv, yv, values, n)
+
+The result can be seen in Figure fig:contour_ex2. 
+
+FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend).
+
+Sometimes one wants contour levels that are not eqvidistant or not
+distributed throughout the range of the scalar field. Individual
+contour levels to be drawn can easily be specified as a list::
+
+        levels = [-0.5, 0.1, 0.3, 0.9]
+        contour(xv, yv, values, levels, clabels='on')
+
+Now, the levels list specify the values of the contour levels, and
+the clabel keyword allows labeling of the level values in the plot.
+Figure fig:contour_ex3 shows the result. We remark that the
+Gnuplot backend colors the contour lines and places the contour values
+and corresponding colors beside the plot. Figures that are reproduced
+in black and white only can then be hard to analyze. Other backends
+may draw the contour lines in black and annotate each line with the
+corresponding contour level value.  Such plots are better suited for
+being displayed in black and white.
+
+FIGURE:[figs/contour_ex3.eps] Four individually specified contour levels (Gnuplot backend).
+
+The contourf command,
+!bc  
+        contourf(xv, yv, values)
+
+gives a filled contour plot as shown in Figure fig:contourf_ex1.
+Only the Matplotlib and VTK backends currently supports filled
+contour plots. 
+
+FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (VTK backend).
+
+The contour lines can be "lifted up" in 3D space, as shown in Figure
+fig:contour3_ex1, using the contour3 command::
+
+        contour3(xv, yv, values, 15)
+
+
+FIGURE:[figs/contour3_ex1.eps] Example on the contour3 command for elevated contour levels (Gnuplot backend).
+
+Finally, we show a simple example illustrating the meshc and surfc
+commands::
+
+        meshc(xv, yv, values, 
+              clevels=10, 
+              colormap=hot(), 
+              grid='off')
+        figure()
+        surfc(xv, yv, values, 
+              clevels=15, 
+              colormap=hsv(), 
+              hidden='on', 
+              grid='off',
+              view=(30,40))
+
+The resulting plots are displayed in Figures fig:meshc_ex1 and
+fig:surfc_ex1.
+
+FIGURE:[figs/meshc_ex1.eps] Wireframe mesh with contours at the bottom (Gnuplot backend).
+
+FIGURE:[figs/surfc_ex1.eps] Surface plot with contours (Gnuplot backend).
+
+
+Pseudocolor Plots
+~~~~~~~~~~~~~~~~~
+
+Another way of visualizing a 2D scalar field in Easyviz is the
+pcolor command. This command creates a pseudocolor plot, which is a
+flat surface viewed from above. The simplest form of this command
+follows the syntax of the other commands::
+
+        pcolor(xv, yv, values)
+
+We can set the color shading in a pseudocolor plot either by giving
+the shading keyword argument to pcolor or by calling the shading
+command. The color shading is specified by a string that can be either
+'faceted' (default), 'flat', or 'interp' (interpolated). The Gnuplot and
+Matplotlib backends support 'faceted' and 'flat' only, while the
+VTK backend supports all of them.
+
+FIGURE:[figs/pcolor_ex1.eps] Pseudocolor plot (Gnuplot backend).
+
+
+Isosurface Plots
+~~~~~~~~~~~~~~~~
+
+For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
+lines or isolines for 2D scalar fields. An isosurface connects points in
+a scalar field with (approximately) the same scalar value and is
+mathematically defined by the implicit equation f(x,y,z)=c. In Easyviz,
+isosurfaces are created with the isosurface command. We will
+demonstrate this command using 3D scalar field data from the flow
+function. This function is taken from the Matlab documentation and
+generates fluid flow data. Our first isosurface visualization example
+then looks as follows::
+
+        x, y, z, v = flow()  # generate fluid-flow data
+        set(show=False)
+        h = isosurface(x,y,z,v,-3)
+        h.set(opacity=0.5)
+        shading('interp')
+        daspect([1,1,1])
+        view(3)
+        axis('tight')
+        set(show=True)
+        show()
+
+After creating some scalar volume data with the flow function, we
+create an isosurface with the isovalue -3. The isosurface is then
+set a bit transparent (opacity=0.5) before we specify the shading
+model and the view point. We also set the data aspect ratio to be
+equal in all directions with the daspect command.  The resulting
+plot is shown in Figure fig:isosurface1. We remark that the
+Gnuplot backend does not support 3D scalar fields and hence not
+isosurfaces.
+
+FIGURE:[figs/isosurface1.eps] Isosurface plot (VTK backend).
+
+Here is another example that demonstrates the isosurface command
+(again using the flow function)::
+
+        x, y, z, v = flow()
+        set(show=False)
+        h = isosurface(x,y,z,v,0)
+        shading('interp')
+        daspect([1,4,4])
+        view([-65,20])
+        axis('tight')
+        set(show=True)
+        show()
+
+Figure fig:isosurface2 shows the resulting plot.
+
+FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend).
+
+
+Volumetric Slice Plot
+~~~~~~~~~~~~~~~~~~~~~
+
+Another way of visualizing scalar volume data is by using the slice_
+command (since the name slice is already taken by a built-in
+function in Python for array slicing, we have followed the standard
+Python convention and added a trailing underscore to the name in
+Easyviz - slice_ is thus the counterpart to the Matlab function
+slice.). This command draws orthogonal slice planes through a
+given volumetric data set. Here is an example on how to use the
+slice_ command::
+
+        x, y, z = meshgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
+                           sparse=True)
+        v = x*exp(-x**2 - y**2 - z**2)
+        xslice = [-1.2, .8, 2]
+        yslice = 2
+        zslice = [-2, 0]
+        slice_(x, y, z, v, xslice, yslice, zslice,
+               colormap=hsv(), grid='off')
+
+Note that we here use the SciTools function seq for specifying a
+uniform partitioning of an interval - the linspace function from
+numpy could equally well be used.  The first three arguments in the
+slice_ call are the grid points in the x, y, and z
+directions. The fourth argument is the scalar field defined on-top of
+the grid. The next three arguments defines either slice planes in the
+three space directions or a surface plane (currently not working). In
+this example we have created 6 slice planes: Three at the x axis (at
+x=-1.2, x=0.8, and x=2), one at the y axis (at y=2), and two
+at the z axis (at z=-2 and z=0.0). The result is presented in
+Figure fig:slice1.
+
+FIGURE:[figs/slice1.eps] Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend).
+
+
+*Contours in Slice Planes.* With the contourslice command we can create contour plots
+in planes aligned with the coordinate axes. Here is an example 
+using 3D scalar field data from the flow function::
+
+        x, y, z, v = flow()
+        set(show=False)
+        h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
+        axis([0, 10, -3, 3, -3, 3])
+        daspect([1, 1, 1])
+        ax = gca()
+        ax.set(fgcolor=(1,1,1), bgcolor=(0,0,0))
+        box('on')
+        view(3)
+        set(show=True)
+        show()
+
+The first four arguments given to contourslice in this example are
+the extended coordinates of the grid (x, y, z) and the 3D scalar
+field values in the volume (v). The next three arguments defines the
+slice planes in which we want to draw contour lines. In this
+particular example we have specified two contour plots in the planes
+x=1,2,\dots,9, none in y=const planes (empty
+list) , and one contour plot in the plane z=0. The last argument to
+contourslice is optional, it can be either an integer specifying the
+number of contour lines (the default is five) or, as in the current
+example, a list specifying the level curves. Running the set of
+commands results in the plot shown in Figure fig:contourslice1.
+
+FIGURE:[figs/contourslice1.eps] Contours in slice planes (VTK backend).
+
+Here is another example where we draw contour slices from a
+three-dimensional MRI data set::
+
+        import scipy
+        mri = scipy.io.loadmat('mri_matlab_v6.mat')
+        D = mri['D']
+        image_num = 8
+        
+        # Displaying a 2D Contour Slice:
+        contourslice(D, [], [], image_num, daspect=[1,1,1])
+
+The MRI data set is loaded from the file mri_matlab_v6.mat with the
+aid from the loadmat function available in the io module in the
+SciPy package. We then create a 2D contour slice plot with one slice
+in the plane z=8. Figure fig:contourslice3 displays the result.
+
+FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend).
+
+
+Visualization of vector fields
+------------------------------
+
+A vector field is a function from space or space-time to a vector
+value, where the number of components in the vector corresponds to
+the number of space dimensions. Primary examples on vector fields
+are the gradient of a scalar field; or velocity, displacement, or
+force in continuum physics.
+
+In Easyviz, a vector field can be visualized either by a quiver
+(arrow) plot or by various kinds of stream plots like stream lines,
+stream ribbons, and stream tubes. Below we will look closer at each of
+these visualization techniques.
+
+Quiver Plots
+~~~~~~~~~~~~
+
+The quiver and quiver3 commands draw arrows to illustrate vector
+values (length and direction) at discrete points.  As the names
+indicate, quiver is for 2D vector fields in the plane and quiver3
+plots vectors in 3D space.  The basic usage of the quiver command
+goes as follows::
+
+        x = y = linspace(-5, 5, 21)
+        xv, yv = meshgrid(x, y, sparse=False)
+        values = sin(sqrt(xv**2 + yv**2))
+        uv, vv = gradient(values)
+        quiver(xv, yv, uv, vv)
+
+Our vector field in this example is simply the gradient of the scalar
+field used to illustrate the commands for 2D scalar field plotting.
+The gradient function computes the gradient using finite difference
+approximations.  The result is a vector field with components uv and
+vv in the x and y directions, respectively.  The grid points and
+the vector components are passed as arguments to quiver, which in
+turn produces the plot in Figure fig:quiver_ex1.
+
+FIGURE:[figs/quiver_ex1.eps] Velocity vector plot (Gnuplot backend).
+
+The arrows in a quiver plot are automatically scaled to fit within the
+grid. If we want to control the length of the arrows, we can pass an
+additional argument to scale the default lengths::
+
+        scale = 2
+        quiver(xv, yv, uv, vv, scale)
+
+This value of scale will thus strecth the vectors to their double length. 
+To turn off the automatic scaling, we can set the scale value to zero.
+
+Quiver plots are often used in combination with other plotting
+commands such as pseudocolor plots or contour plots, since this may
+help to get a better perception of a given set of data. Here is an
+example demonstrating this principle for a simple scalar field, where
+we plot the field values as colors and add vectors to illustrate the
+associated gradient field::
+
+        xv, yv = meshgrid(seq(-5,5,0.1), seq(-5,5,0.1))
+        values = sin(sqrt(xv**2 + yv**2))
+        pcolor(xv, yv, values, shading='interp')
+        
+        # create a coarser grid for the gradient field:
+        xv, yv = meshgrid(seq(-5,5,0.5), seq(-5,5,0.5))
+        values = sin(sqrt(xv**2 + yv**2))
+        uv, vv = gradient(values)
+        hold('on')
+        quiver(xv, yv, uv, vv, 'filled', 'k', axis=[-6,6,-6,6])
+        figure(2)
+        contour(xv, yv, values, 15) 
+        hold('on')
+        quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
+
+The resulting plots can be seen in Figure fig:quiver_ex2 and
+fig:quiver_ex3. 
+
+
+FIGURE:[figs/quiver_ex2.eps] Combined quiver and pseudocolor plot (VTK backend).
+FIGURE:[figs/quiver_ex3.eps] Combined quiver and pseudocolor plot (VTK backend).
+
+Visualization of 3D vector fields by arrows at grid points can be done
+with the quiver3 command. At the time of this writing, only the VTK
+backend supports 3D quiver plots. A simple example of plotting the
+"radius vector field" v=(x,y,z) is given next::
+
+        x = y = z = seq(-3,3,2)
+        xv, yv, zv = meshgrid(x, y, z, sparse=False)
+        uv = xv
+        vv = yv
+        wv = zv
+        quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r',
+                axis=[-7,7,-7,7,-7,7])
+
+The strings 'filled' and 'r' makes the arrows become filled
+and red, respectively. The resulting plot is presented in Figure 
+fig:quiver3_ex1. 
+
+FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend).
+
+
+
+Stream Plots
+~~~~~~~~~~~~
+
+Stream plots constitute an alternative to arrow plots for visualizing
+vector fields.  The stream plot commands currently available in
+Easyviz are streamline, streamtube, and streamribbon.  Stream
+lines are lines aligned with the vector field, i.e., the vectors are
+tangents to the streamlines. Stream tubes are similar, but now the
+surfaces of thin tubes are aligned with the vectors.  Stream ribbons
+are also similar: thin sheets are aligned with the vectors. The latter
+type of visualization is also known as stream or flow sheets.  In the
+near future, Matlab commands such as streamslice and
+streamparticles might also be implemented.
+
+We start with an example on how to use the streamline command. In
+this example (and in the following examples) we will use the wind
+data set that is included with Matlab. This data set represents air
+currents over a region of North America and is suitable for testing
+the different stream plot commands. The following commands will load
+the wind data set and then draw some stream lines from it::
+
+        import scipy  # need scipy to load binary .mat-files
+        
+        # load the wind data set and create variables:
+        wind = scipy.io.loadmat('wind.mat')
+        x = wind['x']
+        y = wind['y']
+        z = wind['z']
+        u = wind['u']
+        v = wind['v']
+        w = wind['w']
+        
+        # create starting points for the stream lines:
+        sx, sy, sz = meshgrid([80]*4, seq(20,50,10), seq(0,15,5), 
+                              sparse=False)
+          
+        # draw stream lines:
+        streamline(x, y, z, u, v, w, sx, sy, sz,
+                   view=3, axis=[60,140,10,60,-5,20])
+
+The wind data set is stored in a binary `.mat`-file called
+wind.mat. To load the data in this file into Python, we can use the
+loadmat function which is available through the io module in
+SciPy. Using the loadmat function on the `wind.mat`-file returns a
+Python dictionary (called wind in the script) containing the NumPy
+arrays x, y, z, u, v, and w. The arrays u, v, and w
+are the 3D vector data, while the arrays x, y, and z defines the
+(3D extended) coordinates for the associated grid. The data arrays in
+the dictionary wind are then stored in seperate variables for easier
+access later in the script.
+
+Before we call the streamline command we must set up some starting
+point coordinates for the stream lines. In this example, we have used
+the meshgrid command to define the starting points with the line::
+
+        sx, sy, sz = meshgrid([80]*4, seq(20,50,10), seq(0,15,5))
+
+This command defines starting points which all lie on x=80,
+y=20,30,40,50, and z=0,5,10,15. We now have all the data we need
+for calling the streamline command. The first six arguments to the
+streamline command are the grid coordinates (x,y,z) and the 3D
+vector data (u,v,w), while the next three arguments are the starting
+points which we defined with the meshgrid command above. The
+resulting plot is presented in Figure fig:streamline_ex1.
+
+FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend).
+
+The next example demonstrates streamtube command applied to the 
+same wind data set::
+
+        streamtube(x, y, z, u, v, w, sx, sy, sz,
+                   daspect=[1,1,1],
+        	   view=3,
+        	   axis='tight',
+        	   shading='interp')
+
+The arrays sx, sy, and sz are the same as in the previous
+example and defines the starting positions for the center lines of the
+tubes. The resulting plot is presented in Figure
+fig:streamtube_ex1.
+
+FIGURE:[figs/streamtube_ex1.eps] Stream tubes (Vtk backend).
+
+Finally, we illustrate the streamribbon command::
+
+        streamribbon(x, y, z, u, v, w, sx, sy, sz,
+                     ribbonwidth=5,
+                     daspect=[1,1,1],
+                     view=3,
+                     axis='tight',
+                     shading='interp')
+
+Figure fig:streamribbon_ex1 shows the resulting stream ribbons.
+
+FIGURE:[figs/streamribbon_ex1.eps] Stream ribbons (VTK backend).
+
+
+
+
+
+
+
+
+
+
 
 Design
 ======
@@ -856,7 +1383,7 @@ gca().
 It is
 natural to have one class for figures and one for axes. Class Figure
 contains a dictionary with one (default) or more Axis objects in
-addition to several properties such as figure width/height. Class Axis
+addition to several properties such as figure width and height. Class Axis
 has another dictionary with the plot data as well as lots of
 parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
 For example, when adding an
@@ -894,19 +1421,19 @@ are set by a set method and read by a get method. For
 example, we can set axis limits using the set methods in a
 Axis instance::
 
-      ax = gca()                  # get current axies
-      ax.set(xmin=-2, xmax=2)
+        ax = gca()                  # get current axies
+        ax.set(xmin=-2, xmax=2)
 
 To extract the values of these limits we can write::
 
-      xmin = ax.get('xmin')
-      xmax = ax.get('xmax')
+        xmin = ax.get('xmin')
+        xmax = ax.get('xmax')
 
 Normal use will seldom involve set and get functions, since most
 most users will apply the Matlab-inspired interface and set, e.g., axis
 limits by::
 
-      axis([-2, 2, 0, 6])
+        axis([-2, 2, 0, 6])
 
 
 

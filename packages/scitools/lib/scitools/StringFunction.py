@@ -42,11 +42,11 @@ class StringFunction:
     >>> f(1.2)
     1.6754631805511511
 
-    >>> f = StringFunction('1+sin(2*t)', independent_variables='t')
+    >>> f = StringFunction('1+sin(2*t)', independent_variable='t')
     >>> f(1.2)
     1.6754631805511511
 
-    >>> f = StringFunction('1+A*sin(w*t)', independent_variables='t', \
+    >>> f = StringFunction('1+A*sin(w*t)', independent_variable='t', \
                            A=0.1, w=3.14159)
     >>> f(1.2)
     0.94122173238695939

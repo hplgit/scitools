@@ -201,9 +201,9 @@ _NumPy_modules = (
     ('MA', 'numarray.ma.MA', 'numpy.core.ma'),
     )
      
-
 if basic_NumPy == 'numpy':
     try:
+        # fix backward compatibility with Numeric names:
 	import numpy
 	oldversion = (numpy.version.version[0] != '1')
 	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
@@ -222,8 +222,13 @@ if basic_NumPy == 'numpy':
 	if not oldversion:
 	    # get the old names too (NewAxis, Float, etc.):
 	    from numpy.oldnumeric import *
-	del(oldversion)
-
+	del oldversion
+        # define new names compatible with Numeric:
+        LinearAlgebra.solve_linear_equations = linalg.solve
+        LinearAlgebra.inverse = linalg.inv
+        LinearAlgebra.determinant = linalg.det
+        LinearAlgebra.eigenvalues = linalg.eigvals
+        LinearAlgebra.eigenvectors = linalg.eig
 
     except ImportError, e:
         raise ImportError, '%s\nnumpy import failed!\n'\
