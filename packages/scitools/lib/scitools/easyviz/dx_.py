@@ -197,7 +197,7 @@ class DXBackend(BaseClass):
         self._master.withdraw()
         self.figure(self.get('curfig'))
 
-        # convert tables for format strings:
+        # conversion tables for format strings:
         self._markers = {
             '': None,   # no marker
             '.': None,  # dot

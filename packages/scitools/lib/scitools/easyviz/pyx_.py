@@ -60,11 +60,11 @@ class PyXBackend(BaseClass):
         
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
-        # Alex had a nice function for this.
+        
         
         self.figure(self.get('curfig'))
 
-        # convert tables for format strings:
+        # conversion tables for format strings:
         self._markers = {
             '': None,   # no marker
             '.': None,  # dot

@@ -22,7 +22,7 @@ class VtkBackend(BaseClass):
         self._master = None
         self.figure(self._attrs['curfig'])
 
-        # convert tables for format strings
+        # conversion tables for format strings
         self._colors = {
             '':  (0,0,1), # No color-->Blue
             'k': (0,0,0), # Black
