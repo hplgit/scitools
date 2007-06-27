@@ -83,8 +83,11 @@ class StringFunction:
     The string parameter can, instead of a valid Python expression,
     be a function in a file (module). The string is then the
     complete path to the function, typically of the form
-    somepackage.somemodule.function_name.
-    There is a function called _test_function,
+    somepackage.somemodule.function_name. This functionality is useful
+    when simple string formulas cannot describe the function, e.g., when
+    there are multiple if-branches inside the function expression.
+    
+    As an example, there is a function called _test_function,
 
         def _test_function(x, c=0, a=1, b=2):
             if x > c:
@@ -99,6 +102,14 @@ class StringFunction:
     >>> f = StringFunction('scitools.misc._test_function', independent_variable='x', a=10)
     >>> f(4)  # 10*(4-0) + 2 = 42
     42
+
+    (Note that in Python 2.5 the _test_function can be coded as a
+    simple string expression with return a*(x-c)+b if x > c else -a*(x-c)+b.)
+    
+    Giving the name of a function in a file (module) is convenient in
+    user interfaces because the user can then write the name of
+    the function as a standard Python module.function path. StringFunction
+    turns this name, as a string, into a working module.function path.
     
     Troubleshooting:
 
