@@ -24,9 +24,9 @@ exec s
 
 # The following implementation of StringFunction is an
 # improved version compared to the one explained in the
-# first printing of the book "Python for Computational Science".
+# first edition of the book "Python for Computational Science".
 # The new version is created by Mario Pernici <Mario.Pernici@mi.infn.it>
-# and Hans Petter Langtangen <hpl@ifi.uio.no>. The basic idea is to
+# and Hans Petter Langtangen <hpl@simula.no>. The basic idea is to
 # build a lambda function out of the string expression and define
 # self.__call__ to be this lambda function.
 
@@ -80,6 +80,26 @@ class StringFunction:
     >>> f(2,1)  # [1+2*2, 1]
     [5, 1]
 
+    The string parameter can, instead of a valid Python expression,
+    be a function in a file (module). The string is then the
+    complete path to the function, typically of the form
+    somepackage.somemodule.function_name.
+    There is a function called _test_function,
+
+        def _test_function(x, c=0, a=1, b=2):
+            if x > c:
+                return a*(x-c) + b
+            else:
+                return -a*(x-c) + b
+
+    in the module scitools.misc (i.e., the misc.py file in the scitools
+    package). We can then specify the complete path of this function
+    as "string expression":
+
+    >>> f = StringFunction('scitools.misc._test_function', independent_variable='x', a=10)
+    >>> f(4)  # 10*(4-0) + 2 = 42
+    42
+    
     Troubleshooting:
 
     1)
@@ -101,16 +121,43 @@ class StringFunction:
     f = StringFunction('1+x*y', globals=globals())
     f(p,q) will now work for NumPy arrays p and q.
 
-    2)
-    At present, you cannot send StringFunction instances to Fortran
-    if F2PY generated the wrapper code. The workaround is to send
-    the __call__ function, e.g.,
-    f = StringFunction(...)
-    v = my_f77_routine(f.__call__)
-    
+    2) StringFunction builds a lambda function and evaluates this.
+    You can see the lambda function as a string by accessing the
+    _lambda attribute.
     """
     def __init__(self, expression, **kwargs):
         self._f = expression
+
+        # check if expression is a function in a module:
+        self._function_from_file = None
+        parts = expression.split('.')
+        if len(parts) > 1:
+            string_function = False
+            # This may be a package.module.function type of function
+            # (or just a string expression with a number with a dot...).
+            # Let _build_lambda build a wrapper to this function.
+            # self._f holds a special keyword argument to the
+            # lambda function which refers to the function in file.
+            
+            module = '.'.join(parts[:-1])
+            # can we import this module? (might be misphrased or it
+            # might not be a module at all but part of a string formula...)
+            try:
+                exec('import ' + module)
+            except:
+                string_function = True
+            try:
+                self._function_from_file = eval(expression)
+            except NameError:
+                string_function = True
+        else:
+            string_function = True
+
+        # consistency check:
+        if not string_function:
+            if self._function_from_file is None:
+                raise ValueError, 'a bug'
+            
         # self._var holds the independent variables in a tuple:
         if 'independent_variable' in kwargs:
             self._var = tuple(kwargs['independent_variable'])  # 'x', 't' etc.
@@ -141,18 +188,40 @@ class StringFunction:
         parameters as keyword arguments.
         The idea is due to Mario Pernici <Mario.Pernici@mi.infn.it>.
         """
-        s = 'lambda ' + ', '.join(self._var)
-        ##s = 'lambda self, ' + ', '.join(self._var)
+        args = ', '.join(self._var)
+        s = 'lambda ' + args
+
         # add parameters as keyword arguments:
         if self._prms:
-            s += ', ' + ', '.join(['%s=%s' % (k, self._prms[k]) \
-                                   for k in self._prms])
-        s += ': ' + self._f
+            kwargs = ', '.join(['%s=%s' % (k, self._prms[k]) \
+                                for k in self._prms])
+            s += ', ' + kwargs
+
+        if self._function_from_file is None:
+            # insert string expression as body in the lambda function:
+            s += ': ' + self._f
+        else:
+            # let lambda call a function in a file (module):
+            s += ', function_from_file=self._function_from_file: ' + \
+                 'function_from_file(%s, %s)' % (args, kwargs)
+            # note: we could use self._f directly here (giving the
+            # full module path), but then we need to do import first,
+            # all this is done in the __init__ and then it is simpler
+            # to just let self_function_from_file point to the imported
+            # function
+        
         self._lambda = s # store lambda function code; just for convenience
+
         try:
-            self.__call__ = eval(s, self._globals)
-            ## the following makes all instances have the same function :-(
-            ##StringFunction.__call__ = eval(s, self._globals)
+            if self._function_from_file is None:
+                self.__call__ = eval(s, self._globals)
+                
+                ## the following makes all instances have the same function :-(
+                ##StringFunction.__call__ = eval(s, self._globals)
+            else:
+                # didn't work with self._globals...and we don't need it
+                self.__call__ = eval(s)
+
         except NameError, e:
             prm = str(e).split()[1]
             raise NameError, 'name "%s" is not defined - if it is '\
@@ -404,7 +473,7 @@ C     note: it cannot be int
                   'use pow(a,b) instead of a**b in the expression'\
                   '\n%s\n(since you demand translation to C/C++)' % self._f
         
-def _test():
+def _doctest():
     import doctest, StringFunction
     return doctest.testmod(StringFunction)
 
@@ -574,6 +643,7 @@ class StringFunction_v5(StringFunction_v4):
 
 
 def _efficiency():
+    print '\nPerform some efficiency tests (this might take some time...):'
     formula = 'sin(x) + x**3 + 2*x'
     formula_wprm = formula + ' + A*B'
     def s0(x):
@@ -607,8 +677,9 @@ def _efficiency():
                   comment=name)
         e.add(name, t)
     print e
+    print 'End of efficiency tests\n'
 
 if __name__ == '__main__':
-    _efficiency()
+    _doctest()
     _demo()
-    _test()
+    _efficiency()

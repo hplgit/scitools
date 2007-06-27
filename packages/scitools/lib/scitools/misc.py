@@ -800,6 +800,12 @@ def flatten(nested_data):
         else:
             yield e
 
+# used from StringFunction in an example:
+def _test_function(x, c=0, a=1, b=2):
+    if x > c:
+        return a*(x-c) + b
+    else:
+        return -a*(x-c) + b
 
 # -- tests ---
 def f(a, b, max=1.2, min=2.2):  # some function
