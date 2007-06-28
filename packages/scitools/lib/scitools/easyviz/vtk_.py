@@ -98,7 +98,7 @@ class VtkBackend(BaseClass):
         renwin_frame.pack(side='left', fill='both', expand=1)
         frame = Tkinter.Frame(renwin_frame)
         frame.pack(side='top', fill='both', expand=1)
-        width, height = fig.get('size')
+        width, height = fig.getp('size')
         if width is None or height is None:
             width = 640;  height = 480
         tkw = vtkTkRenderWidget.vtkTkRenderWidget(frame,
@@ -115,7 +115,7 @@ class VtkBackend(BaseClass):
         return renwin
 
     def _set_view_old(self):
-        axis_cam = self._axis.get('camera')
+        axis_cam = self._axis.getp('camera')
         if not hasattr(self._axis, '_vtk_camera'):
             # initialize camera:
             pass
@@ -124,89 +124,89 @@ class VtkBackend(BaseClass):
             pass
         camera = vtk.vtkCamera()
         self._axis._renderer.SetActiveCamera(camera)
-        if axis_cam.get('camproj') == 'perspective':
+        if axis_cam.getp('camproj') == 'perspective':
             camera.ParallelProjectionOff()
         else:
             camera.ParallelProjectionOn()
-        fp = axis_cam.get('camtarget')
+        fp = axis_cam.getp('camtarget')
         camera.SetFocalPoint(fp)
-        camera.SetViewUp(axis_cam.get('camup'))
-        if axis_cam.get('cammode') == 'auto':
-            if axis_cam.get('view') == 3:
+        camera.SetViewUp(axis_cam.getp('camup'))
+        if axis_cam.getp('cammode') == 'auto':
+            if axis_cam.getp('view') == 3:
                 camera.SetPosition(fp[0],fp[1]-1,fp[2])
                 camera.Azimuth(-37.5)
                 camera.Elevation(30)
             else:
                 camera.SetPosition(fp[0], fp[1], 1)
         else:
-            camera.SetPosition(axis_cam.get('campos'))
+            camera.SetPosition(axis_cam.getp('campos'))
         #camera.ComputeViewPlaneNormal()
         #camera.OrthogonalizeViewUp()
-        if axis_cam.get('camva') is not None:
-            camera.SetViewAngle(axis_cam.get('camva'))
-        azimuth = axis_cam.get('azimuth')
+        if axis_cam.getp('camva') is not None:
+            camera.SetViewAngle(axis_cam.getp('camva'))
+        azimuth = axis_cam.getp('azimuth')
         if azimuth is not None:
-            if axis_cam.get('view') == 3:
+            if axis_cam.getp('view') == 3:
                 azimuth += 37.5 # compensate for above
             camera.Azimuth(azimuth)
-        elevation = axis_cam.get('elevation')
+        elevation = axis_cam.getp('elevation')
         if elevation is not None:
-            if axis_cam.get('view') == 3:
+            if axis_cam.getp('view') == 3:
                 elevation -= 30 # compensate for above
             camera.Elevation(elevation)
         # make all actors fit inside the current scene:
         self._axis._renderer.ResetCamera()
-        camera.Zoom(axis_cam.get('camzoom'))
+        camera.Zoom(axis_cam.getp('camzoom'))
         self._axis._vtk_camera = camera
 
     def _initialize_camera(self):
-        ax_cam = self._axis.get('camera')
+        ax_cam = self._axis.getp('camera')
         camera = vtk.vtkCamera()
-        fp = ax_cam.get('camtarget')
+        fp = ax_cam.getp('camtarget')
         camera.SetFocalPoint(fp)
-        camera.SetViewUp(ax_cam.get('camup'))
-        if ax_cam.get('cammode') == 'auto':
-            if ax_cam.get('view') == 3:
+        camera.SetViewUp(ax_cam.getp('camup'))
+        if ax_cam.getp('cammode') == 'auto':
+            if ax_cam.getp('view') == 3:
                 camera.SetPosition(fp[0],fp[1]-1,fp[2])
                 camera.Azimuth(-37.5)
                 camera.Elevation(30)
             else:
                 camera.SetPosition(fp[0], fp[1], 1)
         else:
-            camera.SetPosition(ax_cam.get('campos'))
-        azimuth = ax_cam.get('azimuth')
+            camera.SetPosition(ax_cam.getp('campos'))
+        azimuth = ax_cam.getp('azimuth')
         if azimuth is not None:
-            if ax_cam.get('view') == 3:
+            if ax_cam.getp('view') == 3:
                 azimuth += 37.5 # compensate for above
             camera.Azimuth(azimuth)
-        elevation = ax_cam.get('elevation')
+        elevation = ax_cam.getp('elevation')
         if elevation is not None:
-            if ax_cam.get('view') == 3:
+            if ax_cam.getp('view') == 3:
                 elevation -= 30 # compensate for above
             camera.Elevation(elevation)
 
         return camera
 
     def _update_camera(self):
-        ax_cam = self._axis.get('camera')
+        ax_cam = self._axis.getp('camera')
         camera = self._axis._vtk_camera
         return camera
 
     def _set_view(self):
-        ax_cam = self._axis.get('camera')
+        ax_cam = self._axis.getp('camera')
         if not hasattr(self._axis, '_vtk_camera'):
             camera = self._initialize_camera()
         else:
             #camera = self._update_camera()
             camera = self._initialize_camera()
 
-        if ax_cam.get('camroll') is not None:
-            camera.Roll(ax_cam.get('camroll'))
+        if ax_cam.getp('camroll') is not None:
+            camera.Roll(ax_cam.getp('camroll'))
 
-        if ax_cam.get('camva') is not None:
-            camera.SetViewAngle(ax_cam.get('camva'))
+        if ax_cam.getp('camva') is not None:
+            camera.SetViewAngle(ax_cam.getp('camva'))
  
-        if ax_cam.get('camproj') == 'perspective':
+        if ax_cam.getp('camproj') == 'perspective':
             camera.ParallelProjectionOff()
         else:
             camera.ParallelProjectionOn()
@@ -217,9 +217,9 @@ class VtkBackend(BaseClass):
         # make sure all actors are inside the current view:
         ren = self._axis._renderer
         ren.ResetCamera()
-        if self._axis.get('camera').get('view') == 2:
+        if self._axis.getp('camera').getp('view') == 2:
             ren.GetActiveCamera().Zoom(1.5)
-        camera.Zoom(ax_cam.get('camzoom'))
+        camera.Zoom(ax_cam.getp('camzoom'))
        
         # set the camera in the vtkCubeAxesActor2D object:
         self._axis._vtk_axes.SetCamera(camera)
@@ -228,15 +228,15 @@ class VtkBackend(BaseClass):
         ax = self._axis
         if not hasattr(ax, '_vtk_axes'):
             ax._vtk_axes = vtk.vtkCubeAxesActor2D()
-        if ax.get('visible'):
+        if ax.getp('visible'):
             tprop = vtk.vtkTextProperty()
-            tprop.SetColor(ax.get('fgcolor'))
-            tprop.SetFontSize(ax.get('fontsize'))
+            tprop.SetColor(ax.getp('fgcolor'))
+            tprop.SetFontSize(ax.getp('fontsize'))
             tprop.SetShadow(0)
             tprop.SetBold(0)
-            mode = ax.get('mode')
+            mode = ax.getp('mode')
             if mode in ['auto', 'tight']:
-                dar = ax.get('daspect')
+                dar = ax.getp('daspect')
                 bounds = b = list(ax._vtk_apd.GetOutput().GetBounds())
                 if mode == 'auto':
                     incr = 0.1
@@ -262,17 +262,17 @@ class VtkBackend(BaseClass):
             #ax._vtk_axes.SetCamera(ax._vtk_camera)
             ax._vtk_axes.SetLabelFormat("%6.3g")
             ax._vtk_axes.SetFlyModeToOuterEdges()
-            #ax._vtk_axes.SetFontFactor(ax.get('fontsize')/10.)
+            #ax._vtk_axes.SetFontFactor(ax.getp('fontsize')/10.)
             ax._vtk_axes.ScalingOff()
             ax._vtk_axes.SetAxisTitleTextProperty(tprop)
             ax._vtk_axes.SetAxisLabelTextProperty(tprop)
-            ax._vtk_axes.GetProperty().SetColor(ax.get('fgcolor'))
+            ax._vtk_axes.GetProperty().SetColor(ax.getp('fgcolor'))
             ax._vtk_axes.SetCornerOffset(0)
             ax._vtk_axes.SetNumberOfLabels(5)
-            ax._vtk_axes.SetXLabel(ax.get('xlabel'))
-            ax._vtk_axes.SetYLabel(ax.get('ylabel'))
-            ax._vtk_axes.SetZLabel(ax.get('zlabel'))
-            if ax.get('camera').get('view') == 2:
+            ax._vtk_axes.SetXLabel(ax.getp('xlabel'))
+            ax._vtk_axes.SetYLabel(ax.getp('ylabel'))
+            ax._vtk_axes.SetZLabel(ax.getp('zlabel'))
+            if ax.getp('camera').getp('view') == 2:
                 ax._vtk_axes.YAxisVisibilityOff()
             else:
                 ax._vtk_axes.YAxisVisibilityOn()
@@ -286,7 +286,7 @@ class VtkBackend(BaseClass):
         # remove old box (if present):
         if ax._renderer.GetActors().IsItemPresent(ax._vtk_box):
             ax._renderer.RemoveActor(ax._vtk_box)
-        if ax.get('box'):
+        if ax.getp('box'):
             box = vtk.vtkCubeSource()
             #box.SetBounds(ax._vtk_scaled_bounds)
             box.SetBounds(ax._vtk_box_bounds)
@@ -296,44 +296,44 @@ class VtkBackend(BaseClass):
             mapper = vtk.vtkPolyDataMapper()
             mapper.SetInput(outline.GetOutput())
             ax._vtk_box.SetMapper(mapper)
-            ax._vtk_box.GetProperty().SetColor(ax.get('fgcolor'))
+            ax._vtk_box.GetProperty().SetColor(ax.getp('fgcolor'))
             ax._renderer.AddActor(ax._vtk_box)
 
     def _set_colormap(self):
-        colormap = self._axis.get('colormap')
+        colormap = self._axis.getp('colormap')
         if not isinstance(colormap, vtk.vtkLookupTable):
             colormap = self.jet() # use default colormap
         self._axis._vtk_colormap = colormap
 
     def _set_colorbar(self):
         ax = self._axis
-        cbar = ax.get('colorbar')
+        cbar = ax.getp('colorbar')
 
         if not hasattr(ax, '_vtk_colorbar'):
             ax._vtk_colorbar = vtk.vtkScalarBarActor()
         if ax._renderer.GetActors().IsItemPresent(ax._vtk_colorbar):
             ax._renderer.RemoveActor2D(ax._vtk_colorbar)
-        if cbar.get('visible'):
-            cblocation = cbar.get('cblocation')
+        if cbar.getp('visible'):
+            cblocation = cbar.getp('cblocation')
             cbloc = self._colorbar_locations[cblocation]
             ax._vtk_colorbar.SetLookupTable(ax._vtk_colormap)
             if 'North' in cblocation or 'South' in cblocation:
                 ax._vtk_colorbar.SetOrientationToHorizontal()
             else:
                 ax._vtk_colorbar.SetOrientationToVertical()
-            ax._vtk_colorbar.SetTitle(cbar.get('cbtitle'))
+            ax._vtk_colorbar.SetTitle(cbar.getp('cbtitle'))
             ax._vtk_colorbar.SetPosition(*cbloc[0])
             ax._vtk_colorbar.SetPosition2(*cbloc[1])
             tprop = vtk.vtkTextProperty()
-            tprop.SetColor(ax.get('fgcolor'))
-            tprop.SetFontSize(ax.get('fontsize'))
+            tprop.SetColor(ax.getp('fgcolor'))
+            tprop.SetFontSize(ax.getp('fontsize'))
             tprop.ShadowOff()
             ax._vtk_colorbar.SetTitleTextProperty(tprop)
             ax._vtk_colorbar.SetLabelTextProperty(tprop)
             ax._renderer.AddActor(ax._vtk_colorbar)
 
     def _set_shading(self, item, source, actor):
-        shading = self._axis.get('shading')
+        shading = self._axis.getp('shading')
         if shading == 'interp':
             actor.GetProperty().SetInterpolationToGouraud()
         elif shading == 'flat':
@@ -349,7 +349,7 @@ class VtkBackend(BaseClass):
             mapper.SetResolveCoincidentTopologyToPolygonOffset()
             mesh = vtk.vtkActor()
             mesh.SetMapper(mapper)
-            color = item.get('linecolor')
+            color = item.getp('linecolor')
             if color == '' or color is None:
                 color = (0,0,0) # use black as default
             elif not isinstance(color, (tuple,list)):
@@ -361,13 +361,13 @@ class VtkBackend(BaseClass):
     def _set_title(self):
         tprop = vtk.vtkTextProperty()
         tprop.BoldOff()
-        tprop.SetFontSize(self._axis.get('fontsize'))
-        tprop.SetColor(self._axis.get('fgcolor'))
+        tprop.SetFontSize(self._axis.getp('fontsize'))
+        tprop.SetColor(self._axis.getp('fgcolor'))
         tprop.SetFontFamilyToArial()
         tprop.SetVerticalJustificationToTop()
         tprop.SetJustificationToCentered()
 	mapper = vtk.vtkTextMapper()
-        mapper.SetInput(self._axis.get('title'))
+        mapper.SetInput(self._axis.getp('title'))
         mapper.SetTextProperty(tprop)
 	actor = vtk.vtkActor2D()
         actor.SetMapper(mapper)
@@ -376,10 +376,10 @@ class VtkBackend(BaseClass):
         self._axis._renderer.AddActor(actor)
 
     def _set_caxis(self):
-        if self._axis.get('caxismode') == 'auto':
+        if self._axis.getp('caxismode') == 'auto':
             caxis = None
         else:
-            caxis = self._axis.get('caxis')
+            caxis = self._axis.getp('caxis')
         self._axis._vtk_caxis = caxis
         
     def _data_inside_bounds(self, data):
@@ -409,10 +409,10 @@ class VtkBackend(BaseClass):
         return clipper
 
     def _add_slices(self, item, sgrid, contours=False):
-        cvector = item.get('cvector')
+        cvector = item.getp('cvector')
         center = sgrid.GetCenter()
-        dar = self._axis.get('daspect')
-        sx, sy, sz = item.get('slices')
+        dar = self._axis.getp('daspect')
+        sx, sy, sz = item.getp('slices')
         if len(shape(sx)) == 2 and shape(sx) == shape(sy) == shape(sz):
             s = Surface(sx,sy,sz)
             sgrid2 = self._get_2d_structured_grid(s)
@@ -432,7 +432,7 @@ class VtkBackend(BaseClass):
             mapper = vtk.vtkPolyDataMapper()
             mapper.SetInput(cut.GetOutput())
             mapper.SetLookupTable(self._axis._vtk_colormap)
-            caxis = self._axis.get('caxis')
+            caxis = self._axis.getp('caxis')
             if None in caxis:
                 caxis = data.GetOutput().GetScalarRange()
             mapper.SetScalarRange(caxis)
@@ -477,13 +477,13 @@ class VtkBackend(BaseClass):
                             iso.SetValue(i, cvector[i])
                     else:
                         zmin, zmax = data.GetOutput().GetScalarRange()
-                        iso.GenerateValues(item.get('clevels'), zmin, zmax)
+                        iso.GenerateValues(item.getp('clevels'), zmin, zmax)
                     iso.Update()
                     mapper.SetInput(iso.GetOutput())
                 else:
                     mapper.SetInput(data.GetOutput())
                 mapper.SetLookupTable(self._axis._vtk_colormap)
-                caxis = self._axis.get('caxis')
+                caxis = self._axis.getp('caxis')
                 if None in caxis:
                     caxis = sgrid.GetScalarRange()
                 mapper.SetScalarRange(caxis)
@@ -499,7 +499,7 @@ class VtkBackend(BaseClass):
     def _add_isosurface(self, item, sgrid):
         iso = vtk.vtkContourFilter()
         iso.SetInput(sgrid)
-        iso.SetValue(0, item.get('isovalue'))
+        iso.SetValue(0, item.getp('isovalue'))
         iso.Update()
         data = self._cut_data(iso)
         normals = vtk.vtkPolyDataNormals()
@@ -509,7 +509,7 @@ class VtkBackend(BaseClass):
         mapper = vtk.vtkPolyDataMapper()
         mapper.SetInput(normals.GetOutput())
         mapper.SetLookupTable(self._axis._vtk_colormap)
-        caxis = self._axis.get('caxis')
+        caxis = self._axis.getp('caxis')
         if None in caxis:
             caxis = sgrid.GetScalarRange()
         mapper.SetScalarRange(caxis)
@@ -523,24 +523,24 @@ class VtkBackend(BaseClass):
 
     def _get_2d_structured_grid(self, item, vectors=False,
                                 heights=True, bottom=False):
-        memoryorder = item.get('memoryorder')
-        dar = self._axis.get('daspect')
-        x = asarray(item.get('xdata'))/dar[0]
-        y = asarray(item.get('ydata'))/dar[1]
+        memoryorder = item.getp('memoryorder')
+        dar = self._axis.getp('daspect')
+        x = asarray(item.getp('xdata'))/dar[0]
+        y = asarray(item.getp('ydata'))/dar[1]
         sgrid = vtk.vtkStructuredGrid()
-        sgrid.SetDimensions(item.get('dims'))
-        no_points = item.get('numberofpoints')
+        sgrid.SetDimensions(item.getp('dims'))
+        no_points = item.getp('numberofpoints')
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(no_points)
         if vectors:
             item.scale_vectors()
             x = ravel(x)
             y = ravel(y)
-            u = asarray(item.get('udata'))
-            v = ravel(item.get('vdata'))
-            w = ravel(item.get('wdata'))
-            z = ravel(item.get('zdata'))
-            if item.get('function') == 'quiver3':
+            u = asarray(item.getp('udata'))
+            v = ravel(item.getp('vdata'))
+            w = ravel(item.getp('wdata'))
+            z = ravel(item.getp('zdata'))
+            if item.getp('function') == 'quiver3':
                 z = z/dar[2]
             if rank(u) == 2:
                 nx, ny = shape(u)
@@ -568,7 +568,7 @@ class VtkBackend(BaseClass):
             sgrid.SetPoints(points)
             sgrid.GetPointData().SetVectors(vectors)
         else:
-            values = asarray(item.get('zdata'))
+            values = asarray(item.getp('zdata'))
             if heights:
                 z = values/dar[2]
             elif bottom:
@@ -577,7 +577,7 @@ class VtkBackend(BaseClass):
             else:
                 z = zeros(values.shape, NumPy_dtype(values))
             try:
-                cdata = asarray(item.get('cdata'))
+                cdata = asarray(item.getp('cdata'))
             except KeyError:
                 pass
             else:
@@ -606,20 +606,20 @@ class VtkBackend(BaseClass):
         return sgrid
 
     def _get_3d_structured_grid(self, item, vectors=False):
-        memoryorder = item.get('memoryorder')
-        dar = self._axis.get('daspect')
-        x = asarray(item.get('xdata'))/dar[0]
-        y = asarray(item.get('ydata'))/dar[1]
-        z = asarray(item.get('zdata'))/dar[2]
+        memoryorder = item.getp('memoryorder')
+        dar = self._axis.getp('daspect')
+        x = asarray(item.getp('xdata'))/dar[0]
+        y = asarray(item.getp('ydata'))/dar[1]
+        z = asarray(item.getp('zdata'))/dar[2]
         sgrid = vtk.vtkStructuredGrid()
-        sgrid.SetDimensions(item.get('dims'))
-        no_points = item.get('numberofpoints')
+        sgrid.SetDimensions(item.getp('dims'))
+        no_points = item.getp('numberofpoints')
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(no_points)
         if vectors:
-            u = asarray(item.get('udata'))
-            v = asarray(item.get('vdata'))
-            w = asarray(item.get('wdata'))
+            u = asarray(item.getp('udata'))
+            v = asarray(item.getp('vdata'))
+            w = asarray(item.getp('wdata'))
             nx, ny, nz = shape(u)
             if not (shape(x) == shape(y) == shape(z)):
                 x, y, z = meshgrid(ravel(x), ravel(y), ravel(z),
@@ -648,9 +648,9 @@ class VtkBackend(BaseClass):
             scalars.SetNumberOfTuples(no_points)
             scalars.SetNumberOfComponents(1)
             
-            v = asarray(item.get('vdata'))
+            v = asarray(item.getp('vdata'))
             # TODO: what about pseudocolor data?
-            #cdata = ravel(item.get('cdata'))
+            #cdata = ravel(item.getp('cdata'))
             #if cdata is not None:
             #    v = cdata
             nx, ny, nz = shape(v)
@@ -685,14 +685,14 @@ class VtkBackend(BaseClass):
         mapper = vtk.vtkDataSetMapper()
         mapper.SetInput(normals.GetOutput())
         mapper.SetLookupTable(self._axis._vtk_colormap)
-        caxis = self._axis.get('caxis')
+        caxis = self._axis.getp('caxis')
         if None in caxis:
             caxis = data.GetOutput().GetScalarRange()
         mapper.SetScalarRange(caxis)
         mapper.Update()
         actor = vtk.vtkActor()
         actor.SetMapper(mapper)
-        if item.get('wireframe'):
+        if item.getp('wireframe'):
             actor.GetProperty().SetRepresentationToWireframe()
         else:
             self._set_shading(item, data, actor)
@@ -706,7 +706,7 @@ class VtkBackend(BaseClass):
         plane.SetInput(sgrid)
         plane.Update()
         data = self._cut_data(plane)
-        filled = item.get('filled')
+        filled = item.getp('filled')
         if filled:
             iso = vtk.vtkBandedPolyDataContourFilter()
             iso.SetScalarModeToValue()
@@ -714,8 +714,8 @@ class VtkBackend(BaseClass):
         else:
             iso = vtk.vtkContourFilter()
         iso.SetInput(data.GetOutput())
-        clevels = item.get('clevels')
-        cvector = item.get('cvector')
+        clevels = item.getp('clevels')
+        cvector = item.getp('cvector')
         if cvector is not None:
             for i in range(clevels):
                 iso.SetValue(i, cvector[i])
@@ -727,11 +727,11 @@ class VtkBackend(BaseClass):
         isoMapper = vtk.vtkPolyDataMapper()
         isoMapper.SetInput(iso.GetOutput())
         isoMapper.SetLookupTable(self._axis._vtk_colormap)
-        caxis = self._axis.get('caxis')
+        caxis = self._axis.getp('caxis')
         if None in caxis:
             caxis = data.GetOutput().GetScalarRange()
         isoMapper.SetScalarRange(caxis)
-        if item.get('linecolor'): # linecolor is defined:
+        if item.getp('linecolor'): # linecolor is defined:
             isoMapper.ScalarVisibilityOff()
         isoMapper.Update()
         isoActor = vtk.vtkActor()
@@ -750,7 +750,7 @@ class VtkBackend(BaseClass):
             edgeActor.GetProperty().SetColor(0, 0, 0)
             self._axis._renderer.AddActor(edgeActor)
 
-        if item.get('clabels'):
+        if item.getp('clabels'):
             # subsample the points and label them:
             mask = vtk.vtkMaskPoints()
             mask.SetInput(iso.GetOutput())
@@ -777,17 +777,17 @@ class VtkBackend(BaseClass):
             self._axis._renderer.AddActor(contourLabels)
 
     def _add_velocity_vectors(self, item, sgrid):
-        marker, rotation = self._arrow_types[item.get('linemarker')]
+        marker, rotation = self._arrow_types[item.getp('linemarker')]
         arrow = vtk.vtkGlyphSource2D()
         arrow.SetGlyphType(marker)
-        arrow.SetFilled(item.get('filledarrows'))
+        arrow.SetFilled(item.getp('filledarrows'))
         arrow.SetRotationAngle(rotation)
         if arrow.GetGlyphType() != 9: # not an arrow
             arrow.DashOn()
             arrow.SetCenter(.75,0,0)
         else:
             arrow.SetCenter(.5,0,0)        
-        arrow.SetColor(self._colors[item.get('linecolor')])
+        arrow.SetColor(self._colors[item.getp('linecolor')])
 
         plane = vtk.vtkStructuredGridGeometryFilter()
         plane.SetInput(sgrid)
@@ -821,17 +821,17 @@ class VtkBackend(BaseClass):
         max_velocity = sgrid.GetPointData().GetVectors().GetMaxNorm()
         max_time = 35.0*length/max_velocity
         
-        n = item.get('numberofstreams')
-        sx = ravel(item.get('startx'))
-        sy = ravel(item.get('starty'))
-        sz = ravel(item.get('startz'))
-        dar = self._axis.get('daspect')
+        n = item.getp('numberofstreams')
+        sx = ravel(item.getp('startx'))
+        sy = ravel(item.getp('starty'))
+        sz = ravel(item.getp('startz'))
+        dar = self._axis.getp('daspect')
         for i in range(n):
             integ = vtk.vtkRungeKutta2() # or 4?
             stream = vtk.vtkStreamLine()
             stream.SetInput(sgrid)
-            stream.SetStepLength(item.get('stepsize'))
-            #stream.SetIntegrationStepLength(item.get('stepsize'))
+            stream.SetStepLength(item.getp('stepsize'))
+            #stream.SetIntegrationStepLength(item.getp('stepsize'))
             #stream.SetIntegrationDirectionToIntegrateBothDirections()
             stream.SetIntegrationDirectionToForward()
             #stream.SetMaximumPropagationTime(max_time)
@@ -842,21 +842,21 @@ class VtkBackend(BaseClass):
             stream.SetIntegrator(integ)
             stream.Update()
             data = self._cut_data(stream)
-            if item.get('ribbons'):
+            if item.getp('ribbons'):
                 streamribbon = vtk.vtkRibbonFilter()
                 streamribbon.SetInput(data.GetOutput())
                 streamribbon.VaryWidthOn()
-                streamribbon.SetWidthFactor(item.get('ribbonwidth'))
+                streamribbon.SetWidthFactor(item.getp('ribbonwidth'))
                 #streamribbon.SetAngle(90)
                 streamribbon.SetDefaultNormal([0,1,0])
                 streamribbon.UseDefaultNormalOn()
                 streamribbon.Update()
                 output = streamribbon.GetOutput()
-            elif item.get('tubes'):
+            elif item.getp('tubes'):
                 streamtube = vtk.vtkTubeFilter()
                 streamtube.SetInput(data.GetOutput())
                 streamtube.SetRadius(1)
-                streamtube.SetNumberOfSides(item.get('n'))
+                streamtube.SetNumberOfSides(item.getp('n'))
                 streamtube.SetVaryRadiusToVaryRadiusByVector()
                 streamtube.Update()
                 output = streamtube.GetOutput()
@@ -865,7 +865,7 @@ class VtkBackend(BaseClass):
             mapper = vtk.vtkPolyDataMapper()
             mapper.SetInput(output)
             mapper.SetLookupTable(self._axis._vtk_colormap)
-            caxis = self._axis.get('caxis')
+            caxis = self._axis.getp('caxis')
             if None in caxis:
                 caxis = output.GetBounds()[4:]
                 #caxis = sgrid.GetScalarRange()
@@ -880,15 +880,15 @@ class VtkBackend(BaseClass):
             self._axis._vtk_apd.AddInput(output)
             
     def _add_line(self, item):
-        dar = self._axis.get('daspect')
-        n = item.get('numberofpoints')
+        dar = self._axis.getp('daspect')
+        n = item.getp('numberofpoints')
         polydata = vtk.vtkPolyData()
         polydata.SetLines(vtk.vtkCellArray()) 
         points = vtk.vtkPoints()
         #points.SetNumberOfPoints(n)
-        x = ravel(item.get('xdata'))/dar[0]
-        y = ravel(item.get('ydata'))/dar[1]
-        z = item.get('zdata')
+        x = ravel(item.getp('xdata'))/dar[0]
+        y = ravel(item.getp('ydata'))/dar[1]
+        z = item.getp('zdata')
         if z is not None:
             z = ravel(z)/dar[2]
         else:
@@ -913,44 +913,44 @@ class VtkBackend(BaseClass):
 
     def _set_actor_properties(self, item, actor):
         # set line properties:
-        color = item.get('linecolor')
+        color = item.getp('linecolor')
         if not isinstance(color, (tuple,list)):
             try: color = self._colors[color]
             except: color = (0,0,1) # use blue as default
         actor.GetProperty().SetColor(color)
-        if item.get('linetype') == '--':
+        if item.getp('linetype') == '--':
             actor.GetProperty().SetLineStipplePattern(65280)
-        elif item.get('linetype') == ':':
+        elif item.getp('linetype') == ':':
             actor.GetProperty().SetLineStipplePattern(0x1111)
             actor.GetProperty().SetLineStippleRepeatFactor(1)
-        actor.GetProperty().SetPointSize(item.get('pointsize'))
-        linewidth = item.get('linewidth')
+        actor.GetProperty().SetPointSize(item.getp('pointsize'))
+        linewidth = item.getp('linewidth')
         if linewidth:
             actor.GetProperty().SetLineWidth(linewidth)
         
         # set material properties:
         ax = self._axis
-        mat = item.get('material')
-        if mat.get('opacity') is not None:
-            actor.GetProperty().SetOpacity(mat.get('opacity'))
-        if mat.get('ambient') is not None:
-            actor.GetProperty().SetAmbient(mat.get('ambient'))
-        if ax.get('ambientcolor') is not None:
-            actor.GetProperty().SetAmbientColor(ax.get('ambientcolor'))
-        if mat.get('diffuse') is not None:
-            actor.GetProperty().SetDiffuse(mat.get('diffuse'))
-        if ax.get('diffusecolor') is not None:
-            actor.GetProperty().SetDiffuseColor(ax.get('diffusecolor'))
-        if mat.get('specular') is not None:
-            actor.GetProperty().SetSpecular(mat.get('specular'))
-        if mat.get('specularpower') is not None:
-            actor.GetProperty().SetSpecularPower(mat.get('specularpower'))
+        mat = item.getp('material')
+        if mat.getp('opacity') is not None:
+            actor.GetProperty().SetOpacity(mat.getp('opacity'))
+        if mat.getp('ambient') is not None:
+            actor.GetProperty().SetAmbient(mat.getp('ambient'))
+        if ax.getp('ambientcolor') is not None:
+            actor.GetProperty().SetAmbientColor(ax.getp('ambientcolor'))
+        if mat.getp('diffuse') is not None:
+            actor.GetProperty().SetDiffuse(mat.getp('diffuse'))
+        if ax.getp('diffusecolor') is not None:
+            actor.GetProperty().SetDiffuseColor(ax.getp('diffusecolor'))
+        if mat.getp('specular') is not None:
+            actor.GetProperty().SetSpecular(mat.getp('specular'))
+        if mat.getp('specularpower') is not None:
+            actor.GetProperty().SetSpecularPower(mat.getp('specularpower'))
 
     def _set_grid(self):
-        if not self._axis.get('visible') or not self._axis.get('grid'):
+        if not self._axis.getp('visible') or not self._axis.getp('grid'):
             return
         b = self._axis._vtk_box_bounds #self._axis._vtk_scaled_bounds
-        if self._axis.get('camera').get('view') == 3:
+        if self._axis.getp('camera').getp('view') == 3:
             origins = [[b[0],b[2],b[4]], [b[0],b[3],b[4]], [b[1],b[2],b[4]]]
             points1 = [[b[1],b[2],b[4]], [b[0],b[3],b[5]], [b[1],b[2],b[5]]]
             points2 = [[b[0],b[3],b[4]], [b[1],b[3],b[4]], [b[1],b[3],b[4]]]
@@ -976,8 +976,8 @@ class VtkBackend(BaseClass):
             self._axis._renderer.AddActor(actor)
 
     def _create_vtk_data(self):
-        for item in self._axis.get('plotitems'):
-            func = item.get('function')
+        for item in self._axis.getp('plotitems'):
+            func = item.getp('function')
             if isinstance(item, Line):
                 self._add_line(item)
             elif isinstance(item, Surface):
@@ -986,25 +986,25 @@ class VtkBackend(BaseClass):
                 else:
                     sgrid = self._get_2d_structured_grid(item)
                 self._add_surface(item, sgrid)
-                citem = item.get('contours')
+                citem = item.getp('contours')
                 if isinstance(citem, Contours):
                     csgrid = self._get_2d_structured_grid(citem, heights=False,
                                                           bottom=True)
                     self._add_contours(citem, csgrid)
             elif isinstance(item, Contours):
-                if item.get('clocation') == 'surface':
+                if item.getp('clocation') == 'surface':
                     sgrid = self._get_2d_structured_grid(item)
                 else:
                     sgrid = self._get_2d_structured_grid(item, heights=False)
                 self._add_contours(item, sgrid)
             elif isinstance(item, VelocityVectors):
-                if len(item.get('udata').shape) == 3:
+                if len(item.getp('udata').shape) == 3:
                     sgrid = self._get_3d_structured_grid(item, vectors=True)
                 else:
                     sgrid = self._get_2d_structured_grid(item, vectors=True)
                 self._add_velocity_vectors(item, sgrid)
             elif isinstance(item, Streams):
-                if len(item.get('udata').shape) == 3: 
+                if len(item.getp('udata').shape) == 3: 
                     sgrid = self._get_3d_structured_grid(item, vectors=True)
                 else:
                     sgrid = self._get_2d_structured_grid(item, vectors=True)
@@ -1022,7 +1022,7 @@ class VtkBackend(BaseClass):
             self._axis._vtk_apd.Update()
 
     def _add_legend(self, item, polydata):
-        legend = item.get('legend')
+        legend = item.getp('legend')
         if legend:
             ax = self._axis
             n = ax._vtk_nolegends
@@ -1030,8 +1030,8 @@ class VtkBackend(BaseClass):
             ax._vtk_legendbox.SetNumberOfEntries(ax._vtk_nolegends)
             ax._vtk_legendbox.SetEntrySymbol(n, polydata)
             ax._vtk_legendbox.SetEntryString(n, legend)
-            color = self._colors[item.get('linecolor')]
-            ax._vtk_legendbox.SetEntryColor(n, color)#ax.get('fgcolor'))
+            color = self._colors[item.getp('linecolor')]
+            ax._vtk_legendbox.SetEntryColor(n, color)#ax.getp('fgcolor'))
 
     def _set_legends(self):
         ax = self._axis
@@ -1042,7 +1042,7 @@ class VtkBackend(BaseClass):
             #ax._vtk_legendbox.BorderOff()
             ax._vtk_legendbox.GetPositionCoordinate().SetValue(0.8, 0.2, 0)
             ax._vtk_legendbox.GetPosition2Coordinate().SetValue(.2, n*.1, 0)
-            ax._vtk_legendbox.GetProperty().SetColor(ax.get('fgcolor'))
+            ax._vtk_legendbox.GetProperty().SetColor(ax.getp('fgcolor'))
             ax._renderer.AddActor(ax._vtk_legendbox)
 
     def _set_lights(self):
@@ -1052,29 +1052,29 @@ class VtkBackend(BaseClass):
             for l in self._axis._vtk_lights:
                 self._axis._renderer.RemoveLight(l)
             self._axis._vtk_lights = []
-        for l in self._axis.get('lights'):
+        for l in self._axis.getp('lights'):
             light = vtk.vtkLight()
-            light.SetColor(l.get('lightcolor'))
-            light.SetFocalPoint(l.get('lighttarget'))
-            light.SetPosition(l.get('lightpos'))
+            light.SetColor(l.getp('lightcolor'))
+            light.SetFocalPoint(l.getp('lighttarget'))
+            light.SetPosition(l.getp('lightpos'))
             self._axis._renderer.AddLight(light)
             self._axis._vtk_lights.append(light)
 
     def _setup_axis(self):
         ax = self._axis
-        xmin, xmax = ax.get('xmin'), ax.get('xmax')
+        xmin, xmax = ax.getp('xmin'), ax.getp('xmax')
         if None in [xmin, xmax]:
-            xmin, xmax = ax.get('xlim')
-        ymin, ymax = ax.get('ymin'), ax.get('ymax')
+            xmin, xmax = ax.getp('xlim')
+        ymin, ymax = ax.getp('ymin'), ax.getp('ymax')
         if None in [ymin, ymax]:
-            ymin, ymax = ax.get('ylim')
-        zmin, zmax = ax.get('zmin'), ax.get('zmax')
+            ymin, ymax = ax.getp('ylim')
+        zmin, zmax = ax.getp('zmin'), ax.getp('zmax')
         if None in [zmin, zmax]:
-            zmin, zmax = ax.get('zlim')
+            zmin, zmax = ax.getp('zlim')
         bnds = [xmin, xmax, ymin, ymax, zmin, zmax]
         ax._vtk_bounds = bnds[:]
         # scale axis:
-        dar = ax.get('daspect')
+        dar = ax.getp('daspect')
         bnds[0] = bnds[0]/dar[0];  bnds[1] = bnds[1]/dar[0]
         bnds[2] = bnds[2]/dar[1];  bnds[3] = bnds[3]/dar[1]
         bnds[4] = bnds[4]/dar[2];  bnds[5] = bnds[5]/dar[2]
@@ -1108,13 +1108,13 @@ class VtkBackend(BaseClass):
         ax._vtk_legendbox.SetNumberOfEntries(0)
 
         #ax._renderer.TwoSidedLightingOff()
-        ax._renderer.SetBackground(ax.get('bgcolor'))
-        viewport = ax.get('viewport')
+        ax._renderer.SetBackground(ax.getp('bgcolor'))
+        viewport = ax.getp('viewport')
         if not viewport:
             viewport = (0,0,1,1)
         ax._renderer.SetViewport(viewport)
         ax._renderer.RemoveAllProps() # clear current scene
-        #axshape = self.gcf().get('axshape')
+        #axshape = self.gcf().getp('axshape')
         #ax._renderer.SetPixelAspect(axshape[1], axshape[0])
 
         if not hasattr(ax, '_vtk_apd'):
@@ -1126,17 +1126,17 @@ class VtkBackend(BaseClass):
         self._axis = gca() # shortcut for fast access
         
         fig = self.gcf()
-        if fig.get('axshape') != fig._axshape:
+        if fig.getp('axshape') != fig._axshape:
             # remove all current renderers:
             for ren in fig._renderers:
                 self._g.RemoveRenderer(ren)
             fig._renderers = []
-            fig._axshape = fig.get('axshape')
+            fig._axshape = fig.getp('axshape')
             
         #if self._master is not None:
         #    fig._root.withdraw()
 
-        if len(self._axis.get('plotitems')) > 0:
+        if len(self._axis.getp('plotitems')) > 0:
             self._setup_axis()
             self._set_lights()
             self._set_colormap()
@@ -1153,7 +1153,7 @@ class VtkBackend(BaseClass):
             # render scene:
             self._axis._renderer.Render()
 
-        if self.get('show') and hasattr(fig, '_root'):
+        if self.getp('show') and hasattr(fig, '_root'):
             fig._root.deiconify() # raise window
             fig._root.update()
             
@@ -1173,12 +1173,12 @@ class VtkBackend(BaseClass):
             except Tkinter.TclError:
                 # can't create gui; only offscreen rendering
                 fig._g = vtk.vtkRenderWindow()
-                try: width, height = fig.get('size')
+                try: width, height = fig.getp('size')
                 except TypeError: width, height = (640, 480)
                 fig._g.SetSize(width, height)
                 fig._g.OffScreenRenderingOn()
             fig._renderers = []
-            fig._axshape = fig.get('axshape')
+            fig._axshape = fig.getp('axshape')
         self._g = fig._g # link for faster access
         #self._g.SetAAFrames(5)
 
@@ -1260,19 +1260,19 @@ class VtkBackend(BaseClass):
         if not filename:
             raise TypeError, "hardcopy: No filename given, cannot save figure."
 
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
         basename, ext = os.path.splitext(filename)
         if not ext:  # no extension given, use .eps
             ext = '.eps'
             filename += ext
         
-        if not self.get('show'):  # don't display to screen
+        if not self.getp('show'):  # don't display to screen
             self._g.OffScreenRenderingOn()
 
         self._replot()
 
-        color = self.get('color')
+        color = self.getp('color')
         
         vector_file_formats = {'.ps': 0, '.eps': 1, '.pdf': 2, '.tex': 3}
         if vector_file and ext.lower() in vector_file_formats:

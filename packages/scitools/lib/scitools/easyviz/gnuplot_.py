@@ -798,8 +798,6 @@ class GnuplotBackend(BaseClass):
                 fig._g = Gnuplot.Gnuplot() # Persist is not supported under win
             
         self._g = fig._g # link for faster access
-
-    figure.__doc__ = BaseClass.figure.__doc__
         
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
@@ -967,8 +965,6 @@ class GnuplotBackend(BaseClass):
             self._g('quit')
             self._g = self.gcf()._g # set _g to the correct instance again
 
-    hardcopy.__doc__ = BaseClass.hardcopy.__doc__ + hardcopy.__doc__
-
     # reimplement methods like clf, closefig, closefigs
     def clf(self):
         """Clear current figure."""
@@ -1111,5 +1107,21 @@ class GnuplotBackend(BaseClass):
         return 'set palette model RGB maxcolors %d %s' % (m,c)
     
 
+    # Now we add the doc string from the methods in BaseClass to the
+    # methods that are reimplemented in this backend:
+    for cmd in BaseClass._matlab_like_cmds:
+        if not '__' in cmd and hasattr(BaseClass, cmd):
+            m1 = eval('BaseClass.%s' % cmd)
+            try:
+                m2 = eval('%s' % cmd)
+            except NameError:
+                pass
+            else:
+                if m1.__doc__ != m2.__doc__:
+                    if m2.__doc__ is None:
+                        m2.__doc__ = ""
+                    m2.__doc__ = m1.__doc__ + m2.__doc__
+
+    
 plt = GnuplotBackend()  # create backend instance
 use(plt, globals())     # export public namespace of plt to globals()
