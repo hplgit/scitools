@@ -1654,7 +1654,7 @@ class BaseClass(object):
     _matlab_like_cmds = ['autumn', 'axes', 'axis', 'bone', 'box', 'brighten',
                          'camdolly', 'camlight', 'camlookat', 'campos',
                          'camproj', 'camroll', 'camtarget', 'camup', 'camva',
-                         'camzoom', 'caxis', 'cla', 'clabel', 'clf',
+                         'camzoom', 'caxis', 'cla', 'clabel', 'clf', 'close',
                          'closefig', 'closefigs', 'coneplot', 'colorbar',
                          'colorcube', 'colormap', 'contour', 'contour3',
                          'contourf', 'contourslice', 'cool', 'copper',
@@ -1817,6 +1817,7 @@ class BaseClass(object):
             axes()
 
         returns a default axis (Axis()).
+        
         Calling::
 
             axes(ax)
@@ -1888,27 +1889,31 @@ class BaseClass(object):
             daspect()
 
         returns the data aspect ratio of the current axis.
+        
         Calling::
 
             daspect([x,y,z])
 
         sets the data aspect ratio.
+        
         Calling::
 
             daspect('mode')
 
         returns the data aspect ratio mode.
+        
         Calling::
 
             daspect(mode)
 
         sets the data aspect ratio mode (mode can be either 'auto' or
         'manual').
+        
         Calling::
 
             daspect(ax, ...)
 
-        uses the axes in ax instead of the current axes.
+        uses the the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -1984,24 +1989,28 @@ class BaseClass(object):
     def hold(self, *args): 
         """Change the hold state of the current axis.
 
-        Calling
+        Calling::
 
             hold('on')
 
         will hold the current plot and all axis properties so that the result
         from subsequent plotting commands is added to the existing plot. Note
-        that this will not affect the autoranging of the axis.
+        that this does not affect the autoranging of the axis.
 
-        Calling
+        Calling::
 
             hold('off')
 
         returns to the default state where every plotting command erases the
         previous plot before the new plot is drawn.
 
-        Calling hold() toggles the hold state of the current axis.
+        Calling::
 
-        Calling
+            hold()
+
+        toggles the hold state of the current axis.
+
+        Calling::
 
             hold(ax, ...)
 
@@ -2060,9 +2069,17 @@ class BaseClass(object):
     def cla(self, *args):
         """Clear the current axis.
 
-        Calling cla() clears the current axis.
+        Calling::
 
-        Calling cla(ax) clears the Axis object ax instead of the current axis.
+            cla()
+
+        clears the current axis.
+
+        Calling::
+
+            cla(ax)
+
+        clears the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2071,42 +2088,72 @@ class BaseClass(object):
         ax.reset()
 
     def axis(self, *args, **kwargs): 
-        """Choose the axis limits.
+        """Choose the axis limits and appearance.
 
-          - axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
-            sets the limits on the x-, y- and z-axes in the current plot.
+        Calling::
 
-          - axis(xmin, xmax, ymin, ymax[, zmin, zmax])
-            same as above.
+            axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
+              
+        sets the limits on the x-, y-, and z-axes in the current plot.
 
-          - axis()
-            returns the limits for the current plot. If the view in the
-            current plot is a 2D view, only the limits on the x- and y-axis
-            are returned.
+        Calling::
+
+            axis(xmin, xmax, ymin, ymax[, zmin, zmax])
+              
+        gives the same result as above.
+
+        Calling::
+
+            axis()
+              
+        returns the limits on the x-, y-, and z-axes for the current plot.
+        If the view in the current plot is a 2D view, only the limits on the
+        x- and y-axis are returned.
         
-          - axis(mode)
-            sets axis scaling to mode, where mode can be 
+        Calling::
 
-             * 'auto'   - autoscaling is used
-             * 'manual' - freeze the scaling at the current limits
-             * 'tight'  - sets the axis limits to the range of the data
-             * 'fill'   - 
+            axis(mode)
+              
+        sets axis scaling to mode, where mode can be 
 
-          - axis(method)
-            sets the appearance of the current axis as specified by method.
-            %s
+          * 'auto'   - autoscaling is used
+          * 'manual' - freeze the scaling at the current limits
+          * 'tight'  - sets the axis limits to the range of the data
+          * 'fill'   - has currently no affect
 
-          - axis(direction)
-            sets the direction of the increasing values on the axes.
+        Calling::
 
-             * 'ij' - reverse y-axis
-             * 'xy' - restore y-axis
+            axis(method)
+              
+        sets the appearance of the current axis as specified by method.
+        %s
 
-          - axis('on') or axis('off')
-            turn axis on or off
+        Calling::
 
-          - axis(ax, ...)
-            affects the Axis object ax instead of the current axis.
+            axis(direction)
+              
+        sets the direction of the increasing values on the axes.
+
+          * 'ij' - reverse y-axis
+          * 'xy' - restore y-axis
+
+        Calling::
+
+            axis('off')
+              
+        turns off the visibility of the axis.
+
+        Calling::
+
+            axis('on')
+
+        turns the visibility of the axis back on.
+
+        Calling::
+
+            axis(ax, ...)
+              
+        affects the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2157,13 +2204,29 @@ class BaseClass(object):
     def close(self, *args):
         """Close figure.
 
-        Calling close() closes the current figure.
+        Calling::
 
-        Calling close(i) closes the figure with number i.
+            close()
 
-        Calling close(fig) closes the figure fig where fig is a Figure object.
+        closes the current figure.
 
-        Calling close('all') closes all figures.
+        Calling::
+
+            close(num)
+
+        closes the figure with number num.
+
+        Calling::
+
+            close(fig)
+
+        closes the figure fig where fig is a Figure object.
+
+        Calling::
+
+            close('all')
+
+        closes all figures.
         """
         nargs = len(args)
         if nargs == 0:
@@ -2191,13 +2254,29 @@ class BaseClass(object):
     def grid(self, *args):
         """Toggle the display of grid lines.
 
-        Calling grid('on') displays grid lines in the current axis.
+        Calling::
 
-        Calling grid('off') removes the grid lines from the current axis.
+            grid('on')
 
-        Calling grid() toggles the display of grid lines in the current axis.
+        displays grid lines in the current axis.
 
-        Calling grid(ax, ...) uses Axis object ax instead of the current axis.
+        Calling::
+
+            grid('off')
+
+        removes the grid lines from the current axis.
+
+        Calling::
+
+            grid()
+
+        toggles the display of grid lines in the current axis.
+
+        Calling::
+
+            grid(ax, ...)
+
+        uses Axis object ax instead of the current axis.
 
         Note that calling grid(True) and grid(False) is the same as calling
         grid('on') and grid('off'), respectively.
@@ -2220,7 +2299,7 @@ class BaseClass(object):
     def legend(self, *args): 
         """Add legend(s) to the current plot.
 
-        Calling
+        Calling::
 
             legend(string1,string2,string3,...)
 
@@ -2228,14 +2307,14 @@ class BaseClass(object):
         Note that the number of strings must match the number of items in
         the current axis (i.e. gca().get('numberofitems')).
 
-        Calling
+        Calling::
 
             legend(string)
 
         adds the given string as a legend to the last item added to the
         current axis.
 
-        Calling
+        Calling::
 
             legend(ax, ...)
 
@@ -2268,13 +2347,17 @@ class BaseClass(object):
     def title(self, *args): 
         """Title a graph.
 
-        Calling
+        Calling::
 
             title('text')
 
         adds the given text at the top of the current axis.
 
-        Calling title(ax, ...) adds a title to the Axis object ax.
+        Calling::
+
+            title(ax, ...)
+
+        adds a title to the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2291,13 +2374,17 @@ class BaseClass(object):
     def xlabel(self, *args): 
         """Label the x-axis.
 
-        Calling
+        Calling::
 
             xlabel('text')
 
         adds the given text beside the x-axis on the current axis.
 
-        Calling xlabel(ax, ...) adds the xlabel to the Axis object ax.
+        Calling::
+
+            xlabel(ax, ...)
+
+        adds the xlabel to the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2314,13 +2401,17 @@ class BaseClass(object):
     def ylabel(self, *args): 
         """Label the y-axis.
 
-        Calling
+        Calling::
 
             ylabel('text')
 
         adds the given text beside the y-axis on the current axis.
 
-        Calling ylabel(ax, ...) adds the ylabel to the Axis object ax.
+        Calling::
+
+            ylabel(ax, ...)
+
+        adds the ylabel to the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2337,13 +2428,17 @@ class BaseClass(object):
     def zlabel(self, *args): 
         """Label the z-axis.
 
-        Calling
+        Calling::
 
             zlabel('text')
 
         adds the given text beside the z-axis on the current axis.
 
-        Calling zlabel(ax, ...) adds the zlabel to the Axis object ax.
+        Calling::
+
+            zlabel(ax, ...)
+
+        adds the zlabel to the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -2361,38 +2456,62 @@ class BaseClass(object):
     def plot(self, *args, **kwargs):
         """Draw line and scatter plots. 
  
-            - plot(x, y)
-              plots y against x, i.e., if x and y are vectors of length n,
-              then this will plot all the points (x[i], y[i]) for 0<=i<n.
+        Calling::
+
+            plot(x, y)
+            
+        plots y against x, i.e., if x and y are vectors of length n, then
+        this will plot all the points (x[i], y[i]) for 0<=i<n.
  
-            - plot(y)
-              plots values in y on y-axis (same as plot(range(len(y)),y))
+        Calling::
+
+            plot(y)
+            
+        plots values in y on y-axis (same as plot(range(len(y)),y)).
  
-            - plot(y, fmt)
-              plots values in y on y-axis formated like fmt (see below).
+        Calling::
+
+            plot(y, fmt)
+            
+        plots values in y on y-axis formated like fmt (see below).
  
-            - plot(x1,y1,fmt1, x2,y2,fmt2, ...)
-              same as hold(True) followed by multiple plot(x,y,fmt).
+        Calling::
+
+            plot(x1,y1,fmt1, x2,y2,fmt2, ...)
+            
+        same as hold('on') followed by multiple plot(x,y,fmt).
  
-            - plot(x1,y1,x2,y2,...)
-              like above, but automatically chooses different colors.
+        Calling::
+
+            plot(x1,y1,x2,y2,...)
+            
+        like above, but automatically chooses different colors.
                 
-            - plot(y1,y2,...,x=x)
-              uses x as the x values for all the supplied curves.
-              x='auto' has the same effect as x=range(len(y1)).
+        Calling::
 
-            - plot(...,log='x'), plot(...,log='y'), or plot(...,log='xy')
-              uses a logarithmic (base 10) scale for the x-, y-, and z-axis,
-              respectively.
-              
-            - plot(...,log='x'), plot(...,log='xy') etc.
-              draw logarithmic axes.
+            plot(y1,y2,...,x=x)
+            
+        uses x as the x values for all the supplied curves.
+        x='auto' has the same effect as x=range(len(y1)).
 
-            - plot(...)
-              returns a list a of all Line objects created.
+        Calling::
 
-            - plot(ax, ...)
-              plots into the Axis object ax instead of the current axis.
+            plot(...,log=mode)
+            
+        uses logarithmic (base 10) scales on either the x- or y-axes (or both).
+        mode can be
+
+          * 'x'  - logarithmic scale on x-axis
+          * 'y'  - logarithmic scale on y-axis
+          * 'xy' - logarithmic scales on both x- and y-axes.
+
+        Calling::
+
+            plot(ax, ...)
+            
+        plots into the Axis object ax instead of the current axis.
+
+        The plot command returns a list a of all Line objects created.
             
         The following format specifiers exist:
  
@@ -2412,13 +2531,13 @@ class BaseClass(object):
  
         Examples:
         
-        draws a line
+        Draw a line from a Python list:
         >>> plot([1,2,3])
  
-        draws 3 red 'x'
+        Draw three red crosses:
         >>> plot([1,2,3], 'rx')
 
-        A larger example:
+        A somewhat more complex example:
         >>> x = linspace(0, 15, 76)   # 0, 0.2, 0.4, ..., 15
         >>> y1 = sin(x)*x
         >>> y2 = sin(x)*sqrt(x)
@@ -2486,7 +2605,7 @@ class BaseClass(object):
                                               format=args[1]))
                     i+100 #return
                 else:
-                    raise Exception, "Can't plot a formatstring"
+                    raise ValueError, "plot: cannot plot a formatstring"
                 
             while i <= nargs-3:
                 # This item is not string --> y-value, should never be string.
@@ -2567,8 +2686,8 @@ class BaseClass(object):
     def loglog(self, *args, **kwargs):
         """Log-log scale plot.
 
-        - loglog(...) is the same as plot(...) except that a logarithmic
-          (base 10) scale is used for both the x- and y-axis.
+        The loglog command is the same as the plot command except that a
+        logarithmic (base 10) scale is used for both x- and y-axes.
         """
         kwargs['log'] = 'xy'
         return self.plot(*args, **kwargs)
@@ -2576,8 +2695,8 @@ class BaseClass(object):
     def semilogx(self, *args, **kwargs):
         """Semi-log scale plot.
 
-        - semilogx(...) is the same as plot(...) except that a logarithmic
-          (base 10) scale is used for the x-axis.
+        The semilogx command is the same as the plot command except that a
+        logarithmic (base 10) scale is used for the x-axis.
         """
         kwargs['log'] = 'x'
         return self.plot(*args, **kwargs)
@@ -2585,8 +2704,8 @@ class BaseClass(object):
     def semilogy(self, *args, **kwargs):
         """Semi-log scale plot.
 
-        - semilogy(...) is the same as plot(...) except that a logarithmic
-          (base 10) scale is used for the y-axis.
+        The semilogy command is the same as the plot command except that a
+        logarithmic (base 10) scale is used for the y-axis.
         """
         kwargs['log'] = 'y'
         return self.plot(*args, **kwargs)    
@@ -2594,35 +2713,60 @@ class BaseClass(object):
     def plot3(self, *args, **kwargs):
         """Draw lines and points in 3D space.
  
-            - plot3(x, y, z)
-              plots z against x and y, i.e., if x, y, and z are vectors of
-              length n, then this will plot all the points
-              (x[i], y[i], z[i]) for 0<=i<n. 
+        Calling::
+
+            plot3(x, y, z)
+            
+        plots z against x and y, i.e., if x, y, and z are vectors of length n,
+        then this will plot all the points (x[i], y[i], z[i]) for 0<=i<n. 
   
-            - plot3(z)
-              plots values in z on the z-axis
-              (same as plot3(range(len(z)), range(len(z)), z))
+        Calling::
 
-            - plot3(z, fmt)
-              plots values in z on z-axis formated like fmt (see plot).
+            plot3(z)
+            
+        plots values in z on the z-axis
+        (same as plot3(range(len(z)), range(len(z)), z)).
+
+        Calling::
+
+            plot3(z, fmt)
+            
+        plots values in z on z-axis formated like fmt (see the plot command).
  
-            - plot3(x1,y1,z1,fmt1,x2,y2,z2,fmt2,...)
-              same as hold(True) followed by multiple plot3(x,y,z,fmt).
+        Calling::
+
+            plot3(x1,y1,z1,fmt1,x2,y2,z2,fmt2,...)
+            
+        same as hold('on') followed by multiple plot3(x,y,z,fmt).
  
-            - plot3(x1,y1,z1,x2,y2,z2,...)
-              like above, but automatically chooses different colors.
+        Calling::
+
+            plot3(x1,y1,z1,x2,y2,z2,...)
+            
+        like above, but automatically chooses different colors.
                 
-            - plot3(z1,z2,...,x=x,y=y)
-              uses x as the values on the x-axis and y as the values for the
-              y-axis for all the supplied curves. x='auto' and y='auto' has
-              the same effect as x=range(len(z1)) and y=range(len(z1)),
-              respectively.
- 
-            - plot3(...)
-              returns a list a of all created Line objects.
+        Calling::
 
-            - plot3(ax, ...)
-              plots into the Axis object ax instead of the current axis.
+            plot3(z1,z2,...,x=x,y=y)
+            
+        uses x as the values on the x-axis and y as the values on the y-axis
+        for all the supplied curves (assuming that all have the same length).
+        By setting x='auto' and y='auto' has the same effect as
+        x=range(len(z1)) and y=range(len(z1)), respectively.
+ 
+        Calling::
+
+            plot3(ax, ...)
+            
+        plots into the Axis object ax instead of the current axis.
+
+        The plot3 command returns a list containing all the created Line
+        objects.
+
+        Examples:
+        
+        >>> t = linspace(0,10*pi,301)
+        >>> plot3(sin(t), cos(t), t, title='A helix', grid='on')
         """
         kwargs['description'] = 'plot3: 3D line plot'
         ax = self.gca()
@@ -2697,7 +2841,7 @@ class BaseClass(object):
                                               format=args[3]))
                     i+100 #return
                 else:
-                    raise ValueError, "plot3: can't plot a format string"
+                    raise ValueError, "plot3: cannot plot a formatstring"
                 
             while i <= nargs-5:
                 if not isinstance(args[i], str): # should never be string
@@ -2792,21 +2936,33 @@ class BaseClass(object):
     def quiver(self, *args, **kwargs):
         """Quiver plot.
         
-        - quiver(X, Y, U, V)
-          plots velocity vectors as arrows with components (u,v) at the
-          points (x,y). The matrices X,Y,U,V must all be the same size and
-          contain corresponding position and velocity components (X and Y
-          can also be vectors to specify a uniform grid). 
+        Calling::
 
-        - quiver(U, V)
-          plots velocity vectors at equally spaced points in the x-y plane.
-          (same as quiver(range(m),range(n),U,V) where m,n=shape(u))
+            quiver(X, Y, U, V)
+            
+        plots velocity vectors as arrows with components (u,v) at the
+        points (x,y). The matrices X,Y,U,V must all be the same size and
+        contain corresponding position and velocity components (X and Y
+        can also be vectors to specify a uniform grid). 
 
-        - quiver(..., 'filled')
-          draw filled arrows
+        Calling::
 
-        - quiver(..., LineSpec)
-          sets the line specification as given in LineSpec. 
+            quiver(U, V)
+            
+        plots velocity vectors at equally spaced points in the x-y plane
+        (same as quiver(range(n),range(m),U,V) where m,n=shape(u)).
+
+        Calling::
+
+            quiver(..., 'filled')
+            
+        draw filled arrows.
+
+        Calling::
+
+            quiver(..., fmt)
+            
+        sets the line specification as given in the format string fmt.
 
         Examples:
 
@@ -2827,9 +2983,8 @@ class BaseClass(object):
         >>> theta = 2*pi*x+pi/2
         >>> u = sin(theta)/10
         >>> v = cos(theta)/10
-        >>> quiver(x,y,u,v,0.04,'b')
+        >>> quiver(x,y,u,v,0.04,'b',hold='on')
         <scitools.easyviz.common.VelocityVectors object at 0xb768e1cc>
-        >>> hold('on')
         >>> plot(x,y,'r')
         [<scitools.easyviz.common.Line object at 0xb768e36c>]
         >>> hold('off')
@@ -2861,27 +3016,52 @@ class BaseClass(object):
     def contour(self, *args, **kwargs):
         """Draw a 2D contour plot.
  
-        - contour(X, Y, Z[, n])
-          draw a contour plot where the values in the matrix Z are treated
-          as heights above a plane. The value n specifies the number of
-          contour lines.
-        
-        - contour(Z[, n])
-          same as contour(range(n), range(m), Z[, n]) where m,n = shape(Z).
-        
-        - contour(Z[, v])
-          draw contours at levels specified in vector v.
+        Calling::
 
-        - contour(..., LineSpec)
-          uses the color and line style as given in LineSpec on the contour
-          lines. See the plot command for more information on LineSpec.
+            contour(X, Y, Z)
+            
+        draw a contour plot where the values in the matrix Z are treated as
+        heights above a plane. The value n specifies the number of contour
+        lines.
+        
+        Calling::
 
-        - contours(ax,...)
-          draw a contour plot in the Axis object ax instead of the current
-          axes.
+            contour(Z)
+            
+        same as contour(range(n), range(m), Z) where m,n=shape(Z).
+
+        Calling::
+
+            contour(..., n)
+
+        draw a contour plot with n contour lines.
+        
+        Calling::
+
+            contour(..., v)
+
+        draw contours at levels specified in the vector v.
+
+        Calling::
+
+            contour(..., fmt)
+            
+        uses the color and line style as given in fmt to draw the contour
+        lines (see the plot command for more information on fmt). This
+        overrides the default behavior of using the current colormap to
+        color the contour lines.
+
+        Calling::
+
+            contours(ax, ...)
+            
+        draw a contour plot in the Axis object ax instead of the current axis.
           
-        - contour(...,clabels='on')
-          same as contour(...) followed by clabel('on')
+        Calling::
+
+            contour(...,clabels='on')
+            
+        same as contour(...) followed by clabel('on').
 
         Examples:
 
@@ -2925,14 +3105,50 @@ class BaseClass(object):
         return h
 
     def contourf(self, *args, **kwargs):
-        """Draw filled contour plot."""
+        """Draw filled contour plot.
+
+        The contourf command is the same as the contour command with the
+        exception that the area between the contours are filled with colors.
+
+        Examples:
+
+        >>> contourf(peaks(), clabel='on', colorbar='on')
+        """
         kwargs['description'] = 'contourf: 2D filled contour plot'
         return self.contour(*args, **kwargs)
     
     # 3D plotting
     
     def pcolor(self, *args, **kwargs):
-        """Pseudocolor (checkboard) plot."""
+        """Pseudocolor (checkboard) plot.
+
+        Calling::
+
+            pcolor(C)
+
+        draw a pseudocolor plot of the matrix C.
+        
+        Calling::
+
+            pcolor(X,Y,C)
+
+        same as above, only that the grid is specified by the X and Y arrays.
+
+        Calling::
+
+            pcolor(ax, ...)
+            
+        uses the Axis object ax instead of the current axis.
+
+        Examples:
+
+        Simple pseudocolor plot:
+        >>> pcolor(peaks(31))
+
+        Draw a pseudocolor plot with interpolated shading:
+        >>> pcolor(peaks(), shading='interp',
+        ...        colorbar='on', colormap=hot())
+        """
         kwargs['description'] = 'pcolor: pseudocolor plot'
         ax = self.gca()
         if len(args) > 0 and isinstance(args[0], Axis):
@@ -2954,23 +3170,51 @@ class BaseClass(object):
         raise NotImplementedError, "'fill3' is not implemented."
 
     def streamline(self, *args, **kwargs):
-        """Streamlines from 2D or 3D data.
+        """Draw streamlines from 2D or 3D vector data.
 
-        - streamline(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
-        - streamline(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
-          where m, n, p = shape(U)
-        ##- streamline(XYZ))
-        - streamline(X,Y,U,V,STARTX,STARTY)
-        - streamline(U,V,STARTX,STARTY)
-          assumes X,Y = meshgrid(range(n), range(m))
-          where m, n = shape(U)
-        - streamline(XY)
-        - streamline(ax,...)
-        - streamline(...,options)
-          where options can be [stepsize]
-        - h = streamline(...)
+        Calling::
 
+            streamline(X,Y,Z,U,V,W,startx,starty,startz)
+
+        draws streamlines from the 3D vector data U,V,W defined on the grid
+        given by X,Y,Z. The arrays startx, starty, and startz defines the
+        starting positions for the stream lines.
+            
+        Calling::
+
+            streamline(U,V,W,startx,starty,startz)
+
+        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
+        where m,n,p=shape(U).
+        
+        Calling::
+
+            streamline(X,Y,U,V,startx,starty)
+
+        draws streamlines from the 2D vector data U,V defined on the grid
+        given by X,Y. The arrays startx and starty defines the starting
+        positions for the stream lines.
+        
+        Calling::
+
+            streamline(U,V,startx,starty)
+            
+        assumes that X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).
+        
+        Calling::
+
+            streamline(..., stepsize)
+
+        uses the given step size instead of the default step size of 0.1.
+        
+        Calling::
+
+            streamline(ax, ...)
+
+        uses the Axis object ax instead of the current axis.
+
+        The streamline command returns a Streams object.
+        
         Examples:
         """
         if not 'description' in kwargs:
@@ -2990,20 +3234,38 @@ class BaseClass(object):
         return h
 
     def streamtube(self, *args, **kwargs):
-        """3D stream tube.
+        """Draw 3D stream tubes.
 
-        - streamtube(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
-        - streamtube(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
-          where m, n, p = shape(U)
-        ##- streamtube(VERTICES,X,Y,Z,DIVERGENCE)
-        ##- streamtube(VERTICES,DIVERGENCE)
-        ##- streamtube(VERTICES,WIDTH)
-        ##- streamtube(VERTICES,width)
-        ##- streamtube(VERTICES)
-        - streamtube(...,[scale n])
-        - streamtube(ax,...)
-        - h = streamtube(...)
+        Calling::
+
+            streamtube(X,Y,Z,U,V,W,startx,starty,startz)
+
+        draws stream tubes from the 3D vector data U,V,W defined on the grid
+        given by X,Y,Z. The arrays startx, starty, and startz defines the
+        starting positions for the stream tubes.
+        
+        Calling::
+
+            streamtube(U,V,W,startx,starty,startz)
+            
+        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
+        where m,n,p=shape(U).
+        
+        Calling::
+
+          streamtube(..., [scale n])
+
+        scales the width of the tubes (default is scale=1). The variable n
+        sets the number of points along the circumference of the tube (default
+        is n=20).
+        
+        Calling::
+
+           streamtube(ax, ...)
+
+        uses the Axis object ax instead of the current axis.
+        
+        The streamtube command returns a Streams object.
 
         Examples:
         """
@@ -3011,18 +3273,38 @@ class BaseClass(object):
         return self.streamline(*args, **kwargs)
 
     def streamribbon(self, *args, **kwargs):
-        """3D stream ribbon.
+        """Draw 3D stream ribbons.
 
-        - streamribbon(X,Y,Z,U,V,W,STARTX,STARTY,STARTZ)
-        - streamribbon(U,V,W,STARTX,STARTY,STARTZ)
-          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
-          where m, n, p = shape(U)
-        - streamribbon(VERTICES,X,Y,Z,CAV,SPEED)
-        - streamribbon(VERTICES,CAV,SPEED)
-        - STREAMRIBBON(VERTICES,TWISTANGLE)
-        - STREAMRIBBON(...,WIDTH)
-        - STREAMRIBBON(ax,...)
-        - H = STREAMRIBBON(...)
+        Calling::
+
+            streamribbon(X,Y,Z,U,V,W,startx,starty,startz)
+
+        draws stream ribbons from the 3D vector data U,V,W defined on the
+        grid given by X,Y,Z. The arrays startx, starty, and startz defines
+        the startings positions for the stream ribbons.
+        
+        Calling::
+
+            streamribbon(U,V,W,startx,starty,startz)
+            
+        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
+        where m,n,p=shape(U).
+        
+        Calling::
+
+            streamribbon(..., width)
+
+        sets the width of the ribbons.
+        
+        Calling::
+
+            streamribbon(ax, ...)
+
+        uses the Axis object ax instead of the current axis.
+        
+        The streamribbon command returns a Streams object.
+
+        Examples:
         """
         kwargs['description'] = "streamribbon: 3D stream ribbon"
         return self.streamline(*args, **kwargs)
@@ -3157,7 +3439,7 @@ class BaseClass(object):
         - slice_(X,Y,Z,V,XI,YI,ZI)
 
         - slice_(V,Sx,Sy,Sz) or slice_(V,XI,YI,ZI)
-          same as slice_(range(n+1), range(m+1), range(p+)) where m,n,p = shape(V)
+          same as slice_(range(n+1), range(m+1), range(p+1)) where m,n,p = shape(V)
 
         - slice_(...,'method')
           'method' can be 'linear' (default), 'cubic', or 'nearest'.
