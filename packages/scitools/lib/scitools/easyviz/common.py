@@ -57,18 +57,18 @@ class MaterialProperties(object):
     def __init__(self, **kwargs):
         self._prop = {}
         self._prop.update(self._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
     def __str__(self):
         return pprint.pformat(self._prop)
     
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         for key in self._prop.keys():
             if key in kwargs:
                 _check_type(kwargs[key], key, (int,float))
                 self._prop[key] = float(kwargs[key])
         
-    def get(self, name):
+    def getp(self, name):
         try:
             return self._prop[name]
         except:
@@ -168,7 +168,7 @@ class PlotProperties(object):
         """Dump the parameters of this object."""
         return str(self)
     
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         """
         Set plot properties.
 
@@ -220,9 +220,9 @@ class PlotProperties(object):
                       % kwargs['memoryorder']
 
         # set material properties:
-        self._prop['material'].set(**kwargs)
+        self._prop['material'].setp(**kwargs)
 
-    def get(self, prm_name=None):
+    def getp(self, prm_name=None):
         """
         Return the value of the parameter with name prm_name.
         If the name is None, the dictionary with all parameters
@@ -333,16 +333,16 @@ class Line(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Line._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         """
         Set line properties. Legal keyword arguments: x, y, format.
         The x and y arguments hold the x and y points of a curve.
         The format string is just passed on to setformat, which parses the
         contents and sets the format information.
         """
-        PlotProperties.set(self, **kwargs)
+        PlotProperties.setp(self, **kwargs)
         
         # Here x,y values can be any SequenceType
         # The proper casting should be in the backends plotroutine
@@ -424,7 +424,7 @@ class Surface(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Surface._local_prop)
-        self.set(**kwargs) 
+        self.setp(**kwargs) 
         self._parseargs(*args)
         
         if self._prop['function'] in ['meshc', 'surfc']:
@@ -433,8 +433,8 @@ class Surface(PlotProperties):
                                               self._prop['zdata'],
                                               **kwargs)
 
-    def set(self, **kwargs):
-        PlotProperties.set(self, **kwargs)
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
         
         if 'wireframe' in kwargs:
             self._prop['wireframe'] = _toggle_state(kwargs['wireframe'])
@@ -489,11 +489,11 @@ class Contours(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Contours._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
         self._parseargs(*args)
 
-    def set(self, **kwargs):
-        PlotProperties.set(self, **kwargs)
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
 
         if 'cvector' in kwargs:
             _check_type(kwargs['cvector'], 'cvector', (tuple,list))
@@ -570,11 +570,11 @@ class VelocityVectors(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(VelocityVectors._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
         self._parseargs(*args)
 
-    def set(self, **kwargs):
-        PlotProperties.set(self, **kwargs)
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
 
         if 'arrowscale' in kwargs:
             _check_type(kwargs['arrowscale'], 'arrowscale', (int,float))
@@ -688,11 +688,11 @@ class Streams(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Streams._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
         self._parseargs(*args)
 
-    def set(self, **kwargs):
-        PlotProperties.set(self, **kwargs)
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
 
         for key in 'stepsize tubescale ribbonwidth'.split():
             if key in kwargs:
@@ -826,11 +826,11 @@ class Volume(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Volume._local_prop)
-        self.set(**kwargs)
+        self.setp(**kwargs)
         self._parseargs(*args)
 
-    def set(self, **kwargs):
-        PlotProperties.set(self, **kwargs)
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
 
         if 'isovalue' in kwargs:
             _check_type(kwargs['isovalue'], 'isovalue', (float,int))
@@ -951,12 +951,12 @@ class Colorbar(object):
         self._prop = {}
         self._prop.update(Colorbar._local_prop)
         self._defaults = self._prop.copy()
-        self.set(**kwargs)
+        self.setp(**kwargs)
         
     def __str__(self):
         return pprint.pformat(self._prop)
 
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         if 'cblocation' in kwargs:
             if kwargs['cblocation'] in self._locations:
                 self._prop['cblocation'] = kwargs['cblocation']
@@ -970,7 +970,7 @@ class Colorbar(object):
         if 'visible' in kwargs:
             self._prop['visible'] = _toggle_state(kwargs['visible'])
 
-    def get(self, prm_name):
+    def getp(self, prm_name):
         try:
             return self._prop[prm_name]
         except:
@@ -998,12 +998,12 @@ class Light(object):
         self._prop = {}
         self._prop.update(Light._local_prop)
         self._defaults = self._prop.copy()
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
     def __str__(self):
         return pprint.pformat(self._prop)
 
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         if 'lightcolor' in kwargs:
             color = kwargs['lightcolor']
             _check_type(color, 'lightcolor', (list,tuple))
@@ -1024,7 +1024,7 @@ class Light(object):
         if 'visible' in kwargs:
             self._prop['visible'] = _toggle_state(kwargs['visible'])
 
-    def get(self, name):
+    def getp(self, name):
         try:
             return self._prop[name]
         except:
@@ -1066,12 +1066,12 @@ class Camera(object):
         self._prop.update(Camera._local_prop)
         self._ax = axis
         self._defaults = self._prop.copy()
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
     def __str__(self):
         return pprint.pformat(self._prop)
 
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         if 'cammode' in kwargs:
             if kwargs['cammode'] in self._modes:
                 self._prop['cammode'] = kwargs['cammode']
@@ -1123,7 +1123,7 @@ class Camera(object):
                 _check_size(kwargs[prop], prop, 3)
                 self._prop[prop] = kwargs[prop]
 
-    def get(self, name):
+    def getp(self, name):
         try:
             return self._prop[name]
         except:
@@ -1137,7 +1137,7 @@ class Camera(object):
     def _set_default_view(self, view):
         self.reset()
         self._prop['view'] = view
-        self._prop['camtarget'] = self._ax.get('center')
+        self._prop['camtarget'] = self._ax.getp('center')
         if self._prop['view'] == 3:
             self._prop['camup'] = (0,0,1)
     
@@ -1217,7 +1217,7 @@ class Axis(object):
         """Dump the parameters of this object."""
         return str(self)
     
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         if 'mode' in kwargs:
             mode = kwargs['mode']
             if mode in self._modes:
@@ -1253,7 +1253,7 @@ class Axis(object):
             if isinstance(kwargs['colorbar'], Colorbar):
                 self._prop['colorbar'] = kwargs['colorbar']
             else:
-                self._prop['colorbar'].set(visible=kwargs['colorbar'])
+                self._prop['colorbar'].setp(visible=kwargs['colorbar'])
 
         if 'colormap' in kwargs:
             self._prop['colormap'] = kwargs['colormap'] # backend dependent
@@ -1372,13 +1372,13 @@ class Axis(object):
             self._prop['pth'] = pth
 
         # set properties for camera and colorbar:
-        self._prop['camera'].set(**kwargs)
-        self._prop['colorbar'].set(**kwargs)
+        self._prop['camera'].setp(**kwargs)
+        self._prop['colorbar'].setp(**kwargs)
 
         # update the axis:
         self.update()
 
-    def get(self, name):
+    def getp(self, name):
         """Return parameter with name 'name'."""
         try:
             return self._prop[name]
@@ -1485,9 +1485,9 @@ class Axis(object):
         """
         Update axis limits according to the PlotProperties given in 'item'.
         """
-        xlim = item.get('xlim')
-        ylim = item.get('ylim')
-        zlim = item.get('zlim')
+        xlim = item.getp('xlim')
+        ylim = item.getp('ylim')
+        zlim = item.getp('zlim')
         if not None in self._prop['xlim']:
             xlim = self._check_lim(self._prop['xlim'], xlim)
         if not None in self._prop['ylim']:
@@ -1544,7 +1544,7 @@ class Figure(object):
         # store a copy of the default values for use when figure is reset:
         self._defaults = self._prop.copy()
         self._prop['axes'] = {1: Axis()}
-        self.set(**kwargs)
+        self.setp(**kwargs)
 
     def __str__(self):
         return pprint.pformat(self._prop)
@@ -1570,7 +1570,7 @@ class Figure(object):
         self._prop['axes'] = {1: Axis()}
         self._prop['axes'][1].reset()
 
-    def set(self, **kwargs):
+    def setp(self, **kwargs):
         if 'axshape' in kwargs:
             shape = kwargs['axshape']
             _check_type(shape, 'axshape', (tuple,list))
@@ -1591,9 +1591,9 @@ class Figure(object):
             self._prop['axes'] = {}
             for i in iseq(1,len(viewport_coords)):
                 ax = Axis()
-                ax.set(viewport=viewport_coords[i-1])
+                ax.setp(viewport=viewport_coords[i-1])
                 self._prop['axes'][i] = ax
-                ax.set(pth=i)
+                ax.setp(pth=i)
 
         if 'curax' in kwargs:
             curax = kwargs['curax']
@@ -1607,7 +1607,7 @@ class Figure(object):
             _check_size(size, 'size', 2)
             self._prop['size'] = size
                    
-    def get(self, prm_name):
+    def getp(self, prm_name):
         try:
             return self._prop[prm_name]
         except:
@@ -1703,13 +1703,13 @@ class BaseClass(object):
     def __str__(self):
         return pprint.pformat(self._attrs)
     
-    def set(self, *args, **kwargs):
+    def setp(self, *args, **kwargs):
         """
         Set object properties or attributes in this backend instance.
 
         Calling::
 
-            set([obj,] prop1=value1, prop2=value2, ...)
+            setp([obj,] prop1=value1, prop2=value2, ...)
 
         will set the attributes as given in this backend instance. If the
         optional positional argument obj is a given object with a set method
@@ -1718,7 +1718,7 @@ class BaseClass(object):
         """
         nargs = len(args)
         if nargs > 0 and hasattr(args[0], 'set'):
-            args[0].set(**kwargs)
+            args[0].setp(**kwargs)
 
         for key in kwargs:
             value = kwargs[key]
@@ -1741,19 +1741,19 @@ class BaseClass(object):
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
                     
-    def get(self, *args): 
+    def getp(self, *args): 
         """
         Get object properties or an attribute in this backend instance.
 
         Calling::
 
-            get('name')
+            getp('name')
 
         returns the attribute with name 'name' in this backend instance.
         
         Calling::
 
-            get(obj, 'name')
+            getp(obj, 'name')
 
         returns the property with name 'name' of the object given in obj. This
         object must have a get method (like Figure, Axis, or PlotProperties
@@ -1761,7 +1761,7 @@ class BaseClass(object):
         
         Calling::
 
-            get(obj)
+            getp(obj)
 
         displays all property names and values for the object given in obj.
         """
@@ -1772,7 +1772,7 @@ class BaseClass(object):
                 if nargs == 1:
                     print obj
                 else:
-                    return obj.get(args[1])
+                    return obj.getp(args[1])
             else:
                 prm_name = args[0]
                 try:
@@ -1788,9 +1788,9 @@ class BaseClass(object):
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
 
-    #def __getitem__(self, name):  self.get(name)
+    #def __getitem__(self, name):  self.getp(name)
 
-    #def __setitem__(self, name, value):  self.set({name:value})
+    #def __setitem__(self, name, value):  self.setp({name:value})
         
         
     def _replot(self, *args, **kwargs): 
@@ -1838,12 +1838,12 @@ class BaseClass(object):
         if nargs == 0:
             a = Axis()
             if len(kwargs) > 0:
-                a.set(**kwargs)
-            self.gcf().set(curax=a)
+                a.setp(**kwargs)
+            self.gcf().setp(curax=a)
             return a
         elif nargs == 1:
             _check_type(args[0], 'ax', Axis)
-            self.gcf().set(curax=args[0])
+            self.gcf().setp(curax=args[0])
             #raise NotImplementedError, 'not yet implemented'
         elif nargs == 2:
             pass
@@ -1872,11 +1872,11 @@ class BaseClass(object):
             nargs = 3
         if nargs == 3:
             m, n, p = args
-            if fig.get('axshape') == (m,n):
-                fig.set(curax=p)
+            if fig.getp('axshape') == (m,n):
+                fig.setp(curax=p)
             else:
-                fig.set(axshape=(m,n), curax=p)
-            self.gca().set(**kwargs)
+                fig.setp(axshape=(m,n), curax=p)
+            self.gca().setp(**kwargs)
         else:
             raise TypeError, "subplot: wrong number of arguments"
         return self.gca()
@@ -1921,21 +1921,21 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
 
         if nargs == 0:
-            #return (ax.get('daspect'), ax.get('daspectmode'))
-            return ax.get('daspect')
+            #return (ax.getp('daspect'), ax.getp('daspectmode'))
+            return ax.getp('daspect')
         elif nargs == 1:
             arg = args[0]
             if isinstance(arg, str):
                 if arg == 'mode':
-                    return ax.get('daspectmode')
+                    return ax.getp('daspectmode')
                 else:
-                    ax.set(daspcetmode=arg)
+                    ax.setp(daspcetmode=arg)
             else:
-                ax.set(daspect=arg)
+                ax.setp(daspect=arg)
         else:
             raise TypeError, "daspect: wrong number of arguments"
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def openfig(self, filename='figspickle.txt'): 
@@ -2025,10 +2025,10 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
 
         if nargs == 1:
-            ax.set(hold=args[0])
+            ax.setp(hold=args[0])
         elif nargs == 0:
             ax.toggle('hold')
-            print "hold state is %s" % ax.get('hold')
+            print "hold state is %s" % ax.getp('hold')
         else:
             raise TypeError, 'hold: wrong number of arguments' 
                  
@@ -2036,7 +2036,7 @@ class BaseClass(object):
         """
         Return the hold state (True if hold is on, and False if it is off).
         """
-        return self.gca().get('hold')
+        return self.gca().getp('hold')
         
     def figure(self, num=None, **kwargs): 
         """
@@ -2162,7 +2162,7 @@ class BaseClass(object):
 
         if nargs == 0:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
-            if ax.get('camera').get('view') == 2:
+            if ax.getp('camera').getp('view') == 2:
                 return xmin, xmax, ymin, ymax
             return xmin, xmax, ymin, ymax, zmin, zmax
             
@@ -2175,14 +2175,14 @@ class BaseClass(object):
                 args = args[0];  nargs = len(args)
             elif isinstance(args[0], str):
                 if args[0] in Axis._modes:
-                    ax.set(mode=args[0])
+                    ax.setp(mode=args[0])
                 elif args[0] in ['on', 'off']:
                     state = _toggle_state(args[0])
-                    ax.set(visible=state)
+                    ax.setp(visible=state)
                 elif args[0] in Axis._methods:
-                    ax.set(method=args[0])
+                    ax.setp(method=args[0])
                 elif args[0] in Axis._directions:
-                    ax.set(direction=args[0])
+                    ax.setp(direction=args[0])
 
         kwargs_ = {}
         # first treat positional arguments:
@@ -2193,9 +2193,9 @@ class BaseClass(object):
         for kw in limits:
             if kw in kwargs:
                 kwargs_[kw] = kwargs[kw]
-        ax.set(**kwargs_)
+        ax.setp(**kwargs_)
                 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     axis.__doc__ = axis.__doc__ % docadd('Legal values for method are',
@@ -2287,13 +2287,13 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
 
         if nargs == 1:
-            ax.set(grid=args[0])
+            ax.setp(grid=args[0])
         elif nargs == 0:
             ax.toggle('grid')
         else:
             raise TypeError, "grid: wrong number of arguments"
 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         
     def legend(self, *args): 
@@ -2305,7 +2305,7 @@ class BaseClass(object):
 
         adds legends to the current plot using the given strings as labels.
         Note that the number of strings must match the number of items in
-        the current axis (i.e. gca().get('numberofitems')).
+        the current axis (i.e. gca().getp('numberofitems')).
 
         Calling::
 
@@ -2326,7 +2326,7 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        items = ax.get('plotitems')
+        items = ax.getp('plotitems')
         if len(items) == 0:
             print 'plot is empty, cannot add legend'
             return
@@ -2335,13 +2335,13 @@ class BaseClass(object):
             if len(items) == nargs:
                 # Iterate over items and set legend
                 for i in range(nargs):
-                    items[i].set(legend=str(args[i]))
+                    items[i].setp(legend=str(args[i]))
         elif nargs == 1:
-            items[-1].set(legend=str(args[0]))
+            items[-1].setp(legend=str(args[0]))
         else:
             raise TypeError, "legend: wrong number of arguments"
 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def title(self, *args): 
@@ -2364,11 +2364,11 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
         if nargs == 1:
-            ax.set(title=str(args[0]))
+            ax.setp(title=str(args[0]))
         else:
             raise TypeError, "title: wrong number of arguments"
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
     
     def xlabel(self, *args): 
@@ -2391,11 +2391,11 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
         if nargs == 1:
-            ax.set(xlabel=str(args[0]))
+            ax.setp(xlabel=str(args[0]))
         else:
             raise TypeError, "xlabel: wrong number of arguments" 
             
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
             
     def ylabel(self, *args): 
@@ -2418,11 +2418,11 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
         if nargs == 1:
-            ax.set(ylabel=str(args[0]))
+            ax.setp(ylabel=str(args[0]))
         else:
             raise TypeError, "ylabel: wrong number of arguments" 
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
             
     def zlabel(self, *args): 
@@ -2445,11 +2445,11 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
         if nargs == 1:
-            ax.set(zlabel=str(args[0]))
+            ax.setp(zlabel=str(args[0]))
         else:
             raise TypeError, "zlabel: wrong number of arguments" 
 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         
     # 2D Plotting
@@ -2657,7 +2657,7 @@ class BaseClass(object):
                     for i in range(no_lines):
                         legend = legends[no_lines-i-1]
                         if isinstance(legend, str):
-                            ax.get('plotitems')[-1-i].set(legend=legend)
+                            ax.getp('plotitems')[-1-i].setp(legend=legend)
                         else:
                             print "Legend "+legend+" is not a string"
                 else:
@@ -2665,20 +2665,20 @@ class BaseClass(object):
                           'number of lines in plotcommand (%d)' % \
                           (len(legends), no_lines)
             elif isinstance(legends,str): # only one legend
-                ax.get('plotitems')[-1].set(legend=legends)
+                ax.getp('plotitems')[-1].setp(legend=legends)
             del kwargs['legend']
 
-        if not ax.get('hold') and not 'box' in kwargs:
+        if not ax.getp('hold') and not 'box' in kwargs:
             kwargs['box'] = True
             
         # set keyword arguments in all the added lines
         for line in lines:
-            line.set(**kwargs)
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+            line.setp(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
             
         return lines
@@ -2903,7 +2903,7 @@ class BaseClass(object):
                     for i in range(no_lines):
                         legend = legends[no_lines-i-1]
                         if isinstance(legend, str):
-                            ax.get('plotitems')[-1-i].set(legend=legend)
+                            ax.getp('plotitems')[-1-i].setp(legend=legend)
                         else:
                             print "Legend "+legend+" is not a string"
                 else:
@@ -2911,20 +2911,20 @@ class BaseClass(object):
                           "number of lines (%d) in plotcommand" % \
                           (len(legends), no_lines)
             elif isinstance(legends,str): # only one legend
-                ax.get('plotitems')[-1].set(legend=legends)
+                ax.getp('plotitems')[-1].setp(legend=legends)
             del kwargs['legend']
 
-        if not ax.get('hold') and not 'view' in kwargs:
+        if not ax.getp('hold') and not 'view' in kwargs:
             kwargs['view'] = 3
             
         # set keyword arguments in all the added lines:
         for line in lines:
-            line.set(**kwargs)
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+            line.setp(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
             
         return lines
@@ -2996,7 +2996,7 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = VelocityVectors(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold'):
+        if not ax.getp('hold'):
             if 'quiver3' in kwargs['description']:
                 if not 'grid' in kwargs:
                     kwargs['grid'] = True
@@ -3005,11 +3005,11 @@ class BaseClass(object):
             else:
                 if not 'box' in kwargs:
                     kwargs['box'] = True
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
         
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
     
@@ -3085,7 +3085,7 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Contours(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold'):
+        if not ax.getp('hold'):
             if 'contour3' in kwargs['description']:
                 if not 'grid' in kwargs:
                     kwargs['grid'] = True
@@ -3094,13 +3094,13 @@ class BaseClass(object):
             else: # contour or contourf
                 if not 'box' in kwargs:
                     kwargs['box'] = True
-        ax.set(**kwargs)
-        if h.get('function') == 'contour3':
-            ax.get('camera').set(view=3)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        if h.getp('function') == 'contour3':
+            ax.getp('camera').setp(view=3)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
 
@@ -3155,13 +3155,13 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Surface(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold') and not 'box' in kwargs:
+        if not ax.getp('hold') and not 'box' in kwargs:
             kwargs['box'] = True
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
         
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
             
@@ -3225,11 +3225,11 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Streams(*args, **kwargs)
         ax.add(h)
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
 
@@ -3342,16 +3342,16 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Surface(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold'):
+        if not ax.getp('hold'):
             if not 'grid' in kwargs:
                 kwargs['grid'] = True
             if not 'view' in kwargs:
                 kwargs['view'] = 3
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
         
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
 
@@ -3463,17 +3463,17 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Volume(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold'):
+        if not ax.getp('hold'):
             if 'slice_' in kwargs['description']:
                 if not 'grid' in kwargs:
                     kwargs['grid'] = True
                 if not 'view' in kwargs:
                     kwargs['view'] = 3
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
 
@@ -3529,11 +3529,11 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Streams(*args, **kwargs)
         ax.add(h)
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
 
@@ -3550,13 +3550,13 @@ class BaseClass(object):
         surf(xx,yy,zz)
         shading('interp')
         hold('on')
-        ch = contour3(xx,yy,zz,20);  ch.set(color='b')
+        ch = contour3(xx,yy,zz,20);  ch.setp(color='b')
         uu,vv = gradient(zz)
         h = streamslice(xx,yy,-uu,-vv); 
-        h.set(color='k')
+        h.setp(color='k')
         for i in iseq(1,length(h); 
-            zi = interp2(z,get(h(i),'xdata'),get(h(i),'ydata'));
-            set(h(i),'zdata',zi);
+            zi = interp2(z,getp(h(i),'xdata'),getp(h(i),'ydata'));
+            setp(h(i),'zdata',zi);
         end
         view(30,50); axis tight
         """
@@ -3583,13 +3583,13 @@ class BaseClass(object):
             ax = args[0];  args = args[1:]
         h = Volume(*args, **kwargs)
         ax.add(h)
-        if not ax.get('hold') and not 'view' in kwargs:
+        if not ax.getp('hold') and not 'view' in kwargs:
             kwargs['view'] = 3
-        ax.set(**kwargs)
-        self.gcf().set(**kwargs)
-        self.set(**kwargs)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
 
-        if (self.get('interactive') and self.get('show')) or self.get('show'):
+        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
         return h
      
@@ -3609,13 +3609,13 @@ class BaseClass(object):
         ax = self.gca()
         nargs = len(args)
         if nargs == 1:
-            ax.set(hidden=args[0])
+            ax.setp(hidden=args[0])
         elif nargs == 0:
             ax.toggle('hidden')
         else:
             raise TypeError, "hidden: wrong number of arguments" 
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         
     def view(self, *args):
@@ -3637,18 +3637,18 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         # Allow both view(az,el) and view([az,el])
         if nargs == 1:
             if isinstance(args[0], (tuple,list)):
                 args = args[0]
             elif isinstance(args[0], (int,float)) and args[0] in (2,3):
-                cam.set(view=args[0])
+                cam.setp(view=args[0])
                     
         if nargs == 2:
-            cam.set(azimuth=args[0], elevation=args[1])
+            cam.setp(azimuth=args[0], elevation=args[1])
             
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camdolly(self, *args):
@@ -3665,12 +3665,12 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 3:
-            cam.set(camdolly=args)
+            cam.setp(camdolly=args)
         else:
             raise TypeError, "camdolly: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camlookat(self, *args):
@@ -3691,20 +3691,20 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
             
         if nargs == 0:
-            self.gca().get('camera').set(camlookat=self.gca())
+            self.gca().getp('camera').setp(camlookat=self.gca())
         elif nargs == 1:
             tmparg = args[0]
             if isinstance(tmparg, Axis):
-                tmparg.get('camera').set(camlookat=tmparg)
+                tmparg.getp('camera').setp(camlookat=tmparg)
             elif isinstance(tmparg, PlotProperties):
-                self.gca().get('camera').set(camlookat=tmparg)
+                self.gca().getp('camera').setp(camlookat=tmparg)
             else:
                 raise ValueError, \
                       "camlookat: object must be either %s or %s, not %s" % \
                       (type(Axis), type(PlotProperties), type(tmparg))
         else:
             raise TypeError, "camlookat: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camproj(self, *args):
@@ -3721,14 +3721,14 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 0:
-            return cam.get('camproj')
+            return cam.getp('camproj')
         elif nargs == 1:
-            cam.set(camproj=args[0])
+            cam.setp(camproj=args[0])
         else:
             raise TypeError, "camproj: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camup(self, *args):
@@ -3748,16 +3748,16 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 0:
-            return cam.get('camup')
+            return cam.getp('camup')
         elif nargs == 1:
-            cam.set(camup=args[0])
+            cam.setp(camup=args[0])
         elif nargs == 3:
-            cam.set(camup=args)
+            cam.setp(camup=args)
         else:
             raise TypeError, "camup: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camroll(self, *args):
@@ -3774,12 +3774,12 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 1:
-            cam.set(camroll=args[0])
+            cam.setp(camroll=args[0])
         else:
             raise TypeError, "camroll: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camva(self, *args):
@@ -3799,14 +3799,14 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 0:
-            return cam.get('camva')
+            return cam.getp('camva')
         elif nargs == 1:
-            cam.set(camva=args[0])
+            cam.setp(camva=args[0])
         else:
             raise TypeError, "camva: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camzoom(self, *args):
@@ -3824,12 +3824,12 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 1:
-            cam.set(camzoom=args[0])
+            cam.setp(camzoom=args[0])
         else:
             raise TypeError, "camzoom: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def campos(self, *args):
@@ -3849,16 +3849,16 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 0:
-            return cam.get('campos')
+            return cam.getp('campos')
         elif nargs == 1:
-            cam.set(campos=args[0])
+            cam.setp(campos=args[0])
         elif nargs == 3:
-            cam.set(campos=args)
+            cam.setp(campos=args)
         else:
             raise TypeError, "campos: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camtarget(self, *args):
@@ -3878,16 +3878,16 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cam = ax.get('camera')
+        cam = ax.getp('camera')
         if nargs == 0:
-            return cam.get('camtarget')
+            return cam.getp('camtarget')
         elif nargs == 1:
-            cam.set(camtarget=args[0])
+            cam.setp(camtarget=args[0])
         elif nargs == 3:
-            cam.set(camtarget=args)
+            cam.setp(camtarget=args)
         else:
             raise TypeError, "camtarget: wrong number of arguments"
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def camlight(self, *args, **kwargs):
@@ -3934,8 +3934,8 @@ class BaseClass(object):
           returns Light instance that was created.
         """
         l = Light(**kwargs)
-        self.gca().set(light=l)
-        if self.get('interactive') and self.get('show'):
+        self.gca().setp(light=l)
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return l
         
@@ -3961,15 +3961,15 @@ class BaseClass(object):
 
         if nargs == 1:
             if args[0] == 'default':
-                ax.set(colormap=self.jet())
+                ax.setp(colormap=self.jet())
             else:
-                ax.set(colormap=args[0]) # backend dependent
+                ax.setp(colormap=args[0]) # backend dependent
         elif nargs == 0:
-            return ax.get('colormap')
+            return ax.getp('colormap')
         else:
             raise TypeError, "colormap: wrong number of arguments"
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def caxis(self, *args):
@@ -3996,20 +3996,20 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
 
         if nargs == 0:
-            return ax.get('caxis')
+            return ax.getp('caxis')
         elif nargs == 1:
             if isinstance(args[0], (tuple,list)):
                 args = args[0];  nargs = len(args)
             elif isinstance(args[0], str) and args[0] in ['auto', 'manual']:
-                ax.set(caxismode=args[0])
+                ax.setp(caxismode=args[0])
             else:
                 raise TypeError, "caxis: argument must be %s, not %s" % \
                       ((type(list),type(tuple),type(str)), type(args[0]))
 
         if nargs == 2:
-            ax.set(caxis=args)
+            ax.setp(caxis=args)
 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def colorbar(self, *args):
@@ -4046,19 +4046,19 @@ class BaseClass(object):
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
 
-        cbar = ax.get('colorbar')
+        cbar = ax.getp('colorbar')
         if nargs == 0:
-            cbar.set(visible=True)
+            cbar.setp(visible=True)
         elif nargs == 1:
             if args[0] == 'off' or not args[0]:
-                cbar.set(visible=False)
+                cbar.setp(visible=False)
             else:
-                cbar.set(visible=True)
-                cbar.set(cblocation=args[0])
+                cbar.setp(visible=True)
+                cbar.setp(cblocation=args[0])
         else:
             raise TypeError, "colorbar: wrong number of arguments"
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
         return cbar
@@ -4080,11 +4080,11 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
 
         if nargs == 1:
-            ax.set(shading=str(args[0]))
+            ax.setp(shading=str(args[0]))
         else:
             raise TypeError, "shading: wrong number of arguments" 
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
        
     def bighten(self, *args):
@@ -4094,9 +4094,9 @@ class BaseClass(object):
 
     def clabel(self, state='on'):
         """Control labeling of contours."""
-        self.gca().set(clabels=state)
+        self.gca().setp(clabels=state)
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def box(self, *args):
@@ -4122,11 +4122,11 @@ class BaseClass(object):
         if nargs == 0:
             ax.toggle('box')
         elif nargs == 1:
-            ax.set(box=args[0])
+            ax.setp(box=args[0])
         else:
             raise TypeError, "box: wrong number of argumnts"
         
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def material(self, *args):
@@ -4175,11 +4175,11 @@ class BaseClass(object):
             #kwargs['specularcolorreflectance'] = sc
 
         ax = self.gca()
-        items = ax.get('plotitems')
-        for i in range(ax.get('numberofitems')):
-            items[i].get('material').set(**kwargs)
+        items = ax.getp('plotitems')
+        for i in range(ax.getp('numberofitems')):
+            items[i].getp('material').setp(**kwargs)
 
-        if self.get('interactive') and self.get('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
             
     def subvolume(self, *args):
@@ -4382,7 +4382,7 @@ class DerivedClass(BaseClass):
            limits, camera view, box, grid, ...), and for the current figure
            (like window size, subplots, ...).
 
-        for item in ax.get('plotitems'):
+        for item in ax.getp('plotitems'):
             2. check the kind of the item object (that is, if it is a Line
                instance, a Surface instance, ...) and act accordingly.
             3. plot data.
@@ -4441,7 +4441,7 @@ def debug(plt, level=10):
             print fig
 
             if level > 1:
-                axes_ = fig.get('axes')
+                axes_ = fig.getp('axes')
                 for axnr in axes_.keys():
                     print_("\nAx %d:" % axnr, 4)
                     ax = axes_[axnr]
@@ -4449,22 +4449,22 @@ def debug(plt, level=10):
 
                     if level > 2:
                         print_("\nCamera:", 4)
-                        print_(ax.get('camera'), 8)
+                        print_(ax.getp('camera'), 8)
 
                         print_("\nColorbar:", 4)
-                        print_(ax.get('colorbar'), 8)
+                        print_(ax.getp('colorbar'), 8)
 
                         print_("\nLights:", 4)
-                        for light_ in ax.get('lights'):
+                        for light_ in ax.getp('lights'):
                             print_(light_, 8)
 
                         print_("\nPlotitems:", 4)
-                        for i, item in enumerate(ax.get('plotitems')):
+                        for i, item in enumerate(ax.getp('plotitems')):
                             print_('item number %s %s:' %(i, repr(item)), 8)
                             print_(item, 12)
                             
                             if level > 3:
                                 print_("Material:", 12)
-                                print_(item.get('material'), 16)
+                                print_(item.getp('material'), 16)
 
                             print ''
