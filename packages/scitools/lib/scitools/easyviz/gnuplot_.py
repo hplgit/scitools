@@ -87,7 +87,7 @@ class GnuplotBackend(BaseClass):
             }
          
         self._colors = {
-            '': 3,   # no color --> blue
+            '': None,   # no color --> blue
             'r': 1,  # red
             'g': 2,  # green
             'b': 3,  # blue
@@ -475,18 +475,30 @@ class GnuplotBackend(BaseClass):
             width = int(width)
 
         withstring = ''
-        if not style:
-            if marker:
-                withstring = "points lt %d pt %d ps %d " \
-                             % (color, marker, width)
-            else:
-                withstring = "lines lt %d lw %d" % (color, width)
-        elif style == 'lines':
-            if not marker: 
-                withstring = "lines lt %d lw %d" % (color, width)
-            else: 
-                withstring = "linespoints lt %d lw %d pt %d" % \
-                             (color, width, marker)
+        if color is not None: 
+            if style is None:
+                if marker:
+                    withstring = "points lt %d pt %d ps %d " \
+                                 % (color, marker, width)
+                else:
+                    withstring = "lines lt %d lw %d" % (color, width)
+            elif style == 'lines':
+                if marker is None:  # marker is not set
+                    withstring = "lines lt %d lw %d" % (color, width)
+                else: 
+                    withstring = "linespoints lt %d lw %d pt %d" % \
+                                 (color, width, marker)
+        else:  # no color
+            if style is None:
+                if marker:
+                    withstring = "points pt %d ps %d " % (marker, width)
+                else:
+                    withstring = "lines"  # no color, no style, no marker
+            elif style == 'lines':
+                if marker is None:  # marker is not set
+                    withstring = "lines" 
+                else: 
+                    withstring = "linespoints pt %d" % marker
         return withstring
 
     def _add_line(self, item):
