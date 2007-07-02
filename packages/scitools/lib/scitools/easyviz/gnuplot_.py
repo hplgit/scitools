@@ -47,7 +47,7 @@ if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
     Gnuplot.GnuplotOpts.default_term = "x11"
 
 def _cmpPlotProperties(a,b):
-    """Sort cmp-function for PlotProperties"""
+    """Sort cmp function for PlotProperties"""
     plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
     assert isinstance(a, PlotProperties)
     assert isinstance(b, PlotProperties)
@@ -87,7 +87,7 @@ class GnuplotBackend(BaseClass):
             }
          
         self._colors = {
-            '': None,   # no color --> blue
+            '' : 1   # no color --> red (gives solid line in eps)
             'r': 1,  # red
             'g': 2,  # green
             'b': 3,  # blue
