@@ -474,7 +474,7 @@ class Contours(PlotProperties):
     """
     _local_prop = {
         'cvector':   None,   # vector of contour heights
-        'clevels':   5,      # default number of contour levels
+        'clevels':   8,      # default number of contour levels
         'clabels':   False,  # display contour labels
         'clocation': 'base', # location of cntr levels (surface or base)
         'filled':    False,  # fill contours
@@ -3312,25 +3312,39 @@ class BaseClass(object):
     def mesh(self, *args, **kwargs):
         """Draw a 3D mesh surface.
 
-        - mesh(X, Y, Z[, C])
-          plots the colored parametric mesh defined in the four matrix
-          arguments. The color scaling is determined by the range of C. Uses
-          C = Z if C is not given, so color is proportional to mesh height.
+        Calling::
+
+            mesh(X, Y, Z[, C])
             
-        - mesh(Z[, C])
-          same as mesh(range(n), range(m), Z[, C]) where m,n = shape(Z).
+        plots the colored parametric mesh defined in the four matrix
+        arguments. The color scaling is determined by the range of C. Uses
+        C = Z if C is not given, so color is proportional to mesh height.
             
-        - mesh(x, y, Z[, C])
-          the two vector arguments must have len(x) == n and len(y) == m,
-          where m,n = shape(Z)
+        Calling::
 
-        - mesh(ax, ...)
-          plots into the Axis instance given in ax instead of the current axis.
+            mesh(Z[, C])
+            
+        same as mesh(range(n), range(m), Z[, C]) where m,n = shape(Z).
+            
+        Calling::
 
-        Example:
+            mesh(x, y, Z[, C])
+            
+        the two vector arguments must have len(x)==n and len(y)==m,
+        where m,n = shape(Z).
 
-        >>> x = linspace(-2, 2, 21)
-        >>> xx, yy = meshgrid(x)
+        Calling::
+
+            mesh(ax, ...)
+            
+        plots into the Axis object ax instead of the current axis.
+
+        @return: A Surface object.
+
+        Examples:
+
+        >>> x = y = linspace(-2, 2, 21)
+        >>> xx, yy = meshgrid(x, y)
         >>> zz = exp(-xx**2)*exp(-yy**2)
         >>> mesh(xx, yy, zz)
         """
@@ -3356,7 +3370,8 @@ class BaseClass(object):
         return h
 
     def meshc(self, *args, **kwargs):
-        """Same as mesh(), but a contour plot is drawn beneath the mesh.
+        """Same as the mesh command, but a contour plot is drawn beneath
+        the mesh.
 
         Examples:
 
@@ -3379,8 +3394,8 @@ class BaseClass(object):
         return self.mesh(*args, **kwargs)
     
     def surf(self, *args, **kwargs):
-        """Draw a 3D colored surface. See mesh() for documentation of input
-        arguments.
+        """Draw a 3D colored surface. See the mesh command for documentation
+        of input arguments.
 
         Examples:
 
@@ -3395,37 +3410,99 @@ class BaseClass(object):
         return self.mesh(*args, **kwargs)
 
     def surfc(self, *args, **kwargs):
-        """Same as surf() but a contour plot is drawn beneath the surface."""
+        """Same as the surf command, but a contour plot is drawn beneath
+        the surface.
+        """
         kwargs['description'] = 'surfc: 3D surface with contours at base'
         return self.surf(*args, **kwargs)
 
     def surfl(self, *args, **kwargs):
-        """3-D shaded surface with lighting."""
+        """3D shaded surface with lighting."""
         raise NotImplemetedError, "'surfl' is not implemented"
         
     def quiver3(self, *args, **kwargs):
-        """Draw velocity vectors in 3D.
+        """Draw velocity vectors in 3D space.
         
-        - quiver3(X, Y, Z, U, V, W)
-        - quiver3(Z,U,V,W)
-          assumes X, Y = meshgrid(range(n), range(m)) where m,n = shape(Z)
-        - quiver3(Z, U, V, W, s) or quiver3(X, Y, Z, U, V, W, s)
-          scales the vectors by the scale factor given in s.
-        - quiver3(..., 'filled')
-          fills the arrows
-        - quiver3(..., LineSpec)
-          sets the specification on the arrows as given in LineSpec.
-        - quiver3(ax, ...)
-          draws the vectors in the Axis instance given in ax instead of
-          the current axis.
-        - h = quiver3(...)  
+        Calling::
+
+            quiver3(X, Y, Z, U, V, W)
+
+        plots arrows from the 3D vector field with components U,V,W at the
+        grid defined by X,Y,Z. The shape of the three vector components is
+        assumed to be the same, while the grid components should either have
+        the same shape as U or that len(X)==n, len(Y)==m, and len(Z)==p,
+        where m,n,p=shape(U).
+        
+        Calling::
+
+            quiver3(Z,U,V,W)
+
+        assumes that X,Y = meshgrid(range(n),range(m)), where m,n=shape(Z)
+        
+        Calling::
+
+            quiver3(..., s)
+            
+        scales the vectors by the scale factor given in s. The default is s=1,
+        while s=0 turns off automatic scaling.
+        
+        Calling::
+
+            quiver3(..., 'filled')
+            
+        fills the arrows.
+        
+        Calling::
+
+            quiver3(..., fmt)
+            
+        sets the specification on the arrows as given in fmt.
+        
+        Calling::
+
+            quiver3(ax, ...)
+            
+        plots the vectors in the Axis object ax instead of the current axis.
+
+        @return: A VelocityVectors object.
+
+        Examples:
+
+        Draw the "radius vector field" v = (x,y,z):
+        >>> x = y = linspace(-3,3,4)
+        >>> xv, yv, zv = meshgrid(x, y, sparse=False)
+        >>> yv, vv, wv = xv, yv, zv
+        >>> quiver3(xv, yv, zv, uv, uv, wv, 'filled', 'r',
+        ...         axis=[-7,7,-7,7,-7,7])
+
+        Draw the path of a projectile as a function of time:
+        >>> vz = 10  # Velocity
+        >>> a = -32  # Acceleration
+        >>> t = linspace(0,1,11)
+        >>> z = vz*t + 1./2*a*t**2
+        >>> vx = 2
+        >>> x = vx*t
+        >>> vy = 3
+        >>> y = vy*t
+        >>> u = gradient(x)
+        >>> v = gradient(y)
+        >>> w = gradient(z)
+        >>> scale = 0
+        >>> quiver3(x,y,z,u,v,w,0,view=[70,18],grid='on',
+        ...         axis=[0,3.5,0,3,-10,2])
         """
         kwargs['description'] = "quiver3: 3D vector field"
         return self.quiver(*args, **kwargs)
     
     def contour3(self, *args, **kwargs):
-        """Draw 3D contour plot. Same as contour() but the contours are drawn
-        at their coresponding Z (height) level.
+        """Draw 3D contour plot.
+
+        The contour3 command is the same as the contour command except that
+        the contours are drawn at their coresponding Z (height) level.
+
+        Examples:
+
+        >>> contour3(peaks())
         """
         kwargs['description'] = "contour3: 3D contours at surface"
         return self.contour(*args, **kwargs)
@@ -3434,24 +3511,57 @@ class BaseClass(object):
     def slice_(self, *args, **kwargs):
         """Volumetric slice plot.
         
-        - slice_(X,Y,Z,V,Sx,Sy,Sz)
+        Calling::
 
-        - slice_(X,Y,Z,V,XI,YI,ZI)
+            slice_(X,Y,Z,V,Sx,Sy,Sz)
 
-        - slice_(V,Sx,Sy,Sz) or slice_(V,XI,YI,ZI)
-          same as slice_(range(n+1), range(m+1), range(p+1)) where m,n,p = shape(V)
+        draws orthogonal slice planes through the volumetric data set V
+        defined on the grid with components X, Y, and Z. The Sx, Sy, and Sz
+        arrays defines the slice planes in the x, y, and z direction,
+        respectively.
 
-        - slice_(...,'method')
-          'method' can be 'linear' (default), 'cubic', or 'nearest'.
+        Calling::
 
-        - slice(ax, ...)
-          uses Axis instance in ax instead of the current axes.
+            slice_(V,Sx,Sy,Sz)
+            
+        is the same as slice_(range(n),range(m),range(p),V,Sx,Sy,Sz),
+        where m,n,p = shape(V).
 
-        - h = slice(...)
+        Calling::
+
+            slice_(X,Y,Z,V,XI,YI,ZI)
+
+        draws slices through the volume V along the surface defined by the
+        arrays XI,YI,ZI.
+
+        Calling::
+
+            slice_(V,XI,YI,ZI)
+            
+        is the same as slice_(range(n),range(m),range(p)),V,XI,YI,ZI),
+        where m,n,p = shape(V).
+
+        Calling::
+
+            slice_(..., method)
+            
+        sets the interpolation method to be used, where method can be either
+        'linear' (default), 'cubic', or 'nearest'.
+
+        Calling::
+
+            slice(ax, ...)
+            
+        plots into the Axis object ax instead of the current axis.
+
+        @return: A Volume object.
 
         Examples:
 
-        >>> xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17), linspace(-2,2,25))
+        Visualize the function x*exp(-x**2-y**2-z**2) over the range
+        -2 > x,y,z < 2:
+        >>> xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17),
+        ...                       linspace(-2,2,25))
         >>> vv = x*exp(-xx**2-yy**2-zz**2)
         >>> slice_(xx, yy, zz, vv, [-1.2,.8,2], 2, [-2,-.2])
         """
@@ -3480,35 +3590,63 @@ class BaseClass(object):
     def contourslice(self, *args, **kwargs):
         """Contours in slice planes.
 
-        - contourslice(X,Y,Z,V,SX,SY,SZ)
-          draws contour in axis aligned x,y,z planes at the points in the
-          arrays SX, SY, and SZ.
+        Calling::
+
+            contourslice(X,Y,Z,V,Sx,Sy,Sz)
+
+        draws contours in axis aligned x,y,z planes at the points in the
+        arrays Sx, Sy, and Sz. The arrays X, Y, and Z defines the coordinates
+        for the volume V and must either all have the same shape as V or
+        fulfill the requirement len(X)==n, len(Y)==m, and len(Z)==p, where
+        m,n,p = shape(V).
           
-        - contourslice(X,Y,Z,V,XI,YI,ZI)
-          draws contours through the volume V along the surface given in
-          the arrays XI, YI, and ZI.
+        Calling::
+
+            contourslice(V,Sx,Sy,Sz)
+            
+        is the same as above, but it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
           
-        - contourslice(V,SX,SY,SZ) or contourslice(V,XI,YI,ZI)
-          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
-          where m,n,p = shape(V).
+        Calling::
+
+            contourslice(X,Y,Z,V,XI,YI,ZI)
+            
+        draws contours through the volume V along the surface given in
+        the arrays XI, YI, and ZI.
           
-        - contourslice(..., n)
-          draws n contours per plane.
+        Calling::
+
+            contourslice(V,XI,YI,ZI)
+            
+        is the same as above, but it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
+               
+        Calling::
+
+            contourslice(..., n)
+            
+        draws n contours per plane. This overrides the default value of five
+        contours per plane.
           
-        - contourslice(..., cvals)
-          draws len(cvals) contours per plane at levels given in cvals.
+        Calling::
+
+            contourslice(..., v)
+            
+        draws len(v) contours per plane at the levels given in the array v.
           
-        - contourslice(ax,...)
-          draws into the Axis instance given in ax instead of the current
-          axes.
+        Calling::
+
+            contourslice(ax, ...)
+            
+        draws into the Axis object ax instead of the current axis.
           
-        - h = contourslice(...)
-          returns con
+        @return: A Volume object.
         
         Example:
-        xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17), linspace(-2,2,25))
-        vv = xx*exp(-xx**2-yy**2-zz**2); # Create volume data
-        contourslice(xx, yy, zz, vv, [-.7,.7], [], [0], view=3)
+        >>> xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17),
+        ...                       linspace(-2,2,25))
+        >>> vv = xx*exp(-xx**2-yy**2-zz**2)
+        >>> contourslice(xx, yy, zz, vv, [-.7,.7], [], [0], view=3)
         """
         kwargs['description'] = 'contourslice: contours in slice planes'
         return self.slice_(*args, **kwargs)
@@ -3516,12 +3654,53 @@ class BaseClass(object):
     def coneplot(self, *args, **kwargs):
         """3D cone plot.
         
-        - coneplot(X,Y,Z,U,V,W,CX,CY,CZ)
-        - coneplot(U,V,W,CX,CY,CZ)
-        - coneplot(...,scale)
-        - coneplot(...,color)
-        - coneplot(...,'quiver')
-        - coneplot(ax,...)
+        Calling::
+
+            coneplot(X,Y,Z,U,V,W,Cx,Cy,Cz)
+
+        draws velocity vectors as cones at the points Cx,Cy,Cz in the 3D
+        vector field defined by U,V,W. The arrays X,Y,Z defines the grid
+        coordinates for U,V,W. The shape of the three vector components is
+        assumed to be the same, while the grid components should either have
+        the same shape as U or fulfill the requirement len(X)==n, len(Y)==m,
+        and len(Z)==p, where m,n,p=shape(U).
+        
+        Calling::
+
+            coneplot(U,V,W,Cx,Cy,Cz)
+
+        is the same as above, but it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(U).
+        
+        Calling::
+
+            coneplot(..., scale)
+
+        automatically scales the cones by the factor scale. The default is
+        a value of 1, while a value of 0 turns off automatic scaling.
+        
+        Calling::
+
+            coneplot(..., COLORS)
+
+        colors the cones by using the array COLORS. The array COLORS must
+        have the same shape as the array U.
+        
+        Calling::
+
+            coneplot(..., 'quiver')
+
+        plots arrows instead of cones.
+        
+        Calling::
+
+            coneplot(ax, ...)
+
+        plots into the Axis object ax instead of the current axis.
+
+        @return: A Streams object.
+
+        Examples:
         """
         kwargs['description'] = "coneplot: 3D cone plot"
         ax = self.gca()
@@ -3537,44 +3716,133 @@ class BaseClass(object):
             self._replot()
         return h
 
+    def streamslice(self, *args, **kwargs):
+        """Streamlines in slice planes.
+
+        Calling::
+
+            streamslice(X,Y,Z,U,V,W,Sx,Sy,Sz)
+
+        draws streamlines (with direction arrows) from the 3D vector data
+        U,V,W in axis aligned x,y,z planes at the points in the arrays
+        Sx,Sy,Sz. The vector components must all have the same shape and the
+        arrays X,Y,Z (defining the grid) should either have the same shape
+        as U or fulfill the requirement len(X)==n, len(Y)==m, and len(Z)==p,
+        where m,n,p=shape(U).
+
+        Calling::
+
+            streamslice(U,V,W,Sx,Sy,Sz)
+
+        is the same as above, except that it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).
+
+        Calling::
+
+            streamslice(X,Y,U,V)
+
+        draws streamlines (with direction arrows) from the 2D vector data U,V.
+        Both of the vector components must have the same shape and the
+        arrays X,Y should either have the same shape as U or fulfill the
+        requirement len(X)==n and len(Y)==m, where m,n=shape(U).
+
+        Calling::
+
+            streamslice(U,V)
+
+        is the same as above, except that it is assumed that
+        X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).
+
+        Calling::
+
+            streamslice(..., 'arrows')
+
+        draws direction arrows (the default).
+
+        Calling::
+
+            streamslice(..., 'noarrows')
+
+        suppresses the drawing of direction arrows.
+
+        Calling::
+
+            streamslice(ax, ...)
+
+        plots into the Axis object ax instead of the current axis.
+        
+        @return: A ??? object.
+        
+        Examples:
+        
+        >>> import scipy
+        >>> wind = scipy.io.loadmat('wind.mat')
+        >>> x = wind['x']
+        >>> y = wind['y']
+        >>> z = wind['z']
+        >>> u = wind['u']
+        >>> v = wind['v']
+        >>> w = wind['w']
+        >>> daspect([1,1,1])
+        >>> streamslice(x,y,z,u,v,w,[],[],[5])
+
+        >>> x = y = linspace(-3,3,31)
+        >>> xv, yv = meshgrid(x,y)
+        >>> values = peaks(xx,yy)
+        >>> surf(xv,yv,values)
+        >>> shading('interp')
+        >>> hold('on')
+        >>> ch = contour3(xv,yv,values,20);  ch.setp(color='b')
+        >>> uv,vv = gradient(values)
+        >>> h = streamslice(xv,yv,-uv,-vv) 
+        >>> h.setp(color='k')
+        >>> for i in iseq(1,len(h)):
+        ...     zi = interp2(z,getp(h(i),'xdata'),getp(h(i),'ydata'))
+        ...     setp(h(i),'zdata',zi)
+        >>> view(30,50);  axis('tight')
+        """
+        raise NotImplementedError, "'streamslice' is not implemented."
+
     def isocaps(self, *args, **kwargs):
         """Isosurface end caps."""
         raise NotImplementedError, "'isocaps' is not implemented."
 
-    def streamslice(self, *args, **kwargs):
-        """Streamlines in slice planes.
-        
-        Example:
-        xx,yy = meshgrid(linspace(-3,3,31))
-        zz = peaks(xx,yy)
-        surf(xx,yy,zz)
-        shading('interp')
-        hold('on')
-        ch = contour3(xx,yy,zz,20);  ch.setp(color='b')
-        uu,vv = gradient(zz)
-        h = streamslice(xx,yy,-uu,-vv); 
-        h.setp(color='k')
-        for i in iseq(1,length(h); 
-            zi = interp2(z,getp(h(i),'xdata'),getp(h(i),'ydata'));
-            setp(h(i),'zdata',zi);
-        end
-        view(30,50); axis tight
-        """
-        raise NotImplementedError, "'streamslice' is not implemented."
-
     def isosurface(self, *args, **kwargs):
         """Isosurface extractor.
         
-        - isosurface(X,Y,Z,V,isovalue)
-          
-        - isosurface(V,isovalue)
-          assumes X,Y,Z = meshgrid(range(n), range(m), range(p))
-          where m,n,p = shape(V).
-        
-        - isosurface(..., colors)
+        Calling::
 
-        - h = isosurface(...)
-          returns a Volume instance.
+            isosurface(X,Y,Z,V,isovalue)
+
+        creates an isosurface for the volume V at the iso value given by
+        isovalue. The arrays X, Y, and Z defines the grid at which the data
+        V is given and must either have the same shape as V or fulfill the
+        requirement that len(X)==n, len(Y)==m, and len(Z)==p, where
+        m,n,p = shape(V).
+        
+        Calling::
+
+            isosurface(V,isovalue)
+            
+        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
+        where m,n,p = shape(V).
+        
+        Calling::
+
+            isosurface(..., COLORS)
+
+        uses the colors in the array COLORS instead of the colors in the
+        scalar field. The array COLORS must have the same shape as the
+        volume V.
+
+        @return: A Volume object.
+
+        Examples:
+        
+        >>> x, y, z, v = flow()
+        >>> isosurface(x, y, z, v, -3)
+        >>> daspect([1,1,1])
+        >>> view(3)
         """
         kwargs['description'] = 'isosurface: isosurface extractor'
         
@@ -3600,11 +3868,21 @@ class BaseClass(object):
     def hidden(self, *args):
         """Toggle hidden line removal in the current axis.
 
-        - hidden(state)
-          state can be either 'on' or 'off'
+        Calling::
 
-        - hidden()
-          toggles the hidden state.
+            hidden(state)
+            
+        turns hidden line removal on if state is 'on' (or True) and off if
+        state is 'off' (or False). Hidden line removal is turned on by
+        default.
+
+        Calling::
+
+            hidden()
+            
+        toggles the hidden state.
+
+        Note: Some backends has no support for hidden line removal.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3621,16 +3899,44 @@ class BaseClass(object):
     def view(self, *args):
         """Specify viewpoint.
 
-        - view(azimuth,elevation) or view([azimuth,elevation])
-        
-        - view(2)
-          sets the view to the default 2D view.
-            
-        - view(3)
-          sets the view to the default 3D view.
+        Calling::
 
-        - view(ax, ...)
-          uses ax instead of the current axis.
+            view(azimuth, elevation)
+
+        sets the viewpoint according to azimuth (horizontal rotation) and
+        elevation (vertical). Both azimuth and elevation should be given in
+        degrees. 
+
+        Calling::
+
+            view([azimuth, elevation])
+
+        is the same as above.
+        
+        Calling::
+
+            view(2)
+            
+        sets the view to the default 2D view.
+            
+        Calling::
+
+            view(3)
+            
+        sets the view to the default 3D view.
+
+        Calling::
+
+            view(ax, ...)
+            
+        sets the view in the Axis object ax instead of the current axis.
+
+        Examples:
+
+        >>> surf(peaks())
+        >>> view(2)      # the default 2D view
+        >>> view(40,65)  # azimuth=40 and elevation=65
+        >>> view(3)      # back to the default 3D view
         """
         ax = self.gca()
         nargs = len(args)
@@ -3654,11 +3960,17 @@ class BaseClass(object):
     def camdolly(self, *args):
         """Dolly camera.
 
-        - camdolly(dx, dy, dz)
-          moves the camera position along the direction of projection.
+        Calling::
 
-        - camdolly(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+            camdolly(dx, dy, dz)
+            
+        moves the camera position along the direction of projection.
+
+        Calling::
+
+            camdolly(ax, ...)
+            
+        uses the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3676,14 +3988,23 @@ class BaseClass(object):
     def camlookat(self, *args):
         """Move camera and target to view specified objects.
 
-        - camlookat(h)
-          views the object in h, where h is a PlotProperties instance.
+        Calling::
 
-        - camlookat(ax)
-          views objects in the Axis instance ax.
+            camlookat(obj)
+            
+        views the PlotProperties object obj.
 
-        - camlookat()
-          views objects in the current axes.
+        Calling::
+
+            camlookat(ax)
+            
+        views the objects in the Axis object ax.
+
+        Calling::
+
+            camlookat()
+            
+        views the objects in the current axes.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3708,13 +4029,27 @@ class BaseClass(object):
             self._replot()
 
     def camproj(self, *args):
-        """Set camera projection.
+        """Camera projection.
 
-        - camproj(projeciton)
-          projection can be either 'orthogonal' (default), or 'perspective'.
+        Calling::
 
-        - camproj(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+            camproj()
+
+        returns the camera projection of the current axis.
+
+        Calling::
+
+            camproj(projeciton)
+            
+        sets the projection of the camera to projection, where projection can
+        be either 'orthographic' (default) or 'perspective'.
+
+        Calling::
+
+            camproj(ax, ...)
+            
+        sets or gets the camera projection of the Axis object ax instead of
+        the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3734,14 +4069,30 @@ class BaseClass(object):
     def camup(self, *args):
         """Camera up vector.
 
-        - up = camup()
-          gets the camera up vector of the current axes.
+        Calling::
 
-        - camup([x, y, z]) or camup(x, y, z)
-          sets the camera up vector.
+            camup()
+            
+        returns the up vector of the camera in the current axis.
 
-        - camup(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+        Calling::
+
+            camup([x, y, z])
+            
+        sets the camera up vector.
+
+        Calling::
+
+             camup(x, y, z)
+
+        is the same as the above.
+
+        Calling::
+
+            camup(ax, ...)
+            
+        sets or gets the up vector for the camera in the Axis object ax
+        instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3763,11 +4114,17 @@ class BaseClass(object):
     def camroll(self, *args):
         """Roll camera.
 
-        - camroll(angle)
-          rotates the camera about the direction of projection.
+        Calling::
 
-        - camroll(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+            camroll(angle)
+            
+        rotates the camera about the direction of projection.
+
+        Calling::
+
+            camroll(ax, ...)
+            
+        rotates the camera in the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3785,14 +4142,24 @@ class BaseClass(object):
     def camva(self, *args):
         """Camera view angle.
 
-        - camva()
-          returns the camera view angle of the current axes.
+        Calling::
 
-        - camva(angle)
-          sets the camera view angle.
+            camva()
+            
+        returns the camera view angle of the current axis.
 
-        - camva(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+        Calling::
+
+            camva(angle)
+            
+        sets the camera view angle.
+
+        Calling::
+
+            camva(ax, ...)
+            
+        sets or gets the camera view angle in the Axis object ax instead of
+        the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3812,12 +4179,18 @@ class BaseClass(object):
     def camzoom(self, *args):
         """Zoom camera.
 
-        - camzoom(factor)
-          zooms the camera the specified factor. A value greater than 1 is a
-          zoom-in, while a value less than 1 is a zoom-out.
+        Calling::
 
-        - camzoom(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+            camzoom(factor)
+            
+        zooms the camera the specified factor. A value greater than 1 is a
+        zoom-in, while a value less than 1 is a zoom-out.
+
+        Calling::
+
+            camzoom(ax, ...)
+            
+        zooms the camera in the Axis object ax instead of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3835,14 +4208,30 @@ class BaseClass(object):
     def campos(self, *args):
         """Camera position.
 
-        - pos = campos()
-          returns the camera position of the current axes.
+        Calling::
 
-        - campos([x,y,z]) or campos(x,y,z)
-          sets the camera position.
+            campos()
 
-        - campos(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+        returns the position of the camera in the current axis.
+
+        Calling::
+
+            campos([x,y,z])
+        
+        sets the camera position.
+
+        Calling::
+
+             campos(x,y,z)
+
+        is the same as above.
+
+        Calling::
+
+            campos(ax, ...)
+            
+        sets or gets the position of the camera in the Axis object ax instead
+        of the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3864,14 +4253,30 @@ class BaseClass(object):
     def camtarget(self, *args):
         """Camera target.
 
-        - target = camtarget()
-          returns the camera target of the current axes.
+        Calling::
 
-        - camtarget([x,y,z]) or camtarget(x,y,z)
-          sets the camera target.
+            camtarget()
+            
+        returns the camera target of the current axis.
 
-        - camtarget(ax, ...)
-          uses the Axis instance in ax instead of the current axes.
+        Calling::
+
+            camtarget([x,y,z])
+            
+        sets the target for the camera.
+
+        Calling::
+
+            camtarget(x,y,z)
+
+        is the same as above.
+
+        Calling::
+
+            camtarget(ax, ...)
+            
+        sets or gets the camera target in the Axis object ax instead of the
+        current axis..
         """
         ax = self.gca()
         nargs = len(args)
@@ -3893,45 +4298,73 @@ class BaseClass(object):
     def camlight(self, *args, **kwargs):
         """Create or set position of a light.
 
-        - camlight('headlight')
-          creates a light in the current axes at the camera position.
+        Calling::
 
-        - camlight('right')
-          creates a light right and up from the camera in the current axes.
+            camlight('headlight')
+            
+        creates a light in the current axis at the position of the camera.
 
-        - camlight('left')
-          creates a light left and up from the camera.
+        Calling::
 
-        - camlight()
-          same as camlight('right')
+            camlight('right')
+            
+        creates a light right and up from the camera in the current axis.
 
-        - camlight(az, el)
-          creates a light at az, el from the camera.
+        Calling::
 
-        - camlight(..., style)
-          style can be either 'local' (default), or 'inifinite'.
+            camlight('left')
+            
+        creates a light left and up from the camera.
 
-        - camlight(h, ...)
-          places Light instance h at the specified position.
+        Calling::
 
-        - h = camlight(...)
-          returns light instance.
+            camlight()
+            
+        is the same as camlight('right').
+
+        Calling::
+
+            camlight(azimuth, elevation)
+            
+        creates a light at azimuth, elevation (both given in degrees) from
+        the camera.
+
+        Calling::
+
+            camlight(..., style)
+            
+        sets the style of the light, where style can be either 'local'
+        (default) or 'inifinite'.
+
+        Calling::
+
+            camlight(l, ...)
+            
+        places Light object l at the specified position.
+
+        @return: A Light object.
         """
         # should be implemented in backend
         raise NotImplementedError, "'camlight' not implemented in class %s" % \
               self.__class__.__name__
 
     def light(self, **kwargs):
-        """Add a Light to the current axes.
+        """Add a light to the current axis.
 
-        - light()
-          adds a light with default values for all light properties.
+        Calling:
 
-        - light(param1=value1,param1=value2,...)
-          adds a light with properties as given in the keyword arguments.
+            light()
+            
+        adds a light to the current axis with default values for all light
+        properties.
 
-        - h = light(...)
-          returns Light instance that was created.
+        Calling::
+
+            light(prop1=value1, prop2=value2, ...)
+            
+        adds a light with properties as given in the keyword arguments.
+
+        @return: A Light object.
         """
         l = Light(**kwargs)
         self.gca().setp(light=l)
@@ -3940,19 +4373,33 @@ class BaseClass(object):
         return l
         
     def colormap(self, *args):
-        """Specify colormap of the current figure.
+        """Specify colormap.
 
-        - colormap(map)
-          sets the colormap in 'map' as the current colormap.
+        Calling::
 
-        - colormap('default')
-          sets the colormap to the default colormap (jet).
+            colormap(map)
+            
+        sets the colormap in map as the current colormap (map is backend
+        dependent).
 
-        - colormap()
-          returns the current colormap.
+        Calling::
 
-        - colormap(ax,...)
-          sets the colormap in the axis 'ax' instead of the current axis.
+            colormap('default')
+            
+        sets the colormap to the default colormap (jet).
+
+        Calling::
+
+            colormap()
+            
+        returns the current colormap.
+
+        Calling::
+
+            colormap(ax, ...)
+            
+        sets or gets the colormap in the Axis object ax instead of the
+        current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -3975,20 +4422,42 @@ class BaseClass(object):
     def caxis(self, *args):
         """Pseudocolor axis scaling.
 
-        - caxis([cmin, cmax]) or caxis(cmin, cmax)
-          sets the pseudocolor axis scaling to range from 'cmin' to 'cmax'.
+        Calling::
 
-        - caxis('manual')
-          fixes axis scaling at the current range.
+            caxis([cmin, cmax])
             
-        - caxis('auto')
-          sets axis scaling back to autoranging.
+        sets the pseudocolor axis scaling to range from cmin to cmax.
 
-        - caxis()
-          returns the current axis scaling.
+        Calling::
 
-        - caxis(ax,...)
-          uses the Axis instance in ax instead of the current axes.
+             caxis(cmin, cmax)
+
+        is the same as above.
+
+        Calling::
+
+            caxis('manual')
+            
+        fixes the pseudocolor axis scaling at the current range.
+            
+        Calling::
+
+            caxis('auto')
+            
+        sets the pseudocolor axis scaling back to autoranging.
+
+        Calling::
+
+            caxis()
+            
+        returns the current pseudocolor axis scaling.
+
+        Calling::
+
+            caxis(ax, ...)
+            
+        sets the pseudocolor axis scaling in the Axis object ax instead of
+        the current axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -4013,33 +4482,43 @@ class BaseClass(object):
             self._replot()
 
     def colorbar(self, *args):
-        """Display color bar (color scale) and return the color bar.
+        """Display a color bar (color scale).
 
-        - colorbar()
-          appends a colorbar to the current axes.
+        Calling::
 
-        - colorbar('off')
-          removes the colorbar from the current axes.
+            colorbar()
+            
+        adds a colorbar to the current axis.
 
-        - colorbar(location)
-          appends a colorbar to the current axes at location specified
-          by 'location'. 'location' may be any of the following strings:
+        Calling::
 
-              'North'              inside plot box near top
-              'South'              inside bottom
-              'East'               inside right
-              'West'               inside left
-              'NorthOutside'       outside plot box near top
-              'SouthOutside'       outside bottom
-              'EastOutside'        outside right
-              'WestOutside'        outside left
+            colorbar('off')
+            
+        removes the colorbar from the current axis.
 
-        - colorbar(ax,...)
-          appends a colorbar to the Axis instance specified by ax' instead
-          of the current axis.
+        Calling::
 
-        - h = colorbar(...)
-          returns a Colorbar instance.
+            colorbar(location)
+            
+        adds a colorbar to the current axis at location specified by
+        location, where location may be any of the following:
+
+          * 'North'        - inside plot box near top
+          * 'South'        - inside bottom
+          * 'East'         - inside right
+          * 'West'         - inside left
+          * 'NorthOutside' - outside plot box near top
+          * 'SouthOutside' - outside bottom
+          * 'EastOutside'  - outside right
+          * 'WestOutside'  - outside left
+
+        Calling::
+
+            colorbar(ax, ...)
+            
+        adds a colorbar to the Axis object ax instead of the current axis.
+
+        @return: A Colorbar object.
         """
         ax = self.gca()
         nargs = len(args)
@@ -4066,13 +4545,20 @@ class BaseClass(object):
     def shading(self, *args):
         """Control the color shading of surfaces.
         
-        - shading(mode)
-          sets the shading of the current graph to the shading mode specified
-          by 'mode'. Valid modes are 'flat', 'interp' (interpolated) and
-          'faceted'.
+        Calling::
 
-        - shading(ax,...)
-          uses axes 'ax' instead of the current axes.
+            shading(mode)
+            
+        sets the shading of the current graph to the shading mode specified
+        by 'mode'. Valid modes are 'flat', 'interp' (interpolated) and
+        'faceted' (default).
+
+        Calling::
+
+            shading(ax, ...)
+            
+        sets the shading mode in the Axis object ax instead of the current
+        axis.
         """
         ax = self.gca()
         nargs = len(args)
@@ -4088,31 +4574,59 @@ class BaseClass(object):
             self._replot()
        
     def bighten(self, *args):
-        """Brighten or darken colormap."""
+        """Brighten or darken the color map."""
         raise NotImplementedError, "'brighten' not implemented in class %s" % \
               self.__class__.__name__
 
     def clabel(self, state='on'):
-        """Control labeling of contours."""
+        """Control labeling of contours.
+
+        Calling::
+
+            clabel('on')
+
+        adds height labels to a contour plot.
+
+        Calling::
+
+            clabel('off')
+
+        removes the labeling of the contour lines (default).
+        """
         self.gca().setp(clabels=state)
         
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
     def box(self, *args):
-        """Add or remove a box to the current axes.
+        """Add or remove a box around the boundaries of the current axis.
 
-        - box('on')
-          adds a box to the current axes.
+        Calling::
 
-        - box('off')
-          removes the box.
+            box('on')
+            
+        adds a box at the boundaries of the current axis.
 
-        - box()
-          toggles box state of the current axes.
+        Calling::
 
-        - box(ax,...)
-          uses axes in 'ax' instead of the current axes.
+            box('off')
+            
+        removes the box. This is the default.
+
+        Calling::
+
+            box()
+            
+        toggles the box state in the current axis.
+
+        Calling::
+
+            box(ax, ...)
+            
+        adds/removes a box in the Axis object ax instead of the current axis.
+
+        Note: box(True) and box(False) is the same as box('on') and
+        box('off'), respectively.        
         """
         ax = self.gca()
         nargs = len(args)
@@ -4132,12 +4646,29 @@ class BaseClass(object):
     def material(self, *args):
         """Material reflectance mode.
 
-        - material([ka, kd, ks[, n[, sc]]]) or material(ka, kd, ks[, n[, sc]])
-          sets the ambient/diffuse/specular strength, specular exponent, and
-          specular color reflectance.
+        Calling::
 
-        - material(mode)
-          mode can be either 'shiny', 'dull', 'metal', or 'default'.
+            material([ka, kd, ks[, n[, sc]]])
+            
+        sets the ambient/diffuse/specular strength, specular exponent, and
+        specular color reflectance of objects.
+
+        Calling::
+
+            material(ka, kd, ks[, n[, sc]])
+
+        is the same as above.
+
+        Calling::
+
+            material(mode)
+            
+        sets the material mode, where mode can be
+
+          * 'shiny'   - makes the objects shiny
+          * 'dull',   - makes the objects dull
+          * 'metal'   - makes the objects metallic
+          * 'default' - sets the objects material properties to their defaults.
         """
         modes = {'shiny': (None, None, None, None, None),
                  'dull': (None, None, None, None, None),
