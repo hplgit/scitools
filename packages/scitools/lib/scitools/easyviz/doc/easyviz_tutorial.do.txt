@@ -412,7 +412,7 @@ limit the $x$ coordinates to $[m-3s,m+3s]$.
 
 Now we are ready to take a look at the complete code
 for animating how the Gaussian bell curve evolves as the $s$ parameter
-decreases from 2 to 0.2:
+is decreased from 2 to 0.2:
 
 !bc
 from scitools.all import *
@@ -483,6 +483,7 @@ The `from scitools.all import *` statement imports many modules and packages:
   * `scipy` (if it exists)
   * `numpy` (if `scipy` is not installed)
   * the Python modules `sys`, `os`, `math`, `operator`
+  * the SciTools module `numpyutils`
   * the SciTools module `StringFunction` and the SciTools 
     functions `watch` and `trace` for debugging
 
@@ -517,8 +518,8 @@ FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-speci
 
 Easyviz does not support text and arrows at arbitrary places inside
 the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
-the `Gnuplot` object (a Python module) and issue Gnuplot commands to
-this object directly:
+the `Gnuplot` object and issue Gnuplot commands to
+this object directly. Here is an example on the typical recipe:
 
 !bc
 g = get_backend()
