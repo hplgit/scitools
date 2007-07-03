@@ -1067,7 +1067,6 @@ def factorial(n, method='reduce'):
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        import operator
         return reduce(operator.mul, xrange(2, n+1))
     elif method == 'scipy':
         try:
@@ -1075,8 +1074,9 @@ def factorial(n, method='reduce'):
             return sc.factorial(n)
         except ImportError:
             print 'numpyutils.factorial: scipy is not available'
-            # rely on reduce:
+            print 'default method="reduce" is used instead'
             return reduce(operator.mul, xrange(2, n+1))
+            # or return factorial(n)
     else:
         raise ValueError, 'factorial: method="%s" is not supported' % method
 

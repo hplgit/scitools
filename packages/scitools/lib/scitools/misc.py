@@ -208,8 +208,28 @@ def sorted_os_path_walk(root, func, arg):
             sorted_os_path_walk(name, func, arg) # recurse into directory
 
 
+# class Command has now been replaced by the standard functools.partial
+# function in Python v2.5 and later:
+
 class Command:
-    """Alternative to lambda functions."""
+    """
+    Alternative to lambda functions.
+
+    This class should with Python version 2.5 and later be replaced
+    by the partial class in the standard module functools.
+    However, you cannot simply do a::
+
+      Command = functools.partial
+
+    because Command and functools.partial supply the positional
+    arguments in different manners: Command calls the underlying
+    function with new arguments followed by the originally recorded
+    arguments, while functools.partial does it the other way around
+    (first original arguments, then new positional arguments).
+
+    This Command class is kept for backward compatibility. New usage
+    should employ functools.partial instead.
+    """
 
     def __init__(self, func, *args, **kwargs):
         self.func = func
@@ -218,8 +238,9 @@ class Command:
 
     def __call__(self, *args, **kwargs):
         args = args + self.args
-        kwargs.update(self.kwargs)  # override kw with orig self.kw
-        self.func(*args, **kwargs)
+        self.kwargs.update(kwargs)
+        self.func(*args, **self.kwargs)
+
 
 def timer(func, args=[], kwargs={}, repetitions=10, comment=''):
     """
@@ -713,6 +734,53 @@ class Download(threading.Thread):
         urllib.urlretrieve(self.url, self.filename)
         print self.filename, 'is downloaded'
 
+def machine_info():
+    """
+    Extract as much information about the current machine as possible.
+    Python's platform module is used (uname, python_version, python_build).
+    If files such as /proc/cpuinfo are available, these are read and
+    information returned as "cpuinfo".
+
+    Return: dictionary with keys "uname", "identifier", "python version",
+    "python build". The "identifier" entry is a string that can be
+    used in filenames (the string returned from platform.platform()).
+
+    Recommended use::
+
+      from scitools.misc import machine_info
+      import pprint; pprint.pprint(machine_info())
+      
+    """
+    result = {}
+    
+    # infofile on Linux machines:
+    infofile = '/proc/cpuinfo'
+    cpuinfo = {}
+    if os.path.isfile(infofile):
+        f = open(infofile, 'r')
+        for line in f:
+            try:
+                name, value = [w.strip() for w in line.split(':')]
+            except:
+                continue
+            if name == 'model name':
+                cpuinfo['CPU type'] = value
+            elif name == 'cache size':
+                cpuinfo['cache size'] = value
+            elif name == 'cpu MHz':
+                cpuinfo['CPU speed'] = value + ' Hz'
+            elif name == 'vendor_id':
+                cpuinfo['vendor ID'] = value
+        f.close()
+    result['cpuinfo'] = cpuinfo
+    
+    # check out platform module:
+    import platform
+    result['uname'] = platform.uname()
+    result['python version'] = platform.python_version()
+    result['python build'] = platform.python_build()
+    result['identifier'] = platform.platform()
+    return result
 
 def checkmathfunc(f, args):
     """
@@ -721,7 +789,7 @@ def checkmathfunc(f, args):
       - Check that f works with scalar and array arguments
 
       - Check if args are scalars and if basic functions in
-        f apply NumPy versions and not math
+        f apply Numerical Python versions and not math
     """
     import numarray, Numeric
     # local import:
