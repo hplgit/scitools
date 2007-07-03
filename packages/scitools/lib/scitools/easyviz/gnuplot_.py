@@ -87,7 +87,7 @@ class GnuplotBackend(BaseClass):
             }
          
         self._colors = {
-            '' : 1   # no color --> red (gives solid line in eps)
+            '' : 1,  # no color --> red (gives solid line in eps)
             'r': 1,  # red
             'g': 2,  # green
             'b': 3,  # blue
