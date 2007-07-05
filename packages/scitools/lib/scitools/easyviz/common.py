@@ -1187,6 +1187,8 @@ class Axis(object):
         'diffusecolor': None,
         'speculartcolor': None,
         'pth': None, # this is the p-th axis in subplot(m,n,p)
+        'colororder': 'b g r c m y'.split(),
+        'curcolor': 0,
         }
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
@@ -1385,6 +1387,15 @@ class Axis(object):
         except:
             raise KeyError, "%s.get: no parameter with name '%s'" % \
                   (self.__class__.__name__, name)
+
+    def get_next_color(self):
+        """Return the next color defined in the 'colororder' property."""
+        colors = self._prop['colororder']
+        if self._prop['curcolor'] == len(colors):
+            self._prop['curcolor'] = 0
+        curcolor = colors[self._prop['curcolor']]
+        self._prop['curcolor'] += 1
+        return curcolor
 
     def reset(self):
         """Reset axis attributes to default values."""
@@ -2678,6 +2689,13 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
+        # Automatically add line colors if there were multiple lines added
+        # and no specification of line colors:
+        if len(lines) > 1:
+            for line in lines:
+                if not line.getp('linecolor'):
+                    line.setp(linecolor=ax.get_next_color())
+
         if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
             
@@ -2923,6 +2941,13 @@ class BaseClass(object):
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
+
+        # Automatically add line colors if there were multiple lines added
+        # and no specification of line colors:
+        if len(lines) > 1:
+            for line in lines:
+                if not line.getp('linecolor'):
+                    line.setp(linecolor=ax.get_next_color())
 
         if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
