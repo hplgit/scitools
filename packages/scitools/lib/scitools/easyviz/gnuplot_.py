@@ -55,6 +55,11 @@ def _cmpPlotProperties(a,b):
                len(plotorder) # Check all subclasses is in plotorder
     return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
+# Change the order in which to cycle through line colors when plotting multiple
+# lines with the plot (or plot3) command. In Gnuplot we start with red since
+# this gives a solid line in black and white hardcopies:
+Axis._local_prop['colororder'] = 'r b g c m y'.split()
+
 class GnuplotBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
@@ -70,7 +75,7 @@ class GnuplotBackend(BaseClass):
         
         # conversion tables for format strings:
         self._markers = {
-            '': None,   # no marker
+            '': None,# no marker
             '.': 0,  # dot
             'o': 6,  # circle
             'x': 2,  # cross
@@ -87,7 +92,7 @@ class GnuplotBackend(BaseClass):
             }
          
         self._colors = {
-            '' : 1,  # no color --> red (gives solid line in eps)
+            '' : 1,  # no color --> red (gives solid line)
             'r': 1,  # red
             'g': 2,  # green
             'b': 3,  # blue
@@ -907,13 +912,23 @@ class GnuplotBackend(BaseClass):
           '.eps' (Encapsualted PostScript)
           '.png' (Portable Network Graphics)
 
-        Optional arguments:
+        Optional arguments for PostScript output:
 
-          color       -- True (colors) or False (black and white).
-          fontname    -- default is Helvetica.
-          fontsize    -- default is 16.
-          orientation -- 'portrait' or 'landscape' (default). Only available
-                         for PostScript output.
+          color       -- If True, create a plot with colors. If False
+                         (default),  create a plot in black and white.
+          enhanced    -- If True (default), enable enhanced text mode features
+                         like subscripts, superscripts, and mixed fonts. 
+          orientation -- Set orientation to 'portrait' or 'landscape'. Default
+                         is to leave this unchanged. This option has no effect
+                         on EPS output.
+          solid       -- If True, force lines to become solid (i.e., not
+                         dashed). Default is False.
+          fontname    -- Set the font to be used for titles, labels, etc.
+                         Must be a valid PostScript font or an oblique version
+                         of the Symbol font (called "Symbol-Oblique") which is
+                         useful for mathematics. Default font is "Helvetica".
+          fontsize    -- Set the size of the font in PostScript points.
+                         Default is 14.
         """
         if DEBUG:
             print "Hardcopy to %s" % filename
@@ -932,50 +947,49 @@ class GnuplotBackend(BaseClass):
         terminal = ext2term.get(ext, 'postscript')
         
         self.setp(**kwargs)
-        fontname = kwargs.get('fontname', 'Helvetica')
-        fontsize = kwargs.get('fontsize', 16)
-        orientation = kwargs.get('orientation', 'landscape')
         color = self.getp('color')
-                  
-        self._g('unset multiplot') # is this necessary?
+        enhanced = kwargs.get('enhanced', True)
+        orientation = kwargs.get('orientation', None)
+        solid = kwargs.get('solid', False)
+        fontname = kwargs.get('fontname', 'Helvetica')
+        fontsize = kwargs.get('fontsize', 14)
         
-        if self.getp('show'): # OK to display to screen
-            self._replot()
-            kwargs = {'filename': filename, 'terminal': terminal}
-            if terminal == 'postscript':
-                kwargs.update({'color': color, 'enhanced': True,
-                               'fontname': fontname, 'fontsize': fontsize})
-                if ext == '.eps':
-                    kwargs['mode'] = 'eps'
-                else:
-                    kwargs['mode'] = orientation
-            self._g.hardcopy(**kwargs)
-        else: # Manually set terminal and don't show windows
-            if color:
-                colortype = 'color'
-            else:
-                colortype = 'monochrome'
+        keyw = {'filename': filename, 'terminal': terminal}
+        if terminal == 'postscript':
+            keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid, 
+                       'fontname': fontname, 'fontsize': fontsize})
+            if orientation in ['landscape', 'portrait']:
+                keyw['mode'] = orientation
+            if ext == '.eps':
+                keyw['mode'] = 'eps'
                         
-            # Create a new Gnuplot instance only for now
-            self._g = Gnuplot.Gnuplot()
-            kwargs = {'filename': filename, 'terminal': terminal}
-            if terminal == 'postscript':
-                kwargs.update({'color': color, 'enhanced': True, 
-                               'fontname': fontname, 'fontsize': fontsize})
-                if ext == '.eps':
-                    self._g('set term postscript eps %s' % colortype)
-                    kwargs['mode'] = 'eps'
-                else:
-                    self._g('set term postscript %s %s' % \
-                            (orientation, colortype))
-                    kwargs['mode'] = orientation
-            elif terminal == 'png':
-                self._g('set term png')
-            self._g('set output "%s"' % filename)
+        # Create a new Gnuplot instance only for now
+        self._g = Gnuplot.Gnuplot()
+        setterm = ['set', 'terminal', terminal]
+        if terminal == 'postscript':
+            if ext == '.eps':
+                setterm.append('eps')
+            else:
+                if orientation in ['landscape', 'portrait']:
+                    setterm.append(orientation)
+            setterm.append(enhanced and 'enhanced' or 'noenhanced')
+            setterm.append(color and 'color' or 'monochrome')
+            setterm.append(solid and 'solid' or 'dashed')
+            setterm.append('"%s"' % fontname)
+            setterm.append('%s' % fontsize)
+        elif terminal == 'png':
+            pass
+        self._g(' '.join(setterm))
+        self._g('set output "%s"' % filename)
+        self._replot()
+        if self.gcf().getp('axshape') == (1,1):
+            # need to call hardcopy in Gnuplot.py:
+            self._g.hardcopy(**keyw)
+        self._g('quit')
+        self._g = self.gcf()._g  # set self._g to the correct instance again
+        
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
-            self._g.hardcopy(**kwargs)
-            self._g('quit')
-            self._g = self.gcf()._g # set _g to the correct instance again
 
     # reimplement methods like clf, closefig, closefigs
     def clf(self):
