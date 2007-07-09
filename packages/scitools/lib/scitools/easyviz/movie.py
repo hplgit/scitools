@@ -3,12 +3,14 @@
 """
 Known issues:
 
-- .jpg images created by the Vtk backend dosen't seem to work with the
-  mencoder and ffmpeg tools. This can be fixed by setting the force_conversion
-  argument to True. This will force conversion of the .jpg files to .png files
-  which in turn should successfully create the movie.
+* JPEG images created by the Vtk backend does not seem to work with
+  the MEncoder and FFmpeg tools. This can be fixed by setting the
+  force_conversion argument to True. This will force conversion of the
+  JPEG files to PNG files which in turn should successfully create the
+  movie.
 
-- apsect ratio in mpeg_encode doesn't seem to work.
+* Aspect ratio in mpeg_encode does not seem to work.
+
 """
 
 import os, glob, re
@@ -22,7 +24,7 @@ class MovieEncoder(object):
         'output_file': None, 
         'overwrite_output': False,   # overwrite output file if true
         'encoder': None,             # default encoding tool
-        'vbitrate': 800,             # default video bit rate
+        'vbitrate': None,            # default video bit rate
         'vbuffer': None,             # video buffer
         'fps': 25,                   # default frame rate
         'vcodec': 'mpeg4',           # default video codec
@@ -40,7 +42,8 @@ class MovieEncoder(object):
         'gop_size': None,
         'force_conversion': False,
         }
-    _legal_encoders = 'mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc'.split()
+    _legal_encoders = ('mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc ' + \
+                      'convert').split()
     _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
 
     def __init__(self, input_files, **kwargs):
@@ -63,7 +66,7 @@ class MovieEncoder(object):
             self._prop['encoder'] = encoder
         else:
             if not encoder in self._legal_encoders:
-                raise ValueError, "encoder must be %s, not %s" % \
+                raise ValueError, "encoder must be %s, not '%s'" % \
                       (self._legal_encoders, encoder)
             if not findprograms(encoder):
                 raise Exception, "The selected encoder (%s) is not installed" \
@@ -76,7 +79,7 @@ class MovieEncoder(object):
             file_ = input_files
         else:
             raise ValueError, "The input files must be given as either a "\
-                  "list/tuple of strings or a string, not %s" % \
+                  "list/tuple of strings or a string, not '%s'" % \
                   type(input_files)
         fname, ext = os.path.splitext(file_)
         if not ext:
@@ -112,9 +115,52 @@ class MovieEncoder(object):
             for tmp_file in self._tmp_files:
                 os.remove(tmp_file)
 
+    def _convert(self):
+        """Create a string with commands for making a movie with the convert
+        tool from ImageMagick."""
+        encoder = self._prop['encoder']
+        cmd = encoder
+
+        # set number of frames per second:
+        cmd += ' -delay 1x%s' % self._prop['fps']
+
+        # set size:
+        size = self._get_size()
+        if size is not None:
+            cmd += ' -scale %sx%s' % (size[0], size[1])
+        
+        # get image files:
+        files = self._prop['input_files']
+        if isinstance(files, str):
+            pattern = r'(.*)%(\d+)d(.*\..*)'
+            match = re.search(pattern, files)
+            if match:
+                pre = match.group(1)
+                num = int(match.group(2))
+                ext = match.group(3)
+                files = pre + '[0-9]'*num + ext
+            files = glob.glob(files)
+        if not files:
+            raise ValueError, \
+                  "%s is not a valid file specification or the files " \
+                  "does not exist." % files
+        cmd += ' %s' % (' '.join(files))
+
+        # set output file:
+        if self._prop['output_file'] is None:
+            self._prop['output_file'] = 'movie.gif'
+        output_file = self._prop['output_file']
+        if os.path.isfile(output_file) and not self._prop['overwrite_output']:
+            raise Exception, \
+                  "Output file %s already exist. Use 'overwrite_output=True'" \
+                  " to overwrite the file." % output_file
+        cmd += ' %s' % output_file
+
+        return cmd
+
     def _mencoder(self):
         """Create a string with commands for creating a movie with the
-        mencoder encoding program.
+        MEncoder encoding program.
         """
         encoder = self._prop['encoder']
         cmd = encoder
@@ -147,6 +193,8 @@ class MovieEncoder(object):
         cmd += ' fps=%g' % float(self._prop['fps'])
         cmd += ':type=%s' % file_type
         vbitrate = self._prop['vbitrate']
+        if vbitrate is None:
+            vbitrate = 800
         vcodec = self._prop['vcodec']
         qscale = self._prop['qscale']
         qmin = self._prop['qmin']
@@ -222,7 +270,10 @@ class MovieEncoder(object):
             # create a new string with the right pattern:
             files = basename + '%04d.png'
         cmd += ' -i "%s"' % files
-        cmd += ' -b %s' % self._prop['vbitrate']
+        vbitrate = self._prop['vbitrate']
+        if vbitrate is None:
+            vbitrate = 800
+        cmd += ' -b %s' % vbitrate
         cmd += ' -r %s' % self._prop['fps']
         size = self._get_size()
         if size is not None:
@@ -260,7 +311,7 @@ class MovieEncoder(object):
 
         # set frame rate:
         # mpeg_encode only supports a given set of frame rates:
-        legal_frame_rates = (23.976, 24, 25, 29.97, 30, 50 ,59.94, 60)
+        legal_frame_rates = (23.976, 24, 25, 29.97, 30, 50, 59.94, 60)
         if self._prop['fps'] in legal_frame_rates:
             fps = self._prop['fps']
         else:
@@ -504,7 +555,7 @@ FORCE_ENCODE_LAST_FRAME
                 if aspect not in legal_aspects.values():
                     raise ValueError, \
                           "aspect must be either 1:1, 4:3, 16:9, or 2.21:1," \
-                          " not %s" % aspect
+                          " not '%s'" % aspect
             cmd += ' -a %s' % aspect
 
         # set output file:
@@ -514,9 +565,10 @@ FORCE_ENCODE_LAST_FRAME
         return cmd
 
     def _any2any(self, files, basename='tmp_', size=None, ofile_ext='.pnm'):
-        # Converts a list of files to the file format specified in the
-        # ofile_ext keyword argument. Using either Netpbm tools or convert
-        # (from the ImageMagick package).
+        """Convert a list of files to the file format specified in the
+        ofile_ext keyword argument. Using either Netpbm tools or convert
+        (from the ImageMagick package).
+        """
         netpbm_converters = {'.png': ('pngtopnm', 'pnmtopng'),
                              '.gif': ('giftopnm',  'ppmtogif'),
                              '.jpg': ('jpegtopnm', 'pnmtojpeg'),
@@ -591,6 +643,7 @@ FORCE_ENCODE_LAST_FRAME
         return new_files
 
     def _get_aspect_ratio(self):
+        """Parse and return the aspect ratio."""
         # accept aspect ratio on the form 4:3, 4/3, or 1.3333
         aspect = self._prop['aspect']
         if isinstance(aspect, str):
@@ -606,6 +659,7 @@ FORCE_ENCODE_LAST_FRAME
         return aspect
 
     def _get_size(self):
+        """Parse and return the size."""
         legal_sizes = {'sqcif': (128, 96),
                        'qcif': (176, 144),
                        'cif': (352, 288),
@@ -622,67 +676,117 @@ FORCE_ENCODE_LAST_FRAME
 
 
 def movie(input_files, **kwargs):
-    """
-    Make a movie from a series of image files. 
+    """Make a movie from a series of image files.
 
-    Input arguments:
+    This function is designed to be an easy way of creating a movie file from
+    a series of image files using some suitable encoding tool to combine the
+    images together. Several different encoding tools can be used, such as
+    MEncoder, FFmpeg, mpeg_encode, ppmtompeg (Netpbm), mpeg2enc (MJPEGTools),
+    and convert (ImageMagick). The encoding tool will be chosen automatically
+    among these if more than one is installed on the machine in question
+    (unless it is specified as an argument by the user). 
 
-    input_files -- This argument specifies the image files which will be used
-                   to make the movie. The arguemnt must be given as either a
-                   string (eg. 'image_*.png') or a list/tuple of strings
-                   (eg. glob.glob('image_*.png').
+    Let us say we have some image files named image_0000.eps, image_0001.eps,
+    image_0002.eps, ..., and we want to join them together into a movie file.
+    This can be accomplished with the simple call
+
+        movie('image_*.eps')
+
+    This will produce a movie file with a default name such as 'movie.avi',
+    'movie.mpeg', or 'movie.gif' (depending on the encoding tool) in the
+    current working directory. To get more control over the output file one
+    can explicitly specify the encoder and the name of the resulting movie:
+
+        movie('image_*.eps', encoder='convert',
+              output_name='/home/johannr/wave2D.gif')
+
+    This will create an animated gif using the convert tool from ImageMagick
+    and the resulting file will be named wave2D.gif and placed in the
+    directory /home/johannr. If we instead want to create an MPEG movie by
+    using the MEncoder tool, we can du this with the following command:
+
+        movie('image_*.eps', encoder='mencoder',
+              output_name='/home/johannr/wave2D.mpeg',
+              vcodec='mpeg2video', vbitrate=2400, qscale=4, fps=10)
+
+    Here, we have also specified the video codec to be mpeg2video, the video
+    bitrate to be 2400 kbps, the quantization scale (quality) to be 4, and
+    the number of frames per second to be 10.
+    
+    Below follows a more detailed description of the various arguments that
+    are available in this function.
+
+    Required arguments:
+
+    input_files -- Specifies the image files which will be used to make the
+                   movie. The argument must be given either as a string,
+                   e.g., 'image_*.png' or a list/tuple of strings, e.g.,
+                   glob.glob('image_*.png').
 
                    Note:
                    
                    - When using the FFmpeg or the Mpeg2enc tools, the image
-                     files should be given (if possible) as a string with
-                     the format '{1}%{2}d{3}' where the name componentes are
-                     as follows:
+                     files should be given (if possible) as a string on the
+                     format '{1}%{2}d{3}', where the name components are as
+                     follows:
                      
-                       {1} filename prefix (eg. image_)
-                       {2} counting placeholder (like in C, printf, eg. 04)
-                       {3} file extension (eg. .png or .jpg)
+                       {1} filename prefix (e.g. image_)
+                       {2} counting placeholder (like in C, printf, e.g. 04)
+                       {3} file extension (e.g. .png or .jpg)
 
-                     A correct description of the files could look like
-                     this: 'image_%04d.png'
-
-                   - If the image files is not given on the correct format (as
-                     described above), there will be made copies which will
-                     then be renamed to the required filename format. This will
-                     extend the creation time of the movie.
+                     An example of a correct description of the input files
+                     is 'image_%04d.png'. If the input files are not given on
+                     the correct format, there will automatically be made
+                     copies of these files which will then be renamed to the
+                     required filename format. This will of course extend the
+                     creation time of the movie.
                      
-                   - MEncdoer, FFmpeg, and Mpeg2enc supports only .jpg and .png
-                     image files, so if another file format is used, there will
-                     be made copies which in turn will be converted to the
-                     correct format.
+                   - MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
+                     .png image files. So, if the input files is on another
+                     file format, there will be made copies which in turn
+                     will be converted to the correct format.
     
-    Keyword arguments:
+    Optional arguments:
 
     output_file -- Sets the name of the output movie. If not set, a default
-                   name like 'movie.avi' (or 'movie.mpeg' depending on the
-                   output format) will be given.
+                   name like movie.avi, movie.mpeg, or movie.gif (depending
+                   on the output format) will be given.
 
-    overwrite_output -- If this is True, the file given in the output_file
-                   (above) will be overwritten without warning (if it exists).
-                   The default is False.
+                   Note: When using the convert tool to combine the images,
+                   the extension of the file name is used to determine the
+                   file format of the final movie. For example, if a name like
+                   movie.gif is given, the resulting movie will become an
+                   animated gif file. Other supported movie formats are MPEG
+                   (.mpg, .mpeg, or .m2v) and MNG (Multiple-image Network
+                   Graphics).
+
+    overwrite_output -- If True, the file given in the output_file argument
+                   above will be overwritten without warning (if it already
+                   exists). The default is False.
     
     encoder     -- Sets the encoder tool to be used. Currently the following
-                   encoders are supported: 'mencoder', 'ffmpeg', 'mpeg_encode',
-                   'ppmtompeg' (from the Netpbm package), and 'mpeg2enc' (from
-                   the MJPEGTools package).
+                   encoders are supported: 'mencoder', 'ffmpeg',
+                   'mpeg_encode', 'ppmtompeg' (from the Netpbm package),
+                   'mpeg2enc' (from the MJPEGTools package), and 'convert'
+                   (ImageMagick).
 
                    Note: ppmtompeg and mpeg_encode is the same tool.
       
-    vbitrate    -- Sets the bit rate of the movie . The default is 800 kbps.
+    vbitrate    -- Sets the bit rate of the movie. The default is 800 kbps
+                   when using the FFmpeg and MEncoder encoders. For
+                   mpeg_encode, ppmtompeg, and mpeg2enc, this option is by
+                   default not specified. This option has no effect on the
+                   convert tool from ImageMagick.
 
     vbuffer     -- Sets the video buffer size. The default is to use the 
                    current encoding tools default video buffer size. In some
-                   cases it might be necessary to push this up to 500K or more.
+                   cases it might be necessary to push this up to 500K or
+                   more.
        
     fps         -- Sets the number of frames per second for the final movie.
                    The default is 25 fps.
 
-                   Note: the mpeg_encode, ppmtompeg, and mpeg2enc tool only
+                   Note: the mpeg_encode, ppmtompeg, and mpeg2enc tools only
                    supports the following frame rates: 23.976, 24, 25, 29.97,
                    30, 50, 59.94, and 60 fps.
 
@@ -718,50 +822,50 @@ def movie(input_files, **kwargs):
 
                    - The mencoder tool can also use the 'xvid' codec.
 
-                   - Only 'mpeg1video' and 'mpeg2video' is available when
+                   - Only 'mpeg1video' and 'mpeg2video' are available when
                      using the mpeg2enc tool. 
 
-                   - For the mpeg_encode (and ppmtompeg) encoding tool this
-                     option has no effect. 
+                   - This option has no effect when using the mpeg_encode and
+                     ppmtompeg encoding tools. 
 
     qscale      -- The quantization scale value (qscale) give a trade-off
                    between quality and compression. A lower value means better
-                   quality but larger files. Lager values gives better
+                   quality but larger files. Larger values gives better
                    compression, but worse quality. The qscale value must be an
                    integer between 1 and 31.
-                   The default is to not set the qscale option, that is
-                   qscale=None.
+                   The default is to not set the qscale option.
 
-                   Note: For the mpeg_encode and ppmtompeg tools, it is
-                   possible to have different qscale for I, P, and B frames
-                   (see iqscale, pqscale, and bqscale below).
+                   Note: For the mpeg_encode and ppmtompeg tools it is
+                   possible to have different qscale values for I, P, and B
+                   frames (see iqscale, pqscale, and bqscale below).
 
-    qmin        -- Minimum quantization scale value. Integer between 1 and 31.
-                   Default is 2.
+    qmin        -- Sets the minimum quantization scale value. Must be given as
+                   an integer between 1 and 31. The default is 2.
 
-    qmax        -- Maximum quantization scale value. Integer between 1 and 31.
-                   Default is 31.
+    qmax        -- Sets the maximum quantization scale value. Must be given as
+                   an integer between 1 and 31. The default is 31.
 
-    iqscale     -- Sets the quantization scale (see qscale) for I frames.
-                   Only affects mpeg_encode and ppmtompeg. The default is to
-                   use the same value as in qscale. If qscale is None, then 8
-                   is default value for iqscale.
+    iqscale     -- Sets the quantization scale value (see qscale) for I
+                   frames. This option only affects mpeg_encode and ppmtompeg.
+                   The default is to use the same value as in qscale. If
+                   qscale is not given, then 8 is the default value for
+                   iqscale.
                    
-    pqscale     -- Same as iqscale, but for P frames. If qscale is None, then
-                   10 is default value for pqscale.
+    pqscale     -- Same as iqscale, but for P frames. If qscale is not given,
+                   then 10 is the default value for pqscale.
     
-    bqscale     -- Same as iqscale, but for B frames. If qscale is None, then
-                   25 is default valie for bqscale.
+    bqscale     -- Same as iqscale, but for B frames. If qscale is not given,
+                   then 25 is the default value for bqscale.
 
     pattern     -- Sets the pattern (sequence) of I frames, P frames, and B
                    frames. The default pattern is 'I' which gives good quality
                    (but worse compression). Another standard sequence is
                    'IBBPBBPBBPBBPBB'.
 
-                   Note: this option only effects the mpeg_encode and ppmtompeg
-                   encoding tools.
+                   Note: this option only affects the mpeg_encode and
+                   ppmtompeg encoding tools.
        
-    size        -- Sets the size of the movie. The size must be given as
+    size        -- Sets the size of the final movie. The size must be given as
                    either a tuple/list, like (width, height), or as a string.
                    The format of the string must be 'wxh' (eg. '320x240'), but
                    the following abbreviations are also recognized:
@@ -771,9 +875,9 @@ def movie(input_files, **kwargs):
                    'cif'   - 352x288
                    '4cif'  - 704x576
 
-                   The default is to use the size of the input images.
+                   The default is to use the same size as the input images.
 
-    aspect      -- Sets the aspect ratio of the movie (eg. 4/3 or 16/9).
+    aspect      -- Sets the aspect ratio of the movie (e.g. 4/3 or 16/9).
 
                    Note:
                    
@@ -787,56 +891,28 @@ def movie(input_files, **kwargs):
 
     prefered_package -- Sets whether to prefer the Netpbm package or the
                   ImageMagick package if both of them are installed. Must be
-                  given as a string, that is either 'imagemagick' or 'netpbm'.
+                  given as a string, i.e, either 'imagemagick' or 'netpbm'.
                   The default is to use ImageMagick.
 
                   Note:
 
-                  - If only one of the packages is installed, then that package
-                    will be used.
+                  - If only one of the packages is installed, then that
+                    package will be used.
 
                   - If none of the packages is installed, then some operations
                     might stop in lack of needed programs.
 
     gop_size    -- Sets the number of frames in a group of pictures (GOP). The
-                   default is to use the current encoder tools default value.
+                   default is to use the encoding tools default value.
        
-    quiet       -- If this is True, then the operations will run quietly and
-                   only complain on errors. Default is False.
+    quiet       -- If True, then the operations will run quietly and only
+                   complain on errors. The default is False.
 
-    force_conversion -- Force conversion of images. This is a hack which can
+    force_conversion -- Forces conversion of images. This is a hack that can
                    be used if the encoding tool has problems reading the input
                    image files. If this is True, the images will be converted
-                   even if the they are in a format recognized by the encoding
-                   tool. Default is False.
-
-    Examples:
-    
-    Create a movie (with default values) from a series of png image files named
-    img001.png, img002.png, img003.png, ... in the current working directory:
-
-    >>> import easyviz, glob
-    >>> images = glob.glob('img*.png')
-    >>> easyviz.movie(images)
-
-    or equivalently:
-
-    >>> easyviz.movie('img*.png')
-
-    Create a movie from a series of jpeg files named img01.jpg, img02.jpg, ...
-    which lies in the folder /tmp/images using the FFmpeg encoder, with video
-    codec 'mpeg2video', video bit rate 2400 kbps, size 320x240, quantization
-    scale 4, 25 frames per second, and store the movie in a file called
-    movie.avi in the current directory:
-    
-    >>> easiviz.movie('/tmp/images/img%02d.jpg',
-    ...               encoder='ffmpeg',
-    ...               vcodec='mpeg2video',
-    ...               vbitrate=2400,
-    ...               size='320x240',
-    ...               qscale=4,
-    ...               fps=25)
-    ...               output_file='movie.avi')
+                   even if they are in a format recognized by the encoding
+                   tool. The default is False.
 
     """
     me = MovieEncoder(input_files, **kwargs)
