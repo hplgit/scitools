@@ -1725,7 +1725,8 @@ class BaseClass(object):
         will set the attributes as given in this backend instance. If the
         optional positional argument obj is a given object with a set method
         (like Figure, Axis, and PlotProperties objects), the (relevant)
-        properties and values are also set in this object.
+        properties and values are also set in this object. This also works on
+        a list with objects.
         """
         nargs = len(args)
         if nargs > 0:
