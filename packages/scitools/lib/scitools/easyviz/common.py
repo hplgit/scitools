@@ -1728,8 +1728,13 @@ class BaseClass(object):
         properties and values are also set in this object.
         """
         nargs = len(args)
-        if nargs > 0 and hasattr(args[0], 'set'):
-            args[0].setp(**kwargs)
+        if nargs > 0:
+            arg = args[0]
+            if not isinstance(arg, (tuple,list)):
+                arg = (arg,)
+            for obj in arg:
+                if hasattr(obj, 'setp'):
+                    obj.setp(**kwargs)
 
         for key in kwargs:
             value = kwargs[key]
@@ -1778,7 +1783,7 @@ class BaseClass(object):
         """
         nargs = len(args)
         if nargs > 0:
-            if hasattr(args[0], 'get'):
+            if hasattr(args[0], 'getp'):
                 obj = args[0]
                 if nargs == 1:
                     print obj
