@@ -2599,6 +2599,7 @@ class BaseClass(object):
                                 lines.append(Line(x=kwargs['x'],
                                                   y=args[i+1],
                                                   format=''))
+            del kwargs['x']  # x in kwargs is no longer needed
         else: # Normal case
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
@@ -2835,6 +2836,9 @@ class BaseClass(object):
                                                   y=kwargs['y'],
                                                   z=args[i+1],
                                                   format=''))
+            # x and y in kwargs are no longer needed:
+            del kwargs['x']
+            del kwargs['y']
         else: # Normal case
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
