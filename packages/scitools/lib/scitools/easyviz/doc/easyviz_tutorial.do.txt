@@ -541,7 +541,7 @@ without limiting the available functionality of various plotting programs.
 
 __Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.
-The Axis object represent a set of axis, with curves drawn in the
+The Axis object represents a set of axis, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axis in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
