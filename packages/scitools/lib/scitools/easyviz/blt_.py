@@ -765,7 +765,7 @@ class BltBackend(BaseClass):
         if DEBUG:
             print "Hardcopy to %s" % filename
 
-        orientation = kwargs.getp('orientation', False)
+        orientation = kwargs.get('orientation', False)
         if orientation == 'portrait':
             orientation = False
         elif orientation == 'landscape':
