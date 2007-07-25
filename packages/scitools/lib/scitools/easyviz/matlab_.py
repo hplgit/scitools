@@ -308,7 +308,7 @@ class MatlabBackend(BaseClass):
         if cmap is not None:
             self._g.colormap(cmap, nout=0)
         else:
-            self._g.colormap('default', nout=0)
+            pass  #self._g.colormap('default', nout=0)
 
     def _set_view(self, ax):
         """Set viewpoint specification."""
@@ -726,7 +726,7 @@ class MatlabBackend(BaseClass):
         fig = self.gcf()
         #self._g.figure(self.getp('curfig'))
         # reset the plotting package instance in fig._g now if needed
-        self._g.clf()
+        self._g.clf('reset')
         
         self._set_figure_size(fig)
         
