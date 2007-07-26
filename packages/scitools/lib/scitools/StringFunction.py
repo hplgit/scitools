@@ -104,7 +104,7 @@ class StringFunction:
     42
 
     (Note that in Python 2.5 the _test_function can be coded as a
-    simple string expression with return a*(x-c)+b if x > c else -a*(x-c)+b.)
+    simple string expression a*(x-c)+b if x > c else -a*(x-c)+b.)
     
     Giving the name of a function in a file (module) is convenient in
     user interfaces because the user can then write the name of
