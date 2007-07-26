@@ -1117,7 +1117,7 @@ class VtkBackend(BaseClass):
         if not viewport:
             viewport = (0,0,1,1)
         ax._renderer.SetViewport(viewport)
-        ax._renderer.RemoveAllProps() # clear current scene
+        ax._renderer.RemoveAllViewProps() # clear current scene
         #axshape = self.gcf().getp('axshape')
         #ax._renderer.SetPixelAspect(axshape[1], axshape[0])
 
