@@ -840,7 +840,7 @@ class VeuszBackend(BaseClass):
                 key = self._g.Add('key')
                 self._g.Set('%s/horzPosn' % key, 'right')
                 self._g.Set('%s/vertPosn' % key, 'top')
-                self._g.Set('%s/Text/size' % key, ax.getp('fontsize'))
+                self._g.Set('%s/Text/size' % key, str(ax.getp('fontsize')))
             self._set_axis_props(ax)
                     
         if self.getp('show'):
