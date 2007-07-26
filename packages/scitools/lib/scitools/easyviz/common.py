@@ -254,7 +254,9 @@ class PlotProperties(object):
             marker = ""
             linewidth = ""
             pointsize = ""
-            # Notice that '--' and '-.' are before '_' in the _linestyles alphabet
+            # Notice that '--' and '-.' are before '-' in the _linestyles
+            # alphabet.
+            
             for item in self._linestyles:
                 if item in format:
                     linetype = item
@@ -265,7 +267,7 @@ class PlotProperties(object):
                     color = item
                 elif item in self._markers:
                     if item == '.':
-                        if ('.' in linetype) and ('.'.count(format) == 1):
+                        if ('.' in linetype) and (format.count('.') == 1):
                             pass
                         else:
                             marker = item # same as '.'
