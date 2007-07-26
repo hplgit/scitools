@@ -2181,13 +2181,21 @@ class BaseClass(object):
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
             ax = args[0];  args = args[1:];  nargs -= 1
-
-        if nargs == 0:
+            
+        if nargs == 0 and len(kwargs) == 0:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
+            def get_lim(amin, amax, n1, n2):
+                if ax.getp(n1) is not None and ax.getp(n2) is not None:
+                    return ax.getp(n1), ax.getp(n2)
+                else:
+                    return amin, amax
+            xmin, xmax = get_lim(xmin, xmax, 'xmin', 'xmax')
+            ymin, ymax = get_lim(ymin, ymax, 'ymin', 'ymax')
+            zmin, zmax = get_lim(zmin, zmax, 'zmin', 'zmax')
             if ax.getp('camera').getp('view') == 2:
                 return xmin, xmax, ymin, ymax
             return xmin, xmax, ymin, ymax, zmin, zmax
-            
+     
         limits = Axis._ranges
         
         # Allow both axis(xmin,xmax,ymin,ymax[,zmin,zmax]) and
@@ -2216,10 +2224,10 @@ class BaseClass(object):
             if kw in kwargs:
                 kwargs_[kw] = kwargs[kw]
         ax.setp(**kwargs_)
-                
+     
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-
+      
     axis.__doc__ = axis.__doc__ % docadd('Legal values for method are',
                                          Axis._methods, indent=10)
 
