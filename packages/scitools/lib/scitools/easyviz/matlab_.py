@@ -749,46 +749,48 @@ class MatlabBackend(BaseClass):
                     axhandle = self._g.axes('position', rect, nout=1)
                 else:
                     axhandle = self._g.gca()
-            #self._g.cla(axhandle, nout=0)
-            hold_state = False
-            legends = []
-            plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
-            for item in plotitems:
-                func = item.getp('function') # function that produced this item
-                if isinstance(item, Line):
-                    self._add_line(item)
-                elif isinstance(item, Surface):
-                    self._add_surface(item, shading=ax.getp('shading'))
-                elif isinstance(item, Contours):
-                    self._add_contours(item)
-                elif isinstance(item, VelocityVectors):
-                    self._add_vectors(item)
-                elif isinstance(item, Streams):
-                    self._add_streams(item)
-                elif isinstance(item, Volume):
-                    if func == 'isosurface':
-                        self._add_isosurface(item)
-                    elif func == 'slice_':
-                        self._add_slices(item)
-                    elif func == 'contourslice':
-                        self._add_contourslices(item)
-                legend = item.getp('legend')
-                if legend:
-                    # add legend to plot
-                    legends.append(legend)
-                if ax.getp('numberofitems') > 1 and not hold_state:
-                    self._g.hold(axhandle, 'on', nout=0)
-                    hold_state = True
+            if ax.getp('numberofitems') > 0:
+                hold_state = False
+                legends = []
+                plotitems = ax.getp('plotitems')
+                plotitems.sort(_cmpPlotProperties)
+                for item in plotitems:
+                    func = item.getp('function')
+                    if isinstance(item, Line):
+                        self._add_line(item)
+                    elif isinstance(item, Surface):
+                        self._add_surface(item, shading=ax.getp('shading'))
+                    elif isinstance(item, Contours):
+                        self._add_contours(item)
+                    elif isinstance(item, VelocityVectors):
+                        self._add_vectors(item)
+                    elif isinstance(item, Streams):
+                        self._add_streams(item)
+                    elif isinstance(item, Volume):
+                        if func == 'isosurface':
+                            self._add_isosurface(item)
+                        elif func == 'slice_':
+                            self._add_slices(item)
+                        elif func == 'contourslice':
+                            self._add_contourslices(item)
+                    legend = item.getp('legend')
+                    if legend:
+                        # add legend to plot
+                        legends.append(legend)
+                    if ax.getp('numberofitems') > 1 and not hold_state:
+                        self._g.hold(axhandle, 'on', nout=0)
+                        hold_state = True
                     
-            if legends:
-                self._g.legend(*legends)
-            self._g.hold(axhandle, 'off', nout=0)
+                if legends:
+                    self._g.legend(*legends)
+                    
+                if hold_state:
+                    self._g.hold(axhandle, 'off', nout=0)
 
-            self._set_axis_props(ax)
-            if hold_state:
-                self._g.hold(axhandle, 'off', nout=0)
-                    
+                self._set_axis_props(ax)
+            else:
+                self._g.set_(axhandle, 'Visible', 'off', nout=0)
+                
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
