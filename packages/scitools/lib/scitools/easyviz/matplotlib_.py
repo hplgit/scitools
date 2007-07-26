@@ -516,6 +516,7 @@ class MatplotlibBackend(BaseClass):
         u, v, w = item.getp('udata'), item.getp('vdata'), item.getp('wdata')
         # get line specifiactions (marker='.' means no marker):
         marker, color, style, width = self._get_linespecs(item)
+        memoryorder = item.getp('memoryorder')
 
         legend = item.getp('legend')
 
@@ -525,7 +526,7 @@ class MatplotlibBackend(BaseClass):
 
         filled = item.getp('filledarrows') # draw filled arrows if True
 
-        if z is not None and w is not None and False:
+        if z is not None and w is not None:
             # draw velocity vectors as arrows with components (u,v,w) at
             # points (x,y,z):
             print "No support for quiver3 in Matplotlib."
@@ -534,6 +535,8 @@ class MatplotlibBackend(BaseClass):
             # points (x,y):
             if not color:
                 color = u**2+v**2  # color arrows by magnitude
+            if shape(x) != shape(u) and shape(y) != shape(u):
+                x, y = meshgrid(x, y, sparse=False, memoryorder=memoryorder)
             h = self._g.quiver(x,y,u,v,scale,color=color,width=1.0)
             if legend:
                 h.set_label(legend)

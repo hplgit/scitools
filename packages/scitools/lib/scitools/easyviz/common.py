@@ -614,8 +614,6 @@ class VelocityVectors(PlotProperties):
             _check_type(args[-1], 'arrowscale', (float,int))
             self._prop['arrowscale'] = float(args[-1])
 
-        if z is None and w is None:
-            z = w = zeros(shape(u))
         self._set_data(x, y, z, u, v, w)
 
     def scale_vectors(self):
@@ -628,10 +626,15 @@ class VelocityVectors(PlotProperties):
             xmin, xmax, ymin, ymax, zmin, zmax = self.get_limits()
             dx = (xmax - xmin)/dims[1]
             dy = (ymax - ymin)/dims[0]
-            dz = (zmax - zmin)/max(dims[0],dims[1])
-            d = dx**2 + dy**2 + dz**2
+            d = dx**2 + dy**2
+            if w is not None:
+                dz = (zmax - zmin)/max(dims[0],dims[1])
+                d += dx**2
             if d > 0:
-                length = sqrt((u/d)**2 + (v/d)**2 + (w/d)**2)
+                if w is not None:
+                    length = sqrt((u/d)**2 + (v/d)**2 + (w/d)**2)
+                else:
+                    length = sqrt((u/d)**2 + (v/d)**2)
                 maxlen = max(length.flat)
             else:
                 maxlen = 0
@@ -642,26 +645,28 @@ class VelocityVectors(PlotProperties):
                 as = as*0.9
             self._prop['udata'] = u*as
             self._prop['vdata'] = v*as
-            self._prop['wdata'] = w*as
+            if w is not None:
+                self._prop['wdata'] = w*as
 
     def _set_data(self, x, y, z, u, v, w):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
-        self._set_lim(z, 'zlim')
+        if z is not None:
+            self._set_lim(z, 'zlim')
         self._prop['xdata'] = x
         self._prop['ydata'] = y
         self._prop['zdata'] = z
         self._prop['udata'] = u
         self._prop['vdata'] = v
         self._prop['wdata'] = w
-        if len(shape(u)) == 1:
+        if rank(u) == 1:
             self._prop['dims'] = (len(u), 1, 1)
-        elif len(shape(u)) == 2:
+        elif rank(u) == 2:
             nx, ny = shape(u)
             self._prop['dims'] = (nx, ny, 1)
         else:
             self._prop['dims'] = u.shape
-        self._prop['numberofpoints'] = len(ravel(z))
+        self._prop['numberofpoints'] = len(ravel(u))
 
 
 class Streams(PlotProperties):
@@ -717,7 +722,7 @@ class Streams(PlotProperties):
             #sx, sy, sz = [asarray(a) for a in args[6:9]]
         elif nargs >= 6 and nargs <= 7:
             u, v = [asarray(a) for a in args[:2]]
-            if len(shape(u)) == 3: # streamline(U,V,W,startx,starty,startz)
+            if rank(u) == 3: # streamline(U,V,W,startx,starty,startz)
                 nx, ny, nz = shape(u)
                 x, y, z = meshgrid(seq(nx-1), seq(ny-1), seq(nz-1))
                 #w = asarray(args[2])
@@ -731,7 +736,7 @@ class Streams(PlotProperties):
             try:
                 nx, ny = shape(u)
             except:
-                raise ValueError, "u must be 2D, not %dD" % len(shape(u))
+                raise ValueError, "u must be 2D, not %dD" % rank(u)
             x, y = meshgrid(seq(nx-1), seq(ny-1))
             sx, sy = [asarray(a) for a in args[2:4]]
         elif nargs >= 1 and nargs <= 2: # streamline(XYZ) or streamline(XY) 
@@ -797,7 +802,7 @@ class Streams(PlotProperties):
         self._prop['startx'] = sx
         self._prop['starty'] = sy
         self._prop['startz'] = sz
-        if len(shape(u)) == 2:
+        if rank(u) == 2:
             nx, ny = shape(u)
             self._prop['dims'] = (nx, ny, 1)
         else:

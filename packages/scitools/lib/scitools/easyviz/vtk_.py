@@ -538,8 +538,12 @@ class VtkBackend(BaseClass):
             y = ravel(y)
             u = asarray(item.getp('udata'))
             v = ravel(item.getp('vdata'))
-            w = ravel(item.getp('wdata'))
-            z = ravel(item.getp('zdata'))
+            w = item.getp('wdata')
+            z = item.getp('zdata')
+            if z is None and w is None:
+                z = w = zeros(shape(u))
+            z = ravel(z)
+            w = ravel(w)
             if item.getp('function') == 'quiver3':
                 z = z/dar[2]
             if rank(u) == 2:

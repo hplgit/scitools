@@ -658,7 +658,7 @@ class GnuplotBackend(BaseClass):
 
         filled = item.getp('filledarrows') # draw filled arrows if True
 
-        if z is not None and w is not None and False: # NOTE: <-- FIX!!!
+        if z is not None and w is not None: 
             # draw velocity vectors as arrows with components (u,v,w) at
             # points (x,y,z):
             data = None  # no support for vectors in 3D space in Gnuplot
