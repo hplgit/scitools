@@ -498,7 +498,7 @@ class Contours(PlotProperties):
         PlotProperties.setp(self, **kwargs)
 
         if 'cvector' in kwargs:
-            _check_type(kwargs['cvector'], 'cvector', (tuple,list))
+            _check_type(kwargs['cvector'], 'cvector', (tuple,list,NumPyArray))
             self._prop['cvector'] = kwargs['cvector']
             self._prop['clevels'] = len(kwargs['cvector'])
 
