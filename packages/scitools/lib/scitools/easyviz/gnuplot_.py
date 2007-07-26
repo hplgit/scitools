@@ -551,7 +551,7 @@ class GnuplotBackend(BaseClass):
             elif shading == 'interp':
                 # TODO: test interpolated shading mode in Gnuplot 4.2
                 #self._g('set pm3d interpolate 10,1 flush begin ftriangles nohidden3d corners2color mean')
-                pass
+                self._g('set pm3d at s solid')  # use flat shading for now
 
         if item.getp('memoryorder') == 'yxz':
             if rank(x) == 2 and rank(y) == 2:
