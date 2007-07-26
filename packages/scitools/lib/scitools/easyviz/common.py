@@ -3987,7 +3987,7 @@ class BaseClass(object):
         # Allow both view(az,el) and view([az,el])
         if nargs == 1:
             if isinstance(args[0], (tuple,list)):
-                args = args[0]
+                args = args[0];  nargs = len(args)
             elif isinstance(args[0], (int,float)) and args[0] in (2,3):
                 cam.setp(view=args[0])
                     
