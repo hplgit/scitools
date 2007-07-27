@@ -100,6 +100,8 @@ if not has_scipy:
         try:
             from numpyutils import *   # loads numpy too
             _import_list.append("from numpy import *\nfrom numpyutils import *")
+            from numpy.lib.scimath import *   # more general sin, cos etc
+
         except ImportError:
             raise ImportError, \
                   'numpy was requested, but it could not be found'
