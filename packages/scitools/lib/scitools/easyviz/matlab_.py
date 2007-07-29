@@ -70,7 +70,8 @@ class MatlabBackend(BaseClass):
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
         
-        self.figure(self.getp('curfig'))
+        #self.figure(self.getp('curfig'))
+        pass
 
     def _set_scale(self, ax):
         """Set linear or logarithmic (base 10) axis scale."""
@@ -720,7 +721,7 @@ class MatlabBackend(BaseClass):
             fig._g = mlab
         self._g = fig._g # link for faster access
 
-        h = self._g.figure(self.getp('curfig'), nout=1)
+        #h = self._g.figure(self.getp('curfig'), nout=1)
         # hide figure until calling _replot:
         #self._g.set_(h, 'Visible', 'off', nout=0)
 
@@ -731,7 +732,11 @@ class MatlabBackend(BaseClass):
             print "Doing replot in backend"
         
         fig = self.gcf()
-        #self._g.figure(self.getp('curfig'))
+        try:
+            fig._g
+        except: 
+            self.figure(self.getp('curfig'))
+        h = self._g.figure(self.getp('curfig'), nout=1)
         # reset the plotting package instance in fig._g now if needed
         self._g.clf('reset')
         
