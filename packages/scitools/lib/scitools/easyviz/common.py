@@ -1825,6 +1825,13 @@ class BaseClass(object):
         raise NotImplementedError, '_replot not implemented in class %s' % \
               self.__class__.__name__
 
+    def _check_axis(self, *args):
+        ax = self.gca()
+        nargs = len(args)
+        if nargs > 0 and isinstance(args[0], Axis):
+            ax = args[0];  args = args[1:];  nargs -= 1
+        return ax, args, nargs
+
     def gcf(self):
         """Return current figure."""
         return self._figs[self._attrs['curfig']]
@@ -1939,13 +1946,9 @@ class BaseClass(object):
 
         uses the the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
-            #return (ax.getp('daspect'), ax.getp('daspectmode'))
             return ax.getp('daspect')
         elif nargs == 1:
             arg = args[0]
@@ -2043,10 +2046,7 @@ class BaseClass(object):
         Note that one can use hold(True) and hold(False) instead of
         hold('on') and hold('off'), respectively.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         if nargs == 1:
             ax.setp(hold=args[0])
@@ -2075,7 +2075,7 @@ class BaseClass(object):
                 num = 1
             else:
                 num = max(self._figs.keys())+1
-                print "Active figure is %d." % num
+                #print "Active figure is %d." % num
 
         if not num in self._figs:
             # Points to class Figure or other convenient function
@@ -2105,10 +2105,7 @@ class BaseClass(object):
 
         clears the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
         ax.reset()
 
     def axis(self, *args, **kwargs): 
@@ -2179,10 +2176,7 @@ class BaseClass(object):
               
         affects the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
             
         if nargs == 0 and len(kwargs) == 0:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
@@ -2233,6 +2227,159 @@ class BaseClass(object):
     axis.__doc__ = axis.__doc__ % docadd('Legal values for method are',
                                          Axis._methods, indent=10)
 
+    def xlim(self, *args):
+        """Set or get limits on x axis.
+
+        Calling::
+
+            xlim([xmin,xmax])
+
+        sets the x limits on the current axis.
+
+        Calling::
+
+            xlim(xmin,xmax)
+
+        gives the same results as above.
+
+        Calling::
+
+            xmin, xmax = xlim()
+
+        returns the x limits for the current axis.
+
+        Calling::
+
+            xlim(ax, ...)
+
+        affects the Axis object ax instead of the current axis.
+        """
+        ax, args, nargs = self._check_axis(*args)
+
+        if nargs == 0:
+            xmin = ax.getp('xmin')
+            xmax = ax.getp('xmax')
+            if xmin is None or xmax is None:
+                xmin, xmax = ax.getp('xlim')
+            if xmin is None or xmax is None:
+                return [0,1]
+            return xmin, xmax
+        elif nargs == 1:
+            arg = args[0]
+            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+                ax.setp(xmin=arg[0], xmax=arg[1])
+            elif isinstance(arg, str):
+                raise NotImplementedError
+        elif nargs == 2:
+            ax.setp(xmin=args[0], xmax=args[1])
+        else:
+            raise TypeError, 'xlim: wrong number of arguments.'
+
+        if self.getp('interactive') and self.getp('show'):
+            self._replot()
+
+    def ylim(self, *args):
+        """Set or get limits on y axis.
+
+        Calling::
+
+            ylim([ymin,ymax])
+
+        sets the y limits on the current axis.
+
+        Calling::
+
+            ylim(ymin,ymax)
+
+        gives the same results as above.
+
+        Calling::
+
+            ymin, ymax = ylim()
+
+        returns the y limits for the current axis.
+
+        Calling::
+
+            ylim(ax, ...)
+
+        affects the Axis object ax instead of the current axis.
+        """
+        ax, args, nargs = self._check_axis(*args)
+
+        if nargs == 0:
+            ymin = ax.getp('ymin')
+            ymax = ax.getp('ymax')
+            if ymin is None or ymax is None:
+                ymin, ymax = ax.getp('ylim')
+            if ymin is None or ymax is None:
+                return [0,1]
+            return ymin, ymax
+        elif nargs == 1:
+            arg = args[0]
+            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+                ax.setp(ymin=arg[0], ymax=arg[1])
+            elif isinstance(arg, str):
+                raise NotImplementedError
+        elif nargs == 2:
+            ax.setp(ymin=args[0], ymax=args[1])
+        else:
+            raise TypeError, 'ylim: wrong number of arguments.'
+
+        if self.getp('interactive') and self.getp('show'):
+            self._replot()
+
+    def zlim(self, *args):
+        """Set or get limits on z axis.
+
+        Calling::
+
+            zlim([zmin,zmax])
+
+        sets the z limits on the current axis.
+
+        Calling::
+
+            zlim(zmin,zmax)
+
+        gives the same results as above.
+
+        Calling::
+
+            zmin, zmax = zlim()
+
+        returns the z limits for the current axis.
+
+        Calling::
+
+            zlim(ax, ...)
+
+        affects the Axis object ax instead of the current axis.
+        """
+        ax, args, nargs = self._check_axis(*args)
+
+        if nargs == 0:
+            zmin = ax.getp('zmin')
+            zmax = ax.getp('zmax')
+            if zmin is None or zmax is None:
+                zmin, zmax = ax.getp('zlim')
+            if zmin is None or zmax is None:
+                return [0,1]
+            return zmin, zmax
+        elif nargs == 1:
+            arg = args[0]
+            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+                ax.setp(zmin=arg[0], zmax=arg[1])
+            elif isinstance(arg, str):
+                raise NotImplementedError
+        elif nargs == 2:
+            ax.setp(zmin=args[0], zmax=args[1])
+        else:
+            raise TypeError, 'zlim: wrong number of arguments.'
+
+        if self.getp('interactive') and self.getp('show'):
+            self._replot()
+        
     def close(self, *args):
         """Close figure.
 
@@ -2313,15 +2460,12 @@ class BaseClass(object):
         Note that calling grid(True) and grid(False) is the same as calling
         grid('on') and grid('off'), respectively.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
-        if nargs == 1:
-            ax.setp(grid=args[0])
-        elif nargs == 0:
+        if nargs == 0:
             ax.toggle('grid')
+        elif nargs == 1:
+            ax.setp(grid=args[0])
         else:
             raise TypeError, "grid: wrong number of arguments"
 
@@ -2353,10 +2497,7 @@ class BaseClass(object):
         adds legend(s) to the plot in the Axis object ax instead of the
         current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         items = ax.getp('plotitems')
         if len(items) == 0:
@@ -2391,10 +2532,8 @@ class BaseClass(object):
 
         adds a title to the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
+        
         if nargs == 1:
             ax.setp(title=str(args[0]))
         else:
@@ -2418,10 +2557,8 @@ class BaseClass(object):
 
         adds the xlabel to the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
+        
         if nargs == 1:
             ax.setp(xlabel=str(args[0]))
         else:
@@ -2445,10 +2582,8 @@ class BaseClass(object):
 
         adds the ylabel to the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
+        
         if nargs == 1:
             ax.setp(ylabel=str(args[0]))
         else:
@@ -2472,10 +2607,8 @@ class BaseClass(object):
 
         adds the zlabel to the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
+        
         if nargs == 1:
             ax.setp(zlabel=str(args[0]))
         else:
@@ -2580,18 +2713,15 @@ class BaseClass(object):
         plot(...,log='y'), and plot(...,log='x'), respectively.
         """
         kwargs['description'] = 'plot: 2D curve plot'
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
 
-        if len(args) == 0:
+        if nargs == 0:
             raise TypeError, "plot: not enough arguments given"
         
         lines = [] # store all Line instances here
         # If first argument is a format string this will be ignored
         # If two format strings are used only the first of them will be used
-        if 'x' in kwargs:   
-            nargs = len(args)
+        if 'x' in kwargs: 
             if nargs == 1 or (nargs == 2 and isinstance(args[1], str)):
                 if nargs == 1:
                     lines.append(Line(x=kwargs['x'], y=args[0], format=''))
@@ -2619,7 +2749,6 @@ class BaseClass(object):
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
             # If the odd number is one, the argument x='auto' is passed.
-            nargs = len(args)
             i = 0
             if nargs in (1,2):
                 if not isinstance(args[0], str):
@@ -2809,11 +2938,9 @@ class BaseClass(object):
         >>> plot3(sin(t), cos(t), t, title='A helix', grid='on')
         """
         kwargs['description'] = 'plot3: 3D line plot'
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
 
-        if len(args) == 0:
+        if nargs == 0:
             raise TypeError, "plot3: not enough arguments given"
         
         lines = [] # all Line instances are stored here
@@ -2821,7 +2948,6 @@ class BaseClass(object):
         # If first argument is a format string this will be ignored
         # If two format strings are used only the first of them will be used
         if 'x' in kwargs and 'y' in kwargs:
-            nargs = len(args)
             if nargs == 1 or (nargs == 2 and isinstance(args[1], str)):
                 if nargs == 1:
                     lines.append(Line(x=kwargs['x'],
@@ -2858,7 +2984,6 @@ class BaseClass(object):
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
             # If the odd number is one, the argument x='auto' is passed.
-            nargs = len(args)
             i = 0
             if nargs in (1,2,3,4):
                 if not isinstance(args[0], str):
@@ -3041,9 +3166,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'quiver: 2D vector field'
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = VelocityVectors(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3129,10 +3252,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'contour: 2D contours at base'
-            
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Contours(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3141,7 +3261,7 @@ class BaseClass(object):
                     kwargs['grid'] = True
                 if not 'view' in kwargs:
                     kwargs['view'] = 3
-            else: # contour or contourf
+            else:  # contour or contourf
                 if not 'box' in kwargs:
                     kwargs['box'] = True
         ax.setp(**kwargs)
@@ -3200,9 +3320,7 @@ class BaseClass(object):
         ...        colorbar='on', colormap=hot())
         """
         kwargs['description'] = 'pcolor: pseudocolor plot'
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Surface(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold') and not 'box' in kwargs:
@@ -3269,10 +3387,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = "streamline: 2D or 3D streamline"
-        
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Streams(*args, **kwargs)
         ax.add(h)
         ax.setp(**kwargs)
@@ -3400,10 +3515,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'mesh: 3D mesh'
-            
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Surface(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3617,10 +3729,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'slice_: volumetric slices'
-        
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Volume(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3753,9 +3862,7 @@ class BaseClass(object):
         Examples:
         """
         kwargs['description'] = "coneplot: 3D cone plot"
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Streams(*args, **kwargs)
         ax.add(h)
         ax.setp(**kwargs)
@@ -3895,10 +4002,7 @@ class BaseClass(object):
         >>> view(3)
         """
         kwargs['description'] = 'isosurface: isosurface extractor'
-        
-        ax = self.gca()
-        if len(args) > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:]
+        ax, args, nargs = self._check_axis(*args)
         h = Volume(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold') and not 'view' in kwargs:
@@ -3988,10 +4092,7 @@ class BaseClass(object):
         >>> view(40,65)  # azimuth=40 and elevation=65
         >>> view(3)      # back to the default 3D view
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         # Allow both view(az,el) and view([az,el])
@@ -4022,10 +4123,7 @@ class BaseClass(object):
             
         uses the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 3:
@@ -4056,10 +4154,7 @@ class BaseClass(object):
             
         views the objects in the current axes.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
             
         if nargs == 0:
             self.gca().getp('camera').setp(camlookat=self.gca())
@@ -4101,10 +4196,7 @@ class BaseClass(object):
         sets or gets the camera projection of the Axis object ax instead of
         the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4144,10 +4236,7 @@ class BaseClass(object):
         sets or gets the up vector for the camera in the Axis object ax
         instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4176,10 +4265,7 @@ class BaseClass(object):
             
         rotates the camera in the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 1:
@@ -4211,10 +4297,7 @@ class BaseClass(object):
         sets or gets the camera view angle in the Axis object ax instead of
         the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4242,10 +4325,7 @@ class BaseClass(object):
             
         zooms the camera in the Axis object ax instead of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 1:
@@ -4283,10 +4363,7 @@ class BaseClass(object):
         sets or gets the position of the camera in the Axis object ax instead
         of the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4328,10 +4405,7 @@ class BaseClass(object):
         sets or gets the camera target in the Axis object ax instead of the
         current axis..
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4451,18 +4525,15 @@ class BaseClass(object):
         sets or gets the colormap in the Axis object ax instead of the
         current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
-        if nargs == 1:
+        if nargs == 0:
+            return ax.getp('colormap')
+        elif nargs == 1:
             if args[0] == 'default':
                 ax.setp(colormap=self.jet())
             else:
                 ax.setp(colormap=args[0]) # backend dependent
-        elif nargs == 0:
-            return ax.getp('colormap')
         else:
             raise TypeError, "colormap: wrong number of arguments"
         
@@ -4509,10 +4580,7 @@ class BaseClass(object):
         sets the pseudocolor axis scaling in the Axis object ax instead of
         the current axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
             return ax.getp('caxis')
@@ -4570,10 +4638,7 @@ class BaseClass(object):
 
         @return: A Colorbar object.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         cbar = ax.getp('colorbar')
         if nargs == 0:
@@ -4610,10 +4675,7 @@ class BaseClass(object):
         sets the shading mode in the Axis object ax instead of the current
         axis.
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         if nargs == 1:
             ax.setp(shading=str(args[0]))
@@ -4678,10 +4740,7 @@ class BaseClass(object):
         Note: box(True) and box(False) is the same as box('on') and
         box('off'), respectively.        
         """
-        ax = self.gca()
-        nargs = len(args)
-        if nargs > 0 and isinstance(args[0], Axis):
-            ax = args[0];  args = args[1:];  nargs -= 1
+        ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
             ax.toggle('box')
@@ -4921,65 +4980,6 @@ class BaseClass(object):
         """Shades of green and yellow color map."""
         raise NotImplementedError, 'summer not implemented in class %s' % \
               self.__class__.__name__
-
-
-class DerivedClass(BaseClass):
-    """Template for creating new backends."""
-    
-    def __init__(self):
-        BaseClass.__init__(self)
-        self.init()
-        
-    def init(self):
-        # Set docstrings of all functions to the docstrings of BaseClass
-        # The exception is if something is very different
-        
-
-        #Do initialization special for this backend
-        pass
-        
-    def _replot(self):
-        """
-        Update backend
-        """
-        #Write backend specific plot commands
-
-        # the old (easyplot) way:
-        '''
-        currentfignumber=self._attr('curfig')
-        currentfig=self._figs{currentfignumber}
-        1. set correct attributes in backend
-
-        for line in currentfig.lines:
-            2 check attributes of line
-            3 plot data.
-        
-        '''
-
-        # the new (easyviz) way:
-        '''
-        ax = self.gca() # the current axis
-        1. set correct properties in backend for the current axis (like axis
-           limits, camera view, box, grid, ...), and for the current figure
-           (like window size, subplots, ...).
-
-        for item in ax.getp('plotitems'):
-            2. check the kind of the item object (that is, if it is a Line
-               instance, a Surface instance, ...) and act accordingly.
-            3. plot data.
-        '''
-        pass
-        
-    def hardcopy(self, file='file.ps', **kwargs):
-        """
-        Save current figure to file
-        """
-        pass
-    
-    #def somefunc(self,*args,**kwargs):
-    #    BaseClass.somefunc(self,*args,**kwargs)
-    #    #Add extra functionality here
-
 
 
 def use(plt, namespace=globals()):
