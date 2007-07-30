@@ -463,8 +463,21 @@ class MatlabBackend(BaseClass):
                     func = self._g.pcolor
                 else:
                     func = self._g.surf
+
         kwargs = {'nout': 0}
-        func(*args, **kwargs)
+        if item.getp('function') == 'pcolor':
+            # pcolor neads special treatment since it has no support for
+            # parameter/value pairs.
+            if c is not None:
+                extra_args = ['CData', c] + args[4:]
+            else:
+                extra_args = args[3:]
+            h = self._g.pcolor(x,y,z,nout=1)
+            if extra_args:
+                extra_args = [h] + extra_args
+                self._g.set_(*extra_args, **kwargs)
+        else:
+            func(*args, **kwargs)
         
     def _add_contours(self, item, placement=None):
         # The placement keyword can be either None or 'bottom'. The
