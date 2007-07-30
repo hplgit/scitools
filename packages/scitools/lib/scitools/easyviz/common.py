@@ -1287,7 +1287,11 @@ class Axis(object):
                     self._prop['caxis'] = [None]*2
                 elif mode == 'manual':
                     if None in self._prop['caxis']:
-                        self._prop['caxis'] = (0,1)
+                        zmin, zmax = self._prop['zlim']
+                        if zmin is None or zmax is not None:
+                            self._prop['caxis'] = (zmin, zmax)
+                        else:
+                            self._prop['caxis'] = (0,1)
             else:
                 raise ValueError, "Axis.set: caxismode must be %s, not %s" \
                       (self._modes, mode)
@@ -4583,7 +4587,10 @@ class BaseClass(object):
         ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
-            return ax.getp('caxis')
+            cmin, cmax = ax.getp('caxis')
+            if cmin is None or cmax is None:
+                cmin, cmax = ax.getp('zlim')
+            return cmin, cmax
         elif nargs == 1:
             if isinstance(args[0], (tuple,list)):
                 args = args[0];  nargs = len(args)
