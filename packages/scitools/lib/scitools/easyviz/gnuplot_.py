@@ -579,12 +579,7 @@ class GnuplotBackend(BaseClass):
         z = item.getp('zdata')  # scalar field
 
         filled = item.getp('filled')  # draw filled contour plot if True
-        if filled:
-            #self._g('set style fill pattern')
-            #self._g('set pm3d at s solid')
-            #self._g('set palette maxcolors %d' % item.getp('clevels'))
-            pass
-
+        
         cvector = item.getp('cvector')
         clevels = item.getp('clevels')  # number of contour levels
         if cvector is None:
@@ -605,6 +600,11 @@ class GnuplotBackend(BaseClass):
             if placement == 'bottom':
                 # place the contours at the bottom (as in meshc or surfc)
                 self._g('set contour base')
+            elif filled:
+                self._g('set contour base')
+                self._g('set style fill pattern')
+                self._g('set pm3d at s solid')
+                self._g('set palette maxcolors %d' % item.getp('clevels'))
             else:
                 # standard contour plot
                 self._g('set contour base')
