@@ -203,7 +203,7 @@ To include the plot in electronic documents, we need a hardcopy of the
 figure in PostScript, PNG, or another image format.  The hardcopy
 command produces files with images in various formats::
 
-        hardcopy('tmp1.ps')  # produce PostScript
+        hardcopy('tmp1.eps') # produce PostScript
         hardcopy('tmp1.png') # produce PNG
 
 The filename extension determines the format: .ps or
@@ -238,7 +238,7 @@ all the plot properties can be set at once::
              legend='t^2*exp(-t^2)',
              axis=[0, 3, -0.05, 0.6],
              title='My First Easyviz Demo',
-             hardcopy='tmp1.ps',
+             hardcopy='tmp1.eps',
              show=True)
 
 
@@ -291,13 +291,13 @@ different approaches::
         ylabel('y')
         legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
         title('Plotting two curves in the same plot')
-        hardcopy('tmp2.ps')
+        hardcopy('tmp2.eps')
         
         # alternative:
         plot(t, y1, t, y2, xlabel='t', ylabel='y',
              legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
              title='Plotting two curves in the same plot',
-             hardcopy='tmp2.ps')
+             hardcopy='tmp2.eps')
 
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
@@ -390,7 +390,7 @@ the Gnuplot backend one can view the effect in Figure fig:plot2g::
              axis=[0, 4, -0.1, 0.6],
              legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
              title='Plotting two curves in the same plot',
-             hardcopy='tmp2.ps')
+             hardcopy='tmp2.eps')
 
 
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
@@ -472,7 +472,7 @@ the f_2(t) curve::
         xlabel('t')
         ylabel('y')
         show()
-        hardcopy('tmp3.ps') 
+        hardcopy('tmp3.eps') 
         hardcopy('tmp3.png')
 
 The plot is shown in Figure fig:plot3.
@@ -566,7 +566,7 @@ limit the x coordinates to [m-3s,m+3s].
 
 Now we are ready to take a look at the complete code
 for animating how the Gaussian bell curve evolves as the s parameter
-decreases from 2 to 0.2::
+is decreased from 2 to 0.2::
 
         from scitools.all import *
         import time
@@ -588,12 +588,12 @@ decreases from 2 to 0.2::
             y = f(x, m, s)
             plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
                  xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-                 hardcopy='tmp_%04d.ps' % counter)
+                 hardcopy='tmp_%04d.eps' % counter)
             counter += 1
             #time.sleep(0.2)  # can insert a pause to control movie speed
         
         # make movie file:
-        movie('tmp_*.ps')
+        movie('tmp_*.eps')
 
 
 First note that the s values are decreasing (linspace handles this
@@ -609,7 +609,7 @@ of the form stem0001.ext, stem0002.ext, stem0003.ext, etc.,
 since an alphabetic sort of the filenames then gives the right
 sequence of the files (and so does the expression stem*.ext used
 in the operating system or in Python's fnmatch module).
-In our example, stem is tmp_, and .ext is .ps
+In our example, stem is tmp_, and .ext is .eps
 (which implies the PostScript format in the hardcopy).
 
 Having a set of stem*.ext files, one can simply generate a movie
@@ -636,6 +636,7 @@ produces "behind the curtain".
   * scipy (if it exists)
   * numpy (if scipy is not installed)
   * the Python modules sys, os, math, operator
+  * the SciTools module numpyutils
   * the SciTools module StringFunction and the SciTools 
     functions watch and trace for debugging
 
@@ -669,8 +670,8 @@ FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-speci
 
 Easyviz does not support text and arrows at arbitrary places inside
 the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
-the Gnuplot object (a Python module) and issue Gnuplot commands to
-this object directly::
+the Gnuplot object and issue Gnuplot commands to
+this object directly. Here is an example on the typical recipe::
 
         g = get_backend()
         if g.__class__.__name__ == 'Gnuplot':
@@ -678,7 +679,7 @@ this object directly::
             g('set label "global maximum" at 0.1,0.5 font "Times,18"')
             g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
         g.refresh()
-        g.hardcopy('tmp2.ps')  # make new hardcopy
+        g.hardcopy('tmp2.eps')  # make new hardcopy
 
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
@@ -690,7 +691,7 @@ without limiting the available functionality of various plotting programs.
 
 
 *Working with Axis and Figure Objects.* Easyviz supports the concept of Axis objects, as in Matlab.
-The Axis object represent a set of axis, with curves drawn in the
+The Axis object represents a set of axis, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axis in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
@@ -704,7 +705,7 @@ object, whose set method can be used to set axis properties::
 
         plot(t, y1, 'r-', t, y2, 'bo',
              legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-             hardcopy='tmp2.ps')
+             hardcopy='tmp2.eps')
         
         ax = gca()   # get current Axis object
         ax.set(xlabel='t', ylabel='y',
@@ -736,13 +737,13 @@ version of the plot::
         title('One curve')
         legend('t^2*exp(-t^2)')
         show()
-        hardcopy('tmp2_1.ps')
+        hardcopy('tmp2_1.eps')
 
 We can also adjust figure 2::
 
         figure(2)  # go to second figure
         title('Another curve')
-        hardcopy('tmp2_2.ps')
+        hardcopy('tmp2_2.eps')
         show()
 
 The current Figure object is reached by gcf (get current figure),
@@ -770,7 +771,7 @@ Here is the code for this third figure::
         plot(t, y2, xlabel='t', ylabel='y')
         title('A figure with two plots')
         show()
-        hardcopy('tmp2_3.ps')
+        hardcopy('tmp2_3.eps')
 
 We remark that the hardcopy command does not work with the Gnuplot backend
 in this case with multiple axes in a figure.
