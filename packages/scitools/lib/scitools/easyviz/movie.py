@@ -127,6 +127,7 @@ class MovieEncoder(object):
                 ext = match.group(3)
                 files = pre + '[0-9]'*num + ext
             files = glob.glob(files)
+            files.sort()
         if not files:
             raise ValueError, \
                   "'%s' is not a valid file specification or the files " \
@@ -163,6 +164,7 @@ class MovieEncoder(object):
                 ext = match.group(3)
                 files = pre + '[0-9]'*num + ext
             files = glob.glob(files)
+            files.sort()
             if not files:
                 raise ValueError, \
                       "'%s' is not a valid file specification or the files "\
@@ -249,8 +251,10 @@ class MovieEncoder(object):
                     ext = match.group(3)
                     files = pre + '[0-9]'*num + ext
                     files = glob.glob(files)
+                    files.sort()
             else:
                 files = glob.glob(files)
+                files.sort()
         if isinstance(files, (list,tuple)):
             basename = 'tmp_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
@@ -333,6 +337,7 @@ class MovieEncoder(object):
                 ext = match.group(3)
                 files = pre + '[0-9]'*num + ext
             files = glob.glob(files)
+            files.sort()
         if not files:
             raise ValueError, \
                   "'%s' is not a valid file specification or the files " \
@@ -462,8 +467,10 @@ FORCE_ENCODE_LAST_FRAME
                     ext = match.group(3)
                     files = pre + '[0-9]'*num + ext
                     files = glob.glob(files)
+                    files.sort()
             else:
                 files = glob.glob(files)
+                files.sort()
         if isinstance(files, (list,tuple)):
             basename = 'tmp_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
