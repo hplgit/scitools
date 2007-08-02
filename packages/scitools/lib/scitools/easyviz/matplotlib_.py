@@ -156,7 +156,8 @@ class MatplotlibBackend(BaseClass):
             # and z direction. If this is not automated in the plotting
             # package, one can use the following limits:
             #xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
-            self._g.axis('auto')
+            #self._g.axis('auto')
+            pass
         elif mode == 'manual':
             # (some) axis limits are frozen
             xmin = ax.getp('xmin')
@@ -370,9 +371,9 @@ class MatplotlibBackend(BaseClass):
             print "Setting axis properties"
         self._set_title(ax)
         self._set_scale(ax)
+        self._set_axis_method(ax)
         self._set_limits(ax)
         self._set_position(ax)
-        self._set_axis_method(ax)
         self._set_daspect(ax)
         self._set_coordinate_system(ax)
         self._set_hidden_line_removal(ax)
@@ -787,7 +788,7 @@ class MatplotlibBackend(BaseClass):
             raise ValueError, "closefig: cannot close figure '%s'" % arg
         self._g.close(num)
         #del self._figs[num]._g
-        del self._figs[num]
+        #del self._figs[num]
     
     def closefigs(self):
         for key in self._figs.keys():
