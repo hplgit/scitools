@@ -1,6 +1,7 @@
 """
 This backend uses the Python 2D plotting library Matplotlib (available from
-http://matplotlib.sourceforge.net). One can specify this backend by 
+http://matplotlib.sourceforge.net). To use this backend, one can run a
+script somefile.py like
 
   python somefile.py --SCITOOLS_easyviz_backend matplotlib
 
@@ -132,7 +133,7 @@ class MatplotlibBackend(BaseClass):
             self._g.xlabel(xlabel)
         if ylabel:
             # add a text label on y-axis
-            self._g.ylabel(ylabel, rotation='horizontal')
+            self._g.ylabel(ylabel, rotation='vertical')
         if zlabel:
             # add a text label on z-axis
             pass
@@ -433,8 +434,12 @@ class MatplotlibBackend(BaseClass):
         c = item.getp('cdata')           # pseudocolor data (can be None)
         legend = item.getp('legend')
 
-        if colormap is None:
+        if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
+
+        if shape(x) != shape(z) or shape(y) != shape(z):
+            x, y = meshgrid(x, y, sparse=False,
+                            memoryorder=item.getp('memoryorder'))
         
         contours = item.getp('contours')
         if contours:
@@ -464,8 +469,12 @@ class MatplotlibBackend(BaseClass):
         z = item.getp('zdata')           # scalar field
         legend = item.getp('legend')
 
-        if colormap is None:
+        if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
+        
+        if shape(x) != shape(z) or shape(y) != shape(z):
+            x, y = meshgrid(x, y, sparse=False,
+                            memoryorder=item.getp('memoryorder'))
         
         filled = item.getp('filled')  # draw filled contour plot if True
 
@@ -523,6 +532,8 @@ class MatplotlibBackend(BaseClass):
         # scale the vectors according to this variable (scale=0 should
         # turn off automatic scaling):
         scale = item.getp('arrowscale')
+        if scale == 0:
+            scale = None
 
         filled = item.getp('filledarrows') # draw filled arrows if True
 
@@ -533,11 +544,13 @@ class MatplotlibBackend(BaseClass):
         else:
             # draw velocity vectors as arrows with components (u,v) at
             # points (x,y):
-            if not color:
-                color = u**2+v**2  # color arrows by magnitude
             if shape(x) != shape(u) and shape(y) != shape(u):
                 x, y = meshgrid(x, y, sparse=False, memoryorder=memoryorder)
-            h = self._g.quiver(x,y,u,v,scale,color=color,width=1.0)
+            if not color:
+                c = u**2+v**2  # color arrows by magnitude
+                h = self._g.quiver(x,y,u,v,c,scale=scale)
+            else:
+                h = self._g.quiver(x,y,u,v,scale=scale,color=color)
             if legend:
                 h.set_label(legend)
 
@@ -654,8 +667,8 @@ class MatplotlibBackend(BaseClass):
             print "Doing replot in backend"
 
         # turn off interactive in pylab temporarily:
-        #pylab_interactive_state = self._g.isinteractive()
-        #self._g.ioff()
+        old_pylab_interactive_state = self._g.isinteractive()
+        self._g.ioff()
         
         fig = self.gcf()
         try:
@@ -714,15 +727,18 @@ class MatplotlibBackend(BaseClass):
                     
         # set back the hold and interactive states in pylab:
         self._g.hold(pylab_hold_state)
-        #if pylab_interactive_state:
-        #    self._g.ion()
+        if old_pylab_interactive_state:
+            self._g.ion()
 
+        self._g.draw()
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
                 print "\nDumping plot data to screen\n"
                 debug(self)
-            #self._g.draw()
+            self._g.figure(self.getp('curfig'))  # raise figure
+            # Or is there a better way to draw the current figure without
+            # calling pylab.show()?
             #self._g.show()
 
     def hardcopy(self, filename, **kwargs):
