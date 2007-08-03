@@ -520,7 +520,11 @@ class GnuplotBackend(BaseClass):
         withstring = self._get_withstring(marker, color, style, width)
         if z is not None:
             # zdata is given, add a 3D curve:
-            data = None  # not yet implemented
+            data = Gnuplot.Data(arrayconverter(x),
+                                arrayconverter(y),
+                                arrayconverter(z),
+                                title=item.getp('legend'), with=withstring)
+            self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
             data = Gnuplot.Data(arrayconverter(x),
@@ -854,6 +858,8 @@ class GnuplotBackend(BaseClass):
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):
                     gdata.append(self._add_line(item))
+                    if item.getp('function') == 'plot3':
+                        self._use_splot = True
                 elif isinstance(item, Surface):
                     gdata.append(self._add_surface(item,
                                                    shading=ax.getp('shading')))
