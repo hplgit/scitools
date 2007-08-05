@@ -12,7 +12,7 @@ plot(x, y, 'r-', x, v, 'b--', x, w, 'g--',
 sleep(3)
 
 # get backend and fine-tune the plot:
-g = get_easyviz_backend()
+g = get_backend()
 print type(g), g  # Gnuplot instance
 g('set key left box')
 g('set grid')

@@ -6,7 +6,7 @@
 from scitools.easyviz import *
 from time import sleep
 
-set(show=False)
+setp(show=False)
 x, y, z, v = flow()
 h = contourslice(x,y,z,v,seq(1,9),[],[0],linspace(-8,2,10))
 axis([0,10,-3,3,-3,3])
@@ -15,17 +15,25 @@ camva(24)
 camproj('perspective')
 campos([-3,-15,5])
 ax = gca()
-ax.set(fgcolor=(1,1,1), bgcolor=(0,0,0))
+ax.setp(fgcolor=(1,1,1), bgcolor=(0,0,0))
 box('on')
 view(3) # because camva, camproj, and campos currently not working
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
 
+#hardcopy('tmp_contourslice1.eps')
+#hardcopy('tmp_contourslice1.png')
+
+figure()
 # alternative syntax:
 h = contourslice(x,y,z,v,seq(1,9),[],[0],linspace(-8,2,10),
                  axis=[0,10,-3,3,-3,3], daspect=[1,1,1],
                  camva=24, camproj='perspective', campos=[-3,-15,5], 
                  fgcolor=(1,1,1), bgcolor=(0,0,0),
                  box='on')
-sleep(3)
+
+#hardcopy('tmp_contourslice2.eps')
+#hardcopy('tmp_contourslice2.png')
+
+#sleep(3)
+raw_input('press enter')

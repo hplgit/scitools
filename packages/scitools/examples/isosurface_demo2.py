@@ -12,7 +12,7 @@ mri = io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
 #Ds = smooth3(D);
 
-set(show=False)
+setp(show=False)
 isosurface(D,5)
 #hiso = isosurface(Ds,5),
 #	'FaceColor',[1,.75,.65],...
@@ -26,8 +26,7 @@ shading('interp')
 #colormap(map)
 
 # Define the View:
-#view(45,30)
-view(3)
+view(45,30)
 axis('tight')
 daspect([1,1,.4])
 
@@ -38,6 +37,11 @@ daspect([1,1,.4])
 #set(hcap,'AmbientStrength',.6)
 #set(hiso,'SpecularColorReflectance',0,'SpecularExponent',50)
 
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
+#sleep(3)
+raw_input('press enter')
+#save_script('/tmp/cappediso_script')
+
+#hardcopy('tmp_isosurf3.eps')
+#hardcopy('tmp_isosurf3.png')

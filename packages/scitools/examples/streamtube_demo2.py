@@ -21,14 +21,14 @@ ymin = arrmin(y)
 alt = 7.356 # z-value for slice and streamtube plane
 wind_speed = sqrt(u**2 + v**2 + w**2)
 
-set(show=False)
+setp(show=False)
 
 # Draw Slice Planes:
 hslice = slice_(x,y,z,wind_speed,xmax,ymin,alt)
 hold('on')
 #set(hslice,'FaceColor','interp','EdgeColor','none')
 ax = gca()
-ax.set(shading='interp')
+ax.setp(shading='interp')
 colormap(hsv(16))
 
 # Add Contour Lines to Slice Planes:
@@ -42,7 +42,7 @@ hcont = contourslice(x,y,z,wind_speed,xmax,ymin,alt,cont_intervals.tolist())
 # should also accept NumPy arrays!
 
 #set(hcont,'EdgeColor',[.4 .4 .4],'LineWidth',1)
-hcont.set(linewidth=2)
+hcont.setp(linewidth=2)
 
 # Create the Stream Tubes:
 sx,sy,sz = meshgrid([xmin]*11,seq(20,50,3),[alt]*11)
@@ -54,14 +54,19 @@ htubes = streamtube(x,y,z,u,v,w,sx,sy,sz)#,[1.25, 5])
 view(-100,30)
 #axis(volumebounds(x,y,z,wind_speed))
 #set(gca,'Projection','perspective')
-ax.set(projection='perspective')
+ax.setp(projection='perspective')
 #camlight left
+grid('off')
 
-set(show=True)
+setp(show=True)
 show()
 
-sleep(3)
+#sleep(3)
+raw_input('press enter')
 
+#hardcopy('tmp_streamtube2.eps')
+#hardcopy('tmp_streamtube2_lq.eps', vector_file=False)
+#hardcopy('tmp_streamtube2.png')
 
 
 

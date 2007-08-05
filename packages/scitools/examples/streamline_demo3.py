@@ -15,7 +15,7 @@ u = wind['u']
 v = wind['v']
 w = wind['w']
 
-set(show=False)
+setp(show=False)
 sx, sy, sz = meshgrid([80]*36,seq(20,55,1),[5]*36)
 sl = streamline(x,y,z,u,v,w,sx,sy,sz)
 axis('tight')
@@ -24,10 +24,11 @@ daspect([1,1,.125])
 camproj('perspective')
 camva(8)
 box('on')
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
 
+
+figure()
 # alternative syntax:
 sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 axis='tight',
@@ -36,5 +37,7 @@ sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 camproj='perspective',
                 camva=8,
                 box='on')
-sleep(3)
+
+#sleep(3)
+raw_input('press enter')
 

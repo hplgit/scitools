@@ -9,30 +9,39 @@ from time import sleep
 
 x, y, z, v = flow()
 
-set(show=False)
+setp(show=False)
 h = isosurface(x,y,z,v,-3)
-#set(h,'FaceColor','red','EdgeColor','none');
-h.set(opacity=0.5)
+#setp(h,'FaceColor','red','EdgeColor','none');
+h.setp(opacity=0.5)
 shading('interp')
 daspect([1,1,1])
 view(3)
 axis('tight')
 #camlight()
 #lighting('gouraud')
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
 
-set(show=False)
+#hardcopy('tmp_isosurf1.eps')
+#hardcopy('tmp_isosurf1_lq.eps', vector_file=False)
+#hardcopy('tmp_isosurf1.png')
+
+figure()
+setp(show=False)
 h = isosurface(x,y,z,v,0)
-#set(hpatch,'FaceColor','red','EdgeColor','none')
+#setp(hpatch,'FaceColor','red','EdgeColor','none')
 shading('interp')
 daspect([1,4,4])
 view([-65,20])
 axis('tight')
 #camlight('left')
-#set(gcf,'Renderer','zbuffer');
+#setp(gcf,'Renderer','zbuffer');
 #lighting('phong')
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
+#sleep(3)
+raw_input('press enter')
+
+#hardcopy('tmp_isosurf2.eps')
+#hardcopy('tmp_isosurf2_lq.eps', vector_file=False)
+#hardcopy('tmp_isosurf2.png')

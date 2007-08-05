@@ -23,7 +23,7 @@ zmin = arrmin(z)
 ymax = ymax - 0.1
 zmin = 0 # bug in slice_ and contourslice
 
-set(show=False)
+setp(show=False)
 
 # Add Slice Planes for Visual Context:
 wind_speed = sqrt(u**2 + v**2 + w**2)
@@ -36,20 +36,21 @@ shading('interp')
 hcont = contourslice(x,y,z,wind_speed,[xmin,100,xmax],ymax,zmin,8)
 # What is the default number of contour lines in contourslice? 8?
 #set(hcont,'EdgeColor',[.7,.7,.7],'LineWidth',.5)
-hcont.set(linecolor=[.7,.7,.7], linewidth=2)
+hcont.setp(linecolor=[.7,.7,.7], linewidth=2)
 
 # Define the Starting Points for the Stream Lines:
 sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5), sparse=False)
 hlines = streamline(x,y,z,u,v,w,sx,sy,sz)
 #set(hlines,'LineWidth',2,'Color','r')
-hlines.set(linewidth=3, linecolor='r')
+hlines.setp(linewidth=3, linecolor='r')
 
 # Define the View:
 view(3)
 daspect([2,2,1])
 axis('tight')
 
-set(show=True)
+setp(show=True)
 show()
 
-sleep(3)
+#sleep(3)
+raw_input('press enter')

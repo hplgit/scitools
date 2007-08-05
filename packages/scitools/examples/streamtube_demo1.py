@@ -17,21 +17,26 @@ w = wind['w']
 
 sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
 
-set(show=False)
+setp(show=False)
 streamtube(x,y,z,u,v,w,sx,sy,sz)
 daspect([1,1,1])
 view(3)
 axis('tight')
 shading('interp')
 #camlight(); lighting('gouraud')
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
+#sleep(3)
 
+figure()
 # alternative syntax:
 streamtube(x,y,z,u,v,w,sx,sy,sz,
            daspect=[1,1,1],
            view=3,
            axis='tight',
            shading='interp')
-sleep(3)
+#sleep(3)
+raw_input('press enter')
+
+#hardcopy('tmp_streamtube1.eps')
+#hardcopy('tmp_streamtube1.png')

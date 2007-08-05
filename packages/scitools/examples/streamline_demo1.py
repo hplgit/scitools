@@ -15,19 +15,22 @@ u = wind['u']
 v = wind['v']
 w = wind['w']
 
-set(show=False)
+setp(show=False)
 sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
 sl = streamline(x,y,z,u,v,w,sx,sy,sz)
-sl.set(linecolor='r')
+sl.setp(linecolor='r')
 view(3)
 axis([60,140,10,60,-5,20])
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
 
+
+figure()
 # alternative syntax:
 sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 linecolor='r',
                 view=3,
                 axis=[60,140,10,60,-5,20])
-sleep(3)
+
+#sleep(3)
+raw_input('press enter')

@@ -17,7 +17,7 @@ xmax = arrmax(x)
 ymax = arrmax(y) 
 zmax = arrmax(z)
 
-set(show=False)
+setp(show=False)
 
 # Create a Slice Plane at an Angle to the X-Axes:
 hslice = surf(linspace(xmin,xmax,100),
@@ -25,15 +25,15 @@ hslice = surf(linspace(xmin,xmax,100),
               zeros((100,100)))
 
 #rotate(hslice,[-1,0,0],-45)
-xd = hslice.get('xdata')
-yd = hslice.get('ydata')
-zd = hslice.get('zdata')
+xd = hslice.getp('xdata')
+yd = hslice.getp('ydata')
+zd = hslice.getp('zdata')
 #delete(hslice)
 
 # Draw the Slice Planes:
 #h = slice_(x,y,z,v,xd,yd,zd)
 h = slice_(x,y,z,v,[],[],0)
-h.set(diffuse=.8)
+h.setp(diffuse=.8)
 #h.set('FaceColor','interp',
 #      'EdgeColor','none',
 #      'DiffuseStrength',.8)
@@ -60,9 +60,10 @@ camproj('perspective')
 
 # Add Lighting and Specify Colors:
 shading('interp')
-colormap(jet(24))
+#colormap(jet(24))
 #lightangle(-45,45)
 
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
+#sleep(3)
+raw_input("press enter")

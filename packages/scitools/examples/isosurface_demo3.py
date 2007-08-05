@@ -20,7 +20,7 @@ sx, sy, sz = meshgrid([80]*36,seq(20,55,1),[5]*36, sparse=True)
 
 wind_speed = sqrt(u**2 + v**2 + w**2)
 
-set(show=False)
+setp(show=False)
 hiso = isosurface(x,y,z,wind_speed,40)
 #isonormals(x,y,z,wind_speed,hiso)
 #set(hiso,'FaceColor','red','EdgeColor','none');
@@ -61,6 +61,7 @@ view(65,45)
 #lighting phong
 #set(hcap,'AmbientStrength',.6)
 
-set(show=True)
+setp(show=True)
 show()
-sleep(3)
+#sleep(3)
+raw_input('press enter')
