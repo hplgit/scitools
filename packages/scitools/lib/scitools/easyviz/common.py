@@ -2840,16 +2840,12 @@ class BaseClass(object):
         # set keyword arguments in all the added lines
         for line in lines:
             line.setp(**kwargs)
+            # automatically add line colors if this is not specified:
+            if not line.getp('linecolor'):
+                line.setp(linecolor=ax.get_next_color())
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-
-        # Automatically add line colors if there were multiple lines added
-        # and no specification of line colors:
-        if len(lines) > 1:
-            for line in lines:
-                if not line.getp('linecolor'):
-                    line.setp(linecolor=ax.get_next_color())
 
         if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
@@ -3092,16 +3088,12 @@ class BaseClass(object):
         # set keyword arguments in all the added lines:
         for line in lines:
             line.setp(**kwargs)
+            # automatically add line colors if this is not specified:
+            if not line.getp('linecolor'):
+                line.setp(linecolor=ax.get_next_color())
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-
-        # Automatically add line colors if there were multiple lines added
-        # and no specification of line colors:
-        if len(lines) > 1:
-            for line in lines:
-                if not line.getp('linecolor'):
-                    line.setp(linecolor=ax.get_next_color())
 
         if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
             self._replot()
