@@ -163,7 +163,7 @@ class MatlabBackend(BaseClass):
                 # let plotting package set z-axis limits or use
                 #zmin, zmax = ax.getp('zlim')
                 pass
-            self._g.axis('manual', nout=0)
+            #self._g.axis('manual', nout=0)
         elif mode == 'tight':
             # set the limits on the axis to the range of the data. If
             # this is not automated in the plotting package, one can
@@ -348,9 +348,9 @@ class MatlabBackend(BaseClass):
             print "Setting axis properties"
         self._set_title(ax)
         self._set_scale(ax)
+        self._set_axis_method(ax)  # should be called before _set_limits.
         self._set_limits(ax)
         self._set_position(ax)
-        self._set_axis_method(ax)
         self._set_daspect(ax)
         self._set_coordinate_system(ax)
         self._set_hidden_line_removal(ax)
@@ -466,7 +466,7 @@ class MatlabBackend(BaseClass):
 
         kwargs = {'nout': 0}
         if item.getp('function') == 'pcolor':
-            # pcolor neads special treatment since it has no support for
+            # pcolor needs special treatment since it has no support for
             # parameter/value pairs.
             if c is not None:
                 extra_args = ['CData', c] + args[4:]
@@ -942,58 +942,58 @@ class MatlabBackend(BaseClass):
            
     # Colormap methods:
     def hsv(self, m=64):
-        return self._g.hsv(m)
+        return mlab.hsv(m)
 
     def hot(self, m=64):
-        return self._g.hot(m)
+        return mlab.hot(m)
     
     def gray(self, m=64):
-        return self._g.gray(m)
+        return mlab.gray(m)
     
     def bone(self, m=64):
-        return self._g.bone(m)
+        return mlab.bone(m)
 
     def copper(self, m=64):
-        return self._g.copper(m)
+        return mlab.copper(m)
 
     def pink(self, m=64):
-        return self._g.pink(m)
+        return mlab.pink(m)
     
     def white(self, m=64):
-        return self._g.white(m)
+        return mlab.white(m)
     
     def flag(self, m=64):
-        return self._g.flag(m)
+        return mlab.flag(m)
         
     def lines(self, m=64):
-        return self._g.lines(m)
+        return mlab.lines(m)
     
     def colorcube(self, m=64):
-        return self._g.colorcube(m)
+        return mlab.colorcube(m)
     
     def vga(self, m=64):
-        return self._g.vga(m)
+        return mlab.vga(m)
     
     def jet(self, m=64):
-        return self._g.jet(m)
+        return mlab.jet(m)
     
     def prism(self, m=64):
-        return self._g.prism(m)
+        return mlab.prism(m)
         
     def cool(self, m=64):
-        return self._g.cool(m)
+        return mlab.cool(m)
     
     def autumn(self, m=64):
-        return self._g.autumn(m)
+        return mlab.autumn(m)
     
     def spring(self, m=64):
-        return self._g.spring(m)
+        return mlab.spring(m)
     
     def winter(self, m=64):
-        return self._g.winter(m)
+        return mlab.winter(m)
     
     def summer(self, m=64):
-        return self._g.summer(m)
+        return mlab.summer(m)
 
 
     # Now we add the doc string from the methods in BaseClass to the
