@@ -116,21 +116,29 @@ class StringFunction:
     1)
     The StringFunction class can work with sin, cos, exp, and other
     mathematical functions if the argument is a scalar (float or int) type.
-    If the argument is a vector, the NumPy (or SciPy) versions of sin, cos,
+    If the argument is a vector, the NumPy versions of sin, cos,
     exp, etc., are needed. A common error message in the latter case is
 
     TypeError: only rank-0 arrays can be converted to Python scalars.
 
     Make something like
 
-    from numarray import *
-    # or (better)
-    from numarray import sin, cos
+    from numpy import *
+    # or
+    from scitools.all import *
+    # or
+    from numpy import sin, cos
 
     in the calling code and supply globals=globals() as argument to
     the constructor:
-    f = StringFunction('1+x*y', globals=globals())
+    f = StringFunction('1+x*y', independent_variables=('x', 'y'),
+                       globals=globals())
     f(p,q) will now work for NumPy arrays p and q.
+
+    You can also omit the globals argument when constructing the
+    StringFunction and later call
+    f.vectorize(globals())
+    to allow array arguments.
 
     2) StringFunction builds a lambda function and evaluates this.
     You can see the lambda function as a string by accessing the
@@ -243,9 +251,22 @@ class StringFunction:
         
             
     def set_parameters(self, **kwargs):
+        """Set keyword parameters in the function."""
         self._prms.update(kwargs)
         self._build_lambda()
 
+    def vectorize(self, globals_dict):
+        """
+        Allow the StringFunction object to take NumPy array
+        arguments. The calling code must have done a
+        from numpy import * or similar and send the globals()
+        dictionary as the argument globals_dict.
+        Alternatively, the globals() dictionary can be supplied
+        as a globals keyword argument to the constructor.
+        """
+        self._globals = globals_dict
+        self._build_lambda()
+        
     def troubleshoot(self, *args, **kwargs):
         """
         Perform function evaluation call with lots of testing to

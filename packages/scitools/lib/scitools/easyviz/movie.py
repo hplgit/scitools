@@ -9,7 +9,7 @@ class MovieEncoder(object):
     _local_prop = {
         'input_files': None,         # image files
         'output_file': None,         # resulting movie
-        'overwrite_output': False,   # overwrite output file if True
+        'overwrite_output': True,    # overwrite output file if True
         'encoder': None,             # encoding tool
         'vbitrate': None,            # video bit rate
         'vbuffer': None,             # video buffer
@@ -29,8 +29,8 @@ class MovieEncoder(object):
         'gop_size': None,            # size of GOP (group of pictures)
         'force_conversion': False,   # force conversion (to png) if True
         }
-    _legal_encoders = ('mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc ' + \
-                      'convert').split()
+    _legal_encoders = 'mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc '\
+                      'convert'.split()
     _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
 
     def __init__(self, input_files, **kwargs):
@@ -109,7 +109,8 @@ class MovieEncoder(object):
         cmd = encoder
 
         # set number of frames per second:
-        cmd += ' -delay 1x%s' % self._prop['fps']
+        #cmd += ' -delay 1x%s' % self._prop['fps']
+        cmd += ' -delay %d' % (1.0/self._prop['fps']*100)
 
         # set size:
         size = self._get_size()
@@ -676,35 +677,45 @@ FORCE_ENCODE_LAST_FRAME
 def movie(input_files, **kwargs):
     """Make a movie from a series of image files.
 
-    This function is designed to be an easy way of creating a movie file from
-    a series of image files using some suitable encoding tool to combine the
-    images together. Several different encoding tools can be used, such as
-    MEncoder, FFmpeg, mpeg_encode, ppmtompeg (Netpbm), mpeg2enc (MJPEGTools),
-    and convert (ImageMagick). The encoding tool will be chosen automatically
-    among these if more than one is installed on the machine in question
-    (unless it is specified as an argument by the user). 
+    This function makes it very easy to create a movie file from a
+    series of image files. Several different encoding tools can be
+    used, such as MEncoder, FFmpeg, mpeg_encode, ppmtompeg (Netpbm),
+    mpeg2enc (MJPEGTools), and convert (ImageMagick), to combine the
+    image files together. The encoding tool will be chosen
+    automatically among these if more than one is installed on the
+    machine in question (unless it is specified as a keyword argument
+    to the movie function).
 
-    Let us say we have some image files named image_0000.eps, image_0001.eps,
-    image_0002.eps, ..., and we want to join them together into a movie file.
-    This can be accomplished with the simple call
+    Suppose we have some image files named image_0000.eps, image_0001.eps,
+    image_0002.eps, ... Note that the zero-padding, obtained by the printf
+    format 04d in this case, ensures that the files are listed in correct
+    numeric order when using a wildcard notation like image_*.eps.
+    We want to make a movie out of these files, where each file constitutes
+    a frame in the movie. This task can be accomplished by the simple call
 
         movie('image_*.eps')
 
-    This will produce a movie file with a default name such as 'movie.avi',
-    'movie.mpeg', or 'movie.gif' (depending on the encoding tool) in the
-    current working directory. To get more control over the output file one
-    can explicitly specify the encoder and the name of the resulting movie:
+    The result is a movie file with a default name such as
+    'movie.avi', 'movie.mpeg', or 'movie.gif' (depending on the
+    encoding tool chosen by the movie function). The file resides in
+    the current working directory.
+
+    One can easily specify the name of the movie file and explicitly
+    specify the encoder. For example, an animated GIF movie can be
+    created by
 
         movie('image_*.eps', encoder='convert',
-              output_name='/home/johannr/wave2D.gif')
+              output_file='../wave2D.gif')
 
-    This will create an animated gif using the convert tool from ImageMagick
-    and the resulting file will be named wave2D.gif and placed in the
-    directory /home/johannr. If we instead want to create an MPEG movie by
-    using the MEncoder tool, we can do this with the following command:
+    The encoder here is the convert program from the ImageMagick suite
+    of image manipulation tools. The resulting movie file will be
+    named 'wave2D.gif' and placed in the parent directory.
+    
+    If we instead want to create an MPEG movie by using the MEncoder
+    tool, we can do this with the following command:
 
         movie('image_*.eps', encoder='mencoder',
-              output_name='/home/johannr/wave2D.mpeg',
+              output_file='/home/johannr/wave2D.mpeg',
               vcodec='mpeg2video', vbitrate=2400, qscale=4, fps=10)
 
     Here, we have also specified the video codec to be mpeg2video, the video
@@ -736,8 +747,7 @@ def movie(input_files, **kwargs):
                      is 'image_%04d.png'. If the input files are not given on
                      the correct format, there will automatically be made
                      copies of these files which will then be renamed to the
-                     required filename format. This will of course extend the
-                     creation time of the movie.
+                     required filename format.
                      
                    - MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
                      .png image files. So, if the input files are on another
@@ -760,7 +770,7 @@ def movie(input_files, **kwargs):
 
     overwrite_output -- If True, the file given in the output_file argument
                    above will be overwritten without warning (if it already
-                   exists). The default is False.
+                   exists). The default is True.
     
     encoder     -- Sets the encoder tool to be used. Currently the following
                    encoders are supported: 'mencoder', 'ffmpeg',

@@ -147,7 +147,8 @@ The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure ref{fig:plot2a}.
 
-
+Doing a `hold('off')` makes the next `plot` command create a new
+plot.
 
 FIGURE:[figs/plot2a.eps] Two curves in the same plot.
 
@@ -214,7 +215,7 @@ In this plot we also adjust the size of the line and the circles by
 adding an integer: `r-6` means a red line with thickness 6 and `bo5`
 means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
-the Gnuplot backend one can view the effect in Figure ref{fig:plot2g}.
+the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
 
 !bc
 from scitools.all import *
@@ -257,7 +258,13 @@ The different available line types are
   * dotted line:     `':'`
   * dash-dot line:   `'-.'`
 
-We remark that in the Gnuplot backend all the different line types are
+During programming, you can find all these details in the
+documentation of the `plot` function. Just type `help(plot)`
+in an interactive Python shell or invoke `pydoc` with
+`scitools.easyviz.plot`. This tutorial is available
+through `pydoc scitools.easyviz`.
+
+We remark that in the Gnuplot program all the different line types are
 drawn as solid lines on the screen. The hardcopy chooses automatically
 different line types (solid, dashed, etc.) and not in accordance with
 the line type specification.
@@ -281,8 +288,6 @@ Lots of markers at data points are available:
 Symbols and line styles may be combined, for instance as in `'kx-'`,
 which means a black solid line with black crosses at the data points.
 
-The line thickness can be added as a number in the line style specification
-string. For example, `'r-2'` means red solid line with thickness 2.
 
 __Another Example.__ Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
@@ -325,7 +330,7 @@ The plot is shown in Figure ref{fig:plot3}.
 
 FIGURE:[figs/plot3.eps] A plot with three curves.
 
-__Minimalistic Plotting.__ 
+__Minimalistic Typing.__ 
 When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example on minimalistic syntax for
@@ -341,7 +346,7 @@ _____Interactive Plotting Sessions_____
 
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the `plot` command
-returns an argument:
+returns a result:
 !bc
 >>> t = linspace(0, 3, 51)
 >>> plot(t, t**2*exp(-t**2))
@@ -439,7 +444,7 @@ for s in s_values:
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
 
-# make movie file:
+# make movie file the simplest possible way:
 movie('tmp_*.eps')
 !ec
 
@@ -455,14 +460,58 @@ the set of files in right order. We therefore suggest to use filenames
 of the form `stem0001.ext`, `stem0002.ext`, `stem0003.ext`, etc.,
 since an alphabetic sort of the filenames then gives the right
 sequence of the files (and so does the expression `stem*.ext` used
-in the operating system or in Python's `fnmatch` module).
+in the operating system or in Python's `fnmatch` or `glob` modules).
 In our example, `stem` is `tmp_`, and `.ext` is `.eps`
 (which implies the PostScript format in the hardcopy).
+The printf format `04d` pads the integers with zeros such that
+`1` becomes `0001`, `13` becomes `0013` and so on.
 
-Having a set of `stem*.ext` files, one can simply generate a movie
-by a `movie('stem*.ext')` call. When a movie file is not wanted (it may
-take some time to generate it), one can simply skip the `hardcopy`
-argument and the call to `movie`.
+Having a set of `stem*.ext` files, one can simply generate a movie by
+a `movie('stem*.ext')` call. The `movie` function generates a movie
+file called `movie.avi` (AVI format), `movie.mpeg` (MPEG format), or
+`movie.gif` (animated GIF format) in the current working
+directory. The movie format depends on the encoders found on your
+machine.
+
+You can get complete control of the movie format and the
+name of the movie file by supplying more arguments to the
+`movie` function. First, let us generate an animated GIF
+file called `tmpmovie.gif`:
+!bc
+movie('tmp_*.eps', encoder='convert', fps=2,
+      output_name='tmpmovie.gif')
+!ec
+The generation of animated GIF images applies the `convert` program
+from the ImageMagick suite. This program must of course be installed
+on the machine. The argument fps stands for frames per second so
+here the speed of the movie is slow in that there is a delay of half
+a second between each frame (image file).
+To view the animated GIF file, one can use the `animate`
+program (also from ImageMagick) and give the movie file as command-line
+argument. One can alternatively put the GIF file in a web page 
+in an IMG tag such that a browser automatically displays the movie.
+
+An MPEG movie can be generated by the call
+!bc
+movie('tmp_*.eps', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie1.mpeg',
+!ec
+Alternatively, we may use the `ppmtompeg` encoder from the Netpbm suite of
+image manipulation tools:
+!bc
+movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
+      output_file='tmpmovie2.mpeg',
+!ec
+The `ppmtompeg` supports only a few (high) frame rates.
+
+The next sample call to `movie` uses the Mencoder tool and specifies 
+some additional arguments (video codec, video bitrate, and the 
+quantization scale):
+!bc
+movie('tmp_*.eps', encoder='mencoder', fps=24,
+      output_name='tmpmovie.mpeg',
+      vcodec='mpeg2video', vbitrate=2400, qscale=4)
+!ec
 
 
 
@@ -509,7 +558,8 @@ commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program and work with
+that communicates with the underlying plotting program (known as
+"backend") and work with
 this object directly, using plotting program-specific command
 syntax.  Let us illustrate this principle with an example where we add
 a text and an arrow in the plot, see Figure ref{fig:plot2i}.
