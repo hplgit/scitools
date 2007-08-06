@@ -1,2 +1,2 @@
-python "%scripting%\src\tools\_gnuplot.py" %*
+python "%~dp0\_gnuplot.py" %*
 
