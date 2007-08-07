@@ -479,7 +479,7 @@ name of the movie file by supplying more arguments to the
 file called `tmpmovie.gif`:
 !bc
 movie('tmp_*.eps', encoder='convert', fps=2,
-      output_name='tmpmovie.gif')
+      output_file='tmpmovie.gif')
 !ec
 The generation of animated GIF images applies the `convert` program
 from the ImageMagick suite. This program must of course be installed
@@ -509,7 +509,7 @@ some additional arguments (video codec, video bitrate, and the
 quantization scale):
 !bc
 movie('tmp_*.eps', encoder='mencoder', fps=24,
-      output_name='tmpmovie.mpeg',
+      output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
 !ec
 
