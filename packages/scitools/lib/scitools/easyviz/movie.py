@@ -28,6 +28,7 @@ class MovieEncoder(object):
         'pattern': 'I',              # pattern for I, P, and B frames
         'gop_size': None,            # size of GOP (group of pictures)
         'force_conversion': False,   # force conversion (to png) if True
+        'cleanup': True,             # clean up temporary files
         }
     _legal_encoders = 'mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc '\
                       'convert'.split()
@@ -96,9 +97,9 @@ class MovieEncoder(object):
             print '\n\ncould not make movie'
         elif not self._prop['quiet']:
             print "\n\nmovie in output file", self._prop['output_file']
-
+            
         # clean up temporary files:
-        if hasattr(self, '_tmp_files'): 
+        if self._prop['cleanup'] and hasattr(self, '_tmp_files'): 
             for tmp_file in self._tmp_files:
                 os.remove(tmp_file)
 
@@ -257,7 +258,7 @@ class MovieEncoder(object):
                 files = glob.glob(files)
                 files.sort()
         if isinstance(files, (list,tuple)):
-            basename = 'tmp_'
+            basename = 'easyviz_tmp_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
             file_type = 'png'
             self._tmp_files = files[:]
@@ -301,7 +302,7 @@ class MovieEncoder(object):
         mpeg_encode tool.
         """
         encoder = self._prop['encoder']
-        basename = 'tmp_'  # basename for temporary files
+        basename = 'easyviz_tmp_'  # basename for temporary files
 
         # set frame rate:
         # mpeg_encode only supports a given set of frame rates:
@@ -473,7 +474,7 @@ FORCE_ENCODE_LAST_FRAME
                 files = glob.glob(files)
                 files.sort()
         if isinstance(files, (list,tuple)):
-            basename = 'tmp_'
+            basename = 'easyviz_tmp_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
             file_type = 'png'
             self._tmp_files = files[:]
@@ -563,7 +564,8 @@ FORCE_ENCODE_LAST_FRAME
             cmd += ' -v 0' # verbosity level 0 (warnings and errors only)
         return cmd
 
-    def _any2any(self, files, basename='tmp_', size=None, ofile_ext='.pnm'):
+    def _any2any(self, files, basename='easyviz_tmp_',
+                 size=None, ofile_ext='.pnm'):
         """Convert a list of files to the file format specified in the
         ofile_ext keyword argument. Using either Netpbm tools or convert
         (from the ImageMagick package). 
@@ -794,9 +796,14 @@ def movie(input_files, **kwargs):
     fps         -- Sets the number of frames per second for the final movie.
                    The default is 25 fps.
 
-                   Note: the mpeg_encode, ppmtompeg, and mpeg2enc tools only
-                   supports the following frame rates: 23.976, 24, 25, 29.97,
-                   30, 50, 59.94, and 60 fps.
+                   Notes:
+
+                   - The mpeg_encode, ppmtompeg, and mpeg2enc tools only
+                     supports the following frame rates: 23.976, 24, 25,
+                     29.97, 30, 50, 59.94, and 60 fps.
+
+                   - Not all video codecs have support for arbitrary frame
+                     rates (e.g., 'mpeg1video' and 'mpeg2video').
 
     vcodec      -- Sets the video codec to be used. Some of the possible codecs
                    are:
@@ -914,6 +921,9 @@ def movie(input_files, **kwargs):
        
     quiet       -- If True, then the operations will run quietly and only
                    complain on errors. The default is False.
+
+    cleanup     -- If True (default), all temporary files that are created
+                   during the execution of the movie command will be deleted.
 
     force_conversion -- Forces conversion of images. This is a hack that can
                    be used if the encoding tool has problems reading the input
