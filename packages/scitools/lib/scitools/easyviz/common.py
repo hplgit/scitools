@@ -1845,19 +1845,19 @@ class BaseClass(object):
         return self.gcf().gca()
 
     def axes(self, *args, **kwargs):
-        """Create axes in arbitrary positions.
+        """Create axes in specified positions.
 
         Calling::
 
             axes()
 
-        returns a default axis (Axis()).
+        returns a default Axis instance.
         
         Calling::
 
             axes(ax)
 
-        sets axes in the Axis instance ax as the current axis.
+        sets the axis in the Axis instance ax as the current axis.
         
         Calling::
 
@@ -1892,10 +1892,24 @@ class BaseClass(object):
 
             subplot(m,n,p)
 
-        breaks the Figure window into an m-by-n matrix of small axes,
-        selects the p-th axes for the current plot, and returns the axis
-        object. One can omit the commas as long as m<=n<=p<10. For instance,
-        subplot(221) is the same as subplot(2,2,1).
+        splits the Figure window into m rows and n columns of small axes. The
+        p-th axis is then selected for the current plot and the Axis object
+        is returned.
+
+        Calling::
+
+            subplot(mnp)
+
+        is the same as calling subplot(m,n,p) as long as m<=n<=p<10.
+
+        Example:
+
+        >>> x = linspace(-5,5,101)
+        >>> subplot(2,1,1)
+        >>> plot(x,x-cos(x**2))
+        >>> x = logspace(-1,2)
+        >>> subplot(2,1,2)
+        >>> loglog(x,exp(x),'b-s')
         """
         fig = self.gcf()
         nargs = len(args)
@@ -1917,13 +1931,13 @@ class BaseClass(object):
         return self.gca()
 
     def daspect(self, *args):
-        """Change data aspect ratio.
+        """Change the data aspect ratio.
 
         Calling::
 
             daspect()
 
-        returns the data aspect ratio of the current axis.
+        returns the data aspect ratio for the current axis.
         
         Calling::
 
@@ -1941,8 +1955,8 @@ class BaseClass(object):
 
             daspect(mode)
 
-        sets the data aspect ratio mode (mode can be either 'auto' or
-        'manual').
+        sets the data aspect ratio mode, where mode can be either 'auto'
+        or 'manual'.
         
         Calling::
 
@@ -2024,22 +2038,20 @@ class BaseClass(object):
 
             hold('on')
 
-        will hold the current plot and all axis properties so that the result
-        from subsequent plotting commands is added to the existing plot. Note
-        that this does not affect the autoranging of the axis.
+        makes every subsequent plotting commands be added to the current plot.
 
         Calling::
 
             hold('off')
 
-        returns to the default state where every plotting command erases the
-        previous plot before the new plot is drawn.
+        clears the previous plot before the new plot is drawn. This is the
+        default behavior.
 
         Calling::
 
             hold()
 
-        toggles the hold state of the current axis.
+        toggles the hold state in the current axis.
 
         Calling::
 
@@ -2138,7 +2150,7 @@ class BaseClass(object):
         Calling::
 
             axis(mode)
-              
+        
         sets axis scaling to mode, where mode can be 
 
           * 'auto'   - autoscaling is used
@@ -2403,7 +2415,7 @@ class BaseClass(object):
 
             close(fig)
 
-        closes the figure fig where fig is a Figure object.
+        closes the Figure object fig.
 
         Calling::
 
@@ -2485,7 +2497,7 @@ class BaseClass(object):
 
         adds legends to the current plot using the given strings as labels.
         Note that the number of strings must match the number of items in
-        the current axis (i.e. gca().getp('numberofitems')).
+        the current axis (i.e., getp(gca(), 'numberofitems')).
 
         Calling::
 
@@ -2498,8 +2510,7 @@ class BaseClass(object):
 
             legend(ax, ...)
 
-        adds legend(s) to the plot in the Axis object ax instead of the
-        current axis.
+        affects the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_axis(*args)
 
@@ -2522,13 +2533,13 @@ class BaseClass(object):
             self._replot()
 
     def title(self, *args): 
-        """Title a graph.
+        """Add title to the current plot.
 
         Calling::
 
-            title('text')
+            title(s)
 
-        adds the given text at the top of the current axis.
+        adds the text given in s at the top of the current axis.
 
         Calling::
 
@@ -2547,19 +2558,19 @@ class BaseClass(object):
             self._replot()
     
     def xlabel(self, *args): 
-        """Label the x-axis.
+        """Add a label to the x-axis.
 
         Calling::
 
-            xlabel('text')
+            xlabel(s)
 
-        adds the given text beside the x-axis on the current axis.
+        adds the text given in s beside the x-axis on the current axis.
 
         Calling::
 
             xlabel(ax, ...)
 
-        adds the xlabel to the Axis object ax instead of the current axis.
+        adds the label to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_axis(*args)
         
@@ -2572,19 +2583,19 @@ class BaseClass(object):
             self._replot()
             
     def ylabel(self, *args): 
-        """Label the y-axis.
+        """Add a label to the y-axis.
 
         Calling::
 
-            ylabel('text')
+            ylabel(s)
 
-        adds the given text beside the y-axis on the current axis.
+        adds the text given in s beside the y-axis on the current axis.
 
         Calling::
 
             ylabel(ax, ...)
 
-        adds the ylabel to the Axis object ax instead of the current axis.
+        adds the label to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_axis(*args)
         
@@ -2597,13 +2608,13 @@ class BaseClass(object):
             self._replot()
             
     def zlabel(self, *args): 
-        """Label the z-axis.
+        """Add a label to the z-axis.
 
         Calling::
 
-            zlabel('text')
+            zlabel(s)
 
-        adds the given text beside the z-axis on the current axis.
+        adds the text given in s beside the z-axis on the current axis.
 
         Calling::
 
@@ -2853,27 +2864,39 @@ class BaseClass(object):
         return lines
 
     def loglog(self, *args, **kwargs):
-        """Log-log scale plot.
+        """Draw a loglog plot with logarithmic scaling on x- and y-axis.
 
-        The loglog command is the same as the plot command except that a
+        Calling::
+
+            loglog(...)
+
+        is the same as calling plot(...) with the exception that a
         logarithmic (base 10) scale is used for both x- and y-axes.
         """
         kwargs['log'] = 'xy'
         return self.plot(*args, **kwargs)
 
     def semilogx(self, *args, **kwargs):
-        """Semi-log scale plot.
+        """Draw a semilog plot with logarithmic scaling on x-axis.
 
-        The semilogx command is the same as the plot command except that a
+        Calling::
+
+            semilogx(...)
+
+        is the same as calling plot(...) with the exception that a
         logarithmic (base 10) scale is used for the x-axis.
         """
         kwargs['log'] = 'x'
         return self.plot(*args, **kwargs)
 
     def semilogy(self, *args, **kwargs):
-        """Semi-log scale plot.
+        """Draw a semilog plot with logarithmic scaling on y-axis.
 
-        The semilogy command is the same as the plot command except that a
+        Calling::
+
+            semilogy(...)
+
+        is the same as calling plot(...) with the exception that a
         logarithmic (base 10) scale is used for the y-axis.
         """
         kwargs['log'] = 'y'
@@ -3105,23 +3128,24 @@ class BaseClass(object):
         raise NotImplementedError, "'fill' is not implemented"
  
     def quiver(self, *args, **kwargs):
-        """Quiver plot.
+        """Draw arrows from a 2D vector field.
         
         Calling::
 
             quiver(X, Y, U, V)
             
-        plots velocity vectors as arrows with components (u,v) at the
-        points (x,y). The matrices X,Y,U,V must all be the same size and
-        contain corresponding position and velocity components (X and Y
-        can also be vectors to specify a uniform grid). 
+        displays vectors as arrows with components U and V at the grid
+        defined by X and Y. The arrays U and V must both have the same shape
+        and the grid components X and Y must either have the same shape as
+        U or fulfill the requirement len(X)==n and len(y)==m, where
+        m,n=shape(u).
 
         Calling::
 
             quiver(U, V)
-            
-        plots velocity vectors at equally spaced points in the x-y plane
-        (same as quiver(range(n),range(m),U,V) where m,n=shape(u)).
+
+        is the same as calling quiver(range(n),range(m),U,V), where
+        m,n=shape(u)).
 
         Calling::
 
@@ -3133,7 +3157,8 @@ class BaseClass(object):
 
             quiver(..., fmt)
             
-        sets the line specification as given in the format string fmt.
+        sets the line specification as given in the format string fmt. See
+        the plot command for further details on specifying the format string.
 
         Examples:
 
@@ -3189,48 +3214,51 @@ class BaseClass(object):
 
             contour(X, Y, Z)
             
-        draw a contour plot where the values in the matrix Z are treated as
-        heights above a plane. The value n specifies the number of contour
-        lines.
+        displays a contour plot where the values in the scalar field Z are
+        treated as heights above a plane. The grid components X and Y must
+        either have the same shape as Z or fulfill the requirement len(X)==n
+        and len(Y)==m, where m,n=shape(Z).
         
         Calling::
 
             contour(Z)
             
-        same as contour(range(n), range(m), Z) where m,n=shape(Z).
+        is the same as calling contour(range(n),range(m),Z), where
+        m,n=shape(Z).
 
         Calling::
 
             contour(..., n)
 
-        draw a contour plot with n contour lines.
+        displays a contour plot with n contour lines (default is 8 lines).
         
         Calling::
 
             contour(..., v)
 
-        draw contours at levels specified in the vector v.
+        displays contours at levels given in the array v.
 
         Calling::
 
             contour(..., fmt)
             
-        uses the color and line style as given in fmt to draw the contour
-        lines (see the plot command for more information on fmt). This
-        overrides the default behavior of using the current colormap to
-        color the contour lines.
+        uses the color and line style as given in the format string fmt to
+        draw the contour lines (see the plot command for further details on
+        format strings). This overrides the default behavior of using the
+        current colormap to color the contour lines.
 
         Calling::
 
             contours(ax, ...)
             
-        draw a contour plot in the Axis object ax instead of the current axis.
+        plots into the Axis object ax instead of the current axis.
           
         Calling::
 
             contour(...,clabels='on')
             
-        same as contour(...) followed by clabel('on').
+        is the same as calling contour(...) followed by clabel('on').
+        FIXME: Shouldn't it be clabel(h, 'on'), where h = contour(...)?
 
         Examples:
 
@@ -3273,8 +3301,12 @@ class BaseClass(object):
     def contourf(self, *args, **kwargs):
         """Draw filled contour plot.
 
-        The contourf command is the same as the contour command with the
-        exception that the area between the contours are filled with colors.
+        Calling::
+
+            contourf(...)
+
+        is the same as calling contour(...) with the exception that the space
+        between the contour lines is filled with colors.
 
         Examples:
 
@@ -3286,19 +3318,21 @@ class BaseClass(object):
     # 3D plotting
     
     def pcolor(self, *args, **kwargs):
-        """Pseudocolor (checkboard) plot.
+        """Draw a 2D pseudocolor plot.
 
         Calling::
 
             pcolor(C)
 
-        draw a pseudocolor plot of the matrix C.
+        draw a pseudocolor plot of the 2D array C.
         
         Calling::
 
             pcolor(X,Y,C)
 
         same as above, only that the grid is specified by the X and Y arrays.
+        These arrays must either have the same shape as C or fulfill the
+        requirement len(X)==n and len(Y)==m, where m,n=shape(C).
 
         Calling::
 
@@ -3340,30 +3374,38 @@ class BaseClass(object):
 
             streamline(X,Y,Z,U,V,W,startx,starty,startz)
 
-        draws streamlines from the 3D vector data U,V,W defined on the grid
-        given by X,Y,Z. The arrays startx, starty, and startz defines the
-        starting positions for the stream lines.
+        will draw streamlines from the 3D vector field with components
+        U,V,W defined on the grid given by X,Y,Z. The arrays U,V,W should
+        all have the same shape and the grid components X,Y,Z must either
+        have the same shape as U or fulfill the requirement len(X)==n,
+        len(Y)==m, and len(Z)==p, where m,n,p=shape(U). The starting
+        positions for the streamlines are defined in the arrays startx,
+        starty, and startz.
             
         Calling::
 
             streamline(U,V,W,startx,starty,startz)
-
-        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
-        where m,n,p=shape(U).
+    
+        is the same as above, except that it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).
         
         Calling::
 
             streamline(X,Y,U,V,startx,starty)
 
-        draws streamlines from the 2D vector data U,V defined on the grid
-        given by X,Y. The arrays startx and starty defines the starting
-        positions for the stream lines.
+        will draw streamlines from the 2D vector field with components U,V
+        defined on the grid given by X,Y. The arrays U,V should have the same
+        shape and the grid componetns X,Y mist either have the same shape as
+        U or fulfill the requirement len(X)==n and len(Y)==m, where
+        m,n=shape(u). The starting positions for the streamlines are defined
+        in the arrays startx and starty.
         
         Calling::
 
             streamline(U,V,startx,starty)
-            
-        assumes that X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).
+
+        is the same as above, except that it is assumed that
+        X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).
         
         Calling::
 
@@ -3380,6 +3422,8 @@ class BaseClass(object):
         The streamline command returns a Streams object.
         
         Examples:
+
+        FIXME: Add streamline example.
         """
         if not 'description' in kwargs:
             kwargs['description'] = "streamline: 2D or 3D streamline"
@@ -3395,77 +3439,51 @@ class BaseClass(object):
         return h
 
     def streamtube(self, *args, **kwargs):
-        """Draw 3D stream tubes.
+        """Draw stream tubes from 3D vector data.
 
         Calling::
 
-            streamtube(X,Y,Z,U,V,W,startx,starty,startz)
+            streamtube(...)
 
-        draws stream tubes from the 3D vector data U,V,W defined on the grid
-        given by X,Y,Z. The arrays startx, starty, and startz defines the
-        starting positions for the stream tubes.
+        is the same as calling streamlines(...), except that only 3D vector
+        fields are supported by the streamtube command. The optional
+        positional argument stepsize is not supported either.
         
         Calling::
 
-            streamtube(U,V,W,startx,starty,startz)
-            
-        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
-        where m,n,p=shape(U).
+            streamtube(..., [scale, n])
+
+        will scale the width of the tubes according to scale (default is 1),
+        while the variable n sets the number of points along the
+        circumference of the tube (default is 20).
         
-        Calling::
-
-          streamtube(..., [scale n])
-
-        scales the width of the tubes (default is scale=1). The variable n
-        sets the number of points along the circumference of the tube (default
-        is n=20).
-        
-        Calling::
-
-           streamtube(ax, ...)
-
-        uses the Axis object ax instead of the current axis.
-        
-        The streamtube command returns a Streams object.
-
         Examples:
+
+        FIXME: Add streamtube example.
         """
         kwargs['description'] = "streamtube: 3D stream tube"
         return self.streamline(*args, **kwargs)
 
     def streamribbon(self, *args, **kwargs):
-        """Draw 3D stream ribbons.
+        """Draw stream ribbons from 3D vector data.
 
         Calling::
 
-            streamribbon(X,Y,Z,U,V,W,startx,starty,startz)
+            streamribbon(...)
 
-        draws stream ribbons from the 3D vector data U,V,W defined on the
-        grid given by X,Y,Z. The arrays startx, starty, and startz defines
-        the startings positions for the stream ribbons.
-        
-        Calling::
+        is the same as calling streamlines(...), except that only 3D vector
+        fields are supported by the streamribbon command. The optional
+        positional argument stepsize is not supported either.
 
-            streamribbon(U,V,W,startx,starty,startz)
-            
-        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
-        where m,n,p=shape(U).
-        
         Calling::
 
             streamribbon(..., width)
 
-        sets the width of the ribbons.
+        specifies the width of the ribbons.
         
-        Calling::
-
-            streamribbon(ax, ...)
-
-        uses the Axis object ax instead of the current axis.
-        
-        The streamribbon command returns a Streams object.
-
         Examples:
+
+        FIXME: Add streamribbon example.
         """
         kwargs['description'] = "streamribbon: 3D stream ribbon"
         return self.streamline(*args, **kwargs)
@@ -3476,24 +3494,21 @@ class BaseClass(object):
         Calling::
 
             mesh(X, Y, Z[, C])
-            
-        plots the colored parametric mesh defined in the four matrix
-        arguments. The color scaling is determined by the range of C. Uses
-        C = Z if C is not given, so color is proportional to mesh height.
-            
+
+        plots the colored mesh defined by scalar field Z defined on the grid
+        given by X and Y. The grid components X and Y must either have the
+        same shape as Z or fulfill the requirement len(X)==n and len(Y)==m,
+        where m,n=shape(Z). The color is determined by the array C which must
+        have the same shape as Z. If the color array C is not given, Z is used
+        as the color array (i.e., C=Z).
+        
         Calling::
 
             mesh(Z[, C])
             
-        same as mesh(range(n), range(m), Z[, C]) where m,n = shape(Z).
-            
-        Calling::
-
-            mesh(x, y, Z[, C])
-            
-        the two vector arguments must have len(x)==n and len(y)==m,
+        is the same as calling mesh(range(n), range(m), Z[, C]),
         where m,n = shape(Z).
-
+        
         Calling::
 
             mesh(ax, ...)
@@ -3528,8 +3543,14 @@ class BaseClass(object):
         return h
 
     def meshc(self, *args, **kwargs):
-        """Same as the mesh command, but a contour plot is drawn beneath
-        the mesh.
+        """Draw a mesh with a contour plot beneath.
+
+        Calling::
+
+            meshc(...)
+
+        is the same as calling mesh(...) only that a contour plot is drawn
+        beneath the mesh.
 
         Examples:
 
@@ -3552,12 +3573,17 @@ class BaseClass(object):
         return self.mesh(*args, **kwargs)
     
     def surf(self, *args, **kwargs):
-        """Draw a 3D colored surface. See the mesh command for documentation
-        of input arguments.
+        """Draw a 3D solid surface.
+
+        Calling::
+
+            surf(...)
+
+        is the same as calling mesh(...), except that a solid colored surface
+        is drawn instead of a wireframe mesh.
 
         Examples:
 
-        Draw a colored surface:
         >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = xx**2 + yy**2
@@ -3568,8 +3594,14 @@ class BaseClass(object):
         return self.mesh(*args, **kwargs)
 
     def surfc(self, *args, **kwargs):
-        """Same as the surf command, but a contour plot is drawn beneath
-        the surface.
+        """Draw a solid surface with contours beneath.
+
+        Calling::
+
+            surfc(...)
+
+        is the same as calling surf(...) only that a contour plot is drawn
+        beneath the surface.
         """
         kwargs['description'] = 'surfc: 3D surface with contours at base'
         return self.surf(*args, **kwargs)
@@ -3587,22 +3619,23 @@ class BaseClass(object):
 
         plots arrows from the 3D vector field with components U,V,W at the
         grid defined by X,Y,Z. The shape of the three vector components is
-        assumed to be the same, while the grid components should either have
-        the same shape as U or that len(X)==n, len(Y)==m, and len(Z)==p,
-        where m,n,p=shape(U).
+        assumed to be the same, while the grid components must either have
+        the same shape as U or fulfill the requirements len(X)==n, len(Y)==m,
+        and len(Z)==p, where m,n,p=shape(U).
         
         Calling::
 
             quiver3(Z,U,V,W)
 
-        assumes that X,Y = meshgrid(range(n),range(m)), where m,n=shape(Z)
+        gives the same result as above, but it is assumed that
+        X,Y = meshgrid(range(n),range(m)), where m,n=shape(Z).
         
         Calling::
 
             quiver3(..., s)
             
-        scales the vectors by the scale factor given in s. The default is s=1,
-        while s=0 turns off automatic scaling.
+        scales the arrows by the scale factor given in s. The default is s=1,
+        while a value of s=0 turns off automatic scaling.
         
         Calling::
 
@@ -3614,7 +3647,8 @@ class BaseClass(object):
 
             quiver3(..., fmt)
             
-        sets the specification on the arrows as given in fmt.
+        sets the specification on the arrows as given in the format string
+        fmt (see the plot command for further information on format strings).
         
         Calling::
 
@@ -3634,6 +3668,7 @@ class BaseClass(object):
         ...         axis=[-7,7,-7,7,-7,7])
 
         Draw the path of a projectile as a function of time:
+        FIXME: This example is taken from ...
         >>> vz = 10  # Velocity
         >>> a = -32  # Acceleration
         >>> t = linspace(0,1,11)
@@ -3655,8 +3690,12 @@ class BaseClass(object):
     def contour3(self, *args, **kwargs):
         """Draw 3D contour plot.
 
-        The contour3 command is the same as the contour command except that
-        the contours are drawn at their coresponding Z (height) level.
+        Calling::
+
+            contour3(...)
+
+        is the same as calling contour(...), except that the contours are
+        drawn at their coresponding height level.
 
         Examples:
 
@@ -3667,43 +3706,45 @@ class BaseClass(object):
     
     # Volume plotting
     def slice_(self, *args, **kwargs):
-        """Volumetric slice plot.
+        """Draw volumetric slice plot.
         
         Calling::
 
             slice_(X,Y,Z,V,Sx,Sy,Sz)
 
         draws orthogonal slice planes through the volumetric data set V
-        defined on the grid with components X, Y, and Z. The Sx, Sy, and Sz
-        arrays defines the slice planes in the x, y, and z direction,
-        respectively.
+        defined on the grid with components X, Y, and Z. The grid components
+        must either have the same shape as V or fulfill the requirement
+        len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(V). The Sx,
+        Sy, and Sz arrays defines the slice planes in the x, y, and z
+        direction, respectively. 
 
         Calling::
 
             slice_(V,Sx,Sy,Sz)
             
-        is the same as slice_(range(n),range(m),range(p),V,Sx,Sy,Sz),
+        is the same as calling slice_(range(n),range(m),range(p),V,Sx,Sy,Sz),
         where m,n,p = shape(V).
 
         Calling::
 
             slice_(X,Y,Z,V,XI,YI,ZI)
 
-        draws slices through the volume V along the surface defined by the
-        arrays XI,YI,ZI.
+        draws slices through the volumetric data set V along the surface
+        defined by the arrays XI,YI,ZI.
 
         Calling::
 
             slice_(V,XI,YI,ZI)
             
-        is the same as slice_(range(n),range(m),range(p)),V,XI,YI,ZI),
+        is the same as calling slice_(range(n),range(m),range(p)),V,XI,YI,ZI),
         where m,n,p = shape(V).
 
         Calling::
 
             slice_(..., method)
             
-        sets the interpolation method to be used, where method can be either
+        sets which interpolation method to be used, where method can be either
         'linear' (default), 'cubic', or 'nearest'.
 
         Calling::
@@ -3743,17 +3784,17 @@ class BaseClass(object):
         return h
 
     def contourslice(self, *args, **kwargs):
-        """Contours in slice planes.
+        """Draw contour lines in slice planes.
 
         Calling::
 
             contourslice(X,Y,Z,V,Sx,Sy,Sz)
 
-        draws contours in axis aligned x,y,z planes at the points in the
-        arrays Sx, Sy, and Sz. The arrays X, Y, and Z defines the coordinates
-        for the volume V and must either all have the same shape as V or
-        fulfill the requirement len(X)==n, len(Y)==m, and len(Z)==p, where
-        m,n,p = shape(V).
+        will draw contour lines in planes aligned with the coordinate axes
+        at the points in the arrays Sx, Sy, and Sz. The arrays X, Y, and Z
+        defines the grid coordinates for the volume V and they must either
+        have the same shape as V or fulfill the requirement len(X)==n,
+        len(Y)==m, and len(Z)==p, where m,n,p = shape(V).
           
         Calling::
 
@@ -3766,8 +3807,8 @@ class BaseClass(object):
 
             contourslice(X,Y,Z,V,XI,YI,ZI)
             
-        draws contours through the volume V along the surface given in
-        the arrays XI, YI, and ZI.
+        will draw contour lines through the volume V along the surface given
+        in the arrays XI, YI, and ZI.
           
         Calling::
 
@@ -3780,20 +3821,20 @@ class BaseClass(object):
 
             contourslice(..., n)
             
-        draws n contours per plane. This overrides the default value of five
-        contours per plane.
+        will draw n contour lines per plane instead of the default of five
+        contour lines.
           
         Calling::
 
             contourslice(..., v)
             
-        draws len(v) contours per plane at the levels given in the array v.
+        will draw contour lines at the levels given in the array v.
           
         Calling::
 
             contourslice(ax, ...)
             
-        draws into the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
           
         @return: A Volume object.
         
@@ -3807,18 +3848,18 @@ class BaseClass(object):
         return self.slice_(*args, **kwargs)
 
     def coneplot(self, *args, **kwargs):
-        """3D cone plot.
+        """Draw a 3D cone plot.
         
         Calling::
 
             coneplot(X,Y,Z,U,V,W,Cx,Cy,Cz)
 
-        draws velocity vectors as cones at the points Cx,Cy,Cz in the 3D
-        vector field defined by U,V,W. The arrays X,Y,Z defines the grid
-        coordinates for U,V,W. The shape of the three vector components is
-        assumed to be the same, while the grid components should either have
-        the same shape as U or fulfill the requirement len(X)==n, len(Y)==m,
-        and len(Z)==p, where m,n,p=shape(U).
+        draws velocity vectors as cones from the 3D vector field defined by
+        U, V, and W at the points given in the arrays Cx, Cy, and Cz. The
+        arrays X, Y, and Z defines the grid coordinates for vector field. The
+        shape of U, V, and W is assumed to be the same, while the grid
+        components must either have the same shape as U or fulfill the
+        requirement len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(U).
         
         Calling::
 
@@ -3831,31 +3872,33 @@ class BaseClass(object):
 
             coneplot(..., scale)
 
-        automatically scales the cones by the factor scale. The default is
-        a value of 1, while a value of 0 turns off automatic scaling.
+        will automatically scale the cones by the factor scale (default is 1).
+        To turn of automatic scaling, use a scale value of 0.
         
         Calling::
 
-            coneplot(..., COLORS)
+            coneplot(..., C)
 
-        colors the cones by using the array COLORS. The array COLORS must
-        have the same shape as the array U.
+        uses the colors in the array C to color the cones (C must have the
+        same shape as U).
         
         Calling::
 
             coneplot(..., 'quiver')
 
-        plots arrows instead of cones.
+        will plot arrows instead of cones.
         
         Calling::
 
             coneplot(ax, ...)
 
-        plots into the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
 
         @return: A Streams object.
 
         Examples:
+
+        FIXME: Add conplot example.
         """
         kwargs['description'] = "coneplot: 3D cone plot"
         ax, args, nargs = self._check_axis(*args)
@@ -3870,22 +3913,23 @@ class BaseClass(object):
         return h
 
     def streamslice(self, *args, **kwargs):
-        """Streamlines in slice planes.
+        """Draw streamlines in axis aligned slice planes.
 
         Calling::
 
-            streamslice(X,Y,Z,U,V,W,Sx,Sy,Sz)
+            streamslice(X,Y,Z,U,V,W,startx,starty,startz)
 
-        draws streamlines (with direction arrows) from the 3D vector data
-        U,V,W in axis aligned x,y,z planes at the points in the arrays
-        Sx,Sy,Sz. The vector components must all have the same shape and the
-        arrays X,Y,Z (defining the grid) should either have the same shape
-        as U or fulfill the requirement len(X)==n, len(Y)==m, and len(Z)==p,
-        where m,n,p=shape(U).
+        will draw streamlines (with direction arrows) from the 3D vector field
+        with components U, V, and W in planes aligned with the coordinate axes
+        at the points given in the arrays startx, starty, and startz. The
+        arrays U, V, and W must all have the same shape and the grid
+        coordinates given in the arrays X, Y, and Z must either have the same
+        shape as U or fulfill the requirement len(X)==n, len(Y)==m, and
+        len(Z)==p, where m,n,p=shape(U).
 
         Calling::
 
-            streamslice(U,V,W,Sx,Sy,Sz)
+            streamslice(U,V,W,startx,starty,startz)
 
         is the same as above, except that it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).
@@ -3894,10 +3938,10 @@ class BaseClass(object):
 
             streamslice(X,Y,U,V)
 
-        draws streamlines (with direction arrows) from the 2D vector data U,V.
-        Both of the vector components must have the same shape and the
-        arrays X,Y should either have the same shape as U or fulfill the
-        requirement len(X)==n and len(Y)==m, where m,n=shape(U).
+        will draw streamlines from the 2D vector field with components U and
+        V. The vector components must have equal shape and the arrays X and Y
+        should either have the same shape as U or fulfill the requirement
+        len(X)==n and len(Y)==m, where m,n=shape(U).
 
         Calling::
 
@@ -3910,19 +3954,19 @@ class BaseClass(object):
 
             streamslice(..., 'arrows')
 
-        draws direction arrows (the default).
+        will display direction arrows (default).
 
         Calling::
 
             streamslice(..., 'noarrows')
 
-        suppresses the drawing of direction arrows.
+        will not display direction arrows.
 
         Calling::
 
             streamslice(ax, ...)
 
-        plots into the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
         
         @return: A ??? object.
         
@@ -3936,66 +3980,47 @@ class BaseClass(object):
         >>> u = wind['u']
         >>> v = wind['v']
         >>> w = wind['w']
-        >>> daspect([1,1,1])
-        >>> streamslice(x,y,z,u,v,w,[],[],[5])
-
-        >>> x = y = linspace(-3,3,31)
-        >>> xv, yv = meshgrid(x,y)
-        >>> values = peaks(xx,yy)
-        >>> surf(xv,yv,values)
-        >>> shading('interp')
-        >>> hold('on')
-        >>> ch = contour3(xv,yv,values,20);  ch.setp(color='b')
-        >>> uv,vv = gradient(values)
-        >>> h = streamslice(xv,yv,-uv,-vv) 
-        >>> h.setp(color='k')
-        >>> for i in iseq(1,len(h)):
-        ...     zi = interp2(z,getp(h(i),'xdata'),getp(h(i),'ydata'))
-        ...     setp(h(i),'zdata',zi)
-        >>> view(30,50);  axis('tight')
+        >>> streamslice(x,y,z,u,v,w,[],[],[4],daspect=[1,1,1])
         """
         raise NotImplementedError, "'streamslice' is not implemented."
 
     def isocaps(self, *args, **kwargs):
-        """Isosurface end caps."""
+        """Draw isosurface end caps."""
         raise NotImplementedError, "'isocaps' is not implemented."
 
     def isosurface(self, *args, **kwargs):
-        """Isosurface extractor.
+        """Draw isosurfaces from 3D scalar fields.
         
         Calling::
 
             isosurface(X,Y,Z,V,isovalue)
 
         creates an isosurface for the volume V at the iso value given by
-        isovalue. The arrays X, Y, and Z defines the grid at which the data
-        V is given and must either have the same shape as V or fulfill the
-        requirement that len(X)==n, len(Y)==m, and len(Z)==p, where
+        isovalue. The arrays X, Y, and Z defines the grid for the volume V
+        and they must either have the same shape as V or fulfill the
+        requirement len(X)==n, len(Y)==m, and len(Z)==p, where
         m,n,p = shape(V).
         
         Calling::
 
             isosurface(V,isovalue)
             
-        assumes that X,Y,Z = meshgrid(range(n),range(m),range(p)),
-        where m,n,p = shape(V).
+        is the same as above, but it is assumed that
+        X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
         
         Calling::
 
-            isosurface(..., COLORS)
+            isosurface(..., C)
 
-        uses the colors in the array COLORS instead of the colors in the
-        scalar field. The array COLORS must have the same shape as the
-        volume V.
+        uses the colors in the array C instead of the colors in the
+        scalar field V (C and V must have the same shape).
 
         @return: A Volume object.
 
         Examples:
         
         >>> x, y, z, v = flow()
-        >>> isosurface(x, y, z, v, -3)
-        >>> daspect([1,1,1])
-        >>> view(3)
+        >>> isosurface(x, y, z, v, -3, daspect=[1,1,1])
         """
         kwargs['description'] = 'isosurface: isosurface extractor'
         ax, args, nargs = self._check_axis(*args)
@@ -4012,7 +4037,7 @@ class BaseClass(object):
         return h
      
     def show(self):
-        """Redraw the current axis."""
+        """Redraw the current figure."""
         self._replot()
 
     def hidden(self, *args):
@@ -4032,7 +4057,8 @@ class BaseClass(object):
             
         toggles the hidden state.
 
-        Note: Some backends has no support for hidden line removal.
+        Note: Some backends has no support for hidden line removal (e.g.,
+        VTK).
         """
         ax = self.gca()
         nargs = len(args)
@@ -4067,19 +4093,19 @@ class BaseClass(object):
 
             view(2)
             
-        sets the view to the default 2D view.
+        changes the view to the default 2D view.
             
         Calling::
 
             view(3)
             
-        sets the view to the default 3D view.
+        changes the view to the default 3D view.
 
         Calling::
 
             view(ax, ...)
             
-        sets the view in the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
 
         Examples:
 
@@ -4087,6 +4113,7 @@ class BaseClass(object):
         >>> view(2)      # the default 2D view
         >>> view(40,65)  # azimuth=40 and elevation=65
         >>> view(3)      # back to the default 3D view
+        >>> surf(peaks(),view=[35,75])  # as a keyword argument
         """
         ax, args, nargs = self._check_axis(*args)
 
@@ -4475,8 +4502,8 @@ class BaseClass(object):
 
             light()
             
-        adds a light to the current axis with default values for all light
-        properties.
+        will add a light to the current axis with default values for all
+        light properties.
 
         Calling::
 
@@ -4499,18 +4526,18 @@ class BaseClass(object):
 
             colormap(map)
             
-        sets the colormap in map as the current colormap (map is backend
-        dependent).
+        uses the colormap in map as the current colormap (map is dependent
+        on the current backend).
 
         Calling::
 
             colormap('default')
             
-        sets the colormap to the default colormap (jet).
+        sets the colormap to the default colormap, i.e., jet.
 
         Calling::
 
-            colormap()
+            map = colormap()
             
         returns the current colormap.
 
@@ -4518,8 +4545,8 @@ class BaseClass(object):
 
             colormap(ax, ...)
             
-        sets or gets the colormap in the Axis object ax instead of the
-        current axis.
+        uses the figure corresponding to the Axis object ax instead of the
+        current figure.
         """
         ax, args, nargs = self._check_axis(*args)
 
@@ -4537,44 +4564,43 @@ class BaseClass(object):
             self._replot()
 
     def caxis(self, *args):
-        """Pseudocolor axis scaling.
+        """Set the limits for the color axis.
 
         Calling::
 
             caxis([cmin, cmax])
             
-        sets the pseudocolor axis scaling to range from cmin to cmax.
+        changes the limits for the color axis to range from cmin to cmax.
 
         Calling::
 
              caxis(cmin, cmax)
 
-        is the same as above.
+        gives the same result as above.
 
         Calling::
 
             caxis('manual')
             
-        fixes the pseudocolor axis scaling at the current range.
+        freezes the limits at the current range.
             
         Calling::
 
             caxis('auto')
             
-        sets the pseudocolor axis scaling back to autoranging.
+        uses autoranging for the color axis limits (default).
 
         Calling::
 
-            caxis()
+            cmin, cmax = caxis()
             
-        returns the current pseudocolor axis scaling.
+        returns the current color axis limits.
 
         Calling::
 
             caxis(ax, ...)
             
-        sets the pseudocolor axis scaling in the Axis object ax instead of
-        the current axis.
+        uses the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_axis(*args)
 
@@ -4599,13 +4625,13 @@ class BaseClass(object):
             self._replot()
 
     def colorbar(self, *args):
-        """Display a color bar (color scale).
+        """Display a color bar.
 
         Calling::
 
             colorbar()
             
-        adds a colorbar to the current axis.
+        displays a colorbar in the current axis.
 
         Calling::
 
@@ -4615,10 +4641,10 @@ class BaseClass(object):
 
         Calling::
 
-            colorbar(location)
+            colorbar(loc)
             
-        adds a colorbar to the current axis at location specified by
-        location, where location may be any of the following:
+        displays a colorbar in the current axis at the location specified by
+        loc, where loc may be any of the following:
 
           * 'North'        - inside plot box near top
           * 'South'        - inside bottom
@@ -4633,7 +4659,7 @@ class BaseClass(object):
 
             colorbar(ax, ...)
             
-        adds a colorbar to the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
 
         @return: A Colorbar object.
         """
@@ -4663,16 +4689,15 @@ class BaseClass(object):
 
             shading(mode)
             
-        sets the shading of the current graph to the shading mode specified
-        by 'mode'. Valid modes are 'flat', 'interp' (interpolated) and
-        'faceted' (default).
+        changes the shading mode in the current axis to the one specified by
+        by mode. Valid modes are 'flat', 'interp' (interpolated or Gouraud)
+        and 'faceted' (default).
 
         Calling::
 
             shading(ax, ...)
             
-        sets the shading mode in the Axis object ax instead of the current
-        axis.
+        uses the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_axis(*args)
 
@@ -4684,7 +4709,7 @@ class BaseClass(object):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
        
-    def bighten(self, *args):
+    def brighten(self, *args):
         """Brighten or darken the color map."""
         raise NotImplementedError, "'brighten' not implemented in class %s" % \
               self.__class__.__name__
@@ -4710,31 +4735,31 @@ class BaseClass(object):
             self._replot()
 
     def box(self, *args):
-        """Add or remove a box around the boundaries of the current axis.
+        """Display a box around the boundaries of the current axis.
 
         Calling::
 
             box('on')
             
-        adds a box at the boundaries of the current axis.
+        displays a box at the boundaries of the current axis.
 
         Calling::
 
             box('off')
             
-        removes the box. This is the default.
+        turns off the box.
 
         Calling::
 
             box()
             
-        toggles the box state in the current axis.
+        toggles the display of a box in the current axis.
 
         Calling::
 
             box(ax, ...)
             
-        adds/removes a box in the Axis object ax instead of the current axis.
+        uses the Axis object ax instead of the current axis.
 
         Note: box(True) and box(False) is the same as box('on') and
         box('off'), respectively.        
@@ -4752,14 +4777,14 @@ class BaseClass(object):
             self._replot()
 
     def material(self, *args):
-        """Material reflectance mode.
+        """Set the material reflectance mode.
 
         Calling::
 
             material([ka, kd, ks[, n[, sc]]])
             
-        sets the ambient/diffuse/specular strength, specular exponent, and
-        specular color reflectance of objects.
+        changes the ambient/diffuse/specular strength, specular exponent,
+        and specular color reflectance of objects.
 
         Calling::
 
@@ -4771,12 +4796,13 @@ class BaseClass(object):
 
             material(mode)
             
-        sets the material mode, where mode can be
+        sets the material mode, where mode can be one of the following
+        strings:
 
-          * 'shiny'   - makes the objects shiny
-          * 'dull',   - makes the objects dull
-          * 'metal'   - makes the objects metallic
-          * 'default' - sets the objects material properties to their defaults.
+          * 'shiny'   - shiny objects
+          * 'dull',   - dull objects
+          * 'metal'   - metallic objects
+          * 'default' - default material properties
         """
         modes = {'shiny': (None, None, None, None, None),
                  'dull': (None, None, None, None, None),
@@ -4820,74 +4846,6 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-            
-    def subvolume(self, *args):
-        """Extract subset of volume dataset.
-        
-        - nx, ny, nz, nv = subvolume(x,y,z,v,limits)
-        - nx, ny, nz, nv = subvolume(v,limits)
-        - nx, ny, nz, nu, nv, nw = subvolume(x,y,z,u,v,w,limits)
-          extracts subset of vector dataset u,v,w.
-        - nx, ny, nz, nu, nv, nw = subvolume(u,v,w,limits)
-        """
-        u = None
-        nargs = len(args)
-        if nargs == 7: # subvolume(x,y,z,u,v,w,limits)
-            x, y, z, u, v, w = [asarray(a) for a in args[:6]]
-        elif nargs == 5: # subvolume(x,y,z,v,limits)
-            x, y, z, v = [asarray(a) for a in args[:4]]
-        elif nargs == 4: # subvolume(u,v,w,limits)
-            u, v, w = [asarray(a) for a in args[:3]]
-            try:
-                m, n, p = u.shape
-            except:
-                raise ValueError, \
-                      "subvolume: U must be 3D, not %dD" % len(u.shape)
-            x, y, z = meshgrid(range(n), range(m), range(p))
-        elif nargs == 2: # subvolume(v,limits)
-            v = asarray(args[0])
-            try:
-                m, n, p = v.shape
-            except:
-                raise ValueError, \
-                      "subvolume: V must be 3D, not %dD" % len(v.shape)
-            x, y, z = meshgrid(range(n), range(m), range(p))
-        else:
-            raise TypeError, "subvolume: wrong number of arguments"
-
-        # get limits:
-        try:
-            xmin, xmax, ymin, ymax, zmin, zmax = args[-1]
-        except:
-            raise ValueError, "subvolume: limits must be given as %s" % \
-                  ('xmin xmax ymin ymax zmin zmax'.split())
-
-        # find indices in x, y, and z according to limits:
-        # ...
-
-        if u is not None: # vector data set
-            assert x.shape == y.shape == z.shape == \
-                   u.shape == v.shape == w.shape, \
-                   "subvolume: all arrays must be of same shape"
-            usub = u[xmin:xmax, ymin:ymax, zmin:zmax]
-            vsub = v[xmin:xmax, ymin:ymax, zmin:zmax]
-            wsub = w[xmin:xmax, ymin:ymax, zmin:zmax]
-        else: # volume data set
-            assert x.shape == y.shape == z.shape == v.shape, \
-                   "subvolume: all arrays must be of same shape"
-            vsub = v[xmin:xmax, ymin:ymax, zmin:zmax]
-        
-        xsub = x[xmin:xmax, ymin:ymax, zmin:zmax]
-        ysub = y[xmin:xmax, ymin:ymax, zmin:zmax]
-        zsub = z[xmin:xmax, ymin:ymax, zmin:zmax]
-
-        if u is not None:
-            return xsub, ysub, zsub, usub, vsub, wsub
-        return xsub, ysub, zsub, vsub
-
-    def reducevolume(self, *args):
-        """Reduce volume dataset."""
-        raise NotImplementedError, "'reducevolume' not implemented"
            
     # Colormap methods:
     def hsv(self, m=None):
@@ -4906,7 +4864,7 @@ class BaseClass(object):
               self.__class__.__name__
     
     def bone(self, m=None):
-        """Gray-scale with tinge of blue color map."""
+        """Gray-scale with a tinge of blue color map."""
         raise NotImplementedError, 'bone not implemented in class %s' % \
               self.__class__.__name__
 
