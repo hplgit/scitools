@@ -57,6 +57,7 @@ if __name__.find('numpyutils') != -1:
 # and the code below then relies on previously imported Numerical Python
 # modules (Numeric, numpy, numarray)
 
+import operator
 
 def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
     """
@@ -1049,6 +1050,9 @@ def factorial(n, method='reduce'):
     if not isinstance(n, (int, long, float)):
         raise TypeError, 'factorial(n): n must be integer not %s' % type(n)
     n = long(n)
+
+    if n == 0 or n == 1:
+        return 1
     
     if method == 'plain recursive':
         if n == 1:
