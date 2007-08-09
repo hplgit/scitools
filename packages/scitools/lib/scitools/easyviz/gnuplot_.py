@@ -918,6 +918,84 @@ class GnuplotBackend(BaseClass):
           '.eps' (Encapsualted PostScript)
           '.png' (Portable Network Graphics)
 
+        Optional arguments:
+
+          color       -- True (colors) or False (black and white).
+          fontname    -- default is Helvetica.
+          fontsize    -- default is 16.
+          orientation -- 'portrait' or 'landscape' (default). Only available
+                         for PostScript output.
+        """
+        if DEBUG:
+            print "Hardcopy to %s" % filename
+
+        ext2term = {'.ps': 'postscript',
+                    '.eps': 'postscript',
+                    '.png': 'png'}
+        basename, ext = os.path.splitext(filename)
+        if not ext:
+            # no extension given, assume .ps:
+            ext = '.ps'
+            filename += ext
+        elif ext not in ext2term:
+            raise ValueError, "hardcopy: extension must be %s, not '%s'" % \
+                  (ext2term.keys(), ext)
+        terminal = ext2term.get(ext, 'postscript')
+        
+        self.setp(**kwargs)
+        fontname = kwargs.get('fontname', 'Helvetica')
+        fontsize = kwargs.get('fontsize', 16)
+        orientation = kwargs.get('orientation', 'landscape')
+        color = self.getp('color')
+                  
+        self._g('unset multiplot') # is this necessary?
+        
+        if self.getp('show'): # OK to display to screen
+            self._replot()
+            kwargs = {'filename': filename, 'terminal': terminal}
+            if terminal == 'postscript':
+                kwargs.update({'color': color, 'enhanced': True,
+                               'fontname': fontname, 'fontsize': fontsize})
+                if ext == '.eps':
+                    kwargs['mode'] = 'eps'
+                else:
+                    kwargs['mode'] = orientation
+            self._g.hardcopy(**kwargs)
+        else: # Manually set terminal and don't show windows
+            if color:
+                colortype = 'color'
+            else:
+                colortype = 'monochrome'
+                        
+            # Create a new Gnuplot instance only for now
+            self._g = Gnuplot.Gnuplot()
+            kwargs = {'filename': filename, 'terminal': terminal}
+            if terminal == 'postscript':
+                kwargs.update({'color': color, 'enhanced': True, 
+                               'fontname': fontname, 'fontsize': fontsize})
+                if ext == '.eps':
+                    self._g('set term postscript eps %s' % colortype)
+                    kwargs['mode'] = 'eps'
+                else:
+                    self._g('set term postscript %s %s' % \
+                            (orientation,colortype))
+                    kwargs['mode'] = orientation
+            elif terminal == 'png':
+                self._g('set term png')
+            self._g('set output "%s"' % filename)
+            self._replot()
+            self._g.hardcopy(**kwargs)
+            self._g('quit')
+            self._g = self.gcf()._g # set _g to the correct instance again
+
+    def hardcopy_multi(self, filename, **kwargs):
+        """
+        Currently supported extensions in Gnuplot backend:
+
+          '.ps'  (PostScript)
+          '.eps' (Encapsualted PostScript)
+          '.png' (Portable Network Graphics)
+
         Optional arguments for PostScript output:
 
           color       -- If True, create a plot with colors. If False
@@ -996,6 +1074,8 @@ class GnuplotBackend(BaseClass):
         
         if self.getp('interactive') and self.getp('show'):
             self._replot()
+
+    hardcopy_multi.__doc__ = BaseClass.hardcopy.__doc__+hardcopy_multi.__doc__
 
     # reimplement methods like clf, closefig, closefigs
     def clf(self):
