@@ -18,7 +18,7 @@ class MovieEncoder(object):
         'size': None,                # final movie size
         'quiet': False,              # run in quite mode
         'aspect': None,              # aspect ratio
-        'prefered_package': 'ImageMagick',  # prefer ImageMagick or Netpbm
+        'preferred_package': 'ImageMagick',  # prefer ImageMagick or Netpbm
         'qscale': None,              # quantization scale
         'qmin': 2,                   # minimum quantization scale
         'qmax': 31,                  # maximum quantization scale
@@ -590,7 +590,7 @@ FORCE_ENCODE_LAST_FRAME
         
         app = anytopnm
         if findprograms((convert, anytopnm, pnmtoany)):
-            if self._prop['prefered_package'].lower() == 'imagemagick':
+            if self._prop['preferred_package'].lower() == 'imagemagick':
                 app = convert
         elif findprograms(convert):
             app = convert
@@ -902,7 +902,7 @@ def movie(input_files, **kwargs):
                    - mpeg2enc only supports the following aspect ratios: 1.0,
                      1.33, 1.77, and 2.21.
 
-    prefered_package -- Sets whether to prefer the Netpbm package or the
+    preferred_package -- Sets whether to prefer the Netpbm package or the
                   ImageMagick package if both of them are installed. Must be
                   given as a string, i.e, either 'imagemagick' (default) or
                   'netpbm'.
