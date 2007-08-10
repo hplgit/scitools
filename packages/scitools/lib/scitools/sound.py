@@ -1,4 +1,4 @@
-import math, numpy, wave, commands, sys
+import math, numpy, wave, commands, sys, os
 
 max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
@@ -52,7 +52,7 @@ def play(soundfile):
         commands.getstatusoutput('open %s' %tmpfile)
     else:
         # assume windows
-        commands.getstatusoutput('start %s' %tmpfile)
+        os.system('start %s' %tmpfile)
 
 def note(frequency, length, amplitude=1, sample_rate=44100):
     """
