@@ -78,7 +78,6 @@ class MatlabBackend(BaseClass):
         if DEBUG:
             print "Setting scales"
         scale = ax.getp('scale')
-        h = self._g.gca()
         if scale == 'loglog':
             # use logarithmic scale on both x- and y-axis
             xscale = 'log'
@@ -91,12 +90,11 @@ class MatlabBackend(BaseClass):
             # use linear scale on x-axis and logarithmic scale on y-axis
             xscale = 'lin'
             yscale = 'log'
-        elif scale == 'linear':
+        else: 
             # use linear scale on both x- and y-axis
-            #xscale = 'lin'
-            #yscale = 'lin'
-            return
-        self._g.set_(h, 'XScale', xscale, 'YScale', yscale, nout=0)
+            xscale = 'lin'
+            yscale = 'lin'
+        self._axargs.extend(['XScale', xscale, 'YScale', yscale])
 
     def _set_labels(self, ax):
         """Add text labels for x-, y-, and z-axis."""
@@ -138,7 +136,8 @@ class MatlabBackend(BaseClass):
             xmax = ax.getp('xmax')
             if xmin is not None and xmax is not None:
                 # set x-axis limits
-                self._g.set_(h, 'XLim', [xmin,xmax], nout=0)
+                #self._g.set_(h, 'XLim', [xmin,xmax], nout=0)
+                self._axargs.extend(['XLim', [xmin,xmax]])
             else:
                 # let plotting package set x-axis limits or use
                 #xmin, xmax = ax.getp('xlim')
@@ -148,7 +147,8 @@ class MatlabBackend(BaseClass):
             ymax = ax.getp('ymax')
             if ymin is not None and ymax is not None:
                 # set y-axis limits
-                self._g.set_(h, 'YLim', [ymin,ymax], nout=0)
+                #self._g.set_(h, 'YLim', [ymin,ymax], nout=0)
+                self._axargs.extend(['YLim', [ymin,ymax]])
             else:
                 # let plotting package set y-axis limits or use
                 #ymin, ymax = ax.getp('ylim')
@@ -158,7 +158,8 @@ class MatlabBackend(BaseClass):
             zmax = ax.getp('zmax')
             if zmin is not None and zmax is not None:
                 # set z-axis limits
-                self._g.set_(h, 'ZLim', [zmin,zmax], nout=0)
+                #self._g.set_(h, 'ZLim', [zmin,zmax], nout=0)
+                self._axargs.extend(['ZLim', [zmin,zmax]])
             else:
                 # let plotting package set z-axis limits or use
                 #zmin, zmax = ax.getp('zlim')
@@ -191,11 +192,10 @@ class MatlabBackend(BaseClass):
         """Set data aspect ratio."""
         if ax.getp('daspectmode') == 'manual':
             dar = ax.getp('daspect')  # dar is a list (len(dar) is 3).
-            self._g.daspect(dar, nout=0)
+            self._axargs.extend(['DataAspectRatio', dar])
         else:
-            # daspectmode is 'auto'. Plotting package handles data
-            # aspect ratio automatically.
-            pass  #self._g.daspect('auto', nout=0)
+            #self._axargs.extend(['DataAspectRatioMode', 'auto'])
+            pass
         
     def _set_axis_method(self, ax):
         method = ax.getp('method')
@@ -208,13 +208,23 @@ class MatlabBackend(BaseClass):
             self._g.axis('image', nout=0)
         elif method == 'square':
             # make the axis box square in size
-            self._g.axis('square', nout=0)
+            self._axargs.extend(['DataAspectRatioMode', 'auto',
+                                 'PlotBoxAspectRatio', [1,1,1]])
         elif method == 'normal':
             # full size axis box
-            pass  #self._g.axis('normal', nout=0)
+            self._axargs.extend(['DataAspectRatioMode', 'auto',
+                                 'PlotBoxAspectRatioMode', 'auto',
+                                 'CameraViewAngleMode', 'auto'])
         elif method == 'vis3d':
             # freeze data aspect ratio when rotating 3D objects
-            self._g.axis('vis3d', nout=0)
+            #self._g.axis('vis3d', nout=0)
+            ax = self._g.gca()
+            camva = self._g.get(ax, 'CameraViewAngle')
+            dar = self._g.get(ax, 'DataAspectRatio')
+            pbar = self._g.get(ax, 'PlotBoxAspectRatio')
+            self._axargs.extend(['DataAspectRatio', dar,
+                                 'PlotBoxAspectRatio', pbar,
+                                 'CameraViewAngle', camva])
 
     def _set_coordinate_system(self, ax):
         """
@@ -227,13 +237,13 @@ class MatlabBackend(BaseClass):
             # system is the upper-left corner. The i-axis should be
             # vertical and numbered from top to bottom, while the j-axis
             # should be horizontal and numbered from left to right.
-            self._g.axis('ij', nout=0)
+            self._axargs.extend(['YDir', 'reverse'])
         elif direction == 'xy':
             # use the default Cartesian axes form. The origin is at the
             # lower-left corner. The x-axis is vertical and numbered
             # from left to right, while the y-axis is vertical and
             # numbered from bottom to top.
-            pass  #self._g.axis('xy', nout=0)
+            self._axargs.extend(['YDir', 'normal'])
 
     def _set_box(self, ax):
         """Turn box around axes boundary on or off."""
@@ -241,21 +251,23 @@ class MatlabBackend(BaseClass):
             print "Setting box"
         if ax.getp('box'):
             # display box 
-            self._g.box('on')
+            self._axargs.extend(['Box', 'on'])
         else:
             # do not display box
-            self._g.box('off')
+            self._axargs.extend(['Box', 'off'])
         
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
             print "Setting grid"
+        state = None
         if ax.getp('grid'):
             # turn grid lines on
-            self._g.grid('on')
+            state = 'on'
         else:
             # turn grid lines off
-            self._g.grid('off')
+            state = 'off'
+        self._axargs.extend(['XGrid', state, 'YGrid', state, 'ZGrid', state])
 
     def _set_hidden_line_removal(self, ax):
         """Turn on/off hidden line removal for meshes."""
@@ -281,7 +293,7 @@ class MatlabBackend(BaseClass):
             # FIXME: what about the title?
         else:
             # turn off colorbar
-            pass  #self._g.colorbar('off', nout=0)
+            pass
 
     def _set_caxis(self, ax):
         """Set the color axis scale."""
@@ -292,13 +304,13 @@ class MatlabBackend(BaseClass):
             # NOTE: cmin and cmax might be None:
             if cmin is None or cmax is None:
                 #cmin, cmax = [0,1]
-                self._g.caxis('manual', nout=0)
+                self._axargs.extend(['CLimMode', 'manual'])
             else:
                 # set color axis scaling according to cmin and cmax
-                self._g.caxis([cmin, cmax], nout=0)
+                self._axargs.extend(['CLim', [cmin, cmax]])
         else:
             # use autoranging for color axis scale
-            pass  #self._g.caxis('auto', nout=0)
+            self._axargs.extend(['CLimMode', 'auto'])
 
     def _set_colormap(self, ax):
         """Set the colormap."""
@@ -346,6 +358,8 @@ class MatlabBackend(BaseClass):
     def _set_axis_props(self, ax):
         if DEBUG:
             print "Setting axis properties"
+        h = self._g.gca()
+        self._axargs = [h]
         self._set_title(ax)
         self._set_scale(ax)
         self._set_axis_method(ax)  # should be called before _set_limits.
@@ -362,9 +376,12 @@ class MatlabBackend(BaseClass):
             self._set_labels(ax)
             self._set_box(ax)
             self._set_grid(ax)
+            self._axargs.extend(['Visible', 'on'])
         else:
             # turn off all axis labeling, tickmarks, and background
-            self._g.axis('off', nout=0)
+            self._axargs.extend(['Visible', 'off'])
+        kwargs = {'nout': 0}
+        self._g.set_(*self._axargs, **kwargs)
 
     def _get_linespecs(self, item):
         """
