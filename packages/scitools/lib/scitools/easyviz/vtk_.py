@@ -217,8 +217,8 @@ class VtkBackend(BaseClass):
         # make sure all actors are inside the current view:
         ren = self._axis._renderer
         ren.ResetCamera()
-        if self._axis.getp('camera').getp('view') == 2:
-            ren.GetActiveCamera().Zoom(1.5)
+        #if self._axis.getp('camera').getp('view') == 2:
+        #    ren.GetActiveCamera().Zoom(1.5)
         camera.Zoom(ax_cam.getp('camzoom'))
        
         # set the camera in the vtkCubeAxesActor2D object:
