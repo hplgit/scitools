@@ -528,11 +528,11 @@ produces "behind the curtain".
 
 __Importing Just Easyviz.__
 The `from scitools.all import *` statement imports many modules and packages:
-  * `scitools.easyviz`
-  * `scipy` (if it exists)
-  * `numpy` (if `scipy` is not installed)
-  * the Python modules `sys`, `os`, `math`, `operator`
-  * the SciTools module `numpyutils`
+  * `from scitools.easyviz import *`
+  * `from numpy import *`
+  * `from scipy import *` (if `scipy` is available)
+  * the Python modules `sys`, `os`, `math`, `operator`, `pprint`
+  * `from numpyutils import *` (SciTools module)
   * the SciTools module `StringFunction` and the SciTools 
     functions `watch` and `trace` for debugging
 
@@ -582,7 +582,7 @@ g.hardcopy('tmp2.eps')  # make new hardcopy
 !ec
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
-plots with Easyviz, using standard commands that are independent of
+plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
@@ -591,9 +591,9 @@ without limiting the available functionality of various plotting programs.
 
 __Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.
-The Axis object represents a set of axis, with curves drawn in the
+The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
-One may have several axis in one figure, each axis representing a subplot.
+One may have several axes in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
 windows on the screen or separate hardcopies.
 
