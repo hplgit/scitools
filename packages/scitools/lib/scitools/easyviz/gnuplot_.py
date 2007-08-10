@@ -903,6 +903,17 @@ class GnuplotBackend(BaseClass):
                 for data in gdata[1:]:
                     self._g.replot(data)
 
+        if sys.platform == 'win32':
+            # Since Windows has no support for FIFOs, we store a reference
+            # to the gnuplot data so that files dont get deleted to early.
+            # This should fix the problem with Windows and 0 bytes images
+            # stored with hardcopy:
+            try:
+                self._gdata
+            except AttributeError:
+                self._gdata = []
+            self._gdata.append(gdata)
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -910,7 +921,14 @@ class GnuplotBackend(BaseClass):
                 debug(self)
             pass
 
-    def hardcopy(self, filename, **kwargs):
+    def cleanup(self):
+        """Clean up data."""
+        try:
+            del self._gdata
+        except AttributeError:
+            pass
+
+    def hardcopy_old(self, filename, **kwargs):
         """
         Currently supported extensions in Gnuplot backend:
 
@@ -988,7 +1006,7 @@ class GnuplotBackend(BaseClass):
             self._g('quit')
             self._g = self.gcf()._g # set _g to the correct instance again
 
-    def hardcopy_multi(self, filename, **kwargs):
+    def hardcopy(self, filename, **kwargs):
         """
         Currently supported extensions in Gnuplot backend:
 
@@ -1074,8 +1092,6 @@ class GnuplotBackend(BaseClass):
         
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-
-    hardcopy_multi.__doc__ = BaseClass.hardcopy.__doc__+hardcopy_multi.__doc__
 
     # reimplement methods like clf, closefig, closefigs
     def clf(self):
