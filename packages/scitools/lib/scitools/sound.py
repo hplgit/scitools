@@ -83,7 +83,7 @@ def _test1():
     data = read(filename)
     play(filename)
 
-def Noting_Else_Matters(echo=False):
+def Nothing_Else_Matters(echo=False):
     E1 = note(164.81, .5)
     G = note(392, .5)
     B = note(493.88, .5)
