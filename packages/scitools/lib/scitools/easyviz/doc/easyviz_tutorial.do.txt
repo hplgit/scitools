@@ -674,8 +674,6 @@ title('A figure with two plots')
 show()
 hardcopy('tmp2_3.eps')
 !ec
-We remark that the `hardcopy` command does not work with the Gnuplot backend
-in this case with multiple axes in a figure.
 
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
