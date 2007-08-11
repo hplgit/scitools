@@ -832,6 +832,7 @@ class GnuplotBackend(BaseClass):
         self._g('set size 1.0, 1.0')
         self._g('set origin 0.0, 0.0')
         self._g('unset multiplot')
+        self._g('set missing "nan"')
         
         self._set_figure_size(fig)
 
