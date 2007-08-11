@@ -523,13 +523,15 @@ class GnuplotBackend(BaseClass):
             data = Gnuplot.Data(arrayconverter(x),
                                 arrayconverter(y),
                                 arrayconverter(z),
-                                title=item.getp('legend'), with=withstring)
+                                title=item.getp('legend'), with=withstring,
+                                using='1:2:($3)')
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
             data = Gnuplot.Data(arrayconverter(x),
-                                arrayconverter(y),
-                                title=item.getp('legend'), with=withstring)
+                                arrayconverter(y), 
+                                title=item.getp('legend'), with=withstring,
+                                using='1:($2)')
         return data
 
     def _add_surface(self, item, shading='faceted'):
