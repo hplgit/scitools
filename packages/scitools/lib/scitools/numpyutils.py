@@ -1037,7 +1037,8 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
 def factorial(n, method='reduce'):
     """
     Compute the factorial n! using long integers.
-    and various methods (see source code for the methods).
+    Different implementations are available
+    (see source code for the methods).
 
     Here is an efficiency comparison of the methods (computing 80!):
     reduce                    |     1.00
@@ -1053,8 +1054,13 @@ def factorial(n, method='reduce'):
 
     if n == 0 or n == 1:
         return 1
-    
-    if method == 'plain recursive':
+
+    if method == 'plain iterative':
+        f = 1
+        for i in range(1, n+1):
+            f *= i
+        return f
+    elif method == 'plain recursive':
         if n == 1:
             return 1
         else:
