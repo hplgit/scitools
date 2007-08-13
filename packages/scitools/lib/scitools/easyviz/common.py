@@ -2728,7 +2728,8 @@ class BaseClass(object):
         Note: loglog, semilogy, and semilogx are like plot(...,log='xy'),
         plot(...,log='y'), and plot(...,log='x'), respectively.
         """
-        kwargs['description'] = 'plot: 2D curve plot'
+        if 'description' not in kwargs:
+            kwargs['description'] = 'plot: 2D curve plot'
         ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
@@ -2961,7 +2962,10 @@ class BaseClass(object):
         >>> t = linspace(0,10*pi,301)
         >>> plot3(sin(t), cos(t), t, title='A helix', grid='on')
         """
-        kwargs['description'] = 'plot3: 3D line plot'
+        if not 'description' in kwargs:
+            kwargs['description'] = 'plot3: 3D line plot'
+        if not 'hidden' in kwargs:
+            kwargs['hidden'] = False
         ax, args, nargs = self._check_axis(*args)
 
         if nargs == 0:
@@ -3124,9 +3128,13 @@ class BaseClass(object):
             
         return lines
         
-    def fill(self):
+    def fill(self, *args, **kwargs):
         """Draw filled 2D polygons."""
-        raise NotImplementedError, "'fill' is not implemented"
+        #raise NotImplementedError, "'fill' is not implemented"
+        kwargs['description'] = 'fill: filled 2D polygons'
+        if not 'linecolor' in kwargs:
+            kwargs['linecolor'] = 'k'
+        return self.plot(*args, **kwargs)
  
     def quiver(self, *args, **kwargs):
         """Draw arrows from a 2D vector field.

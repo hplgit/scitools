@@ -534,6 +534,47 @@ class GnuplotBackend(BaseClass):
                                 using='1:($2)')
         return data
 
+    def _add_filled_line(self, item):
+        """Add a 2D or 3D filled curve."""
+        if DEBUG:
+            print "Adding a line"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        z = item.getp('zdata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+        
+        withstring = self._get_withstring(marker, color, style, width)
+        try:
+            facecolor = item.getp('facecolor')
+        except KeyError:
+            facecolor = 1  # use red for now
+        try:
+            edgecolor = item.getp('edgecolor')
+        except:
+            edgecolor = color  # use linecolor
+        if z is not None:
+            # zdata is given, add a 3D curve:
+            data = [Gnuplot.Data(x, y, z,
+                                 title=item.getp('legend'),
+                                 with='filledcurve',
+                                 using='1:2:($3)')]
+            self._g('set parametric')
+        else:
+            # no zdata, add a 2D curve:
+            data = [Gnuplot.Data(x, y, 
+                                 title=item.getp('legend'),
+                                 with='filledcurve %s' % facecolor,
+                                 using='1:($2)'),
+                    Gnuplot.Data(x, y, 
+                                 with=withstring,
+                                 using='1:($2)'),
+                    Gnuplot.Data([x[0],x[-1]], [y[0],y[-1]], 
+                                 with=withstring,
+                                 using='1:($2)')]
+        return data
+
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
@@ -860,8 +901,11 @@ class GnuplotBackend(BaseClass):
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):
-                    gdata.append(self._add_line(item))
-                    if item.getp('function') == 'plot3':
+                    if func[:4] == 'fill':  # fill and fill3
+                        gdata.extend(self._add_filled_line(item))
+                    else:
+                        gdata.append(self._add_line(item))
+                    if func in ['plot3', 'fill3']:
                         self._use_splot = True
                 elif isinstance(item, Surface):
                     gdata.append(self._add_surface(item,
@@ -907,10 +951,11 @@ class GnuplotBackend(BaseClass):
                     self._g.replot(data)
 
         if sys.platform == 'win32':
-            # Since Windows has no support for FIFOs, we store a reference
-            # to the gnuplot data so that files dont get deleted to early.
-            # This should fix the problem with Windows and 0 bytes images
-            # stored with hardcopy:
+            # Since os.mkfifo is not available on the Windows platform, we
+            # store a reference to the gnuplot data so that the temporary
+            # files won't get deleted to early. This should fix the problem
+            # with 0 byte images created with hardcopy on Windows. Use the
+            # cleanup method to remove the references and free up the memory.
             try:
                 self._gdata
             except AttributeError:
