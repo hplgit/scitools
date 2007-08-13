@@ -72,7 +72,7 @@ class MaterialProperties(object):
         try:
             return self._prop[name]
         except:
-            raise KeyError, '%s.get: no parameter with name "%s"' % \
+            raise KeyError, '%s.getp: no parameter with name "%s"' % \
                   (self.__class__.__name__, name)        
 
 
@@ -234,7 +234,7 @@ class PlotProperties(object):
             try:
                 return self._prop[prm_name]
             except:
-                raise KeyError, '%s.get: no parameter with name "%s"' % \
+                raise KeyError, '%s.getp: no parameter with name "%s"' % \
                       (self.__class__.__name__, prm_name)
 
     def setformat(self, format):
@@ -390,7 +390,7 @@ class Line(PlotProperties):
                     x = kwargs['x']
             # Consitency check
             assert len(x) == len(y), \
-                   'Line.set: x and y must be of same length'
+                   'Line.setp: x and y must be of same length'
 
             self._set_data(x, y)
 
@@ -981,7 +981,7 @@ class Colorbar(object):
         try:
             return self._prop[prm_name]
         except:
-            raise KeyError, "%s.get: no parameter with name '%s'" % \
+            raise KeyError, "%s.getp: no parameter with name '%s'" % \
                   (self.__class__.__name__, prm_name)
 
     def reset(self):
@@ -1035,7 +1035,7 @@ class Light(object):
         try:
             return self._prop[name]
         except:
-            raise KeyError, "%s.get: no parameter with name '%s'." % \
+            raise KeyError, "%s.getp: no parameter with name '%s'." % \
                   (self.__class__.__name__, name)
     
     def reset(self):
@@ -1083,7 +1083,7 @@ class Camera(object):
             if kwargs['cammode'] in self._modes:
                 self._prop['cammode'] = kwargs['cammode']
             else:
-                raise ValueError, "Camera.set: cammode must be %s, not %s" % \
+                raise ValueError, "Camera.setp: cammode must be %s, not %s" % \
                       (self._modes, kwargs['cammode'])
         
         if 'view' in kwargs:
@@ -1094,7 +1094,7 @@ class Camera(object):
                 self._prop['azimuth'], self._prop['elevation'] = view
             else:
                 raise ValueError, \
-                      "Camera.set: view must be either [az,el], 2, or 3."
+                      "Camera.setp: view must be either [az,el], 2, or 3."
 
         if 'camproj' in kwargs:
             if kwargs['camproj'] in self._camprojs:
@@ -1134,7 +1134,7 @@ class Camera(object):
         try:
             return self._prop[name]
         except:
-            raise KeyError, "%s.get: no parameter with name '%s'." % \
+            raise KeyError, "%s.getp: no parameter with name '%s'." % \
                   (self.__class__.__name__, name)
 
     def reset(self):
@@ -1236,21 +1236,21 @@ class Axis(object):
                     for r in self._ranges:
                         self._prop[r] = None
             else:
-                raise ValueError, "Axis.set: mode must be %s, not %s" % \
+                raise ValueError, "Axis.setp: mode must be %s, not %s" % \
                       (self._modes, mode)
             
         if 'method' in kwargs:
             if kwargs['method'] in self._methods:
                 self._prop['method'] = kwargs['method']
             else:
-                raise ValueError, "Axis.set: method must be %s, not %s" % \
+                raise ValueError, "Axis.setp: method must be %s, not %s" % \
                       (self._methods, kwargs['method'])
 
         if 'direction' in kwargs:
             if kwargs['direction'] in self._directions:
                 self._prop['direction'] = kwargs['direction']
             else:
-                raise ValueError, "Axis.set: direction must be %s, not %s" % \
+                raise ValueError, "Axis.setp: direction must be %s, not %s" % \
                       (self._directions, kwargs['direction'])
 
         for key in 'hold hidden box grid'.split():
@@ -1276,8 +1276,9 @@ class Axis(object):
                 self._prop['caxismode'] = 'manual'
             else:
                 raise ValueError, \
-                      "%s.set: caxis must be a two element vector [cmin,cmax]"\
-                      % self.__class__.__name__
+                      "%s.setp: caxis must be a two element vector" \
+                      " [cmin,cmax], not '%s'." \
+                      % (self.__class__.__name__,ca)
 
         if 'caxismode' in kwargs:
             mode = kwargs['caxismode']
@@ -1293,7 +1294,7 @@ class Axis(object):
                         else:
                             self._prop['caxis'] = (0,1)
             else:
-                raise ValueError, "Axis.set: caxismode must be %s, not %s" \
+                raise ValueError, "Axis.setp: caxismode must be %s, not %s" \
                       (self._modes, mode)
         
         if 'shading' in kwargs:
@@ -1301,14 +1302,14 @@ class Axis(object):
                 self._prop['shading'] = kwargs['shading']
                 #self._update_shading()
             else:
-                raise ValueError, "Axis.set: '%s' not a valid shading mode" % \
-                      kwargs['shading']
+                raise ValueError, "Axis.setp: '%s' not a valid shading mode" \
+                      % kwargs['shading']
 
         if 'light' in kwargs:
             if isinstance(kwargs['light'], Light):
                 self._prop['lights'].append(kwargs['light'])
             else:
-                raise ValueError, "Axis.set: light must be %s, not %s" % \
+                raise ValueError, "Axis.setp: light must be %s, not %s" % \
                       (type(Light), type(self._prop['light']))
 
         # Set scale
@@ -1396,7 +1397,7 @@ class Axis(object):
         try:
             return self._prop[name]
         except:
-            raise KeyError, "%s.get: no parameter with name '%s'" % \
+            raise KeyError, "%s.getp: no parameter with name '%s'" % \
                   (self.__class__.__name__, name)
 
     def get_next_color(self):
@@ -1633,7 +1634,7 @@ class Figure(object):
         try:
             return self._prop[prm_name]
         except:
-            raise KeyError, "%s.get: no parameter with name '%s'" % \
+            raise KeyError, "%s.getp: no parameter with name '%s'" % \
                   (self.__class__.__name__, prm_name)
 
     def _set_current_axis_old(self, ax):
@@ -1755,7 +1756,7 @@ class BaseClass(object):
                     self._attrs[key] = value
                 else:
                     raise TypeError, \
-                          'BaseClass.set: keyword "%s" %s is illegal.' % \
+                          'BaseClass.setp: keyword "%s" %s is illegal.' % \
                           (key, type(key))
 
         if 'hardcopy' in kwargs:
@@ -1806,15 +1807,15 @@ class BaseClass(object):
                 try:
                     return self._attrs[prm_name]
                 except:
-                    raise KeyError, '%s.get: no parameter with name "%s"' % \
+                    raise KeyError, '%s.getp: no parameter with name "%s"' % \
                           (self.__class__.__name__, prm_name)
         else:
-            raise TypeError, "get: wrong number of arguments"
+            raise TypeError, "getp: wrong number of arguments"
             
         # subclasses should extend the doc string like this:
-        #get.__doc__ += docadd('Keywords for the set method',
-        #                      BaseClass._local_attrs.keys(),
-        #                      SomeSubClass._local_attrs.keys())
+        #getp.__doc__ += docadd('Keywords for the getp method',
+        #                       BaseClass._local_attrs.keys(),
+        #                       SomeSubClass._local_attrs.keys())
 
     #def __getitem__(self, name):  self.getp(name)
 
