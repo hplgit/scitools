@@ -71,7 +71,7 @@ The `tmp2.dat` file looks as follows::
 # author: Hans Petter Langtangen <hpl@ifi.uio.no>
 
 import sys, os, re
-from Numeric import *
+from numpy import *
 
 __all__ = ['read', 'read_columns', 'readfile',
            'write', 'write_columns',]
@@ -214,7 +214,7 @@ def write_columns(fileobj, *columns):
     As write, but the column data are represented as one-dimensional
     arrays.
     """
-    a = transpose(array(columns))
+    a = array(columns).transpose()
     write(fileobj, a)
     
     
