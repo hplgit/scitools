@@ -1830,7 +1830,12 @@ class BaseClass(object):
         raise NotImplementedError, '_replot not implemented in class %s' % \
               self.__class__.__name__
 
-    def _check_axis(self, *args):
+    def _check_args(self, *args):
+        """Return the current axis, the argument list args, and the number of
+        arguments in args. If the first argument in args is an Axis instance,
+        this will be returned instead of the current axis. The Axis instancce
+        is then removed from the argument list and the number of arguments
+        is decremented by one."""
         ax = self.gca()
         nargs = len(args)
         if nargs > 0 and isinstance(args[0], Axis):
@@ -1965,7 +1970,7 @@ class BaseClass(object):
 
         uses the the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             return ax.getp('daspect')
@@ -2063,7 +2068,7 @@ class BaseClass(object):
         Note that one can use hold(True) and hold(False) instead of
         hold('on') and hold('off'), respectively.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 1:
             ax.setp(hold=args[0])
@@ -2122,7 +2127,7 @@ class BaseClass(object):
 
         clears the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         ax.reset()
 
     def axis(self, *args, **kwargs): 
@@ -2193,7 +2198,7 @@ class BaseClass(object):
               
         affects the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
             
         if nargs == 0 and len(kwargs) == 0:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
@@ -2271,7 +2276,7 @@ class BaseClass(object):
 
         affects the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             xmin = ax.getp('xmin')
@@ -2322,7 +2327,7 @@ class BaseClass(object):
 
         affects the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             ymin = ax.getp('ymin')
@@ -2373,7 +2378,7 @@ class BaseClass(object):
 
         affects the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             zmin = ax.getp('zmin')
@@ -2477,7 +2482,7 @@ class BaseClass(object):
         Note that calling grid(True) and grid(False) is the same as calling
         grid('on') and grid('off'), respectively.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             ax.toggle('grid')
@@ -2513,7 +2518,7 @@ class BaseClass(object):
 
         affects the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         items = ax.getp('plotitems')
         if len(items) == 0:
@@ -2548,7 +2553,7 @@ class BaseClass(object):
 
         adds a title to the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         
         if nargs == 1:
             ax.setp(title=str(args[0]))
@@ -2573,7 +2578,7 @@ class BaseClass(object):
 
         adds the label to the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         
         if nargs == 1:
             ax.setp(xlabel=str(args[0]))
@@ -2598,7 +2603,7 @@ class BaseClass(object):
 
         adds the label to the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         
         if nargs == 1:
             ax.setp(ylabel=str(args[0]))
@@ -2623,7 +2628,7 @@ class BaseClass(object):
 
         adds the zlabel to the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         
         if nargs == 1:
             ax.setp(zlabel=str(args[0]))
@@ -2730,7 +2735,7 @@ class BaseClass(object):
         """
         if 'description' not in kwargs:
             kwargs['description'] = 'plot: 2D curve plot'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             raise TypeError, "plot: not enough arguments given"
@@ -2966,7 +2971,7 @@ class BaseClass(object):
             kwargs['description'] = 'plot3: 3D line plot'
         if not 'hidden' in kwargs:
             kwargs['hidden'] = False
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             raise TypeError, "plot3: not enough arguments given"
@@ -3135,6 +3140,11 @@ class BaseClass(object):
         if not 'linecolor' in kwargs:
             kwargs['linecolor'] = 'k'
         return self.plot(*args, **kwargs)
+
+    def stem(self, *args, **kwargs):
+        """Draw a stem plot."""
+        kwargs['description'] = 'stem: '
+        return self.plot(*args, **kwargs)
  
     def quiver(self, *args, **kwargs):
         """Draw arrows from a 2D vector field.
@@ -3196,7 +3206,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'quiver: 2D vector field'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = VelocityVectors(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3285,7 +3295,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'contour: 2D contours at base'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Contours(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3359,7 +3369,7 @@ class BaseClass(object):
         ...        colorbar='on', colormap=hot())
         """
         kwargs['description'] = 'pcolor: pseudocolor plot'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Surface(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold') and not 'box' in kwargs:
@@ -3436,7 +3446,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = "streamline: 2D or 3D streamline"
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Streams(*args, **kwargs)
         ax.add(h)
         ax.setp(**kwargs)
@@ -3535,7 +3545,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'mesh: 3D mesh'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Surface(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3775,7 +3785,7 @@ class BaseClass(object):
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'slice_: volumetric slices'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Volume(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold'):
@@ -3910,7 +3920,7 @@ class BaseClass(object):
         FIXME: Add conplot example.
         """
         kwargs['description'] = "coneplot: 3D cone plot"
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Streams(*args, **kwargs)
         ax.add(h)
         ax.setp(**kwargs)
@@ -4032,7 +4042,7 @@ class BaseClass(object):
         >>> isosurface(x, y, z, v, -3, daspect=[1,1,1])
         """
         kwargs['description'] = 'isosurface: isosurface extractor'
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
         h = Volume(*args, **kwargs)
         ax.add(h)
         if not ax.getp('hold') and not 'view' in kwargs:
@@ -4124,7 +4134,7 @@ class BaseClass(object):
         >>> view(3)      # back to the default 3D view
         >>> surf(peaks(),view=[35,75])  # as a keyword argument
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         # Allow both view(az,el) and view([az,el])
@@ -4155,7 +4165,7 @@ class BaseClass(object):
             
         uses the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 3:
@@ -4186,7 +4196,7 @@ class BaseClass(object):
             
         views the objects in the current axes.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
             
         if nargs == 0:
             self.gca().getp('camera').setp(camlookat=self.gca())
@@ -4228,7 +4238,7 @@ class BaseClass(object):
         sets or gets the camera projection of the Axis object ax instead of
         the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4268,7 +4278,7 @@ class BaseClass(object):
         sets or gets the up vector for the camera in the Axis object ax
         instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4297,7 +4307,7 @@ class BaseClass(object):
             
         rotates the camera in the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 1:
@@ -4329,7 +4339,7 @@ class BaseClass(object):
         sets or gets the camera view angle in the Axis object ax instead of
         the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4357,7 +4367,7 @@ class BaseClass(object):
             
         zooms the camera in the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 1:
@@ -4395,7 +4405,7 @@ class BaseClass(object):
         sets or gets the position of the camera in the Axis object ax instead
         of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4437,7 +4447,7 @@ class BaseClass(object):
         sets or gets the camera target in the Axis object ax instead of the
         current axis..
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cam = ax.getp('camera')
         if nargs == 0:
@@ -4557,7 +4567,7 @@ class BaseClass(object):
         uses the figure corresponding to the Axis object ax instead of the
         current figure.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             return ax.getp('colormap')
@@ -4611,7 +4621,7 @@ class BaseClass(object):
             
         uses the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             cmin, cmax = ax.getp('caxis')
@@ -4672,7 +4682,7 @@ class BaseClass(object):
 
         @return: A Colorbar object.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         cbar = ax.getp('colorbar')
         if nargs == 0:
@@ -4708,7 +4718,7 @@ class BaseClass(object):
             
         uses the Axis object ax instead of the current axis.
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 1:
             ax.setp(shading=str(args[0]))
@@ -4773,7 +4783,7 @@ class BaseClass(object):
         Note: box(True) and box(False) is the same as box('on') and
         box('off'), respectively.        
         """
-        ax, args, nargs = self._check_axis(*args)
+        ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
             ax.toggle('box')
