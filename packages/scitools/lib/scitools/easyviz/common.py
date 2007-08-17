@@ -2865,7 +2865,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
             
         return lines
@@ -3128,7 +3128,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
             
         return lines
@@ -3222,7 +3222,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
         
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
     
@@ -3313,7 +3313,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
 
@@ -3378,7 +3378,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
         
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
             
@@ -3453,7 +3453,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
 
@@ -3557,7 +3557,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
         
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
 
@@ -3798,7 +3798,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
 
@@ -3927,7 +3927,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
 
@@ -4051,7 +4051,7 @@ class BaseClass(object):
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
 
-        if (self.getp('interactive') and self.getp('show')) or self.getp('show'):
+        if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
      
