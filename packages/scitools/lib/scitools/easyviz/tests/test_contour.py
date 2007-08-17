@@ -119,7 +119,7 @@ class test_contour_labels(EasyvizTestCase):
 
     def check_contour_labels_kwarg(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour(xv,yv,values,clabel='on') 
+        contour(xv,yv,values,clabels='on') 
         title("contour(..,clabel='on')")
         n()
 

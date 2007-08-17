@@ -41,6 +41,12 @@ class EasyvizTestCase(unittest.TestCase):
         w = sin(x)*x**0.33333333
         return x, y, v, w
 
+    def get_3D_line_data(self, n=41):
+        t = linspace(0,2*pi,40)
+        x = sin(t)
+        y = cos(t)
+        return x, y, t
+
     def get_format_string_data(self):
         colors = Line._colors
         try: colors.remove('w')  # remove white

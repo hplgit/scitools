@@ -132,11 +132,24 @@ class test_plot_format_string(EasyvizTestCase):
         n()
 
 
+class test_plot_with_NaNs(EasyvizTestCase):
+    def check_plot_NaN_in_list(self):
+        plot([0,1,NaN,3,4])
+        title("plot([0,1,NaN,3,4])")
+        n()
+        
+    def check_plot_NaN_in_array(self):
+        plot(array([0,1,NaN,3,4],float))
+        title("plot(array([0,1,NaN,3,4],float))")
+        n()
+
+
 def test_suite(level=1):
     suites = []
     if level > 0:
         suites.append(unittest.makeSuite(test_plot_basic,'check_'))
         suites.append(unittest.makeSuite(test_plot_format_string,'check_'))
+        suites.append(unittest.makeSuite(test_plot_with_NaNs,'check_'))
     total_suite = unittest.TestSuite(suites)
     return total_suite
 
