@@ -38,6 +38,5 @@ sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 camva=8,
                 box='on')
 
-#sleep(3)
 raw_input('press enter')
 

@@ -14,8 +14,7 @@ yslice = 2
 zslice = [-2+BUG,0]
 slice_(x,y,z,v,xslice,yslice,zslice,
        grid='off')
-#sleep(3)
-#save_script('/tmp/slicescript')
+
 raw_input('press enter')
 
 #hardcopy('tmp_slice1.eps')

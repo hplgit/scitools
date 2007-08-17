@@ -15,7 +15,7 @@ z = linspace(zmin,zmax,20)
 x,y,z = meshgrid(x,y,z,sparse=False)
 u = y; v = -x; w = 0*x+1
 
-setp(show=False)
+setp(interactive=False)
 hold('on')
 daspect([1,1,1])
 #cx,cy,cz = meshgrid(linspace(xmin,xmax,30),linspace(ymin,ymax,30),[-3,4])
@@ -34,7 +34,7 @@ view(-30,10); axis('off'); axis('tight')
 camproj('perspective'); camva(66); camlookat()
 camdolly(0,0,.5)
 #camlight()
-setp(show=True)
+
 show()
-#sleep(3)
+
 raw_input('press enter')

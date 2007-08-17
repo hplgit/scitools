@@ -27,9 +27,9 @@ setp(show=True)
 show()
 #sleep(3)
 
-#hardcopy('tmp_streamribbon1_hq.eps')
-#hardcopy('tmp_streamribbon1_lq.eps', vector_file=False)
-#hardcopy('tmp_streamribbon1.png')
+#hardcopy('tmp_streamribbon1a_hq.eps')
+#hardcopy('tmp_streamribbon1a_lq.eps', vector_file=False)
+#hardcopy('tmp_streamribbon1a.png')
 
 figure()
 # alternative syntax:
@@ -41,9 +41,8 @@ streamribbon(x,y,z,u,v,w,sx,sy,sz,
              camlight='right',
              lighting='gouraud')
 
-#sleep(3)
 raw_input('press enter')
 
-#hardcopy('tmp_streamribbon2_hq.eps')
-#hardcopy('tmp_streamribbon2_lq.eps', vector_file=False)
-#hardcopy('tmp_streamribbon2.png')
+#hardcopy('tmp_streamribbon1b_hq.eps')
+#hardcopy('tmp_streamribbon1b_lq.eps', vector_file=False)
+#hardcopy('tmp_streamribbon1b.png')

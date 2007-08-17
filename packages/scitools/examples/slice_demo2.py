@@ -17,7 +17,7 @@ xmax = arrmax(x)
 ymax = arrmax(y) 
 zmax = arrmax(z)
 
-setp(show=False)
+setp(interactive=False)
 
 # Create a Slice Plane at an Angle to the X-Axes:
 hslice = surf(linspace(xmin,xmax,100),
@@ -63,7 +63,6 @@ shading('interp')
 #colormap(jet(24))
 #lightangle(-45,45)
 
-setp(show=True)
 show()
-#sleep(3)
+
 raw_input("press enter")

@@ -7,10 +7,11 @@ commands.
 
 from scitools.all import *
 
+setp(interactive=False)
+
 xv, yv = meshgrid(linspace(-5,5,81), linspace(-5,5,81), memoryorder='xyz')
 values = sin(sqrt(xv**2 + yv**2))
 
-setp(show=False)
 pcolor(xv, yv, values, shading='interp', memoryorder='xyz')
 
 # create a coarser grid for the gradient field:
@@ -33,6 +34,7 @@ show()
 figure()
 contour(xv, yv, values, 15, hold=True, show=False, memoryorder='xyz')
 quiver(xv, yv, uu, vv, axis=[-6,6,-6,6], show=True, memoryorder='xyz')
+show()
 
 #hardcopy('quiver2b.eps')
 #hardcopy('quiver2b.png')

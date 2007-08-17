@@ -7,9 +7,10 @@
 from scitools.easyviz import *
 from time import sleep
 
+setp(interactive=False)
+
 x, y, z, v = flow()
 
-setp(show=False)
 h = isosurface(x,y,z,v,-3)
 #setp(h,'FaceColor','red','EdgeColor','none');
 h.setp(opacity=0.5)
@@ -19,15 +20,13 @@ view(3)
 axis('tight')
 #camlight()
 #lighting('gouraud')
-setp(show=True)
 show()
 
-#hardcopy('tmp_isosurf1.eps')
-#hardcopy('tmp_isosurf1_lq.eps', vector_file=False)
-#hardcopy('tmp_isosurf1.png')
+#hardcopy('tmp_isosurf1a.eps')
+#hardcopy('tmp_isosurf1a_lq.eps', vector_file=False)
+#hardcopy('tmp_isosurf1a.png')
 
 figure()
-setp(show=False)
 h = isosurface(x,y,z,v,0)
 #setp(hpatch,'FaceColor','red','EdgeColor','none')
 shading('interp')
@@ -37,11 +36,10 @@ axis('tight')
 #camlight('left')
 #setp(gcf,'Renderer','zbuffer');
 #lighting('phong')
-setp(show=True)
 show()
 #sleep(3)
 raw_input('press enter')
 
-#hardcopy('tmp_isosurf2.eps')
-#hardcopy('tmp_isosurf2_lq.eps', vector_file=False)
-#hardcopy('tmp_isosurf2.png')
+#hardcopy('tmp_isosurf1b.eps')
+#hardcopy('tmp_isosurf1b_lq.eps', vector_file=False)
+#hardcopy('tmp_isosurf1b.png')

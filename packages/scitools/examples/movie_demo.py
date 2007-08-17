@@ -48,22 +48,18 @@ while t <= tstop:
         time.sleep(0.1)
 
 # First we create an animated gif file using convert as the encoding tool:
-movie('tmp_*.png', encoder='convert', overwrite_output=True)
+movie('tmp_*.png', encoder='convert', output_file='movie.gif')
 
 # Now we create an mpeg file using the mpeg_encode tool:
 files = glob.glob('tmp_*.png')
 files.sort()  # this might not be necessary
-movie(files, encoder='mpeg_encode',
-      output_file='movie.mpeg', overwrite_output=True)
+movie(files, encoder='mpeg_encode', output_file='movie.mpeg')
 
-# This last example shows how to create an mpeg4 file using the
-# FFmpeg encoder:
+# This last example shows how to create an mpeg4 file using MEncoder:
 movie('tmp_%04d.png',
-      encoder='ffmpeg',
+      encoder='mencoder',
       vcodec='mpeg4',
       vbitrate=2400,
       qscale=1,
       output_file='movie.avi',
-      fps=10,
-      #size=(640,480),
-      overwrite_output=True)
+      fps=10)

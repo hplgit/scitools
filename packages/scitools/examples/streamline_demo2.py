@@ -23,7 +23,7 @@ zmin = arrmin(z)
 ymax = ymax - 0.1
 zmin = 0 # bug in slice_ and contourslice
 
-setp(show=False)
+setp(interactive=False)
 
 # Add Slice Planes for Visual Context:
 wind_speed = sqrt(u**2 + v**2 + w**2)
@@ -49,8 +49,6 @@ view(3)
 daspect([2,2,1])
 axis('tight')
 
-setp(show=True)
 show()
 
-#sleep(3)
 raw_input('press enter')

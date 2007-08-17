@@ -32,5 +32,5 @@ sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 view=3,
                 axis=[60,140,10,60,-5,20])
 
-#sleep(3)
+
 raw_input('press enter')

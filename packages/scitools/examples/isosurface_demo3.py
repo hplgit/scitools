@@ -7,6 +7,8 @@ from scitools.easyviz import *
 from time import sleep
 from scipy import io
 
+setp(interactive=False)
+
 # Create an Isosurface:
 wind = io.loadmat('wind_matlab_v6.mat')
 x = wind['x']
@@ -20,7 +22,6 @@ sx, sy, sz = meshgrid([80]*36,seq(20,55,1),[5]*36, sparse=True)
 
 wind_speed = sqrt(u**2 + v**2 + w**2)
 
-setp(show=False)
 hiso = isosurface(x,y,z,wind_speed,40)
 #isonormals(x,y,z,wind_speed,hiso)
 #set(hiso,'FaceColor','red','EdgeColor','none');
@@ -31,7 +32,10 @@ shading('interp')
 #hcap = patch(isocaps(x,y,z,wind_speed,40),...
 #    'FaceColor','interp',...
 #    'EdgeColor','none');
-colormap(hsv())
+try:
+    colormap(hsv())
+except:
+    pass
 
 # Create First Set of Cones:
 daspect([1,1,1])
@@ -61,7 +65,6 @@ view(65,45)
 #lighting phong
 #set(hcap,'AmbientStrength',.6)
 
-setp(show=True)
 show()
-#sleep(3)
+
 raw_input('press enter')

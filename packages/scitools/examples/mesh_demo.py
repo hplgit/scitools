@@ -26,12 +26,11 @@ figure()
 x = y = linspace(0,pi,32)
 xv, yv = meshgrid(x,y)
 values = sin(yv**2 + xv) - cos(yv - xv**2)
-setp(show=False)
+setp(interactive=False)
 subplot(221);  mesh(values);
 subplot(222);  mesh(x, y, values, hidden='off')
 subplot(223);  mesh(xv, yv, values)
 subplot(224);  meshc(values)  # contour lines beneath the mesh
-setp(show=True)
 show()
 
 #hardcopy('mesh1c.eps', color=True)

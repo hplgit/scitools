@@ -3,7 +3,6 @@
 # Example taken from:
 # http://www.mathworks.com/access/helpdesk/help/techdoc/visualize/f5-6736.html
 
-from time import sleep
 from scitools.easyviz import *
 from scipy import io
 
@@ -21,7 +20,7 @@ ymin = arrmin(y)
 alt = 7.356 # z-value for slice and streamtube plane
 wind_speed = sqrt(u**2 + v**2 + w**2)
 
-setp(show=False)
+setp(interactive=False)
 
 # Draw Slice Planes:
 hslice = slice_(x,y,z,wind_speed,xmax,ymin,alt)
@@ -58,10 +57,8 @@ ax.setp(projection='perspective')
 #camlight left
 grid('off')
 
-setp(show=True)
 show()
 
-#sleep(3)
 raw_input('press enter')
 
 #hardcopy('tmp_streamtube2.eps')

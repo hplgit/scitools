@@ -7,12 +7,13 @@ from scitools.easyviz import *
 from time import sleep
 from scipy import io
 
+setp(interactive=False)
+
 # Displaying an Isosurface:
 mri = io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
 #Ds = smooth3(D);
 
-setp(show=False)
 isosurface(D,5)
 #hiso = isosurface(Ds,5),
 #	'FaceColor',[1,.75,.65],...
@@ -37,11 +38,9 @@ daspect([1,1,.4])
 #set(hcap,'AmbientStrength',.6)
 #set(hiso,'SpecularColorReflectance',0,'SpecularExponent',50)
 
-setp(show=True)
 show()
-#sleep(3)
-raw_input('press enter')
-#save_script('/tmp/cappediso_script')
 
-#hardcopy('tmp_isosurf3.eps')
-#hardcopy('tmp_isosurf3.png')
+raw_input('press enter')
+
+#hardcopy('tmp_isosurf2a.eps')
+#hardcopy('tmp_isosurf2a.png')
