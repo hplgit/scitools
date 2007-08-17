@@ -329,9 +329,10 @@ class MatlabBackend(BaseClass):
             print "Setting view"
         cam = ax.getp('camera')
         view = cam.getp('view')
+        matlab_view = list(ravel(self._g.get(self._g.gca(), 'View')))
         if view == 2:
             # setup a default 2D view
-            self._g.view(2, nout=0)
+            self._axargs.extend(['View', [0,90]])
         elif view == 3:
             az = cam.getp('azimuth')
             el = cam.getp('elevation')
@@ -339,21 +340,33 @@ class MatlabBackend(BaseClass):
                 # azimuth or elevation is not given. Set up a default
                 # 3D view (az=-37.5 and el=30 is the default 3D view in
                 # Matlab).
-                self._g.view(3, nout=0)
+                self._axargs.extend(['View', [-37.5,30]])
             else:
                 # set a 3D view according to az and el
-                self._g.view(az, el, nout=0)
+                self._axargs.extend(['View', [az,el]])
             
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
+                if roll is not None:
+                    self._g.camroll(roll, nout=0)
                 zoom = cam.getp('camzoom')
+                #if zoom != 1:  # FIXME: Is this the right way?
+                #    self._g.camzoom(zoom, nout=0)
                 dolly = cam.getp('camdolly')
+                #if dolly != (0,0,0):
+                #    self._g.camdolly(list(dolly), nout=0)
                 target = cam.getp('camtarget')
                 position = cam.getp('campos')
                 up_vector = cam.getp('camup')
                 view_angle = cam.getp('camva')
                 projection = cam.getp('camproj')
+                #self._axargs.extend(['CameraTarget', target,
+                #                     'CameraPosition', position,
+                #                     'CameraPosition', position,
+                #                     'CamearUpVector', up_vector,
+                #                     'CameraViewAngle', view_angle,
+                #                     'Projection', projection])
 
     def _set_axis_props(self, ax):
         if DEBUG:
@@ -454,7 +467,7 @@ class MatlabBackend(BaseClass):
         if width:
             args.extend(['LineWidth', float(width)])
 
-        if not shading == 'faceted':
+        if not shading == 'faceted' and not color:
             args.extend(['EdgeColor', 'none', 'FaceColor', shading])
         
         contours = item.getp('contours')
@@ -482,14 +495,14 @@ class MatlabBackend(BaseClass):
                     func = self._g.surf
 
         kwargs = {'nout': 0}
-        if item.getp('function') == 'pcolor':
+        if item.getp('function') in ['pcolor','meshc']:
             # pcolor needs special treatment since it has no support for
             # parameter/value pairs.
             if c is not None:
                 extra_args = ['CData', c] + args[4:]
             else:
                 extra_args = args[3:]
-            h = self._g.pcolor(x,y,z,nout=1)
+            h = func(x,y,z,nout=1)
             if extra_args:
                 extra_args = [h] + extra_args
                 self._g.set_(*extra_args, **kwargs)
@@ -720,6 +733,7 @@ class MatlabBackend(BaseClass):
             args.append(clevels)
         else:
             args.append(cvector)
+        kwargs = {'nout': 0}
         self._g.contourslice(*args, **kwargs)
 
     def _set_figure_size(self, fig):
