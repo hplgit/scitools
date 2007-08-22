@@ -85,42 +85,42 @@ class test_contour3_misc(EasyvizTestCase):
     def check_contour3_format_string(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour3(xv,yv,values,'b:')
-        title("contour3(xv,yv,values,'b:')")
+        title("contour3(..,'b:')")
         n()
 
     def check_contour3_12_levels_format_string(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour3(xv,yv,values,12,'r--')
-        title("contour3(xv,yv,values,12,'r--')")
+        title("contour3(..,12,'r--')")
         n()
 
     def check_contour3_linewidth(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour3(xv,yv,values,linewidth=3)
-        title("contour3(xv,yv,values,linewidth=3)")
+        title("contour3(..,linewidth=3)")
         n()
 
 
 class test_contour3_labels(EasyvizTestCase):
     def check_contour3_labels_on(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour3(xv,yv,values)
-        clabel('on')  # FIXME: this is broken
-        title("contour3(xv,yv,values);clabel('on')")
+        h = contour3(xv,yv,values)
+        clabel(h,'on')
+        title("h=contour3(..);clabel(h,'on')")
         n()
 
     def check_contour3_labels_off(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour3(xv,yv,values)
-        clabel('on')
-        clabel('off')
-        title("contour3(xv,yv,values);clabel('on');clabel('off')")
+        h = contour3(xv,yv,values)
+        clabel(h,'on')
+        clabel(h,'off')
+        title("h=contour3(..);clabel(h,'on');clabel(h,'off')")
         n()
 
     def check_contour3_labels_on_kwarg(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour3(xv,yv,values,clabel='on')
-        title("contour3(xv,yv,values,clabel='on')")
+        contour3(xv,yv,values,clabels='on')
+        title("contour3(..,clabels='on')")
         n()
 
 

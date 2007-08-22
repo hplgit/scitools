@@ -3286,8 +3286,7 @@ class BaseClass(object):
 
             contour(...,clabels='on')
             
-        is the same as calling contour(...) followed by clabel('on').
-        FIXME: Shouldn't it be clabel(h, 'on'), where h = contour(...)?
+        is the same as calling h=contour(...) followed by clabel(h,'on').
 
         Examples:
 
@@ -4743,22 +4742,29 @@ class BaseClass(object):
         raise NotImplementedError, "'brighten' not implemented in class %s" % \
               self.__class__.__name__
 
-    def clabel(self, state='on'):
+    def clabel(self, *args):
         """Control labeling of contours.
 
         Calling::
 
-            clabel('on')
+            clabel(obj, 'on')
 
-        adds height labels to a contour plot.
+        adds height labels to a contour plot (obj must be a Contours
+        object).
 
         Calling::
 
-            clabel('off')
+            clabel(obj, 'off')
 
         removes the labeling of the contour lines (default).
         """
-        self.gca().setp(clabels=state)
+        nargs = len(args)
+        if nargs == 2:
+            obj = args[0]
+            state = args[1]
+            obj.setp(clabels=state)
+        else:
+            raise TypeError, "clabel: wrong number of arguments"
         
         if self.getp('interactive') and self.getp('show'):
             self._replot()

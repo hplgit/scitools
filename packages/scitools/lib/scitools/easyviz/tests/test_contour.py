@@ -85,13 +85,13 @@ class test_contour_misc(EasyvizTestCase):
     def check_contour_12_levels_format_string(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour(xv,yv,values,12,'r--')
-        title("contour(xv,yv,values,12,'r--')")
+        title("contour(..,12,'r--')")
         n()
 
     def check_contour_format_string(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour(xv,yv,values,'b:')
-        title("contour(xv,yv,values,'b:')")
+        title("contour(..,'b:')")
         n()
 
     def check_contour_linewidth(self):
@@ -104,23 +104,23 @@ class test_contour_misc(EasyvizTestCase):
 class test_contour_labels(EasyvizTestCase):
     def check_contour_labels(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour(xv,yv,values)
-        clabel('on')  # FIXME: this is broken
-        title("contour(..);clabel('on')")
+        h = contour(xv,yv,values)
+        clabel(h,'on')
+        title("h=contour(..);clabel(h,'on')")
         n()
 
     def check_contour_labels_off(self):
         x,y,xv,yv,values = self.get_2D_data()
-        contour(xv,yv,values)
-        clabel('on')
-        clabel('off')
-        title("contour(..);clabel('on');clabel('off')")
+        h = contour(xv,yv,values)
+        clabel(h,'on')
+        clabel(h,'off')
+        title("h=contour(..);clabel(h,'on');clabel(h,'off')")
         n()
 
     def check_contour_labels_kwarg(self):
         x,y,xv,yv,values = self.get_2D_data()
         contour(xv,yv,values,clabels='on') 
-        title("contour(..,clabel='on')")
+        title("contour(..,clabels='on')")
         n()
 
 
