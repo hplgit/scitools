@@ -1,5 +1,19 @@
+import os
+
 from scitools.numpytools import asarray, NewAxis, ones, seq, shape, reshape, \
      meshgrid, NumPyArray, NumPy_type
+
+from scitools.configdata import config_parser_frontend
+
+_config_data, _files = config_parser_frontend('scitools', os.curdir)
+
+def _update_from_config_file(d):
+    """
+    Update the dictionary d with values from the config file scitools.cfg.
+    """
+    for key in d.keys():
+        if key in _config_data.get('easyviz',{}).keys():
+            d[key] = _config_data['easyviz'][key][0]
 
 def _toggle_state(state):
     if state == 'off' or not state:

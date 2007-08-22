@@ -5,7 +5,7 @@ from scitools.numpytools import seq, iseq, asarray, NewAxis, ones, zeros, \
      reshape, compress
 
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
-     _check_size, _check_type, _toggle_state
+     _check_size, _check_type, _toggle_state, _update_from_config_file
 
 
 def docadd(comment, *lists, **kwargs):
@@ -52,6 +52,7 @@ class MaterialProperties(object):
         'specular': None,
         'specularpower': None,
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
     def __init__(self, **kwargs):
@@ -137,6 +138,7 @@ class PlotProperties(object):
         'material': None,
         'memoryorder': 'yxz',
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
     def __init__(self, **kwargs):
@@ -484,6 +486,7 @@ class Contours(PlotProperties):
         'ydata':     None,
         'zdata':     None,
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
@@ -826,6 +829,7 @@ class Volume(PlotProperties):
         'vdata': None, # data values at grid points
         'cdata': None, # pseudocolor data
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
@@ -946,6 +950,7 @@ class Colorbar(object):
         'cbtitle': '',
         'visible': False,
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
     
     _locations = 'North South East West NorthOutside SouthOutside ' \
@@ -999,6 +1004,7 @@ class Light(object):
         'intensity': 1,
         'visible': True,
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
     
     def __init__(self, **kwargs):
@@ -1060,6 +1066,7 @@ class Camera(object):
         'campos': (0,0,0),
         'camproj': 'orthographic'
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
     _modes = ['auto', 'manual']
@@ -1194,9 +1201,10 @@ class Axis(object):
         'diffusecolor': None,
         'speculartcolor': None,
         'pth': None, # this is the p-th axis in subplot(m,n,p)
-        'colororder': 'b g r c m y'.split(),
+        'colororder': 'b g r c m y k'.split(),
         'curcolor': 0,
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
     _directions = "ij xy".split()
@@ -1559,6 +1567,7 @@ class Figure(object):
         'axshape': (1,1), # shape of axes
         'size': [None]*2, # size of figure ([width, height])
         }
+    _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
 
     def __init__(self, **kwargs):
@@ -1703,6 +1712,7 @@ class BaseClass(object):
         'interactive': True, # update backend after each change
         'color': False,      # hardcopy with color?
         }
+    _update_from_config_file(_local_attrs)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_attrs.keys())
 
     # Dictionary of functions testing legal types
