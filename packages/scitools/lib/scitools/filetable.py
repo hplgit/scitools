@@ -76,7 +76,8 @@ from numpy import *
 __all__ = ['read', 'read_columns', 'readfile',
            'write', 'write_columns',]
 
-def read(fileobj, commentchar='#'):
+# simple version (not as effective as function read):
+def read_v1(fileobj, commentchar='#'):
     """Load a table with numbers into a two-dim. NumPy array."""
     # read until next blank line:
     r = []  # total set of numbers (r[i]: numbers in i-th row)
@@ -88,8 +89,8 @@ def read(fileobj, commentchar='#'):
         r.append([float(s) for s in line.split()])
     return array(r, Float)
 
-# faster read:
-def read2(fileobj, commentchar='#'):
+
+def read(fileobj, commentchar='#'):
     """
     Load a table with numbers into a two-dim. NumPy array.
     @param fileobj: open file object.
@@ -126,7 +127,6 @@ def read2(fileobj, commentchar='#'):
     data.shape = (len(a)/shape1, shape1)
     return data
 
-read = read2  # the fast version is the default
 
 def read_columns(fileobj, commentchar='#'):
     """As read. Return columns as separate arrays."""
@@ -146,8 +146,8 @@ def readfile(filename, commentchar='#'):
 
 
 
-
-def write(fileobj, a):
+# simple write version:
+def write_v1(fileobj, a):
     """Write a two-dim. NumPy array a in tabular form to fileobj."""
     if len(a.shape) != 2:
         raise TypeError, \
@@ -157,8 +157,8 @@ def write(fileobj, a):
             fileobj.write(str(a[i,j]) + "\t")
         fileobj.write("\n")
 
-# faster write:
-def write2(fileobj, a):
+# faster write version:
+def write_v2(fileobj, a):
     """Write a two-dim. NumPy array a in tabular form to fileobj."""
     # written by Mario Pernici <Mario.Pernici@mi.infn.it>
     if a.shape[1] == 1:
@@ -179,12 +179,12 @@ def write2(fileobj, a):
     # fileobj.write(out + '\n')
     # the str(a) conversion is *extremely* expensive
 
-def write3(fileobj, a):
-    """Short and fast version, compared to write and write2."""
+def write_v3(fileobj, a):
+    """Short and fast version, compared to write_v1 and write_v2."""
     # written by Mario Pernici <Mario.Pernici@mi.infn.it>
     fileobj.write(('%g\t'*(a.shape[1]-1) + '%g\n')*a.shape[0] % tuple(ravel(a)))
 
-def write4(fileobj, a):
+def write(fileobj, a):
     """Write a two-dim. NumPy array a in tabular form to fileobj."""
     # fastest version (of the write family of functions) so far...
     # written by Mario Pernici <Mario.Pernici@mi.infn.it>
@@ -207,7 +207,6 @@ def write4(fileobj, a):
     for i in range(shape0 - shape0%N, shape0):
       fileobj.write(str_fmt % tuple(a[i]))
 
-write = write4  # the fast version is the default
 
 def write_columns(fileobj, *columns):
     """
