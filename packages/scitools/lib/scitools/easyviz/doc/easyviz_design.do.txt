@@ -11,7 +11,7 @@ backend files have this underscore).
 Each backend is a subclass of class `BaseClass`. The `BaseClass` code
 is found in `common.py` and contains all common code for the backends.
 Basically, a backend class extends `BaseClass` with
-rendering capabilities and backend-specific functionallity. 
+rendering capabilities and backend-specific functionality. 
 
 The most important method that needs to be implemented in the backend
 is the `_replot` method, which updates the backend and the plot after a
@@ -63,23 +63,23 @@ Other less important classes are `Camera`, `Light`, `Colorbar`, and
 `MaterialProperties`.
 
 All the classes in `common.py` follows a convention where class parameters
-are set by a `set` method and read by a `get` method. For
-example, we can set axis limits using the `set` methods in a
-`Axis` instance:
+are set by a `setp` method and read by a `getp` method. For
+example, we can set the limits on the $x$ axis by using the `setp`
+method in a `Axis` instance:
 !bc
-ax = gca()                  # get current axies
-ax.set(xmin=-2, xmax=2)
+ax = gca()                  # get current axis
+ax.setp(xmin=-2, xmax=2)
 !ec
 To extract the values of these limits we can write
 !bc
-xmin = ax.get('xmin')
-xmax = ax.get('xmax')
+xmin = ax.getp('xmin')
+xmax = ax.getp('xmax')
 !ec
-Normal use will seldom involve `set` and `get` functions, since most
-most users will apply the Matlab-inspired interface and set, e.g., axis
+Normal use will seldom involve `setp` and `getp` functions, since most
+users will apply the Matlab-inspired interface and set, e.g., the
 limits by
 !bc
-axis([-2, 2, 0, 6])
+xlim([-2,2])
 !ec
 
 

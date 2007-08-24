@@ -18,8 +18,8 @@ topics such as fine tuning of plots (using plotting package-specific
 commands) and working with Axis and Figure objects close the curve
 plotting part of the tutorial.
 
-Various methods for visualization of scalar fields in 2D are treated
-next, before we show how 2D vector fields can be handled.
+Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.
 
 
 # #include "easyviz_tutorial.do.txt"

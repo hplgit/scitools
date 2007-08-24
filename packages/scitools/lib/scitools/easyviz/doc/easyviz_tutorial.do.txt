@@ -272,7 +272,7 @@ the line type specification.
 Lots of markers at data points are available:
   * plus sign:                     `'+'`
   * circle:                        `'o'`
-  * asterix:                       `'*'`
+  * asterisk:                      `'*'`
   * point:                         `'.'`
   * cross:                         `'x'`
   * square:                        `'s'`
@@ -358,10 +358,10 @@ All Easyviz commands that produce a plot return an object reflecting the
 particular type of plot. The `plot` command returns a list of
 `Line` objects, one for each curve in the plot. These `Line`
 objects can be invoked to see, for instance, the value of different
-parameters in the plot (`Line.get()`):
+parameters in the plot:
 !bc
->>> lines = plot(x, y, 'b')
->>> pprint.pprint(lines[0].get())
+>>> line, = plot(x, y, 'b')
+>>> getp(line)
 {'description': '',
  'dims': (4, 1, 1),
  'legend': '',
@@ -434,7 +434,7 @@ x = linspace(m -3*s_start, m + 3*s_start, 1000)
 # f is max for x=m; smaller s gives larger max value
 max_f = f(m, m, s_stop)
 
-# show the movie, and make hardcopies of frames simulatenously:
+# show the movie, and make hardcopies of frames simultaneously:
 counter = 0
 for s in s_values:
     y = f(x, m, s)
@@ -609,10 +609,10 @@ plot(t, y1, 'r-', t, y2, 'bo',
      hardcopy='tmp2.eps')
 
 ax = gca()   # get current Axis object
-ax.set(xlabel='t', ylabel='y',
-       axis=[0, 4, -0.1, 0.6],
-       title='Plotting two curves in the same plot')
-show()  # show the plot again after ax.set actions
+ax.setp(xlabel='t', ylabel='y',
+        axis=[0, 4, -0.1, 0.6],
+        title='Plotting two curves in the same plot')
+show()  # show the plot again after ax.setp actions
 !ec
 
 The `figure()` call makes a new figure, i.e., a

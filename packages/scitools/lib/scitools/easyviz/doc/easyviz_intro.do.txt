@@ -5,7 +5,7 @@ Python scripts. Both curve plots and more advanced 2D/3D visualization
 of scalar and vector fields are supported.  The Easyviz interface was
 designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
 a unified interface to lots of visualization engines (called backends
-later): Gnuplot, Vtk, Matlab, Matplotlib, PyX, etc.; and 3) a
+later): Gnuplot, VTK, Matlab, Matplotlib, PyX, etc.; and 3) a
 minimalistic interface which offers only basic control of plots
 (fine-tuning is left to programming in the specific backend directly).
 
@@ -74,10 +74,10 @@ surfc(xv, yv, values,
 __Second princple.__ Easyviz is just a unified interface to other plotting
 packages that can be called from Python. Such plotting packages are
 referred to as backends. Several backends are supported: Gnuplot,
-Matplotlib, Pmw.Blt.Graph, PyX, Matlab, Vtk. In other words, scripts
+Matplotlib, Pmw.Blt.Graph, PyX, Matlab, VTK. In other words, scripts
 that use Easyviz commands only, can work with a variety of backends,
 depending on what you have installed on the machine in question and
-what quality of the plots you demand. For example, swiching from
+what quality of the plots you demand. For example, switching from
 Gnuplot to Matplotlib is trivial.
 
 Scripts with Easyviz commands will most probably run anywhere since at
@@ -96,7 +96,7 @@ and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
 must grab the backend object and use the backend-specific syntax to
 fine-tune the plot. The idea is that you can get away with Easyviz
-and a plotting package-independent script "95%" of the time - only now
+and a plotting package-independent script "95 percent" of the time - only now
 and then there will be demand for package-dependent code for
 fine-tuning and customization of figures.
 
@@ -125,7 +125,7 @@ file, called `scitools.cfg` has a section `[easyviz]` where the
 `backend` in Easyviz can be set:
 !bc
 [easyviz]
-backend = vtk_
+backend = vtk
 !ec
 A `scitools.cfg` can be placed in the current working folder, thereby
 affecting plots made in this folder, or it can be located in the

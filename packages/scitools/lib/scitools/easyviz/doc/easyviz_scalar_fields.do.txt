@@ -71,7 +71,7 @@ the color map to `hot`, set some suitable axis values, and changed the
 view point. The same plot can also be accomplished with one single, compound
 statement (as Easyviz offers for the `plot` command): 
 !bc
-surf(v, yv, values,
+surf(xv, yv, values,
      shading='interp',
      colorbar='on',
      colormap=jet(),
@@ -135,7 +135,7 @@ The result can be seen in Figure ref{fig:contour_ex2}.
 
 FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend).
 
-Sometimes one wants contour levels that are not eqvidistant or not
+Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
 contour levels to be drawn can easily be specified as a list:
 !bc
@@ -183,7 +183,6 @@ figure()
 surfc(xv, yv, values, 
       clevels=15, 
       colormap=hsv(), 
-      hidden='on', 
       grid='off',
       view=(30,40))
 !ec
@@ -222,7 +221,7 @@ a scalar field with (approximately) the same scalar value and is
 mathematically defined by the implicit equation $f(x,y,z)=c$. In Easyviz,
 isosurfaces are created with the `isosurface` command. We will
 demonstrate this command using 3D scalar field data from the `flow`
-function. This function is taken from the Matlab documentation and
+function. This function, also found in Matlab,
 generates fluid flow data. Our first isosurface visualization example
 then looks as follows:
 !bc
@@ -399,7 +398,7 @@ additional argument to scale the default lengths:
 scale = 2
 quiver(xv, yv, uv, vv, scale)
 !ec
-This value of `scale` will thus strecth the vectors to their double length. 
+This value of `scale` will thus stretch the vectors to their double length. 
 To turn off the automatic scaling, we can set the scale value to zero.
 
 Quiver plots are often used in combination with other plotting
@@ -445,7 +444,8 @@ wv = zv
 quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r',
         axis=[-7,7,-7,7,-7,7])
 !ec
-The strings `'filled'` and `'r'` makes the arrows become filled
+The strings `'filled'` and `'r'` are optional and makes the arrows
+become filled 
 and red, respectively. The resulting plot is presented in Figure 
 ref{fig:quiver3_ex1}. 
 
@@ -499,12 +499,12 @@ The `wind` data set is stored in a binary `.mat`-file called
 `wind.mat`. To load the data in this file into Python, we can use the
 `loadmat` function which is available through the `io` module in
 SciPy. Using the `loadmat` function on the `wind.mat`-file returns a
-Python dictionary (called `wind` in the script) containing the NumPy
+Python dictionary (called `wind` in the current example) containing the NumPy
 arrays `x`, `y`, `z`, `u`, `v`, and `w`. The arrays `u`, `v`, and `w`
 are the 3D vector data, while the arrays `x`, `y`, and `z` defines the
 (3D extended) coordinates for the associated grid. The data arrays in
 the dictionary `wind` are then stored in seperate variables for easier
-access later in the script.
+access later.
 
 Before we call the `streamline` command we must set up some starting
 point coordinates for the stream lines. In this example, we have used
@@ -522,7 +522,7 @@ resulting plot is presented in Figure ref{fig:streamline_ex1}.
 
 FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend).
 
-The next example demonstrates `streamtube` command applied to the 
+The next example demonstrates the `streamtube` command applied to the 
 same `wind` data set:
 !bc
 streamtube(x, y, z, u, v, w, sx, sy, sz,
