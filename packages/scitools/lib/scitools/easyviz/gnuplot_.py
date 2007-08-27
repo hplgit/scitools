@@ -364,7 +364,7 @@ class GnuplotBackend(BaseClass):
             if cmin is None or cmax is None:
                 cmin, cmax = [0,1]
             # set color axis scaling according to cmin and cmax
-            self._g('set cbrange [%d:%d]' % (int(cmin),int(cmax)))
+            self._g('set cbrange [%s:%s]' % (cmin,cmax))
         else:
             # use autoranging for color axis scale
             self._g('set cbrange [*:*]')
