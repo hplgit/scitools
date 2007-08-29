@@ -271,7 +271,8 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
 #    b = asarray(a.shape)
 #    return reshape (a, tuple (compress (not_equal (b, 1), b)))
     
-def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
+def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
+             memoryorder=None):
     """
     Make 1D/2D/3D coordinate arrays for vectorized evaluations of
     1D/2D/3D scalar/vector fields over 1D/2D/3D grids, given
@@ -298,15 +299,15 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
     3
     >>> meshgrid(y)      # 1D grid; y is just returned
     array([ 0.,  1.])
-    >>> meshgrid(x,y,sparse=False)  # store the full N-D matrix
+    >>> meshgrid(x,y,sparse=False)  # store the full 2D matrix
     (array([[ 0. ,  0.5,  1. ],
        [ 0. ,  0.5,  1. ]]), array([[ 0.,  0.,  0.],
        [ 1.,  1.,  1.]]))
-    >>> meshgrid(x,y,memoryorder='xyz') # change memory order
+    >>> meshgrid(x,y,indexing='ij')  # change to matrix indexing
     (array([[ 0. ],
            [ 0.5],
            [ 1. ]]), array([[ 0.,  1.]]))
-    >>> meshgrid(x,y,sparse=False,memoryorder='xyz')
+    >>> meshgrid(x,y,sparse=False,indexing='ij')
     (array([[ 0. ,  0. ],
            [ 0.5,  0.5],
            [ 1. ,  1. ]]), array([[ 0.,  1.],
@@ -383,6 +384,17 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
         if z is y: z = y.copy()
     except AttributeError:  # x, y, or z not NumPy array
         pass
+
+    if memoryorder is not None:
+        import warnings
+        msg = "Keyword argument 'memoryorder' is deprecated and will be " \
+              "removed in the future. Please use the 'indexing' keyword " \
+              "argument instead."
+        warnings.warn(msg, DeprecationWarning)
+        if memoryorder == 'xyz':
+            indexing = 'ij'
+        else:
+            indexing = 'xy'
     
     mult_fact = 1
     # if the keyword argument sparse is set to False, the full N-D matrix
@@ -391,7 +403,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
 
     # if only one argument is fixed, we have a 2D grid:
     if arr1D(x) and arr1D(y) and fixed(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(y)))
             if z is None:
@@ -407,7 +419,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
                 return x[newaxis,:]*mult_fact, y[:,newaxis]*mult_fact, z
         
     if arr1D(x) and fixed(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(z)))
             if y is None:
@@ -423,7 +435,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
                 return x[newaxis,:]*mult_fact, y, z[:,newaxis]*mult_fact
         
     if fixed(x) and arr1D(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(y),len(z)))
             if x is None:
@@ -440,7 +452,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
 
     # or maybe we have a full 3D grid:
     if arr1D(x) and arr1D(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(y),len(z)))
             return x[:,newaxis,newaxis]*mult_fact, \

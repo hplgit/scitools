@@ -542,21 +542,22 @@ Functionality of this module that extends Numerical Python
 
 The following extensions to Numerical Python are also defined:
 
- - sequence:
-           sequence(a,b,s, [type]) computes numbers from a up to and
+ - seq
+           seq(a,b,s, [type]) computes numbers from a up to and
            including b in steps of s and (default) type float_
- - seq:
-           same as sequence (short form)
+           sequence = seq (for backward compatibility)
 
- - isequence:
-           as sequence, but integer counters are computed
-           (isequence is an alternative to range where the
-           upper limit is included in the sequence)
  - iseq:
-           same as isequence (short form)
+           as seq, but integer counters are computed
+           (iseq is an alternative to range where the
+           upper limit is included in the sequence - this can
+           be important for direct mapping of indices between
+           mathematics and Python code)
+           isequence = iseq (for backward compatibility)
 
  - arr:
-           simplified interface to creating NumPy arrays (see its doc string)
+           simplified/unified interface to creating NumPy
+           arrays (see its doc string)
 
  - solve_tridiag_linear_system:
            returns the solution of a tridiagonal linear system
@@ -585,6 +586,10 @@ The following extensions to Numerical Python are also defined:
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
 
+ - factorial:
+           compute the factorial n! by various methods (iterative,
+           recursive, reduce, functional, scipy, etc)
+
 """
 
 if __name__.find('numpyutils') != -1:
@@ -595,6 +600,7 @@ if __name__.find('numpyutils') != -1:
 # and the code below then relies on previously imported Numerical Python
 # modules (Numeric, numpy, numarray)
 
+import operator
 
 def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
     """
@@ -617,8 +623,8 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
     return a_new
 
 
-def sequence(min=0.0, max=None, inc=1.0, type='d',
-             return_type='NumPyArray'):
+def seq(min=0.0, max=None, inc=1.0, type=float,
+        return_type='NumPyArray'):
     """
     Generate numbers from min to (and including!) max,
     with increment of inc. Safe alternative to arange.
@@ -629,16 +635,15 @@ def sequence(min=0.0, max=None, inc=1.0, type='d',
         # take 1st arg as max, min as 0, and inc=1
         max = min; min = 0.0; inc = 1.0
     r = arange(min, max + inc/2.0, inc, type)
-    if return_type == 'NumPyArray':
+    if return_type == 'NumPyArray' or return_type == ndarray:
         return r
     elif return_type == 'list':
         return r.tolist()
     elif return_type == 'tuple':
         return tuple(r.tolist())
 
-seq = sequence # short form
 
-def isequence(start=0, stop=None, inc=1):
+def iseq(start=0, stop=None, inc=1):
     """
     Generate integers from start to (and including) stop,
     with increment of inc. Alternative to range/xrange.
@@ -648,10 +653,11 @@ def isequence(start=0, stop=None, inc=1):
         stop = start; start = 0; inc = 1
     return xrange(start, stop+inc, inc)
 
-iseq = isequence
+sequence = seq  # backward compatibility
+isequence = iseq  # backward compatibility
 
 
-def arr(shape=None, element_type='d', data=None, copy=True, file_=None):
+def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
     """
     Compact and flexible interface for creating NumPy arrays.
 
@@ -660,7 +666,7 @@ def arr(shape=None, element_type='d', data=None, copy=True, file_=None):
     @param data:         list, tuple, or NumPy array with data elements
     @param copy:         copy data if true, share data if false
     @type  copy:         boolean
-    @param element_type: 'd', 'i', or float_, int_, complex_, etc.
+    @param element_type: float, int, int16, float64, bool, etc.
     @param file_:        filename or file object containing array data
     @type  file_:        string
     @return:             created Numerical Python array
@@ -755,8 +761,8 @@ def arr(shape=None, element_type='d', data=None, copy=True, file_=None):
                 break
         ncolumns = len(line1.split())
         file_.seek(0)
-        # we assume that array data in file has element_type=float_:
-        if not element_type == 'd':
+        # we assume that array data in file has element_type=float:
+        if not (element_type == float or element_type == 'd'):
             raise ValueError, 'element_type must be float_/"%s", not "%s"' % \
                   ('d', element_type)
         
@@ -796,14 +802,15 @@ def arr(shape=None, element_type='d', data=None, copy=True, file_=None):
             # print more information (size of data):
             print e, 'of size %s' % shape
 
-# squeeze is from pylab
-def squeeze(a):
-    "squeeze(a) returns a with any ones from the shape of a removed"
-    a = asarray(a)
-    b = asarray(a.shape)
-    return reshape (a, tuple (compress (not_equal (b, 1), b)))
+# squeeze was taken from pylab but now numpy has this function
+#def squeeze(a):
+#    "squeeze(a) returns a with any ones from the shape of a removed"
+#    a = asarray(a)
+#    b = asarray(a.shape)
+#    return reshape (a, tuple (compress (not_equal (b, 1), b)))
     
-def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
+def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
+             memoryorder=None):
     """
     Make 1D/2D/3D coordinate arrays for vectorized evaluations of
     1D/2D/3D scalar/vector fields over 1D/2D/3D grids, given
@@ -830,15 +837,15 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
     3
     >>> meshgrid(y)      # 1D grid; y is just returned
     array([ 0.,  1.])
-    >>> meshgrid(x,y,sparse=False)  # store the full N-D matrix
+    >>> meshgrid(x,y,sparse=False)  # store the full 2D matrix
     (array([[ 0. ,  0.5,  1. ],
        [ 0. ,  0.5,  1. ]]), array([[ 0.,  0.,  0.],
        [ 1.,  1.,  1.]]))
-    >>> meshgrid(x,y,memoryorder='xyz') # change memory order
+    >>> meshgrid(x,y,indexing='ij')  # change to matrix indexing
     (array([[ 0. ],
            [ 0.5],
            [ 1. ]]), array([[ 0.,  1.]]))
-    >>> meshgrid(x,y,sparse=False,memoryorder='xyz')
+    >>> meshgrid(x,y,sparse=False,indexing='ij')
     (array([[ 0. ,  0. ],
            [ 0.5,  0.5],
            [ 1. ,  1. ]]), array([[ 0.,  1.],
@@ -915,6 +922,17 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
         if z is y: z = y.copy()
     except AttributeError:  # x, y, or z not NumPy array
         pass
+
+    if memoryorder is not None:
+        import warnings
+        msg = "Keyword argument 'memoryorder' is deprecated and will be " \
+              "removed in the future. Please use the 'indexing' keyword " \
+              "argument instead."
+        warnings.warn(msg, DeprecationWarning)
+        if memoryorder == 'xyz':
+            indexing = 'ij'
+        else:
+            indexing = 'xy'
     
     mult_fact = 1
     # if the keyword argument sparse is set to False, the full N-D matrix
@@ -923,67 +941,67 @@ def meshgrid(x=None, y=None, z=None, sparse=True, memoryorder='yxz'):
 
     # if only one argument is fixed, we have a 2D grid:
     if arr1D(x) and arr1D(y) and fixed(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(y)))
             if z is None:
-                return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact
+                return x[:,newaxis]*mult_fact, y[newaxis,:]*mult_fact
             else:
-                return x[:,NewAxis]*mult_fact, y[NewAxis,:]*mult_fact, z
+                return x[:,newaxis]*mult_fact, y[newaxis,:]*mult_fact, z
         else:
             if not sparse:
                 mult_fact = ones((len(y),len(x)))
             if z is None:
-                return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact
+                return x[newaxis,:]*mult_fact, y[:,newaxis]*mult_fact
             else:
-                return x[NewAxis,:]*mult_fact, y[:,NewAxis]*mult_fact, z
+                return x[newaxis,:]*mult_fact, y[:,newaxis]*mult_fact, z
         
     if arr1D(x) and fixed(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(z)))
             if y is None:
-                return x[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+                return x[:,newaxis]*mult_fact, z[newaxis,:]*mult_fact
             else:
-                return x[:,NewAxis]*mult_fact, y, z[NewAxis,:]*mult_fact
+                return x[:,newaxis]*mult_fact, y, z[newaxis,:]*mult_fact
         else:
             if not sparse:
                 mult_fact = ones((len(z),len(x)))
             if y is None:
-                return x[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+                return x[newaxis,:]*mult_fact, z[:,newaxis]*mult_fact
             else:
-                return x[NewAxis,:]*mult_fact, y, z[:,NewAxis]*mult_fact
+                return x[newaxis,:]*mult_fact, y, z[:,newaxis]*mult_fact
         
     if fixed(x) and arr1D(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(y),len(z)))
             if x is None:
-                return y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+                return y[:,newaxis]*mult_fact, z[newaxis,:]*mult_fact
             else:
-                return x, y[:,NewAxis]*mult_fact, z[NewAxis,:]*mult_fact
+                return x, y[:,newaxis]*mult_fact, z[newaxis,:]*mult_fact
         else:
             if not sparse:
                 mult_fact = ones((len(z),len(y)))
             if x is None:
-                return y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+                return y[newaxis,:]*mult_fact, z[:,newaxis]*mult_fact
             else:
-                return x, y[NewAxis,:]*mult_fact, z[:,NewAxis]*mult_fact
+                return x, y[newaxis,:]*mult_fact, z[:,newaxis]*mult_fact
 
     # or maybe we have a full 3D grid:
     if arr1D(x) and arr1D(y) and arr1D(z):
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             if not sparse:
                 mult_fact = ones((len(x),len(y),len(z)))
-            return x[:,NewAxis,NewAxis]*mult_fact, \
-                   y[NewAxis,:,NewAxis]*mult_fact, \
-                   z[NewAxis,NewAxis,:]*mult_fact
+            return x[:,newaxis,newaxis]*mult_fact, \
+                   y[newaxis,:,newaxis]*mult_fact, \
+                   z[newaxis,newaxis,:]*mult_fact
         else:
             if not sparse:
                 mult_fact = ones((len(y),len(x),len(z)))
-            return x[NewAxis,:,NewAxis]*mult_fact, \
-                   y[:,NewAxis,NewAxis]*mult_fact, \
-                   z[NewAxis,NewAxis,:]*mult_fact
+            return x[newaxis,newaxis,:]*mult_fact, \
+                   y[newaxis,:,newaxis]*mult_fact, \
+                   z[:,newaxis,newaxis]*mult_fact
 
     # at this stage we assume that we just have scalars:
     l = []
@@ -1059,8 +1077,7 @@ def norm_L1(u):
 
 def norm_inf(u):
     """Infinity/max norm of a multi-dimensional array u viewed as a vector."""
-    return arrmax(abs(u.flat))
-
+    return abs(u).max()
 
 
 def solve_tridiag_linear_system(A, b):
@@ -1574,7 +1591,8 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
 def factorial(n, method='reduce'):
     """
     Compute the factorial n! using long integers.
-    and various methods (see source code for the methods).
+    Different implementations are available
+    (see source code for the methods).
 
     Here is an efficiency comparison of the methods (computing 80!):
     reduce                    |     1.00
@@ -1587,8 +1605,16 @@ def factorial(n, method='reduce'):
     if not isinstance(n, (int, long, float)):
         raise TypeError, 'factorial(n): n must be integer not %s' % type(n)
     n = long(n)
-    
-    if method == 'plain recursive':
+
+    if n == 0 or n == 1:
+        return 1
+
+    if method == 'plain iterative':
+        f = 1
+        for i in range(1, n+1):
+            f *= i
+        return f
+    elif method == 'plain recursive':
         if n == 1:
             return 1
         else:
