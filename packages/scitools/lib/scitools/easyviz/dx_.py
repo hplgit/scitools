@@ -607,7 +607,7 @@ end
         pass
 
     def _create_2D_scalar_data_file(self, x, y, z,
-                                    regular_grid=False, memoryorder='yxz'):
+                                    regular_grid=False, indexing='xy'):
         tmp = tempfile.mktemp()
         # first create data file:
         data_file = open(tmp+'.dat', 'w')
@@ -631,7 +631,7 @@ end
         if regular_grid:
             x0 = x[0,0]
             y0 = y[0,0]
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 dx = x[1,0] - x[0,0]
                 dy = y[0,1] - y[0,0]
             else:
@@ -666,7 +666,7 @@ end
         return header_file.name
 
     def _create_3D_scalar_data_file(self, x, y, z, v,
-                                    regular_grid=False, memoryorder='yxz'):
+                                    regular_grid=False, indexing='xy'):
         tmp = tempfile.mktemp()
         # create data file:
         data_file = open(tmp+'.dat', 'w')
@@ -694,7 +694,7 @@ end
             x0 = x[0,0,0]
             y0 = y[0,0,0]
             z0 = z[0,0,0]
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 dx = x[1,0,0] - x[0,0,0]
                 dy = y[0,1,0] - y[0,0,0]
                 dz = z[0,0,1] - z[0,0,0]
@@ -732,10 +732,10 @@ end
 
     def _create_2D_scalar_field(self, x, y, z, id,
                                 regular_grid=False,
-                                memoryorder='yxz'):
+                                indexing='xy'):
         nx, ny = shape(z)
         if shape(x) != (nx,ny) and shape(y) != (nx,ny):
-            x, y = meshgrid(x,y,sparse=False,memoryorder=memoryorder)
+            x, y = meshgrid(x,y,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
         # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 
@@ -746,7 +746,7 @@ end
         if regular_grid:
             x0 = x[0,0]
             y0 = y[0,0]
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 dx = x[1,0] - x0
                 dy = y[0,1] - y0
             else:
@@ -768,11 +768,11 @@ end
 
     def _create_3D_scalar_field(self, x, y, z, v, id,
                                 regular_grid=False,
-                                memoryorder='yxz'):
+                                indexing='xy'):
         nx, ny, nz = shape(v)
         if shape(x) != (nx,ny,nz) and shape(y) != (nx,ny,nz) \
                and shape(z) != (nx,ny,nz):
-            x, y, z = meshgrid(x,y,z,sparse=False,memoryorder=memoryorder)
+            x, y, z = meshgrid(x,y,z,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
         # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 
@@ -784,7 +784,7 @@ end
             x0 = x[0,0,0]
             y0 = y[0,0,0]
             z0 = z[0,0,0]
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 dx = x[1,0,0] - x0
                 dy = y[0,1,0] - y0
                 dz = z[0,0,1] - z0
@@ -844,17 +844,17 @@ end
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
-        order = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         
         #general_file = self._create_2D_scalar_data_file(x, y, z,
         #                                                regular_grid=False,
-        #                                                memoryorder=order)
+        #                                                indexing=indexing)
         #self._g('imported%s = Import("%s",format="general");' \
         #        % (id,general_file))
         #data_field = 'imported%s' % id
         data_field = self._create_2D_scalar_field(x, y, z, id,
                                                   regular_grid=False,
-                                                  memoryorder=order)
+                                                  indexing=indexing)
         self._g('colored%s = AutoColor(%s);' % (id,data_field))
         self._g('rubbersheet%s = RubberSheet(colored%s,scale=1);' % (id,id))
         dar = self._ax.getp('daspect')
@@ -907,14 +907,14 @@ end
         x = item.getp('xdata')  # grid component in x-direction
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
-        order = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         dar = self._ax.getp('daspect')
 
         #general_file = self._create_2D_scalar_data_file(x, y, z)
         #self._g('imported%s = Import("%s",format="general");' \
         #        % (id,general_file))
         data_field = self._create_2D_scalar_field(x, y, z, id,
-                                                  memoryorder=order)
+                                                  indexing=indexing)
         self._g('colored%s = AutoColor(%s);' % (id,data_field))
 
         filled = item.getp('filled')  # draw filled contour plot if True
@@ -1025,7 +1025,7 @@ end
         v = item.getp('vdata')  # volume
         c = item.getp('cdata')  # pseudocolor data
         isovalue = item.getp('isovalue')
-        order = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         dar = self._ax.getp('daspect')
         
         #general_file = self._create_3D_scalar_data_file(x, y, z, v)
@@ -1033,7 +1033,7 @@ end
         #        % (id,general_file))
         data_field = self._create_3D_scalar_field(x, y, z, v, id,
                                                   regular_grid=False,
-                                                  memoryorder=order)
+                                                  indexing=indexing)
         self._g('colored%s = AutoColor(%s);' % (id,data_field))
         self._g('obj%s = Isosurface(colored%s, value=%s);' % \
                 (id,id,isovalue))
@@ -1048,14 +1048,14 @@ end
         # grid components:
         x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
         v = item.getp('vdata')  # volume
-        order = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         dar = self._ax.getp('daspect')
         xmin, xmax, ymin, ymax, zmin, zmax = item.get_limits()
         center = [(xmax+xmin)/2, (ymax+ymin)/2, (zmax+zmin)/2]
 
         data_field = self._create_3D_scalar_field(x, y, z, v, id,
                                                   regular_grid=False,
-                                                  memoryorder=order)
+                                                  indexing=indexing)
         self._g('colored%s = AutoColor(%s);' % (id,data_field))
         
         self._g('slices%s = Collect();' % id)

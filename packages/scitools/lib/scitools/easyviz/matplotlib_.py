@@ -440,7 +440,7 @@ class MatplotlibBackend(BaseClass):
 
         if shape(x) != shape(z) or shape(y) != shape(z):
             x, y = meshgrid(x, y, sparse=False,
-                            memoryorder=item.getp('memoryorder'))
+                            indexing=item.getp('indexing'))
         
         contours = item.getp('contours')
         if contours:
@@ -475,7 +475,7 @@ class MatplotlibBackend(BaseClass):
         
         if shape(x) != shape(z) or shape(y) != shape(z):
             x, y = meshgrid(x, y, sparse=False,
-                            memoryorder=item.getp('memoryorder'))
+                            indexing=item.getp('indexing'))
         
         filled = item.getp('filled')  # draw filled contour plot if True
 
@@ -526,7 +526,7 @@ class MatplotlibBackend(BaseClass):
         u, v, w = item.getp('udata'), item.getp('vdata'), item.getp('wdata')
         # get line specifiactions (marker='.' means no marker):
         marker, color, style, width = self._get_linespecs(item)
-        memoryorder = item.getp('memoryorder')
+        indexing = item.getp('indexing')
 
         legend = item.getp('legend')
 
@@ -546,7 +546,7 @@ class MatplotlibBackend(BaseClass):
             # draw velocity vectors as arrows with components (u,v) at
             # points (x,y):
             if shape(x) != shape(u) and shape(y) != shape(u):
-                x, y = meshgrid(x, y, sparse=False, memoryorder=memoryorder)
+                x, y = meshgrid(x, y, sparse=False, indexing=indexing)
             if not color:
                 c = u**2+v**2  # color arrows by magnitude
                 h = self._g.quiver(x,y,u,v,c,scale=scale)

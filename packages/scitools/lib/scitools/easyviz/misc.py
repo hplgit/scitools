@@ -1,8 +1,7 @@
 import os
 
-from scitools.numpytools import asarray, NewAxis, ones, seq, shape, reshape, \
-     meshgrid, NumPyArray, NumPy_type
-
+from scitools.numpytools import asarray, ones, seq, shape, reshape, meshgrid, \
+     NumPyArray, NumPy_type
 from scitools.configdata import config_parser_frontend
 
 _config_data, _files = config_parser_frontend('scitools', os.curdir)
@@ -50,15 +49,14 @@ def _check_xyzv(*args, **kwargs):
     except:
         raise ValueError, '_check_xyzv: v must be 3D, not %dD' % len(shape(v))
 
-    memoryorder = kwargs.get('memoryorder', 'yxz')
+    indexing = kwargs.get('indexing', 'xy')
 
     if x is None and y is None and z is None:
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             ny, nx = nx, nz  # swap
-        x, y, z = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1),
-                           memoryorder=memoryorder)
+        x, y, z = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1), indexing=indexing)
     else:
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             assert shape(x)==(nx,ny,nz) or shape(x)==(1,ny,1) or \
                    shape(x)==(ny,), \
                    "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
@@ -130,14 +128,14 @@ def _check_xyz(*args, **kwargs):
     except:
         raise ValueError, "z must be 2D, not %dD" % len(shape(z))
 
-    memoryorder = kwargs.get('memoryorder', 'yxz')
+    indexing = kwargs.get('indexing', 'xy')
 
     if x is None and y is None:
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             nx, ny = ny, nx  # swap
-        x, y = meshgrid(seq(ny-1), seq(nx-1), memoryorder=memoryorder)
+        x, y = meshgrid(seq(ny-1), seq(nx-1), indexing=indexing)
     else:
-        if memoryorder == 'xyz':
+        if indexing == 'ij':
             assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
                    "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
                    (shape(x), (nx,ny), (nx,1), (nx,))
@@ -166,7 +164,7 @@ def _check_xyuv(*args, **kwargs):
     else:
         raise TypeError, "_check_xyuv: wrong number of arguments"
     
-    memoryorder = kwargs.get('memoryorder', 'yxz')
+    indexing = kwargs.get('indexing', 'xy')
 
     us = shape(u)
     assert us == shape(v), "_check_xyuv: u and v must be of same shape"
@@ -183,14 +181,14 @@ def _check_xyuv(*args, **kwargs):
     elif len(us) == 2:
         nx, ny = us
         if x is None and y is None:
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 x = seq(nx-1)
                 y = seq(ny-1)
             else:
                 x = seq(ny-1)
                 y = seq(nx-1)                
         else:
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 assert shape(x)==(nx,ny) or shape(x)==(nx,1) or \
                        shape(x)==(nx,), \
                        "_check_xyuv: x has shape %s, expected %s, %s, " \
@@ -224,7 +222,7 @@ def _check_xyzuvw(*args, **kwargs):
     else:
         raise TypeError, "_check_xyzuvw: wrong number of arguments"
 
-    memoryorder = kwargs.get('memoryorder', 'yxz')
+    indexing = kwargs.get('indexing', 'xy')
 
     us = shape(u)
     assert us == shape(v) == shape(w), \
@@ -244,19 +242,19 @@ def _check_xyzuvw(*args, **kwargs):
     elif len(us) == 2:
         nx, ny = us
         if x is None and y is None:
-            x, y, z = _check_xyz(z, memoryorder=memoryorder)
+            x, y, z = _check_xyz(z, indexing=indexing)
         else:
-            x, y, z = _check_xyz(x, y, z, memoryorder=memoryorder)
+            x, y, z = _check_xyz(x, y, z, indexing=indexing)
         assert shape(z) == us, \
                "_check_xyzuvw: z, u, v, and w must be of same shape"
     elif len(us) == 3:
         nx, ny, nz = us
         if x is None and y is None:
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 nx, ny = ny, nx  # swap
             x, y, junk = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1))
         else:
-            if memoryorder == 'xyz':
+            if indexing == 'ij':
                 assert shape(x)==us or shape(x)==(nx,1,1) or shape(x)==(nx,), \
                        "_check_xyzuvw: x has shape %s, expected %s, %s, or %s"\
                        % (shape(x), us, (nx,1,1), (nx,))

@@ -449,9 +449,9 @@ class MatlabBackend(BaseClass):
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
 
-        if item.getp('memoryorder') == 'xyz' and \
+        if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,memoryorder='xyz')
+            x,y = meshgrid(x,y,sparse=False,indexing='ij')
         args = [x,y,z]
         if c is not None:
             args.append(c)
@@ -519,9 +519,9 @@ class MatlabBackend(BaseClass):
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
 
-        if item.getp('memoryorder') == 'xyz' and \
+        if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,memoryorder='xyz')
+            x,y = meshgrid(x,y,sparse=False,indexing='ij')
         args = [x,y,z]
 
         filled = item.getp('filled')  # draw filled contour plot if True
@@ -599,18 +599,18 @@ class MatlabBackend(BaseClass):
         if z is not None and w is not None:
             # draw velocity vectors as arrows with components (u,v,w) at
             # points (x,y,z):
-            if item.getp('memoryorder') == 'xyz' and \
+            if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u) and \
                     shape(z) != shape(u)):
-                x,y,z = meshgrid(x,y,z,sparse=False,memoryorder='xyz')
+                x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
             args = [x,y,z,u,v,w]
             func = self._g.quiver3
         else:
             # draw velocity vectors as arrows with components (u,v) at
             # points (x,y):
-            if item.getp('memoryorder') == 'xyz' and \
+            if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u)):
-                x,y = meshgrid(x,y,sparse=False,memoryorder='xyz')
+                x,y = meshgrid(x,y,sparse=False,indexing='ij')
             args = [x,y,u,v]
             func = self._g.quiver
         args.append(scale)
@@ -674,10 +674,10 @@ class MatlabBackend(BaseClass):
         c = item.getp('cdata')  # pseudocolor data
         isovalue = item.getp('isovalue')
 
-        if item.getp('memoryorder') == 'xyz' and \
+        if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,memoryorder='xyz')
+            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
         args = [x,y,z,v]
         if c is not None:
             args.append(c)
@@ -692,10 +692,10 @@ class MatlabBackend(BaseClass):
         x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
         v = item.getp('vdata')  # volume
 
-        if item.getp('memoryorder') == 'xyz' and \
+        if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,memoryorder='xyz')
+            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
         sx, sy, sz = item.getp('slices')
         if rank(sz) == 2:
             # sx, sy, and sz defines a surface
@@ -720,10 +720,10 @@ class MatlabBackend(BaseClass):
             # sx, sy, and sz is either numbers or vectors with numbers
             pass
         
-        if item.getp('memoryorder') == 'xyz' and \
+        if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,memoryorder='xyz')
+            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
         args = [x,y,z,v,sx,sy,sz]
 
         cvector = item.getp('cvector')

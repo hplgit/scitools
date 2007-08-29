@@ -523,7 +523,7 @@ class VtkBackend(BaseClass):
 
     def _get_2d_structured_grid(self, item, vectors=False,
                                 heights=True, bottom=False):
-        memoryorder = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         dar = self._axis.getp('daspect')
         x = asarray(item.getp('xdata'))/dar[0]
         y = asarray(item.getp('ydata'))/dar[1]
@@ -548,7 +548,7 @@ class VtkBackend(BaseClass):
                 z = z/dar[2]
             if rank(u) == 2:
                 nx, ny = shape(u)
-                if memoryorder == 'xyz':
+                if indexing == 'ij':
                     if len(x) == nx:
                         x = ravel(x[:,NewAxis]*ones((nx,ny)))
                     if len(y) == ny:
@@ -593,7 +593,7 @@ class VtkBackend(BaseClass):
             nx, ny = shape(values)
             if not (shape(x) == shape(y) == (nx,ny)):
                 x, y = meshgrid(ravel(x), ravel(y),
-                                sparse=False, memoryorder=memoryorder)
+                                sparse=False, indexing=indexing)
             assert shape(x) == shape(y) == shape(z), \
                    "array dimensions must agree"
             ind = 0
@@ -610,7 +610,7 @@ class VtkBackend(BaseClass):
         return sgrid
 
     def _get_3d_structured_grid(self, item, vectors=False):
-        memoryorder = item.getp('memoryorder')
+        indexing = item.getp('indexing')
         dar = self._axis.getp('daspect')
         x = asarray(item.getp('xdata'))/dar[0]
         y = asarray(item.getp('ydata'))/dar[1]
@@ -627,7 +627,7 @@ class VtkBackend(BaseClass):
             nx, ny, nz = shape(u)
             if not (shape(x) == shape(y) == shape(z)):
                 x, y, z = meshgrid(ravel(x), ravel(y), ravel(z),
-                                   sparse=False, memoryorder=memoryorder)
+                                   sparse=False, indexing=indexing)
             assert shape(x) == shape(y) == shape(z) == \
                    shape(u) == shape(v) == shape(w), \
                    "array dimensions must agree"
@@ -660,7 +660,7 @@ class VtkBackend(BaseClass):
             nx, ny, nz = shape(v)
             if not (shape(x) == shape(y) == shape(z) == (nx,ny,nz)):
                 x, y, z = meshgrid(ravel(x), ravel(y), ravel(z),
-                                   sparse=False, memoryorder=memoryorder)
+                                   sparse=False, indexing=indexing)
             assert shape(x) == shape(y) == shape(z) == shape(v), \
                    "array dimensions must agree"
             ind = 0

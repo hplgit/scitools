@@ -7,6 +7,8 @@ from scitools.numpytools import seq, iseq, asarray, NewAxis, ones, zeros, \
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
 
+from warnings import warn
+
 
 def docadd(comment, *lists, **kwargs):
     """
@@ -136,7 +138,8 @@ class PlotProperties(object):
         'linemarker': '',
         'pointsize': 1.0,
         'material': None,
-        'memoryorder': 'yxz',
+        'memoryorder': 'yxz',  # FIXME: this is deprecated and will be removed
+        'indexing': 'xy',  # 'xy' is Cartesian indexing, 'ij' matrix indexing 
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the set method', _local_prop.keys())
@@ -215,11 +218,26 @@ class PlotProperties(object):
                       (self._markers, kwargs['linemarker'])
 
         if 'memoryorder' in kwargs:
-            if kwargs['memoryorder'] in ('xyz', 'yxz'):
-                self._prop['memoryorder'] = kwargs['memoryorder']
+            msg = "Keyword argument 'memoryorder' is deprecated and will be " \
+                  "removed in the future. Please use the 'indexing' keyword " \
+                  "argument instead."
+            warn(msg, DeprecationWarning)
+            if kwargs['memoryorder'] == 'xyz':
+                self._prop['indexing'] = 'ij'
+                self._prop['memoryorder'] = 'xyz'
+            elif kwargs['memoryorder'] == 'yxz':
+                self._prop['indexing'] = 'xy'
+                self._prop['memoryorder'] = 'yxz'
             else:
                 raise ValueError, "memoryorder must be 'xyz' or 'yxz', not %s"\
                       % kwargs['memoryorder']
+
+        if 'indexing' in kwargs:
+            if kwargs['indexing'] in ['xy', 'ij']:
+                self._prop['indexing'] = kwargs['indexing']
+            else:
+                raise ValueError, "indexing must be 'xy' or 'ij', not '%s'" \
+                      % kwargs['indexing']
 
         # set material properties:
         self._prop['material'].setp(**kwargs)
@@ -230,6 +248,12 @@ class PlotProperties(object):
         If the name is None, the dictionary with all parameters
         is returned.
         """
+        if prm_name == 'memoryorder':
+            msg = "Keyword argument 'memoryorder' is deprecated and will be " \
+                  "removed in the future. Please use the 'indexing' keyword " \
+                  "argument instead."
+            warn(msg, DeprecationWarning)
+        
         if prm_name is None:
             return self._prop
         else:
@@ -444,12 +468,12 @@ class Surface(PlotProperties):
             self._prop['wireframe'] = _toggle_state(kwargs['wireframe'])
 
     def _parseargs(self, *args):
-        kwargs = {'memoryorder': self._prop['memoryorder']}
+        kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 3 and nargs <= 4: # mesh(X,Y,Z) or mesh(x,y,Z)
             x, y, z = _check_xyz(*args[:3], **kwargs)
         elif nargs >= 1 and nargs <= 2: # mesh(Z)
-            x, y, z = _check_xyz(args[0], memoryorder=kwargs['memoryorder'])
+            x, y, z = _check_xyz(args[0], indexing=kwargs['indexing'])
         else:
             raise TypeError, "Surface._parseargs: wrong number of arguments"
         
@@ -519,12 +543,12 @@ class Contours(PlotProperties):
     def _parseargs(self, *args):
         if isinstance(args[-1], str): # contour(...,LineSpec)
             self.setformat(args[-1]);  args = args[:-1]
-        kwargs = {'memoryorder': self._prop['memoryorder']}
+        kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 3 and nargs <= 4:
             x, y, z = _check_xyz(*args[:3], **kwargs)
         elif nargs >= 1:
-            x, y, z = _check_xyz(args[0], memoryorder=kwargs['memoryorder'])
+            x, y, z = _check_xyz(args[0], indexing=kwargs['indexing'])
         else:
             raise TypeError, "Contours._parseargs: wrong number of arguments"
 
@@ -599,7 +623,7 @@ class VelocityVectors(PlotProperties):
                     
         z, w = [None]*2
         func = self._prop['function']
-        kwargs = {'memoryorder': self._prop['memoryorder']}
+        kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 6 and nargs <= 7: # quiver3(X,Y,Z,U,V,W)
             x, y, z, u, v, w = _check_xyzuvw(*args[:6], **kwargs)
@@ -715,9 +739,9 @@ class Streams(PlotProperties):
         self._prop['ribbons'] = func == 'streamribbon'
 
     def _parseargs(self, *args):
-        # TODO: do more error checking and add support for memoryorder='xyz'.
+        # TODO: do more error checking and add support for indexing='ij'.
         z, w, option = [None]*3
-        #kwargs = {'memoryorder': self._prop['memoryorder']}
+        #kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 9 and nargs <= 10:
             x, y, z, u, v, w, sx, sy, sz = [asarray(a) for a in args[:9]]
@@ -869,7 +893,7 @@ class Volume(PlotProperties):
 
     def _parseargs_slice_(self, *args):
         # this method also works for contourslice
-        kwargs = {'memoryorder': self._prop['memoryorder']}
+        kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 7 and nargs <= 8:
             # slice_(X,Y,Z,V,Sx,Sy,Sz) or slice_(X,Y,Z,V,XI,YI,ZI)
@@ -877,8 +901,7 @@ class Volume(PlotProperties):
             slices = [asarray(a) for a in args[4:7]]
         elif nargs >= 4 and nargs <= 5:
             # slice_(V,Sx,Sy,Sz) or slice_(V,XI,YI,ZI)
-            x, y, z, v = _check_xyzv(args[0],
-                                     memoryorder=kwargs['memoryorder'])
+            x, y, z, v = _check_xyzv(args[0], indexing=kwargs['indexing'])
             slices = [asarray(a) for a in args[1:4]]
         else:
             raise TypeError, "Wrong number of arguments"
@@ -904,14 +927,13 @@ class Volume(PlotProperties):
         self._set_data(x, y, z, v, slices=slices)
 
     def _parseargs_isosurface(self, *args):
-        kwargs = {'memoryorder': self._prop['memoryorder']}
+        kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 5 and nargs <= 6: # isosurface(X,Y,Z,V,isovalue) 
             x, y, z, v = _check_xyzv(*args[:4], **kwargs)
             isovalue = float(args[4])
         elif nargs >= 2 and nargs <= 3: # isosurface(V,isovalue)
-            x, y, z, v = _check_xyzv(args[0],
-                                     memoryorder=kwargs['memoryorder'])
+            x, y, z, v = _check_xyzv(args[0], indexing=kwargs['indexing'])
             isovalue = float(args[1])
         else:
             raise TypeError, "Wrong number of arguments"

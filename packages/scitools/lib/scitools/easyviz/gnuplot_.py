@@ -600,7 +600,7 @@ class GnuplotBackend(BaseClass):
                 #self._g('set pm3d interpolate 10,1 flush begin ftriangles nohidden3d corners2color mean')
                 self._g('set pm3d at s solid')  # use flat shading for now
 
-        if item.getp('memoryorder') == 'yxz':
+        if item.getp('indexing') == 'xy':
             if rank(x) == 2 and rank(y) == 2:
                 x = x[0,:];  y = y[:,0]
             z = transpose(z, [1,0])
@@ -664,7 +664,7 @@ class GnuplotBackend(BaseClass):
         else:
             self._g('unset clabel')
 
-        if item.getp('memoryorder') == 'yxz':
+        if item.getp('indexing') == 'xy':
             z = transpose(z, [1,0])
             if rank(x) == 2 and rank(y) == 2:
                 x = x[0,:];  y = y[:,0]
@@ -716,7 +716,7 @@ class GnuplotBackend(BaseClass):
                 if rank(x) == 2:
                     x = x*ones(shape(u))
                 else:
-                    if item.getp('memoryorder') == 'yxz':
+                    if item.getp('indexing') == 'xy':
                         x = x[NewAxis,:]*ones(shape(u))
                     else:
                         x = x[:,NewAxis]*ones(shape(u))
@@ -724,7 +724,7 @@ class GnuplotBackend(BaseClass):
                 if rank(y) == 2:
                     y = y*ones(shape(u))
                 else:
-                    if item.getp('memoryorder') == 'yxz':
+                    if item.getp('indexing') == 'xy':
                         y = y[:,NewAxis]*ones(shape(u))
                     else:
                         y = y[NewAxis,:]*ones(shape(u))

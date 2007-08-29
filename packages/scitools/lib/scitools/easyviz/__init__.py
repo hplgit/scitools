@@ -10,7 +10,7 @@ Python scripts. Both curve plots and more advanced 2D/3D visualization
 of scalar and vector fields are supported.  The Easyviz interface was
 designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
 a unified interface to lots of visualization engines (called backends
-later): Gnuplot, Vtk, Matlab, Matplotlib, PyX, etc.; and 3) a
+later): Gnuplot, VTK, Matlab, Matplotlib, PyX, etc.; and 3) a
 minimalistic interface which offers only basic control of plots
 (fine-tuning is left to programming in the specific backend directly).
 
@@ -79,10 +79,10 @@ as an elevated surface with colors using these commands::
 *Second princple.* Easyviz is just a unified interface to other plotting
 packages that can be called from Python. Such plotting packages are
 referred to as backends. Several backends are supported: Gnuplot,
-Matplotlib, Pmw.Blt.Graph, PyX, Matlab, Vtk. In other words, scripts
+Matplotlib, Pmw.Blt.Graph, PyX, Matlab, VTK. In other words, scripts
 that use Easyviz commands only, can work with a variety of backends,
 depending on what you have installed on the machine in question and
-what quality of the plots you demand. For example, swiching from
+what quality of the plots you demand. For example, switching from
 Gnuplot to Matplotlib is trivial.
 
 Scripts with Easyviz commands will most probably run anywhere since at
@@ -101,7 +101,7 @@ and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
 must grab the backend object and use the backend-specific syntax to
 fine-tune the plot. The idea is that you can get away with Easyviz
-and a plotting package-independent script "95%" of the time - only now
+and a plotting package-independent script "95 percent" of the time - only now
 and then there will be demand for package-dependent code for
 fine-tuning and customization of figures.
 
@@ -132,7 +132,7 @@ file, called scitools.cfg has a section [easyviz] where the
 backend in Easyviz can be set::
 
         [easyviz]
-        backend = vtk_
+        backend = vtk
 
 A scitools.cfg can be placed in the current working folder, thereby
 affecting plots made in this folder, or it can be located in the
@@ -152,8 +152,8 @@ topics such as fine tuning of plots (using plotting package-specific
 commands) and working with Axis and Figure objects close the curve
 plotting part of the tutorial.
 
-Various methods for visualization of scalar fields in 2D are treated
-next, before we show how 2D vector fields can be handled.
+Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.
 
 
 Plotting a Single Curve
@@ -303,7 +303,8 @@ The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure fig:plot2a.
 
-
+Doing a hold('off') makes the next plot command create a new
+plot.
 
 FIGURE:[figs/plot2a.eps] Two curves in the same plot.
 
@@ -370,7 +371,7 @@ In this plot we also adjust the size of the line and the circles by
 adding an integer: r-6 means a red line with thickness 6 and bo5
 means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
-the Gnuplot backend one can view the effect in Figure fig:plot2g::
+the Gnuplot program one can view the effect in Figure fig:plot2g::
 
         from scitools.all import *
         
@@ -412,7 +413,13 @@ The different available line types are
   * dotted line:     ':'
   * dash-dot line:   '-.'
 
-We remark that in the Gnuplot backend all the different line types are
+During programming, you can find all these details in the
+documentation of the plot function. Just type help(plot)
+in an interactive Python shell or invoke pydoc with
+scitools.easyviz.plot. This tutorial is available
+through pydoc scitools.easyviz.
+
+We remark that in the Gnuplot program all the different line types are
 drawn as solid lines on the screen. The hardcopy chooses automatically
 different line types (solid, dashed, etc.) and not in accordance with
 the line type specification.
@@ -420,7 +427,7 @@ the line type specification.
 Lots of markers at data points are available:
   * plus sign:                     '+'
   * circle:                        'o'
-  * asterix:                       '*'
+  * asterisk:                      '*'
   * point:                         '.'
   * cross:                         'x'
   * square:                        's'
@@ -436,8 +443,6 @@ Lots of markers at data points are available:
 Symbols and line styles may be combined, for instance as in 'kx-',
 which means a black solid line with black crosses at the data points.
 
-The line thickness can be added as a number in the line style specification
-string. For example, 'r-2' means red solid line with thickness 2.
 
 *Another Example.* Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
@@ -479,7 +484,7 @@ The plot is shown in Figure fig:plot3.
 
 FIGURE:[figs/plot3.eps] A plot with three curves.
 
-*Minimalistic Plotting.* When exploring mathematics in the interactive Python shell, most of us
+*Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example on minimalistic syntax for
 comparing the two sample functions we have used in the previous examples::
@@ -494,7 +499,7 @@ Interactive Plotting Sessions
 
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the plot command
-returns an argument::
+returns a result::
 
         >>> t = linspace(0, 3, 51)
         >>> plot(t, t**2*exp(-t**2))
@@ -506,10 +511,10 @@ All Easyviz commands that produce a plot return an object reflecting the
 particular type of plot. The plot command returns a list of
 Line objects, one for each curve in the plot. These Line
 objects can be invoked to see, for instance, the value of different
-parameters in the plot (Line.get())::
+parameters in the plot::
 
-        >>> lines = plot(x, y, 'b')
-        >>> pprint.pprint(lines[0].get())
+        >>> line, = plot(x, y, 'b')
+        >>> getp(line)
         {'description': '',
          'dims': (4, 1, 1),
          'legend': '',
@@ -582,7 +587,7 @@ is decreased from 2 to 0.2::
         # f is max for x=m; smaller s gives larger max value
         max_f = f(m, m, s_stop)
         
-        # show the movie, and make hardcopies of frames simulatenously:
+        # show the movie, and make hardcopies of frames simultaneously:
         counter = 0
         for s in s_values:
             y = f(x, m, s)
@@ -592,7 +597,7 @@ is decreased from 2 to 0.2::
             counter += 1
             #time.sleep(0.2)  # can insert a pause to control movie speed
         
-        # make movie file:
+        # make movie file the simplest possible way:
         movie('tmp_*.eps')
 
 
@@ -608,14 +613,58 @@ the set of files in right order. We therefore suggest to use filenames
 of the form stem0001.ext, stem0002.ext, stem0003.ext, etc.,
 since an alphabetic sort of the filenames then gives the right
 sequence of the files (and so does the expression stem*.ext used
-in the operating system or in Python's fnmatch module).
+in the operating system or in Python's fnmatch or glob modules).
 In our example, stem is tmp_, and .ext is .eps
 (which implies the PostScript format in the hardcopy).
+The printf format 04d pads the integers with zeros such that
+1 becomes 0001, 13 becomes 0013 and so on.
 
-Having a set of stem*.ext files, one can simply generate a movie
-by a movie('stem*.ext') call. When a movie file is not wanted (it may
-take some time to generate it), one can simply skip the hardcopy
-argument and the call to movie.
+Having a set of stem*.ext files, one can simply generate a movie by
+a movie('stem*.ext') call. The movie function generates a movie
+file called movie.avi (AVI format), movie.mpeg (MPEG format), or
+movie.gif (animated GIF format) in the current working
+directory. The movie format depends on the encoders found on your
+machine.
+
+You can get complete control of the movie format and the
+name of the movie file by supplying more arguments to the
+movie function. First, let us generate an animated GIF
+file called tmpmovie.gif::
+
+        movie('tmp_*.eps', encoder='convert', fps=2,
+              output_file='tmpmovie.gif')
+
+The generation of animated GIF images applies the convert program
+from the ImageMagick suite. This program must of course be installed
+on the machine. The argument fps stands for frames per second so
+here the speed of the movie is slow in that there is a delay of half
+a second between each frame (image file).
+To view the animated GIF file, one can use the animate
+program (also from ImageMagick) and give the movie file as command-line
+argument. One can alternatively put the GIF file in a web page 
+in an IMG tag such that a browser automatically displays the movie.
+
+An MPEG movie can be generated by the call::
+
+        movie('tmp_*.eps', encoder='ffmpeg', fps=4,
+              output_file='tmpmovie1.mpeg',
+
+Alternatively, we may use the ppmtompeg encoder from the Netpbm suite of
+image manipulation tools::
+
+        movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
+              output_file='tmpmovie2.mpeg',
+
+The ppmtompeg supports only a few (high) frame rates.
+
+The next sample call to movie uses the Mencoder tool and specifies 
+some additional arguments (video codec, video bitrate, and the 
+quantization scale)::
+
+        movie('tmp_*.eps', encoder='mencoder', fps=24,
+              output_file='tmpmovie.mpeg',
+              vcodec='mpeg2video', vbitrate=2400, qscale=4)
+
 
 
 
@@ -632,11 +681,11 @@ how the user can grab Figure and Axis objects that Easyviz
 produces "behind the curtain".
 
 *Importing Just Easyviz.* The from scitools.all import * statement imports many modules and packages:
-  * scitools.easyviz
-  * scipy (if it exists)
-  * numpy (if scipy is not installed)
-  * the Python modules sys, os, math, operator
-  * the SciTools module numpyutils
+  * from scitools.easyviz import *
+  * from numpy import *
+  * from scipy import * (if scipy is available)
+  * the Python modules sys, os, math, operator, pprint
+  * from numpyutils import * (SciTools module)
   * the SciTools module StringFunction and the SciTools 
     functions watch and trace for debugging
 
@@ -661,7 +710,8 @@ commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program and work with
+that communicates with the underlying plotting program (known as
+"backend") and work with
 this object directly, using plotting program-specific command
 syntax.  Let us illustrate this principle with an example where we add
 a text and an arrow in the plot, see Figure fig:plot2i.
@@ -683,7 +733,7 @@ this object directly. Here is an example on the typical recipe::
 
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
-plots with Easyviz, using standard commands that are independent of
+plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
@@ -691,9 +741,9 @@ without limiting the available functionality of various plotting programs.
 
 
 *Working with Axis and Figure Objects.* Easyviz supports the concept of Axis objects, as in Matlab.
-The Axis object represents a set of axis, with curves drawn in the
+The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
-One may have several axis in one figure, each axis representing a subplot.
+One may have several axes in one figure, each axis representing a subplot.
 One may also have several figures, represented by different
 windows on the screen or separate hardcopies.
 
@@ -708,10 +758,10 @@ object, whose set method can be used to set axis properties::
              hardcopy='tmp2.eps')
         
         ax = gca()   # get current Axis object
-        ax.set(xlabel='t', ylabel='y',
-               axis=[0, 4, -0.1, 0.6],
-               title='Plotting two curves in the same plot')
-        show()  # show the plot again after ax.set actions
+        ax.setp(xlabel='t', ylabel='y',
+                axis=[0, 4, -0.1, 0.6],
+                title='Plotting two curves in the same plot')
+        show()  # show the plot again after ax.setp actions
 
 
 The figure() call makes a new figure, i.e., a
@@ -773,8 +823,6 @@ Here is the code for this third figure::
         show()
         hardcopy('tmp2_3.eps')
 
-We remark that the hardcopy command does not work with the Gnuplot backend
-in this case with multiple axes in a figure.
 
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command::
@@ -861,7 +909,7 @@ the color map to hot, set some suitable axis values, and changed the
 view point. The same plot can also be accomplished with one single, compound
 statement (as Easyviz offers for the plot command)::
 
-        surf(v, yv, values,
+        surf(xv, yv, values,
              shading='interp',
              colorbar='on',
              colormap=jet(),
@@ -926,7 +974,7 @@ The result can be seen in Figure fig:contour_ex2.
 
 FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend).
 
-Sometimes one wants contour levels that are not eqvidistant or not
+Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
 contour levels to be drawn can easily be specified as a list::
 
@@ -974,7 +1022,6 @@ commands::
         surfc(xv, yv, values, 
               clevels=15, 
               colormap=hsv(), 
-              hidden='on', 
               grid='off',
               view=(30,40))
 
@@ -1015,7 +1062,7 @@ a scalar field with (approximately) the same scalar value and is
 mathematically defined by the implicit equation f(x,y,z)=c. In Easyviz,
 isosurfaces are created with the isosurface command. We will
 demonstrate this command using 3D scalar field data from the flow
-function. This function is taken from the Matlab documentation and
+function. This function, also found in Matlab,
 generates fluid flow data. Our first isosurface visualization example
 then looks as follows::
 
@@ -1190,7 +1237,7 @@ additional argument to scale the default lengths::
         scale = 2
         quiver(xv, yv, uv, vv, scale)
 
-This value of scale will thus strecth the vectors to their double length. 
+This value of scale will thus stretch the vectors to their double length. 
 To turn off the automatic scaling, we can set the scale value to zero.
 
 Quiver plots are often used in combination with other plotting
@@ -1235,7 +1282,8 @@ backend supports 3D quiver plots. A simple example of plotting the
         quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r',
                 axis=[-7,7,-7,7,-7,7])
 
-The strings 'filled' and 'r' makes the arrows become filled
+The strings 'filled' and 'r' are optional and makes the arrows
+become filled 
 and red, respectively. The resulting plot is presented in Figure 
 fig:quiver3_ex1. 
 
@@ -1287,12 +1335,12 @@ The wind data set is stored in a binary `.mat`-file called
 wind.mat. To load the data in this file into Python, we can use the
 loadmat function which is available through the io module in
 SciPy. Using the loadmat function on the `wind.mat`-file returns a
-Python dictionary (called wind in the script) containing the NumPy
+Python dictionary (called wind in the current example) containing the NumPy
 arrays x, y, z, u, v, and w. The arrays u, v, and w
 are the 3D vector data, while the arrays x, y, and z defines the
 (3D extended) coordinates for the associated grid. The data arrays in
 the dictionary wind are then stored in seperate variables for easier
-access later in the script.
+access later.
 
 Before we call the streamline command we must set up some starting
 point coordinates for the stream lines. In this example, we have used
@@ -1310,7 +1358,7 @@ resulting plot is presented in Figure fig:streamline_ex1.
 
 FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend).
 
-The next example demonstrates streamtube command applied to the 
+The next example demonstrates the streamtube command applied to the 
 same wind data set::
 
         streamtube(x, y, z, u, v, w, sx, sy, sz,
@@ -1366,7 +1414,7 @@ backend files have this underscore).
 Each backend is a subclass of class BaseClass. The BaseClass code
 is found in common.py and contains all common code for the backends.
 Basically, a backend class extends BaseClass with
-rendering capabilities and backend-specific functionallity. 
+rendering capabilities and backend-specific functionality. 
 
 The most important method that needs to be implemented in the backend
 is the _replot method, which updates the backend and the plot after a
@@ -1418,23 +1466,23 @@ Other less important classes are Camera, Light, Colorbar, and
 MaterialProperties.
 
 All the classes in common.py follows a convention where class parameters
-are set by a set method and read by a get method. For
-example, we can set axis limits using the set methods in a
-Axis instance::
+are set by a setp method and read by a getp method. For
+example, we can set the limits on the x axis by using the setp
+method in a Axis instance::
 
-        ax = gca()                  # get current axies
-        ax.set(xmin=-2, xmax=2)
+        ax = gca()                  # get current axis
+        ax.setp(xmin=-2, xmax=2)
 
 To extract the values of these limits we can write::
 
-        xmin = ax.get('xmin')
-        xmax = ax.get('xmax')
+        xmin = ax.getp('xmin')
+        xmax = ax.getp('xmax')
 
-Normal use will seldom involve set and get functions, since most
-most users will apply the Matlab-inspired interface and set, e.g., axis
+Normal use will seldom involve setp and getp functions, since most
+users will apply the Matlab-inspired interface and set, e.g., the
 limits by::
 
-        axis([-2, 2, 0, 6])
+        xlim([-2,2])
 
 
 
