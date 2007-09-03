@@ -999,9 +999,9 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
         else:
             if not sparse:
                 mult_fact = ones((len(y),len(x),len(z)))
-            return x[newaxis,newaxis,:]*mult_fact, \
-                   y[newaxis,:,newaxis]*mult_fact, \
-                   z[:,newaxis,newaxis]*mult_fact
+            return x[newaxis,:,newaxis]*mult_fact, \
+                   y[:,newaxis,newaxis]*mult_fact, \
+                   z[newaxis,newaxis,:]*mult_fact
 
     # at this stage we assume that we just have scalars:
     l = []
