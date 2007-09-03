@@ -1,10 +1,46 @@
 #!/usr/bin/env python
 """
-Build the SciTools scitools++ directory with scitools
-and utilities.
+Build the scitools++ directory.
 
-Method: copy installed packages and scripts (lib and bin files).
+scitools++ contains all of SciTools PLUS some other useful
+Python packages like Doconce, IPython, Epydoc, Preprocess, etc.
+
+NumPy is requires and not a part of scitools++.
+
+Method: plain copy of installed packages and scripts (lib and bin files).
 """
+
+MODULES = (
+    'doconce',
+    'scitools',
+    'Gnuplot',
+    'IPython',
+    'Scientific',
+    'epydoc',
+    'preprocess',
+    )
+
+SCRIPTS = (
+    'ipython',
+    'epydoc',
+    'epydocgui',
+    'preprocess',
+    'insertdocstr',
+    'doconce2format',
+    'diff.pl',
+    'diff.py',
+    'file2interactive.py',
+    'floatdiff.py',
+    'gnuplot.bat',
+    '_gnuplot.py',
+    'locate_pdb.py',
+    'pdb',
+    'ps2mpeg.py',
+    'regression.py',
+    'subst.py',
+    'timer.py',
+    )
+
 
 import os, glob, sys, shutil
 join = os.path.join
@@ -19,7 +55,7 @@ join = os.path.join
 #          scitools
 #          IPython
 #          epydoc
-#          preprocess.py
+#          preprocess
 #          ...
 #       bin
 #
@@ -67,7 +103,7 @@ def copy_installed_modules():
     """
     print '********* copy installed modules to scitools++ **************'
     path = join(sys.prefix, 'lib', 'python' + sys.version[:3], 'site-packages')
-    files = ['doconce', 'scitools', 'Gnuplot', 'IPython', 'Scientific', 'epydoc', 'preprocess']
+    files = MODULES  # see top of this file
     print files
     
     files = [join(path, file) for file in files]
@@ -84,26 +120,7 @@ def copy_installed_scripts():
     Copy installed executable scripts to the scitools++/bin directory.
     """
     print '********* copy installed executable scripts **************'
-    scripts = ('ipython',
-               'f2py',
-               'epydoc',
-               'epydocgui',
-               'preprocess',
-               'insertdocstr',
-               'doconce2format',
-               'diff.pl',
-               'diff.py',
-               'file2interactive.py',
-               'floatdiff.py',
-               'gnuplot.bat',
-               '_gnuplot.py',
-               'locate_pdb.py',
-               'pdb',
-               'ps2mpeg.py',
-               'regression.py',
-               'subst.py',
-               'timer.py',
-               )
+    scripts = SCRIPTS  # see top of this file
     print scripts
     for script in scripts:
         system("cp `which %s` %s" % (script, bindir))
@@ -121,7 +138,7 @@ def main():
     copy_installed_scripts()
     shutil.copy('scitools++_setup.py', join(newdir, 'setup.py'))
     clean(newdir)  # necessary
-    print '\nSciTools++ umbrella was successfully made'
+    print '\nThe scitools++ umbrella was successfully made'
     print 'Go to the build/ directory and tarpack scitools++'
 
 if __name__ == '__main__':

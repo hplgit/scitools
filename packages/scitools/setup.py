@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-"""Install scitools with easyviz
+"""
+Install scitools with easyviz
+
 Usage:
 
-python setup.py install [, --prefix=$PREFIX]"""
+python setup.py install [, --prefix=$PREFIX]
+"""
 
 __author__ = 'Rolv Erlend Bredsen <rolv@simula.no>'
 
 import os, sys, socket, re, glob
+
 
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
@@ -16,11 +20,11 @@ else:
 
 setup(
     version = "0.1", 
-    author = "Hans Petter Langtangen, Rolv Erlend Bredesen, Johannes Ring",
-    author_email = "<rolv@simula.no>",
+    author = "Hans Petter Langtangen, Rolv Erlend Bredesen, Johannes Ring, Ilmar Wilbers",
+    author_email = "<hpl@simula.no>",
     description = __doc__,
     license = "",
-    name = "Scitools",
+    name = "SciTools",
     url = "",
     package_dir = {'': 'lib'},
     packages = ["scitools",
@@ -29,7 +33,7 @@ setup(
 		],
     package_data={'': ['scitools.ini', 'scitools.cfg']},
     scripts = [os.path.join('bin', f) \
-               for f in os.listdir('bin') if not f.startswith('.')],
+               for f in os.listdir('bin') if not (f.startswith('.') or f.endswith('~') or f.endswith('.old') or f.endswith('.bak'))],
 	       )
 	    
 	       
