@@ -5,9 +5,14 @@ or as illustrations in programs in any computer language.
 
 The module offers a function
 
-plot(x, y, draw_axis=True, plot_slope=True, plot_labels=False, dot='*')
+plot(x, y, draw_axis=True, plot_slope=True, plot_labels=False, dot='*',
+     min_x=None, max_x=None, min_y=None, max_y=None,
+     output=sys.stdout)
 
 where x and y are sequences of x and y data for a curve.
+Axes are automatically calculated from the x and y data if not
+min_x, max_x, min_y or max_y are given.
+
 Multiple curves in the plot is not supported.
 
 Here are examples on various plot commands:
@@ -131,6 +136,30 @@ Here are examples on various plot commands:
                                    o    -0.96                                   
                                         |                                       
 
+>>> # store plot in a string:
+>>> p = plot(x, y, output=str)
+>>> print p
+                                        |                                       
+                                        +0.96                                   
+                                        |  /\                                   
+                           \            | /  \                                  
+                         --\            ||    \                                 
+                        /   \           ||     |             -                  
+                       /    \           ||     |            / --\               
+                       /     \          |      |           /    \               
+      ----\           /       |         |       |          /     \              
+---+//-----\---------/--------|---------|-------|---------/-------\---------+---
+   -2       \\      /         |        ||       |        /         \      +2    
+             \      /          |       ||        \      /           \----//     
+              \    /           |      | |        \      /                       
+               -  /            |      | |         \    /                        
+                --/             \    |  |         \   /                         
+                                \    |  |          \  /                         
+                                 \   |  |           --                          
+                                  \ /   |                                       
+                                   /    -0.96                                   
+                                        |                                       
+
 """
 #-----------------------------------------------
 #aplotter.py - ascii art function plotter
@@ -165,7 +194,7 @@ Here are examples on various plot commands:
 #OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #-----------------------------------------------
 
-import math
+import math, sys
 
 
 EPSILON = 0.000001
@@ -539,15 +568,19 @@ def plot(*args,**flags):
 	limit_flags_names = set(["min_x","min_y","max_x","max_y"])
 	limit_flags = dict([(n,flags[n]) for n in limit_flags_names & set(flags)])
 	settting_flags = dict([(n,flags[n]) for n in set(flags) - limit_flags_names])
-	
+	output = flags.get('output', sys.stdout)
 	if len(args) == 1:
 		p = Plotter(**settting_flags)
-		print p.plot_single(args[0],**limit_flags)
+		r = p.plot_single(args[0],**limit_flags)
 	elif len(args) == 2:
 		p = Plotter(**settting_flags)
-		print p.plot_double(args[0],args[1],**limit_flags)
+		r = p.plot_double(args[0],args[1],**limit_flags)
 	else:
 		raise NotImplementedError("can't draw multiple graphs yet")
+	if output == sys.stdout:
+		print r
+	else:
+		return r
 	
 __all__ = ["Plotter","plot"]
 
@@ -565,6 +598,8 @@ y = exp(-0.5*x**2)*sin(2*pi*x)
 	       "plot(x, y, plot_slope=False)",
 	       "plot(x, y, plot_labels=False)",
 	       "plot(x, y, dot='o', plot_slope=False)",
+	       "p = plot(x, y, output=str)",
+	       "print p"
 	       ]
 	print data
 	for c in cmd:
