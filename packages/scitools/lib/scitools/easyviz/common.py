@@ -20,10 +20,10 @@ def docadd(comment, *lists, **kwargs):
 
     Example on usage:
     # add to the class doc string:
-    __doc__ += docadd('Keywords for the set method', _local_attrs.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_attrs.keys())
 
     # add to a method (get) doc string:
-    get.__doc__ += docadd('Keywords for the set method',
+    get.__doc__ += docadd('Keywords for the setp method',
                           BaseClass._local_attrs.keys(),
                           SomeSubClass._local_attrs.keys())
     """
@@ -55,7 +55,7 @@ class MaterialProperties(object):
         'specularpower': None,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -142,7 +142,7 @@ class PlotProperties(object):
         'indexing': 'xy',  # 'xy' is Cartesian indexing, 'ij' matrix indexing 
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -354,7 +354,7 @@ class Line(PlotProperties):
         'ydata': None,
         'zdata': None,
         }
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
     
@@ -433,6 +433,65 @@ class Line(PlotProperties):
             self._prop['dims'] = (len(x), len(y), 1)
 
 
+class Bars(PlotProperties):
+    """
+    Properties of bars in bar graphs.
+    """
+    _local_prop = {
+        'barwidth': None,
+        'xdata': None,
+        'ydata': None,
+        }
+    __doc__ += docadd('Keywords for the setp method',
+                      PlotProperties._local_prop.keys(),
+                      _local_prop.keys())
+
+    def __init__(self, *args, **kwargs):
+        PlotProperties.__init__(self, **kwargs)
+        self._prop.update(Bars._local_prop)
+        self.setp(**kwargs) 
+        self._parseargs(*args)
+
+    def setp(self, **kwargs):
+        PlotProperties.setp(self, **kwargs)
+        
+        if 'barwidth' in kwargs:
+            self._prop['barwidth'] = kwargs['barwidth']
+
+    def _parseargs(self, *args):
+        # allow both bar(...,LineSpec,width) and bar(...,width,LineSpec):
+        for i in range(2):
+            arg = args[-1]
+            if isinstance(arg, str) and arg in self._colors:
+                self._prop['linecolor'] = arg
+                args = args[:-1]
+            elif isinstance(arg, (float,int)):
+                self._prop['barwidth'] = arg
+                args = args[:-1]
+        nargs = len(args)
+        if nargs == 2:    # bar(x,Y)
+            x = args[0]
+            y = args[1]
+        elif nargs == 1:  # bar(Y)
+            y = args[0]
+            x = range(1,len(y)+1)
+        else:
+            raise TypeError, "Bars._parseargs: wrong number of arguments"
+            
+        self._set_data(x, y)
+
+    def _set_data(self, x, y):
+        if x is None:
+            pass
+        self._set_lim(x, 'xlim')
+        self._set_lim(y, 'ylim')
+        self._prop['xdata'] = x
+        self._prop['ydata'] = y
+        n = len(x)
+        self._prop['dims'] = (n, 1, 1)
+        self._prop['numberofpoints'] = n
+
+
 class Surface(PlotProperties):
     """
     Properties of surfaces in scalar field plots.
@@ -445,7 +504,7 @@ class Surface(PlotProperties):
         'ydata': None,
         'zdata': None,
         }
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
 
@@ -511,7 +570,7 @@ class Contours(PlotProperties):
         'zdata':     None,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
     
@@ -592,7 +651,7 @@ class VelocityVectors(PlotProperties):
         'xdata': None, 'ydata': None, 'zdata': None, # grid components
         'udata': None, 'vdata': None, 'wdata': None, # vector components
         }
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
     
@@ -715,7 +774,7 @@ class Streams(PlotProperties):
         'udata': None, 'vdata': None, 'wdata': None,    # vector components
         'startx': None, 'starty': None, 'startz': None, # starting points
         }
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
     
@@ -854,7 +913,7 @@ class Volume(PlotProperties):
         'cdata': None, # pseudocolor data
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method',
+    __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
     
@@ -973,7 +1032,7 @@ class Colorbar(object):
         'visible': False,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
     
     _locations = 'North South East West NorthOutside SouthOutside ' \
                  'EastOutside WestOutside'.split()
@@ -1027,7 +1086,7 @@ class Light(object):
         'visible': True,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
     
     def __init__(self, **kwargs):
         self._prop = {}
@@ -1089,7 +1148,7 @@ class Camera(object):
         'camproj': 'orthographic'
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
 
     _modes = ['auto', 'manual']
     _camprojs = ['orthographic', 'perspective']
@@ -1227,7 +1286,7 @@ class Axis(object):
         'curcolor': 0,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
 
     _directions = "ij xy".split()
     _methods = "equal image square normal vis3d".split()
@@ -1590,7 +1649,7 @@ class Figure(object):
         'size': [None]*2, # size of figure ([width, height])
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -1735,7 +1794,7 @@ class BaseClass(object):
         'color': False,      # hardcopy with color?
         }
     _update_from_config_file(_local_attrs)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the set method', _local_attrs.keys())
+    __doc__ += docadd('Keywords for the setp method', _local_attrs.keys())
 
     # Dictionary of functions testing legal types
     _attrs_type = {'curfig': lambda arg: isinstance(arg, (int)),
@@ -1798,7 +1857,7 @@ class BaseClass(object):
             self.material(kwargs['material'])
 
         # subclasses should extend the doc string like this:
-        #set.__doc__ += docadd('Keywords for the set method',
+        #set.__doc__ += docadd('Keywords for the setp method',
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
                     
@@ -3175,8 +3234,61 @@ class BaseClass(object):
 
     def stem(self, *args, **kwargs):
         """Draw a stem plot."""
-        kwargs['description'] = 'stem: '
+        kwargs['description'] = 'stem: stem plot'
         return self.plot(*args, **kwargs)
+
+    def bar(self, *args, **kwargs):
+        """Draw a bar graph.
+        
+        Calling::
+
+            bar(Y)
+
+        will draw a bar for each of the elements in the vector/matrix Y.
+        If Y is a matrix, a group of bars from the elements of each row of
+        Y will be created.
+
+        Calling::
+
+            bar(x,Y)
+
+        is the same as above only that the values on the x axis is defined
+        by the vector x. 
+
+        Calling::
+
+            bar(..., width)
+
+        uses the specified width on the bars. This might be different in the
+        various backends.
+
+        Calling::
+
+            bar(ax, ...)
+
+        uses the Axis object ax instead of the current axis.
+
+        @return: A Bars object.
+
+        Examples:
+
+        >>> from numpy.random import rand
+        >>> bar(rand(4))
+
+        >>> figure()
+        >>> bar(rand(4,3))
+        """
+        kwargs['description'] = 'bar: bar graph'
+        ax, args, nargs = self._check_args(*args)
+        h = Bars(*args, **kwargs)
+        ax.add(h)
+        ax.setp(**kwargs)
+        self.gcf().setp(**kwargs)
+        self.setp(**kwargs)
+        
+        if self.getp('interactive') and self.getp('show'):
+            self._replot()
+        return h
  
     def quiver(self, *args, **kwargs):
         """Draw arrows from a 2D vector field.

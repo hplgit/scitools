@@ -33,7 +33,7 @@ from __future__ import division
 
 from common import *
 from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose, \
-     linspace
+     linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from misc import _cmpPlotProperties, arrayconverter
 
@@ -344,8 +344,7 @@ class GnuplotBackend(BaseClass):
         if cbar.getp('visible'):
             # turn on colorbar
             cbar_title = cbar.getp('cbtitle')
-            # TODO: set title on the colorbox (see cblabel)
-            #self._g('set clabel %s')
+            self._g('set cblabel "%s"' % cbar_title)
             cbar_location = self._colorbar_locations[cbar.getp('cblocation')]
             self._g('set style line 2604 linetype -1 linewidth .4')
             self._g('set colorbox %s user border 2604 origin %g,%g size %g,%g'\
@@ -375,7 +374,7 @@ class GnuplotBackend(BaseClass):
             print "Setting colormap"
         cmap = ax.getp('colormap')
         # cmap is plotting package dependent
-        if isinstance(cmap, str):
+        if isinstance(cmap, str) and cmap != 'default':
             self._g(cmap)
         elif isinstance(cmap, (tuple,list)) and len(cmap) == 3 and \
                  isinstance(cmap[0], int) and \
@@ -466,7 +465,6 @@ class GnuplotBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -575,6 +573,54 @@ class GnuplotBackend(BaseClass):
                                  using='1:($2)')]
         return data
 
+    def _add_bar_graph(self, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a bar graph"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+        
+        withstring = self._get_withstring(marker, color, style, width)
+
+        if rank(y) == 1:
+            y = reshape(y,(len(y),1))
+        nx, ny = shape(y)
+        
+        xtics = ', '.join(['"%s" %d' % (m+1,i+1) \
+                           for i,m in enumerate(range(nx))])
+        self._g("set xtics (%s)" % xtics)
+
+        barwidth = item.getp('barwidth')
+        if barwidth is None:
+            barwidth = 0.13
+        self._g("set boxwidth %s" % barwidth)
+        #self._g("set grid noxtics ytics")
+        self._g("set style fill solid 1.00 border -1")
+
+        center = floor(ny/2)
+        step = 0.16
+
+        start = -step*center
+        stop = step*center
+        if not ny%2:
+            start += step/2
+            stop -= step/2
+        a = linspace(start,stop,ny)
+
+        data = []
+
+        i = 0
+        for j in range(ny):
+            y_ = y[:,j]
+            x_ = array(range(1,nx+1)) + a[i]
+            i += 1
+            if i == ny:
+                i = 0
+            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % (i+1)))
+        return data
+
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
@@ -596,9 +642,11 @@ class GnuplotBackend(BaseClass):
                 self._g('set pm3d at s solid hidden3d 100')
                 self._g('set style line 100 lt -1 lw 0.5')
             elif shading == 'interp':
-                # TODO: test interpolated shading mode in Gnuplot 4.2
-                #self._g('set pm3d interpolate 10,1 flush begin ftriangles nohidden3d corners2color mean')
-                self._g('set pm3d at s solid')  # use flat shading for now
+                # Interpolated shading requires Gnuplot >= 4.2
+                self._g('set pm3d implicit at s')
+                self._g('set pm3d scansautomatic')
+                self._g('set pm3d interpolate 10,10')
+                self._g('set pm3d flush begin ftriangles nohidden3d')
 
         if item.getp('indexing') == 'xy':
             if rank(x) == 2 and rank(y) == 2:
@@ -907,6 +955,9 @@ class GnuplotBackend(BaseClass):
                         gdata.append(self._add_line(item))
                     if func in ['plot3', 'fill3']:
                         self._use_splot = True
+                elif isinstance(item, Bars):
+                    shading = ax.getp('shading')
+                    gdata.extend(self._add_bar_graph(item,shading=shading))
                 elif isinstance(item, Surface):
                     gdata.append(self._add_surface(item,
                                                    shading=ax.getp('shading')))
