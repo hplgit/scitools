@@ -20,12 +20,12 @@ def test_if_module_exists(modulename, msg='', raise_exception=False):
                   'module to proceed. %s\n' % \
                   (modulename, msg)
         if raise_exception:
-            print 'The problem arose in', 
+            print 'The problem arose in ', 
             debug.trace(frameno=-3)
             raise ImportError, message
         else:
             print '\n', message
-            print 'The problem arose in', 
+            print 'The problem arose in ', 
             debug.trace(frameno=-3)
             sys.exit(1)
 
