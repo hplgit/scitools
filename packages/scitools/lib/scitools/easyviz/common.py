@@ -3256,6 +3256,20 @@ class BaseClass(object):
 
     def bar(self, *args, **kwargs):
         """Draw a bar graph.
+
+        Calling::
+
+           bar(data)
+
+        where data is a dictionary on the form
+
+          data = {'method1': {'thing1': value, 'thing2': value},
+                  'method2': {'thing1': value, 'thing2': value},
+                  'method3': {'thing1': value, 'thing2': value},}
+
+        will draw m bars for every name (key in data), one for each key in
+        data[name], where the height indicates the value. The name is placed
+        beneath each of the bar groups on the x axis.
         
         Calling::
 
