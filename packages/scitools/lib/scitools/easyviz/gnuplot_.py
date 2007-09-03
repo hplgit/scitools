@@ -587,17 +587,25 @@ class GnuplotBackend(BaseClass):
         if rank(y) == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
-        
-        xtics = ', '.join(['"%s" %d' % (m+1,i+1) \
-                           for i,m in enumerate(range(nx))])
-        self._g("set xtics (%s)" % xtics)
+
+        barticks = item.getp('barticks')
+        if barticks is None:
+            barticks = range(nx)
+        xtics = ', '.join(['"%s" %d' % (m,i) \
+                           for i,m in enumerate(barticks)])
+        if item.getp('rotated_barticks'):
+            self._g("set xtics rotate (%s)" % xtics)
+        else:
+            self._g("set xtics (%s)" % xtics)
 
         barwidth = item.getp('barwidth')
         if barwidth is None:
             barwidth = 0.13
-        self._g("set boxwidth %s" % barwidth)
-        #self._g("set grid noxtics ytics")
-        self._g("set style fill solid 1.00 border -1")
+        self._g('set boxwidth %s' % barwidth)
+        if shading == 'faceted':
+            self._g('set style fill solid 1.00 border -1')
+        else:
+            self._g('set style fill solid 1.00')
 
         center = floor(ny/2)
         step = 0.16
@@ -614,7 +622,7 @@ class GnuplotBackend(BaseClass):
         i = 0
         for j in range(ny):
             y_ = y[:,j]
-            x_ = array(range(1,nx+1)) + a[i]
+            x_ = array(range(nx)) + a[i]
             i += 1
             if i == ny:
                 i = 0
@@ -920,8 +928,8 @@ class GnuplotBackend(BaseClass):
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
         self._g.reset()
-        self._g('set size 1.0, 1.0')
-        self._g('set origin 0.0, 0.0')
+        #self._g('set size 1.0, 1.0')
+        #self._g('set origin 0.0, 0.0')
         self._g('unset multiplot')
         self._g('set missing "nan"')
         

@@ -441,6 +441,8 @@ class Bars(PlotProperties):
         'barwidth': None,
         'xdata': None,
         'ydata': None,
+        'barticks': None,
+        'rotated_barticks': False,
         }
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
@@ -458,6 +460,12 @@ class Bars(PlotProperties):
         if 'barwidth' in kwargs:
             self._prop['barwidth'] = kwargs['barwidth']
 
+        if 'barticks' in kwargs:
+            self._prop['barticks'] = kwargs['barticks']
+
+        if 'rotated_barticks' in kwargs:
+            self._prop['rotated_barticks'] = bool(kwargs['rotated_barticks'])
+
     def _parseargs(self, *args):
         # allow both bar(...,LineSpec,width) and bar(...,width,LineSpec):
         for i in range(2):
@@ -472,9 +480,18 @@ class Bars(PlotProperties):
         if nargs == 2:    # bar(x,Y)
             x = args[0]
             y = args[1]
+            self._prop['barticks'] = x
         elif nargs == 1:  # bar(Y)
             y = args[0]
-            x = range(1,len(y)+1)
+            if isinstance(y, dict):
+                a = []
+                keys = y.keys()
+                keys.sort()
+                for key in keys:
+                    a.append(y[key].values())
+                self._prop['barticks'] = keys
+                y = asarray(a)
+            x = range(len(y))
         else:
             raise TypeError, "Bars._parseargs: wrong number of arguments"
             
