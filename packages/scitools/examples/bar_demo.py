@@ -19,7 +19,7 @@ figure()
 g = get_backend()
 h = bar(rand(3,2))
 if backend == 'gnuplot':
-    g('set xtics rotate ("A" 1, "B" 2, "C" 3)')
+    g('set xtics ("A" 1, "B" 2, "C" 3)')
     g.replot()
 
 raw_input('press enter')
