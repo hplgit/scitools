@@ -6,7 +6,7 @@ A collection of Python utilities originally developed for the
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 
-def test_if_module_exists(modulename, msg=''):
+def test_if_module_exists(modulename, msg='', raise_exception=False):
     """
     Test if modulename can be imported, and if not, write
     an error message.
@@ -14,8 +14,16 @@ def test_if_module_exists(modulename, msg=''):
     try:
         __import__(modulename)
     except ImportError:
-        raise ImportError, 'Could not import module "%s" - it is '\
-              'not installed on your system. %s' % (modulename, msg)
+        import debug
+        message = 'Could not import module "%s" - it is '\
+                  'not installed on your system, and you need this '\
+                  'module to proceed. %s\n%s' % \
+                  (modulename, msg, debug.trace(frameno=-3))
+        if raise_exception:
+            raise ImportError, message
+        else:
+            print '\n', message
+            sys.exit(1)
     
 def system(command, verbose=True, failure_handling='exit', fake=False):
     """
