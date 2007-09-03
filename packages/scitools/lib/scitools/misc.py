@@ -6,6 +6,17 @@ A collection of Python utilities originally developed for the
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 
+def test_if_module_exists(modulename, msg=''):
+    """
+    Test if modulename can be imported, and if not, write
+    an error message.
+    """
+    try:
+        __import__(modulename)
+    except ImportError:
+        raise ImportError, 'Could not import module "%s" - it is '\
+              'not installed on your system. %s' % (modulename, msg)
+    
 def system(command, verbose=True, failure_handling='exit', fake=False):
     """
     Wrapping of the os.system command. Actually, the
@@ -216,11 +227,12 @@ class Command:
     Alternative to lambda functions.
 
     This class should with Python version 2.5 and later be replaced
-    by the partial class in the standard module functools.
+    by the "partial" class in the standard module functools.
     However, you cannot simply do a::
 
       Command = functools.partial
 
+    to be backward compatible with your old programs that use Command,
     because Command and functools.partial supply the positional
     arguments in different manners: Command calls the underlying
     function with new arguments followed by the originally recorded
