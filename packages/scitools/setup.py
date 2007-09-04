@@ -7,10 +7,8 @@ Usage:
 python setup.py install [, --prefix=$PREFIX]
 """
 
-__author__ = 'Rolv Erlend Bredsen <rolv@simula.no>'
-
 import os, sys, socket, re, glob
-
+import scitools
 
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
@@ -19,11 +17,11 @@ else:
     from distutils.core import setup
 
 setup(
-    version = "0.1", 
-    author = "Hans Petter Langtangen, Rolv Erlend Bredesen, Johannes Ring, Ilmar Wilbers",
+    version = str(scitools.version), 
+    author = ', '.join(scitools.author),
     author_email = "<hpl@simula.no>",
-    description = __doc__,
-    license = "",
+    description = scitools.__doc__,
+    license = "LGPL",
     name = "SciTools",
     url = "",
     package_dir = {'': 'lib'},

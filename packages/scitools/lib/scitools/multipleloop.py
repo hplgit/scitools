@@ -29,7 +29,7 @@ Case::
 >>> cmd = options(all, names, prefix='-')
 >>> for c in cmd:
 ...     print c
-...     #os.system(programname + ' ' + c)
+...     #commands.getstatusoutput(programname + ' ' + c)
 ...
 -b 1 -func 'y' -w 0.69999999999999996
 -b 0.29999999999999999 -func 'y' -w 0.69999999999999996
