@@ -10,8 +10,8 @@ bar(rand(4,3))
 figure()
 x = linspace(-3,3,15)
 y = exp(-x*x)
-if backend == 'gnuplot':
-    bar(y,0.7)  # increase width of bars
+if backend in ['gnuplot', 'matplotlib']:
+    bar(y,7)  # increase width of bars
 else:
     bar(y)
 
@@ -24,9 +24,9 @@ bar(data,rotated_barticks=False,
     hardcopy='bar1a.eps',color=True,
     ymin=0,ymax=5)
 
-# border turned off:
+# red bars with borders turned off:
 figure()
-bar(rand(5,4),shading='interp')
+bar(rand(5,4),'r',shading='interp')
 
 
 raw_input('press enter')
