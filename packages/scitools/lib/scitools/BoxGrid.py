@@ -4,7 +4,7 @@ Class for uniform and non-uniform grid on an interval, rectangle, or box.
 """
 
 from scitools.errorcheck import right_type, wrong_type
-from scitools.numpytools import meshgrid, seq, NumPyArray, wrap2callable
+from scitools.numpyutils import meshgrid, seq, ndarray, wrap2callable
 
 # constants for indexing the space directions:
 X = X1 = 0
@@ -39,7 +39,7 @@ class UniformBoxGrid(object):
     @ivar ycoor, zcoor : nicknames for self.coor[1] and self.coor[2]
 
     @ivar coorv        : expanded version of coor for vectorized expressions
-                         (in 2D, self.coorv[0] = self.coor[0][:,NewAxis,NewAxis])
+                         (in 2D, self.coorv[0] = self.coor[0][:,newaxis,newaxis])
     @ivar xcoorv, ycoorv, zcoorv: nickname for self.coorv[i], i=0,1,2
     """
     def __init__(self,
@@ -348,7 +348,7 @@ class UniformBoxGrid(object):
         Check that data_array is a NumPy array with dimensions
         compatible with the grid.
         """
-        if not isinstance(data_array, NumPyArray):
+        if not isinstance(data_array, ndarray):
             raise TypeError, 'data %s is %s, not NumPy array' % \
                   (name_of_data_array, type(data_array))
         else:
@@ -507,7 +507,7 @@ class BoxGrid(UniformBoxGrid):
         self.shape = []
 
         if x is not None:
-            right_type(x, 'x', (list,tuple,NumPyArray))
+            right_type(x, 'x', (list,tuple,ndarray))
 
             self.nsd += 1
             self.nx = len(x)-1; self.xmin = x[0]; self.xmax = x[-1]
@@ -518,7 +518,7 @@ class BoxGrid(UniformBoxGrid):
             self.shape.append(nx+1)
 
         if y is not None:
-            right_type(y, 'y', (list,tuple,NumPyArray))
+            right_type(y, 'y', (list,tuple,ndarray))
 
             self.nsd += 1
             self.ny = len(y)-1; self.ymin = y[0]; self.ymax = y[-1]
@@ -529,7 +529,7 @@ class BoxGrid(UniformBoxGrid):
             self.shape.append(ny+1)
 
         if z is not None:
-            right_type(z, 'z', (list,tuple,NumPyArray))
+            right_type(z, 'z', (list,tuple,ndarray))
 
             self.nsd += 1
             self.nz = len(z)-1; self.zmin = z[0]; self.zmax = z[-1]

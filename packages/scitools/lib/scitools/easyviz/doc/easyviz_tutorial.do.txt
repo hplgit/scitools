@@ -434,7 +434,8 @@ x = linspace(m -3*s_start, m + 3*s_start, 1000)
 # f is max for x=m; smaller s gives larger max value
 max_f = f(m, m, s_stop)
 
-# show the movie, and make hardcopies of frames simultaneously:
+# show the movie on the screen
+# and make hardcopies of frames simultaneously:
 counter = 0
 for s in s_values:
     y = f(x, m, s)

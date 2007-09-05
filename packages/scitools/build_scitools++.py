@@ -90,7 +90,7 @@ from scitools.misc import system
         
 def clean(root, filetypes=['*.pyc', '*~', '*.pyo', '*.p.py', '_update.py']):
     for type in filetypes:
-        system("find %s -name '%s' -exec rm -f {} \;" % (root, type))
+        os.system("find %s -name '%s' -exec rm -rf {} \;" % (root, type))
         
 
 def copy_installed_modules():
@@ -137,7 +137,7 @@ def main():
     copy_installed_modules()
     copy_installed_scripts()
     shutil.copy('scitools++_setup.py', join(newdir, 'setup.py'))
-    clean(newdir)  # necessary
+    clean(newdir, ['*.pyc', '*~', '*.pyo', '*.p.py', '_update.py', '.svn'])
     print '\nThe scitools++ umbrella was successfully made'
     print 'Go to the build/ directory and tarpack scitools++'
 

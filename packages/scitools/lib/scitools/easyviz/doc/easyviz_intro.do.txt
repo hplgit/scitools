@@ -60,7 +60,7 @@ hardcopy('tmp0.png') # this one can be included in HTML
 A scalar function $f(x,y)$ may be visualized
 as an elevated surface with colors using these commands:
 !bc
-x = seq(-2, 2, 0.1)      # -2 to 2 with steps of 0.1
+x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
 xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
 values = f(xv, yv)       # function values
 surfc(xv, yv, values,

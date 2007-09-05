@@ -87,7 +87,7 @@ def read_v1(fileobj, commentchar='#'):
         if line.isspace(): break  # blank line
         if line[0] == commentchar: continue # treat next line
         r.append([float(s) for s in line.split()])
-    return array(r, Float)
+    return array(r)
 
 
 def read(fileobj, commentchar='#'):
@@ -123,7 +123,7 @@ def read(fileobj, commentchar='#'):
     # skip lines starting with the comment character
     filestr = re.sub(commentline, '', filestr)
     a = [float(x) for x in filestr.split()]
-    data = array(a, Float)
+    data = array(a)
     data.shape = (len(a)/shape1, shape1)
     return data
 

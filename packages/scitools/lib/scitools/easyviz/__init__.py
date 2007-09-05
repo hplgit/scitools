@@ -3,7 +3,7 @@
 Easyviz
 =======
 
-Easyviz is a light-weight interface to various packages for scientific
+Easyviz is a unified interface to various packages for scientific
 visualization and plotting.  The Easyviz interface is written in
 Python with the purpose of making it very easy to visualize data in
 Python scripts. Both curve plots and more advanced 2D/3D visualization

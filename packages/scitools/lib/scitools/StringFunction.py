@@ -165,10 +165,6 @@ class StringFunction:
                 exec('import ' + module)
             except:
                 string_function = True
-            try:
-                self._function_from_file = eval(expression)
-            except NameError:
-                string_function = True
         else:
             string_function = True
 
@@ -215,6 +211,8 @@ class StringFunction:
             kwargs = ', '.join(['%s=%s' % (k, self._prms[k]) \
                                 for k in self._prms])
             s += ', ' + kwargs
+        else:
+            kwargs = ''
 
         if self._function_from_file is None:
             # insert string expression as body in the lambda function:
