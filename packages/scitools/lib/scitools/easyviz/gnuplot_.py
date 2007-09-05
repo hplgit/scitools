@@ -877,7 +877,7 @@ class GnuplotBackend(BaseClass):
         width, height = fig.getp('size')
         if width and height:
             # set figure width and height
-            pass
+            self._g('set size %s,%s' % (width,height))
         else:
             # use the default width and height in plotting package
             pass
