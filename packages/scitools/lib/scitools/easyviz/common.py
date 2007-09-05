@@ -3304,8 +3304,15 @@ class BaseClass(object):
 
             bar(..., width)
 
-        uses the specified width on the bars. This might be different in the
-        various backends.
+        uses the specified width on the bars. The default width is 0.8, while
+        a width of 1.0 should make the bars just touch each other (might vary
+        in the different backends).
+
+        Calling::
+
+            bar(..., color)
+
+        uses the given color for all the bars.
 
         Calling::
 

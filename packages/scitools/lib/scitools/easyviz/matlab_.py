@@ -439,11 +439,12 @@ class MatlabBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
-        args = [x,y,'grouped']
+        args = [x,y]
 
         barwidth = item.getp('barwidth')
         if barwidth is not None:
             args.append(barwidth)
+        args.append('grouped')
         if color:
             args.extend(['FaceColor', color])
         if shading != 'faceted':

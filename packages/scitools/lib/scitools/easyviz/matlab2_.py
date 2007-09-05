@@ -496,11 +496,12 @@ class Matlab2Backend(BaseClass):
             cmd += "y = %s;\n" % str(y.tolist()).replace('],', '];')
         else:
             cmd += "y = %s;\n" % list(y)
-        cmd += "bar(x,y,'grouped'"
+        cmd += "bar(x,y"
 
         barwidth = item.getp('barwidth')
         if barwidth is not None:
-            cmd += ",barwidth"
+            cmd += ",%s" % barwidth
+        cmd += ",'grouped'"
         if color:
             cmd += ",'FaceColor', '%s'" % color
             # FIXME: Color can also be a three-tuple [r,g,b]

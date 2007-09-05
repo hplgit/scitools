@@ -448,7 +448,7 @@ class MatplotlibBackend(BaseClass):
         colors = item._colors + matplotlib.colors.cnames.values()
         for j in range(ny):
             y_ = y[:,j]
-            x_ = array(range(nx)) + a[j] - 0.06
+            x_ = array(range(nx)) + a[j] - barwidth/2
             if not color:
                 c = colors[j]
             else:
