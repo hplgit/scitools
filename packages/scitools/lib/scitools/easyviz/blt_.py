@@ -40,7 +40,10 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 
+check('Pmw', msg='You need to install the Pmw package.')
+check('Tkinter', msg='You need to install the Tkinter package.')
 import Pmw
 import Tkinter
 

@@ -9,7 +9,10 @@ import random
 hardcopy_counter = 0
 psplot = False
 prompt = ''
-pause = 0.2
+if backend == 'gnuplot':
+    pause = 0.2
+else:
+    pause = 0.0
 clear_figure = False
 new_figure = True
 screenplot = True

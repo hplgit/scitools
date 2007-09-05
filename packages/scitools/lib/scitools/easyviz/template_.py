@@ -33,6 +33,11 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
+
+#check('<package>', msg='You need to install the <package> package.')
+#import <package>
+
 
 class TemplateBackend(BaseClass):
     def __init__(self):

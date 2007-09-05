@@ -1,10 +1,12 @@
 from common import *
-import vtk, os
-
 from scitools.numpytools import ravel, zeros, array, allclose, Float, rank, \
      NumPy_dtype, meshgrid
+from scitools.misc import test_if_module_exists as check
 
+check('vtk', msg='You need to install the VTK package.')
+import vtk
 #import vtk.util.colors
+import os
 
 import Tkinter
 try: import vtkTkRenderWidget
@@ -927,10 +929,10 @@ class VtkBackend(BaseClass):
         elif item.getp('linetype') == ':':
             actor.GetProperty().SetLineStipplePattern(0x1111)
             actor.GetProperty().SetLineStippleRepeatFactor(1)
-        actor.GetProperty().SetPointSize(item.getp('pointsize'))
+        #actor.GetProperty().SetPointSize(item.getp('pointsize'))
         linewidth = item.getp('linewidth')
         if linewidth:
-            actor.GetProperty().SetLineWidth(linewidth)
+            actor.GetProperty().SetLineWidth(float(linewidth))
         
         # set material properties:
         ax = self._axis

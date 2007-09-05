@@ -63,6 +63,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 
 try:
     import grace_np
@@ -71,7 +72,8 @@ except ImportError:
         from pygrace import grace_np
     except ImportError:
         # grace_np is not available
-        pass  # will fail later
+        check('grace_np',
+              msg='You need to install grace_np.py or the pygrace package.')
 
 
 class GraceBackend(BaseClass):

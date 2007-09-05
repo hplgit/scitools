@@ -35,8 +35,10 @@ from common import *
 from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 from misc import arrayconverter
 
+check('Gnuplot', msg='You need to install the Gnuplot.py package.')
 import Gnuplot
 import tempfile
 import os
@@ -573,8 +575,6 @@ class GnuplotBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
         
-        withstring = self._get_withstring(marker, color, style, width)
-
         if rank(y) == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
@@ -610,7 +610,12 @@ class GnuplotBackend(BaseClass):
         for j in range(ny):
             y_ = y[:,j]
             x_ = array(range(nx)) + a[j]
-            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % (j+1)))
+            if not item.getp('linecolor'):
+                c = j+1
+            else:
+                c = color
+            print c
+            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % c))
         return data
 
     def _add_surface(self, item, shading='faceted'):

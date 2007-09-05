@@ -30,7 +30,9 @@ from __future__ import division
 from common import *
 from scitools.numpytools import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 
+check('matplotlib', msg='You need to install the matplotlib package.')
 import matplotlib
 import matplotlib.colors
 # Override system defaults before importing pylab

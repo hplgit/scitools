@@ -35,7 +35,9 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 
+check('pyx', msg='You need to install the PyX package.')
 import pyx 
 import math
 

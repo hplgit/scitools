@@ -33,6 +33,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
+from scitools.misc import test_if_module_exists as check
 
 import os
 import tempfile
@@ -41,15 +42,12 @@ VISIT_ARGS = os.environ.get('VISIT_ARGS', ["-nosplash"])
 if isinstance(VISIT_ARGS, str):
     VISIT_ARGS = VISIT_ARGS.split()
 
-try:
-    import visit
-except ImportError:
-    raise Exception, "Can't import VisIt. " \
-          "Try setting the PYTHONPATH environment variable."
-else:
-    for arg in VISIT_ARGS:
-        visit.AddArgument(arg)
-    visit.Launch()
+check('visit', msg='You need to install the VisIt package. Also make sure' \
+      'the visit Python module is in the PYTHONPATH environment variable.')
+import visit
+for arg in VISIT_ARGS:
+    visit.AddArgument(arg)
+visit.Launch()
 
 
 class VisitBackend(BaseClass):
