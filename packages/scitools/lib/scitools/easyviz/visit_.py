@@ -33,7 +33,6 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties
 
 import os
 import tempfile
@@ -51,15 +50,6 @@ else:
     for arg in VISIT_ARGS:
         visit.AddArgument(arg)
     visit.Launch()
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class VisitBackend(BaseClass):
@@ -173,8 +163,20 @@ class VisitBackend(BaseClass):
         if DEBUG:
             print "Setting title"
         title = ax.getp('title')
+        t = self._g.CreateAnnotationObject("Text2D")
+        t.SetText(title)
+        t.SetPosition(0.3,0.9)  # (0,0) is lower left corner
+        t.SetFontFamily(0)      # 0: Arial, 1: Courier, 2: Times
+        t.SetWidth(0.25)        # 25%
+        #t.SetTextColor((0,0,0)) # FIXME: Use ax.getp('fgcolor')
+        #t.SetUseForegroundForTextColor(False)
         if title:
-            pass  # set title
+            t.SetVisible(True)  # set title
+        else:
+            t.SetVisible(False)
+        # FIXME: This is a problem:
+        # surf(peaks(21),title='Simple plot')
+        # contour(peaks(21))  # title is still present
     
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
@@ -359,9 +361,15 @@ class VisitBackend(BaseClass):
             print "Setting view"
         cam = ax.getp('camera')
         view = cam.getp('view')
+        self._g.ResetView()
+        v2D = self._g.GetView2D()
+        v3D = self._g.GetView3D()
+        v3D.SetPerspective(False)
         if view == 2:
             # setup a default 2D view
-            pass
+            v3D.SetViewUp(0,1,0)
+            v3D.SetViewNormal(0,0,1)
+            v3D.SetImageZoom(1.2)
         elif view == 3:
             az = cam.getp('azimuth')
             el = cam.getp('elevation')
@@ -373,6 +381,9 @@ class VisitBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
+            v3D.SetViewUp(0,0,1)
+            v3D.SetViewNormal(-0.5,-0.8,0.4)
+            v3D.SetImageZoom(1.0)
             
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
@@ -384,6 +395,12 @@ class VisitBackend(BaseClass):
                 up_vector = cam.getp('camup')
                 view_angle = cam.getp('camva')
                 projection = cam.getp('camproj')
+                if projection == 'perspective':
+                    v3D.SetPerspective(True)
+                else:
+                    v3D.SetPerspective(False)
+        self._g.SetView2D(v2D)
+        self._g.SetView3D(v3D)
 
     def _set_axis_props(self, ax):
         if DEBUG:
@@ -775,7 +792,7 @@ LOOKUP_TABLE default
                 # this is subplot(nrows,ncolumns,axnr)
                 pass
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):
@@ -951,6 +968,13 @@ LOOKUP_TABLE default
         BaseClass.clf(self)
         self._g.ClearWindow()
 
+           
+    # Colormap methods:
+    def hsv(self, m=64):
+        return 'rainbow'
+
+    def jet(self, m=64):
+        return 'hot'
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:

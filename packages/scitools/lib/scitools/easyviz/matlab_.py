@@ -47,19 +47,8 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties
 
 from mlabwrap import mlab
-
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class MatlabBackend(BaseClass):
@@ -441,6 +430,34 @@ class MatlabBackend(BaseClass):
         kwargs = {'nout': 0}
         func(*args, **kwargs)
 
+    def _add_bar_graph(self, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a bar graph"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        args = [x,y,'grouped']
+
+        barwidth = item.getp('barwidth')
+        if barwidth is not None:
+            args.append(barwidth)
+        if color:
+            args.extend(['FaceColor', color])
+        if shading != 'faceted':
+            args.extend(['EdgeColor', 'none'])
+
+        kwargs = {'nout': 0}
+        self._g.bar(*args, **kwargs)
+        
+        barticks = item.getp('barticks')
+        if barticks is not None:
+            #self._g.set_(self._g.gca(), 'XTickLabel', barticks, nout=0)
+            if item.getp('rotated_barticks'):
+                pass
+
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
@@ -802,11 +819,13 @@ class MatlabBackend(BaseClass):
                 hold_state = False
                 legends = []
                 plotitems = ax.getp('plotitems')
-                plotitems.sort(_cmpPlotProperties)
+                plotitems.sort(self._cmpPlotProperties)
                 for item in plotitems:
                     func = item.getp('function')
                     if isinstance(item, Line):
                         self._add_line(item)
+                    elif isinstance(item, Bars):
+                        self._add_bar_graph(item,shading=ax.getp('shading'))
                     elif isinstance(item, Surface):
                         self._add_surface(item, shading=ax.getp('shading'))
                     elif isinstance(item, Contours):

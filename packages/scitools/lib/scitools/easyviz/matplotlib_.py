@@ -28,6 +28,7 @@ Matplotlib
 from __future__ import division
 
 from common import *
+from scitools.numpytools import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
 
 import matplotlib
@@ -38,16 +39,6 @@ matplotlib.rc('text', usetex=True)
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
 import pylab
-
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp-function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class MatplotlibBackend(BaseClass):
@@ -118,8 +109,9 @@ class MatplotlibBackend(BaseClass):
             self._g.gca().set_yscale('log')
         elif scale == 'linear':
             # use linear scale on both x- and y-axis
-            self._g.gca().set_xscale('linear')
-            self._g.gca().set_yscale('linear')
+            #self._g.gca().set_xscale('linear')
+            #self._g.gca().set_yscale('linear')
+            pass
 
     def _set_labels(self, ax):
         """Add text labels for x-, y-, and z-axis."""
@@ -426,6 +418,53 @@ class MatplotlibBackend(BaseClass):
             if legend:
                 l.set_label(legend)
 
+    def _add_bar_graph(self, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a bar graph"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        if rank(y) == 1:
+            y = reshape(y,(len(y),1))
+        nx, ny = shape(y)
+
+        step = item.getp('barstepsize')/10
+
+        center = floor(ny/2)
+        start = -step*center
+        stop = step*center
+        if not ny%2:
+            start += step/2
+            stop -= step/2
+        a = linspace(start,stop,ny)
+
+        barwidth = item.getp('barwidth')/10
+
+        hold_state = self._g.ishold()
+        self._g.hold(True)
+        colors = item._colors + matplotlib.colors.cnames.values()
+        for j in range(ny):
+            y_ = y[:,j]
+            x_ = array(range(nx)) + a[j] - 0.06
+            if not color:
+                c = colors[j]
+            else:
+                c = color
+            self._g.bar(x_,y_,width=barwidth,color=c)
+        self._g.hold(hold_state)
+
+        barticks = item.getp('barticks')
+        if barticks is None:
+            barticks = x
+        self._g.xticks(range(len(x)), barticks)
+        if item.getp('rotated_barticks'):
+            pass
+        else:
+            pass
+
     def _add_surface(self, item, shading='faceted', colormap=None):
         if DEBUG:
             print "Adding a surface"
@@ -695,11 +734,13 @@ class MatplotlibBackend(BaseClass):
                 self._g.subplot(nrows,ncolumns,axnr)
             legends = False
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):
                     self._add_line(item)
+                elif isinstance(item, Bars):
+                    self._add_bar_graph(item, shading=ax.getp('shading'))
                 elif isinstance(item, Surface):
                     self._add_surface(item,
                                       shading=ax.getp('shading'),

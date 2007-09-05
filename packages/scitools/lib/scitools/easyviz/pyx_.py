@@ -35,19 +35,9 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties
 
 import pyx 
 import math
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp-function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class PyXBackend(BaseClass):
@@ -726,7 +716,7 @@ class PyXBackend(BaseClass):
             graph = pyx.graph.graphxy(xpos, ypos, **kwargs)
             #graph = pyx.graph.graphxyz(xpos, ypos, width=5, height=5, depth=5)
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             if plotitems:
                 self._g.insert(graph)  # insert graph into figure canvas
                 self._set_axis_props(ax)

@@ -33,7 +33,6 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties
 
 class TemplateBackend(BaseClass):
     def __init__(self):
@@ -621,7 +620,7 @@ class TemplateBackend(BaseClass):
                 # this is subplot(nrows,ncolumns,axnr)
                 pass
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):

@@ -35,7 +35,7 @@ from common import *
 from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties, arrayconverter
+from misc import arrayconverter
 
 import Gnuplot
 import tempfile
@@ -45,15 +45,6 @@ import operator
 
 if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
     Gnuplot.GnuplotOpts.default_term = "x11"
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 # Change the order in which to cycle through line colors when plotting multiple
 # lines with the plot (or plot3) command. In Gnuplot we start with red since
@@ -598,18 +589,16 @@ class GnuplotBackend(BaseClass):
         else:
             self._g("set xtics (%s)" % xtics)
 
-        barwidth = item.getp('barwidth')
-        if barwidth is None:
-            barwidth = 0.13
+        barwidth = item.getp('barwidth')/10
         self._g('set boxwidth %s' % barwidth)
         if shading == 'faceted':
             self._g('set style fill solid 1.00 border -1')
         else:
             self._g('set style fill solid 1.00')
 
-        center = floor(ny/2)
-        step = 0.16
+        step = item.getp('barstepsize')/10
 
+        center = floor(ny/2)
         start = -step*center
         stop = step*center
         if not ny%2:
@@ -618,15 +607,10 @@ class GnuplotBackend(BaseClass):
         a = linspace(start,stop,ny)
 
         data = []
-
-        i = 0
         for j in range(ny):
             y_ = y[:,j]
-            x_ = array(range(nx)) + a[i]
-            i += 1
-            if i == ny:
-                i = 0
-            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % (i+1)))
+            x_ = array(range(nx)) + a[j]
+            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % (j+1)))
         return data
 
     def _add_surface(self, item, shading='faceted'):
@@ -953,7 +937,7 @@ class GnuplotBackend(BaseClass):
                 self._g('set origin %g,%g' % origin)
                 self._g('set size %g,%g' % size)
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):

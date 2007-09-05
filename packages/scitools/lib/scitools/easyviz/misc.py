@@ -291,7 +291,8 @@ def arrayconverter(a):
 
 def _cmpPlotProperties(a,b):
     """Sort cmp-function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
+    plotorder = [Volume, Streams, Surface, Contours,
+                 VelocityVectors, Bars, Line] 
     assert isinstance(a, PlotProperties)
     assert isinstance(b, PlotProperties)
     assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \

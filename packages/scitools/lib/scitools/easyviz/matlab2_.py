@@ -114,7 +114,6 @@ from __future__ import division
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import findprograms
-from misc import _cmpPlotProperties
 
 import os
 import tempfile
@@ -122,15 +121,6 @@ import tempfile
 
 MATLAB_CMD_STR = os.environ.get('MATLAB_CMD_STR', "matlab -nosplash -nojvm")
 has_matlab = findprograms('matlab')
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class Matlab2Backend(BaseClass):
@@ -490,6 +480,41 @@ class Matlab2Backend(BaseClass):
         
         cmd += ")\n"
         self._script += cmd
+
+    def _add_bar_graph(self, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a bar graph"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        cmd = ""
+        cmd += "x = %s;\n" % list(x)
+        if rank(y) == 2:
+            cmd += "y = %s;\n" % str(y.tolist()).replace('],', '];')
+        else:
+            cmd += "y = %s;\n" % list(y)
+        cmd += "bar(x,y,'grouped'"
+
+        barwidth = item.getp('barwidth')
+        if barwidth is not None:
+            cmd += ",barwidth"
+        if color:
+            cmd += ",'FaceColor', '%s'" % color
+            # FIXME: Color can also be a three-tuple [r,g,b]
+        if shading != 'faceted':
+            cmd += ",'EdgeColor', 'none'"
+        cmd += ")\n"
+        self._script += cmd
+        
+        barticks = item.getp('barticks')
+        if barticks is not None:
+            barticks = '; '.join(["'%s'" % s for s in barticks])
+            self._script += "set(gca, 'XTickLabel', [%s])\n" % barticks
+            if item.getp('rotated_barticks'):
+                pass
 
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
@@ -921,11 +946,13 @@ class Matlab2Backend(BaseClass):
                 hold_state = False
                 legends = []
                 plotitems = ax.getp('plotitems')
-                plotitems.sort(_cmpPlotProperties)
+                plotitems.sort(self._cmpPlotProperties)
                 for item in plotitems:
                     func = item.getp('function')
                     if isinstance(item, Line):
                         self._add_line(item)
+                    elif isinstance(item, Bars):
+                        self._add_bar_graph(item, shading=ax.getp('shading'))
                     elif isinstance(item, Surface):
                         self._add_surface(item, shading=ax.getp('shading'))
                     elif isinstance(item, Contours):

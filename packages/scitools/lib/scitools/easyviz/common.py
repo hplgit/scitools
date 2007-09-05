@@ -438,9 +438,10 @@ class Bars(PlotProperties):
     Properties of bars in bar graphs.
     """
     _local_prop = {
-        'barwidth': None,
         'xdata': None,
         'ydata': None,
+        'barwidth': 0.8,
+        'barstepsize': 1.0,
         'barticks': None,
         'rotated_barticks': False,
         }
@@ -458,7 +459,10 @@ class Bars(PlotProperties):
         PlotProperties.setp(self, **kwargs)
         
         if 'barwidth' in kwargs:
-            self._prop['barwidth'] = kwargs['barwidth']
+            self._prop['barwidth'] = float(kwargs['barwidth'])
+
+        if 'barstepsize' in kwargs:
+            self._prop['barstepsize'] = float(kwargs['barstepsize'])
 
         if 'barticks' in kwargs:
             self._prop['barticks'] = kwargs['barticks']
@@ -474,7 +478,7 @@ class Bars(PlotProperties):
                 self._prop['linecolor'] = arg
                 args = args[:-1]
             elif isinstance(arg, (float,int)):
-                self._prop['barwidth'] = arg
+                self._prop['barwidth'] = float(arg)
                 args = args[:-1]
         nargs = len(args)
         if nargs == 2:    # bar(x,Y)
@@ -1950,6 +1954,16 @@ class BaseClass(object):
             ax = args[0];  args = args[1:];  nargs -= 1
         return ax, args, nargs
 
+    def _cmpPlotProperties(self, a, b):
+        """Sort cmp function for PlotProperties."""
+        plotorder = [Volume, Streams, Surface, Contours,
+                     VelocityVectors, Bars, Line] 
+        assert isinstance(a, PlotProperties)
+        assert isinstance(b, PlotProperties)
+        assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) ==\
+               len(plotorder)  # check all subclasses is in plotorder
+        return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
+
     def gcf(self):
         """Return current figure."""
         return self._figs[self._attrs['curfig']]
@@ -3313,6 +3327,9 @@ class BaseClass(object):
         ax, args, nargs = self._check_args(*args)
         h = Bars(*args, **kwargs)
         ax.add(h)
+        if not ax.getp('hold'):
+            if not 'box' in kwargs:
+                kwargs['box'] = True
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)

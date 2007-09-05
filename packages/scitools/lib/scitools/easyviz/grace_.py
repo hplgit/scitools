@@ -63,7 +63,6 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from misc import _cmpPlotProperties
 
 try:
     import grace_np
@@ -73,15 +72,6 @@ except ImportError:
     except ImportError:
         # grace_np is not available
         pass  # will fail later
-
-def _cmpPlotProperties(a,b):
-    """Sort cmp-function for PlotProperties"""
-    plotorder = [Volume, Streams, Surface, Contours, VelocityVectors, Line] 
-    assert isinstance(a, PlotProperties)
-    assert isinstance(b, PlotProperties)
-    assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \
-               len(plotorder) # Check all subclasses is in plotorder
-    return cmp(plotorder.index(a.__class__),plotorder.index(b.__class__))
 
 
 class GraceBackend(BaseClass):
@@ -759,7 +749,7 @@ class GraceBackend(BaseClass):
             i = 0
             legends = []
             plotitems = ax.getp('plotitems')
-            plotitems.sort(_cmpPlotProperties)
+            plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
                 name = str(i)
                 func = item.getp('function') # function that produced this item
