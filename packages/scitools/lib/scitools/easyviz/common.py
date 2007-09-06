@@ -3257,10 +3257,9 @@ class BaseClass(object):
         
     def fill(self, *args, **kwargs):
         """Draw filled 2D polygons."""
-        #raise NotImplementedError, "'fill' is not implemented"
         kwargs['description'] = 'fill: filled 2D polygons'
-        if not 'linecolor' in kwargs:
-            kwargs['linecolor'] = 'k'
+        if not 'edgecolor' in kwargs:
+            kwargs['edgecolor'] = 'k'
         return self.plot(*args, **kwargs)
 
     def stem(self, *args, **kwargs):

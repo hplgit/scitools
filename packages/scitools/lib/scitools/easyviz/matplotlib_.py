@@ -51,10 +51,6 @@ class MatplotlibBackend(BaseClass):
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
         
-        # Set docstrings of all functions to the docstrings of BaseClass
-        # The exception is if something is very different
-        
-        
         self.figure(self.getp('curfig'))
 
         # conversion tables for format strings:
@@ -388,7 +384,6 @@ class MatplotlibBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
         marker = self._markers[item.getp('linemarker')]
         color = item.getp('linecolor')
         style = item.getp('linetype')
@@ -416,6 +411,39 @@ class MatplotlibBackend(BaseClass):
         else:
             # no zdata, add a 2D curve:
             l, = self._g.plot(x,y,fmt,linewidth=width)
+            legend = item.getp('legend')
+            if legend:
+                l.set_label(legend)
+
+    def _add_filled_line(self, item):
+        """Add a 2D or 3D filled curve."""
+        if DEBUG:
+            print "Adding a line"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        z = item.getp('zdata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        if not width:
+            width = 1.0
+            
+        try:
+            facecolor = item.getp('facecolor')
+        except KeyError:
+            facecolor = 'b'  # use blue for now
+        try:
+            edgecolor = item.getp('edgecolor')
+        except:
+            edgecolor = color  # use linecolor
+            
+        if z is not None:
+            # zdata is given, add a filled 3D curve:
+            print "No support for fill3 in Matplotlib."            
+        else:
+            # no zdata, add a filled 2D curve:
+            l, = self._g.fill(x,y,fc=facecolor,ec=edgecolor,linewidth=width)
             legend = item.getp('legend')
             if legend:
                 l.set_label(legend)
@@ -740,7 +768,10 @@ class MatplotlibBackend(BaseClass):
             for item in plotitems:
                 func = item.getp('function') # function that produced this item
                 if isinstance(item, Line):
-                    self._add_line(item)
+                    if func == 'fill':
+                        self._add_filled_line(item)
+                    else:
+                        self._add_line(item)
                 elif isinstance(item, Bars):
                     self._add_bar_graph(item, shading=ax.getp('shading'))
                 elif isinstance(item, Surface):
