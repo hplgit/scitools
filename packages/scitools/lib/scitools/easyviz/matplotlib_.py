@@ -429,14 +429,15 @@ class MatplotlibBackend(BaseClass):
         if not width:
             width = 1.0
             
-        try:
-            facecolor = item.getp('facecolor')
-        except KeyError:
-            facecolor = 'b'  # use blue for now
-        try:
-            edgecolor = item.getp('edgecolor')
-        except:
-            edgecolor = color  # use linecolor
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            if not color:
+                color = 'b'
+            facecolor = color
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = 'k'  # use black for now
+            # FIXME: edgecolor should be ax.getp('fgcolor') by default
             
         if z is not None:
             # zdata is given, add a filled 3D curve:

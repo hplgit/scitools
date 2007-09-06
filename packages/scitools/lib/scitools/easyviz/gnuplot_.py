@@ -538,15 +538,20 @@ class GnuplotBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
         
-        withstring = self._get_withstring(marker, color, style, width)
-        try:
-            facecolor = item.getp('facecolor')
-        except KeyError:
-            facecolor = 1  # use red for now
-        try:
-            edgecolor = item.getp('edgecolor')
-        except:
-            edgecolor = color  # use linecolor
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
+        else:
+            facecolor = self._colors.get(facecolor, 'r')
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = -1  # use black for now
+            # FIXME: Should use ax.getp('fgcolor') as default edgecolor
+        else:
+            edgecolor = self._colors.get(edgecolor, -1)
+            
+        withstring = self._get_withstring(marker, edgecolor, style, width)
+        
         if z is not None:
             # zdata is given, add a 3D curve:
             data = [Gnuplot.Data(x, y, z,
