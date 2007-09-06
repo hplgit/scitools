@@ -8,8 +8,15 @@ python setup.py install [, --prefix=$PREFIX]
 """
 
 import os, sys, socket, re, glob
-import scitools
 
+try:
+    import scitools
+except ImportError:
+    from os.path import abspath, join, dirname
+    path = abspath(join(dirname(__file__), "lib"))
+    sys.path.append(path)
+    import scitools
+    
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
     from setuptools import setup, Extension
