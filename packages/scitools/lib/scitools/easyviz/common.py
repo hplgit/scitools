@@ -1472,6 +1472,8 @@ class Axis(object):
                 
         if 'daspect' in kwargs:
             daspect = kwargs['daspect']
+            if isinstance(daspect, (int,float)):
+                daspect = [daspect]*3
             _check_type(daspect, 'daspect', (tuple,list))
             _check_size(daspect, 'daspect', 3)
             self._prop['daspect'] = [float(elm) for elm in daspect]
@@ -2071,34 +2073,58 @@ class BaseClass(object):
 
         Calling::
 
+            daspect([x,y,z])
+
+        sets the data aspect ratio for the x, y, and z axis (e.g.,
+        daspect([1,2,4]) means that one unit in x direction is equal in
+        length to two units in y direction and four units in z direction).
+        Note that this is not supported by all backends.
+
+        Calling::
+
             daspect()
 
         returns the data aspect ratio for the current axis.
         
         Calling::
 
-            daspect([x,y,z])
+            daspect(mode)
 
-        sets the data aspect ratio.
+        sets the data aspect ratio mode, where mode can be either 'auto'
+        or 'manual'. By specifying the mode to 'auto' (default), the data
+        aspect ratio will be automatically computed so that each axis spans
+        the available space in the figure window.
         
         Calling::
 
             daspect('mode')
 
         returns the data aspect ratio mode.
-        
+
         Calling::
 
-            daspect(mode)
+            daspect(r)
 
-        sets the data aspect ratio mode, where mode can be either 'auto'
-        or 'manual'.
-        
+        sets the data aspect ratio to r. This is for backends that do not
+        support setting individual aspect ratios for the x, y, and z axis
+        (like the Gnuplot backend). If the backend do support individual
+        aspect ratios, the aspect ratio is set to r for all three axes.
+                
         Calling::
 
             daspect(ax, ...)
 
         uses the the Axis object ax instead of the current axis.
+
+        >>> surf(peaks(21))
+        <scitools.easyviz.common.Surface object at 0xb7d7950c>
+        >>> daspect()
+        (1.0, 1.0, 0.71549553759291729)
+        >>> figure()
+        >>> surf(peaks(21))
+        <scitools.easyviz.common.Surface object at 0xb58ff70c>
+        >>> daspect([1,1,1])
+        >>> 
         """
         ax, args, nargs = self._check_args(*args)
 

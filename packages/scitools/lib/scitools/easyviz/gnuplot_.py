@@ -252,7 +252,9 @@ class GnuplotBackend(BaseClass):
         """Set data aspect ratio."""
         if ax.getp('daspectmode') == 'manual':
             dar = ax.getp('daspect')  # dar is a list (len(dar) is 3).
-            pass
+            # In Gnuplot we cannot set individual aspects for the different
+            # axes. Therefore we use dar[0] as the aspect ratio:
+            self._g('set size ratio %s' % dar[0])
         else:
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
