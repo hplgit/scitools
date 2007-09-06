@@ -441,16 +441,26 @@ class MatlabBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = 'k'
+            # FIXME: should use ax.getp('fgcolor') as the default edgecolor
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
         args = [x,y]
 
         barwidth = item.getp('barwidth')
         if barwidth is not None:
             args.append(barwidth)
         args.append('grouped')
-        if color:
-            args.extend(['FaceColor', color])
+        if facecolor:
+            args.extend(['FaceColor', facecolor])
         if shading != 'faceted':
             args.extend(['EdgeColor', 'none'])
+        elif edgecolor:
+            args.extend(['EdgeColor', '%s' % edgecolor])
+            # FIXME: a three-tuple [r,g,b] should also be supported
 
         kwargs = {'nout': 0}
         self._g.bar(*args, **kwargs)

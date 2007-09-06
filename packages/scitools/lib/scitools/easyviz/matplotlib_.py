@@ -467,6 +467,14 @@ class MatplotlibBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = 'k'  # use black for now
+            # FIXME: edgecolor should be same as ax.getp('fgcolor') by default
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
+
         if rank(y) == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
@@ -489,21 +497,20 @@ class MatplotlibBackend(BaseClass):
         for j in range(ny):
             y_ = y[:,j]
             x_ = array(range(nx)) + a[j] - barwidth/2
-            if not color:
+            if not facecolor:
                 c = colors[j]
             else:
-                c = color
-            self._g.bar(x_,y_,width=barwidth,color=c)
+                c = facecolor
+            self._g.bar(x_,y_,width=barwidth,color=c,ec=edgecolor)
         self._g.hold(hold_state)
 
         barticks = item.getp('barticks')
         if barticks is None:
             barticks = x
-        self._g.xticks(range(len(x)), barticks)
         if item.getp('rotated_barticks'):
-            pass
+            self._g.xticks(range(len(x)), barticks, rotation=90)
         else:
-            pass
+            self._g.xticks(range(len(x)), barticks)
 
     def _add_surface(self, item, shading='faceted', colormap=None):
         if DEBUG:
@@ -716,7 +723,8 @@ class MatplotlibBackend(BaseClass):
         width, height = fig.getp('size')
         if width and height:
             # set figure width and height
-            pass
+            fig = self._g.gcf()
+            fig.set_size_inches(width,height)
         else:
             # use the default width and height in plotting package
             pass

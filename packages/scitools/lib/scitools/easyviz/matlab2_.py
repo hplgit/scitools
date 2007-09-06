@@ -490,6 +490,14 @@ class Matlab2Backend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = 'k'
+            # FIXME: edgecolor should be ax.getp('fgcolor') as default
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
+        
         cmd = ""
         cmd += "x = %s;\n" % list(x)
         if rank(y) == 2:
@@ -502,11 +510,13 @@ class Matlab2Backend(BaseClass):
         if barwidth is not None:
             cmd += ",%s" % barwidth
         cmd += ",'grouped'"
-        if color:
-            cmd += ",'FaceColor', '%s'" % color
+        if facecolor:
+            cmd += ",'FaceColor', '%s'" % facecolor
             # FIXME: Color can also be a three-tuple [r,g,b]
         if shading != 'faceted':
             cmd += ",'EdgeColor', 'none'"
+        elif edgecolor:
+            cmd += ",'EdgeColor', '%s'" % facecolor
         cmd += ")\n"
         self._script += cmd
         

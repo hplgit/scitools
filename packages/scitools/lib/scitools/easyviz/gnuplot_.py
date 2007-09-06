@@ -600,10 +600,22 @@ class GnuplotBackend(BaseClass):
 
         barwidth = item.getp('barwidth')/10
         self._g('set boxwidth %s' % barwidth)
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = -1  # use black for now
+            # FIXME: edgecolor should be same as ax.getp('fgcolor') by default
+        else:
+            edgecolor = self._colors.get(edgecolor, 'r')
         if shading == 'faceted':
-            self._g('set style fill solid 1.00 border -1')
+            self._g('set style fill solid 1.00 border %s' % edgecolor)
         else:
             self._g('set style fill solid 1.00')
+
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
+        else:
+            facecolor = self._colors.get(facecolor, 3)  # use blue as default
 
         step = item.getp('barstepsize')/10
 
@@ -619,11 +631,10 @@ class GnuplotBackend(BaseClass):
         for j in range(ny):
             y_ = y[:,j]
             x_ = array(range(nx)) + a[j]
-            if not item.getp('linecolor'):
+            if not item.getp('linecolor') and not item.getp('facecolor'):
                 c = j+1
             else:
-                c = color
-            print c
+                c = facecolor
             data.append(Gnuplot.Data(x_,y_,with='boxes %s' % c))
         return data
 
