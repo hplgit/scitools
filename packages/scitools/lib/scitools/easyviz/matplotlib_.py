@@ -485,7 +485,7 @@ class MatplotlibBackend(BaseClass):
 
         hold_state = self._g.ishold()
         self._g.hold(True)
-        colors = item._colors + matplotlib.colors.cnames.values()
+        colors = PlotProperties._colors + matplotlib.colors.cnames.values()
         for j in range(ny):
             y_ = y[:,j]
             x_ = array(range(nx)) + a[j] - barwidth/2
@@ -759,15 +759,13 @@ class MatplotlibBackend(BaseClass):
 
         # reset the plotting package instance in fig._g now if needed
         self._g.clf()
-
-        # turn on hold in pylab temporarily:
-        pylab_hold_state = self._g.ishold()
-        self._g.hold(True)
         
         self._set_figure_size(fig)
         
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
+            if ax.getp('numberofitems') == 0:
+                continue
             if nrows != 1 or ncolumns != 1:
                 # create axes in tiled position
                 # this is subplot(nrows,ncolumns,axnr)
@@ -810,13 +808,14 @@ class MatplotlibBackend(BaseClass):
                 if legend:
                     # add legend to plot
                     legends = True
+                if ax.getp('numberofitems') > 1 and not self._g.ishold():
+                    self._g.hold(True)
 
             if legends:
                 self._g.legend()
             self._set_axis_props(ax)
                     
-        # set back the hold and interactive states in pylab:
-        self._g.hold(pylab_hold_state)
+        # set back the interactive state in pylab:
         if old_pylab_interactive_state:
             self._g.ion()
 
