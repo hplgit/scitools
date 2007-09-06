@@ -762,6 +762,11 @@ class MatplotlibBackend(BaseClass):
                 # create axes in tiled position
                 # this is subplot(nrows,ncolumns,axnr)
                 self._g.subplot(nrows,ncolumns,axnr)
+            else:
+                rect = ax.getp('viewport')
+                if isinstance(rect, (list,tuple)) and len(rect) == 4 and \
+                       ax.getp('pth') is None:
+                    self._g.axes(rect)
             legends = False
             plotitems = ax.getp('plotitems')
             plotitems.sort(self._cmpPlotProperties)

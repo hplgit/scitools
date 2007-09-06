@@ -238,13 +238,15 @@ class GnuplotBackend(BaseClass):
     def _set_position(self, ax):
         """Set axes position."""
         rect = ax.getp('viewport')
-        if rect:
+        if isinstance(rect, (list,tuple)) and len(rect) == 4 and \
+               ax.getp('pth') is None:
             # axes position is defined. In Matlab rect is defined as
             # [left,bottom,width,height], where the four parameters are
             # location values between 0 and 1 ((0,0) is the lower-left
             # corner and (1,1) is the upper-right corner).
             # NOTE: This can be different in the plotting package.
-            pass
+            self._g('set origin %g,%g' % tuple(rect[:2]))
+            self._g('set size %g,%g' % tuple(rect[2:]))
 
     def _set_daspect(self, ax):
         """Set data aspect ratio."""
@@ -1180,8 +1182,9 @@ class GnuplotBackend(BaseClass):
         self._g(' '.join(setterm))
         self._g('set output "%s"' % filename)
         self._replot()
-        if self.gcf().getp('axshape') == (1,1):
-            # need to call hardcopy in Gnuplot.py:
+        if len(self.gcf().getp('axes')) == 1:
+            # Need to call hardcopy in Gnuplot.py to avoid ending up with
+            # a PostScript file with multiple pages:
             self._g.hardcopy(**keyw)
         self._g('quit')
         self._g = self.gcf()._g  # set self._g to the correct instance again
