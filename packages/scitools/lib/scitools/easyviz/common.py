@@ -136,6 +136,8 @@ class PlotProperties(object):
         'linewidth': '',
         'linetype': '',
         'linemarker': '',
+        'facecolor': '',
+        'edgecolor': '',
         'pointsize': 1.0,
         'material': None,
         'memoryorder': 'yxz',  # FIXME: this is deprecated and will be removed
@@ -216,6 +218,12 @@ class PlotProperties(object):
             else:
                 raise ValueError, 'linemarker must be %s, not %s' % \
                       (self._markers, kwargs['linemarker'])
+
+        if 'facecolor' in kwargs:
+            self._prop['facecolor'] = kwargs['facecolor']
+
+        if 'edgecolor' in kwargs:
+            self._prop['edgecolor'] = kwargs['edgecolor']
 
         if 'memoryorder' in kwargs:
             msg = "Keyword argument 'memoryorder' is deprecated and will be " \
