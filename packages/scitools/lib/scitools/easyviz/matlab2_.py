@@ -978,7 +978,8 @@ class Matlab2Backend(BaseClass):
                         hold_state = True
                     
                 if legends:
-                    self._script += "legend(%s),...\n" % tuple(legends)
+                    legends = ','.join("'%s'" % l for l in legends)
+                    self._script += "legend(%s),...\n" % legends
                     
                 if hold_state:
                     self._script += "hold off,...\n"
