@@ -43,13 +43,12 @@ from matplotlib.font_manager import fontManager, FontProperties
 import pylab
 
 # override some properties for nicer plots:
-pylab.rcParams.update({'font.size' : 10,
-                       'axes.labelsize' : 10,
-                       'font.size' : 10,
-                       'text.fontsize' : 10,
-                       'xtick.labelsize' : 8,
-                       'ytick.labelsize' : 8,
-                       })
+#pylab.rcParams.update({'font.size' : 10,
+#                       'axes.labelsize' : 10,
+#                       'text.fontsize' : 10,
+#                       'xtick.labelsize' : 8,
+#                       'ytick.labelsize' : 8,
+#                       })
 
 
 class MatplotlibBackend(BaseClass):
