@@ -292,8 +292,6 @@ def main(n, length, method, name):
 
     if method == "pickle":
         datain = NumPyDB_pickle(name, 'load')
-    elif method == "arrPickle":
-        datain = NumPyDB_arrPickle(name, 'load')
     elif method == "cPickle":
         datain = NumPyDB_cPickle(name, 'load')
     elif method == "shelve":

@@ -278,16 +278,23 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     1D/2D/3D scalar/vector fields over 1D/2D/3D grids, given
     one-dimensional coordinate arrays x, y, and/or, z.
 
-    >>> x=seq(0,1,0.5)   # coordinate along x axis
-    >>> y=seq(0,1,1)     # coordinate along y axis
-    >>> meshgrid(x,y)    # extend x and y for a 2D xy grid
-    (array([[ 0. ,  0.5,  1. ]]), array([[ 0.],
-           [ 1.]]))
+    >>> x=linspace(0,1,3)        # coordinates along x axis
+    >>> y=linspace(0,1,2)        # coordinates along y axis
+    >>> xv, yv = meshgrid(x,y)   # extend x and y for a 2D xy grid
+    >>> xv
+    array([[ 0. ,  0.5,  1. ]]
+    >>> yv
+    array([[ 0.],
+           [ 1.]])
     >>> z=5
-    >>> meshgrid(x,y,z)  # 2D slice of a 3D grid, with z=const
-    (array([[ 0. ,  0.5,  1. ]]), array([[ 0.],
-           [ 1.]]), 5)
-    >>> xv, yv, zc = meshgrid(x,y,z)  # typical usage
+    >>> xv, yv, zc = meshgrid(x,y,z)  # 2D slice of a 3D grid, with z=const
+    >>> xv
+    array([[ 0. ,  0.5,  1. ]]
+    >>> yv
+    array([[ 0.],
+           [ 1.]])
+    >>> zc
+    5
 
     >>> meshgrid(2,y,x)  # 2D slice of a 3D grid, with x=const
     (2, array([[ 0.,  1.]]), array([[ 0. ],
@@ -314,30 +321,98 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
            [ 0.,  1.],
            [ 0.,  1.]]))
 
-    """
 
-    # NOTE: numpy.mgrid defines a similar functionality, should use
-    # that function if numpy is imported??
+    Why has SciTools its own meshgrid function when NumPy has three
+    similar functions, `mgrid`, `ogrid`, and `meshgrid`?
+    The `meshgrid` function in NumPy is limited to two dimensions only, while
+    the SciTools version can also work with 3D grids. In addition,
+    the NumPy version of `meshgrid` has no option for generating sparse
+    grids to conserve memory, like we have in SciTools by specifying the
+    `sparse` argument:
+    !bc
+    >>> xv, yv = meshgrid(linspace(-2,2,5), linspace(-1,1,3), sparse=True)
+    >>> xv
+    array([[-2., -1.,  0.,  1.,  2.]])
+    >>> yv
+    array([[-1.],
+           [ 0.],
+           [ 1.]])
+    >>>
+    !ec
+    Actually, this is the default behavior for the `meshgrid` function in
+    SciTools. In NumPy, however, we will in this case get a full 2D grid:
+    !bc
+    >>> xv, yv = numpy.meshgrid(linspace(-2,2,5), linspace(-1,1,3))
+    >>> xv
+    array([[-2., -1.,  0.,  1.,  2.],
+           [-2., -1.,  0.,  1.,  2.],
+           [-2., -1.,  0.,  1.,  2.]])
+    >>> yv
+    array([[-1., -1., -1., -1., -1.],
+           [ 0.,  0.,  0.,  0.,  0.],
+           [ 1.,  1.,  1.,  1.,  1.]])
+    >>> 
+    !ec
+    This is the same as setting `sparse=False` in `meshgrid` in SciTools.
+
+    The NumPy functions `mgrid` and `ogrid` does provide support for,
+    respectively, full and sparse n-dimensional meshgrids, however,
+    these functions uses slices to generate the meshgrids rather than
+    one-dimensional coordinate arrays such as in Matlab. With slices, the
+    user does not have the option to generate meshgrid with, e.g.,
+    irregular spacings, like 
+    !bc
+    x = array([-1,-0.5,1,4,5], float)
+    y = array([0,-2,-5], float)
+    xv, yv = meshgrid(x, y)
+    !ec
+
+    In addition to the reasons mentioned above, the functions provided by
+    NumPy supports only Cartesian indexing, i.e., x and y, not matrix
+    indexing, i.e., rows and columns. The `meshgrid` function in SciTools
+    supports both indexing conventions through the `indexing` keyword
+    argument. Giving the string `'ij'` returns a meshgrid with matrix
+    indexing, while `'xy'` returns a meshgrid with Cartesian indexing. The
+    difference is illustrated by the following code snippet:
+    !bc
+    nx = 10
+    ny = 15
+
+    x = linspace(-2,2,nx)
+    y = linspace(-2,2,ny)
+
+    xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
+    for i in range(nx):
+        for j in range(ny):
+            # treat xv[i,j], yv[i,j]
+
+    xv, yv = meshgrid(x, y, sparse=False, indexing='xy')
+    for i in range(nx):
+        for j in range(ny):
+            # treat xv[j,i], yv[j,i]
+    !ec
+
+    It is not entirely true that matrix indexing is not supported by the
+    `meshgrid` function in NumPy because we can just switch the order of
+    the first two input and output arguments:
+    !bc
+    yv, xv = numpy.meshgrid(y, x)
+    !ec
+    is the same as
+    !bc
+    xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
+    !ec
+    However, we think it is clearer to have the logical "x, y"
+    sequence on the left-hand side and instead adjust a keyword argument.
+    """
 
     import types
     def fixed(coor):
         return isinstance(coor, (float, complex, int, types.NoneType))
 
-    if False:
-        # convert list/tuple to NumPy arrays:
-        if isinstance(x, (list,tuple)):  x = array(x)
-        if isinstance(y, (list,tuple)):  y = array(y)
-        if isinstance(z, (list,tuple)):  z = array(z)
-
-        # Make sure output is dense when input array types are different
-        if not sparse:
-            x = asarray_cpwarn(x, comment='meshgrid: x')
-            y = asarray_cpwarn(y, comment='meshgrid: y')
-            z = asarray_cpwarn(z, comment='meshgrid: z')
-    else:
-        if not fixed(x):  x = asarray(x)
-        if not fixed(y):  y = asarray(y)
-        if not fixed(z):  z = asarray(z)
+    if not fixed(x):  x = asarray(x)
+    if not fixed(y):  y = asarray(y)
+    if not fixed(z):  z = asarray(z)
 
     # Only singleton dimensions is allowed if rank > 1
     def squeeze(a):
