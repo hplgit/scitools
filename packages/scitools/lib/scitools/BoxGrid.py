@@ -61,10 +61,10 @@ class UniformBoxGrid(object):
 
         
         if x is not None and nx is not None:
-            right_type(x, 'x', (list,tuple))
-            right_type(x[0], 'x[0]', (float,int))
-            right_type(x[1], 'x[1]', (float,int))
-            right_type(nx, 'nx', int)
+            right_type(x, (list,tuple))
+            right_type(x[0], (float,int))
+            right_type(x[1], (float,int))
+            right_type(nx, int)
 
             self.nsd += 1
             self.nx = nx; self.xmin = x[0]; self.xmax = x[1]
@@ -75,10 +75,10 @@ class UniformBoxGrid(object):
             self.shape.append(nx+1)
 
         if y is not None and ny is not None:
-            right_type(y, 'y', (list,tuple))
-            right_type(y[0], 'y[0]', (float,int))
-            right_type(y[1], 'y[1]', (float,int))
-            right_type(ny, 'ny', int)
+            right_type(y, (list,tuple))
+            right_type(y[0], (float,int))
+            right_type(y[1], (float,int))
+            right_type(ny, int)
 
             self.nsd += 1
             self.ny = ny; self.ymin = y[0]; self.ymax = y[1]
@@ -89,10 +89,10 @@ class UniformBoxGrid(object):
             self.shape.append(ny+1)
 
         if z is not None and nz is not None:
-            right_type(z, 'z', (list,tuple))
-            right_type(z[0], 'z[0]', (float,int))
-            right_type(z[1], 'z[1]', (float,int))
-            right_type(nz, 'nz', int)
+            right_type(z, (list,tuple))
+            right_type(z[0], (float,int))
+            right_type(z[1], (float,int))
+            right_type(nz, int)
 
             self.nsd += 1
             self.nz = nz; self.zmin = z[0]; self.zmax = z[1]
@@ -507,7 +507,7 @@ class BoxGrid(UniformBoxGrid):
         self.shape = []
 
         if x is not None:
-            right_type(x, 'x', (list,tuple,ndarray))
+            right_type(x, (list,tuple,ndarray))
 
             self.nsd += 1
             self.nx = len(x)-1; self.xmin = x[0]; self.xmax = x[-1]
@@ -518,7 +518,7 @@ class BoxGrid(UniformBoxGrid):
             self.shape.append(nx+1)
 
         if y is not None:
-            right_type(y, 'y', (list,tuple,ndarray))
+            right_type(y, (list,tuple,ndarray))
 
             self.nsd += 1
             self.ny = len(y)-1; self.ymin = y[0]; self.ymax = y[-1]
@@ -529,7 +529,7 @@ class BoxGrid(UniformBoxGrid):
             self.shape.append(ny+1)
 
         if z is not None:
-            right_type(z, 'z', (list,tuple,ndarray))
+            right_type(z, (list,tuple,ndarray))
 
             self.nsd += 1
             self.nz = len(z)-1; self.zmin = z[0]; self.zmax = z[-1]
@@ -545,15 +545,15 @@ def _test(g):
     print 'g=%s' % str(g)
     # dump all the contents of a grid object:
     scitools.misc.dump(g, hide_nonpublic=False)
-    from scitools.numpytools import arr
+    from numpy import zeros
     def fv(*args):
         # vectorized evaluation function
-        return arr(g.shape)+2
+        return zeros(g.shape)+2
     def fs(*args):
         # scalar version
         return 2
     fv_arr = g.vectorized_eval(fv)
-    fs_arr = arr(g.shape)
+    fs_arr = zeros(g.shape)
     coor = [0.0]*g.nsd
     itparts = ['all', 'interior', 'all_boundary', 'interior_boundary',
                'corners']
@@ -593,7 +593,7 @@ def _test2():
     print 'g4["y"][-1]:', g4["y"][-1]
     
 def _test4():
-    from scitools.numpytools import sin, arr, exp
+    from numpy import sin, zeros, exp
     # check vectorization evaluation:
     g = UniformBoxGrid(x=(0,1), y=(0,1), nx=3, ny=3)
     try:
@@ -602,14 +602,14 @@ def _test4():
         # fine, expect to arrive here
         print msg
     try:
-        g.vectorized_eval(lambda x,y: arr((2,2))+2)
+        g.vectorized_eval(lambda x,y: zeros((2,2))+2)
     except IndexError, msg:
         # fine, expect to arrive here
         print msg
 
     a = g.vectorized_eval(lambda x,y: sin(x)*exp(y-x))
     print a
-    a = g.vectorized_eval(lambda x,y: arr(g.shape)+2)
+    a = g.vectorized_eval(lambda x,y: zeros(g.shape)+2)
     print a
 
 def _test5():

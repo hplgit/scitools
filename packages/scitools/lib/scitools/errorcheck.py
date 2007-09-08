@@ -227,9 +227,6 @@ def right_type(a, expected_types):
     @type  a: any
     @param expected_types: class name(s) of the expected type(s).
     @type  expected_types: class name or list/tuple of class names
-    @param a_can_be_class: True if a is a class object, False if a
-    is an instance of a class.
-    @type  a_can_be_class: bool
     @return: None. The function raises a TypeError exception if a
     is not of right type.
     """

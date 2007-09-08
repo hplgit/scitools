@@ -4,7 +4,6 @@ Interactive drawing of y=f(x) functions.
 The drawing takes place in a Pmw.Blt.Graph widget.
 """
 import Pmw, Tkinter, os
-from scitools.numpytools import *
 
 class DrawFunction:
     def __init__(self, xcoor, parent,
@@ -228,7 +227,8 @@ def points2grid(x, y, xcoor):
     L = 0; R = 0
     n = len(xcoor)
     m = len(x)
-    f = zeros(n, Float)
+    from numpy import zeros
+    f = zeros(n)
     for i in range(n):
         xi = xcoor[i]
         # find j such that xi is between x[j-1] and x[j]
@@ -270,7 +270,8 @@ if __name__ == '__main__':
     Pmw.initialise(root)
     import scitools.misc; scitools.misc.fontscheme6(root)
     root.title('DrawFunction demo')
-    x = sequence(0,1,0.05)
+    from numpy import linspace
+    x = linspace(0, 1, 21)
     df = DrawFunction(x, root)
     df.pack()
 #    Tkinter.Button(root, text='Print coordinates (interpolated to grid)',

@@ -92,7 +92,7 @@ class NumPyDB_text(NumPyDB):
         """Dump NumPy array a with identifier."""
         fd = open(self.dn, 'a');  fm = open(self.pn, 'a')
         fm.write("%d\t\t %s\n" % (fd.tell(), identifier))
-        fmt = 'array([' + '%s,'*(size(a)-1) + '%s])\n'
+        fmt = 'array([' + '%s,'*(a.size-1) + '%s])\n'
         fd.write(fmt % tuple(ravel(a)))
         fd.close();  fm.close()
     
@@ -189,36 +189,6 @@ class NumPyDB_cPickle (NumPyDB):
         fd.close()
         return [a, id]
 
-class NumPyDB_arrPickle (NumPyDB):
-    """Use Numeric's pickle functionality."""
-    
-    def __init__(self, database_name, mode='store'):
-        NumPyDB.__init__(self, database_name, mode)
-
-    def dump(self, a, identifier):
-        """Dump NumPy array a with identifier. Works only with Numeric."""
-        fd = open(self.dn, 'a');  fm = open(self.pn, 'a')
-        fm.write("%d\t\t %s\n" % (fd.tell(), identifier))
-        dump(a, fd)  # Numeric.dump
-        fd.close();  fm.close()
-
-    def load(self, identifier, bestapprox=None):
-        """
-        Load NumPy array with a given identifier. In case the
-        identifier is not found, bestapprox != None means that
-        an approximation is sought. The bestapprox argument is
-        then taken as a function that can be used for computing
-        the distance between two identifiers id1 and id2.
-
-        Works only with Numeric arrays.
-        """
-        pos, id = self.locate(identifier, bestapprox)
-        if pos < 0: return [None, "not found"]
-        fd = open(self.dn, 'r')
-        fd.seek(pos)
-        a = load(fd)  # Numeric.load
-        fd.close()
-        return [a, id]
 
 import shelve
 
@@ -302,12 +272,6 @@ def main(n, length, method, name):
           % (n,length,method)
     if method == "pickle":
         dataout = NumPyDB_pickle(name, 'store')
-    elif method == "arrPickle":
-        if basic_NumPy == 'Numeric':
-            dataout = NumPyDB_arrPickle(name, 'store')
-        else:
-            print 'Warning NumPyDB_arrPickle works only with NumPy'
-            dataout = NumPyDB_cPickle(name, 'store')
     elif method == "cPickle":
         dataout = NumPyDB_cPickle(name, 'store')
     elif method == "shelve":
@@ -320,7 +284,7 @@ def main(n, length, method, name):
     import time
     t0 = time.clock()
     for i in range(n):
-        u = arrayrange(i, length/2+i, 0.4999999, Float)
+        u = arange(i, length/2+i, 0.4999999)
         # (generate numbers with many digits so repr(u) has
         # a representative size (not just integers, for instance))
         
@@ -367,7 +331,7 @@ if __name__ == '__main__':
     try:     length = int(sys.argv[2])
     except:  length = 10
     try:     methods = [sys.argv[3]]
-    except:  methods = ['pickle','cPickle','arrPickle','shelve','text']
+    except:  methods = ['pickle','cPickle','shelve','text']
     print 'NumPy array type:', basic_NumPy
     for method in methods:
         main(n, length, method, "tmpdata_" + method)

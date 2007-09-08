@@ -228,7 +228,7 @@ Here is an example::
                                type(value))
 
                 elif callable(self._type_check[prm]):
-                    can_set = self.type_check[prm](value)
+                    can_set = self._type_check[prm](value)
                 else:
                     raise TypeError, 'self._type_check["%s"] has an '\
                           'illegal value %s' % \

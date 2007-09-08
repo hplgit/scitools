@@ -4,7 +4,7 @@ Class for a scalar (or vector) field over a BoxGrid or UniformBoxGrid grid.
 """
 
 from scitools.BoxGrid import BoxGrid, UniformBoxGrid, X, Y, Z
-from scitools.numpytools import arr, Int
+from numpy import zeros, array
 
 # ideas:
 # connect grid to field, field to grid
@@ -89,7 +89,7 @@ class BoxField(Field):
                       (values.shape, required_shape)
         else:
             # create array of scalar field grid point values:
-            self.values = arr(required_shape)
+            self.values = N.zeros(required_shape)
 
         # doesn't  work: self.__getitem__ = self.values.__getitem__
         #self.__setitem__ = self.values.__setitem__
@@ -97,7 +97,7 @@ class BoxField(Field):
     def update(self):
         """Update the self.values array (if grid has been changed)."""
         if self.grid.shape != self.values.shape:
-            self.values = arr(self.grid.shape)
+            self.values = N.zeros(self.grid.shape)
 
     # these are slower than u_ = u.values; u_[i] since an additional
     # function call is required compared to NumPy array indexing:
@@ -133,7 +133,7 @@ def _test(g):
     # write out field values at the mid point of the grid
     # (convert g.shape to NumPy array and divide by 2 to find
     # approximately the mid point)
-    midptindex = tuple(arr(data=g.shape,element_type=Int)/2)
+    midptindex = tuple(array(g.shape,int)/2)
     ptcoor = g[midptindex]
     # tuples with just one item does not work as indices
     print 'mid point %s has indices %s' % (ptcoor, midptindex)

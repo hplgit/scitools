@@ -4,7 +4,7 @@ Notebook for selecting functions.
 """
 
 import Pmw, Tkinter, os, types
-from scitools.numpytools import seq, wrap2callable, NumPyArray, pi
+from scitools.numpyutils import seq, wrap2callable, ndarray, pi
 from DrawFunction import DrawFunction
 from StringFunction import StringFunction
 from ParameterInterface import Parameters, parametersGUI
@@ -138,7 +138,7 @@ class FuncSpec:
                       type(self.description)
 
         if self.xcoor is not None:
-            if not isinstance(self.xcoor, NumPyArray):
+            if not isinstance(self.xcoor, ndarray):
                 raise TypeError, \
                       'xcoor must be a NumPy array, not %s' % type(self.xcoor)
 

@@ -186,7 +186,7 @@ def remove_multiple_items(somelist):
     Given some list somelist, return a list where identical items
     are removed.
     """
-    right_type(somelist, 'somelist', list)
+    right_type(somelist, list)
     new = []
     helphash = {}
     for item in somelist:

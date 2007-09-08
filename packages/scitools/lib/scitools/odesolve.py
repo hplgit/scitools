@@ -179,8 +179,7 @@ For example::
  
 
 """
-import numpytools as N
-print 'Numerical Python type:', N.basic_NumPy
+import numpy as N
 import operator, os
 
 #---------------------------------------------------------------------
@@ -196,7 +195,7 @@ _func_or_file_type = lambda v: v is None or callable(v) or \
 
 # test that a variable v is array/list-like, a number, or None:
 _array_or_number_type = lambda v: v is None or \
-      isinstance(v, (list, tuple, N.NumPyArray, float, complex, int))
+      isinstance(v, (list, tuple, N.ndarray, float, complex, int))
 
 
 # test that a variable v is a function or the string 'built-in'
@@ -568,7 +567,7 @@ class ODESolver(object):
     Traceback (most recent call last):
     initial_condition={}: this function is called to approve the value {}:
     _array_or_number_type = lambda v: v is None or \
-      isinstance(v, (list, tuple, N.NumPyArray, float, complex, int))
+      isinstance(v, (list, tuple, N.ndarray, float, complex, int))
     ...and the function returned False
     >>>
     >>>
@@ -1059,7 +1058,7 @@ are stored in lists and finally converted to arrays.)
                 self._y = []
             if not hasattr(self, '_t'):
                 self._t = []
-            if isinstance(y, N.NumPyArray):
+            if isinstance(y, N.ndarray):
                 # storing references is potentially problematic since
                 # algorithms may update y by in-place modifications;
                 # take a copy to be safe:
@@ -1149,7 +1148,7 @@ are stored in lists and finally converted to arrays.)
             # to wrap to NumPy arrays (self._f2array is then set to True):
             if isinstance(f0, (list,tuple)):
                 self._f2array = True
-            elif isinstance(f0, N.NumPyArray):
+            elif isinstance(f0, N.ndarray):
                 self._f2array = False
             elif operator.isNumberType(f0):
                 self._f2array = False
@@ -1160,7 +1159,7 @@ are stored in lists and finally converted to arrays.)
                 raise TypeError, 'f (right-hand side) returns %s, not '\
                       'list, tuple, array or number' % type(f0)
             f0 = N.array(f0, copy=False)
-            if N.size(f0) != n:
+            if f0.size != n:
                 raise ValueError, 'f returns vector of length %d while '\
                       'initial_condition has incompatible length %d' % \
                       (len(f0), n)
@@ -1180,7 +1179,7 @@ are stored in lists and finally converted to arrays.)
             if len(y.shape) == 1:
                 # individual y values were scalars so y is now a
                 # one-dim array; turn it into the standard two-dim array:
-                y = y[:,N.NewAxis]
+                y = y[:,N.newaxis]
             t = N.array(self.t, copy=False)
             self._y = y;  self._t = t
             return self.y, self.t
@@ -1320,7 +1319,7 @@ arguments to the function g call by a nonlinear_solver to solve g=0''',
             # to wrap to NumPy arrays:
             if isinstance(J0, (list,tuple)):
                 self._Jacobian2array = True
-            elif isinstance(J0, N.NumPyArray):
+            elif isinstance(J0, N.ndarray):
                 self._Jacobian2array = False
             elif operator.isNumberType(J0):
                 self._f2array = False

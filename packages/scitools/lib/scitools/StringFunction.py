@@ -30,6 +30,8 @@ exec s
 # build a lambda function out of the string expression and define
 # self.__call__ to be this lambda function.
 
+import re
+
 class StringFunction:
     """
     Representation of a string formula as a function of one or
@@ -148,30 +150,16 @@ class StringFunction:
         self._f = expression
 
         # check if expression is a function in a module:
-        self._function_from_file = None
-        parts = expression.split('.')
-        if len(parts) > 1:
-            string_function = False
-            # This may be a package.module.function type of function
-            # (or just a string expression with a number with a dot...).
-            # Let _build_lambda build a wrapper to this function.
-            # self._f holds a special keyword argument to the
-            # lambda function which refers to the function in file.
-            
-            module = '.'.join(parts[:-1])
-            # can we import this module? (might be misphrased or it
-            # might not be a module at all but part of a string formula...)
-            try:
-                exec('import ' + module)
-            except:
-                string_function = True
-        else:
-            string_function = True
+        self._function_in_module = None
 
-        # consistency check:
-        if not string_function:
-            if self._function_from_file is None:
-                raise ValueError, 'a bug'
+        # a module function specification is on the form
+        # [A-Za-z_][A-Za-z0-9_.]x where x+1 is the len(expression)
+        pattern = r'[A-Za-z_][A-Za-z0-9_.]{%d}' % (len(expression)-1)
+        if re.search(pattern, expression):
+            parts = expression.split('.')
+            module = '.'.join(parts[:-1])
+            function = parts[-1]
+            self._function_in_module = (module, function)
             
         # self._var holds the independent variables in a tuple:
         if 'independent_variable' in kwargs:
@@ -181,7 +169,6 @@ class StringFunction:
         # user's globals() array (with relevant imported modules/functions):
         self._globals = kwargs.get('globals', globals())
 
-        self.__name__ = self._f  # class name = function expression
         self._prms = kwargs.copy()
 	try:    del self._prms['independent_variable']
         except: pass
@@ -214,30 +201,35 @@ class StringFunction:
         else:
             kwargs = ''
 
-        if self._function_from_file is None:
+        if self._function_in_module is None:
             # insert string expression as body in the lambda function:
             s += ': ' + self._f
         else:
+            exec('import ' + self._function_in_module[0])
             # let lambda call a function in a file (module):
-            s += ', function_from_file=self._function_from_file: ' + \
-                 'function_from_file(%s, %s)' % (args, kwargs)
+            s += ', module=%s: module.%s(%s, %s)' % \
+                 (self._function_in_module[0],
+                  self._function_in_module[1],
+                  args, kwargs)
             # note: we could use self._f directly here (giving the
             # full module path), but then we need to do import first,
             # all this is done in the __init__ and then it is simpler
-            # to just let self_function_from_file point to the imported
+            # to just let self_function_in_module point to the imported
             # function
         
         self._lambda = s # store lambda function code; just for convenience
 
         try:
-            if self._function_from_file is None:
+            if self._function_in_module is None:
                 self.__call__ = eval(s, self._globals)
                 
                 ## the following makes all instances have the same function :-(
                 ##StringFunction.__call__ = eval(s, self._globals)
             else:
-                # didn't work with self._globals...and we don't need it
-                self.__call__ = eval(s)
+                # didn't work with self._globals...and we don't need it...????
+                self.__call__ = eval(s, globals(), locals())
+                #self.__call__ = eval(s)
+                #print 'call is', self.__call__
 
         except NameError, e:
             prm = str(e).split()[1]
