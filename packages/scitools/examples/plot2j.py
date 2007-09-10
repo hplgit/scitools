@@ -15,10 +15,10 @@ plot(t, y1, 'r-', t, y2, 'bo',
      hardcopy='tmp2.eps')
 
 ax = gca()   # get current Axis object
-ax.set(xlabel='t', ylabel='y',
-       axis=[0, 4, -0.1, 0.6],
-       title='Plotting two curves in the same plot')
-show()  # show the plot again after ax.set actions
+ax.setp(xlabel='t', ylabel='y',
+        axis=[0, 4, -0.1, 0.6],
+        title='Plotting two curves in the same plot')
+show()  # show the plot again after ax.setp actions
 
 print ax.dump()
 fig = gcf(); print fig.dump()

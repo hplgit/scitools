@@ -20,13 +20,16 @@ figure()
 data = {'method1': {'thing1': 3, 'thing2': 2, 'thing3': 4},
         'method2': {'thing1': 4, 'thing2': 4.5, 'thing3': 2},
         'method3': {'thing1': 1, 'thing2': 4, 'thing3': 2},}
-bar(data,rotated_barticks=False,
-    hardcopy='bar1a.eps',color=True,
-    ymin=0,ymax=5)
+bar(data, rotated_barticks=True,
+    hardcopy='bar1a.eps', color=True,
+    ymin=0, ymax=5)
 
 # red bars with borders turned off:
 figure()
 bar(rand(5,4),'r',shading='interp')
 
+# specify face and edge color:
+figure()
+bar(rand(3,3),facecolor='b',edgecolor='r')
 
 raw_input('press enter')

@@ -13,10 +13,6 @@ figure()
 t = linspace(0.0,3.0,301)
 s = sin(2*pi*t)
 c = sin(4*pi*t)
-fill(t, s, 'b', t, c, 'g', alpha=0.2) # Alpha doesn't seem to work yet 
-
-if 0:
-    from scitools.easyviz.common import debug
-    debug(plt)
+fill(t, s, 'b', t, c, 'g', opacity=0.2)
 
 raw_input('press enter')
