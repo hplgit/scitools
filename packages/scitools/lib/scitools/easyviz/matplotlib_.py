@@ -446,13 +446,17 @@ class MatplotlibBackend(BaseClass):
         if not edgecolor:
             edgecolor = 'k'  # use black for now
             # FIXME: edgecolor should be ax.getp('fgcolor') by default
+        opacity = item.getp('material').getp('opacity')
+        if opacity is None:
+            opacity = 1.0
             
         if z is not None:
             # zdata is given, add a filled 3D curve:
             print "No support for fill3 in Matplotlib."            
         else:
             # no zdata, add a filled 2D curve:
-            l, = self._g.fill(x,y,fc=facecolor,ec=edgecolor,linewidth=width)
+            l, = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
+                              linewidth=width, alpha=opacity)
             legend = item.getp('legend')
             if legend:
                 l.set_label(legend)
@@ -473,6 +477,9 @@ class MatplotlibBackend(BaseClass):
         facecolor = item.getp('facecolor')
         if not facecolor:
             facecolor = color
+        opacity = item.getp('material').getp('opacity')
+        if opacity is None:
+            opacity = 1.0
 
         if rank(y) == 1:
             y = reshape(y,(len(y),1))
@@ -500,7 +507,8 @@ class MatplotlibBackend(BaseClass):
                 c = colors[j]
             else:
                 c = facecolor
-            self._g.bar(x_,y_,width=barwidth,color=c,ec=edgecolor)
+            self._g.bar(x_, y_, width=barwidth, color=c,
+                        ec=edgecolor, alpha=opacity)
         self._g.hold(hold_state)
 
         barticks = item.getp('barticks')
@@ -526,6 +534,10 @@ class MatplotlibBackend(BaseClass):
         if shape(x) != shape(z) or shape(y) != shape(z):
             x, y = meshgrid(x, y, sparse=False,
                             indexing=item.getp('indexing'))
+
+        opacity = item.getp('material').getp('opacity')
+        if opacity is None:
+            opacity = 1.0
         
         contours = item.getp('contours')
         if contours:
@@ -540,7 +552,8 @@ class MatplotlibBackend(BaseClass):
         else:
             # colored surface (as produced by surf, surfc, or pcolor)
             # use keyword argument shading to set the color shading mode
-            h = self._g.pcolor(x,y,z,shading=shading,cmap=colormap)
+            h = self._g.pcolor(x, y, z, shading=shading,
+                               cmap=colormap, alpha=opacity)
             if legend:
                 h.set_label(legend)
 
@@ -561,6 +574,10 @@ class MatplotlibBackend(BaseClass):
         if shape(x) != shape(z) or shape(y) != shape(z):
             x, y = meshgrid(x, y, sparse=False,
                             indexing=item.getp('indexing'))
+        
+        opacity = item.getp('material').getp('opacity')
+        if opacity is None:
+            opacity = 1.0
         
         filled = item.getp('filled')  # draw filled contour plot if True
 
@@ -587,7 +604,7 @@ class MatplotlibBackend(BaseClass):
                 pass
         if filled:
             contour_cmd = self._g.contourf
-        kwargs = {'cmap': colormap}
+        kwargs = {'cmap': colormap, 'alpha': opacity}
         if legend:
             kwargs['label'] = legend
         cs = contour_cmd(x,y,z,clevels,**kwargs)
