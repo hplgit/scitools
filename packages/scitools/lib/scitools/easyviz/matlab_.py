@@ -488,8 +488,12 @@ class MatlabBackend(BaseClass):
             
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
-        if color:
-            args.extend(['EdgeColor', color])
+        edgecolor = item.getp('edgecolor')
+        facecolor = item.getp('facecolor')
+        if edgecolor:
+            args.extend(['EdgeColor', edgecolor])
+        if facecolor:
+            args.extend(['FaceColor', facecolor])
         if style:
             args.extend(['LineStyle', style])
         if marker:

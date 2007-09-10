@@ -645,11 +645,26 @@ class GnuplotBackend(BaseClass):
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
-        
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+        if not width:
+            width = 1.0
+        width = width - width/2
+        edgecolor = item.getp('edgecolor')
+        #facecolor = item.getp('facecolor')
+        #if facecolor and facecolor in self._colors:
+        #    facecolor = self._colors[facecolor]
+
+        withstring = ''
         self._g('set surface')
         if item.getp('wireframe'):
             # wireframe mesh (as produced by mesh or meshc)
             self._g('unset pm3d')
+            if edgecolor == '':
+                withstring = 'l palette'
+            else:
+                edgecolor = self._colors.get(edgecolor, -1)
+                withstring += 'lines lt %s lw %s' % (edgecolor,width)
         else:
             # colored surface (as produced by surf, surfc, or pcolor)
             # use keyword argument shading to set the color shading mode
@@ -657,13 +672,18 @@ class GnuplotBackend(BaseClass):
                 self._g('set pm3d at s solid')
             elif shading == 'faceted':
                 self._g('set pm3d at s solid hidden3d 100')
-                self._g('set style line 100 lt -1 lw 0.5')
+                if edgecolor == '':
+                    edgecolor = -1  # use black for now
+                else:
+                    edgecolor = self._colors.get(edgecolor, -1)
+                self._g('set style line 100 lt %s lw %s' % (edgecolor,width))
             elif shading == 'interp':
                 # Interpolated shading requires Gnuplot >= 4.2
                 self._g('set pm3d implicit at s')
                 self._g('set pm3d scansautomatic')
                 self._g('set pm3d interpolate 10,10')
                 self._g('set pm3d flush begin ftriangles nohidden3d')
+            withstring += 'l palette'
 
         if item.getp('indexing') == 'xy':
             if rank(x) == 2 and rank(y) == 2:
@@ -676,7 +696,7 @@ class GnuplotBackend(BaseClass):
                                 arrayconverter(x),
                                 arrayconverter(y),
                                 title=item.getp('legend'),
-                                with='l palette',
+                                with=withstring,
                                 binary=0)
         return data
 

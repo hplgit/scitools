@@ -516,7 +516,7 @@ class Matlab2Backend(BaseClass):
         if shading != 'faceted':
             cmd += ",'EdgeColor', 'none'"
         elif edgecolor:
-            cmd += ",'EdgeColor', '%s'" % facecolor
+            cmd += ",'EdgeColor', '%s'" % edgecolor
         cmd += ")\n"
         self._script += cmd
         
@@ -553,10 +553,14 @@ class Matlab2Backend(BaseClass):
             
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
+        edgecolor = item.getp('edgecolor')
+        facecolor = item.getp('facecolor')
         args = ""
-        if color:
-            args += ",'EdgeColor','%s'" % color
+        if edgecolor:
+            args += ",'EdgeColor','%s'" % edgecolor
             # FIXME: Color can also be a three-tuple [r,g,b]
+        if facecolor:
+            args += ",'FaceColor','%s'" % facecolor
         if style:
             args += ",'LineStyle','%s'" % style
         if marker:
