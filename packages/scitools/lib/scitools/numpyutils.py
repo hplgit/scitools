@@ -415,11 +415,11 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
         return isinstance(coor, (float, complex, int, types.NoneType))
 
     if not fixed(x):
-        x = asarray(x).squeeze()
+        x = asarray(x)
     if not fixed(y):
-        y = asarray(y).squeeze()
+        y = asarray(y)
     if not fixed(z):
-        z = asarray(z).squeeze()
+        z = asarray(z)
     
     def arr1D(coor):
         try:
@@ -540,7 +540,14 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
         return l[0]
     else:
         return tuple(l)
-     
+
+def ndgrid(*args,**kwargs):
+    """
+    Same as calling meshgrid with indexing='ij' (see meshgrid for
+    documentation).
+    """
+    kwargs['indexing'] = 'ij'
+    return meshgrid(*args,**kwargs)
         
 def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
     """
