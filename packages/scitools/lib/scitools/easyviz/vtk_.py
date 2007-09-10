@@ -1276,7 +1276,9 @@ class VtkBackend(BaseClass):
         if not self.getp('show'):  # don't display to screen
             self._g.OffScreenRenderingOn()
 
-        self._replot()
+        replot = kwargs.get('replot', True)
+        if replot:
+            self._replot()
 
         color = self.getp('color')
         

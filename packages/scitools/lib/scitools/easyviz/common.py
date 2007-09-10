@@ -2183,11 +2183,14 @@ class BaseClass(object):
         pickle.dump(self._figs, handle)
         handle.close()
 
-    def hardcopy(self, filename=''): 
+    def hardcopy(self, filename, **kwargs): 
         """
         Save a hardcopy of the current figure to file (with the given
         filename). The file format (image type) is determined from the
-        extension of the filename. 
+        extension of the filename. If any changes have been made by working
+        directly on the backend instance, set the keyword argument replot
+        to False to stop Easyviz from replotting the current figure and
+        destroying those changes.
         """
         # must be implemented in subclass
         raise NotImplementedError, 'hardcopy not implemented in class %s' % \

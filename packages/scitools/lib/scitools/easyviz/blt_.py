@@ -237,7 +237,7 @@ class BltBackend(BaseClass):
         """Set data aspect ratio."""
         if ax.getp('daspectmode') == 'manual':
             dar = ax.getp('daspect')  # dar is a list (len(dar) is 3).
-            pass
+            self._g.configure(aspect=dar[0])
         else:
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
@@ -415,7 +415,6 @@ class BltBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -676,8 +675,6 @@ class BltBackend(BaseClass):
             
         self._g = fig._g # link for faster access
 
-    figure.__doc__ = BaseClass.figure.__doc__
-        
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
@@ -753,7 +750,9 @@ class BltBackend(BaseClass):
         """
         self.setp(**kwargs)
         color = self.getp('color')
-        self._replot()
+        replot = kwargs.get('replot', True)
+        if replot:
+            self._replot()
 
         if DEBUG:
             print "Hardcopy to %s" % filename
@@ -774,8 +773,6 @@ class BltBackend(BaseClass):
                                      landscape=orientation)
         self._ps = self._g.postscript_output()
         self._g.postscript_output(filename)
-
-    hardcopy.__doc__ = BaseClass.hardcopy.__doc__ + hardcopy.__doc__
 
     def clf(self):
         fig = self.gcf()

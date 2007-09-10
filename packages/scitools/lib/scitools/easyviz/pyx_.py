@@ -762,7 +762,9 @@ class PyXBackend(BaseClass):
         """
         self.setp(**kwargs)
         color = self.getp('color')
-        self._replot()
+        replot = kwargs.get('replot', True)
+        if replot:
+            self._replot()
 
         if DEBUG:
             print "Hardcopy to %s" % filename

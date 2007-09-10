@@ -443,36 +443,6 @@ class VisitBackend(BaseClass):
             print "\nAnnotationAttributes:\n", self._aa
         self._g.SetAnnotationAttributes(self._aa)
 
-    def _get_linespecs(self, item):
-        """
-        Return the line marker, line color, line style, and
-        line width of the item.
-        """
-        
-        marker = self._markers[item.getp('linemarker')]
-        color = self._colors[item.getp('linecolor')]
-        style = self._line_styles[item.getp('linetype')]
-        width = item.getp('linewidth')
-        return marker, color, style, width
-
-    def _add_line(self, item):
-        """Add a 2D or 3D curve to the scene."""
-        if DEBUG:
-            print "Adding a line"
-        # get data:
-        x = item.getp('xdata')
-        y = item.getp('ydata')
-        z = item.getp('zdata')
-        # get line specifiactions:
-        marker, color, style, width = self._get_linespecs(item)
-
-        if z is not None:
-            # zdata is given, add a 3D curve:
-            pass
-        else:
-            # no zdata, add a 2D curve:
-            pass
-
     def _generate_2D_database(self, x, y, z, c, indexing='xy'):
         x = squeeze(x)
         y = squeeze(y)
@@ -512,6 +482,79 @@ LOOKUP_TABLE default
                 f.write("%s\n" % c[i,j])
         f.close()
         return tmpfname
+
+    def _generate_3D_database(self, x, y, z, v, c, indexing='xy'):
+        x = squeeze(x)
+        y = squeeze(y)
+        z = squeeze(z)
+        v = asarray(v)
+        c = asarray(c)
+        nx, ny, nz = shape(v)
+        if shape(x) != (nx,ny,nz) and shape(y) != (nx,ny,nz) and \
+               shape(z) != (nx,ny,nz):
+            x, y, z = meshgrid(x, y, z, sparse=False, indexing=indexing)
+        dx, dy, dz = self._ax.getp('daspect')
+        x = x/dx
+        y = y/dy
+        z = z/dz
+
+        tmpfname = tempfile.mktemp(suffix='.vtk')
+        self.gcf()._tmpfiles.append(tmpfname)  # clean up later
+        f = open(tmpfname, 'w')
+        f.write("""# vtk DataFile Version 2.0
+vtk file written by scitools.easyviz
+ASCII
+           
+DATASET STRUCTURED_GRID
+DIMENSIONS %d %d %d
+POINTS %d float
+""" % (nx,ny,nz,nx*ny*nz))
+        for i in range(nx):
+            for j in range(ny):
+                for k in range(nz):
+                    f.write("%s %s %s\n" % (x[i,j,k],y[i,j,k],z[i,j,k]))
+   
+        f.write("""
+POINT_DATA %d
+SCALARS scalars float
+LOOKUP_TABLE default
+""" % (nx*ny*nz))
+        for i in range(nx):
+            for j in range(ny):
+                for k in range(nz):
+                    f.write("%s\n" % v[i,j,k])
+        f.close()
+        return tmpfname
+
+    def _get_linespecs(self, item):
+        """
+        Return the line marker, line color, line style, and
+        line width of the item.
+        """
+        
+        marker = self._markers[item.getp('linemarker')]
+        color = self._colors[item.getp('linecolor')]
+        style = self._line_styles[item.getp('linetype')]
+        width = item.getp('linewidth')
+        return marker, color, style, width
+
+    def _add_line(self, item):
+        """Add a 2D or 3D curve to the scene."""
+        if DEBUG:
+            print "Adding a line"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        z = item.getp('zdata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+
+        if z is not None:
+            # zdata is given, add a 3D curve:
+            pass
+        else:
+            # no zdata, add a 2D curve:
+            pass
 
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
@@ -679,14 +722,28 @@ LOOKUP_TABLE default
                 pass
             pass
 
-    def _add_isosurface(self, item):
+    def _add_isosurface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a isosurface"
         # grid components:
         x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
         v = item.getp('vdata')  # volume
         c = item.getp('cdata')  # pseudocolor data
-        isovalue = item.getp('isovalue')
+        isovalue = float(item.getp('isovalue'))
+
+        if c is None:
+            c = asarray(z).copy()
+        db = self._generate_3D_database(x,y,z,v,c,
+                                        indexing=item.getp('indexing'))
+        self._g.OpenDatabase(db)
+        
+        self._g.AddPlot("Contour", "scalars")
+        ca = self._g.ContourAttributes()
+        if DEBUG:
+            print "\nContourAttributes:\n", ca
+        ca.SetContourMethod(1)  # Values
+        ca.SetContourValue(isovalue)
+        self._g.SetPlotOptions(ca)
 
     def _add_slices(self, item):
         if DEBUG:
@@ -901,7 +958,9 @@ LOOKUP_TABLE default
         """
         self.setp(**kwargs)
         color = self.getp('color')
-        self._replot()
+        replot = kwargs.get('replot', True)
+        if replot:
+            self._replot()
 
         if DEBUG:
             print "Hardcopy to %s" % filename

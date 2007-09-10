@@ -851,7 +851,9 @@ class MatplotlibBackend(BaseClass):
         """
         self.setp(**kwargs)
         color = self.getp('color')
-        self._replot()
+        replot = kwargs.get('replot', True)
+        if replot:
+            self._replot()
 
         if DEBUG:
             print "Hardcopy to %s" % filename
@@ -859,7 +861,6 @@ class MatplotlibBackend(BaseClass):
         dpi = kwargs.get('dpi', 150)
         orientation = kwargs.get('orientation', 'portrait')
 
-        self._replot()
         self._g.savefig(filename,
                         facecolor='w',
                         edgecolor='w',
