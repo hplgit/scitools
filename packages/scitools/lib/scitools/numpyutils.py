@@ -263,13 +263,6 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
         except MemoryError, e:
             # print more information (size of data):
             print e, 'of size %s' % shape
-
-# squeeze was taken from pylab but now numpy has this function
-#def squeeze(a):
-#    "squeeze(a) returns a with any ones from the shape of a removed"
-#    a = asarray(a)
-#    b = asarray(a.shape)
-#    return reshape (a, tuple (compress (not_equal (b, 1), b)))
     
 def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
              memoryorder=None):
@@ -353,7 +346,8 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
            [ 1.,  1.,  1.,  1.,  1.]])
     >>> 
     !ec
-    This is the same as setting `sparse=False` in `meshgrid` in SciTools.
+    This is the same result we get by setting `sparse=False` in `meshgrid`
+    in SciTools.
 
     The NumPy functions `mgrid` and `ogrid` does provide support for,
     respectively, full and sparse n-dimensional meshgrids, however,
@@ -362,18 +356,28 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     user does not have the option to generate meshgrid with, e.g.,
     irregular spacings, like 
     !bc
-    x = array([-1,-0.5,1,4,5], float)
-    y = array([0,-2,-5], float)
-    xv, yv = meshgrid(x, y)
+    >>> x = array([-1,-0.5,1,4,5], float)
+    >>> y = array([0,-2,-5], float)
+    >>> xv, yv = meshgrid(x, y, sparse=False)
+    >>> xv 
+    array([[-1. , -0.5,  1. ,  4. ,  5. ],
+           [-1. , -0.5,  1. ,  4. ,  5. ],
+           [-1. , -0.5,  1. ,  4. ,  5. ]])
+    >>> yv
+    array([[ 0.,  0.,  0.,  0.,  0.],
+           [-2., -2., -2., -2., -2.],
+           [-5., -5., -5., -5., -5.]])
+    >>> 
     !ec
 
-    In addition to the reasons mentioned above, the functions provided by
+    In addition to the reasons mentioned above, the meshgrid function in
     NumPy supports only Cartesian indexing, i.e., x and y, not matrix
-    indexing, i.e., rows and columns. The `meshgrid` function in SciTools
-    supports both indexing conventions through the `indexing` keyword
-    argument. Giving the string `'ij'` returns a meshgrid with matrix
-    indexing, while `'xy'` returns a meshgrid with Cartesian indexing. The
-    difference is illustrated by the following code snippet:
+    indexing, i.e., rows and columns (`mgrid` and `ogrid` supports only
+    matrix indexing). The `meshgrid` function in SciTools supports both
+    indexing conventions through the `indexing` keyword argument. Giving
+    the string `'ij'` returns a meshgrid with matrix indexing, while
+    `'xy'` returns a meshgrid with Cartesian indexing. The difference is
+    illustrated by the following code snippet:
     !bc
     nx = 10
     ny = 15
@@ -410,28 +414,12 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     def fixed(coor):
         return isinstance(coor, (float, complex, int, types.NoneType))
 
-    if not fixed(x):  x = asarray(x)
-    if not fixed(y):  y = asarray(y)
-    if not fixed(z):  z = asarray(z)
-
-    # Only singleton dimensions is allowed if rank > 1
-    def squeeze(a):
-        "squeeze(a) returns a with any ones from the shape of a removed"
-        a = asarray(a)
-        b = asarray(a.shape)
-        return reshape (a, tuple (compress (not_equal (b, 1), b)))
-        
-    if rank(x) > 1: 
-        x = squeeze(x)
-        assert rank(x) == 1 
-    if rank(y) >1:
-        y = squeeze(y)
-        assert rank(y) == 1
-    if z is not None:
-        if rank(z) > 1:
-            z = squeeze(z)
-            assert rank(z) == 1
-    
+    if not fixed(x):
+        x = asarray(x).squeeze()
+    if not fixed(y):
+        y = asarray(y).squeeze()
+    if not fixed(z):
+        z = asarray(z).squeeze()
     
     def arr1D(coor):
         try:
@@ -471,10 +459,10 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
         else:
             indexing = 'xy'
     
-    mult_fact = 1
-    # if the keyword argument sparse is set to False, the full N-D matrix
+    # If the keyword argument sparse is set to False, the full N-D matrix
     # (not only the 1-D vector) should be returned. The mult_fact variable
     # should then be updated as necessary.
+    mult_fact = 1
 
     # if only one argument is fixed, we have a 2D grid:
     if arr1D(x) and arr1D(y) and fixed(z):
