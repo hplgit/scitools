@@ -2,7 +2,7 @@ import pickle, os, operator, pprint
 
 from scitools.numpytools import seq, iseq, asarray, NewAxis, ones, zeros, \
      sqrt, shape, NumPyArray, arrmin, arrmax, ravel, meshgrid, rank, squeeze, \
-     reshape, compress
+     reshape, compress, ndgrid
 
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file

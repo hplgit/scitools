@@ -219,12 +219,15 @@ Decorating the Plot
 The x and y axis in curve plots should have labels, here t and
 y, respectively. Also, the curve should be identified with a label,
 or legend as it is often called.  A title above the plot is also
-common.  All such things are easily added after the plot command::
+common.  In addition, we may want to control the extent of the axes (although
+most plotting programs will automatically adjust the axes to the range of the
+data).
+All such things are easily added after the plot command::
 
         xlabel('t')
         ylabel('y')
         legend('t^2*exp(-t^2)')
-        axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
+        axis([0, 3, -0.05, 0.6])   # [tmin, tmax, ymin, ymax]
         title('My First Easyviz Demo')
 
 This syntax is inspired by Matlab to make the switch between
@@ -310,43 +313,22 @@ FIGURE:[figs/plot2a.eps] Two curves in the same plot.
 
 
 
-Controlling Axis and Line Styles
---------------------------------
+Controlling Line Styles
+-----------------------
 
-A plotting program will normally compute sensible ranges of
-the axis. For example, the Gnuplot program has in our examples
-so far used an y axis from 0 to 0.6 while the x axis goes from
-0 to 3. Sometimes it is desired to adjust the range
-of the axis. Say we want the x axis to go from 0 to 4 (although the
-data stops at x=3), while y axis goes from -0.1 to 0.6.
-In the Matlab-like syntax new axis specifications are 
-done by the axis command::
-
-        axis([0, 4, -0.1, 0.6])
-
-With a single plot command we must use the axis keyword::
-
-        plot(t, y1, t, y2, ...
-             axis=[0, 4, -0.1, 0.6],
-             ...)
-
-In both cases, the axis specification is a list of the
-x_{\rm min}, x_{\rm max}, y_{\rm min}, and y_{\rm max}
-values.
-
-The two curves get distinct default line styles, depending on the
-program that is used to produce the curve (and the settings for this
-program). It might well happen that you get a green and a red curve
-(which is bad for a significant portion of the male population).  We
-may therefore often want to control the line style in detail. Say we
-want the first curve (t and y1) to be drawn as a red solid line
-and the second curve (t and y2) as blue circles at the discrete
-data points.  The Matlab-inspired syntax for specifying line types
-applies a letter for the color and a symbol from the keyboard for the
-line type. For example, r- represents a red (r) line (-), while
-bo means blue (b) circles (o). The line style specification is
-added as an argument after the x and y coordinate arrays of the
-curve::
+When plotting multiple curves in the same plot, the individual curves
+get distinct default line styles, depending on the program that is
+used to produce the curve (and the settings for this program). It
+might well happen that you get a green and a red curve (which is bad
+for a significant portion of the male population).  We may therefore
+often want to control the line style in detail. Say we want the first
+curve (t and y1) to be drawn as a red solid line and the second
+curve (t and y2) as blue circles at the discrete data points.  The
+Matlab-inspired syntax for specifying line types applies a letter for
+the color and a symbol from the keyboard for the line type. For
+example, r- represents a red (r) line (-), while bo means blue
+(b) circles (o). The line style specification is added as an
+argument after the x and y coordinate arrays of the curve::
 
         plot(t, y1, 'r-')
         hold('on')

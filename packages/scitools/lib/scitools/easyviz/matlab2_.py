@@ -83,7 +83,7 @@ Python prompt, we must first exit Matlab.
 Now we create a contour plot in combination with a quiver plot:
 
 >>> reset()  # remove the previous Matlab commands
->>> xx, yy = meshgrid(linspace(-3,3,31), linspace(-3,3,31), sparse=False)
+>>> xx, yy = ndgrid(linspace(-3,3,31), linspace(-3,3,31), sparse=False)
 >>> zz = peaks(xx, yy)
 >>> contour(xx,yy,zz,12,hold='on')
 >>> uu, vv = gradient(zz)
@@ -538,11 +538,14 @@ class Matlab2Backend(BaseClass):
         cmd = ""
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,indexing='ij')
+            x,y = ndgrid(x,y,sparse=False)
         if shape(x) != shape(z) and shape(y) != shape(z):
             cmd += "x = %s;\n" % list(x)
             cmd += "y = %s;\n" % list(y)
-            cmd += "[X,Y] = meshgrid(x,y);\n"
+            if item.getp('indexing') == 'ij':
+                cmd += "[X,Y] = ndgrid(x,y);\n"
+            else:
+                cmd += "[X,Y] = meshgrid(x,y);\n"
         else:
             cmd += "X = %s;\n" % str(x.tolist()).replace('],', '];')
             cmd += "Y = %s;\n" % str(y.tolist()).replace('],', '];')
@@ -623,11 +626,14 @@ class Matlab2Backend(BaseClass):
         cmd = ""
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,indexing='ij')
+            x,y = ndgrid(x,y,sparse=False)
         if shape(x) != shape(z) and shape(y) != shape(z):
             cmd += "x = %s;\n" % list(x)
             cmd += "y = %s;\n" % list(y)
-            cmd += "[X,Y] = meshgrid(x,y);\n"
+            if item.getp('indexing') == 'ij':
+                cmd += "[X,Y] = ndgrid(x,y);\n"
+            else:
+                cmd += "[X,Y] = meshgrid(x,y);\n"
         else:
             cmd += "X = %s;\n" % str(x.tolist()).replace('],', '];')
             cmd += "Y = %s;\n" % str(y.tolist()).replace('],', '];')
@@ -720,13 +726,16 @@ class Matlab2Backend(BaseClass):
             if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u) and \
                     shape(z) != shape(u)):
-                x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+                x,y,z = ndgrid(x,y,z,sparse=False)
             if shape(x) != shape(u) and shape(y) != shape(u) and \
                shape(z) != shape(u):
                 cmd += "x = %s;\n" % list(x)
                 cmd += "y = %s;\n" % list(y)
                 cmd += "z = %s;\n" % list(z)
-                cmd += "[X,Y,Z] = meshgrid(x,y,z);\n"
+                if item.getp('indexing') == 'ij':
+                    cmd += "[X,Y,Z] = ndgrid(x,y,z);\n"
+                else:
+                    cmd += "[X,Y,Z] = meshgrid(x,y,z);\n"
             else:
                 cmd += "X = %s;\n" % str(x.tolist()).replace('],', '];')
                 cmd += "Y = %s;\n" % str(y.tolist()).replace('],', '];')
@@ -741,11 +750,14 @@ class Matlab2Backend(BaseClass):
             # points (x,y):
             if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u)):
-                x,y = meshgrid(x,y,sparse=False,indexing='ij')
+                x,y = ndgrid(x,y,sparse=False)
             if shape(x) != shape(u) and shape(y) != shape(u):
                 cmd += "x = %s;\n" % list(x)
                 cmd += "y = %s;\n" % list(y)
-                cmd += "[X,Y] = meshgrid(x,y);\n"
+                if item.getp('indexing') == 'ij':
+                    cmd += "[X,Y] = ndgrid(x,y);\n"
+                else:
+                    cmd += "[X,Y] = meshgrid(x,y);\n"
             else:
                 cmd += "X = %s;\n" % str(x.tolist()).replace('],', '];')
                 cmd += "Y = %s;\n" % str(y.tolist()).replace('],', '];')
@@ -821,13 +833,16 @@ class Matlab2Backend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         if shape(x) != shape(v) and shape(y) != shape(v) and \
                shape(z) != shape(v):
             cmd += "x = %s;\n" % list(x)
             cmd += "y = %s;\n" % list(y)
             cmd += "z = %s;\n" % list(z)
-            cmd += "[X,Y,Z] = meshgrid(x,y,z);\n"
+            if item.getp('indexing') == 'ij':
+                cmd += "[X,Y,Z] = ndgrid(x,y,z);\n"
+            else:
+                cmd += "[X,Y,Z] = meshgrid(x,y,z);\n"
         else:
             cmd += "X = %s;\n" % str(x.tolist()).replace('],', '];')
             cmd += "X = reshape(X,%d,%d,%d);\n" % shape(v)
@@ -857,7 +872,7 @@ class Matlab2Backend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         sx, sy, sz = item.getp('slices')
         if rank(sz) == 2:
             # sx, sy, and sz defines a surface
@@ -885,7 +900,7 @@ class Matlab2Backend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         args = [x,y,z,v,sx,sy,sz]
 
         cvector = item.getp('cvector')

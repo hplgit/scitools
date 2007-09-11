@@ -598,7 +598,7 @@ end
         pass
 
     def _create_2D_scalar_data_file(self, x, y, z,
-                                    regular_grid=False, indexing='xy'):
+                                    regular_grid=False, indexing='ij'):
         tmp = tempfile.mktemp()
         # first create data file:
         data_file = open(tmp+'.dat', 'w')
@@ -610,7 +610,7 @@ end
                 data_file.write("\n")
         else:
             if shape(x) != (nx,ny) and shape(y) != (nx,ny):
-                x, y = meshgrid(x,y,sparse=False)
+                x, y = ndgrid(x,y,sparse=False)
             for i in range(nx):
                 for j in range(ny):
                     data_file.write("%5.3lf\t%5.3lf\t%5.3lf\n" % \
@@ -657,7 +657,7 @@ end
         return header_file.name
 
     def _create_3D_scalar_data_file(self, x, y, z, v,
-                                    regular_grid=False, indexing='xy'):
+                                    regular_grid=False, indexing='ij'):
         tmp = tempfile.mktemp()
         # create data file:
         data_file = open(tmp+'.dat', 'w')
@@ -671,7 +671,7 @@ end
         else:
             if shape(x) != (nx,ny,nz) and shape(y) != (nx,ny,nz) \
                    and shape(z) != (nx,ny,nz):
-                x, y, z = meshgrid(x,y,z,sparse=False)
+                x, y, z = ndgrid(x,y,z,sparse=False)
             for i in range(nx):
                 for j in range(ny):
                     for k in range(nz):
@@ -723,10 +723,10 @@ end
 
     def _create_2D_scalar_field(self, x, y, z, id,
                                 regular_grid=False,
-                                indexing='xy'):
+                                indexing='ij'):
         nx, ny = shape(z)
         if shape(x) != (nx,ny) and shape(y) != (nx,ny):
-            x, y = meshgrid(x,y,sparse=False,indexing=indexing)
+            x, y = ndgrid(x,y,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
         # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 
@@ -759,11 +759,11 @@ end
 
     def _create_3D_scalar_field(self, x, y, z, v, id,
                                 regular_grid=False,
-                                indexing='xy'):
+                                indexing='ij'):
         nx, ny, nz = shape(v)
         if shape(x) != (nx,ny,nz) and shape(y) != (nx,ny,nz) \
                and shape(z) != (nx,ny,nz):
-            x, y, z = meshgrid(x,y,z,sparse=False,indexing=indexing)
+            x, y, z = ndgrid(x,y,z,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
         # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 

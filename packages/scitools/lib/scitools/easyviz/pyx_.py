@@ -466,15 +466,15 @@ class PyXBackend(BaseClass):
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
-        x = item.getp('xdata')  # grid component in x-direction
-        y = item.getp('ydata')  # grid component in y-direction
-        z = item.getp('zdata')  # scalar field
-        c = item.getp('cdata')  # pseudocolor data (can be None)
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = item.getp('zdata')           # scalar field
+        c = item.getp('cdata')           # pseudocolor data (can be None)
         
         data = []
         m, n = shape(z)
-        if shape(x) != shape(z) and shape(y) != shape(z):
-            x, y = meshgrid(x,y,sparse=False)
+        if shape(x) != (m,n) and shape(y) != (m,n):
+            x, y = ndgrid(x,y,sparse=False)
         for i in range(m):
             for j in range(n):
                 data.append([x[i,j], y[i,j], z[i,j]])

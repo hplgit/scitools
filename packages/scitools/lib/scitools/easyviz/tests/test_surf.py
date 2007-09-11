@@ -39,7 +39,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid(self):
         x = linspace(-2,2,21)
         y = linspace(-3,3,13)
-        xv, yv = meshgrid(x, y, indexing='ij')
+        xv, yv = ndgrid(x, y)
         values = peaks(xv,yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")
@@ -48,7 +48,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid_no_grid_components(self):
         x = linspace(-2,2,21)
         y = linspace(-3,3,13)
-        xv, yv = meshgrid(x, y, indexing='ij')
+        xv, yv = ndgrid(x, y)
         values = peaks(xv, yv)
         surf(values)
         title("surf(values) (rectangular grid)")
@@ -57,7 +57,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid2(self):
         x = linspace(-5,5,41)
         y = linspace(-2,2,9)
-        xv, yv = meshgrid(x, y, indexing='ij')
+        xv, yv = ndgrid(x, y)
         values = peaks(xv, yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")
@@ -66,7 +66,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid2_no_grid_components(self):
         x = linspace(-5,5,41)
         y = linspace(-2,2,9)
-        xv, yv = meshgrid(x, y, indexing='ij')
+        xv, yv = ndgrid(x, y)
         values = peaks(xv, yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")

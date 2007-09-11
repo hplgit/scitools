@@ -474,14 +474,14 @@ class MatlabBackend(BaseClass):
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
-        x = item.getp('xdata')  # grid component in x-direction
-        y = item.getp('ydata')  # grid component in y-direction
-        z = item.getp('zdata')  # scalar field
-        c = item.getp('cdata')  # pseudocolor data (can be None)
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = item.getp('zdata')           # scalar field
+        c = item.getp('cdata')           # pseudocolor data (can be None)
 
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,indexing='ij')
+            x,y = ndgrid(x, y, sparse=False)
         args = [x,y,z]
         if c is not None:
             args.append(c)
@@ -549,13 +549,13 @@ class MatlabBackend(BaseClass):
         # bottom (as in meshc or surfc).
         if DEBUG:
             print "Adding contours"
-        x = item.getp('xdata')  # grid component in x-direction
-        y = item.getp('ydata')  # grid component in y-direction
-        z = item.getp('zdata')  # scalar field
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = item.getp('zdata')           # scalar field
 
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(z) and shape(y) != shape(z)):
-            x,y = meshgrid(x,y,sparse=False,indexing='ij')
+            x,y = ndgrid(x, y, sparse=False)
         args = [x,y,z]
 
         filled = item.getp('filled')  # draw filled contour plot if True
@@ -618,9 +618,13 @@ class MatlabBackend(BaseClass):
         #item.scale_vectors()
 
         # grid components:
-        x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
+        x = squeeze(item.getp('xdata'))
+        y = squeeze(item.getp('ydata'))
+        z = item.getp('zdata')
         # vector components:
-        u, v, w = item.getp('udata'), item.getp('vdata'), item.getp('wdata')
+        u = item.getp('udata')
+        v = item.getp('vdata')
+        w = item.getp('wdata')
         # get line specifiactions (marker='.' means no marker):
         marker, color, style, width = self._get_linespecs(item)
 
@@ -633,10 +637,11 @@ class MatlabBackend(BaseClass):
         if z is not None and w is not None:
             # draw velocity vectors as arrows with components (u,v,w) at
             # points (x,y,z):
+            z = squeeze(z)
             if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u) and \
                     shape(z) != shape(u)):
-                x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+                x,y,z = ndgrid(x, y, z, sparse=False)
             args = [x,y,z,u,v,w]
             func = self._g.quiver3
         else:
@@ -644,7 +649,7 @@ class MatlabBackend(BaseClass):
             # points (x,y):
             if item.getp('indexing') == 'ij' and \
                    (shape(x) != shape(u) and shape(y) != shape(u)):
-                x,y = meshgrid(x,y,sparse=False,indexing='ij')
+                x,y = ndgrid(x, y, sparse=False)
             args = [x,y,u,v]
             func = self._g.quiver
         args.append(scale)
@@ -711,7 +716,7 @@ class MatlabBackend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         args = [x,y,z,v]
         if c is not None:
             args.append(c)
@@ -729,7 +734,7 @@ class MatlabBackend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         sx, sy, sz = item.getp('slices')
         if rank(sz) == 2:
             # sx, sy, and sz defines a surface
@@ -757,7 +762,7 @@ class MatlabBackend(BaseClass):
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
-            x,y,z = meshgrid(x,y,z,sparse=False,indexing='ij')
+            x,y,z = ndgrid(x,y,z,sparse=False)
         args = [x,y,z,v,sx,sy,sz]
 
         cvector = item.getp('cvector')

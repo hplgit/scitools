@@ -57,10 +57,10 @@ def _check_xyzv(*args, **kwargs):
         x, y, z = meshgrid(range(ny), range(nx), range(nz), indexing=indexing)
     else:
         if indexing == 'ij':
-            assert shape(x)==(nx,ny,nz) or shape(x)==(1,ny,1) or \
-                   shape(x)==(ny,), \
+            assert shape(x)==(nx,ny,nz) or shape(x)==(nx,1,1) or \
+                   shape(x)==(nx,), \
                    "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
-                   (shape(x), (nx,ny,nz), (1,ny,1), (ny,))
+                   (shape(x), (nx,ny,nz), (nx,1,1), (nx,))
         
             if shape(x) == (nx,ny,nz):
                 assert shape(y) == (nx,ny,nz), \
