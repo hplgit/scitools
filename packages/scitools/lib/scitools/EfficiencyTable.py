@@ -18,11 +18,14 @@ class EfficiencyTable:
     """
     def __init__(self, description, normalization_time=None):
         """
-        description: a string acting as headline for this test.
-        normalization_time: all CPU times will be divided by this value
+        @param description: a string acting as headline for this test.
+        @param normalization_time: all CPU times will be divided by this value
         (if not set, the class will find the smallest (best) CPU
-        time and divide all others by this value. The best_time
-        parameter can also be set in the set_normalization_time method.)
+        time and divide all others by this value.
+
+        The best_time parameter can also be set in the
+        set_normalization_time method. The normalization time is not
+        used before an instance is printed (str method).)
         """
         self.description = description
         self.experiments = {}  # key=description, value=[CPU-time1, CPU-time2, ]
@@ -70,13 +73,20 @@ class EfficiencyTable:
         
     def _reference_CPU_time(self, experiment_idx=0):
         if self._normalization_time is not None:
+            # try first to see if there is an experiment with the
+            # given normalization time:
             for description in self.experiments:
                 if abs(self.experiments[description][experiment_idx] - \
                        self._normalization_time) < 1.0E-10:
                     return self._normalization_time, description
+            # no experiment coincides with the given normalization time
+            description = 'some external experiment'
+            self.experiments[description] = [self._normalization_time]
+            return self._normalization_time, description
+            
                 
-        # find best performance:
-        # (only search among positive CPU times for an experiment wit
+        # no given normalization time, find best performance:
+        # (only search among positive CPU times for an experiment with
         # index experiment_idx)
         best = 1.0E+20
         cpu_eps = 1.0E-9  # smallest reliable CPU time (but many repetitions
@@ -101,7 +111,11 @@ class EfficiencyTable:
         Print out a sorted list (with respect to CPU times) of the experiments.
         In case of multiple CPU times per description of an experiment,
         the table is sorted with respect to the first CPU time entry of each
-        multiple CPU times list.
+        multiple CPU times list. All CPU times are divided by a normalization
+        time, which is given to the constructor or to the
+        set_normalization_time method, or if not prescribed, this class
+        finds the smallest reliable CPU time (neglecting very small
+        CPU time).
         """
         # inv_dict is the inverse dictionary of self.experiments, i.e.,
         # CPU time is the key and the description is the valid.

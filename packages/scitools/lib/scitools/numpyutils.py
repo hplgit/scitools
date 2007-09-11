@@ -119,9 +119,14 @@ sequence = seq  # backward compatibility
 isequence = iseq  # backward compatibility
 
 
-def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
+def arr(shape=None, element_type=float,
+        interval=None, 
+        data=None, copy=True,
+        file_=None,
+        order='C'):
     """
-    Compact and flexible interface for creating NumPy arrays.
+    Compact and flexible interface for creating NumPy arrays,
+    including several consistency and error checks.
 
     @param shape:        length of each dimension
     @type  shape:        tuple or int
@@ -129,40 +134,59 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
     @param copy:         copy data if true, share data if false
     @type  copy:         boolean
     @param element_type: float, int, int16, float64, bool, etc.
+    @param interval:     make elements from a to b (shape gives no of elms)
+    @type  interval:     tuple or list
     @param file_:        filename or file object containing array data
     @type  file_:        string
+    @param order:        'Fortran' or 'C' storage
+    @type  order:        string
     @return:             created Numerical Python array
 
-    The array can be created in three ways:
+    The array can be created in four ways:
     
       1. as zeros (just shape specified),
 
-      2. as a copy of or reference to (depending on copy=True,False resp.)
+      2. as uniformly spaced coordinates in an interval [a,b]
+
+      3. as a copy of or reference to (depending on copy=True,False resp.)
          a list, tuple, or NumPy array (provided as the data argument),
 
-      3. from data in a file (for one- or two-dimensional real-valued arrays).
+      4. from data in a file (for one- or two-dimensional real-valued arrays).
 
-    The function calls the underlying NumPy functions zeros and array
-    (see the NumPy manual for the functionality of these functions).
-    In case of data in a file, the first line determines the number of
-    columns in the array. The file format is just rows and columns
-    with numbers, no decorations (square brackets, commas, etc.) are
-    allowed.
+    The function calls the underlying NumPy functions zeros, array and
+    linspace (see the NumPy manual for the functionality of these
+    functions).  In case of data in a file, the first line determines
+    the number of columns in the array. The file format is just rows
+    and columns with numbers, no decorations (square brackets, commas,
+    etc.) are allowed.
 
     >>> arr((3,4))
     array([[ 0.,  0.,  0.,  0.],
            [ 0.,  0.,  0.,  0.],
            [ 0.,  0.,  0.,  0.]])
+
+    >>> arr(4, element_type=int) + 4  # integer array
+    array([4, 4, 4, 4])
+
+    >>> arr(3, interval=[0,2])
+    array([ 0.,  1.,  2.])
+           
     >>> somelist=[[0,1],[5,5]]
     >>> a = arr(data=somelist)
+    >>> a  # a has always float elements by default
+    array([[ 0.,  1.],
+           [ 5.,  5.]])
+    >>> a = arr(data=somelist, element_type=int)
+    >>> a
+    array([[0, 1],
+           [5, 5]])
     >>> b = a + 1
+    
     >>> c = arr(data=b, copy=False)  # let c share data with b
     >>> b is c
     True
     >>> id(b) == id(c)
     True
-    >>> arr(4, element_type='i') + 4  # integer array
-    array([4, 4, 4, 4])
 
     >>> # make a file with array data:
     >>> f = open('tmp.dat', 'w')
@@ -204,7 +228,7 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
             if isinstance(data, (list,tuple)) and copy == False:
                 # cannot share data (data is list/tuple)
                 copy = True
-            return array(data, element_type, copy=copy)
+            return array(data, dtype=element_type, copy=copy, order=order)
         else:
             raise TypeError, \
                   'shape is %s, must be list/tuple or int' % type(shape)
@@ -247,7 +271,23 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
                 'shape=%s is not compatible with shape %s found in "%s"' % \
                 (shape, d.shape, file)
         return d
-    
+
+    elif interval is not None and shape is not None:
+        if not isinstance(shape, int):
+            raise TypeError, 'For array values in an interval, '\
+                  'shape must be an integer'
+        if not isinstance(interval, (list,tuple)):
+            raise TypeError, 'interval must be list or tuple, not %s' % \
+                  type(interval)
+        if len(interval) != 2:
+            raise ValueError, 'interval must be a 2-tuple (or list)'
+
+        try:
+            return linspace(interval[0], interval[1], shape)
+        except MemoryError, e:
+            # print more information (size of data):
+            print e, 'of size %s' % shape
+
     else:
         # no data, no file, just make zeros
 
@@ -259,7 +299,7 @@ def arr(shape=None, element_type=float, data=None, copy=True, file_=None):
             'arr: either shape, data, or from_function must be specified'
 
         try:
-            return zeros(shape, element_type)
+            return zeros(shape, dtype=element_type, order=order)
         except MemoryError, e:
             # print more information (size of data):
             print e, 'of size %s' % shape
