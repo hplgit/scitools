@@ -39,7 +39,7 @@ hcont = contourslice(x,y,z,wind_speed,[xmin,100,xmax],ymax,zmin,8)
 hcont.setp(linecolor=[.7,.7,.7], linewidth=2)
 
 # Define the Starting Points for the Stream Lines:
-sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5), sparse=False)
+sx,sy,sz = ndgrid([80]*4,seq(20,50,10),seq(0,15,5), sparse=False)
 hlines = streamline(x,y,z,u,v,w,sx,sy,sz)
 #set(hlines,'LineWidth',2,'Color','r')
 hlines.setp(linewidth=3, linecolor='r')

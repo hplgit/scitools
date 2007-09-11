@@ -14,7 +14,7 @@ mri = io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
 #Ds = smooth3(D);
 
-isosurface(D,5)
+isosurface(D,5,indexing='xy')
 #hiso = isosurface(Ds,5),
 #	'FaceColor',[1,.75,.65],...
 #	'EdgeColor','none');

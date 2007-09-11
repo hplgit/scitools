@@ -16,7 +16,7 @@ v = wind['v']
 w = wind['w']
 
 setp(show=False)
-sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
+sx,sy,sz = ndgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
 sl = streamline(x,y,z,u,v,w,sx,sy,sz)
 sl.setp(linecolor='r')
 view(3)

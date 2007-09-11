@@ -6,13 +6,14 @@ setp(interactive=False)
 
 x = linspace(-5,5,201)
 subplot(2,2,1)
-plot(x,x-sin(pi*x),xlabel='x',ylabel='y')
+plot(x, x-sin(pi*x), xlabel='x', ylabel='y', title='subplot(2,2,1)')
 subplot(2,2,2)
-plot(x,x-cos(x**2),title='Simple plot')
+plot(x, x-cos(x**2), xlabel='x', ylabel='y', title='subplot(2,2,2)')
 subplot(2,2,3)
-plot(cos(3*pi*x),cos(0.5*pi*x),x=x,grid='on',axis=[-3,3,-3,3])
+plot(cos(3*pi*x), cos(0.5*pi*x), x=x, grid='on', axis=[-3,3,-3,3],
+     xlabel='x', ylabel='y', title='subplot(2,2,3)')
 subplot(2,2,4)
-plot(x,cos(pi*x),title='Simple plot 2')
+plot(x, cos(pi*x), xlabel='x', ylabel='y', title='subplot(2,2,4)')
 show()
 
 #hardcopy('subplot1a.eps', color=True)

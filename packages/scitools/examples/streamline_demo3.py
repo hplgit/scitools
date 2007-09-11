@@ -16,7 +16,7 @@ v = wind['v']
 w = wind['w']
 
 setp(show=False)
-sx, sy, sz = meshgrid([80]*36,seq(20,55,1),[5]*36)
+sx, sy, sz = ndgrid([80]*36,seq(20,55,1),[5]*36)
 sl = streamline(x,y,z,u,v,w,sx,sy,sz)
 axis('tight')
 view(30,30)

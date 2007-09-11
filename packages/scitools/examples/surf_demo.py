@@ -4,7 +4,7 @@
 
 from scitools.all import *
 
-xv, yv = meshgrid(linspace(-2,2,41),linspace(-1,1,21))
+xv, yv = ndgrid(linspace(-2,2,21),linspace(-1,1,11))
 values = xv**2*yv-2*yv
 setp(show=False)
 subplot(221);  surf(values)
@@ -33,7 +33,7 @@ surf(x,y,z,axis='equal')
 #hardcopy('surf1b.png')
 
 figure()
-xv, yv = meshgrid(linspace(-2,2,41),linspace(-2,2,41))
+xv, yv = ndgrid(linspace(-2,2,41),linspace(-2,2,41))
 values = xv*exp(-xv**2-yv**2)
 dx, dy = gradient(values)
 c = dx + dy
@@ -43,7 +43,7 @@ surf(xv,yv,values,c,colorbar='on',axis=[-2,2,-2,2,-0.5,0.5])
 #hardcopy('surf1c.png')
 
 figure()
-xv, yv = meshgrid(seq(-2.5,2.5,0.15),seq(-5,5,0.15))
+xv, yv = ndgrid(seq(-2.5,2.5,0.15),seq(-5,5,0.15))
 values = 70*yv**2*exp(-xv**2-0.2*yv**2)
 surf(xv,yv,values)
 

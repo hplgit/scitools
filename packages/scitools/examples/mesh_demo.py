@@ -13,7 +13,7 @@ title('Wireframe mesh of the peaks function')
 
 figure()
 x = linspace(-8,8,31)
-xv, yv = meshgrid(x,x)
+xv, yv = ndgrid(x,x)
 r = sqrt(xv**2 + yv**2) + eps
 values = sin(r)/r
 mesh(xv, yv, values, xlabel='x', ylabel='y', zlabel='z',
@@ -24,7 +24,7 @@ mesh(xv, yv, values, xlabel='x', ylabel='y', zlabel='z',
 
 figure()
 x = y = linspace(0,pi,32)
-xv, yv = meshgrid(x,y)
+xv, yv = ndgrid(x,y)
 values = sin(yv**2 + xv) - cos(yv - xv**2)
 setp(interactive=False)
 subplot(221);  mesh(values);

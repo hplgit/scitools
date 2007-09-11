@@ -16,8 +16,8 @@ def test():
     t2 = seq(5*pi/4, 9*pi/4, pi/n); # angle around the tube
     
     u = seq(pi/2, 5*pi/2, pi/n)
-    X,Z1 = meshgrid(t1,u,sparse=False)
-    Y,Z2 = meshgrid(t2,u,sparse=False)
+    X,Z1 = ndgrid(t1,u,sparse=False)
+    Y,Z2 = ndgrid(t2,u,sparse=False)
 
     setp(interactive=False)
     # The handle

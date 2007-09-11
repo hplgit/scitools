@@ -9,22 +9,20 @@ from scitools.all import *
 
 setp(interactive=False)
 
-xv, yv = meshgrid(linspace(-5,5,81), linspace(-5,5,81), memoryorder='xyz')
+xv, yv = ndgrid(linspace(-5,5,81), linspace(-5,5,81))
 values = sin(sqrt(xv**2 + yv**2))
 
-pcolor(xv, yv, values, shading='interp', memoryorder='xyz')
+pcolor(xv, yv, values, shading='interp')
 
 # create a coarser grid for the gradient field:
-xv, yv = meshgrid(linspace(-5,5,21), linspace(-5,5,21),
-                  sparse=True, memoryorder='xyz')
+xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21), sparse=True)
 values = sin(sqrt(xv**2 + yv**2))
 
 # compute the gradient field:
 uu, vv = gradient(values)
 
 hold('on')
-quiver(xv, yv, uu, vv, 'filled', 'k', axis=[-6,6,-6,6],memoryorder='xyz')
-setp(show=True)
+quiver(xv, yv, uu, vv, 'filled', 'k', axis=[-6,6,-6,6])
 show()
 
 #hardcopy('quiver2a.eps')
@@ -32,8 +30,8 @@ show()
 
 
 figure()
-contour(xv, yv, values, 15, hold=True, show=False, memoryorder='xyz')
-quiver(xv, yv, uu, vv, axis=[-6,6,-6,6], show=True, memoryorder='xyz')
+contour(xv, yv, values, 15, hold=True)
+quiver(xv, yv, uu, vv, axis=[-6,6,-6,6])
 show()
 
 #hardcopy('quiver2b.eps')

@@ -16,7 +16,7 @@ v = wind['v']
 w = wind['w']
 
 setp(show=False)
-sx,sy,sz = meshgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
+sx,sy,sz = ndgrid([80]*4,seq(20,50,10),seq(0,15,5),sparse=False)
 streamribbon(x,y,z,u,v,w,sx,sy,sz,ribbonwidth=5)
 view(3)
 daspect([1,1,1])

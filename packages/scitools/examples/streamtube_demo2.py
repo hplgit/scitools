@@ -44,7 +44,7 @@ hcont = contourslice(x,y,z,wind_speed,xmax,ymin,alt,cont_intervals.tolist())
 hcont.setp(linewidth=2)
 
 # Create the Stream Tubes:
-sx,sy,sz = meshgrid([xmin]*11,seq(20,50,3),[alt]*11)
+sx,sy,sz = ndgrid([xmin]*11,seq(20,50,3),[alt]*11)
 daspect([1,1,1]) # set DAR before calling streamtube
 htubes = streamtube(x,y,z,u,v,w,sx,sy,sz)#,[1.25, 5])
 #set(htubes,'EdgeColor','none','FaceColor','r','AmbientStrength',.5)
