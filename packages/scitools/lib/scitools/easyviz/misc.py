@@ -49,12 +49,12 @@ def _check_xyzv(*args, **kwargs):
     except:
         raise ValueError, '_check_xyzv: v must be 3D, not %dD' % len(shape(v))
 
-    indexing = kwargs.get('indexing', 'xy')
+    indexing = kwargs.get('indexing', 'ij')
 
     if x is None and y is None and z is None:
         if indexing == 'ij':
             ny, nx = nx, nz  # swap
-        x, y, z = meshgrid(seq(ny-1), seq(nx-1), seq(nz-1), indexing=indexing)
+        x, y, z = meshgrid(range(ny), range(nx), range(nz), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x)==(nx,ny,nz) or shape(x)==(1,ny,1) or \
@@ -128,12 +128,12 @@ def _check_xyz(*args, **kwargs):
     except:
         raise ValueError, "z must be 2D, not %dD" % len(shape(z))
 
-    indexing = kwargs.get('indexing', 'xy')
+    indexing = kwargs.get('indexing', 'ij')
 
     if x is None and y is None:
         if indexing == 'ij':
             nx, ny = ny, nx  # swap
-        x, y = meshgrid(seq(ny-1), seq(nx-1), indexing=indexing)
+        x, y = meshgrid(range(ny), range(nx), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
@@ -164,15 +164,15 @@ def _check_xyuv(*args, **kwargs):
     else:
         raise TypeError, "_check_xyuv: wrong number of arguments"
     
-    indexing = kwargs.get('indexing', 'xy')
+    indexing = kwargs.get('indexing', 'ij')
 
     us = shape(u)
     assert us == shape(v), "_check_xyuv: u and v must be of same shape"
     
     if len(us) == 1:
         if x is None and y is None:
-            x = seq(us[0]-1)
-            y = seq(us[0]-1)
+            x = range(us[0])
+            y = range(us[0])
         else:
             assert shape(x) == us, \
                    "_check_xyuv: x has shape %s, expected %s" % (shape(x), us)

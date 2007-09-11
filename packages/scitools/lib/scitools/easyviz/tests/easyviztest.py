@@ -62,28 +62,28 @@ class EasyvizTestCase(unittest.TestCase):
                                    random.choice(linestyles)]))
         return format
     
-    def get_2D_data(self, n=21, sparse=True, memoryorder='yxz'):
+    def get_2D_data(self, n=21, sparse=True, indexing='ij'):
         x = y = linspace(-3,3,n)
-        xv, yv = meshgrid(x, y, sparse=sparse, memoryorder=memoryorder)
+        xv, yv = meshgrid(x, y, sparse=sparse, indexing=indexing)
         values = peaks(xv, yv)
         return x, y, xv, yv, values
 
-    def get_3D_data(self, sparse=True, memoryorder='yxz'):
+    def get_3D_data(self, sparse=True, indexing='ij'):
         x = y = z = linspace(-3,3,13)
-        xv, yv, zv = meshgrid(x, y, z, sparse=sparse, memoryorder=memoryorder)
+        xv, yv, zv = meshgrid(x, y, z, sparse=sparse, indexing=indexing)
         values = xv**exp(-xv**2-yv**2-zv**2)
         return x, y, z, xv, yv, zv, values
 
-    def get_2D_vector_data(self, n=13, sparse=True, memoryorder='yxz'):
+    def get_2D_vector_data(self, n=13, sparse=True, indexing='ij'):
         x = y = linspace(-2,2,n)
-        xv, yv = meshgrid(x, y, sparse=sparse, memoryorder=memoryorder)
+        xv, yv = meshgrid(x, y, sparse=sparse, indexing=indexing)
         values = xv*exp(-xv**2-yv**2)
         uv, vv = gradient(values)
         return x, y, xv, yv, values, uv, vv
 
-    def get_3D_vector_data(self, sparse=True, memoryorder='yxz'):
+    def get_3D_vector_data(self, sparse=True, indexing='ij'):
         x = y = z = linspace(-3,3,13)
-        xv, yv, zv = meshgrid(x, y, z, sparse=sparse, memoryorder=memoryorder)
+        xv, yv, zv = meshgrid(x, y, z, sparse=sparse, indexing=indexing)
         values = xv**exp(-xv**2-yv**2-zv**2)
         
         return x, y, z, xv, yv, zv, values

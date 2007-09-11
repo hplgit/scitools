@@ -61,23 +61,23 @@ class test_quiver_scaling(EasyvizTestCase):
         n()
 
 
-class test_quiver_memoryorder_xyz(EasyvizTestCase):
-    def check_quiver_memoryorder_xyz_default(self):
-        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(memoryorder='xyz')
-        quiver(xv,yv,uv,vv,memoryorder='xyz')
-        title("quiver(xv,yv,uv,vv,memoryorder='xyz')")
+class test_quiver_indexing_xy(EasyvizTestCase):
+    def check_quiver_indexing_xy_default(self):
+        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(indexing='xy')
+        quiver(xv,yv,uv,vv,indexing='xy')
+        title("quiver(xv,yv,uv,vv,indexing='xy')")
         n()
 
-    def check_quiver_memoryorder_xyz_no_grid_components(self):
-        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(memoryorder='xyz')
-        quiver(uv,vv,memoryorder='xyz')
-        title("quiver(uv,vv,memoryorder='xyz')")
+    def check_quiver_indexing_xy_no_grid_components(self):
+        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(indexing='xy')
+        quiver(uv,vv,indexing='xy')
+        title("quiver(uv,vv,indexing='xy')")
         n()    
 
-    def check_quiver_memoryorder_xyz_1D_grid_components(self):
-        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(memoryorder='xyz')
-        quiver(x,y,uv,vv,memoryorder='xyz')
-        title("quiver(x,y,uv,vv,memoryorder='xyz')")
+    def check_quiver_indexing_xy_1D_grid_components(self):
+        x,y,xv,yv,values,uv,vv = self.get_2D_vector_data(indexing='xy')
+        quiver(x,y,uv,vv,indexing='xy')
+        title("quiver(x,y,uv,vv,indexing='xy')")
         n()
 
 
@@ -130,7 +130,7 @@ def test_suite(level=1):
     if level > 0:
         suites.append(unittest.makeSuite(test_quiver_basic,'check_'))
         suites.append(unittest.makeSuite(test_quiver_scaling,'check_'))
-        suites.append(unittest.makeSuite(test_quiver_memoryorder_xyz,'check_'))
+        suites.append(unittest.makeSuite(test_quiver_indexing_xy,'check_'))
         suites.append(unittest.makeSuite(test_quiver_misc,'check_'))
     total_suite = unittest.TestSuite(suites)
     return total_suite

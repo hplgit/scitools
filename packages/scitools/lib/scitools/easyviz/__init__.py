@@ -65,7 +65,7 @@ as a part of the plot call::
 A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands::
 
-        x = seq(-2, 2, 0.1)      # -2 to 2 with steps of 0.1
+        x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
         xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
         values = f(xv, yv)       # function values
         surfc(xv, yv, values,
@@ -587,7 +587,8 @@ is decreased from 2 to 0.2::
         # f is max for x=m; smaller s gives larger max value
         max_f = f(m, m, s_stop)
         
-        # show the movie, and make hardcopies of frames simultaneously:
+        # show the movie on the screen
+        # and make hardcopies of frames simultaneously:
         counter = 0
         for s in s_values:
             y = f(x, m, s)

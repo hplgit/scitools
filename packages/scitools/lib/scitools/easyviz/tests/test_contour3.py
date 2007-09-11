@@ -55,29 +55,29 @@ class test_contour3_levels(EasyvizTestCase):
         n()
         
 
-class test_contour3_memoryorder_xyz(EasyvizTestCase):
-    def check_contour3_memoryorder_xyz_default(self):
-        x,y,xv,yv,values = self.get_2D_data(memoryorder='xyz')
-        contour3(xv,yv,values,memoryorder='xyz')
-        title("contour3(xv,yv,values,memoryorder='xyz')")
+class test_contour3_indexing_xy(EasyvizTestCase):
+    def check_contour3_indexing_xy_default(self):
+        x,y,xv,yv,values = self.get_2D_data(indexing='xy')
+        contour3(xv,yv,values,indexing='xy')
+        title("contour3(xv,yv,values,indexing='xy')")
         n()
         
-    def check_contour3_memoryorder_xyz_rectangular_grid(self):
+    def check_contour3_indexing_xy_rectangular_grid(self):
         x = linspace(-3,3,21)
         y = linspace(-2,2,13)
-        xv, yv = meshgrid(x, y, memoryorder='xyz')
+        xv, yv = meshgrid(x, y, indexing='xy')
         values = peaks(xv,yv)
-        contour3(xv,yv,values,memoryorder='xyz')
-        title("contour3(xv,yv,values,memoryorder='xyz') (rectangular grid)")
+        contour3(xv,yv,values,indexing='xy')
+        title("contour3(xv,yv,values,indexing='xy') (rectangular grid)")
         n()
         
-    def check_contour3_memoryorder_xyz_rectangular_grid2(self):
+    def check_contour3_indexing_xy_rectangular_grid2(self):
         x = linspace(-5,5,21)
         y = linspace(-2,2,31)
-        xv, yv = meshgrid(x, y, memoryorder='xyz')
+        xv, yv = meshgrid(x, y, indexing='xy')
         values = peaks(xv,yv)
-        contour3(xv,yv,values,memoryorder='xyz')
-        title("contour3(xv,yv,values,memoryorder='xyz') (rectangular grid)")
+        contour3(xv,yv,values,indexing='xy')
+        title("contour3(xv,yv,values,indexing='xy') (rectangular grid)")
         n()
 
 
@@ -129,7 +129,7 @@ def test_suite(level=1):
     if level > 0:
         suites.append(unittest.makeSuite(test_contour3_basic,'check_'))
         suites.append(unittest.makeSuite(test_contour3_levels,'check_'))
-        suites.append(unittest.makeSuite(test_contour3_memoryorder_xyz,
+        suites.append(unittest.makeSuite(test_contour3_indexing_xy,
                                          'check_'))
         suites.append(unittest.makeSuite(test_contour3_misc,'check_'))
         suites.append(unittest.makeSuite(test_contour3_labels,'check_'))

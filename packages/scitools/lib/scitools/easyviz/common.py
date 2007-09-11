@@ -141,7 +141,7 @@ class PlotProperties(object):
         'pointsize': 1.0,
         'material': None,
         'memoryorder': 'yxz',  # FIXME: this is deprecated and will be removed
-        'indexing': 'xy',  # 'xy' is Cartesian indexing, 'ij' matrix indexing 
+        'indexing': 'ij',  # 'xy' is Cartesian indexing, 'ij' matrix indexing 
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())

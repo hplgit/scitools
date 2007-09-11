@@ -28,10 +28,10 @@ class test_surf_basic(EasyvizTestCase):
         title("surf(xv,yv,values) (xv and yv not sparse)")
         n()
         
-    def check_surf_memoryorder_xyz(self):
-        x,y,xv,yv,values = self.get_2D_data(memoryorder='xyz')
-        surf(xv,yv,values,memoryorder='xyz')
-        title("surf(xv,yv,values,memoryorder='xyz')")
+    def check_surf_indexing_xy(self):
+        x,y,xv,yv,values = self.get_2D_data(indexing='xy')
+        surf(xv,yv,values,indexing='xy')
+        title("surf(xv,yv,values,indexing='xy')")
         n()
 
 
@@ -39,7 +39,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid(self):
         x = linspace(-2,2,21)
         y = linspace(-3,3,13)
-        xv, yv = meshgrid(x, y)
+        xv, yv = meshgrid(x, y, indexing='ij')
         values = peaks(xv,yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")
@@ -48,7 +48,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid_no_grid_components(self):
         x = linspace(-2,2,21)
         y = linspace(-3,3,13)
-        xv, yv = meshgrid(x, y)
+        xv, yv = meshgrid(x, y, indexing='ij')
         values = peaks(xv, yv)
         surf(values)
         title("surf(values) (rectangular grid)")
@@ -57,7 +57,7 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid2(self):
         x = linspace(-5,5,41)
         y = linspace(-2,2,9)
-        xv, yv = meshgrid(x, y)
+        xv, yv = meshgrid(x, y, indexing='ij')
         values = peaks(xv, yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")
@@ -66,30 +66,30 @@ class test_surf_rectangular_grid(EasyvizTestCase):
     def check_surf_rectangular_grid2_no_grid_components(self):
         x = linspace(-5,5,41)
         y = linspace(-2,2,9)
-        xv, yv = meshgrid(x, y)
+        xv, yv = meshgrid(x, y, indexing='ij')
         values = peaks(xv, yv)
         surf(xv,yv,values)
         title("surf(xv,yv,values) (rectangular grid)")
         n()
         
-    def check_surf_rectangular_grid_memoryorder_xyz(self):
+    def check_surf_rectangular_grid_indexing_xy(self):
         x = linspace(-2,2,21)
         y = linspace(-3,3,13)
-        xv, yv = meshgrid(x, y, memoryorder='xyz')
+        xv, yv = meshgrid(x, y, indexing='xy')
         values = peaks(xv, yv)
-        surf(xv,yv,values,memoryorder='xyz')
-        title("surf(xv,yv,values,memoryorder='xyz') (rectangular grid)")
+        surf(xv,yv,values,indexing='xy')
+        title("surf(xv,yv,values,indexing='xy') (rectangular grid)")
         n()
         
-    def check_surf_rectangular_grid2_memoryorder_xyz(self):
+    def check_surf_rectangular_grid2_indexing_xy(self):
         x = linspace(-5,5,41)
         y = linspace(-2,2,9)
-        xv, yv = meshgrid(x, y, memoryorder='xyz')
+        xv, yv = meshgrid(x, y, indexing='xy')
         values = peaks(xv, yv)
-        surf(xv,yv,values,memoryorder='xyz')
-        title("surf(xv,yv,values,memoryorder='xyz') (rectangular grid)")
+        surf(xv,yv,values,indexing='xy')
+        title("surf(xv,yv,values,indexing='xy') (rectangular grid)")
         n()
-      
+
 
 ## class test_surf_multiple_surfaces(EasyvizTestCase):
 ##     def check_surf_two_surfaces(self):
