@@ -36,6 +36,10 @@ The following extensions to Numerical Python are also defined:
  - asarray_cpwarn:
            as asarray(a), but a warning or exception is issued if
            the array a is copied
+
+ - ndgrid:
+           extend one-dimensional coordinate arrays to multi-dimensional
+           arrays over grids
            
  - float_eq:
            operator == for float operands with tolerance,
@@ -581,6 +585,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     else:
         return tuple(l)
 
+
 def ndgrid(*args,**kwargs):
     """
     Same as calling meshgrid with indexing='ij' (see meshgrid for
@@ -588,7 +593,8 @@ def ndgrid(*args,**kwargs):
     """
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
-        
+
+
 def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
     """
     Approximate test a==b for float variables.
