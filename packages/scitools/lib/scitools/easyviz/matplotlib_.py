@@ -212,11 +212,11 @@ class MatplotlibBackend(BaseClass):
         """Set data aspect ratio."""
         if ax.getp('daspectmode') == 'manual':
             dar = ax.getp('daspect')  # dar is a list (len(dar) is 3).
-            pass
+            self._g.gca().set_aspect(dar[0])
         else:
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
-            pass
+            self._g.gca().set_aspect('auto')
         
     def _set_axis_method(self, ax):
         method = ax.getp('method')
