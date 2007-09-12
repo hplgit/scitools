@@ -759,10 +759,12 @@ class Download(threading.Thread):
         urllib.urlretrieve(self.url, self.filename)
         print self.filename, 'is downloaded'
 
-def machine_info():
+def hardware_info():
     """
-    Extract as much information about the current machine as possible.
-    Python's platform module is used (uname, python_version, python_build).
+    Extract as much information about the current hardware as possible.
+    Python's platform module is used (functions uname, python_version,
+    python_build).
+
     If files such as /proc/cpuinfo are available, these are read and
     information returned as "cpuinfo".
 
@@ -772,8 +774,8 @@ def machine_info():
 
     Recommended use::
 
-      from scitools.misc import machine_info
-      import pprint; pprint.pprint(machine_info())
+      from scitools.misc import hardware_info
+      import pprint; pprint.pprint(hardware_info())
       
     """
     result = {}

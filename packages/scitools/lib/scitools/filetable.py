@@ -18,6 +18,11 @@ This module provides functions for
     As write, but the arguments are comma-separated one-dimensional
     arrays, one for each column, instead of a two-dimensional array.
 
+The file format requires the same number of "words" (numbers)
+on each line. Comment lines are allowed, but a blank line
+indicates a delimiter in the data set, and lines after the blank
+line will not be read.
+
 Example: Assume we have a data file `tmp.dat` with the numbers::
 
   0        0.0        0.0        1.0
@@ -81,7 +86,7 @@ def read_v1(fileobj, commentchar='#'):
     """Load a table with numbers into a two-dim. NumPy array."""
     # read until next blank line:
     r = []  # total set of numbers (r[i]: numbers in i-th row)
-    while 1:  # might call read several times for a file
+    while True:  # might call read several times for a file
         line = fileobj.readline()
         if not line: break  # end of file
         if line.isspace(): break  # blank line
@@ -102,7 +107,7 @@ def read(fileobj, commentchar='#'):
     location = fileobj.tell()
     import re
     commentchar = re.escape(commentchar)
-    while 1:  # might call read several times for a file
+    while True:
         line = fileobj.readline()
         if not line: break  # end of file
         elif line.isspace(): break  # blank line
