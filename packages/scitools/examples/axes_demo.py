@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Demonstration on how to place arbitrary axes in some backends."""
+"""Demonstration on how to place arbitrary axes in the different backends."""
 
 from scitools.all import *
 
@@ -11,21 +11,32 @@ y2 = cos(4*pi*x)
 plot(x, y1, 'rd-', xlabel='x-axis', ylabel='y-axis', legend='test')
 
 if backend == 'veusz':
-    pos = ['9cm', '9cm', '1cm', '2cm']
+    pos = [.64, .55, .1, .2]  # [leftMargin,bottomMargin,rightMargin,topMargin]
 elif backend == 'gnuplot':
-    pos = [.6, .52, .33, .33]
-elif backend in ['matplotlib', 'matlab', 'matlab2']:
-    pos = [.62, .56, .2, .2]
+    pos = [.6, .52, .33, .33] # [left,bottom,width,height]
+elif backend == 'grace':
+    pos = [.6, .5, .8, .75]   # [xmin,ymin,xmax,ymax]
+elif backend == 'matplotlib':
+    pos = [.62, .56, .2, .2]  # [left,bottom,width,height]
+elif backend == 'matlab':
+    pos = [.62, .56, .2, .2]  # [left,bottom,width,height]
+elif backend == 'matlab2':
+    pos = [.62, .56, .2, .2]  # [left,bottom,width,height]
+elif backend == 'pyx':
+    # default figure size (i.e., [width,height]) is [15,9.27].
+    pos = [9.6, 3.5, 4, 4]    # [xpos,ypos,width,height]
 else:
     print "The '%s' backend has currently no support for placement of " \
           "arbitrary axes." % backend
-    sys.exit(1)
+    pos = None
 
-ax = axes(viewport=pos)
-plot(ax, x, y2, 'b--')
+if pos is not None:
+    ax = axes(viewport=pos)  # create a new axis at the given position
+    plot(ax, x, y2, 'b--')   # draw a curve in the new axis
 
 hardcopy('axes1a.eps')
-hardcopy('axes1a.png')
+if not backend == 'pyx':
+    hardcopy('axes1a.png')
 
 if backend == 'matlab2':
     save('test_axes.m')
