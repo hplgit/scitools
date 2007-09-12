@@ -713,7 +713,9 @@ class PyXBackend(BaseClass):
                         tmp_ypos -= h + sbsp
                 kwargs.update({'width': w, 'height': h})
             else:
-                #xpos, ypos, width, height = self._get_viewport(ax)
+                rect = ax.getp('viewport')
+                if rect is not None:
+                    xpos, ypos, width, height = rect
                 kwargs.update({'width': width, 'height': height})
             graph = pyx.graph.graphxy(xpos, ypos, **kwargs)
             #graph = pyx.graph.graphxyz(xpos, ypos, width=5, height=5, depth=5)
