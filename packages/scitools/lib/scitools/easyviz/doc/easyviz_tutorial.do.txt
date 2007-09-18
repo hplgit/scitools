@@ -556,12 +556,12 @@ this object directly. Here is an example on the typical recipe:
 
 !bc
 g = get_backend()
-if g.__class__.__name__ == 'Gnuplot':
+if backend == 'gnuplot':
     # g is a Gnuplot object, work with Gnuplot commands directly:
     g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
-g.refresh()
-g.hardcopy('tmp2.eps')  # make new hardcopy
+    g.refresh()
+    g.hardcopy('tmp2.eps')  # make new hardcopy
 !ec
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate

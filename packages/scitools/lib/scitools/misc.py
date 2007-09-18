@@ -204,15 +204,15 @@ def find(func, rootdir, arg=None):
     files = os.listdir(rootdir)  # get all files in rootdir
     files.sort(lambda a,b: cmp(a.lower(),b.lower()))
     for file in files:
-        filepath = os.path.join(rootdir,file) # make complete path
-        if os.path.islink(filepath):
+        fullpath = os.path.join(rootdir,file) # make complete path
+        if os.path.islink(fullpath):
             pass # drop links...
-        elif os.path.isdir(filepath):
-            find(func, filepath, arg) # recurse into directory
-        elif os.path.isfile(filepath):
-            func(filepath, arg) # file is regular, apply func
+        elif os.path.isdir(fullpath):
+            find(func, fullpath, arg) # recurse into directory
+        elif os.path.isfile(fullpath):
+            func(fullpath, arg) # file is regular, apply func
         else:
-            print 'find: cannot treat ',filepath
+            print 'find: cannot treat ', fullpath
 
 
 def sorted_os_path_walk(root, func, arg):

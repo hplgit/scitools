@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Make a string with a mathematical expression behave as a Python function."""
+from __future__ import division
 
 # Default import of mathematical functions (in case the user
 # supplies expressions with math functions and does not provide
@@ -81,6 +82,16 @@ class StringFunction:
     >>> f.set_parameters(a=1, b=2)
     >>> f(2,1)  # [1+2*2, 1]
     [5, 1]
+
+    StringFunction expressions may contain fractions like 1/2 and these
+    always result in float division (not integer division). Here is
+    an example:
+
+    >>> from scitools.StringFunction import StringFunction
+    >>> f = StringFunction('1/4 + 1/2*x')
+    >>> f(2)
+    1.25
+    
 
     The string parameter can, instead of a valid Python expression,
     be a function in a file (module). The string is then the
