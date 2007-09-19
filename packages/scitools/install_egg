@@ -5,6 +5,7 @@ Install scitools using python eggs tagged with revision number:
  2) Build an easy_install egg tagged with svn revision number
  3) Install egg
 """
+# Should we add eggs to PyPi?
 
 import commands
 import sys
