@@ -1,31 +1,41 @@
 #!/usr/bin/env python
 r"""
 
+Example usage:
+--------------
+
 Redirect stderr using the 'with'-statement:
 
 >>> from __future__ import with_statement
 >>> from redirect_io import *
 >>> with hidden_stderr():
 ...     print >> sys.stderr, 'Divide By Cucumber Error'
+>>>
 
->>> print _tmp_err.getvalue() # Fetch previous error message 
-Divide By Cucumber Error
-<BLANKLINE>
+Redirect stderr to stout:
 
 >>> with hidden_stderr(sys.stdout):
 ...     print >> sys.stderr, 'Where am I ?'
 Where am I ?
 >>>
 
-Optinal usage without with statement:
+Optinal usage without 'with'-statement:
 
 >>> _redirect_err()
 >>> try:
-...     print >> sys.stderr, 'Divide by Cumuber Error'
+...     print >> sys.stderr, " +++ Divide by Cucumber Error, "\
+...                          "Please ReInstall Universe And Reboot +++"
 ... finally:
 ...     _return_err()
 >>>
 
+Fetch previous error messages:
+
+>>> print _tmp_err.getvalue() 
+Divide By Cucumber Error
+ +++ Divide by Cucumber Error, Please ReInstall Universe And Reboot +++
+<BLANKLINE>
+>>> 
 """
 from __future__ import with_statement # Comment to run _test_with_statement
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no>'
@@ -67,6 +77,7 @@ def _test_with_statement():
 
     In this example we look at capturing the warning messages
     """
+    assert 'with_statement' not in globals()
     assert sys.version[:3] == '2.5'
     # Force Error
     statement = 'with=3'
@@ -155,3 +166,4 @@ if __name__ == '__main__':
         # To run you must comment    
         # 'from __future__ import with_statement ' at start of file
         _test_with_statement()
+        
