@@ -9,13 +9,9 @@ python setup.py install [, --prefix=$PREFIX]
 
 import os, sys, socket, re, glob
 
-try:
-    import scitools
-except ImportError:
-    from os.path import abspath, join, dirname
-    path = abspath(join(dirname(__file__), "lib"))
-    sys.path.append(path)
-    import scitools
+# make sure we import from scitools in this package, not an installed one:
+sys.path.insert(0, os.path.join('lib', 'scitools'))
+import scitools
     
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
