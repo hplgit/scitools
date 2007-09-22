@@ -542,10 +542,10 @@ Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
 that communicates with the underlying plotting program (known as
-"backend") and work with
-this object directly, using plotting program-specific command
-syntax.  Let us illustrate this principle with an example where we add
-a text and an arrow in the plot, see Figure ref{fig:plot2i}.
+"backend") and work with this object directly, using plotting
+program-specific command syntax.  Let us illustrate this principle
+with an example where we add a text and an arrow in the plot, see
+Figure ref{fig:plot2i}.
 
 FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands.
 
@@ -571,6 +571,34 @@ features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
+__Changing the Backend.__
+The default underlying plotting program (backend) is set in the file
+`scitools.cfg` (the `backend` parameter under the `[easyviz]` entry). 
+Often this program is Gnuplot. There are three ways
+to change the backend. The first method is to edit the `scitools.cfg`
+file so that all programs that apply Easyviz by default use this backend.
+One can either edit the `scitools.cfg` file in the directory where
+SciTools is installed, or one can have a local `.scitools.cfg` file
+in the home directory or in a particular directory. The values in
+the file in the home directory apply to all programs that the user
+runs, while the values in a `.scitools.cfg` file in a particular directory
+applies to all programs in that directory.
+
+The second method is to add a command-line argument to programs that 
+import Easyviz:
+!bc
+--SCITOOLS_easyviz_backend name
+!ec
+Here `name` is `gnuplot`, `vtk`, `matplotlib`, `matlab`, etc.
+The third method is to import a specific backend in a program. Instead
+of the `from scitools.all import *` statement one writes
+!bc
+from numpy import *
+from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+# or
+from scitools.easyviz.vtk_ import *      # work with VTK
+!ec
+Note the trailing underscore in the module names for the various backends.
 
 __Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.
