@@ -3,6 +3,11 @@
 Execute a Python script and present output such that it seems that
 each statement is executed in the interactive interpreter.
 
+A funny feature is to add 'human' as a second command-line argument:
+it then seems that the text in the interpreter is written by a
+human, char by char. This can be used to fake typing in an interactive
+shell ;-)
+
 Troubleshooting:
 
 Each multi-line command must be ended by a pure '\n' line. If there

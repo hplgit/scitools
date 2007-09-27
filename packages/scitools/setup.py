@@ -35,8 +35,10 @@ setup(
 		os.path.join("scitools", "pyPDE"),
 		],
     package_data={'': ['scitools.cfg']},
-    scripts = [os.path.join('bin', f) \
-               for f in os.listdir('bin') if not (f.startswith('.') or f.endswith('~') or f.endswith('.old') or f.endswith('.bak'))],
+    scripts = [os.path.join('bin', f)
+               for f in os.listdir('bin')
+               if not (f.startswith('.') or f.endswith('~') or
+                       f.endswith('.old') or f.endswith('.bak'))],
 	       )
 	    
 	       

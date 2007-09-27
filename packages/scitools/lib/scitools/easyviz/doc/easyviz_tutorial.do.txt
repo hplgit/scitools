@@ -423,12 +423,12 @@ for s in s_values:
     y = f(x, m, s)
     plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
          xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-         hardcopy='tmp_%04d.eps' % counter)
+         hardcopy='tmp_%04d.png' % counter)
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
 
 # make movie file the simplest possible way:
-movie('tmp_*.eps')
+movie('tmp_*.png')
 !ec
 
 First note that the $s$ values are decreasing (`linspace` handles this
@@ -516,8 +516,8 @@ The `from scitools.all import *` statement imports many modules and packages:
   * `from scipy import *` (if `scipy` is available)
   * the Python modules `sys`, `os`, `math`, `operator`, `pprint`
   * `from numpyutils import *` (SciTools module)
-  * the SciTools module `StringFunction` and the SciTools 
-    functions `watch` and `trace` for debugging
+  * the `StringFunction` class from `scitools.StringFunction` and the 
+    functions `watch` and `trace` from `scitools.debug`
 
 The `scipy` import can take some time and lead to slow start-up of plot 
 scripts. A more minimalistic import for curve plotting is 

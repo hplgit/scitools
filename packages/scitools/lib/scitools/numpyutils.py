@@ -31,7 +31,8 @@ The following extensions to Numerical Python are also defined:
 
  - NumPy_array_iterator:
            allows iterating over all array elements using
-           a single, standard for loop (for value, index in iterator)
+           a single, standard for loop (for value, index in iterator),
+           has some additional features compared with numpy.ndenumerate
              
  - asarray_cpwarn:
            as asarray(a), but a warning or exception is issued if
@@ -994,6 +995,10 @@ def NumPy_array_iterator(a, **kwargs):
     """
     Iterate over all elements in a NumPy array a.
     Return values: generator function and the code of this function.
+    The numpy.ndenumerate iterator performs the same iteration over
+    an array, but NumPy_array_iterator has some additional features
+    (especially handy for coding finite difference stencils, see next
+    paragraph).
 
     The keyword arguments specify offsets in the start and stop value
     of the index in each dimension. Legal values are

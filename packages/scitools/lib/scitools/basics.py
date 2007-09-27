@@ -108,9 +108,11 @@ if not has_scipy:
         _t2 = _time.clock(); _import_times += 'numpy=%g ' % (_t2 - _t1)
 
 # nice to have imports:
-import sys, operator, math, StringFunction
+import sys, operator, math
+from scitools.StringFunction import StringFunction
 from glob import glob
-_import_list.append("import sys, operator, math, StringFunction")
+_import_list.append("import sys, operator, math")
+_import_list.append("from StringFunction import StringFunction")
 _import_list.append("from glob import glob")
 
 import debug
