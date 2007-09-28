@@ -1,6 +1,7 @@
 from common import *
-from scitools.numpytools import ravel, zeros, array, allclose, Float, rank, \
-     NumPy_dtype, meshgrid
+from scitools.numpyutils import ravel, zeros, array, allclose, rank, \
+     meshgrid, newaxis
+from scitools.numpytools import NumPy_dtype
 from scitools.misc import test_if_module_exists as check
 
 check('vtk', msg='You need to install the VTK package.')
@@ -552,14 +553,14 @@ class VtkBackend(BaseClass):
                 nx, ny = shape(u)
                 if indexing == 'ij':
                     if len(x) == nx:
-                        x = ravel(x[:,NewAxis]*ones((nx,ny)))
+                        x = ravel(x[:,newaxis]*ones((nx,ny)))
                     if len(y) == ny:
-                        y = ravel(y[NewAxis,:]*ones((nx,ny)))
+                        y = ravel(y[newaxis,:]*ones((nx,ny)))
                 else:
                     if len(x) == ny:
-                        x = ravel(x[NewAxis,:]*ones((nx,ny)))
+                        x = ravel(x[newaxis,:]*ones((nx,ny)))
                     if len(y) == nx:
-                        y = ravel(y[:,NewAxis]*ones((nx,ny)))
+                        y = ravel(y[:,newaxis]*ones((nx,ny)))
             u = ravel(u)
             vectors = vtk.vtkFloatArray()
             vectors.SetNumberOfTuples(no_points)

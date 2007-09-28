@@ -32,7 +32,7 @@ Tip:
 from __future__ import division
 
 from common import *
-from scitools.numpytools import ones, ravel, shape, NewAxis, rank, transpose, \
+from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists as check
@@ -44,6 +44,11 @@ import tempfile
 import os
 import sys
 import operator
+
+def get_gnuplot_version():
+    """Return Gnuplot version used in Gnuplot.py."""
+    f = os.popen('%s --version' % Gnuplot.GnuplotOpts.gnuplot_command)
+    return f.readline().split()[1]
 
 if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
     Gnuplot.GnuplotOpts.default_term = "x11"
@@ -802,17 +807,17 @@ class GnuplotBackend(BaseClass):
                     x = x*ones(shape(u))
                 else:
                     if item.getp('indexing') == 'xy':
-                        x = x[NewAxis,:]*ones(shape(u))
+                        x = x[newaxis,:]*ones(shape(u))
                     else:
-                        x = x[:,NewAxis]*ones(shape(u))
+                        x = x[:,newaxis]*ones(shape(u))
             if shape(y) != shape(u):
                 if rank(y) == 2:
                     y = y*ones(shape(u))
                 else:
                     if item.getp('indexing') == 'xy':
-                        y = y[:,NewAxis]*ones(shape(u))
+                        y = y[:,newaxis]*ones(shape(u))
                     else:
-                        y = y[NewAxis,:]*ones(shape(u))
+                        y = y[newaxis,:]*ones(shape(u))
             data = Gnuplot.Data(arrayconverter(ravel(x)),
                                 arrayconverter(ravel(y)),
                                 arrayconverter(ravel(u)),

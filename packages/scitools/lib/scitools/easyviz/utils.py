@@ -1,6 +1,6 @@
-from scitools.numpytools import zeros, ones, exp, reshape, ravel, Float, \
-     ndgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos, \
-     NumPyArray, NumPy_type, NumPy_dtype
+from scitools.numpyutils import zeros, ones, exp, reshape, ravel, \
+     ndgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos
+from scitools.numpytools import NumPyArray, NumPy_type, NumPy_dtype
 
 def peaks(*args):
     # z = peaks()

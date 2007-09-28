@@ -1,8 +1,8 @@
 import pickle, os, operator, pprint
 
-from scitools.numpytools import seq, iseq, asarray, NewAxis, ones, zeros, \
-     sqrt, shape, NumPyArray, arrmin, arrmax, ravel, meshgrid, rank, squeeze, \
-     reshape, compress, ndgrid
+from scitools.numpyutils import seq, iseq, asarray, ones, zeros, sqrt, shape, \
+     ravel, meshgrid, rank, squeeze, reshape, ndgrid
+from scitools.numpytools import arrmin, arrmax, NumPyArray
 
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
@@ -841,7 +841,7 @@ class Streams(PlotProperties):
             u, v = [asarray(a) for a in args[:2]]
             if rank(u) == 3: # streamline(U,V,W,startx,starty,startz)
                 nx, ny, nz = shape(u)
-                x, y, z = meshgrid(seq(nx-1), seq(ny-1), seq(nz-1))
+                x, y, z = ndgrid(seq(nx-1), seq(ny-1), seq(nz-1))
                 #w = asarray(args[2])
                 w, sx, sy, sz = [asarray(a) for a in args[2:6]]
             else: # streamline(X,Y,U,V,startx,starty)
@@ -854,7 +854,7 @@ class Streams(PlotProperties):
                 nx, ny = shape(u)
             except:
                 raise ValueError, "u must be 2D, not %dD" % rank(u)
-            x, y = meshgrid(seq(nx-1), seq(ny-1))
+            x, y = ndgrid(seq(nx-1), seq(ny-1))
             sx, sy = [asarray(a) for a in args[2:4]]
         elif nargs >= 1 and nargs <= 2: # streamline(XYZ) or streamline(XY) 
             raise NotImplementedError, 'Streams._parseargs: not implemented'
