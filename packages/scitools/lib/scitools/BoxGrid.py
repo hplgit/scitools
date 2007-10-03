@@ -4,7 +4,7 @@ Class for uniform and non-uniform grid on an interval, rectangle, or box.
 """
 
 from scitools.errorcheck import right_type, wrong_type
-from scitools.numpyutils import meshgrid, seq, ndarray, wrap2callable
+from scitools.numpyutils import ndgrid, seq, ndarray, wrap2callable
 
 # constants for indexing the space directions:
 X = X1 = 0
@@ -113,7 +113,7 @@ class UniformBoxGrid(object):
         self.shape = tuple(self.shape)
         # self.dirnames needs list functionality
         
-        self.coorv = meshgrid(*self.coor)
+        self.coorv = ndgrid(*self.coor)
         if not isinstance(self.coorv, (list,tuple)):
             # 1D grid, wrap self.coorv as list:
             self.coorv = [self.coorv]
@@ -125,15 +125,15 @@ class UniformBoxGrid(object):
             # make boundary coordinates for vectorization:
             xdummy, \
             self.ycoorv_xfixed_boundary, \
-            self.zcoorv_xfixed_boundary = meshgrid(0, self.ycoor, self.zcoor)
+            self.zcoorv_xfixed_boundary = ndgrid(0, self.ycoor, self.zcoor)
             
             self.xcoorv_yfixed_boundary, \
             ydummy, \
-            self.zcoorv_yfixed_boundary = meshgrid(self.xcoor, 0, self.zcoor)
+            self.zcoorv_yfixed_boundary = ndgrid(self.xcoor, 0, self.zcoor)
             
             self.xcoorv_yfixed_boundary, \
             self.zcoorv_yfixed_boundary, \
-            zdummy = meshgrid(self.xcoor, self.ycoor, 0)
+            zdummy = ndgrid(self.xcoor, self.ycoor, 0)
             
     # could have _ in all variable names and define read-only
     # access via properties
