@@ -1447,6 +1447,12 @@ class Axis(object):
             if key in kwargs and isinstance(kwargs[key], (float,int)):
                 self._prop[key] = kwargs[key]
 
+        for key in 'xlim ylim zlim'.split():
+            if key in kwargs and isinstance(kwargs[key], (tuple,list)):
+                _check_size(kwargs[key], key, 2)
+                self._prop[key[0]+'min'] = kwargs[key][0]
+                self._prop[key[0]+'max'] = kwargs[key][1]
+
         if 'axis' in kwargs:
             axis = kwargs['axis']
             if isinstance(axis, (tuple,list)):
