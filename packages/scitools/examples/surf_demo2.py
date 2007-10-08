@@ -115,11 +115,11 @@ def test3():
 
     # Extend f periodically to 2 period-intervals:
     #f0 = [ f0(1:n) f0(1:n) ];
-    f0 = ravel(array([f0[0:n],f0[0:n]], Float))
+    f0 = ravel(array([f0[0:n],f0[0:n]], float))
     #f1 = [ f1(1:n) f1(1:n) ];
-    f1 = ravel(array([f1[0:n],f1[0:n]], Float))
+    f1 = ravel(array([f1[0:n],f1[0:n]], float))
     #f2 = [ f2(1:n) f2(1:n) ];
-    f2 = ravel(array([f2[0:n],f2[0:n]], Float))
+    f2 = ravel(array([f2[0:n],f2[0:n]], float))
 
     # [x10;x20;x30] is the parametric representation of
     # the center-line of the tube:
