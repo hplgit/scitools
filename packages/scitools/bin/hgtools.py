@@ -1,17 +1,27 @@
+#!/usr/bin/env python
 """
 Various utilities for working with hg (Mercurial version control system).
 """
+import sys, os
 
 from commands import getstatusoutput as system
 
+def hgdir():
+    if os.path.isdir('.hg'):
+        return True
+    else:
+        print 'There is no Mercurial repository here (.hg not found)!'
+        sys.exit(1)
+        
 def get_tip():
     """
     Return the tip (revision number of the most recent changeset)
     of a hg tree (current working directory).
     """
+    hgdir()
     failure, output = system('hg tip')
     lines = output.splitlines()
-    tip = lines[0].split(':')[1]
+    tip  = lines[0].split(':')[1]
     user = lines[2].split(':')[-1]
     return int(tip), user
 
