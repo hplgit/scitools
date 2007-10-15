@@ -15,9 +15,5 @@ s = sin(2*pi*t)
 c = sin(4*pi*t)
 fill(t, s, 'b', t, c, 'g', opacity=0.2)
 
-
 raw_input('press enter')
 
-
-legend('a','b')
-fill(t, s*exp(-5*t), 'r', grid=True)
