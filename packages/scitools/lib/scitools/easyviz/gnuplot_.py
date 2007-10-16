@@ -539,8 +539,8 @@ class GnuplotBackend(BaseClass):
         if DEBUG:
             print "Adding a line"
         # get data:
-        x = item.getp('xdata')
-        y = item.getp('ydata')
+        x = squeeze(item.getp('xdata'))
+        y = squeeze(item.getp('ydata'))
         z = item.getp('zdata')
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
