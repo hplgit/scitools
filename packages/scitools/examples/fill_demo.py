@@ -17,3 +17,8 @@ fill(t, s, 'b', t, c, 'g', opacity=0.2)
 
 raw_input('press enter')
 
+legend('domain1', 'domain2')
+clf()
+
+plot(t,s,legend='a')
+plot(t,s+2,legend='b')
