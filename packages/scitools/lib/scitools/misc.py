@@ -895,6 +895,31 @@ def flatten(nested_data):
         else:
             yield e
 
+def primes(n):
+    """
+    Return the prime numbers <= n.
+    Standard optimized sieve algorithm.
+    """
+    if n < 2:  return [1]
+    if n == 2: return [1, 2]
+    # do only odd numbers starting at 3
+    s = range(3, n+1, 2)
+    mroot = n**0.5
+    half = len(s)
+    i = 0
+    m = 3
+    while m <= mroot:
+        if s[i]:
+            j = (m*m-3)//2  # int div
+            s[j] = 0
+            while j < half:
+                s[j] = 0
+                j += m
+        i = i+1
+        m = 2*i+3
+    return [1, 2] + [x for x in s if x]
+
+    
 # used from StringFunction in an example:
 def _test_function(x, c=0, a=1, b=2):
     if x > c:
