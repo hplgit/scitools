@@ -1736,14 +1736,14 @@ class Figure(object):
             _check_type(shape[1], 'n', int)
             self._prop['axshape'] = shape
             dx = 1./shape[1];  dy = 1./shape[0]
-            last_x = 0;  last_y = 0
+            last_x = 0;  last_y = 1-dy
             viewport_coords = []
             for y in seq(dy,1,dy):
                 for x in seq(dx,1,dx):
                     viewport_coords.append((last_x,last_y,x,y))
                     last_x = x
                 last_x = 0
-                last_y = y
+                last_y = last_y - dy
 
             self._prop['axes'] = {}
             for i in iseq(1,len(viewport_coords)):
