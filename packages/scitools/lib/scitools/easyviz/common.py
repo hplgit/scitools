@@ -1,7 +1,7 @@
 import pickle, os, operator, pprint
 
 from scitools.numpyutils import seq, iseq, asarray, ones, zeros, sqrt, shape, \
-     ravel, meshgrid, rank, squeeze, reshape, ndgrid
+     ravel, meshgrid, rank, squeeze, reshape, ndgrid, size
 from scitools.numpytools import arrmin, arrmax, NumPyArray
 
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
@@ -202,21 +202,21 @@ class PlotProperties(object):
             elif isinstance(color, (list,tuple)) and len(color) == 3:
                 self._prop['linecolor'] = color
             else:
-                raise ValueError, 'linecolor must be %s, not %s' % \
+                raise ValueError, "linecolor must be '%s', not '%s'" % \
                       (self._colors, kwargs['linecolor'])
             
         if 'linetype' in kwargs:
             if kwargs['linetype'] in self._linestyles:
                 self._prop['linetype'] = kwargs['linetype']
             else:
-                raise ValueError, 'linetype must be %s, not %s' % \
+                raise ValueError, "linetype must be '%s', not '%s'" % \
                       (self._linestyles, kwargs['linetype'])
             
         if 'linemarker' in kwargs:
             if kwargs['linemarker'] in self._markers:
                 self._prop['linemarker'] = kwargs['linemarker']
             else:
-                raise ValueError, 'linemarker must be %s, not %s' % \
+                raise ValueError, "linemarker must be '%s', not '%s'" % \
                       (self._markers, kwargs['linemarker'])
 
         if 'facecolor' in kwargs:
@@ -403,9 +403,14 @@ class Line(PlotProperties):
                     if not operator.isSequenceType(kwargs['x']):
                         raise TypeError, "Can only plot sequence types"
                     x = kwargs['x']
+
             # Consitency check
-            assert len(x) == len(y) == len(z), \
-                   'Line.set: x, y, and z must be of same length'
+            assert size(x) == size(y), \
+                   'Line.setp: x has size %d, expected y to have size %d, ' \
+                   'not %d' % (size(x),size(x),size(y))
+            assert size(x) == size(z), \
+                   'Line.setp: x has size %d, expected z to have size %d, ' \
+                   'not %d' % (size(x),size(x),size(z))
 
             self._set_data(x, y, z)
             
@@ -422,9 +427,11 @@ class Line(PlotProperties):
                     if not operator.isSequenceType(kwargs['x']):
                         raise TypeError, "Can only plot sequence types"
                     x = kwargs['x']
+
             # Consitency check
-            assert len(x) == len(y), \
-                   'Line.setp: x and y must be of same length'
+            assert size(x) == size(y), \
+                   'Line.setp: x has size %d, expected y to have size %d, ' \
+                   'not %d.' % (size(x),size(x),size(y))
 
             self._set_data(x, y)
 
