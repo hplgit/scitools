@@ -3,6 +3,7 @@ import pickle, os, operator, pprint
 from scitools.numpyutils import seq, iseq, asarray, ones, zeros, sqrt, shape, \
      ravel, meshgrid, rank, squeeze, reshape, ndgrid, size
 from scitools.numpytools import arrmin, arrmax, NumPyArray
+from scitools.globaldata import backend
 
 from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
@@ -1740,7 +1741,10 @@ class Figure(object):
             viewport_coords = []
             for y in seq(dy,1,dy):
                 for x in seq(dx,1,dx):
-                    viewport_coords.append((last_x,last_y,x,y))
+                    if backend.startswith('vtk'):
+                        viewport_coords.append((last_x,last_y,x,last_y+dy))
+                    else:
+                        viewport_coords.append((last_x,last_y,x,y))
                     last_x = x
                 last_x = 0
                 last_y = last_y - dy

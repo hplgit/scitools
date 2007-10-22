@@ -215,7 +215,21 @@ class VTKBackend(BaseClass):
             print "Setting title"
         title = ax.getp('title')
         if title:
-            pass  # set title
+            tprop = vtk.vtkTextProperty()
+            tprop.BoldOff()
+            tprop.SetFontSize(ax.getp('fontsize'))
+            tprop.SetColor(ax.getp('fgcolor'))
+            tprop.SetFontFamilyToArial()
+            tprop.SetVerticalJustificationToTop()
+            tprop.SetJustificationToCentered()
+            tmapper = vtk.vtkTextMapper()
+            tmapper.SetInput(title)
+            tmapper.SetTextProperty(tprop)
+            tactor = vtk.vtkActor2D()
+            tactor.SetMapper(tmapper)
+            tactor.GetPositionCoordinate().SetCoordinateSystemToView()
+            tactor.GetPositionCoordinate().SetValue(0.0, 0.95)
+            ax._renderer.AddActor(tactor)
     
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
@@ -879,6 +893,8 @@ class VTKBackend(BaseClass):
         
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
+            if ax.getp('numberofitems') == 0:
+                continue
             self._ax = ax  # link for faster access
             if nrows != 1 or ncolumns != 1:
                 # create axes in tiled position

@@ -27,8 +27,6 @@ TODO:
 
 - add support for mesh and surf (requires PyX from svn)
 
-- add support for axes in arbitrary positions, i.e., axes(viewport=...)
-
 """
 
 from __future__ import division
