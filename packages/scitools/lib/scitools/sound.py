@@ -108,8 +108,9 @@ def Nothing_Else_Matters(echo=False):
     song *= max_amplitude
     if echo:
         song = add_echo(song, 0.6)
-    play(song)
+    return song
 
 if __name__ == '__main__':
     #_test1()
-    Nothing_Else_Matters(False)    
+    song = Nothing_Else_Matters(False)
+    play(song)
