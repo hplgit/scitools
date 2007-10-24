@@ -10,7 +10,7 @@ python setup.py install [, --prefix=$PREFIX]
 import os, sys, socket, re, glob
 
 # make sure we import from scitools in this package, not an installed one:
-sys.path.insert(0, os.path.join('lib', 'scitools'))
+sys.path.insert(0, os.path.join('lib'))
 import scitools
     
 if  __file__ == 'setupegg.py':
