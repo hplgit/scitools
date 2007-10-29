@@ -61,7 +61,7 @@ A scalar function $f(x,y)$ may be visualized
 as an elevated surface with colors using these commands:
 !bc
 x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
-xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
+xv, yv = ndgrid(x, x)    # define a 2D grid with points (xv,yv)
 values = f(xv, yv)       # function values
 surfc(xv, yv, values,
       shading='interp',

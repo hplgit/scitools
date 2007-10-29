@@ -693,4 +693,6 @@ ax = axes(viewport=[left, bottom, width, height])
 !ec
 The four parameteres `left`, `bottom`, `width`, `height`
 are location values between 0 and 1 ((0,0) is the lower-left corner 
-and (1,1) is the upper-right corner).
+and (1,1) is the upper-right corner). However, this might be a bit
+different in the different backends (see the documentation for the
+backend in question).
