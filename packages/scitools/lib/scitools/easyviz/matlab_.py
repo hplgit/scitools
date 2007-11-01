@@ -49,8 +49,14 @@ from common import *
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists as check
 
-check('mlabwrap', msg='You need to install the mlabwrap package.')
-from mlabwrap import mlab
+try:
+    from scikits.mlabwrap import mlab
+except ImportError:
+    try:
+        from mlabwrap import mlab
+    except ImportError:
+        # mlabwrap is not available
+        check('mlabwrap', msg='You need to install the mlabwrap package.')
 
 
 class MatlabBackend(BaseClass):
