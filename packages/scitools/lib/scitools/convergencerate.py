@@ -250,8 +250,27 @@ class OneDiscretizationPrm(object):
     pairwise_rates = staticmethod(pairwise_rates)
     analyze = staticmethod(analyze)
 
+# convenience function:
+def convergence_rate(discretization_prm, error):
+    """
+    Given two lists/arrays with discretization parameters and
+    corresponding errors in a numerical method (element no. i
+    in the two lists must correspond to each other), this
+    function assumes an error formula of the form E=C*d^r,
+    where E is the error and d is the discretization parameter.
+    The function returns C and r.
+
+    Method used: OneDiscretizationPrm.pairwise_rates is called
+    and the final r value is used for return.
+    """
+    rates, C = OneDiscretizationPrm.pairwise_rates(discretization_prm, error)
+    # improvement: check that there is no divergence at the end of
+    # the series of experiments
+    return C, rates[-1]
+
+
 # no need for this one?
-def many_discrprm_log_fit(d, e, factors):
+def __many_discrprm_log_fit(d, e, factors):
     """
     Linear least squares algorithm.
     Suitable for problems with a common

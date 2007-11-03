@@ -20,12 +20,12 @@ def RK4_algorithm\
     store(y, t)
         
     while t+dt <= T:
-        k1 = f(t, y)
-        k2 = f(t+dt/2, y + k1/2, *f_args, **f_kwargs)
-        k3 = f(t+dt/2, y + k2/2, *f_args, **f_kwargs)
-        k4 = f(t+dt,   y + k3,   *f_args, **f_kwargs) 
+        k1 = dt*f(t, y)
+        k2 = dt*f(t+dt/2, y + k1/2, *f_args, **f_kwargs)
+        k3 = dt*f(t+dt/2, y + k2/2, *f_args, **f_kwargs)
+        k4 = dt*f(t+dt,   y + k3,   *f_args, **f_kwargs) 
         t += dt
-        y = y + dt*(k1 + 2*k2 + 2*k3 + k4)/6
+        y = y + (k1 + 2*k2 + 2*k3 + k4)/6.
         store(y, t)
     return y
     
