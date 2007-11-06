@@ -25,18 +25,23 @@ methods below. The most important methods are figure, _replot, and hardcopy.
 
 REQUIREMENTS:
 
-<fill in requirements for backend>
+VTK >= 4.2
+Python bindings for VTK.
+
+Notes:
+
+- filled contours (contourf) doesn't look good in VTK 5.0.
 
 """
 
 from __future__ import division
 
 from common import *
-from scitools.globaldata import DEBUG, VERBOSE
+from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
 from scitools.misc import test_if_module_exists as check
 from scitools.numpyutils import allclose
 
-check('vtk', msg='You need to install the VTK package.')
+check('vtk', msg='You need to install the vtk package.')
 import vtk
 import os
 
@@ -46,6 +51,19 @@ try:
     import vtkTkRenderWidget
 except:
     from vtk.tk import vtkTkRenderWidget
+
+# change these to suit your needs.
+inc_dirs=['/usr/include/vtk-5.0']
+lib_dirs=['/usr/lib', '/usr/lib/python-support/python-vtk/python2.5/vtk']
+
+if OPTIMIZATION == 'weave':
+    try:
+        from scipy import weave
+    except ImportError:
+        try:
+            import weave
+        except ImportError:
+            print "Weave not available. Optimization turned off."
 
 
 class _VTKFigure(object):
@@ -137,6 +155,24 @@ class VTKBackend(BaseClass):
             'h': None,  # hexagram
             }
         
+        self._arrow_types = {
+            # tuple: (type,rotation)
+            '':  (9,0),   # arrow
+            '.': (0,0),   # no marker
+            'o': (7,0),   # circle
+            '+': (3,0),   # plus
+            'x': (3,45),  # x-mark
+            '*': (3,0),   # star --> plus
+            's': (6,0),   # square
+            'd': (8,0),   # diamond
+            'v': (5,180), # triangle (down) 
+            '^': (5,0),   # triangle (up)
+            '<': (5,90),  # triangle (left) 
+            '>': (5,270), # triangle (right)
+            'p': (6,0),   # pentagram --> square
+            'h': (6,0),   # hexagram --> square
+            }
+
         self._colors = {
             '': None,   # no color --> blue
             'r': (1,0,0),  # red
@@ -173,6 +209,13 @@ class VTKBackend(BaseClass):
             print "Setting backend standard variables"
             for disp in 'self._markers self._colors self._line_styles'.split():
                 print disp, eval(disp)
+
+    def _get_color(self, color, default=None):
+        if not (isinstance(color, (tuple,list)) and len(color) == 3):
+            color = self._colors.get(color, default)
+            if color is None:
+                color = default
+        return color
 
     def _set_scale(self, ax):
         """Set linear or logarithmic (base 10) axis scale."""
@@ -525,9 +568,7 @@ class VTKBackend(BaseClass):
 
     def _set_actor_properties(self, item, actor):
         # set line properties:
-        color = self._colors.get(item.getp('linecolor'), (0,0,1))
-        if color is None:
-            color = (0,0,1)
+        color = self._get_color(item.getp('linecolor'), (0,0,1))
         actor.GetProperty().SetColor(color)
         if item.getp('linetype') == '--':
             actor.GetProperty().SetLineStipplePattern(65280)
@@ -558,14 +599,18 @@ class VTKBackend(BaseClass):
         if mat.getp('specularpower') is not None:
             actor.GetProperty().SetSpecularPower(mat.getp('specularpower'))
 
-    def _create_2D_scalar_grid(self, item):
+    def _create_2D_scalar_data(self, item):
         x = squeeze(item.getp('xdata'))  # grid component in x-direction
         y = squeeze(item.getp('ydata'))  # grid component in y-direction
         z = asarray(item.getp('zdata'))  # scalar field
-        c = item.getp('cdata')           # pseudocolor data
+        try:
+            c = item.getp('cdata')       # pseudocolor data
+        except KeyError:
+            c = z.copy()
         if c is None:
             c = z.copy()
-        c = asarray(c)
+        else:
+            c = asarray(c)
         assert shape(c) == shape(z)
         
         if shape(x) != shape(z) and shape(y) != shape(z):
@@ -579,31 +624,239 @@ class VTKBackend(BaseClass):
         x = x/dx;  y = y/dy;  z = z/dz
         
         function = item.getp('function')
-        if function in ['contour', 'pcolor']:
+        if function in ['contour', 'contourf', 'pcolor']:
             z *= 0
         if function in ['meshc', 'surfc'] and isinstance(item, Contours):
             # this item is the Contours object beneath the surface in
             # a meshc or surfc plot.
             z *= 0
-            z += self._scaled_limits[4]
+            z += self._ax._scaled_limits[4]
         
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(item.getp('numberofpoints'))
         scalars = vtk.vtkFloatArray()
         scalars.SetNumberOfTuples(item.getp('numberofpoints'))
         scalars.SetNumberOfComponents(1)
-        ind = 0
         nx, ny = shape(z)
-        for j in range(ny):
-            for i in range(nx):
-                points.SetPoint(ind, x[i,j], y[i,j], z[i,j])
-                scalars.SetValue(ind, c[i,j])
-                ind += 1
+        if OPTIMIZATION == 'weave':
+            code = """
+int ind=0;
+for (int j=0; j<ny; j++) {
+    for (int i=0; i<nx; i++) {
+        points->SetPoint(ind, x(i,j), y(i,j), z(i,j));
+        scalars->SetValue(ind, c(i,j));
+        ind += 1;
+    }
+}
+"""
+            args = ['nx', 'ny', 'x', 'y', 'z', 'c', 'points', 'scalars']
+            weave.inline(code, args,
+                         include_dirs=inc_dirs, library_dirs=lib_dirs,
+                         type_converters=weave.converters.blitz)
+        else:
+            ind = 0
+            for j in range(ny):
+                for i in range(nx):
+                    points.SetPoint(ind, x[i,j], y[i,j], z[i,j])
+                    scalars.SetValue(ind, c[i,j])
+                    ind += 1
         points.Modified()
         sgrid = vtk.vtkStructuredGrid()
         sgrid.SetDimensions(item.getp('dims'))
         sgrid.SetPoints(points)
         sgrid.GetPointData().SetScalars(scalars)
+        sgrid.Update()
+        return sgrid
+
+    def _create_2D_vector_data(self, item):
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = item.getp('zdata')           # scalar field
+        # vector components:
+        u = asarray(item.getp('udata'))
+        v = asarray(item.getp('vdata'))
+        w = item.getp('wdata')
+        
+        if z is None:
+            z = zeros(shape(u))
+        else:
+            z = squeeze(z)
+        if w is None:
+            w = zeros(shape(u))
+        else:
+            w = asarray(w)
+
+        # scale x, y, and z according to data aspect ratio:
+        dx, dy, dz = self._ax.getp('daspect')
+        x = x/dx;  y = y/dy;  z = z/dz
+        
+        if shape(x) != shape(u) and shape(y) != shape(u):
+            assert rank(x) == 1 and rank(y) == 1
+            x, y = meshgrid(x,y,sparse=False,indexing=item.getp('indexing'))
+            # FIXME: use ndgrid instead of meshgrid
+        assert shape(x) == shape(u) and shape(y) == shape(u) and \
+               shape(z) == shape(u) and shape(v) == shape(u) and \
+               shape(w) == shape(u)
+
+        n = item.getp('numberofpoints')
+        points = vtk.vtkPoints()
+        points.SetNumberOfPoints(n)
+        vectors = vtk.vtkFloatArray()
+        vectors.SetNumberOfTuples(n)
+        vectors.SetNumberOfComponents(3)
+        vectors.SetNumberOfValues(3*n)
+        nx, ny = shape(u)
+        if OPTIMIZATION == 'weave':
+            code = """
+int ind=0;
+for (int j=0; j<ny; j++) {
+    for (int i=0; i<nx; i++) {
+        points->SetPoint(ind, x(i,j), y(i,j), z(i,j));
+        vectors->SetTuple3(ind, u(i,j), v(i,j), w(i,j));
+        ind += 1;
+    }
+}
+"""
+            args = ['nx', 'ny', 'x', 'y', 'z',
+                    'u', 'v', 'w', 'points', 'vectors']
+            weave.inline(code, args,
+                         include_dirs=inc_dirs, library_dirs=lib_dirs,
+                         type_converters=weave.converters.blitz)
+        else:
+            ind = 0
+            for j in range(ny):
+                for i in range(nx):
+                    points.SetPoint(ind, x[i,j], y[i,j], z[i,j])
+                    vectors.SetTuple3(ind, u[i,j], v[i,j], w[i,j])
+                    ind += 1
+        points.Modified()
+        sgrid = vtk.vtkStructuredGrid()
+        sgrid.SetDimensions(item.getp('dims'))
+        sgrid.SetPoints(points)
+        sgrid.GetPointData().SetVectors(vectors)
+        sgrid.Update()
+        return sgrid
+
+    def _create_3D_scalar_data(self, item):
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = squeeze(item.getp('zdata'))  # grid component in z-direction
+        v = asarray(item.getp('vdata'))  # scalar data
+        c = item.getp('cdata')           # pseudocolor data
+        # FIXME: What about pseudocolor data?
+        
+        if shape(x) != shape(v) and shape(y) != shape(v) \
+               and shape(z) != shape(v):
+            assert rank(x) == 1 and rank(y) == 1 and rank(z) == 1
+            x,y,z = meshgrid(x,y,z,sparse=False,indexing=item.getp('indexing'))
+            # FIXME: use ndgrid instead of meshgrid
+        assert shape(x) == shape(v) and shape(y) == shape(v) \
+               and shape(z) == shape(v)
+        
+        # scale x, y, and z according to data aspect ratio:
+        dx, dy, dz = self._ax.getp('daspect')
+        x = x/dx;  y = y/dy;  z = z/dz
+        
+        points = vtk.vtkPoints()
+        points.SetNumberOfPoints(item.getp('numberofpoints'))
+        scalars = vtk.vtkFloatArray()
+        scalars.SetNumberOfTuples(item.getp('numberofpoints'))
+        scalars.SetNumberOfComponents(1)
+        nx, ny, nz = shape(v)
+        if OPTIMIZATION == 'weave':
+            code = """
+int ind=0;
+for (int k=0; k<nz; k++) {
+    for (int j=0; j<ny; j++) {
+        for (int i=0; i<nx; i++) {
+            points->SetPoint(ind, x(i,j,k), y(i,j,k), z(i,j,k));
+            scalars->SetValue(ind, v(i,j,k));
+            ind += 1;
+        }
+    }
+}
+"""
+            args = ['nx', 'ny', 'nz', 'x', 'y', 'z', 'v', 'points', 'scalars']
+            weave.inline(code, args,
+                         include_dirs=inc_dirs, library_dirs=lib_dirs,
+                         type_converters=weave.converters.blitz)
+        else:
+            ind = 0
+            for k in range(nz):
+                for j in range(ny):
+                    for i in range(nx):
+                        points.SetPoint(ind, x[i,j,k], y[i,j,k], z[i,j,k])
+                        scalars.SetValue(ind, v[i,j,k])
+                        ind += 1
+        points.Modified()
+        sgrid = vtk.vtkStructuredGrid()
+        sgrid.SetDimensions(item.getp('dims'))
+        sgrid.SetPoints(points)
+        sgrid.GetPointData().SetScalars(scalars)
+        sgrid.Update()
+        return sgrid
+
+    def _create_3D_vector_data(self, item):
+        x = squeeze(item.getp('xdata'))  # grid component in x-direction
+        y = squeeze(item.getp('ydata'))  # grid component in y-direction
+        z = squeeze(item.getp('zdata'))  # grid component in z-direction
+        # vector components:
+        u = asarray(item.getp('udata'))
+        v = asarray(item.getp('vdata'))
+        w = asarray(item.getp('wdata'))
+        
+        # scale x, y, and z according to data aspect ratio:
+        dx, dy, dz = self._ax.getp('daspect')
+        x = x/dx;  y = y/dy;  z = z/dz
+        
+        if shape(x) != shape(u) and shape(y) != shape(u) \
+               and shape(z) != shape(u):
+            assert rank(x) == 1 and rank(y) == 1 and rank(z) == 1
+            x,y,z = meshgrid(x,y,z,sparse=False,indexing=item.getp('indexing'))
+            # FIXME: use ndgrid instead of meshgrid
+        assert shape(x) == shape(u) and shape(y) == shape(u) and \
+               shape(z) == shape(u) and shape(v) == shape(u) and \
+               shape(w) == shape(u)
+
+        n = item.getp('numberofpoints')
+        points = vtk.vtkPoints()
+        points.SetNumberOfPoints(n)
+        vectors = vtk.vtkFloatArray()
+        vectors.SetNumberOfTuples(n)
+        vectors.SetNumberOfComponents(3)
+        vectors.SetNumberOfValues(3*n)
+        nx, ny, nz = shape(u)
+        if OPTIMIZATION == 'weave':
+            code = """
+int ind=0;
+for (int k=0; k<nz; k++) {
+    for (int j=0; j<ny; j++) {
+        for (int i=0; i<nx; i++) {
+            points->SetPoint(ind, x(i,j,k), y(i,j,k), z(i,j,k));
+            vectors->SetTuple3(ind, u(i,j,k), v(i,j,k), w(i,j,k));
+            ind += 1;
+        }
+    }
+}
+"""
+            args = ['nx', 'ny', 'nz', 'x', 'y', 'z',
+                    'u', 'v', 'w', 'points', 'vectors']
+            weave.inline(code, args,
+                         include_dirs=inc_dirs, library_dirs=lib_dirs,
+                         type_converters=weave.converters.blitz)
+        else:
+            ind = 0
+            for k in range(nz):
+                for j in range(ny):
+                    for i in range(nx):
+                        points.SetPoint(ind, x[i,j,k], y[i,j,k], z[i,j,k])
+                        vectors.SetTuple3(ind, u[i,j,k], v[i,j,k], w[i,j,k])
+                        ind += 1
+        points.Modified()
+        sgrid = vtk.vtkStructuredGrid()
+        sgrid.SetDimensions(item.getp('dims'))
+        sgrid.SetPoints(points)
+        sgrid.GetPointData().SetVectors(vectors)
         sgrid.Update()
         return sgrid
 
@@ -640,7 +893,7 @@ class VTKBackend(BaseClass):
         if DEBUG:
             print "Adding a surface"
 
-        sgrid = self._create_2D_scalar_grid(item)
+        sgrid = self._create_2D_scalar_data(item)
         
         contours = item.getp('contours')
         if contours:
@@ -688,46 +941,108 @@ class VTKBackend(BaseClass):
         # bottom (as in meshc or surfc).
         if DEBUG:
             print "Adding contours"
-        x = item.getp('xdata')  # grid component in x-direction
-        y = item.getp('ydata')  # grid component in y-direction
-        z = item.getp('zdata')  # scalar field
+            
+        sgrid = self._create_2D_scalar_data(item)
+        plane = vtk.vtkStructuredGridGeometryFilter()
+        plane.SetInput(sgrid)
+        plane.Update()
+        data = self._cut_data(plane)
 
         filled = item.getp('filled')  # draw filled contour plot if True
-
+        if filled:
+            iso = vtk.vtkBandedPolyDataContourFilter()
+            iso.SetScalarModeToValue()
+            #iso.SetScalarModeToIndex()
+            iso.GenerateContourEdgesOn()
+        else:
+            iso = vtk.vtkContourFilter()
+        iso.SetInput(data.GetOutput())
+        
         cvector = item.getp('cvector')
         clevels = item.getp('clevels')  # number of contour levels
         if cvector is None:
             # the contour levels are chosen automatically
-            #cvector =
-            pass
+            zmin, zmax = data.GetOutput().GetScalarRange()
+            iso.SetNumberOfContours(clevels)
+            iso.GenerateValues(clevels, zmin, zmax)
+        else:
+            for i in range(clevels):
+                iso.SetValue(i, cvector[i])
+        iso.Update()
 
-        location = item.getp('clocation')
-        if location == 'surface':
-            # place the contours at the corresponding z level (contour3)
-            pass
-        elif location == 'base':
-            if placement == 'bottom':
-                # place the contours at the bottom (as in meshc or surfc)
-                pass
-            else:
-                # standard contour plot
-                pass
+        isoMapper = vtk.vtkPolyDataMapper()
+        isoMapper.SetInput(iso.GetOutput())
+        cmap = self._ax._colormap
+        #if filled:
+        #    cmap.SetNumberOfColors(clevels)
+        #    cmap.Build()
+        isoMapper.SetLookupTable(cmap)
+        cax = self._ax._caxis
+        if cax is None:
+            cax = data.GetOutput().GetScalarRange()
+        isoMapper.SetScalarRange(cax)
+        if item.getp('linecolor'):  # linecolor is defined
+            isoMapper.ScalarVisibilityOff()
+        isoMapper.Update()
+        isoActor = vtk.vtkActor()
+        isoActor.SetMapper(isoMapper)
+        self._set_actor_properties(item, isoActor)
+        #self._add_legend(item, iso.GetOutput())
+        self._ax._renderer.AddActor(isoActor)
+        self._ax._apd.AddInput(data.GetOutput())
+
+        if filled:
+            # create contour edges:
+            edgeMapper = vtk.vtkPolyDataMapper()
+            edgeMapper.SetInput(iso.GetContourEdgesOutput())
+            edgeMapper.SetResolveCoincidentTopologyToPolygonOffset()
+            edgeActor = vtk.vtkActor()
+            edgeActor.SetMapper(edgeMapper)
+            fgcolor = self._get_color(self._ax.getp('fgcolor'), (0,0,0))
+            edgecolor = self._get_color(item.getp('edgecolor'), fgcolor)
+            edgeActor.GetProperty().SetColor(edgecolor)
+            # FIXME: use edgecolor property above (or black as default)
+            self._ax._renderer.AddActor(edgeActor)
 
         if item.getp('clabels'):
             # add labels on the contour curves
-            pass
-    
+            # subsample the points and label them:
+            mask = vtk.vtkMaskPoints()
+            mask.SetInput(iso.GetOutput())
+            mask.SetOnRatio(int(data.GetOutput().GetNumberOfPoints()/50))
+            mask.SetMaximumNumberOfPoints(50)
+            mask.RandomModeOn()
+
+            # Create labels for points - only show visible points
+            visPts = vtk.vtkSelectVisiblePoints()
+            visPts.SetInput(mask.GetOutput())
+            visPts.SetRenderer(self._ax._renderer)
+            ldm = vtk.vtkLabeledDataMapper()
+            ldm.SetInput(mask.GetOutput())
+            ldm.SetLabelFormat("%.1g")
+            ldm.SetLabelModeToLabelScalars()
+            tprop = ldm.GetLabelTextProperty()
+            tprop.SetFontFamilyToArial()
+            tprop.SetFontSize(10)
+            tprop.SetColor(0,0,0)
+            tprop.ShadowOff()
+            tprop.BoldOff()
+            contourLabels = vtk.vtkActor2D()
+            contourLabels.SetMapper(ldm)
+            self._ax._renderer.AddActor(contourLabels)
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
         # uncomment the following command if there is no support for
         # automatic scaling of vectors in the current plotting package:
-        #item.scale_vectors()
+        item.scale_vectors()
 
-        # grid components:
-        x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
-        # vector components:
-        u, v, w = item.getp('udata'), item.getp('vdata'), item.getp('wdata')
+        if rank(item.getp('udata')) == 3:
+            sgrid = self._create_3D_vector_data(item)
+        else:
+            sgrid = self._create_2D_vector_data(item)
+
         # get line specifiactions (marker='.' means no marker):
         marker, color, style, width = self._get_linespecs(item)
 
@@ -737,42 +1052,123 @@ class VTKBackend(BaseClass):
 
         filled = item.getp('filledarrows') # draw filled arrows if True
 
-        if z is not None and w is not None:
-            # draw velocity vectors as arrows with components (u,v,w) at
-            # points (x,y,z):
-            pass
+        marker, rotation = self._arrow_types[item.getp('linemarker')]
+        arrow = vtk.vtkGlyphSource2D()
+        arrow.SetGlyphType(marker)
+        arrow.SetFilled(item.getp('filledarrows'))
+        arrow.SetRotationAngle(rotation)
+        if arrow.GetGlyphType() != 9: # not an arrow
+            arrow.DashOn()
+            arrow.SetCenter(.75,0,0)
         else:
-            # draw velocity vectors as arrows with components (u,v) at
-            # points (x,y):
-            pass
+            arrow.SetCenter(.5,0,0)        
+        arrow.SetColor(self._get_color(item.getp('linecolor'), (1,0,0)))
+
+        plane = vtk.vtkStructuredGridGeometryFilter()
+        plane.SetInput(sgrid)
+        plane.Update()
+        data = self._cut_data(plane)
+        glyph = vtk.vtkGlyph3D()
+        glyph.SetInput(data.GetOutput()) 
+        glyph.SetSource(arrow.GetOutput())
+        glyph.SetColorModeToColorByVector()
+        glyph.SetRange(data.GetOutput().GetScalarRange())
+        glyph.ScalingOn()
+        glyph.SetScaleModeToScaleByVector()
+        glyph.OrientOn()
+        glyph.SetVectorModeToUseVector()
+        glyph.Update()
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInput(glyph.GetOutput())
+        #vr = data.GetOutput().GetPointData().GetVectors().GetRange()
+        #mapper.SetScalarRange(vr)
+        mapper.ScalarVisibilityOff()
+        mapper.Update()
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        self._set_actor_properties(item, actor)
+        #self._add_legend(item, arrow.GetOutput())
+        self._ax._renderer.AddActor(actor)
+        self._ax._apd.AddInput(glyph.GetOutput())
 
     def _add_streams(self, item):
         if DEBUG:
             print "Adding streams"
-        # grid components:
-        x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
-        # vector components:
-        u, v, w = item.getp('udata'), item.getp('vdata'), item.getp('wdata')
-        # starting positions for streams:
-        sx, sy, sz = item.getp('startx'), item.getp('starty'), item.getp('startz')
-
-        if item.getp('tubes'):
-            # draw stream tubes from vector data (u,v,w) at points (x,y,z)
-            n = item.getp('n') # no points along the circumference of the tube
-            scale = item.getp('tubescale')
-            pass
-        elif item.getp('ribbons'):
-            # draw stream ribbons from vector data (u,v,w) at points (x,y,z)
-            width = item.getp('ribbonwidth')
-            pass
+            
+        if rank(item.getp('udata')) == 3: 
+            sgrid = self._create_3D_vector_data(item)
         else:
-            if z is not None and w is not None:
-                # draw stream lines from vector data (u,v,w) at points (x,y,z)
-                pass
+            sgrid = self._create_2D_vector_data(item)
+
+        length = sgrid.GetLength()
+        max_velocity = sgrid.GetPointData().GetVectors().GetMaxNorm()
+        max_time = 35.0*length/max_velocity
+        
+        dx, dy, dz = self._ax.getp('daspect')
+        sx = ravel(item.getp('startx'))/dx
+        sy = ravel(item.getp('starty'))/dy
+        sz = ravel(item.getp('startz'))/dz
+        for i in range(item.getp('numberofstreams')):
+            integ = vtk.vtkRungeKutta2()
+            #integ = vtk.vtkRungeKutta4()
+            stream = vtk.vtkStreamLine()
+            stream.SetInput(sgrid)
+            stream.SetStepLength(item.getp('stepsize'))
+            #stream.SetIntegrationStepLength(item.getp('stepsize'))
+            #stream.SetIntegrationDirectionToIntegrateBothDirections()
+            stream.SetIntegrationDirectionToForward()
+            #stream.SetMaximumPropagationTime(max_time)
+            #stream.SetMaximumPropagationTime(200)
+            stream.SpeedScalarsOn()
+            #stream.VorticityOn()
+            stream.SetStartPosition(sx[i], sy[i], sz[i])
+            stream.SetIntegrator(integ)
+            stream.Update()
+            data = self._cut_data(stream)
+
+            if item.getp('tubes'):
+                # draw stream tubes:
+                ncirc = item.getp('n') 
+                scale = item.getp('tubescale')
+                streamtube = vtk.vtkTubeFilter()
+                streamtube.SetInput(data.GetOutput())
+                streamtube.SetRadius(1)
+                streamtube.SetNumberOfSides(ncirc)
+                streamtube.SetVaryRadiusToVaryRadiusByVector()
+                streamtube.Update()
+                output = streamtube.GetOutput()
+            elif item.getp('ribbons'):
+                # draw stream ribbons: 
+                width = item.getp('ribbonwidth')
+                streamribbon = vtk.vtkRibbonFilter()
+                streamribbon.SetInput(data.GetOutput())
+                streamribbon.VaryWidthOn()
+                streamribbon.SetWidthFactor(width)
+                #streamribbon.SetAngle(90)
+                streamribbon.SetDefaultNormal([0,1,0])
+                streamribbon.UseDefaultNormalOn()
+                streamribbon.Update()
+                output = streamribbon.GetOutput()
             else:
-                # draw stream lines from vector data (u,v) at points (x,y)
-                pass
-            pass
+                # draw stream lines:
+                output = data.GetOutput()
+
+            mapper = vtk.vtkPolyDataMapper()
+            mapper.SetInput(output)
+            mapper.SetLookupTable(self._ax._colormap)
+            cax = self._ax._caxis
+            if cax is None:
+                cax = output.GetBounds()[4:]
+                #cax = sgrid.GetScalarRange()
+            mapper.SetScalarRange(cax)
+            mapper.Update()
+            actor = vtk.vtkActor()
+            actor.SetMapper(mapper)
+            #self._set_shading(item, stream, actor)
+            self._set_actor_properties(item, actor)
+            #self._add_legend(item, output)
+            self._ax._renderer.AddActor(actor)
+            self._ax._apd.AddInput(output)
 
     def _add_isosurface(self, item):
         if DEBUG:
@@ -783,44 +1179,131 @@ class VTKBackend(BaseClass):
         c = item.getp('cdata')  # pseudocolor data
         isovalue = item.getp('isovalue')
 
-    def _add_slices(self, item):
+        sgrid = self._create_3D_scalar_data(item)
+        iso = vtk.vtkContourFilter()
+        iso.SetInput(sgrid)
+        iso.SetValue(0, isovalue)
+        iso.Update()
+        data = self._cut_data(iso)
+        normals = vtk.vtkPolyDataNormals()
+        normals.SetInput(data.GetOutput())
+        normals.SetFeatureAngle(45)
+        normals.Update()
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInput(normals.GetOutput())
+        mapper.SetLookupTable(self._ax._colormap)
+        cax = self._ax._caxis
+        if cax is None:
+            cax = sgrid.GetScalarRange()
+        mapper.SetScalarRange(cax)
+        mapper.Update()
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        self._set_shading(item, data, actor)
+        self._set_actor_properties(item, actor)
+        self._ax._renderer.AddActor(actor)
+        self._ax._apd.AddInput(normals.GetOutput())
+
+    def _add_slices(self, item, contours=False):
         if DEBUG:
             print "Adding slices in a volume"
-        # grid components:
-        x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
-        v = item.getp('vdata')  # volume
+
+        sgrid = self._create_3D_scalar_data(item)
 
         sx, sy, sz = item.getp('slices')
         if rank(sz) == 2:
             # sx, sy, and sz defines a surface
-            pass
+            h = Surface(sx,sy,sz)
+            sgrid2 = self._create_2D_scalar_data(h)
+            plane = vtk.vtkStructuredGridGeometryFilter()
+            plane.SetInput(sgrid2)
+            plane.Update()
+            data = self._cut_data(plane)
+            implds = vtk.vtkImplicitDataSet()
+            implds.SetDataSet(data.GetOutput())
+            implds.Modified()
+            cut = vtk.vtkCutter()
+            cut.SetInput(sgrid)
+            cut.SetCutFunction(implds)
+            cut.GenerateValues(10, -2,2)
+            cut.GenerateCutScalarsOn()
+            cut.Update()
+            mapper = vtk.vtkPolyDataMapper()
+            mapper.SetInput(cut.GetOutput())
+            mapper.SetLookupTable(self._ax._colormap)
+            cax = self._ax._caxis
+            if cax is None:
+                cax = data.GetOutput().GetScalarRange()
+            mapper.SetScalarRange(cax)
+            mapper.Update()
+            actor = vtk.vtkActor()
+            actor.SetMapper(mapper)
+            self._set_shading(item, data, actor)
+            self._set_actor_properties(item, actor)
+            self._ax._renderer.AddActor(actor)
+            self._ax._apd.AddInput(cut.GetOutput())
+            self._ax._apd.AddInput(data.GetOutput())
         else:
             # sx, sy, and sz is either numbers or vectors with numbers
-            pass
-        pass
+            origins = []
+            normals = []
+            center = sgrid.GetCenter()
+            dx, dy, dz = self._ax.getp('daspect')
+            sx = ravel(sx)/dx
+            sy = ravel(sy)/dy
+            sz = ravel(sz)/dz
+            for i in range(len(sx)):
+                normals.append([1,0,0])
+                origins.append([sx[i], center[1], center[2]])
+            for i in range(len(sy)):
+                normals.append([0,1,0])
+                origins.append([center[0], sy[i], center[2]])
+            for i in range(len(sz)):
+                normals.append([0,0,1])
+                origins.append([center[0], center[1], sz[i]])
+            for i in range(len(normals)):
+                plane = vtk.vtkPlane()
+                plane.SetOrigin(origins[i])
+                plane.SetNormal(normals[i])
+                cut = vtk.vtkCutter()
+                cut.SetInput(sgrid)
+                cut.SetCutFunction(plane)
+                cut.Update()
+                data = self._cut_data(cut)
+                mapper = vtk.vtkPolyDataMapper()
+                if contours:
+                    iso = vtk.vtkContourFilter()
+                    iso.SetInput(data.GetOutput())
+                    cvector = item.getp('cvector')
+                    if cvector is not None:
+                        for i in range(len(cvector)):
+                            iso.SetValue(i, cvector[i])
+                    else:
+                        zmin, zmax = data.GetOutput().GetScalarRange()
+                        iso.GenerateValues(item.getp('clevels'), zmin, zmax)
+                    iso.Update()
+                    mapper.SetInput(iso.GetOutput())
+                else:
+                    mapper.SetInput(data.GetOutput())
+                mapper.SetLookupTable(self._ax._colormap)
+                cax = self._ax._caxis
+                if cax is None:
+                    cax = sgrid.GetScalarRange()
+                mapper.SetScalarRange(cax)
+                mapper.Update()
+                actor = vtk.vtkActor()
+                actor.SetMapper(mapper)
+                if not contours:
+                    self._set_shading(item, data, actor)
+                self._set_actor_properties(item, actor)
+                self._ax._renderer.AddActor(actor)
+                self._ax._apd.AddInput(cut.GetOutput())
 
     def _add_contourslices(self, item):
         if DEBUG:
             print "Adding contours in slice planes"
-        # grid components:
-        x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
-        v = item.getp('vdata')  # volume
 
-        sx, sy, sz = item.getp('slices')
-        if rank(sz) == 2:
-            # sx, sy, and sz defines a surface
-            pass
-        else:
-            # sx, sy, and sz is either numbers or vectors with numbers
-            pass
-
-        cvector = item.getp('cvector')
-        clevels = item.getp('clevels')  # number of contour levels per plane
-        if cvector is None:
-            # the contour levels are chosen automatically
-            #cvector =
-            pass
-        pass
+        self._add_slices(item, contours=True)
 
     def _set_figure_size(self, fig):
         if DEBUG:
@@ -939,16 +1422,125 @@ class VTKBackend(BaseClass):
 
     def hardcopy(self, filename, **kwargs):
         """
-        Supported extensions: <fill in extensions for this backend>
+        Supported extensions in VTK backend:
+
+          '.ps'  (PostScript)
+          '.eps' (Encapsualted PostScript)
+          '.pdf' (Portable Document Format)
+          '.jpg' (Joint Photographic Experts Group)
+          '.png' (Portable Network Graphics)
+          '.pnm' (Portable Any Map)
+          '.tif' (Tagged Image File Format)
+          '.bmp' (Bitmap Image)
+
+        Optional arguments for JPEG output:
+
+          quality     -- Set the quality of the resulting JPEG image. The
+                         argument must be given as an integer between 0 and
+                         100, where 100 gives the best quality (but also
+                         the largest file). Default quality is 100.
+
+          progressive -- Set whether to use progressive JPEG generation or
+                         not. Default is False.
+
+        Optional arguments for PostScript and PDF output:
+
+          vector_file -- If True (default), the figure will be stored as a
+                         vector file, i.e., using vtkGL2PSExporter instead
+                         of vtkPostScriptWriter (requires VTK to be built
+                         with GL2PS support). GL2PS gives much better
+                         results, but at a cost of longer generation times
+                         and larger files.
+                         
+          orientation -- Set the orientation to either 'portrait' (default)
+                         or 'landscape'. This option only has effect when
+                         vector_file is True.
+                         
+          raster3d    -- If True, this will write 3D props as raster images
+                         while 2D props are rendered using vector graphic
+                         primitives. Default is False. This option only has
+                         effect when vector_file is True.
+                         
+          compression -- If True, compression will be used when generating
+                         PostScript or PDF output. Default is False (no
+                         compression). This option only has effect when
+                         vector_file is True.
         """
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
+        
+        if not self.getp('show'):  # don't render to screen
+            self._g.renwin.OffScreenRenderingOn()
+
         if replot:
             self._replot()
 
         if DEBUG:
             print "Hardcopy to %s" % filename
+
+        basename, ext = os.path.splitext(filename)
+        if not ext:
+            # no extension given, assume .ps:
+            ext = '.ps'
+            filename += ext
+
+        jpeg_quality = int(kwargs.get('quality', 100))
+        progressive = bool(kwargs.get('progressive', False))
+        vector_file = bool(kwargs.get('vector_file', True))
+        orientation = kwargs.get('orientation', 'portrait')
+        raster3d = bool(kwargs.get('raster3d', False))
+        compression = bool(kwargs.get('compression', False))
+        
+        landscape = False
+        if orientation.lower() == 'landscape':
+            landscape = True
+            
+        vector_file_formats = {'.ps': 0, '.eps': 1, '.pdf': 2, '.tex': 3}
+        if vector_file and ext.lower() in vector_file_formats:
+            exp = vtk.vtkGL2PSExporter()
+            exp.SetRenderWindow(self._g.renwin)
+            exp.SetFilePrefix(basename)
+            exp.SetFileFormat(vector_file_formats[ext.lower()])
+            exp.SetCompress(compression)
+            exp.SetLandscape(landscape)
+            exp.SetSortToBSP()
+            #exp.SetSortToSimple()  # less expensive sort algorithm
+            exp.DrawBackgroundOn()
+            exp.SetWrite3DPropsAsRasterImage(raster3d)
+            exp.Write()
+        else:
+            vtk_image_writers = {
+                '.tif': vtk.vtkTIFFWriter(),
+                '.tiff': vtk.vtkTIFFWriter(),
+                '.bmp': vtk.vtkBMPWriter(),
+                '.pnm': vtk.vtkPNMWriter(),
+                '.png': vtk.vtkPNGWriter(),
+                '.jpg': vtk.vtkJPEGWriter(),
+                '.jpeg': vtk.vtkJPEGWriter(),
+                '.ps': vtk.vtkPostScriptWriter(),
+                '.eps': vtk.vtkPostScriptWriter(),  # gives a normal PS file
+                }
+            w2if = vtk.vtkWindowToImageFilter()
+            w2if.SetInput(self._g.renwin)
+            try:
+                writer = vtk_image_writers[ext.lower()]
+            except KeyError:
+                raise TypeError, \
+                      "hardcopy: Extension '%s' is currently not supported." \
+                      % ext
+            if ext.lower() in ('.jpg', '.jpeg'):
+                writer.SetQuality(jpeg_quality)
+                writer.SetProgressive(progressive)
+            if ext.lower() in ('.tif', '.tiff'):
+                # FIXME: allow to set compression mode for TIFF output
+                # see http://www.vtk.org/doc/release/5.0/html/a02108.html
+                pass
+            writer.SetFileName(filename)
+            writer.SetInputConnection(w2if.GetOutputPort())
+            writer.Write()
+        self._g.renwin.OffScreenRenderingOff()
+
 
     # reimplement color maps and other methods (if necessary) like clf,
     # closefig, and closefigs here.
@@ -1040,7 +1632,7 @@ class VTKBackend(BaseClass):
         lut.SetValueRange(0.6, 1.0)
         lut.Build()
         return lut
-        
+
     def autumn(self, m=64):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
@@ -1049,7 +1641,7 @@ class VTKBackend(BaseClass):
         lut.SetValueRange(1.0, 1.0)
         lut.Build()
         return lut
-    
+
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:
     for cmd in BaseClass._matlab_like_cmds:
@@ -1065,6 +1657,6 @@ class VTKBackend(BaseClass):
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = VTKBackend()   # create backend instance
 use(plt, globals())  # export public namespace of plt to globals()
