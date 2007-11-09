@@ -386,7 +386,8 @@ class Line(PlotProperties):
 
         if 'z' in kwargs:
             if not operator.isSequenceType(kwargs['z']):
-                raise TypeError, "Can only plot sequence types"
+                raise TypeError, "Can only plot sequence types, "\
+                      "z is %s" % type(kwargs['z'])
             z = kwargs['z']
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
@@ -395,14 +396,16 @@ class Line(PlotProperties):
                     y = range(len(z))
                 else:
                     if not operator.isSequenceType(kwargs['y']):
-                        raise TypeError, "Can only plot sequence types"
+                        raise TypeError, "Can only plot sequence types, "\
+                              "y is %s" % type(kwargs['y'])
                     y = kwargs['y']
             if 'x' in kwargs:  # will only set x variable if y is set
                 if kwargs['x'] == 'auto':  # now x is the indicies of y 
                     x = range(len(y))
                 else:
                     if not operator.isSequenceType(kwargs['x']):
-                        raise TypeError, "Can only plot sequence types"
+                        raise TypeError, "Can only plot sequence types, "\
+                              "x is %s" % type(kwargs['x'])
                     x = kwargs['x']
 
             # Consitency check
@@ -417,7 +420,8 @@ class Line(PlotProperties):
             
         elif 'y' in kwargs:
             if not operator.isSequenceType(kwargs['y']):
-                raise TypeError, "Can only plot sequence types"
+                raise TypeError, "Can only plot sequence types, "\
+                      "y is %s" % type(kwargs['y'])
             y = kwargs['y']
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
@@ -426,7 +430,8 @@ class Line(PlotProperties):
                     x = range(len(y))
                 else:
                     if not operator.isSequenceType(kwargs['x']):
-                        raise TypeError, "Can only plot sequence types"
+                        raise TypeError, "Can only plot sequence types, "\
+                              "x is %s" % type(kwargs['x'])
                     x = kwargs['x']
 
             # Consitency check

@@ -158,19 +158,21 @@ class StringFunction:
     _lambda attribute.
     """
     def __init__(self, expression, **kwargs):
-        self._f = expression
+        self._f = str(expression)  # ensure a string
 
         # check if expression is a function in a module:
         self._function_in_module = None
 
         # a module function specification is on the form
         # [A-Za-z_][A-Za-z0-9_.]x where x+1 is the len(expression)
+        # but there MUST be a dot in there
         pattern = r'[A-Za-z_][A-Za-z0-9_.]{%d}' % (len(expression)-1)
-        if re.search(pattern, expression):
-            parts = expression.split('.')
-            module = '.'.join(parts[:-1])
-            function = parts[-1]
-            self._function_in_module = (module, function)
+        if "." in expression:
+            if re.search(pattern, expression):
+                parts = expression.split('.')
+                module = '.'.join(parts[:-1])
+                function = parts[-1]
+                self._function_in_module = (module, function)
             
         # self._var holds the independent variables in a tuple:
         if 'independent_variable' in kwargs:
