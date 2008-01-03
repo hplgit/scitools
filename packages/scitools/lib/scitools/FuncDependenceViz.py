@@ -148,14 +148,14 @@ class FuncDependenceViz:
             # x increment has changed, make new vectors:
 
             # add dx/2 to upper limit to ensure self.n entries:
-            x = arange(self.xmin.get(), self.xmax.get()+dx/2, dx, Float)
+            x = arange(self.xmin.get(), self.xmax.get()+dx/2, dx, float)
             if x.shape[0] != self.n.get():
                 raise IndexError, "x has wrong length"
             self.x = x
 
             self.y = {}
             for funcname in self.funcs:
-                self.y[funcname] = zeros(x.shape[0],Float)
+                self.y[funcname] = zeros(x.shape[0],float)
                     
             if self.viztool == "Pmw.Blt.Graph":
                 self.bind_vectors2BLTgraph()
