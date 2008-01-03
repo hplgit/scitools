@@ -544,7 +544,7 @@ class BoxGrid(UniformBoxGrid):
 def _test(g):
     print 'g=%s' % str(g)
     # dump all the contents of a grid object:
-    scitools.misc.dump(g, hide_nonpublic=False)
+    import scitools.misc;  scitools.misc.dump(g, hide_nonpublic=False)
     from numpy import zeros
     def fv(*args):
         # vectorized evaluation function
