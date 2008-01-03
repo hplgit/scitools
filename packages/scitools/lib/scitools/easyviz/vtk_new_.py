@@ -461,21 +461,31 @@ class VTKBackend(BaseClass):
         if DEBUG:
             print "Setting view"
         cam = ax.getp('camera')
+
         view = cam.getp('view')
+
+        fp = cam.getp('camtarget')
+        camera = vtk.vtkCamera()
+        camera.SetFocalPoint(cam.getp('camtarget'))
+        camera.SetViewUp(cam.getp('camup'))
+        camera.ParallelProjectionOn()
         if view == 2:
             # setup a default 2D view
-            pass
+            camera.SetPosition(fp[0], fp[1], 1)
         elif view == 3:
+            camera.SetPosition(fp[0],fp[1]-1,fp[2])
             az = cam.getp('azimuth')
             el = cam.getp('elevation')
             if az is None or el is None:
                 # azimuth or elevation is not given. Set up a default
                 # 3D view (az=-37.5 and el=30 is the default 3D view in
                 # Matlab).
-                pass
+                camera.Azimuth(-37.5)
+                camera.Elevation(30)
             else:
                 # set a 3D view according to az and el
-                pass
+                camera.Azimuth(ax)
+                camera.Elevation(el)                
             
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
@@ -487,6 +497,25 @@ class VTKBackend(BaseClass):
                 up_vector = cam.getp('camup')
                 view_angle = cam.getp('camva')
                 projection = cam.getp('camproj')
+                if projection == 'perspective':
+                    camera.ParallelProjectionOff()
+                else:
+                    camera.ParallelProjectionOn()
+            
+
+        self._ax._renderer.SetActiveCamera(camera)
+        self._ax._camera = camera
+
+        # make sure all actors are inside the current view:
+        ren = self._ax._renderer
+        ren.ResetCamera()
+        #if self._ax.getp('camera').getp('view') == 2:
+        #    ren.GetActiveCamera().Zoom(1.5)
+        camera.Zoom(cam.getp('camzoom'))
+       
+        # set the camera in the vtkCubeAxesActor2D object:
+        #self._ax._vtk_axes.SetCamera(camera)
+
 
     def _set_axis_props(self, ax):
         if DEBUG:

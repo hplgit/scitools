@@ -41,9 +41,9 @@ from __future__ import division
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists as check
+from scitools.numpyutils import floor, linspace, array
 
 check('Pmw', msg='You need to install the Pmw package.')
-check('Tkinter', msg='You need to install the Tkinter package.')
 import Pmw
 import Tkinter
 
@@ -177,9 +177,10 @@ class BltBackend(BaseClass):
             # and z direction. If this is not automated in the plotting
             # package, one can use the following limits:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
-            self._g.axis_configure('x', min=xmin, max=xmax)
-            self._g.axis_configure('y', min=ymin, max=ymax)
+            #self._g.axis_configure('x', min=xmin, max=xmax)
+            #self._g.axis_configure('y', min=ymin, max=ymax)
             #self._g.axis_configure(['x', 'y'], autorange=0.0)
+            pass
         elif mode == 'manual':
             # (some) axis limits are frozen
             xmin = ax.getp('xmin')
@@ -465,6 +466,72 @@ class BltBackend(BaseClass):
         kwargs['label'] = item.getp('legend')
         return kwargs
 
+    def _add_bars(self, name, item, shading='faceted'):
+        if DEBUG:
+            print "Adding a bar graph"
+        # get data:
+        x = item.getp('xdata')
+        y = item.getp('ydata')
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+        
+        if rank(y) == 1:
+            y = reshape(y,(len(y),1))
+        nx, ny = shape(y)
+
+        barticks = item.getp('barticks')
+        if barticks is None:
+            barticks = range(nx)
+        xtics = ', '.join(['"%s" %d' % (m,i) \
+                           for i,m in enumerate(barticks)])
+        if item.getp('rotated_barticks'):
+            pass
+
+        barwidth = item.getp('barwidth')/10
+        edgecolor = item.getp('edgecolor')
+        if not edgecolor:
+            edgecolor = 'black'  # use black for now
+            # FIXME: edgecolor should be same as ax.getp('fgcolor') by default
+        else:
+            edgecolor = self._colors.get(edgecolor, 'black')
+            
+        if shading == 'faceted':
+            pass
+        else:
+            pass
+
+        facecolor = item.getp('facecolor')
+        if not facecolor:
+            facecolor = color
+        facecolor = self._colors.get(facecolor, 'blue')  # use blue as default
+
+        step = item.getp('barstepsize')/10
+
+        center = floor(ny/2)
+        start = -step*center
+        stop = step*center
+        if not ny%2:
+            start += step/2
+            stop -= step/2
+        a = linspace(start,stop,ny)
+
+        self._g.configure(barmode="overlap")
+
+        data = []
+        for j in range(ny):
+            y_ = y[:,j]
+            x_ = array(range(nx)) + a[j]
+            curvename = '%s_bar%s' % (name,j)
+            if not item.getp('linecolor') and not item.getp('facecolor'):
+                color = 'black'
+            else:
+                color = facecolor
+            self._g.bar_create(curvename,
+                               xdata=tuple(x_),
+                               ydata=tuple(y_),
+                               barwidth=barwidth,
+                               fg=color)
+
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
@@ -704,6 +771,9 @@ class BltBackend(BaseClass):
                 if isinstance(item, Line):
                     kwargs = self._add_line(item)
                     g = self._g.line_create(name, **kwargs)
+                elif isinstance(item, Bars):
+                    shading = ax.getp('shading')
+                    self._add_bars(name, item, shading=shading)
                 elif isinstance(item, Surface):
                     self._add_surface(item, shading=ax.getp('shading'))
                 elif isinstance(item, Contours):

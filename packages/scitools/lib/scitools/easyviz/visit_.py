@@ -468,8 +468,8 @@ DATASET STRUCTURED_GRID
 DIMENSIONS %d %d 1
 POINTS %d float
 """ % (nx,ny,nx*ny))
-        for i in range(nx):
-            for j in range(ny):
+        for j in range(ny):
+            for i in range(nx):
                 f.write("%s %s %s\n" % (x[i,j],y[i,j],z[i,j]))
    
         f.write("""
