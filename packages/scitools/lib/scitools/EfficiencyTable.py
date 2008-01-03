@@ -205,6 +205,7 @@ def _test(n):
     # how much does it cost to run an empty loop with
     # range, xrange and iseq?
     e = EfficiencyTable('Empty loops, loop length = %d' % n)
+    import timeit
     t1 = timeit.Timer('for i in range(n): pass',
                       setup='n=%d' % n).timeit(5)
     e.add('for i in range(n): pass', t1)
@@ -218,4 +219,9 @@ def _test(n):
     print e
     
 if __name__ == '__main__':
-    _test()
+    import sys
+    try:
+        n = int(sys.argv[1])
+    except:
+        n = 100
+    _test(n)
