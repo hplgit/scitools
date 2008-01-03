@@ -89,7 +89,7 @@ class BoxField(Field):
                       (values.shape, required_shape)
         else:
             # create array of scalar field grid point values:
-            self.values = N.zeros(required_shape)
+            self.values = zeros(required_shape)
 
         # doesn't  work: self.__getitem__ = self.values.__getitem__
         #self.__setitem__ = self.values.__setitem__
@@ -97,7 +97,7 @@ class BoxField(Field):
     def update(self):
         """Update the self.values array (if grid has been changed)."""
         if self.grid.shape != self.values.shape:
-            self.values = N.zeros(self.grid.shape)
+            self.values = zeros(self.grid.shape)
 
     # these are slower than u_ = u.values; u_[i] since an additional
     # function call is required compared to NumPy array indexing:
