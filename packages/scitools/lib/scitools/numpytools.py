@@ -569,7 +569,8 @@ The following extensions to Numerical Python are also defined:
 
  - NumPy_array_iterator:
            allows iterating over all array elements using
-           a single, standard for loop (for value, index in iterator)
+           a single, standard for loop (for value, index in iterator),
+           has some additional features compared with numpy.ndenumerate
              
  - asarray_cpwarn:
            as asarray(a), but a warning or exception is issued if
@@ -1279,8 +1280,8 @@ class WrapNo2Callable:
         >>> w(99)
         4.4000000000000004
         >>> # try vectorized computations:
-        >>> x = seq(1, 4, 1)
-        >>> y = seq(1, 2)
+        >>> x = linspace(1, 4, 4)
+        >>> y = linspace(1, 2, 2)
         >>> xv = x[:,NewAxis]; yv = y[NewAxis,:]
         >>> xv + yv
         array([[ 2.,  3.],
@@ -1342,8 +1343,8 @@ class WrapNo2Callable:
         >>> w(99)
         4.4000000000000004
         >>> # try vectorized computations:
-        >>> x = seq(1, 4, 1)
-        >>> y = seq(1, 2)
+        >>> x = linspace(1, 4, 4)
+        >>> y = linspace(1, 2, 2)
         >>> xv = x[:,NewAxis]; yv = y[NewAxis,:]
         >>> xv + yv
         array([[ 2.,  3.],
@@ -1383,10 +1384,12 @@ class WrapDiscreteData2Callable:
     Turn discrete data on a uniform grid into a callable function,
     i.e., equip the data with an interpolation function.
 
-    >>> x = seq(0,1,0.1)
+    >>> x = linspace(0, 1, 11)
     >>> y = 1+2*x
+    >>> f = WrapDiscreteData2Callable((x,y))
+    >>> # or just use the wrap2callable generic function:
     >>> f = wrap2callable((x,y))
-    >>> f(0.5)   # evaluate f(x)
+    >>> f(0.5)   # evaluate f(x) by interpolation
     1.5
     >>> f(0.5, 0.1)  # discrete data with extra time prm: f(x,t)
     1.5
@@ -1440,7 +1443,7 @@ def wrap2callable(f, **kwargs):
     >>> f4(0.5)
     2.0
 
-    >>> x = seq(0,1,0.5); y=1+2*x
+    >>> x = linspace(0, 1, 3); y=1+2*x
     >>> f5 = wrap2callable((x,y))
     >>> f5(0.5)
     2.0
@@ -1467,7 +1470,7 @@ def wrap2callable(f, **kwargs):
     >>> f9(0.5,1/3.,0.25)
     4.0
     >>> # discrete 3D data:
-    >>> y = seq(0,1,0.5); z = seq(-1,0.5,0.1)
+    >>> y = linspace(0, 1, 3); z = linspace(-1, 0.5, 16)
     >>> xv = reshape(x, (len(x),1,1))
     >>> yv = reshape(y, (1,len(y),1))
     >>> zv = reshape(z, (1,1,len(z)))
@@ -1530,6 +1533,10 @@ def NumPy_array_iterator(a, **kwargs):
     """
     Iterate over all elements in a NumPy array a.
     Return values: generator function and the code of this function.
+    The numpy.ndenumerate iterator performs the same iteration over
+    an array, but NumPy_array_iterator has some additional features
+    (especially handy for coding finite difference stencils, see next
+    paragraph).
 
     The keyword arguments specify offsets in the start and stop value
     of the index in each dimension. Legal values are
@@ -1544,7 +1551,7 @@ def NumPy_array_iterator(a, **kwargs):
     
     Examples::
     
-    >>> q = seq(1, 2*3*4, 1);  q.shape = (2,3,4)
+    >>> q = linspace(1, 2*3*4, 2*3*4);  q.shape = (2,3,4)
     >>> it, code = NumPy_array_iterator(q)
     >>> print code  # generator function with 3 nested loops:
     def nested_loops(a):
@@ -1585,7 +1592,7 @@ def NumPy_array_iterator(a, **kwargs):
     Here is the version where only the indices and no the values
     are returned by the iterator::
 
-    >>> q = seq(1, 1*3, 1);  q.shape = (1,3)
+    >>> q = linspace(1, 1*3, 3);  q.shape = (1,3)
     >>> it, code = NumPy_array_iterator(q, no_value=True)
     >>> print code
     def nested_loops(a):

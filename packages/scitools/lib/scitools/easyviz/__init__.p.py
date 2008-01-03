@@ -3,7 +3,6 @@
 """
 
 __author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
-__version__ = "0.1"
 
 _import_list = []  # used as in basics.py
 import time as _time; _t0 = _time.clock();

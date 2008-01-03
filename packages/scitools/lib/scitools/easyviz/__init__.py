@@ -66,7 +66,7 @@ A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands::
 
         x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
-        xv, yv = meshgrid(x, x)  # define a 2D grid with points (xv,yv)
+        xv, yv = ndgrid(x, x)    # define a 2D grid with points (xv,yv)
         values = f(xv, yv)       # function values
         surfc(xv, yv, values,
               shading='interp',
@@ -172,7 +172,7 @@ Here is the complete program::
             return t**2*exp(-t**2)
         
         t = linspace(0, 3, 51)    # 51 points between 0 and 3
-        y = zeros(len(t), float)  # allocate y with float elements
+        y = zeros(len(t))         # allocate y with float elements
         for i in xrange(len(t)):
             y[i] = f(t[i])
         
@@ -576,12 +576,12 @@ is decreased from 2 to 0.2::
             y = f(x, m, s)
             plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
                  xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-                 hardcopy='tmp_%04d.eps' % counter)
+                 hardcopy='tmp_%04d.png' % counter)
             counter += 1
             #time.sleep(0.2)  # can insert a pause to control movie speed
         
         # make movie file the simplest possible way:
-        movie('tmp_*.eps')
+        movie('tmp_*.png')
 
 
 First note that the s values are decreasing (linspace handles this
@@ -669,8 +669,8 @@ produces "behind the curtain".
   * from scipy import * (if scipy is available)
   * the Python modules sys, os, math, operator, pprint
   * from numpyutils import * (SciTools module)
-  * the SciTools module StringFunction and the SciTools 
-    functions watch and trace for debugging
+  * the StringFunction class from scitools.StringFunction and the 
+    functions watch and trace from scitools.debug
 
 The scipy import can take some time and lead to slow start-up of plot 
 scripts. A more minimalistic import for curve plotting is 
@@ -694,10 +694,10 @@ Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
 that communicates with the underlying plotting program (known as
-"backend") and work with
-this object directly, using plotting program-specific command
-syntax.  Let us illustrate this principle with an example where we add
-a text and an arrow in the plot, see Figure fig:plot2i.
+"backend") and work with this object directly, using plotting
+program-specific command syntax.  Let us illustrate this principle
+with an example where we add a text and an arrow in the plot, see
+Figure fig:plot2i.
 
 FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands.
 
@@ -707,12 +707,12 @@ the Gnuplot object and issue Gnuplot commands to
 this object directly. Here is an example on the typical recipe::
 
         g = get_backend()
-        if g.__class__.__name__ == 'Gnuplot':
+        if backend == 'gnuplot':
             # g is a Gnuplot object, work with Gnuplot commands directly:
             g('set label "global maximum" at 0.1,0.5 font "Times,18"')
             g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
-        g.refresh()
-        g.hardcopy('tmp2.eps')  # make new hardcopy
+            g.refresh()
+            g.hardcopy('tmp2.eps')  # make new hardcopy
 
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
@@ -722,6 +722,33 @@ features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
+*Changing the Backend.* The default underlying plotting program (backend) is set in the file
+scitools.cfg (the backend parameter under the [easyviz] entry).
+Often this program is Gnuplot. There are three ways to change the
+backend. The first method is to edit the scitools.cfg file so that
+all programs that apply Easyviz by default use this backend.  One can
+either edit the scitools.cfg file in the folder where SciTools is
+installed, or one can have a local .scitools.cfg file in the home
+folder or in any folder. The values in the file in the home folder
+apply to all programs that the user runs, while the values in a
+.scitools.cfg file in a particular folder applies to all programs
+in that folder.
+
+The second method is to add a command-line argument to programs that 
+import Easyviz::
+
+        --SCITOOLS_easyviz_backend name
+
+Here name is gnuplot, vtk, matplotlib, matlab, etc.
+The third method is to import a specific backend in a program. Instead
+of the from scitools.all import * statement one writes::
+
+        from numpy import *
+        from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+        # or
+        from scitools.easyviz.vtk_ import *      # work with VTK
+
+Note the trailing underscore in the module names for the various backends.
 
 *Working with Axis and Figure Objects.* Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
@@ -814,7 +841,9 @@ must use the command::
 
 The four parameteres left, bottom, width, height
 are location values between 0 and 1 ((0,0) is the lower-left corner 
-and (1,1) is the upper-right corner).
+and (1,1) is the upper-right corner). However, this might be a bit
+different in the different backends (see the documentation for the
+backend in question).
 
 
 Visualization of Scalar Fields
@@ -850,14 +879,14 @@ The x and y values in our 2D domain lie between -5 and 5.
 
 The example first creates the necessary data arrays for 2D scalar
 field plotting: the coordinates in each direction, extensions of these
-arrays to form a *meshgrid*, and the function values. The latter array
+arrays to form a *ndgrid*, and the function values. The latter array
 is computed in a vectorized operation which requires the extended
-coordinate arrays from the meshgrid function.  The mesh command
+coordinate arrays from the ndgrid function.  The mesh command
 can then produce the plot with a syntax that mirrors the simplicity of
 the plot command for curves::
 
         x = y = linspace(-5, 5, 21)
-        xv, yv = meshgrid(x, y)
+        xv, yv = ndgrid(x, y)
         values = sin(sqrt(xv**2 + yv**2))
         h = mesh(xv, yv, values)
 
@@ -878,7 +907,7 @@ FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend).
 
 The surf command offers many possibilities to adjust the resulting plot::
 
-        set(interactive=False)
+        setp(interactive=False)
         surf(xv, yv, values)
         shading('flat')
         colorbar()
@@ -893,11 +922,11 @@ view point. The same plot can also be accomplished with one single, compound
 statement (as Easyviz offers for the plot command)::
 
         surf(xv, yv, values,
-             shading='interp',
+             shading='flat',
              colorbar='on',
-             colormap=jet(),
+             colormap=hot(),
              axis=[-6,6,-6,6,-1.5,1.5],
-             view=[-35,35])
+             view=[35,45])
 
 Figure fig:surf_ex2 displays the result.
 
@@ -1050,14 +1079,13 @@ generates fluid flow data. Our first isosurface visualization example
 then looks as follows::
 
         x, y, z, v = flow()  # generate fluid-flow data
-        set(show=False)
+        setp(interactive=False)
         h = isosurface(x,y,z,v,-3)
-        h.set(opacity=0.5)
+        h.setp(opacity=0.5)
         shading('interp')
         daspect([1,1,1])
         view(3)
         axis('tight')
-        set(show=True)
         show()
 
 After creating some scalar volume data with the flow function, we
@@ -1075,13 +1103,12 @@ Here is another example that demonstrates the isosurface command
 (again using the flow function)::
 
         x, y, z, v = flow()
-        set(show=False)
+        setp(interactive=False)
         h = isosurface(x,y,z,v,0)
         shading('interp')
         daspect([1,4,4])
         view([-65,20])
         axis('tight')
-        set(show=True)
         show()
 
 Figure fig:isosurface2 shows the resulting plot.
@@ -1101,7 +1128,7 @@ slice.). This command draws orthogonal slice planes through a
 given volumetric data set. Here is an example on how to use the
 slice_ command::
 
-        x, y, z = meshgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
+        x, y, z = ndgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
                            sparse=True)
         v = x*exp(-x**2 - y**2 - z**2)
         xslice = [-1.2, .8, 2]
@@ -1130,15 +1157,14 @@ in planes aligned with the coordinate axes. Here is an example
 using 3D scalar field data from the flow function::
 
         x, y, z, v = flow()
-        set(show=False)
+        setp(interactive=False)
         h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
         axis([0, 10, -3, 3, -3, 3])
         daspect([1, 1, 1])
         ax = gca()
-        ax.set(fgcolor=(1,1,1), bgcolor=(0,0,0))
+        ax.setp(fgcolor=(1,1,1), bgcolor=(0,0,0))
         box('on')
         view(3)
-        set(show=True)
         show()
 
 The first four arguments given to contourslice in this example are
@@ -1158,13 +1184,13 @@ FIGURE:[figs/contourslice1.eps] Contours in slice planes (VTK backend).
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set::
 
-        import scipy
+        import scipy.io
         mri = scipy.io.loadmat('mri_matlab_v6.mat')
         D = mri['D']
         image_num = 8
         
         # Displaying a 2D Contour Slice:
-        contourslice(D, [], [], image_num, daspect=[1,1,1])
+        contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
 
 The MRI data set is loaded from the file mri_matlab_v6.mat with the
 aid from the loadmat function available in the io module in the
@@ -1198,7 +1224,7 @@ plots vectors in 3D space.  The basic usage of the quiver command
 goes as follows::
 
         x = y = linspace(-5, 5, 21)
-        xv, yv = meshgrid(x, y, sparse=False)
+        xv, yv = ndgrid(x, y, sparse=False)
         values = sin(sqrt(xv**2 + yv**2))
         uv, vv = gradient(values)
         quiver(xv, yv, uv, vv)
@@ -1230,12 +1256,12 @@ example demonstrating this principle for a simple scalar field, where
 we plot the field values as colors and add vectors to illustrate the
 associated gradient field::
 
-        xv, yv = meshgrid(seq(-5,5,0.1), seq(-5,5,0.1))
+        xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
         values = sin(sqrt(xv**2 + yv**2))
         pcolor(xv, yv, values, shading='interp')
         
         # create a coarser grid for the gradient field:
-        xv, yv = meshgrid(seq(-5,5,0.5), seq(-5,5,0.5))
+        xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21))
         values = sin(sqrt(xv**2 + yv**2))
         uv, vv = gradient(values)
         hold('on')
@@ -1248,7 +1274,6 @@ associated gradient field::
 The resulting plots can be seen in Figure fig:quiver_ex2 and
 fig:quiver_ex3. 
 
-
 FIGURE:[figs/quiver_ex2.eps] Combined quiver and pseudocolor plot (VTK backend).
 FIGURE:[figs/quiver_ex3.eps] Combined quiver and pseudocolor plot (VTK backend).
 
@@ -1257,13 +1282,12 @@ with the quiver3 command. At the time of this writing, only the VTK
 backend supports 3D quiver plots. A simple example of plotting the
 "radius vector field" v=(x,y,z) is given next::
 
-        x = y = z = seq(-3,3,2)
-        xv, yv, zv = meshgrid(x, y, z, sparse=False)
+        x = y = z = linspace(-3,3,4)
+        xv, yv, zv = ndgrid(x, y, z, sparse=False)
         uv = xv
         vv = yv
         wv = zv
-        quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r',
-                axis=[-7,7,-7,7,-7,7])
+        quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
 
 The strings 'filled' and 'r' are optional and makes the arrows
 become filled 
@@ -1271,7 +1295,6 @@ and red, respectively. The resulting plot is presented in Figure
 fig:quiver3_ex1. 
 
 FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend).
-
 
 
 Stream Plots
@@ -1295,7 +1318,7 @@ currents over a region of North America and is suitable for testing
 the different stream plot commands. The following commands will load
 the wind data set and then draw some stream lines from it::
 
-        import scipy  # need scipy to load binary .mat-files
+        import scipy.io  # needed to load binary .mat-files
         
         # load the wind data set and create variables:
         wind = scipy.io.loadmat('wind.mat')
@@ -1307,8 +1330,8 @@ the wind data set and then draw some stream lines from it::
         w = wind['w']
         
         # create starting points for the stream lines:
-        sx, sy, sz = meshgrid([80]*4, seq(20,50,10), seq(0,15,5), 
-                              sparse=False)
+        sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5), 
+                            sparse=False)
           
         # draw stream lines:
         streamline(x, y, z, u, v, w, sx, sy, sz,
@@ -1327,16 +1350,16 @@ access later.
 
 Before we call the streamline command we must set up some starting
 point coordinates for the stream lines. In this example, we have used
-the meshgrid command to define the starting points with the line::
+the ndgrid command to define the starting points with the line::
 
-        sx, sy, sz = meshgrid([80]*4, seq(20,50,10), seq(0,15,5))
+        sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
 
 This command defines starting points which all lie on x=80,
 y=20,30,40,50, and z=0,5,10,15. We now have all the data we need
 for calling the streamline command. The first six arguments to the
 streamline command are the grid coordinates (x,y,z) and the 3D
 vector data (u,v,w), while the next three arguments are the starting
-points which we defined with the meshgrid command above. The
+points which we defined with the ndgrid command above. The
 resulting plot is presented in Figure fig:streamline_ex1.
 
 FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend).
@@ -1471,10 +1494,10 @@ limits by::
 
 
 
+
 """
 
 __author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
-__version__ = "0.1"
 
 _import_list = []  # used as in basics.py
 import time as _time; _t0 = _time.clock();
