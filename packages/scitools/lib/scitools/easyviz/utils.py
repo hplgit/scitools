@@ -16,54 +16,43 @@ def peaks(*args):
         x, y = args
     else:
         raise SyntaxError("Invalid number of arguments.")
-    z = 3*(1-x)**2*exp(-x**2 - (y+1)**2) \
-        - 10*(x/5 - x**3 - y**5)*exp(-x**2-y**2) \
-        - 1/3*exp(-(x+1)**2 - y**2)
-    return z
-
-def cart2sph(xx, yy, zz):
-    # theta, phi, r = cart2sph(xx, yy, zz)
-    theta = arctan2(yy, xx)
-    phi = arctan2(zz, sqrt(xx**2 + yy**2))
-    r = sqrt(xx**2 + yy**2 + zz**2)
-    return theta, phi, r
-
-def sph2cart(theta, phi, r):
-    # xx, yy, zz = sph2cart(theta, phi, r)
-    xx = r * cos(phi) * cos(theta)
-    yy = r * cos(phi) * sin(theta)
-    zz = r * sin(phi)
-    return xx, yy, zz
+    return 3*(1-x)**2*exp(-x**2-(y+1)**2) \
+           - 10*(x/5-x**3-y**5)*exp(-x**2-y**2) - 1/3*exp(-(x+1)**2-y**2)
 
 def flow(*args):
     # xx,yy,zz,vv = flow()
     # xx,yy,zz,vv = flow(n)
     # xx,yy,zz,vv = flow(xx,yy,zz)
     if len(args) == 0:
-        xx, yy, zz = ndgrid(seq(.1,10,.2),
-                            seq(-3,3,.25),
-                            seq(-3,3,.25),
+        xx, yy, zz = ndgrid(linspace(0.1, 10, 50),
+                            linspace(-3, 3, 25),
+                            linspace(-3, 3, 25),
                             sparse=False)
     elif len(args) == 1:
         n = int(args[0])
-        xx, yy, zz = ndgrid(linspace(.1,10,2*n),
-                            linspace(-3,3,n),
-                            linspace(-3,3,n),
+        xx, yy, zz = ndgrid(linspace(0.1, 10, 2*n),
+                            linspace(-3, 3, n),
+                            linspace(-3, 3, n),
                             sparse=False)
     elif len(args) == 3:
         xx, yy, zz = args
     else:
         raise SyntaxError("Invalid number of arguments.")
     
-    # Convert to spherical coordinates (with xx as the axis).
-    A = 2; nu = 1
+    # convert to spherical coordinates:
+    theta = arctan2(zz, yy)
+    phi = arctan2(xx, sqrt(yy**2 + zz**2))
+    r = sqrt(xx**2 + yy**2 + zz**2)
 
-    th,phi,r = cart2sph(yy,zz,xx)
-    vr = 2*nu/r*((A**2-1)/(A-cos(phi))**2 - 1)
-    vphi = -2*nu*sin(phi)/(A-cos(phi))/r
-    vth = zeros(shape(r))
+    rv = 2/r*(3/(2-cos(phi))**2 - 1)
+    phiv = -2*sin(phi)/(2-cos(phi))/r
+    thetav = zeros(shape(r))
 
-    vx,vy,vz = sph2cart(vth,vphi,vr)
-    vv = log(sqrt(vx**2 + vy**2 + vz**2))
+    # convert back to cartesian coordinates:
+    xv = rv*cos(phiv)*cos(thetav)
+    yv = rv*cos(phiv)*sin(thetav)
+    zv = rv*sin(phiv)
+
+    vv = log(sqrt(xv**2 + yv**2 + zv**2))
 
     return xx, yy, zz, vv
