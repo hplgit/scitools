@@ -19,7 +19,7 @@ x = xlim;
 y = ylim;
 
 # Displaying a 2-D Contour Slice:
-contourslice(D,[],[],image_num)
+contourslice(D,[],[],image_num,indexing='xy')
 axis('ij')
 xlim(x)
 ylim(y)
@@ -32,7 +32,7 @@ show()
 
 figure()
 BUG = 1
-phandles = contourslice(D,[],[],[1,12,19,27-BUG],8)
+phandles = contourslice(D,[],[],[1,12,19,27-BUG],8,indexing='xy')
 view(3)
 axis('tight')
 #set(phandles,'LineWidth',2)

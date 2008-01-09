@@ -25,7 +25,7 @@ daspect([1,1,1])
 # plot two sets of streamribbons:
 sx,sy,sz = ndgrid([-1,0,1],[-1,0,1],[-6]*3,sparse=False)
 p = streamribbon(x,y,z,u,v,w,sx,sy,sz)
-sx,sy,sz = ndgrid(seq(1,6),zeros(6,Float),[-6]*6,sparse=False)
+sx,sy,sz = ndgrid(seq(1,6),zeros(6,float),[-6]*6,sparse=False)
 p2 = streamribbon(x,y,z,u,v,w,sx,sy,sz)
 
 # define viewing and lighting:
