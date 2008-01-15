@@ -7,6 +7,7 @@ rm -rf dist/
 python setup.py sdist
 if [ $? != 0 ]; then
     exit
+fi
 cd dist
 file=`ls`
 mv $file ../../../SYSDIR/src/python/tools/
