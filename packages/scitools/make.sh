@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Scipt for creating a distribution version of the current scitools,
+# Script for creating a distribution version of the current scitools,
 # and moving it to the correct folder in the SYSDIR structure.
 
 rm -rf dist/
