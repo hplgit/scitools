@@ -627,8 +627,25 @@ def _test5():
     gnuplot(g3, a, legend='3D scalar field', plane_in_3D=(Z,0))
     gnuplot(g3, a, legend='3D scalar field', plane_in_3D=(Z,len(g3.coor[Z])/2))
     gnuplot(g3, a, legend='3D scalar field', plane_in_3D=(Z,len(g3.coor[Z])/2), ps='tmp2.ps')
-    
+
+def _test6():
+    # same as _test6 only using Easyviz to plot instead of Gnuplot
+    from fieldviz import easyviz
+    from scitools.numpytools import exp
+    g1 = UniformBoxGrid(x=(0,1), nx=20)
+    g2 = UniformBoxGrid(x=(0,1), y=(0,1), nx=20, ny=20)
+    g3 = UniformBoxGrid(x=(0,1), y=(0,1), z=(0,1), nx=40, ny=40, nz=40)
+    a = g1.vectorized_eval(lambda x: exp(-(x-0.5)**2))
+    easyviz(g1, a, legend='1D scalar field')
+    a = g2.vectorized_eval(lambda x,y: exp(-(x-0.5)**2)-(y-0.5)**2)
+    easyviz(g2, a, legend='2D scalar field')
+    a = g3.vectorized_eval(lambda x,y,z: exp(-(x-0.5)**2)-(y-0.5)**2-(z-0.5)**2)
+    easyviz(g3, a, legend='3D scalar field', plane_in_3D=(Z,0))
+    easyviz(g3, a, legend='3D scalar field', plane_in_3D=(Z,len(g3.coor[Z])/2))
+    easyviz(g3, a, legend='3D scalar field', plane_in_3D=(Z,len(g3.coor[Z])/2), ps='tmp2.ps')
+        
 if __name__ == '__main__':
     _test2()
     #_test4()
     #_test5()
+    #_test6()
