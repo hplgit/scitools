@@ -1,33 +1,34 @@
 _____Easyviz Backends_____
 
-Easyviz is a unified interface to other plotting packages, referred to
-as backends. Several backends have been implemented to support various
-plotting packages such as Gnuplot, Pyx, Pmw.Blt.Graph, Matplotlib,
-Veusz, and VTK. Support for several other plotting packages are
-planned in the future (including VisIt and OpenDX).
+As we have mentioned earlier, Easyviz is just a unified interface to
+other plotting packages, which we refer to as backends. We have
+currently implemented backends for Gnuplot, Grace, OpenDX, Matlab,
+Matplotlib, Pmw.Blt, Veusz, VisIt, and VTK. Some are more early in
+developement than others, like the backends for OpenDx and VisIt.
 
-Because of limitations in many plotting packages, not all available
-features in Easyviz are supported by every backend. For example, both
-Gnuplot and VTK backends support visualization of 2D vector fields,
-but Gnuplot does not support visualization of 3D vector fields, so
-neither does the Gnuplot backend. The currently supported backends and
-their corresponding requirements and limitations are described next.
+Because of limitations in many of the plotting packages, not all
+features in Easyviz are supported by each of the backends. For
+instance, Gnuplot and VTK both offer visualization of 2D vector
+fields, however, Gnuplot has (at the time of this writing) no support
+for visualization of 3D vector fields, so this is of course not
+available in the Gnuplot backend either. 
+ 
+We will in the following look closer at the backends that are
+currently implemented in Easyviz and some of their corresponding
+features, requirements, and limitations. We will also for each backend
+look at a more advanced example where we grab the backend instance and
+work directly on it.
 
 __Gnuplot__. Gnuplot is a command-line driven interactive plotting
 utility that works on most platforms. The software is freely
 distributed and easy to install. Gnuplot supports many types of plots
-in both 2D and 3D, including lines, contours, vector fields, and
-surfaces. Curve plots and surface plots of 2D scalar fields can be
+in both 2D and 3D, including curve plots, contour plots, vector plots,
+and surfaces. Curve plots and surface plots of 2D scalar fields can be
 tuned to an excellent result, while 3D scalar and vector fields are
-not supported.  To access Gnuplot from Python and send Numerical
-Python arrays to Gnuplot, we use the Python module `Gnuplot`.
+not supported. To access Gnuplot from Python and send NumPy
+arrays to Gnuplot, we use the Python module `Gnuplot`. 
 
-__PyX__. Description + state.
-
-__Pmw.Blt.Graph.__ Pmw (Python Mega Widgets) extends the Tkinter
-package with more sophisticated widgets, included an interactive
-widget for curve plotting. This widget is based on the BLT package
-(an extension of Tk written in C).
+__Matlab__. 
 
 __Matplotlib__. Matplotlib is (at the time of this writing) quickly
 gaining wide popularity in the scientific Python community.
@@ -37,11 +38,20 @@ applies the same ideas with a unified Matlab-like interface to various
 backends, but Matplotlib is a much more comprehensive interface and
 a very much larger package than Easyviz.
 
+__PyX__. PyX is a Python package for the creation of PostScript and
+PDF files. It combines an abstraction of the PostScript drawing model
+with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
+publication-ready quality are built out of these primitives.
+
+
+__Pmw.Blt.Graph.__ Pmw (Python Mega Widgets) extends the Tkinter
+package with more sophisticated widgets, included an interactive
+widget for curve plotting. This widget is based on the BLT package
+(an extension of Tk written in C).
+
+The BLT backend offers currenlty only basic 
+
+__Veusz__. 
+
 __VTK__. VTK (Visualization ToolKit) is a package primarily aimed at
 visualizing 2D and 3D scalar and vector fields by a range of techniques.
-
-__Veusz__.
-
-
-
-

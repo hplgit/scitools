@@ -2,5 +2,6 @@ recursive-include examples *
 recursive-include lib *.cfg
 recursive-include lib/scitools/easyviz/doc *
 recursive-include lib/scitools/easyviz/tests *
-include COPYING
-include COPYING.LESSER
+include LICENSE
+include Allen_Downey.txt
+include README

@@ -26,22 +26,17 @@ setup(
     author = 'Hans Petter Langtangen',
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
-    license = "LGPL",
+    license = "BSD",
     name = "SciTools",
-    url = "",
+    url = "http://scitools.googlecode.com",
     package_dir = {'': 'lib'},
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"), 
 		os.path.join("scitools", "pyPDE"),
 		],
-    package_data={'': ['scitools.cfg']},
+    package_data = {'': ['scitools.cfg']},
     scripts = [os.path.join('bin', f)
                for f in os.listdir('bin')
                if not (f.startswith('.') or f.endswith('~') or
                        f.endswith('.old') or f.endswith('.bak'))],
-	       )
-	    
-	       
-               
-
-    
+    )

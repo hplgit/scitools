@@ -1,22 +1,113 @@
-Different ways of installing scitools is listed below
+Contents
 
-1. Normal install ([, ... ] means optional)
-    sh> python setup.py install [,--prefix=$PREFIX]
+    1. Introduction
+    2. Dependencies
+    3. Installation
+    4. License
+    5. Credits
+    6. Contact
 
-2. Setuptools using eggs
-Build the egg with the following command	
-    sh> python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg	
-Then install the created egg using easy_install
-    sh> easy_install [, --prefix=$PREFIX] dist/Scitools-0.1-py2.4.egg 
+-------------------------------------------------------------------------------
+1. Introduction
 
-3. Manual
-Put the lib subdirectory here in PYTHONPATH and bin in PATH.
-This gives access to the svn directories for scitools, easyviz, etc.
+SciTools is a Python package containing lots of useful tools for
+scientific computing in Python. The package is built on top of other
+widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
+etc. 
 
-4. Extended
-Run build_scitools++.py. This makes a new directory build/scitools++
-that you can move to any convenient place. scitools++ contains scitools
-plus some standard Python modules like Gnuplot, IPython, epydoc, etc.
-Put scitools++/lib in PYTHONPATH and scitools++/bin in PATH.
-Or you may run scitools++/setup.py to install scitools++ in the
-official installation directories on your system.
+-------------------------------------------------------------------------------
+2. Dependencies
+
+SciTools only requirements are Python and some sort of Numerical Python
+(NumPy, Numeric, or Numarray). For most users we recommend to use NumPy
+(see http://numpy.org), however, it might be necessary in some cases to
+install Numeric and/or Numarray as well since some older Python modules
+does not have support for the new NumPy module.
+
+-------------------------------------------------------------------------------
+3. Installation
+
+There are several different ways of installing SciTools:
+
+ - Normal install ([, ... ] means optional)
+  
+     python setup.py install [,--prefix=$PREFIX]
+
+ - Setuptools using eggs
+
+   First build the egg with the following command	
+    
+     python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg	
+
+   Then install the created egg using easy_install
+
+     easy_install [, --prefix=$PREFIX] dist/Scitools-0.1-py2.4.egg 
+
+ - Manual
+
+   Put the lib subdirectory here in PYTHONPATH and bin in PATH.
+   This gives access to the directories for scitools, easyviz, etc.
+
+ - Debian/Ubuntu packages
+
+   If you have Debian or a Debian based platform like Ubuntu, there is a 
+   repository with SciTools available at http://packages.simula.no (see
+   http://packages.simula.no/README for how to enable this
+   repository). With this repository enabled you should be able to 
+   install SciTools simply by typing
+
+     sudo apt-get install python-scitools
+
+ - Extended
+
+   Run build_scitools++.py. This makes a new directory build/scitools++
+   that you can move to any convenient place. scitools++ contains
+   scitools plus some standard Python modules like Gnuplot, IPython,
+   epydoc, etc. Put scitools++/lib in PYTHONPATH and scitools++/bin in
+   PATH. Or you may run scitools++/setup.py to install scitools++ in the
+   official installation directories on your system. 
+
+-------------------------------------------------------------------------------
+3. License
+
+SciTools is licensed under the new BSD license, see the LICENSE file.
+
+Lumpy.py and Gui.py are licensed under GPL, however, permission is
+granted by Allen Downey to include these under a BSD license (see
+included mail in Allen_Downey.txt).
+
+-------------------------------------------------------------------------------
+3. Credits
+
+SciTools is mainly developed by Hans Petter Langtangen <hpl@simula.no>,
+however, some modules included in SciTools are written by others:
+
+Allen B. Downey <downey@allendowney.com> wrote Lumpy.py and Gui.py
+Imri Goldberg <lorgandon@gmail.com> wrote aplotter.py
+Fred L. Drake, Jr. <fdrake@acm.org> wrote pprint2.py
+Gael Varoquaux <gael.varoquaux@normalesup.org> wrote pyreport
+
+Other contributors:
+
+Rolv E. Bredesen <rolveb@simula.no>
+Joachim B. Haga <jobh@simula.no>
+Mario Pernici
+Johannes H. Ring <johannr@simula.no>
+Ilmar Wilbers <ilmarw@simula.no>
+
+-------------------------------------------------------------------------------
+4. Contact
+
+Comments, suggestions, bug fixes should be sent to
+
+    scitools@googlegroups.com
+
+The latest release of SciTools can be obtained from
+
+    http://scitools.googlecode.com
+
+while the latest Subversion revision can be obtained from
+
+    https://svn.simula.no:40081/int/scriptingsuite/trunk/packages/scitools
+
+This is, however, only available for internal members at Simula.

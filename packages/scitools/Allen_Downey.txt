@@ -1,0 +1,36 @@
+Subject: Re: Including Lumpy.py and Gui.py in BSD software?
+From: "Allen Downey" <downey@allendowney.com>
+Date: Fri, February 15, 2008 17:50
+To: "johannr@simula.no" <johannr@simula.no>
+
+Hi Johannes,
+
+Yes, you are welcome to include modified versions of Gui.py and Lumpy.py
+in SciTools under a BSD license.  Thanks for letting me know about your
+project.
+
+Did you make any changes you think I should integrate into my version?
+
+Cheers,
+Allen
+
+
+On 2/15/08, johannr@simula.no <johannr@simula.no> wrote:
+>
+> Hi,
+>
+> my name is Johannes Ring and I am working for Simula Research Laboratory
+> in Norway. Here we, especially Hans Petter Langtangen
+> (http://simula.no/~hpl), develop a software suite for scientific
+> programming in Python called SciTools. It is built on top of many other
+> useful Python packages like NumPy, SciPy, ScientificPython, etc. We have
+> also used slightly modified versions of your Python modules Lumpy.py and
+> Gui.py. Now we are ready to make a public release of SciTools and we have
+> chosen to release it under a BSD license. Lumpy.py and Gui.py are released
+> under GPL, however, we were wondering if it is okay with you that we
+> include these into SciTools?
+>
+> Regards,
+> Johannes Ring
+>
+>
