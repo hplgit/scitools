@@ -1,11 +1,12 @@
 _____Plotting a Single Curve_____
 
 
-Let us plot the curve $y = t^2\exp(-t^2)$ for $t$ values between 0 and 3.
-First we generate equally spaced coordinates for $t$, say 51 values (50
-intervals). Then we compute the corresponding $y$ values at these
-points, before we call the `plot(t,y)` command to make the curve plot.
-Here is the complete program:
+Let us plot the curve $y = t^2\exp(-t^2)$|$y = t**2*exp(-t**2)$ for
+$t$ values between 0 and 3.  First we generate equally spaced
+coordinates for $t$, say 51 values (50 intervals). Then we compute the
+corresponding $y$ values at these points, before we call the
+`plot(t,y)` command to make the curve plot.  Here is the complete
+program:
 
 !bc
 from scitools.all import *
@@ -552,7 +553,9 @@ FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-speci
 Easyviz does not support text and arrows at arbitrary places inside
 the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
 the `Gnuplot` object and issue Gnuplot commands to
-this object directly. Here is an example on the typical recipe:
+this object directly. Here is an example on the typical recipe, written
+after the core of the plot is made in the ordinary (plotting 
+program-independent) way:
 
 !bc
 g = get_backend()
@@ -570,35 +573,6 @@ the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
-
-__Changing the Backend.__
-The default underlying plotting program (backend) is set in the file
-`scitools.cfg` (the `backend` parameter under the `[easyviz]` entry).
-Often this program is Gnuplot. There are three ways to change the
-backend. The first method is to edit the `scitools.cfg` file so that
-all programs that apply Easyviz by default use this backend.  One can
-either edit the `scitools.cfg` file in the folder where SciTools is
-installed, or one can have a local `.scitools.cfg` file in the home
-folder or in any folder. The values in the file in the home folder
-apply to all programs that the user runs, while the values in a
-`.scitools.cfg` file in a particular folder applies to all programs
-in that folder.
-
-The second method is to add a command-line argument to programs that 
-import Easyviz:
-!bc
---SCITOOLS_easyviz_backend name
-!ec
-Here `name` is `gnuplot`, `vtk`, `matplotlib`, `matlab`, etc.
-The third method is to import a specific backend in a program. Instead
-of the `from scitools.all import *` statement one writes
-!bc
-from numpy import *
-from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
-# or
-from scitools.easyviz.vtk_ import *      # work with VTK
-!ec
-Note the trailing underscore in the module names for the various backends.
 
 __Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.

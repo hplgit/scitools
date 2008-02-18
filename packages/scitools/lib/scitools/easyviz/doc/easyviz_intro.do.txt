@@ -5,9 +5,11 @@ Python scripts. Both curve plots and more advanced 2D/3D visualization
 of scalar and vector fields are supported.  The Easyviz interface was
 designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
 a unified interface to lots of visualization engines (called backends
-later): Gnuplot, VTK, Matlab, Matplotlib, PyX, etc.; and 3) a
-minimalistic interface which offers only basic control of plots
-(fine-tuning is left to programming in the specific backend directly).
+later): Gnuplot, Matplotlib, Grace, Veusz, Pmw.Blt.Graph, PyX,
+Matlab, VTK, VisIt, OpenDX; and 3) a minimalistic interface which
+offers only basic control of plots: curves, linestyles, legends,
+title, axis extent and names.  More fine-tuning of plots can be done
+by adding backend-specific commands.
 
 _____Guiding Principles_____
 
@@ -27,7 +29,6 @@ commands
 y2 = t**4*exp(-t**2)
 # pick out each 4 points and add random noise:
 t3 = t[::4]
-random.seed(11)
 y3 = y2[::4] + random.normal(loc=0, scale=0.02, size=len(t3))
 
 plot(t, y1, 'r-')
@@ -41,7 +42,7 @@ xlabel('t')
 ylabel('y')
 show()
 
-hardcopy('tmp0.ps')  # this one can be included in latex
+hardcopy('tmp0.ps')  # this one can be included in LaTeX
 hardcopy('tmp0.png') # this one can be included in HTML
 !ec
 Easyviz also allows these additional function calls to be executed
@@ -71,14 +72,14 @@ surfc(xv, yv, values,
       show=True)
 !ec
 
-__Second princple.__ Easyviz is just a unified interface to other plotting
-packages that can be called from Python. Such plotting packages are
-referred to as backends. Several backends are supported: Gnuplot,
-Matplotlib, Pmw.Blt.Graph, PyX, Matlab, VTK. In other words, scripts
-that use Easyviz commands only, can work with a variety of backends,
-depending on what you have installed on the machine in question and
-what quality of the plots you demand. For example, switching from
-Gnuplot to Matplotlib is trivial.
+__Second princple.__ Easyviz is just a unified interface to other
+plotting packages that can be called from Python. Such plotting
+packages are referred to as backends. Several backends are supported:
+Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
+VTK, VisIt, OpenDX. In other words, scripts that use Easyviz commands
+only, can work with a variety of backends, depending on what you have
+installed on the machine in question and what quality of the plots you
+demand. For example, switching from Gnuplot to Matplotlib is trivial.
 
 Scripts with Easyviz commands will most probably run anywhere since at
 least the Gnuplot package can always be installed right away on any
@@ -108,14 +109,25 @@ commands - and jump to complicated fine-tuning only when strictly needed.
 _____Controlling the Backend_____
 
 The Easyviz backend can either be set in a config file (see Config File
-below) or by a command-line option
+below), by importing a special backend in the program,
+or by adding a command-line option
 !bc
  --SCITOOLS_easyviz_backend name
 !ec
 where `name` is the name of the backend: `gnuplot`, `vtk`, `matplotlib`,
-`blt`. Which backend you
+`blt`, etc. Which backend you
 choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
+
+An alternative method is to import a specific backend in a program. Instead
+of the `from scitools.all import *` statement one writes
+!bc
+from numpy import *
+from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+# or
+from scitools.easyviz.vtk_ import *      # work with VTK
+!ec
+Note the trailing underscore in the module names for the various backends.
 
 
 _____Config File_____
@@ -127,8 +139,10 @@ file, called `scitools.cfg` has a section `[easyviz]` where the
 [easyviz]
 backend = vtk
 !ec
-A `scitools.cfg` can be placed in the current working folder, thereby
-affecting plots made in this folder, or it can be located in the
-user's home folder, which will affect all plotting sessions for the
-user in question.
+A `.scitools.cfg` file can be placed in the current working folder,
+thereby affecting plots made in this folder, or it can be located in
+the user's home folder, which will affect all plotting sessions for
+the user in question. There is also a common SciTools config file
+`scitools.cfg` for the whole site (located in the directory where the
+`scitools` package is installed).
 

@@ -22,7 +22,7 @@ SciTools only requirements are Python and some sort of Numerical Python
 (NumPy, Numeric, or Numarray). For most users we recommend to use NumPy
 (see http://numpy.org), however, it might be necessary in some cases to
 install Numeric and/or Numarray as well since some older Python modules
-does not have support for the new NumPy module.
+may lack support for the new NumPy module.
 
 -------------------------------------------------------------------------------
 3. Installation
@@ -45,8 +45,9 @@ There are several different ways of installing SciTools:
 
  - Manual
 
-   Put the lib subdirectory here in PYTHONPATH and bin in PATH.
-   This gives access to the directories for scitools, easyviz, etc.
+   Put the lib subdirectory in a directory contained in PYTHONPATH,
+   and the bin subdirectory in a directory contained in PATH.
+   (This gives access to the directories for scitools, easyviz, etc.)
 
  - Debian/Ubuntu packages
 
@@ -91,7 +92,7 @@ Other contributors:
 
 Rolv E. Bredesen <rolveb@simula.no>
 Joachim B. Haga <jobh@simula.no>
-Mario Pernici
+Mario Pernici <Mario.Pernici@mi.infn.it>
 Johannes H. Ring <johannr@simula.no>
 Ilmar Wilbers <ilmarw@simula.no>
 
@@ -110,4 +111,5 @@ while the latest Subversion revision can be obtained from
 
     https://svn.simula.no:40081/int/scriptingsuite/trunk/packages/scitools
 
-This is, however, only available for internal members at Simula.
+This is, however, only available for internal members at Simula Research
+Laboratory.
