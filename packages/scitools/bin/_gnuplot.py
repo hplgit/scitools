@@ -15,10 +15,11 @@ if len(sys.argv) < 2:
 if sys.platform.startswith('win'):
     # parse the command-line; it's easy since we drop all X11 options and
     # only need to grab the scriptfile name, and it's the last argument:
-    scriptfile = sys.argv[-1]
-    if os.path.isfile('GNUPLOT.INI'):
-        os.remove('GNUPLOT.INI')
-    os.rename(scriptfile, 'GNUPLOT.INI')
+    if len(sys.argv) > 1:
+        scriptfile = sys.argv[-1]
+        if os.path.isfile('GNUPLOT.INI'):
+            os.remove('GNUPLOT.INI')
+        os.rename(scriptfile, 'GNUPLOT.INI')
     failure = os.system('wgnuplot')  # Gnuplot 4.0
     if failure:
         print '''Could not find Gnuplot on Windows.
@@ -28,7 +29,10 @@ if sys.platform.startswith('win'):
               '''
         sys.exit(1)
 elif os.name == 'posix':
-    failure = os.system('gnuplot ' + ' '.join(sys.argv[1:]))
+    if len(sys.argv) > 1:
+        failure = os.system('gnuplot ' + ' '.join(sys.argv[1:]))
+    else:
+        failure = os.system('gnuplot')
     if failure:
         print 'Could not run Gnuplot.'
         sys.exit(1)

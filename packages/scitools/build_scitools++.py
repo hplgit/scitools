@@ -107,7 +107,7 @@ def copy_installed_modules():
     print files
     
     files = [join(path, file) for file in files]
-    pmw = join(py_package_src, 'Pmw')
+    pmw = join(py_package_src, 'Pmw_1_3', 'Pmw')
     files.append(pmw)
     # copy files to libdir:
     # (shutil.copytree does not work properly for this type of copy)

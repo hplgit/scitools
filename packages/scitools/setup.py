@@ -32,7 +32,7 @@ setup(
     package_dir = {'': 'lib'},
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"), 
-		os.path.join("scitools", "pyPDE"),
+		#os.path.join("scitools", "pyPDE"),
 		],
     package_data = {'': ['scitools.cfg']},
     scripts = [os.path.join('bin', f)

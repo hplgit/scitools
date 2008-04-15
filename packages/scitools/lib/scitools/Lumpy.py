@@ -946,9 +946,9 @@ except:
     class Dummy:
         pass
     numpy_array_type = Dummy
-    
-    
 # end of hpl code
+
+
 def make_thing(lumpy, val):
     """return the Thing that represents this value, either
     by making a new one or looking up an existing one.
@@ -974,11 +974,11 @@ def make_thing(lumpy, val):
     # check the type of the value and dispatch accordingly
     if type(val) == type(Lumpy) or type(val) == type(type(int)):
         thing = Class(lumpy, val)
+    # hpl code:
     elif isinstance(val, numpy_array_type):
-        print 'Found a NumPyArray!!'
         val = NumPyArray(val)
         thing = Instance(lumpy, val)
-        print 'Back from Instance....'
+    # end hpl code
     elif hasdict(val) or hasslots(val):
         thing = Instance(lumpy, val)
     elif isinstance(val, (list, tuple)):
