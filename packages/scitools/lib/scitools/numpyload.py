@@ -199,6 +199,7 @@ _NumPy_modules = (
     ('FFT', 'numarray.fft', 'numpy.fft'),
     ('MLab', 'numarray.linear_algebra.mlab', 'numpy.oldnumeric.mlab'),
     ('MA', 'numarray.ma.MA', 'numpy.core.ma'),
+    #('MA', 'numarray.ma.MA', 'numpy.ma'), # use this line for newer numpy.
     )
      
 if basic_NumPy == 'numpy':
