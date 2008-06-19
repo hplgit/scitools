@@ -480,12 +480,11 @@ class VTKBackend(BaseClass):
                 # azimuth or elevation is not given. Set up a default
                 # 3D view (az=-37.5 and el=30 is the default 3D view in
                 # Matlab).
-                camera.Azimuth(-37.5)
-                camera.Elevation(30)
-            else:
-                # set a 3D view according to az and el
-                camera.Azimuth(ax)
-                camera.Elevation(el)                
+                az = -37.5
+                el = 30
+            # set a 3D view according to az and el
+            camera.Azimuth(az)
+            camera.Elevation(el)                
             
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
