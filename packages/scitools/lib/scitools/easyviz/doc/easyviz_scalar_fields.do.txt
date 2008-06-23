@@ -9,10 +9,10 @@ defined on a grid. Each point in the grid is then associated with a
 scalar value.
 
 There are several ways to visualize a scalar field in Easyviz. Both
-two- and three-dimensional scalar fields are supported. In 2D we can
-create elevated surface plots, contour plots, and pseudocolor plots,
-while in 3D we can create isosurface plots, volumetric slice plots,
-and contour slice plots.
+two- and three-dimensional scalar fields are supported. In two
+dimensions (2D) we can create elevated surface plots, contour plots,
+and pseudocolor plots, while in three dimensions (3D) we can create
+isosurface plots, volumetric slice plots, and contour slice plots.
 
 ___Elevated Surface Plots___
 
@@ -45,6 +45,17 @@ stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
 plot can be seen in Figure ref{fig:mesh_ex1}.
 
+We remark that the computations in the previous example are vectorized.
+The corresponding scalar computations using a double loop read
+!bc
+values = zeros(x.size, y.size)
+for i in xrange(x.size):
+    for j in xrange(y.size):
+        values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
+!ec
+However, for the `mesh` command to work, we need the vectorized
+extensions `xv` and `yv` of `x` and `y`.
+
 FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
 
 The `surf` command employs the same syntax, but results in a different
@@ -68,8 +79,10 @@ show()
 !ec
 Here we have specified a flat shading model, added a color bar, changed
 the color map to `hot`, set some suitable axis values, and changed the
-view point. The same plot can also be accomplished with one single, compound
-statement (as Easyviz offers for the `plot` command): 
+view point (the view takes two arguments: the azimuthal rotation and
+the elevation, both given in degrees). 
+The same plot can also be accomplished with one single, compound
+statement (just as Easyviz offers for the `plot` command): 
 !bc
 surf(xv, yv, values,
      shading='flat',
@@ -88,7 +101,7 @@ ___Contour Plots___
 A contour plot is another useful technique for visualizing scalar
 fields. The primary examples on contour plots from everyday life is
 the level curves on geographical maps, reflecting the height of the
-terrain. Mathematically, a contour line, also called isoline, is
+terrain. Mathematically, a contour line, also called an isoline, is
 defined as the implicit curve $f(x,y)=c$. The contour levels $c$ are
 normally uniformly distributed between the extreme values of the
 function $f$ (this is the case in a map: the height difference between
@@ -116,7 +129,7 @@ contour plots:
 We start with illustrating the plain `contour` command, assuming that
 we already have computed the `xv`, `yv`, and `values`
 arrays as shown in our first example on scalar field plotting.
-The basic syntax follows `mesh` and `surf`:
+The basic syntax follows that of `mesh` and `surf`:
 !bc
 contour(xv, yv, values)
 !ec

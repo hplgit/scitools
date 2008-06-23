@@ -356,6 +356,7 @@ Such output is mostly of interest to advanced users.
 
 
 _____Making Animations_____
+label{easyviz:movie}
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,

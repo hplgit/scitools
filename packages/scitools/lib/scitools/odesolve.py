@@ -10,16 +10,37 @@ Python interface to ODE solvers
 Basic Usage
 -----------
 
-The design goal of this interface was to make the calling code as
-simple as possible. More specifically, if we want to solve
-y'(t) = -y, y(0)=1, by method (class) X, a minimal program will work::
+The design goal of this interface was to make the user code for
+solving ODEs as simple as possible. More specifically, if we want to
+solve y'(t) = -y, y(0)=1, by method (class) X, a minimal program will
+work::
 
     def f(y,t):
         return -y
 
     solver = X()
-    solver.set(initial_condition=1, f=f, dt=0.1)
-    y, t = solver.integrate(T=2.0)   # solve for t in [0,T]
+    solver.set(y0=1, f=f, dt=0.1)
+    #solver.set(t0=1, y0=y[1,:], f=f, dt=0.1) ?
+    # HP world:
+    y, t = solver.integrate(y0=y[1,:], t0=1, T=2.0)  ?
+
+    # Ola world:
+    solver.set(returner bare y plain, lagre minst mulig, store data)
+    for i in xrange(1000000):
+        print y.shape(1) # 1000000 e.g.
+        y[i] = solver.integrate(y0=y[i], t0=1, T=2.0)  ?
+        
+    # can configure return values with solver.set(...)
+    # solver.set(return_values={'y': 'all', 't': 'all', 'info': ...syntax...})
+    #y, t = solver.integrate(T=2.0)   # solve for t in [0,T]
+    y, info = solver.integrate(T=2.0)   # solve for t in [0,T]
+    plot(solver.t, solver.y)
+    print solver.info('error estimates')
+    plot(t, y)
+
+    # above: we store y for all t, but in big problems we may only want
+    # store the final y
+    # solver.set(skip_intermediate_values=True) ... :-(
 
 The returned objects y and t are (by default) Numerical Python
 arrays: y has shape (m, n) and t has shape m, where m is the number
@@ -39,8 +60,8 @@ a scalar ODE::
         return [-y[0],-2*y[1]]
 
     solver = X()
-    solver.set(initial_condition=[1,0], f=f, dt=0.1)
-    y, t = solver.integrate(T=2.0)
+    solver.set(f=f, dt=0.1)
+    y, t = solver.integrate(y0=[1,0], T=2.0)
 
 (It is remarked that the f function and the initial condition are here
 prescribed as lists, but internally in the ODE solver interface these
@@ -81,9 +102,25 @@ Keyword arguments also work::
 
 In general, the signature of f is f(y, t, *f_args, **f_kwargs).
 
+The right-hand side can be defined as a class in more complicated problems,
+for instance when ODE parameters depend on other simulations. A class
+version of f in the previous example reads::
 
-Handling of Parameters
-----------------------
+    class F:
+        def __init__(self, a, b):
+            self.a, self.b = a, b
+
+        def __call__(self, y, t):
+            return -self.a*y + self.b
+
+    f = F(2.5, 0)
+    solver.set(initial_condition=1, f=f, dt=0.1)
+
+
+# f implemented in Fortran or C (f2py)
+
+Handling of Solver Parameters
+-----------------------------
 
 Many ODE solvers require large amounts of input data to steer the
 behavior of the solution algorithm. The collection of parameters
@@ -96,7 +133,7 @@ of the parameters, e.g.::
                f_kwargs={'a': 2.5, 'b': 0},
                adaptivity_method=2,
                k1=0, k2=0, k3=4,
-               initial_a_value=0,)
+               initial_Q_value=0,)
 
 All keyword arguments that can be used with set are also available
 as attributes (actually properties in Python terminology).
@@ -210,7 +247,7 @@ def indent(text, indent_size=4):
     """
     # indent each line properly:
     ind = ' '*indent_size
-    lines = text.split('\n')
+    lines = text.splitlines()
     for i in range(len(lines)):
         lines[i] = ind + lines[i]
     text = '\n'.join(lines)
@@ -476,7 +513,7 @@ class ODESolver(object):
 
      - _check_compatibility(): Check that f (and Jacobian) has size
        compatible with initial_condition, and check if f (or Jacobian)
-       returns list, and not NumPy array, such that a list to array
+       returns list (not NumPy arrays) such that a list to array
        transformation must be performed.
        
 
@@ -1379,7 +1416,7 @@ class ExplicitSolver(ODESolver):
     _solver_prm_help = {}
     _solver_prm_type = {}
     _constant_step_size_prm(_solver_prm, _solver_prm_help, _solver_prm_type)
-    _solver_out = {}
+    _solver_out = {}   # _solver_info is a much better info!!!!!
     _solver_out_help = {}
 
     __doc__ += _doc_format(ODESolver,
@@ -1405,7 +1442,8 @@ class ExplicitSolver(ODESolver):
         self._out.update(ExplicitSolver._solver_out)
         self._out_help.update(ExplicitSolver._solver_out_help)
 
-    def integrate(self, T):
+    def integrate(self, y0=None, t0=None, T=None):
+        assert(T is not None, 'T must be given!')
         f, dt, y0, t0, f_args, f_kwargs = \
            self.get_safe('f', 'dt', 'initial_condition',
                          'initial_time', 'f_args', 'f_kwargs')
