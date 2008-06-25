@@ -554,7 +554,7 @@ FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-speci
 Easyviz does not support text and arrows at arbitrary places inside
 the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
 the `Gnuplot` object and issue Gnuplot commands to
-this object directly. Here is an example on the typical recipe, written
+this object directly. Here is an example of the typical recipe, written
 after the core of the plot is made in the ordinary (plotting 
 program-independent) way:
 
