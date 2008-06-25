@@ -1,0 +1,138 @@
+class ImplicitSolver(ODESolver):
+    """
+    Base class for implicit solvers.
+    The class extends ODESolver's parameters by data for Jacobian,
+    linear and nonlinear solver methods.
+    """
+    
+    _solver_prm = {
+        'Jacobian': None,
+        'J_args': (),
+        'J_kwargs': {},
+        'linear_solver': 'built-in',
+        'nonlinear_solver': 'built-in',
+        'nls_args': [],
+        'g_args': []
+        }
+    _solver_prm_help = {
+        'Jacobian': 'Jacobian of right-hand side (f)',
+        'J_args': 'optional positional arguments to '\
+        'Jacobian : Jacobian(y, t, *J_args)',
+        'J_kwargs': 'optional keyword arguments to '\
+        'Jacobian: Jacobian(y, t, *J_args, **J_kwargs)',
+        
+        'linear_solver': '''\
+If not "built-in" in the solver, this parameter must be a user-specified
+  function(J, b, *ls_args),
+where J is the coefficient matrix of a linear system, b is the
+right-hand side, and ls_args is a tuple of optional arguments.
+The function must return the solution as a NumPy array.''',
+                        
+        'nonlinear_solver': '''\
+If not "built-in", this parameter must be a user-specified
+function that can solve systems of nonlinear equations: g=0.
+The signature of the function is
+  function(g, guess, *nls_args, *g_args),
+where g is a vector-valued function describing the equations,
+  g(x, *g_args)
+with x as the vector of unknowns. The lists nls_args and g_args
+hold optional user-given parameters to the nonlinear solver
+function and the g function, respectively.''',
+
+        'nls_args': '''\
+arguments to the function specified as nonlinear_solver''',
+        'g_args': '''\
+arguments to the function g call by a nonlinear_solver to solve g=0''',
+        }
+
+    _solver_prm_type = {
+        'Jacobian': _func_or_file_type,
+        'J_args': (list,tuple),
+        'J_kwargs': (dict,),
+        'linear_solver': _user_alg_type,
+        'nonlinear_solver': _user_alg_type,
+        'nls_args': (list,tuple),
+        'g_args': (list,tuple),
+        }
+                        
+    _solver_out = {}
+    _solver_out_help = {}
+    
+    def __init_(self, solver_language='Python'):
+        ODESolver.__init__(self, solver_language=solver_language)
+        self._prm.update(ImplicitSolver._solver_prm)
+        self._prm_help.update(ImplicitSolver._solver_prm_help)
+        self._prm_type.update(ImplicitSolver._solver_prm_type)
+        self._out.update(ImplicitSolver._solver_out)
+        self._out_help.update(ImplicitSolver._solver_out_help)
+
+    def _check_compatibility(self):
+        """
+        Investigate f and J functions.
+        Check compatibility of size with that of the initial_condition.
+        """
+        # check f and initial_condition:
+        ODESolver._check_compatibility(self)
+
+        # check Jacobian here:
+
+        method = '%s._check_compatibility' % self.__class__.__name__
+        J = self._prm['Jacobian']
+        if J:
+            # is J a function or the source of a file to be compiled?
+            J = self._callable_or_source(J)
+            J_args, J_kwargs = self.get('J_args', 'J_kwargs')
+
+            try:
+                J0 = J(initial_condition, 0.0, *J_args, **J_kwargs)
+            except TypeError, e:
+                # J_args and J_kwargs might be missing
+                raise ValueError, 'J_args and/or J_kwargs must be set\n%s' % e
+            
+            # check if f returns list/tuple, which we in algorithms need
+            # to wrap to NumPy arrays:
+            if isinstance(J0, (list,tuple)):
+                self._Jacobian2array = True
+            elif isinstance(J0, N.ndarray):
+                self._Jacobian2array = False
+            elif operator.isNumberType(J0):
+                self._f2array = False
+            elif isinstance(J0, type):  # class with __call__
+                self._J2array = True
+                # (it's already checked that J is callable (type check))
+            else:
+                raise TypeError, 'Jacobian returns %s, not '\
+                      'list, tuple, array or number' % type(J0)
+
+            J0 = N.array(J0, copy=False)
+            if len(J0.shape) != 2:
+                raise ValueError, '%s:\nJacobian has wrong dimension '\
+                      '(%s != 2)' % (method, len(J0.shape))
+            n = self.size
+            if J0.shape[0] != n and J0.shape[1] != n:
+                raise ValueError, '%s:\nJacobian has wrong shape '\
+                      '%s, not (%s, %s) as initial_condition indicates' \
+                      % (method, J0.shape, n, n)
+
+        return n
+
+    def _update(self, **kwargs_in_last_set_call):
+        """
+        Check data consistency and make updates of data structures
+        after calling set(**kwargs_in_last_set_call).
+        @return: False means that size of data structures is unaltered,
+        while True means that the size of the ODE system has changed.
+        """
+        size = self.size  # check if size of ODE system changes
+        ODESolver._update(self, **kwargs_in_last_set_call)
+            
+        if 'initial_condition' in kwargs_in_last_set_call and \
+             self._prm['Jacobian'] is not None:
+            # initial_condition was set, J is initialized, check compatibility:
+            self._check_compatibility()
+        elif 'Jacobian' in kwargs_in_last_set_call and \
+             self._prm['initial_condition'] is not None:
+            # J was set, initial_condition is initialized, check compatibility:
+            self._check_compatibility()
+
+        return size != self.size
