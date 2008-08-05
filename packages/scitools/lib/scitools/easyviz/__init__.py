@@ -10,9 +10,11 @@ Python scripts. Both curve plots and more advanced 2D/3D visualization
 of scalar and vector fields are supported.  The Easyviz interface was
 designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
 a unified interface to lots of visualization engines (called backends
-later): Gnuplot, VTK, Matlab, Matplotlib, PyX, etc.; and 3) a
-minimalistic interface which offers only basic control of plots
-(fine-tuning is left to programming in the specific backend directly).
+later): Gnuplot, Matplotlib, Grace, Veusz, Pmw.Blt.Graph, PyX,
+Matlab, VTK, VisIt, OpenDX; and 3) a minimalistic interface which
+offers only basic control of plots: curves, linestyles, legends,
+title, axis extent and names.  More fine-tuning of plots can be done
+by adding backend-specific commands.
 
 Guiding Principles
 ------------------
@@ -32,7 +34,6 @@ commands::
         y2 = t**4*exp(-t**2)
         # pick out each 4 points and add random noise:
         t3 = t[::4]
-        random.seed(11)
         y3 = y2[::4] + random.normal(loc=0, scale=0.02, size=len(t3))
         
         plot(t, y1, 'r-')
@@ -46,7 +47,7 @@ commands::
         ylabel('y')
         show()
         
-        hardcopy('tmp0.ps')  # this one can be included in latex
+        hardcopy('tmp0.ps')  # this one can be included in LaTeX
         hardcopy('tmp0.png') # this one can be included in HTML
 
 Easyviz also allows these additional function calls to be executed
@@ -76,14 +77,14 @@ as an elevated surface with colors using these commands::
               show=True)
 
 
-*Second princple.* Easyviz is just a unified interface to other plotting
-packages that can be called from Python. Such plotting packages are
-referred to as backends. Several backends are supported: Gnuplot,
-Matplotlib, Pmw.Blt.Graph, PyX, Matlab, VTK. In other words, scripts
-that use Easyviz commands only, can work with a variety of backends,
-depending on what you have installed on the machine in question and
-what quality of the plots you demand. For example, switching from
-Gnuplot to Matplotlib is trivial.
+*Second princple.* Easyviz is just a unified interface to other
+plotting packages that can be called from Python. Such plotting
+packages are referred to as backends. Several backends are supported:
+Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
+VTK, VisIt, OpenDX. In other words, scripts that use Easyviz commands
+only, can work with a variety of backends, depending on what you have
+installed on the machine in question and what quality of the plots you
+demand. For example, switching from Gnuplot to Matplotlib is trivial.
 
 Scripts with Easyviz commands will most probably run anywhere since at
 least the Gnuplot package can always be installed right away on any
@@ -114,14 +115,25 @@ Controlling the Backend
 -----------------------
 
 The Easyviz backend can either be set in a config file (see Config File
-below) or by a command-line option::
+below), by importing a special backend in the program,
+or by adding a command-line option::
 
          --SCITOOLS_easyviz_backend name
 
 where name is the name of the backend: gnuplot, vtk, matplotlib,
-blt. Which backend you
+blt, etc. Which backend you
 choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
+
+An alternative method is to import a specific backend in a program. Instead
+of the from scitools.all import * statement one writes::
+
+        from numpy import *
+        from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+        # or
+        from scitools.easyviz.vtk_ import *      # work with VTK
+
+Note the trailing underscore in the module names for the various backends.
 
 
 Config File
@@ -134,10 +146,12 @@ backend in Easyviz can be set::
         [easyviz]
         backend = vtk
 
-A scitools.cfg can be placed in the current working folder, thereby
-affecting plots made in this folder, or it can be located in the
-user's home folder, which will affect all plotting sessions for the
-user in question.
+A .scitools.cfg file can be placed in the current working folder,
+thereby affecting plots made in this folder, or it can be located in
+the user's home folder, which will affect all plotting sessions for
+the user in question. There is also a common SciTools config file
+scitools.cfg for the whole site (located in the directory where the
+scitools package is installed).
 
 
 Tutorial
@@ -160,11 +174,12 @@ Plotting a Single Curve
 -----------------------
 
 
-Let us plot the curve y = t^2\exp(-t^2) for t values between 0 and 3.
-First we generate equally spaced coordinates for t, say 51 values (50
-intervals). Then we compute the corresponding y values at these
-points, before we call the plot(t,y) command to make the curve plot.
-Here is the complete program::
+Let us plot the curve y = t**2*exp(-t**2) for
+t values between 0 and 3.  First we generate equally spaced
+coordinates for t, say 51 values (50 intervals). Then we compute the
+corresponding y values at these points, before we call the
+plot(t,y) command to make the curve plot.  Here is the complete
+program::
 
         from scitools.all import *
         
@@ -509,6 +524,7 @@ Such output is mostly of interest to advanced users.
 
 Making Animations
 -----------------
+easyviz:movie
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,
@@ -704,7 +720,9 @@ FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-speci
 Easyviz does not support text and arrows at arbitrary places inside
 the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
 the Gnuplot object and issue Gnuplot commands to
-this object directly. Here is an example on the typical recipe::
+this object directly. Here is an example of the typical recipe, written
+after the core of the plot is made in the ordinary (plotting 
+program-independent) way::
 
         g = get_backend()
         if backend == 'gnuplot':
@@ -721,34 +739,6 @@ the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
-
-*Changing the Backend.* The default underlying plotting program (backend) is set in the file
-scitools.cfg (the backend parameter under the [easyviz] entry).
-Often this program is Gnuplot. There are three ways to change the
-backend. The first method is to edit the scitools.cfg file so that
-all programs that apply Easyviz by default use this backend.  One can
-either edit the scitools.cfg file in the folder where SciTools is
-installed, or one can have a local .scitools.cfg file in the home
-folder or in any folder. The values in the file in the home folder
-apply to all programs that the user runs, while the values in a
-.scitools.cfg file in a particular folder applies to all programs
-in that folder.
-
-The second method is to add a command-line argument to programs that 
-import Easyviz::
-
-        --SCITOOLS_easyviz_backend name
-
-Here name is gnuplot, vtk, matplotlib, matlab, etc.
-The third method is to import a specific backend in a program. Instead
-of the from scitools.all import * statement one writes::
-
-        from numpy import *
-        from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
-        # or
-        from scitools.easyviz.vtk_ import *      # work with VTK
-
-Note the trailing underscore in the module names for the various backends.
 
 *Working with Axis and Figure Objects.* Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
@@ -858,10 +848,10 @@ defined on a grid. Each point in the grid is then associated with a
 scalar value.
 
 There are several ways to visualize a scalar field in Easyviz. Both
-two- and three-dimensional scalar fields are supported. In 2D we can
-create elevated surface plots, contour plots, and pseudocolor plots,
-while in 3D we can create isosurface plots, volumetric slice plots,
-and contour slice plots.
+two- and three-dimensional scalar fields are supported. In two
+dimensions (2D) we can create elevated surface plots, contour plots,
+and pseudocolor plots, while in three dimensions (3D) we can create
+isosurface plots, volumetric slice plots, and contour slice plots.
 
 Elevated Surface Plots
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -895,6 +885,17 @@ stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
 plot can be seen in Figure fig:mesh_ex1.
 
+We remark that the computations in the previous example are vectorized.
+The corresponding scalar computations using a double loop read::
+
+        values = zeros(x.size, y.size)
+        for i in xrange(x.size):
+            for j in xrange(y.size):
+                values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
+
+However, for the mesh command to work, we need the vectorized
+extensions xv and yv of x and y.
+
 FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
 
 The surf command employs the same syntax, but results in a different
@@ -918,8 +919,10 @@ The surf command offers many possibilities to adjust the resulting plot::
 
 Here we have specified a flat shading model, added a color bar, changed
 the color map to hot, set some suitable axis values, and changed the
-view point. The same plot can also be accomplished with one single, compound
-statement (as Easyviz offers for the plot command)::
+view point (the view takes two arguments: the azimuthal rotation and
+the elevation, both given in degrees). 
+The same plot can also be accomplished with one single, compound
+statement (just as Easyviz offers for the plot command)::
 
         surf(xv, yv, values,
              shading='flat',
@@ -939,7 +942,7 @@ Contour Plots
 A contour plot is another useful technique for visualizing scalar
 fields. The primary examples on contour plots from everyday life is
 the level curves on geographical maps, reflecting the height of the
-terrain. Mathematically, a contour line, also called isoline, is
+terrain. Mathematically, a contour line, also called an isoline, is
 defined as the implicit curve f(x,y)=c. The contour levels c are
 normally uniformly distributed between the extreme values of the
 function f (this is the case in a map: the height difference between
@@ -967,7 +970,7 @@ contour plots:
 We start with illustrating the plain contour command, assuming that
 we already have computed the xv, yv, and values
 arrays as shown in our first example on scalar field plotting.
-The basic syntax follows mesh and surf::
+The basic syntax follows that of mesh and surf::
 
         contour(xv, yv, values)
 

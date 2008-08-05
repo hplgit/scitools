@@ -200,6 +200,7 @@ if basic_NumPy not in ('Numeric', 'numarray', 'numpy'):
 
 # table of equivalent names of Numerical Python modules:
 # (used to import modules under Numeric, numarray, or numpy name)
+
 _NumPy_modules = (
     ('Numeric', 'numarray', 'numpy'),
     # umath and Precision are included as part of Numeric, numarray, numpy
@@ -209,20 +210,26 @@ _NumPy_modules = (
     ('RNG', '', 'numpy.random'),
     ('FFT', 'numarray.fft', 'numpy.fft'),
     ('MLab', 'numarray.linear_algebra.mlab', 'numpy.oldnumeric.mlab'),
-    ('MA', 'numarray.ma.MA', 'numpy.core.ma'),
+    #('MA', 'numarray.ma.MA', 'numpy.core.ma'),
+    ('MA', 'numarray.ma.MA', 'numpy.ma'), # use this line for newer numpy.
     )
      
 if basic_NumPy == 'numpy':
     try:
         # fix backward compatibility with Numeric names:
 	import numpy
-	oldversion = (numpy.version.version[0] != '1')
+	oldversion = (numpy.version.version[0] == '0')
+        majorversion = int(numpy.version.version[0])
+        minorversion = int(numpy.version.version[2])
 	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
 	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
 		n, module = _numpy_name.split('.')
 		exec "from %s import %s as %s" %(n, module, _Numeric_name)
 	    elif oldversion and (_Numeric_name == 'MLab'):
 		from numpy.lib import mlab as MLab
+            elif (oldversion or (majorversion == 1 and minorversion < 1)) \
+                     and (_Numeric_name == 'MA'):
+                import numpy.core.ma; MA = numpy.core.ma
 	    elif _numpy_name != '':
 		exec 'import %s; %s = %s' % \
 		(_numpy_name, _Numeric_name, _numpy_name)
