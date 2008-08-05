@@ -74,8 +74,7 @@ There are several different ways of installing SciTools:
 SciTools is licensed under the new BSD license, see the LICENSE file.
 
 Lumpy.py and Gui.py are licensed under GPL, however, permission is
-granted by Allen Downey to include these under a BSD license (see
-included mail in Allen_Downey.txt).
+granted by Allen Downey to include these under a BSD license.
 
 -------------------------------------------------------------------------------
 3. Credits

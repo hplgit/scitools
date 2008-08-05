@@ -22,7 +22,7 @@ else:
 setup(
     #version = str(scitools.version), 
     #author = ', '.join(scitools.author),
-    version = '0.3',
+    version = '0.4',
     author = 'Hans Petter Langtangen',
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
