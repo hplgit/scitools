@@ -45,6 +45,11 @@ import os
 import sys
 import operator
 
+# The arrayconverter function is only necessary for Gnuplot.py version 1.7
+if Gnuplot.__version__[:3] != '1.7':
+    def arrayconverter(a):
+        return a
+
 def get_gnuplot_version():
     """Return Gnuplot version used in Gnuplot.py."""
     f = os.popen('%s --version' % Gnuplot.GnuplotOpts.gnuplot_command)
