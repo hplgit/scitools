@@ -98,7 +98,7 @@ Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
 programs (Gnuplot is one example). 
-See Figure ref{fig:plot1c} for how the modified
+See Figure ref{fig:plot1c} for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
 
@@ -194,12 +194,6 @@ first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
 
-In this plot we also adjust the size of the line and the circles by
-adding an integer: `r-6` means a red line with thickness 6 and `bo5`
-means red circles with size 5. The effect of the given line thickness
-and symbol size depends on the underlying plotting program. For
-the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
-
 !bc
 from scitools.all import *
 
@@ -221,6 +215,12 @@ plot(t, y1, 'r-6', t2, y2, 'bo3',
      title='Plotting two curves in the same plot',
      hardcopy='tmp2.eps')
 !ec
+
+In this plot we also adjust the size of the line and the circles by
+adding an integer: `r-6` means a red line with thickness 6 and `bo5`
+means red circles with size 5. The effect of the given line thickness
+and symbol size depends on the underlying plotting program. For
+the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
 
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
 
@@ -316,7 +316,7 @@ FIGURE:[figs/plot3.eps] A plot with three curves.
 __Minimalistic Typing.__ 
 When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
-Here is an example on minimalistic syntax for
+Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
 
 !bc
@@ -365,16 +365,16 @@ individual plot files into a movie file. We shall illustrate the
 process with an example.
 
 The function
-$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$,
-known as the "Gaussian bell function",
-is a "wide" function for large $s$ and "peak-formed" for small $s$,
-see Figure ref{fig:plot4}. The function is symmetric around $x=m$
-($m=0$ in the figure).
-Our goal is to make an animation where we see how this function evolves
-as $s$ is decreased. In Python we implement the formula above as
-a function `f(x, m, s)`. 
+$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$ 
+is known as the Gaussian function or the probability density function
+of the normal or Gaussian distribution.  This bell-shaped function is
+"wide" large $s$ and "peak-formed" for small $s$, see Figure
+ref{fig:plot4}. The function is symmetric around $x=m$ ($m=0$ in the
+figure).  Our goal is to make an animation where we see how this
+function evolves as $s$ is decreased. In Python we implement the
+formula above as a function `f(x, m, s)`.
 
-FIGURE:[figs/plot4.eps] Different shapes of a Gaussian bell function.
+FIGURE:[figs/plot4.eps] Different shapes of a Gaussian function.
 
 The animation is created by varying $s$ in a loop and for each $s$
 issue a `plot` command. A moving curve is then visible on the screen.
@@ -400,7 +400,7 @@ function value is very small already $3s$ away from $x=m$. We may therefore
 limit the $x$ coordinates to $[m-3s,m+3s]$.
 
 Now we are ready to take a look at the complete code
-for animating how the Gaussian bell curve evolves as the $s$ parameter
+for animating how the Gaussian function evolves as the $s$ parameter
 is decreased from 2 to 0.2:
 
 !bc
