@@ -324,6 +324,8 @@ t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 !ec
 
+__More Examples.__ The examples in this tutorial and other examples
+can be found in the `scitools/examples` directory.
 
 _____Interactive Plotting Sessions_____
 

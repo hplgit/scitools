@@ -1,0 +1,74 @@
+Easyviz comes with the SciTools package, so to install Easyviz, you
+just go to the `scitools` folder and run
+!bc
+Unix/DOS> python setup.py install
+!ec
+Easyviz is reached as the package `scitools.easyviz` and can be
+imported in several ways (see the paragraph heading
+"Importing Just Easyviz" in the Tutorial).
+
+Easyviz will not work unless you have one or more plotting programs
+correctly installed. Below, we have collected some information on installing
+various programs. This information is in a very preliminary and incomplete
+stage.
+
+_____Installing Gnuplot_____
+
+___Linux/Unix___
+
+__Compile from Source.__
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
+easily on most Unix systems. You also need the `Gnuplot` Python
+module, which can be obtained from `gnuplot-py.sourceforge.net`.
+
+__Debian/Ubuntu.__
+Prebuilt versions are available for Debian/Ubuntu:
+run
+!bc
+apt-get install gnuplot gnuplot-x11 python-gnuplot
+!ec
+
+___Windows___
+
+On Windows, one can either use Gnuplot under Cygwin or use a precompiled
+binary from sourgeforce.net.
+
+__Using the Gnuplot Cygwin package.__ 
+In this case there are two things that needs to be changed in the
+`gp_cygwin.py` file in the top-level directory of the `Gnuplot.py`
+source tree. First you need to change the `gnuplot_command` variable
+to `gnuplot` instead of `pgnuplot.exe`. Then you should change the
+`default_term` variable to `x11` instead of `windows` since the
+Gnuplot Cygwin package is not compiled with the Windows
+terminal. Finally, install `Gnuplot.py` (`python setup.py install`)
+and launch X11 by running `startx` from a Cygwin prompt. Try to run
+the `test.py` script that comes with `Gnuplot.py`. If everything
+works, Easyviz can use Gnuplot.
+
+__Using Gnuplot binaries from gnuplot.sourceforge.net.__
+In this case you only need to unzip the file to some folder like 
+!bc
+C:\gnuplot
+!ec
+and add 
+!bc
+C:\gnuplot\binaries
+!ec
+where `pgnuplot.exe` is located to the `PATH`
+environment variable. 
+#This approach was quite slow on a tested computer so
+#the first approach worked better.
+
+_____Installing Matplotlib_____
+
+___Linux/Unix___
+
+__Debian/Ubuntu.__
+Prebuilt versions are available for Debian/Ubuntu:
+run
+!bc
+apt-get install python-matplotlib dvipng
+!ec
+
+___Windows___
+You can download prebuilt binaries from the Matplotlib home page.

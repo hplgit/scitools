@@ -364,7 +364,7 @@ in the plane $z=8$. Figure ref{fig:contourslice3} displays the result.
 FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend).
 
 
-_____Visualization of vector fields_____
+_____Visualization of Vector Fields_____
 
 A vector field is a function from space or space-time to a vector
 value, where the number of components in the vector corresponds to
