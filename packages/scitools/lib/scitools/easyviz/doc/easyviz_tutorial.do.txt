@@ -324,9 +324,9 @@ t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 !ec
 
-__More Examples.__ The examples in this tutorial and other examples
-can be found in the `examples` directory in the root directory of
-the SciTools source code tree.
+__More Examples.__ The examples in this tutorial, as well as
+additional examples, can be found in the `examples` directory in the
+root directory of the SciTools source code tree.
 
 _____Interactive Plotting Sessions_____
 
@@ -428,12 +428,12 @@ for s in s_values:
     y = f(x, m, s)
     plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
          xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-         hardcopy='tmp_%04d.png' % counter)
+         hardcopy='tmp%04d.png' % counter)
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
 
 # make movie file the simplest possible way:
-movie('tmp_*.png')
+movie('tmp*.png')
 !ec
 
 First note that the $s$ values are decreasing (`linspace` handles this
@@ -445,17 +445,29 @@ always greater than zero.
 For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
-of the form `stem0001.ext`, `stem0002.ext`, `stem0003.ext`, etc.,
-since an alphabetic sort of the filenames then gives the right
-sequence of the files (and so does the expression `stem*.ext` used
-in the operating system or in Python's `fnmatch` or `glob` modules).
-In our example, `stem` is `tmp_`, and `.ext` is `.eps`
-(which implies the PostScript format in the hardcopy).
-The printf format `04d` pads the integers with zeros such that
-`1` becomes `0001`, `13` becomes `0013` and so on.
+of the form `tmp0001.png`, `tmp0002.png`, `tmp0003.png`, etc.  The
+printf format `04d` pads the integers with zeros such that `1` becomes
+`0001`, `13` becomes `0013` and so on.  The expression `tmp*.png` will
+now expand (by an alphabetic sort) to a list of all files in proper
+order. Without the padding with zeros, i.e., names of the form
+`tmp1.png`, `tmp2.png`, ..., `tmp12.png`, etc., the alphabetic order
+will have, e.g., `tmp12.png` before `tmp2.png`. This has serious
+implications when making animations from plot files.
 
-Having a set of `stem*.ext` files, one can simply generate a movie by
-a `movie('stem*.ext')` call. The `movie` function generates a movie
+We recommend to always remove previously generated plot files before
+a new set of files is made. Otherwise, the movie may get old and new
+files mixed up. The following Python code removes all files
+of the form `tmp*.png`:
+!bc
+import glob, os
+for filename in glob.glob('tmp*.png'):
+    os.remove(filename)
+!ec
+These code lines should be inserted at the beginning of the code example
+above.
+
+Having a set of `tmp*.png` files, one can simply generate a movie by
+a `movie('tmp*.png')` call. The `movie` function generates a movie
 file called `movie.avi` (AVI format), `movie.mpeg` (MPEG format), or
 `movie.gif` (animated GIF format) in the current working
 directory. The movie format depends on the encoders found on your
