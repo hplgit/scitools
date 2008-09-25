@@ -44,6 +44,7 @@ import tempfile
 import os
 import sys
 import operator
+import string
 
 # The arrayconverter function is only necessary for Gnuplot.py version 1.7
 if Gnuplot.__version__[:3] != '1.7':
@@ -54,6 +55,76 @@ def get_gnuplot_version():
     """Return Gnuplot version used in Gnuplot.py."""
     f = os.popen('%s --version' % Gnuplot.GnuplotOpts.gnuplot_command)
     return f.readline().split()[1]
+
+# This function is taken from utils.py in Gnuplot.py and modified to fix
+# the problem with this message when plotting contours:
+#
+#   Notice: Cannot contour non grid data. Please use "set dgrid3d"
+#
+def write_array(f, set,
+                item_sep=' ',
+                nest_prefix='', nest_suffix='\n', nest_sep=''):
+    """Write an array of arbitrary dimension to a file.
+
+    A general recursive array writer.  The last four parameters allow
+    a great deal of freedom in choosing the output format of the
+    array.  The defaults for those parameters give output that is
+    gnuplot-readable.  But using '(",", "{", "}", ",\n")' would output
+    an array in a format that Mathematica could read.  'item_sep'
+    should not contain '%' (or if it does, it should be escaped to
+    '%%') since it is put into a format string.
+
+    The default 2-d file organization::
+
+        set[0,0] set[0,1] ...
+        set[1,0] set[1,1] ...
+
+    The 3-d format::
+
+        set[0,0,0] set[0,0,1] ...
+        set[0,1,0] set[0,1,1] ...
+
+        set[1,0,0] set[1,0,1] ...
+        set[1,1,0] set[1,1,1] ...
+
+    """
+
+    if len(set.shape) == 1:
+        (columns,) = set.shape
+        assert columns > 0
+        fmt = string.join(['%s'] * columns, item_sep)
+        f.write(nest_prefix)
+        f.write(fmt % tuple(set.tolist()))
+        f.write(nest_suffix)
+    elif len(set.shape) == 2:
+        # This case could be done with recursion, but `unroll' for
+        # efficiency.
+        (points, columns) = set.shape
+        assert points > 0 and columns > 0
+        fmt = string.join(['%s'] * columns, item_sep)
+        f.write(nest_prefix + nest_prefix)
+        f.write(fmt % tuple(set[0].tolist()))
+        f.write(nest_suffix)
+        for point in set[1:]:
+            f.write(nest_sep + nest_prefix)
+            f.write(fmt % tuple(point.tolist()))
+            f.write(nest_suffix)
+        f.write(nest_suffix)
+    else:
+        # Use recursion for three or more dimensions:
+        assert set.shape[0] > 0
+        f.write(nest_prefix)
+        write_array(f, set[0],
+                    item_sep, nest_prefix, nest_suffix, nest_sep)
+        for subset in set[1:]:
+            f.write(nest_sep)
+            write_array(f, subset,
+                        item_sep, nest_prefix, nest_suffix, nest_sep)
+        # Here is the fix: We comment out the next line so that we have
+        # only one newline character at the end of the temporary files:
+        #f.write(nest_suffix)
+
+Gnuplot.utils.write_array = write_array
 
 if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
     Gnuplot.GnuplotOpts.default_term = "x11"
