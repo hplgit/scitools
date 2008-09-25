@@ -22,7 +22,7 @@ or if just easyviz is needed
 REQUIREMENTS:
 
 Matlab
-mlabwrap
+mlabwrap (http://www.scipy.org/MlabWrap)
 
 Tip:
 
