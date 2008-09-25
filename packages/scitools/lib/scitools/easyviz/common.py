@@ -392,7 +392,8 @@ class Line(PlotProperties):
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
             if 'y' in kwargs:  # will only set y variable if z is set
-                if isinstance(kwargs['y'], str) and kwargs['y'] == 'auto':
+                if isinstance(kwargs['y'], basestring) \
+                       and kwargs['y'] == 'auto':
                     # now y is the indicies of z 
                     y = range(len(z))
                 else:
@@ -401,7 +402,8 @@ class Line(PlotProperties):
                               "y is %s" % type(kwargs['y'])
                     y = kwargs['y']
             if 'x' in kwargs:  # will only set x variable if y is set
-                if isinstance(kwargs['x'], str) and kwargs['x'] == 'auto':
+                if isinstance(kwargs['x'], basestring) \
+                       and kwargs['x'] == 'auto':
                     # now x is the indicies of y 
                     x = range(len(y))
                 else:
@@ -428,7 +430,8 @@ class Line(PlotProperties):
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
             if 'x' in kwargs:  # will only set x variable if y is set
-                if isinstance(kwargs['x'], str) and kwargs['x'] == 'auto':
+                if isinstance(kwargs['x'], basestring) \
+                       and kwargs['x'] == 'auto':
                     # now x is the indicies of y 
                     x = range(len(y))
                 else:
