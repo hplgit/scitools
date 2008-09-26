@@ -31,24 +31,17 @@ from common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists as check
+from misc import _update_from_config_file
 
 check('matplotlib', msg='You need to install the Matplotlib package.')
 import matplotlib
 import matplotlib.colors
-# Override system defaults before importing pylab
-matplotlib.use('TkAgg')
-matplotlib.rc('text', usetex=True)
+# Override values from the matplotlib configuration file with values
+# from scitools.cfg before importing pylab
+_update_from_config_file(matplotlib.rcParams, section='matplotlib')
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
 import pylab
-
-# override some properties for nicer plots:
-#pylab.rcParams.update({'font.size' : 10,
-#                       'axes.labelsize' : 10,
-#                       'text.fontsize' : 10,
-#                       'xtick.labelsize' : 8,
-#                       'ytick.labelsize' : 8,
-#                       })
 
 
 class MatplotlibBackend(BaseClass):
