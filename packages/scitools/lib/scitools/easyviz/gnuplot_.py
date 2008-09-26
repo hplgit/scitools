@@ -36,7 +36,7 @@ from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists as check
-from misc import arrayconverter
+from misc import arrayconverter, _update_from_config_file
 
 check('Gnuplot', msg='You need to install the Gnuplot.py package.')
 import Gnuplot
@@ -45,6 +45,9 @@ import os
 import sys
 import operator
 import string
+
+# Update Gnuplot.GnuplotOpts according to scitools.cfg
+_update_from_config_file(Gnuplot.GnuplotOpts.__dict__, section='gnuplot')
 
 # The arrayconverter function is only necessary for Gnuplot.py version 1.7
 if Gnuplot.__version__[:3] != '1.7':
@@ -1017,18 +1020,15 @@ class GnuplotBackend(BaseClass):
             if DEBUG:
                 name = 'Fig ' + str(self.getp('curfig'))
                 print "creating figure %s in backend" % name
-            try:
-                fig._g = Gnuplot.Gnuplot(persist=1)
-                # Plotwindow will now persist
-                # To close the gnuplot session run fig._g('quit')
-                # Python will only remove the binding to the session and not
-                # stop it when _g is deleted            
-                # This is due to the persist=1 parameter
-            except:
-                fig._g = Gnuplot.Gnuplot() # Persist is not supported under win
+            # Do not force persist. Instead let the user decide whether to
+            # persist a plot through Gnuplot.GnuplotOpts.prefer_persist or
+            # the perfer_persist option in the gnuplot section of
+            # scitools.cfg.
+            #fig._g = Gnuplot.Gnuplot(persist=1)
+            fig._g = Gnuplot.Gnuplot()
             
-        self._g = fig._g # link for faster access
-        
+        self._g = fig._g  # link for faster access
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.

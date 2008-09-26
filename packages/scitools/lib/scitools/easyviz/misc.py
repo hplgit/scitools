@@ -6,13 +6,13 @@ from scitools.configdata import config_parser_frontend
 
 _config_data, _files = config_parser_frontend('scitools', os.curdir)
 
-def _update_from_config_file(d):
+def _update_from_config_file(d, section='easyviz'):
     """
     Update the dictionary d with values from the config file scitools.cfg.
     """
     for key in d.keys():
-        if key in _config_data.get('easyviz',{}).keys():
-            d[key] = _config_data['easyviz'][key][0]
+        if key in _config_data.get(section,{}).keys():
+            d[key] = _config_data[section][key][0]
 
 def _toggle_state(state):
     if state == 'off' or not state:
