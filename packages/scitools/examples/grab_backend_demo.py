@@ -105,10 +105,10 @@ raw_input('press enter to continue')
 #hardcopy('grab_backend1.eps')  # Will destroy all changes!
 #hardcopy('grab_backend1.png')  # Will destroy all changes!
 
-# Since we have made changes in the backend directly, a call to hardcopy in
+# We have made changes in the backend directly and a call to hardcopy in
 # Easyviz would normally destroy all these changes. However, setting the
 # keyword argument replot to False in the hardcopy function will make sure
-# that the changes is not destroyed:
+# that the changes are not destroyed:
 if backend == 'gnuplot':
     # Unfortunately, setting replot to False does not currently work in the
     # Gnuplot backend. So, in this case we must use the hardcopy command from
