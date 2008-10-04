@@ -1,5 +1,8 @@
 """
 Load a configuration file and return key variables.
+This module provides an extended syntax of configuration
+files and functions for more convenient use of
+configuration files.
 """
 __author__ = 'Hans Petter Langtangen <hpl@simula.no>'
 
@@ -132,15 +135,19 @@ def config_parser_frontend(basename,
       my second option = <float> 3.2
       my third option = <eval> [1, 4, 'tmp.ps']  # a list as option value
       my fourth option = MyClass     # no type specification here
+      my fifth option = <eval> StringFunction('sin(x)*cos(x)')
 
-    The type must be bool, int, float, str, or eval. In case of eval,
+    The type must be bool, int, float, str, or eval.
+    As an example, the 'my second option' value will be a Python
+    float object with the value 3.2 (without this type facility,
+    the value would be the string "3.2"). In case of eval,
     the value is processed as eval(value) such that values can become
     lists, dictionaries, or other user-defined objects. In the latter
     case, the globals_ keyword must be set explicitly so that this
     function has access to the user's classes (eval(value, globals_)).
-    As an example, the 'my second option' value will be a Python
-    float object with the value 3.2 (without this type facility,
-    the value would be the string "3.2").
+    For example, 'my fifth option' will evaluate to StringFunction
+    object, but this requires supply of globals_ with the user's
+    imported modules (from StringFunction and math).
 
     There is also a syntax for marking options to be read-only, i.e.,
     these options are meant to be set in configuration files and

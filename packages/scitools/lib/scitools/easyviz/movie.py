@@ -69,6 +69,22 @@ class MovieEncoder(object):
             raise ValueError, "The input files must be given as either a "\
                   "list/tuple of strings or a string, not '%s'" % \
                   type(input_files)
+
+        # check that the input files do exist:
+        if isinstance(input_files, str):
+            all_input_files = glob.glob(input_files)
+            if not all_input_files:
+                raise IOError, 'No files of the form %s exist.' % input_files
+        else:
+            all_input_files = input_files
+        for f in input_files:
+            error_encountered = False
+            if not os.path.isfile(f):
+                print 'Input file %s does not exist.' % f
+                error_encountered = True
+        if error_encountered:
+            raise IOError, 'Some input files were not found.'
+
         fname, ext = os.path.splitext(file_)
         if not ext:
             raise ValueError, "Unable to determine file type from file name."

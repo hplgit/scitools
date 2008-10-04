@@ -175,10 +175,23 @@ class StringFunction:
                 self._function_in_module = (module, function)
             
         # self._var holds the independent variables in a tuple:
-        if 'independent_variable' in kwargs:
-            self._var = tuple(kwargs['independent_variable'])  # 'x', 't' etc.
+        if 'independent_variable' in kwargs:  # allow "variable" and "variables"
+            # note that tuple(string) gives a tuple of the characters
+            # so we need to be careful (if the indep. var has more than
+            # one character)
+            name = kwargs['independent_variable'] # 'x', 't', 'dudt' etc.
+            if not isinstance(name, str):
+                raise ValueError, \
+                      'name "%s" of independent variable is illegal' % name
+            self._var = (name,)
         else:
-            self._var = tuple(kwargs.get('independent_variables', ('x',)))
+            names = kwargs.get('independent_variables', ('x',))
+            if isinstance(names, str):
+                names = (names,)
+            elif not isinstance(names, (list,tuple)):
+                raise ValueError, \
+                      'independent variables=%s is invalid' % names
+            self._var = tuple(names)
         # user's globals() array (with relevant imported modules/functions):
         self._globals = kwargs.get('globals', globals())
 
@@ -234,7 +247,13 @@ class StringFunction:
 
         try:
             if self._function_in_module is None:
-                self.__call__ = eval(s, self._globals)
+                try:
+                    self.__call__ = eval(s, self._globals)
+                except Exception, e:
+                    print """
+Making StringFunction with formula %s failed!
+Tried to build a lambda function:\n %s""" % (self._f, s)
+                    raise e
                 
                 ## the following makes all instances have the same function :-(
                 ##StringFunction.__call__ = eval(s, self._globals)

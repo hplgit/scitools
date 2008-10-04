@@ -363,11 +363,10 @@ label{easyviz:movie}
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,
-plots stored in files. Thereafter we must use a tool to combine the
-individual plot files into a movie file. We shall illustrate the
-process with an example.
+plots stored in files.  Thereafter we must use a tool to combine the
+individual plot files into a movie file.
 
-The function
+__Example.__ The function
 $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$ 
 is known as the Gaussian function or the probability density function
 of the normal or Gaussian distribution.  This bell-shaped function is
@@ -436,12 +435,13 @@ for s in s_values:
 movie('tmp*.png')
 !ec
 
-First note that the $s$ values are decreasing (`linspace` handles this
+Note that the $s$ values are decreasing (`linspace` handles this
 automatically if the start value is greater than the stop value).
 Also note that we, simply because we think it is visually more
 attractive, let the $y$ axis go from -0.1 although the $f$ function is
 always greater than zero.
 
+__Remarks on Filenames.__
 For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
@@ -451,8 +451,18 @@ printf format `04d` pads the integers with zeros such that `1` becomes
 now expand (by an alphabetic sort) to a list of all files in proper
 order. Without the padding with zeros, i.e., names of the form
 `tmp1.png`, `tmp2.png`, ..., `tmp12.png`, etc., the alphabetic order
-will have, e.g., `tmp12.png` before `tmp2.png`. This has serious
-implications when making animations from plot files.
+will give a wrong sequence of frames in the movie. For instance, 
+`tmp12.png` will appear before `tmp2.png`.
+
+Note that the names of plot files specified when making hardopies must
+be consistent with the specification of names in the call to `movie`.
+Typically, one applies a Unix wildcard notation in the call to
+`movie`, say `plotfile*.eps`, where the asterix will match any set of
+characters. When specifying hardcopies, we must then use a filename
+that is consistent with `plotfile*.eps`, that is, the filename must
+start with `plotfile` and end with `.eps`, but in between
+these two parts we are free to construct (e.g.) a frame number padded
+with zeros.
 
 We recommend to always remove previously generated plot files before
 a new set of files is made. Otherwise, the movie may get old and new
@@ -464,9 +474,22 @@ for filename in glob.glob('tmp*.png'):
     os.remove(filename)
 !ec
 These code lines should be inserted at the beginning of the code example
-above.
+above. Alternatively, one may store all plotfiles in a subfolder
+and later delete the subfolder. Here is a suitable code segment:
+!bc
+import shutil, os
+subdir = 'temp'  # subfolder for plot files
+if os.path.isdir(subdir):  # does the subfolder already exist?
+    shutil.rmtree(subdir)  # delete the whole folder
+os.mkdir(subdir) # make new subfolder
+os.chdir(subdir) # move to subfolder
+# do all the plotting
+# make movie
+os.chdir(os.pardir)  # optional: move up to parent folder
+!ec
 
-Having a set of `tmp*.png` files, one can simply generate a movie by
+__Movie Formats.__
+Having a set of (e.g.) `tmp*.png` files, one can simply generate a movie by
 a `movie('tmp*.png')` call. The `movie` function generates a movie
 file called `movie.avi` (AVI format), `movie.mpeg` (MPEG format), or
 `movie.gif` (animated GIF format) in the current working
@@ -512,6 +535,16 @@ movie('tmp_*.eps', encoder='mencoder', fps=24,
       output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
 !ec
+
+Playing movie files can be done by a lot of programs. Windows Media
+Player is a default choice on Windows machines. On Unix, a variety
+of tools can be used. For animated GIF files the `animate` program
+from the ImageMagick suite is suitable, or one can simply
+show the file in a web page with the HTML command
+`<img src="tmpmovie.gif">`. AVI and MPEG files can be played by,
+for example, the
+`myplayer`, `vlc`, or `totem` programs.
+
 
 
 

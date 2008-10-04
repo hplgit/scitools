@@ -6,9 +6,13 @@ This module just contains two import statements::
   from scitools.easyviz import *
   from scitools.basics  import *
 
-The latter import also does a from numpy or scipy import.
+The former imports plot, movie, legend, title, and most other
+convienient functions from the Easyviz plotting tool.
+The latter performs a from numpy import * (or from scipy
+import *) statement as well as an import of the modules
+os, sys, math, StringFunction, operator, and glob.
 See documentation of scitools.easyviz and scitools.basics
-for more documentation (and information in what is imported).
+for more detailed documentation of what is actually imported.
 """
 
 # import easyviz first to make sure scipy or numpy overwrites

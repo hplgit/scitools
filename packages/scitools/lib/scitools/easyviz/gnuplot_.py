@@ -1122,7 +1122,7 @@ class GnuplotBackend(BaseClass):
         if sys.platform == 'win32':
             # Since os.mkfifo is not available on the Windows platform, we
             # store a reference to the gnuplot data so that the temporary
-            # files won't get deleted to early. This should fix the problem
+            # files won't get deleted too early. This should fix the problem
             # with 0 byte images created with hardcopy on Windows. Use the
             # cleanup method to remove the references and free up the memory.
             try:

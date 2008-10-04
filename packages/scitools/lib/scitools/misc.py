@@ -5,6 +5,8 @@ A collection of Python utilities originally developed for the
 
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
+from scitools.StringFunction import StringFunction
+from numpy import *   # convenient to have for StringFunction objects
 
 def test_if_module_exists(modulename, msg='', raise_exception=False):
     """
@@ -29,28 +31,45 @@ def test_if_module_exists(modulename, msg='', raise_exception=False):
             debug.trace(frameno=-3)
             sys.exit(1)
 
+def func_to_method(func, class_, method_name=None):
+    """
+    Add a function to a class class_ as method_name.
+    If method_name is not given, func.__name__ becomes
+    the name of the method.
+    Borrowed from recipe 5.12 in the Python Cookbook.
+    """
+    setattr(class_, method_name or func.__name__, func)
+    
     
 def system(command, verbose=True, failure_handling='exit', fake=False):
     """
-    Wrapping of the os.system command. Actually, the
-    commands.getstatusoutput function is used, and the output
-    from the system command is fetched.
+    User-friendly wrapping of the os.system/os.popen commands.
+    Actually, the commands.getstatusoutput function is used on Unix
+    systems, and the output from the system command is fetched.
 
     @param command: operating system command to be executed.
-    @param verbose: False: no output, True: print command.
+    @param verbose: False: no output, True: print command prior
+    to execution.
     @param failure_handling: one of 'exit', 'warning', 'exception',
     or 'silent'.
     In case of failure, the output from the command is always displayed.
     @param fake: if True, the command is printed but not run (for testing).
     @return: the same as commands.getstatusoutput, i.e.,
-    a boolean failure variable and the output string (result of command).
+    a boolean failure variable and the output from the command
+    as a string object.
     """
     if verbose:
         print 'Running operating system command\n   %s' % command
     if fake:
         return 0, 'testing "%s"' % command
 
-    failure, output = commands.getstatusoutput(command)
+    if sys.platform[:3] == 'win':
+        result = os.popen(command)
+        output = result.read()
+        failure = result.close()
+    else:
+        # Unix/Linux/Mac:
+        failure, output = commands.getstatusoutput(command)
     
     if failure:
         msg = 'Failure when running operating system command'\
@@ -70,15 +89,21 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
 
     return failure, output
 
-def get_from_commandline(option, default=None, argv=sys.argv):
+
+def read_cml(option, default=None, argv=sys.argv):
     """
     Search for option (e.g. '-p', '--plotfile') among the command-line
     arguments and return the associated value (the proceeding argument).
-    If the option is not found, the default argument is returned.
+    If the option is not found, the default argument is returned
+    as a string (since everything we search for on the command line
+    will be strings).
 
-    str2obj(get_from_commandline(option, default=...) will return
-    a Python object (with the right type) corresponding to the value of
-    the object (see the str2obj function)-
+    The call::
+    
+       str2obj(read_cml(option, default=...))
+
+    will return a Python object (with the right type) corresponding to
+    the value of the object (see the str2obj function).
 
     @param option: command-line option.
     @type  option: string.
@@ -87,18 +112,21 @@ def get_from_commandline(option, default=None, argv=sys.argv):
     @return: the item in argv after the option, or default is option
     is not found.
 
+    See the read_cml_func function for reading function expressions
+    or function/instance names on the command line and returning
+    callable objects.
     """
     try:
         index = argv.index(option)
         return argv[index+1]
     except ValueError:
-        return default
+        return str(default)
     except IndexError:
         raise IndexError, 'array of command-line arguments is too short; '\
               'no value after %s option' % option
 
 
-def str2obj(s, globals=globals(), locals=locals()):
+def str2obj(s, globals=globals(), locals=locals(), debug=False):
     """
     Turn string s into the corresponding object.
     eval(s) normally does this, but if s is just a string ready
@@ -112,6 +140,11 @@ def str2obj(s, globals=globals(), locals=locals()):
     In this function we try to eval(s), and if it works, we
     return that object. If it does not work, s probably has
     meaning as a string, and we return just s.
+
+    With debug=True, the function will print out the exception
+    encountered when doing eval(s), and this may point out
+    problems with, e.g., imports in the call code (insufficient
+    variables in globals).
 
     Examples::
     
@@ -165,9 +198,78 @@ def str2obj(s, globals=globals(), locals=locals()):
     try:
         s = eval(s, globals, locals)
         return s
-    except:
+    except Exception, e:
+        if debug:
+            print """
+scitools.misc.str2obj:
+Tried to do eval(s) with s="%s", and it resulted in an exception:
+    %s
+""" % (s, e)
         return s
     
+
+
+def interpret_as_callable_or_StringFunction(s, iv, globals=globals()):
+    """
+    Return a callable object if s is the name of such an
+    object, otherwise turn s to a StringFunction with
+    iv as the name of the independent variable.
+    Used by the read_cml function.
+    """
+    try:
+        evaled_s = eval(s, globals)
+        if callable(evaled_s):
+            return evaled_s
+        else:
+            raise ValueError, \
+            'string "%s" could be evaluated, but is not callable' % s
+    except NameError, e:
+        try:
+            if isinstance(iv, str):  # single indep. variable?
+                iv = [iv]
+            func = StringFunction(s, independent_variables=iv,
+                                  globals=globals)
+        except Exception, e:
+            raise ValueError, \
+            '%s\n"%s" must be a function name, instance creation, \
+            or string formula!' % (e, s)
+        return func
+
+
+def read_cml_func(option, default_func, iv='t', globals=globals()):
+    """
+    Locate --option on the command line (sys.argv) and find
+    the corresponding value (next sys.argv element).
+    This value is supposed to specify a function.
+    If --option is not found, the default_func (a given callable)
+    argument is returned.
+
+    The found value is interpreted as either the name of a callable
+    (function or instance) or a string formula.  In both cases, a
+    callable (user-define function, user-defined instance, or
+    StringFunction object) is returned. For StringFunctions the iv
+    argument specifies the name(s) of the independent variable(s).
+    Parameters to StringFunction objects are not supported.  The
+    globals argument are used for eval(callable_name) or when
+    creating the  StringFunction object.
+
+    Note that this function always returns a callable object,
+    supposed to be a user-defined function.
+    """
+    if option in sys.argv:
+        i = sys.argv.index(option)
+        try:
+            value = sys.argv[i+1]
+        except IndexError:
+            raise IndexError, \
+                  'no value after option %s on the command line' \
+                  % option
+        value = interpret_as_callable_or_StringFunction\
+                (value, iv, globals=globals)
+    else:
+        value = default_func
+    return value
+
 
 def before(string, character):   
     """Return part of string before character."""
@@ -920,7 +1022,7 @@ def primes(n):
     return [1, 2] + [x for x in s if x]
 
     
-# used from StringFunction in an example:
+# used in StringFunction doc as an example:
 def _test_function(x, c=0, a=1, b=2):
     if x > c:
         return a*(x-c) + b

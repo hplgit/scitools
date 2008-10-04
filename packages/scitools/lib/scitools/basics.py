@@ -17,14 +17,29 @@ Import of Numerical Python
     depending on what is set in the "numpy" section of the configuration
     file:
 
-      1. from numpytools import *
+      1. from numpy import *
+         (configuration file: numpytools = no)
+    
+      2. from numpytools import *
          which allows the user to transparently use Numeric, numarray,
          and numpy
          (configuration file: numpytools = yes)
 
-      2. from numpy import *
-         (configuration file: numpytools = no)
-    
+To make numpy/scipy and math more similar (and thereby ease
+vectorization of user-defined functions), we introduce the math
+function names asin, acos, and atan for numpy/scipy's arcsin,
+arccos, and arctan.
+
+
+Other modules
+-------------
+
+The from scitools.basics import * statement performs a
+from numpy (or scipy) import * as explained above, plus an import
+of the modules os, sys, operator, and math. The modules
+StringFunction and glob are also imported.
+
+
 Definition of variables
 -----------------------
 
@@ -33,6 +48,9 @@ Definition of variables
     VERBOSE, DEBUG, has_scipy. Many of these are set in a configuration
     file (see below) or in environment variables (SCITOOLS_SAFECODE,
     SCITOOLS_VERBOSE, SCITOOLS, SCITOOLS_DEBUG, SCITOOLS_easyviz_backend).
+
+All these variables are contained in basics.py.
+
 
 Debug functions 
 ---------------
@@ -114,6 +132,11 @@ from glob import glob
 _import_list.append("import sys, operator, math")
 _import_list.append("from StringFunction import StringFunction")
 _import_list.append("from glob import glob")
+
+# nice to have symbols (for math/numpy/scipy equivalence/vectorization):
+asin = arcsin
+acos = arccos
+atan = arctan
 
 import debug
 debug.DEBUG = DEBUG
