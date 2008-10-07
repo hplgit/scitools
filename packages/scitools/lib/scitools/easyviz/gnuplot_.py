@@ -35,8 +35,8 @@ from common import *
 from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
-from misc import arrayconverter, _update_from_config_file
+from scitools.misc import test_if_module_exists as check, system
+from misc import arrayconverter, _update_from_config_file, _check_type
 
 check('Gnuplot', msg='You need to install the Gnuplot.py package.')
 import Gnuplot
@@ -48,6 +48,46 @@ import string
 
 # Update Gnuplot.GnuplotOpts according to scitools.cfg
 _update_from_config_file(Gnuplot.GnuplotOpts.__dict__, section='gnuplot')
+
+def _check_terminals(terms):
+    """Check if the default terminal (Gnuplot.GnuplotOpts.default_term)
+    work with Gnuplot. If not, try any of the terminals given in terms.
+    Change the default terminal as necessary. Gnuplot will fail later if
+    a working terminal can't be found.
+    """
+    _check_type(terms, 'terms', (list, tuple))
+    working_term = None
+    default_term = Gnuplot.GnuplotOpts.default_term
+    if len(terms) == 0 or default_term != terms[0]:
+        terms = [default_term] + terms
+    for term in terms:
+        test_term = open(tempfile.mktemp(suffix='.gnuplot'), 'w')
+        test_term.write('set term %s\n' % term)
+        test_term.close()
+        cmd = '%s < %s' % (Gnuplot.GnuplotOpts.gnuplot_command, test_term.name)
+        failure, output = system(cmd, verbose=False, failure_handling='silent')
+        os.remove(test_term.name)
+        if not failure:
+            working_term = term
+            break
+    if working_term is not None:
+        if working_term == default_term:
+            # Gnuplot is built with the chosen terminal and it seems to be
+            # working so we don't need to do anything.
+            pass
+        else:
+            Gnuplot.GnuplotOpts.default_term = working_term
+            if VERBOSE:
+                print "Note: Default terminal for Gnuplot changed from " \
+                      "%s to %s." % (default_term, working_term)
+    else:
+        # no working terminals found, will probably fail later
+        if VERBOSE:
+            print "Unable to find a working terminal for use with %s" % \
+                  Gnuplot.GnuplotOpts.gnuplot_command
+
+if sys.platform == "darwin":
+    _check_terminals(['aqua', 'x11'])
 
 # The arrayconverter function is only necessary for Gnuplot.py version 1.7
 if Gnuplot.__version__[:3] != '1.7':
@@ -128,9 +168,6 @@ def write_array(f, set,
         #f.write(nest_suffix)
 
 Gnuplot.utils.write_array = write_array
-
-if sys.platform == "darwin" and "TERM_PROGRAM" not in os.environ:
-    Gnuplot.GnuplotOpts.default_term = "x11"
 
 # Change the order in which to cycle through line colors when plotting multiple
 # lines with the plot (or plot3) command. In Gnuplot we start with red since
@@ -599,18 +636,22 @@ class GnuplotBackend(BaseClass):
         withstring = self._get_withstring(marker, color, style, width)
         if z is not None:
             # zdata is given, add a 3D curve:
+            kwargs = {'title': item.getp('legend'),
+                      'with': withstring,
+                      'using': '1:2:($3)'}
             data = Gnuplot.Data(arrayconverter(x),
                                 arrayconverter(y),
                                 arrayconverter(squeeze(z)),
-                                title=item.getp('legend'), with=withstring,
-                                using='1:2:($3)')
+                                **kwargs)
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
+            kwargs = {'title': item.getp('legend'),
+                      'with': withstring,
+                      'using': '1:($2)'}
             data = Gnuplot.Data(arrayconverter(x),
                                 arrayconverter(y), 
-                                title=item.getp('legend'), with=withstring,
-                                using='1:($2)')
+                                **kwargs)
         return data
 
     def _add_filled_line(self, item):
@@ -640,23 +681,20 @@ class GnuplotBackend(BaseClass):
         
         if z is not None:
             # zdata is given, add a 3D curve:
-            data = [Gnuplot.Data(x, y, z,
-                                 title=item.getp('legend'),
-                                 with='filledcurve',
-                                 using='1:2:($3)')]
+            kwargs = {'title': item.getp('legend'),
+                      'with': 'filledcurve',
+                      'using': '1:2:($3)'}
+            data = [Gnuplot.Data(x, y, z, **kwargs)]
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
-            data = [Gnuplot.Data(x, y, 
-                                 title=item.getp('legend'),
-                                 with='filledcurve %s' % facecolor,
-                                 using='1:($2)'),
-                    Gnuplot.Data(x, y, 
-                                 with=withstring,
-                                 using='1:($2)'),
-                    Gnuplot.Data([x[0],x[-1]], [y[0],y[-1]], 
-                                 with=withstring,
-                                 using='1:($2)')]
+            kwargs1 = {'title': item.getp('legend'),
+                       'with': 'filledcurve %s' % facecolor,
+                       'using': '1:($2)'}
+            kwargs2 = {'with': withstring, 'using': '1:($2)'}
+            data = [Gnuplot.Data(x, y, **kwargs1),
+                    Gnuplot.Data(x, y, **kwargs2),
+                    Gnuplot.Data([x[0],x[-1]], [y[0],y[-1]], **kwargs2)]
         return data
 
     def _add_bar_graph(self, item, shading='faceted'):
@@ -719,7 +757,8 @@ class GnuplotBackend(BaseClass):
                 c = j+1
             else:
                 c = facecolor
-            data.append(Gnuplot.Data(x_,y_,with='boxes %s' % c))
+            kwargs = {'with': 'boxes %s' % c}
+            data.append(Gnuplot.Data(x_, y_, **kwargs))
         return data
 
     def _add_surface(self, item, shading='faceted'):
@@ -776,12 +815,13 @@ class GnuplotBackend(BaseClass):
         else:
             if rank(x) == 2 and rank(y) == 2:
                 x = x[:,0];  y = y[0,:]
+        kwargs = {'title': item.getp('legend'),
+                  'with': withstring,
+                  'binary': 0}
         data = Gnuplot.GridData(arrayconverter(z),
                                 arrayconverter(x),
                                 arrayconverter(y),
-                                title=item.getp('legend'),
-                                with=withstring,
-                                binary=0)
+                                **kwargs)
         return data
 
     def _add_contours(self, item, placement=None):
@@ -840,12 +880,13 @@ class GnuplotBackend(BaseClass):
         else:
             if rank(x) == 2 and rank(y) == 2:
                 x = x[:,0];  y = y[0,:]
+        kwargs = {'title': item.getp('legend'),
+                  'binary': 0,
+                  'with': 'l palette'}
         data = Gnuplot.GridData(arrayconverter(z),
                                 arrayconverter(x),
                                 arrayconverter(y),
-                                title=item.getp('legend'),
-                                binary=0,
-                                with='l palette')
+                                **kwargs)
         return data
 
     def _add_vectors(self, item):
@@ -897,12 +938,12 @@ class GnuplotBackend(BaseClass):
                         y = y[:,newaxis]*ones(shape(u))
                     else:
                         y = y[newaxis,:]*ones(shape(u))
+            kwargs = {'title': item.getp('legend'), 'with': withstring}
             data = Gnuplot.Data(arrayconverter(ravel(x)),
                                 arrayconverter(ravel(y)),
                                 arrayconverter(ravel(u)),
                                 arrayconverter(ravel(v)),
-                                title=item.getp('legend'),
-                                with=withstring)
+                                **kwargs)
         return data
 
     def _add_streams(self, item):
