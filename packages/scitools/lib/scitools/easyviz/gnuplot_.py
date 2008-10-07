@@ -82,9 +82,8 @@ def _check_terminals(terms):
                       "%s to %s." % (default_term, working_term)
     else:
         # no working terminals found, will probably fail later
-        if VERBOSE:
-            print "Unable to find a working terminal for use with %s" % \
-                  Gnuplot.GnuplotOpts.gnuplot_command
+        print "Warning: Unable to find a working terminal for use with %s" % \
+              Gnuplot.GnuplotOpts.gnuplot_command
 
 if sys.platform == "darwin":
     _check_terminals(['aqua', 'x11'])
