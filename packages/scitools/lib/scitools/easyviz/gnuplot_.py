@@ -88,8 +88,17 @@ def _check_terminals(terms):
 if sys.platform == "darwin":
     _check_terminals(['aqua', 'x11'])
 
-# The arrayconverter function is only necessary for Gnuplot.py version 1.7
-if Gnuplot.__version__[:3] != '1.7':
+_gnuplotpy_major = Gnuplot.__version__[0]
+_gnuplotpy_minor = Gnuplot.__version__[2]
+if _gnuplotpy_major == 1 and _gnuplotpy_minor <= 7:
+    if os.uname()[-1] == 'x86_64':
+        # Gnuplot.py <= 1.7 only supports Numeric (not NumPy) and Numeric
+        # does not work on 64 bits platform. 
+        print ("Warning: Gnuplot.py version %s is not support on 64 bits " \
+               "platform. Please upgrade to Gnuplot.py 1.8 or newer.") % \
+               Gnuplot.__version__
+else:
+    # The arrayconverter function is only necessary for Gnuplot.py <= 1.7:
     def arrayconverter(a):
         return a
 
