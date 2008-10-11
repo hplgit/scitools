@@ -753,8 +753,8 @@ class VelocityVectors(PlotProperties):
         self._set_data(x, y, z, u, v, w)
 
     def scale_vectors(self):
-        as = self._prop['arrowscale']
-        if as:
+        as_ = self._prop['arrowscale']
+        if as_:
             u = self._prop['udata']
             v = self._prop['vdata']
             w = self._prop['wdata']
@@ -776,13 +776,13 @@ class VelocityVectors(PlotProperties):
                 maxlen = 0
   
             if maxlen > 0:
-                as = as*0.9/maxlen
+                as_ = as_*0.9/maxlen
             else:
-                as = as*0.9
-            self._prop['udata'] = u*as
-            self._prop['vdata'] = v*as
+                as_ = as_*0.9
+            self._prop['udata'] = u*as_
+            self._prop['vdata'] = v*as_
             if w is not None:
-                self._prop['wdata'] = w*as
+                self._prop['wdata'] = w*as_
 
     def _set_data(self, x, y, z, u, v, w):
         self._set_lim(x, 'xlim')
