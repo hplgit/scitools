@@ -1,1 +1,14 @@
-Not yet written.
+When you encounter a problem with Easyviz plotting, make sure that the
+backend works correctly on its own (there may, e.g., be installation
+problems with the backend - Easyviz just calls the backend to do the
+plotting). 
+
+For the Gnuplot backend you can try the following commands in a
+terminal window:
+!bc
+Unix/DOS> gnuplot
+gnuplot> plot sin(x)
+!ec
+This should result in a plot of the sine function on the screen.
+If this command does not work, Easyviz will not work with the Gnuplot
+backend.

@@ -1071,7 +1071,7 @@ class GnuplotBackend(BaseClass):
                 print "creating figure %s in backend" % name
             # Do not force persist. Instead let the user decide whether to
             # persist a plot through Gnuplot.GnuplotOpts.prefer_persist or
-            # the perfer_persist option in the gnuplot section of
+            # the prefer_persist option in the gnuplot section of
             # scitools.cfg.
             #fig._g = Gnuplot.Gnuplot(persist=1)
             fig._g = Gnuplot.Gnuplot()
