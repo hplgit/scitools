@@ -12,7 +12,7 @@ import os
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 
-if hasattr(__name__, 'VERBOSE'):
+if hasattr(__name__, 'VERBOSE'):  # test if we have global data present...
     if VERBOSE >= 3:
         print 'global data import: no need to initialize data'
 else:
