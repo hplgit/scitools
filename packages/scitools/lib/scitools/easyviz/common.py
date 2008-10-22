@@ -1703,6 +1703,7 @@ class Figure(object):
         'curax': 1,       # current axis
         'axshape': (1,1), # shape of axes
         'size': [None]*2, # size of figure ([width, height])
+        'number': 1,      # this figures number
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
@@ -1778,6 +1779,11 @@ class Figure(object):
             _check_type(size, 'size', (list,tuple))
             _check_size(size, 'size', 2)
             self._prop['size'] = size
+
+        if 'number' in kwargs:
+            number = kwargs['number']
+            _check_type(number, 'number', int)
+            self._prop['number'] = number
                    
     def getp(self, prm_name):
         try:
@@ -2273,7 +2279,7 @@ class BaseClass(object):
         
     def figure(self, num=None, **kwargs): 
         """
-        Create a new figure or switch between figures.
+        Create a new figure or switch between figures and return Figure object.
         num is the figure number of the new or existing figure.
         """
         try:
@@ -2289,9 +2295,11 @@ class BaseClass(object):
         if not num in self._figs:
             # Points to class Figure or other convenient function
             # In gnuplot backend this should instantiate a new pipe instead
+            kwargs['number'] = num
             self._figs[num] = Figure(**kwargs)             
                                               
         self._attrs['curfig'] = num
+        return self._figs[num]
     
     def clf(self): 
         """Clear the current figure."""

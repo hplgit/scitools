@@ -458,7 +458,7 @@ class PyXBackend(BaseClass):
         legend = item.getp('legend')
         if not legend:
             legend = None
-        self._g.items[-1].plot(pyx.graph.data.list(data,x=1,y=2,title=legend),
+        self._g.items[-1].plot(pyx.graph.data.points(data,x=1,y=2,title=legend),
                                styles=styles)
 
     def _add_surface(self, item, shading='faceted'):
@@ -655,20 +655,20 @@ class PyXBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
             # create plotting package figure and save figure instance
             # as fig._g
             if DEBUG:
-                name = 'Fig ' + str(self.getp('curfig'))
+                name = 'Fig ' + str(fig.getp('number'))
                 print "creating figure %s in backend" % name
 
             fig._g = pyx.canvas.canvas()
             
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
+        return fig
 
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""

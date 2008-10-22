@@ -1132,20 +1132,20 @@ end
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
             # create plotting package figure and save figure instance
             # as fig._g
-            name = 'Figure ' + str(self.getp('curfig'))
+            name = 'Figure ' + str(fig.getp('number'))
             if DEBUG:
                 print "creating figure %s in backend" % name
 
             fig._g = _DXFigure(self, title=name)
             
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
+        return fig
         
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""

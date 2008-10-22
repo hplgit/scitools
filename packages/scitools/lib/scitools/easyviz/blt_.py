@@ -710,9 +710,8 @@ class BltBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
-        name = 'Fig ' + str(self.getp('curfig'))
+        fig = BaseClass.figure(self, *args, **kwargs) 
+        name = 'Fig ' + str(fig.getp('number'))
         try:
             fig._g
         except:
@@ -740,7 +739,8 @@ class BltBackend(BaseClass):
             fig._g = Pmw.Blt.Graph(frame)
             fig._g.pack(expand=1, fill='both')
             
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
+        return fig
 
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""

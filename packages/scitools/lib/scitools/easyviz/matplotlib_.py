@@ -742,7 +742,7 @@ class MatplotlibBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
+        fignum = BaseClass.figure(self, *args, **kwargs) 
         fig = self.gcf()
         try:
             fig._g
@@ -750,12 +750,13 @@ class MatplotlibBackend(BaseClass):
             # create plotting package figure and save figure instance
             # as fig._g
             if DEBUG:
-                name = 'Fig ' + str(self.getp('curfig'))
+                name = 'Fig ' + str(fignum)
                 print "creating figure %s in backend" % name
 
             fig._g = pylab
             
         self._g = fig._g # link for faster access
+        return fignum
         
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""

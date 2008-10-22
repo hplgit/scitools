@@ -1169,9 +1169,7 @@ class VtkBackend(BaseClass):
             
     def figure(self, *args, **kwargs):
         """Extension of BaseClass.figure"""
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
-
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
@@ -1180,14 +1178,17 @@ class VtkBackend(BaseClass):
             except Tkinter.TclError:
                 # can't create gui; only offscreen rendering
                 fig._g = vtk.vtkRenderWindow()
-                try: width, height = fig.getp('size')
-                except TypeError: width, height = (640, 480)
+                try:
+                    width, height = fig.getp('size')
+                except TypeError:
+                    width, height = (640, 480)
                 fig._g.SetSize(width, height)
                 fig._g.OffScreenRenderingOn()
             fig._renderers = []
             fig._axshape = fig.getp('axshape')
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
         #self._g.SetAAFrames(5)
+        return fig
 
     def clf(self):
         """Clear current figure."""

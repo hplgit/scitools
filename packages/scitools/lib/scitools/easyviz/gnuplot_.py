@@ -1059,15 +1059,14 @@ class GnuplotBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
             # create plotting package figure and save figure instance
             # as fig._g
             if DEBUG:
-                name = 'Fig ' + str(self.getp('curfig'))
+                name = 'Fig ' + str(fig.getp('number'))
                 print "creating figure %s in backend" % name
             # Do not force persist. Instead let the user decide whether to
             # persist a plot through Gnuplot.GnuplotOpts.prefer_persist or
@@ -1077,6 +1076,7 @@ class GnuplotBackend(BaseClass):
             fig._g = Gnuplot.Gnuplot()
             
         self._g = fig._g  # link for faster access
+        return fig
 
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""

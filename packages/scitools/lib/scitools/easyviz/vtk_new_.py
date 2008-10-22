@@ -40,6 +40,7 @@ from common import *
 from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
 from scitools.misc import test_if_module_exists as check
 from scitools.numpyutils import allclose
+from misc import _update_from_config_file
 
 check('vtk', msg='You need to install the vtk package.')
 import vtk
@@ -51,6 +52,21 @@ try:
     import vtkTkRenderWidget
 except:
     from vtk.tk import vtkTkRenderWidget
+
+_vtk_options = {'mesa': 0,
+                'vtk_inc_dir': ['/usr/include/vtk-5.0'],
+                'vtk_lib_dir': ['/usr/lib',
+                                '/usr/lib/python-support/python-vtk/python2.5/vtk']}
+_update_from_config_file(_vtk_options, section='vtk')
+
+if _vtk_options['mesa']:
+    _graphics_fact = vtk.vtkGraphicsFactory()
+    _graphics_fact.SetOffScreenOnlyMode(1)
+    _graphics_fact.SetUseMesaClasses(1)
+    _imaging_fact = vtk.vtkImagingFactory()
+    _imaging_fact.SetUseMesaClasses(1)
+    del _graphics_fact
+    del _imaging_fact
 
 # change these to suit your needs.
 inc_dirs=['/usr/include/vtk-5.0']
@@ -1349,20 +1365,20 @@ for (int k=0; k<nz; k++) {
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
             # create plotting package figure and save figure instance
             # as fig._g
-            name = 'Figure ' + str(self.getp('curfig'))
+            name = 'Figure ' + str(fig.getp('number'))
             if DEBUG:
                 print "creating figure %s in backend" % name
 
             fig._g = _VTKFigure(self, title=name)
             
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
+        return fig
 
     def _setup_axis(self, ax):
         self._set_limits(ax)

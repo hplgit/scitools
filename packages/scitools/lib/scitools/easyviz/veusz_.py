@@ -735,15 +735,14 @@ class VeuszBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        BaseClass.figure(self, *args, **kwargs) 
-        fig = self.gcf()
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
             # create plotting package figure and save figure instance
             # as fig._g
             if DEBUG:
-                name = 'Fig ' + str(self.getp('curfig'))
+                name = 'Fig ' + str(fig.getp('number'))
                 print "creating figure %s in backend" % name
 
             name = 'Fig ' + str(self.getp('curfig'))
@@ -751,7 +750,8 @@ class VeuszBackend(BaseClass):
             fig._g.EnableToolbar(enable=True)
             fig._g.window.hide()
             
-        self._g = fig._g # link for faster access
+        self._g = fig._g  # link for faster access
+        return fig
         
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
