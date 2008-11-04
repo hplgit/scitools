@@ -1172,29 +1172,26 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
     # new code based on numpy:
     import sys
     if 'numpy' in sys.modules:
-        y0, xleft = histogram(samples, bins=nbins, normed=True)
-        h = xleft[1] - xleft[0]  # bin width
-        if piecewise_constant:
-            x = zeros(2*len(xleft) + 2, type(xleft[0]))
-            y = x.copy()
-            for i in range(len(xleft)):
-                x[2*i+1] = xleft[i]
-                x[2*i+2] = xleft[i] + h
-                y[2*i+1] = y0[i]
-                y[2*i+2] = y0[i]
-            y[0] = 0
-            x[0] = xleft[0]
-            y[-1] = 0
-            y[-2] = y0[-1]
-            x[-1] = xleft[-1] + h
-            x[-2] = x[-1]
-        else:
-            x = zeros(len(xleft), type(xleft[0]))
-            y = y0.copy()
-            for i in range(len(xleft)):
-                x[i] = xleft[i] + h/2.0
+        y0, bin_edges = histogram(samples, bins=nbins, normed=True, new=True)
+    h = bin_edges[1] - bin_edges[0]  # bin width
+    if piecewise_constant:
+        x = zeros(2*len(bin_edges), type(bin_edges[0]))
+        y = x.copy()
+        x[0] = bin_edges[0]
+        y[0] = 0
+        for i in range(len(bin_edges)-1):
+            x[2*i+1] = bin_edges[i]
+            x[2*i+2] = bin_edges[i+1]
+            y[2*i+1] = y0[i]
+            y[2*i+2] = y0[i]
+        x[-1] = bin_edges[-1]
+        y[-1] = 0
+    else:
+        x = zeros(len(bin_edges)-1, type(bin_edges[0]))
+        y = y0.copy()
+        for i in range(len(x)):
+            x[i] = (bin_edges[i] + bin_edges[i+1])/2.0
     return x, y
-
         
 
 def factorial(n, method='reduce'):
