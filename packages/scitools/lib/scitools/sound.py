@@ -29,13 +29,15 @@ def read(filename):
     data = numpy.fromstring(data, dtype=numpy.uint16)
     return data.astype(numpy.int16)
 
-def play(soundfile):
+def play(soundfile, player=None):
     """
     Play a file with name soundfile or an array soundfile.
     (The array is first written to file using the write function
     so the data type can be arbitrary.)
-    The player is chosen by the programs open on Mac/Linux and start
-    on Windows.
+    The player is chosen by the programs 'open' on Mac and 'start'
+    on Windows. On Linux, try different open programs for various
+    distributions. If keyword argument 'player' is given, only this spesific
+    commands is run.
     """
     tmpfile = 'tmp.wav'
     if isinstance(soundfile, numpy.ndarray):
@@ -43,11 +45,27 @@ def play(soundfile):
     elif isinstance(soundfile, str):
         tmpfile = soundfile
 
-    if sys.platform[:5] == 'linux':
-        status, output = commands.getstatusoutput('open %s' % tmpfile)
+    if player:
+        msg = 'Unable to open sound file with %s' %player
+        if sys.platform[:3] == 'win':
+            status = os.system('%s %s' %(player, tmpfile))
+        else:
+            status, output = commands.getstatusoutput('%s %s' %(player, tmpfile))
+            msg += '\nError message:\n%s' %output
         if status != 0:
-            # Only for gnome:
-            commands.getstatusoutput('gnome-open %s' % tmpfile)
+            raise OSError(msg)
+        return
+
+    if sys.platform[:5] == 'linux':
+        open_commands = ['gnome-open', 'kmfclient exec', 'exo-open', 'xdg-open', 'open']
+        for cmd in open_commands:
+            status, output = commands.getstatusoutput('%s %s' %(cmd, tmpfile))
+            if status == 0:
+                break
+        if status != 0:
+            raise OSError('Unable to open sound file, try to set player'\
+                              ' keyword argument.')
+
     elif sys.platform == 'darwin':
         commands.getstatusoutput('open %s' %tmpfile)
     else:

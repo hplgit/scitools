@@ -5,3 +5,4 @@ recursive-include lib/scitools/easyviz/tests *
 include LICENSE
 include Allen_Downey.txt
 include README
+include ChangeLog
