@@ -3,6 +3,5 @@ recursive-include lib *.cfg
 recursive-include lib/scitools/easyviz/doc *
 recursive-include lib/scitools/easyviz/tests *
 include LICENSE
-include Allen_Downey.txt
 include README
 include ChangeLog
