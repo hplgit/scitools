@@ -108,9 +108,13 @@ The latest release of SciTools can be obtained from
 
     http://scitools.googlecode.com
 
-while the latest Subversion revision can be obtained from
+while the latest Subversion revision can be obtained either anonymously 
+(for non-members) by
 
-    https://svn.simula.no:40081/int/scriptingsuite/trunk/packages/scitools
+    svn co http://scitools.googlecode.com/svn/trunk/ scitools
 
-This is, however, only available for internal members at Simula Research
-Laboratory.
+while SciTools members should use
+
+    svn co https://scitools.googlecode.com/svn/trunk/ scitools --username USERNAME
+
+See http://code.google.com/p/scitools/source/checkout for details.
