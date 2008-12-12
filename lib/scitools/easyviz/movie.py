@@ -77,7 +77,7 @@ class MovieEncoder(object):
                 raise IOError, 'No files of the form %s exist.' % input_files
         else:
             all_input_files = input_files
-        for f in input_files:
+        for f in all_input_files:
             error_encountered = False
             if not os.path.isfile(f):
                 print 'Input file %s does not exist.' % f
