@@ -126,47 +126,89 @@ def read_cml(option, default=None, argv=sys.argv):
               'no value after %s option' % option
 
 
+    
+def str2bool(s):
+    """
+    Turn a string s, holding some boolean value
+    ('on', 'off', 'True', 'False', 'yes', 'no' - case insensitive)
+    into boolean variable. s can also be a boolean. Example::
+    >>> str2bool('OFF')
+    False
+    >>> str2bool('yes')
+    True
+    """
+    if isinstance(s, (bool, int)):
+        return bool(s)
+    elif isinstance(s, str):
+        true_values = ('on', 'true', 'yes')
+        false_values = ('off', 'false', 'no')
+        s2 = s.lower()  # make case insensitive comparison
+        if s2 in true_values:
+            return True
+        elif s2 in false_values:
+            return False
+        else:
+            raise ValueError, '"%s" is not a boolean value %s' % \
+                  (s, true_values+false_values)
+    else:
+        raise TypeError, '%s %s cannot be converted to bool' % \
+              (s, type(s))
+    
+
 def str2obj(s, globals=globals(), locals=locals(), debug=False):
     """
-    Turn string s into the corresponding object.
-    eval(s) normally does this, but if s is just a string ready
-    from file, GUI or the command-line, eval will not work when
-    s really represents a string:
-    >>> eval('some string')
-    Traceback (most recent call last):
-    SyntaxError: unexpected EOF while parsing
-    It tries to parse 'some string' as Python code.
+    Turn string s into the corresponding object. str2obj is mainly
+    used to take a string from a GUI or the command line and
+    create a Python object. For example::
 
-    In this function we try to eval(s), and if it works, we
-    return that object. If it does not work, s probably has
-    meaning as a string, and we return just s.
-
-    With debug=True, the function will print out the exception
-    encountered when doing eval(s), and this may point out
-    problems with, e.g., imports in the call code (insufficient
-    variables in globals).
-
-    Examples::
-    
-    >>> from misc import str2obj
     >>> s = str2obj('0.3')
     >>> print s, type(s)
     0.3 <type 'float'>
-    >>> s = str2obj('3')
-    >>> print s, type(s)
-    3 <type 'int'>
+
     >>> s = str2obj('(1,8)')
     >>> print s, type(s)
     (1, 8) <type 'tuple'>
-    >>> s = str2obj('some string')
-    >>> s
-    'some string'
+    
+    Method: eval(s) can normally do the job, but if s is meant to
+    be turned into a string object, eval works only if s has explicit
+    quotes:
 
+    >>> eval('some string')
+    Traceback (most recent call last):
+    SyntaxError: unexpected EOF while parsing
+
+    (eval tries to parse 'some string' as Python code.)
+    Similarly, if s is a boolean word, say 'off' or 'yes',
+    eval will not work.
+
+    In this function we first try to see if s is a boolean value,
+    using scitools.misc.str2bool. If this does is not successful,
+    we try eval(s), and if it works, we return the resulting object.
+    Otherwise, s is (most probably) a string, so we return s itself.
+
+    Examples::
+
+    >>> strings = ('0.3', '5', '[-1,2]', '-1+3j', 'dict(a=1,b=0,c=2)',
+    ...            'some string', 'true', 'ON', 'no')
+    >>> for s in strings:
+    ...     obj = str2obj(s)
+    ...     print '"%s" -> %s %s' % (s, obj, type(obj)
+    "0.3" -> 0.3 <type 'float'>
+    "5" -> 5 <type 'int'>
+    "[-1,2]" -> [-1, 2] <type 'list'>
+    "-1+3j" -> (-1+3j) <type 'complex'>
+    "dict(a=1,b=0,=2)" ->  {'a': 1, 'c': 2, 'b': 0} <type 'dict'>
+    "some string" -> some string <type 'str'>
+    "true" -> True <type 'bool'>
+    "ON" -> True <type 'bool'>
+    "no" -> False <type 'bool'>
+    
     If the name of a user defined function, class or instance is
-    sent to str2obj, one must also provide locals() and globals()
-    dictionaries as extra arguments. Otherwise, str2obj will not
-    know how to "eval" the string and produce the right object
-    (user defined types are not known inside str2obj).
+    sent to str2obj, the calling code must also send locals() and
+    globals() dictionaries as extra arguments. Otherwise, str2obj
+    will not know how to "eval" the string and produce the right
+    object (user-defined types are unknown inside str2obj unless
+    the calling code's globals and locals are provided).
     Here is an example::
     
     >>> def myf(x):
@@ -188,26 +230,101 @@ def str2obj(s, globals=globals(), locals=locals(), debug=False):
     >>> print s, type(s)
     <__main__.A instance at 0xb70f6fcc> <type 'instance'>
 
-    Caveat: if the string argument is the name of a valid Python
+    With debug=True, the function will print out the exception
+    encountered when doing eval(s), and this may point out
+    problems with, e.g., imports in the calling code (insufficient
+    variables in globals).
+
+    Note: if the string argument is the name of a valid Python
     class (type), that class will be returned. For example,
     >>> str2obj('list')  # returns class list
     <type 'list'>
-
-    You can normally safely apply eval on the output of this function.
     """
     try:
-        s = eval(s, globals, locals)
-        return s
-    except Exception, e:
-        if debug:
-            print """
+        b = str2bool(s)
+        return b
+    except ValueError, e:
+        # s is not a boolean value, try eval(s):
+        try:
+            b = eval(s, globals, locals)
+            return b
+        except Exception, e:
+            if debug:
+                print """
 scitools.misc.str2obj:
 Tried to do eval(s) with s="%s", and it resulted in an exception:
     %s
 """ % (s, e)
-        return s
-    
+            # eval(s) did not work, s is probably a string:
+            return s
 
+
+def str2type(value):
+    """
+    Return a function that can take a string and convert it to
+    a Python object of the same type as value.
+    
+    This function is useful when turning input from GUIs or the
+    command line into Python objects. Given a default value
+    for the input, str2type will return the right conversion function.
+    (str2obj can do the thing, but will often return eval, which turns
+    any string into a Python object - this is less safe than str2type,
+    which never returns eval. That principle helps to detect wrong input.)
+
+    A problem with str2type appears if value is an int and the intended
+    object type was a float (value is a default value that happened to be
+    an integer). In that case, int is returned and all float values given
+    as input strings become int objects, which is undesired. It is therefore
+    extremely important to provide a correct value object to str2type!
+
+    Examples::
+    >>> f = str2type((1,4,3))
+    >>> f.__name__
+    'tuple'
+
+    >>> f = str2type(0.2)
+    >>> f.__name__
+    'float'
+
+    >>> f = str2type('some string')
+    >>> f.__name__
+    'str'
+
+    >>> f = str2type(False)
+    >>> f.__name__
+    'str2bool'
+
+    Method: If value is bool, str2bool is returned; if value is
+    a string, str is returned; if value is float, int, complex, list,
+    tuple, or any other basic Python type, eval is returned.
+    Otherwise, value has unknown type (user-defined class, for instance)
+    and str is returned so that the user's code has to perform the
+    right conversion from the string to the proper Python object.
+
+    Note that we could return eval if value is not a string or a boolean,
+    but eval is never returned from this function to avoid conversion
+    to an unintended type.
+    """
+    if isinstance(value, bool):
+        return str2bool
+    elif isinstance(value, basestring):
+        return str
+    elif isinstance(value, int):
+        return int
+    elif isinstance(value, float):
+        return float
+    elif isinstance(value, complex):
+        return complex
+    elif isinstance(value, list):
+        return list
+    elif isinstance(value, tuple):
+        return tuple
+    elif isinstance(value, dict):
+        return dict
+    else:
+        # the type of value is probably defined in some unknown module
+        return str
+    
 
 def interpret_as_callable_or_StringFunction(s, iv, globals=globals()):
     """
