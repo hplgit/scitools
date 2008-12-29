@@ -13,8 +13,8 @@ math_functions = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos',
 s = 'from math import ' + ', '.join(math_functions)
 exec s
 # Problem: vectorized expressions require NumPy versions
-# (Numeric, numarray, scipy) of the math functions. We try to
-# detect errors arising from such lacking imports.
+# of the math functions. We try to detect errors arising from
+# such lacking imports.
 
 # The first edition of the "Python for Computational Science" book
 # introduced the classes StringFunction1x, StringFunction1, and
