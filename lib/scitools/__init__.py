@@ -7,9 +7,10 @@ etc.
 # could include (with preprocess) a README file in Doconce format
 # where all modules are quickly explained in a description list
 
-__version__ = '0.5'
+__version__ = '0.51'
 version = __version__
-__author__ = 'Hans Petter Langtangen', 'Johannes H. Ring', \
-             'Ilmar Wilbers', 'Rolv E. Bredesen', \
-             'Joachim Haga',
+__author__ = 'Johannes H. Ring', 'Hans Petter Langtangen', \
+             'Ilmar Wilbers', 'Rolv E. Bredesen'
 author = __author__
+
+__acknowledgemets__ = 'Joachim Berdal Haga', 'Mario Pernici'
