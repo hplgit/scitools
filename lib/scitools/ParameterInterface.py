@@ -5,6 +5,7 @@ Utilities for holding and displaying data about input parameters.
 import sys, re
 from cmldict import cmldict
 import modulecheck
+import scitools.misc
 
 try:
     import Pmw, Tkinter
@@ -14,55 +15,6 @@ except:
     # tests on which modules that are missing are done
     # in the constructor of the classes
 
-def guesstype(s):
-    """Given a string s, determine if s is int, float or just a string."""
-    real = r'-?(\d+(\.\d*)?|\d*\.\d+)([eE][+\-]?\d+)?'
-    if re.search(r'\d+', s):
-        return int  # return the conversion function int
-    elif re.search(real, s):
-        return float
-    else:
-        return str
-
-def findtype(v):
-    """
-    Given a variable v, return the function that converts
-    a string to an object of the same type as v.
-    """
-    if isinstance(v, bool):
-        # bool('False') is True so we need a tailored function:
-        return str2bool
-    # recall to test bool (subclass) before int...
-    elif isinstance(v, int):
-        return int
-    elif isinstance(v, float):
-        return float
-    elif isinstance(v, complex):
-        return complex
-    elif isinstance(v, str):
-        return str
-    else:
-        return str
-    # could made it easier:
-    # after the special test on bool:
-    # return type(v)
-    # (the only problem is that other objects are then not str converted)
-    # could do things like str2list as list(eval(string))
-
-    
-def str2bool(s):
-    """Turn string ('on'/'off', 'True'/'False') into boolean variable."""
-    if isinstance(s, (bool, int)):
-        return bool(s)
-    elif isinstance(s, str):
-        true_values = ('on', 'True', 'true', 'yes', 'Yes')
-        if s in true_values:
-            return True
-        else:
-            return False
-    else:
-        raise ValueError, 'bool value "%s" cannot be converted to bool' % s
-    
 
 class InputPrm:
     """Class for holding data about a parameter."""
@@ -105,7 +57,7 @@ class InputPrm:
         self.cmlarg = cmlarg
         self.prmclass = prmclass
         if str2type is None: 
-            self.str2type = findtype(default)
+            self.str2type = scitools.misc.str2obj
 
         # check that unit is a valid physical dimension:
         if self.unit is not None:
@@ -254,7 +206,7 @@ class InputPrmGUI(InputPrm):
                           this prm to an external program
         """
         if str2type is None: 
-            str2type = findtype(default)
+            str2type = scitools.misc.str2obj
 
         # bind self._v to an object with get and set methods
         # for assigning and extracting the parameter value
