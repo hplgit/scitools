@@ -265,26 +265,33 @@ def str2type(value):
     a Python object of the same type as value.
     
     This function is useful when turning input from GUIs or the
-    command line into Python objects. Given a default value
-    for the input, str2type will return the right conversion function.
-    (str2obj can do the thing, but will often return eval, which turns
-    any string into a Python object - this is less safe than str2type,
-    which never returns eval. That principle helps to detect wrong input.)
+    command line into Python objects. Given a default value for the
+    input (with the right object type), str2type will return the right
+    conversion function.  (str2obj can do the thing, but will often
+    return eval, which turns any string into a Python object - this is
+    less safe than str2type, which never returns eval. That principle
+    helps to detect wrong input.)
 
-    A problem with str2type appears if value is an int and the intended
-    object type was a float (value is a default value that happened to be
-    an integer). In that case, int is returned and all float values given
-    as input strings become int objects, which is undesired. It is therefore
-    extremely important to provide a correct value object to str2type!
+    Method: If value is bool, we use scitools.misc.str2bool, which
+    is capable of converting strings like "on", "off","yes", "no",
+    "true" and "false" to boolean values. Otherwise, we use
+    type(value) as the conversion function. However, there is one
+    problem with type(value) when value is an int while the user
+    intended a general real number - in that case one may get
+    wrong answers because of wrong (int) round off. Another problem
+    concerns user-defined types. For those (which str2type knows
+    nothing about) the str function is returned, implying that the
+    conversion from a string to the right user-defined type cannot
+    be done by the function returned from str2type.
 
     Examples::
     >>> f = str2type((1,4,3))
     >>> f.__name__
     'tuple'
 
-    >>> f = str2type(0.2)
+    >>> f = str2type(MySpecialClass())
     >>> f.__name__
-    'float'
+    'str'
 
     >>> f = str2type('some string')
     >>> f.__name__
@@ -294,33 +301,14 @@ def str2type(value):
     >>> f.__name__
     'str2bool'
 
-    Method: If value is bool, str2bool is returned; if value is
-    a string, str is returned; if value is float, int, complex, list,
-    tuple, or any other basic Python type, eval is returned.
-    Otherwise, value has unknown type (user-defined class, for instance)
-    and str is returned so that the user's code has to perform the
-    right conversion from the string to the proper Python object.
-
-    Note that we could return eval if value is not a string or a boolean,
+    (Note that we could return eval if value is not a string or a boolean,
     but eval is never returned from this function to avoid conversion
-    to an unintended type.
+    to an unintended type.)
     """
     if isinstance(value, bool):
         return str2bool
-    elif isinstance(value, basestring):
-        return str
-    elif isinstance(value, int):
-        return int
-    elif isinstance(value, float):
-        return float
-    elif isinstance(value, complex):
-        return complex
-    elif isinstance(value, list):
-        return list
-    elif isinstance(value, tuple):
-        return tuple
-    elif isinstance(value, dict):
-        return dict
+    elif isinstance(value, (basestring,int,float,complex,list,tuple,dict)):
+        return type(value)
     else:
         # the type of value is probably defined in some unknown module
         return str
