@@ -45,19 +45,53 @@ and launch X11 by running `startx` from a Cygwin prompt. Try to run
 the `test.py` script that comes with `Gnuplot.py`. If everything
 works, Easyviz can use Gnuplot.
 
-__Using Gnuplot binaries from gnuplot.sourceforge.net.__
-In this case you only need to unzip the file to some folder like 
+__Using Gnuplot Binaries.__
+
+ o Download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+   A possible URL is
+!bc
+http://puzzle.dl.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
+!ec
+   The zip file may have another name for a newer version of Gnuplot on
+   Windows.
+
+ o Unzip the `gp424win32.zip` file to the folder
 !bc
 C:\gnuplot
 !ec
-and add 
+
+ o Add the folder name
 !bc
-C:\gnuplot\binaries
+C:\gnuplot\bin
 !ec
-where `pgnuplot.exe` is located to the `PATH`
-environment variable. 
-#This approach was quite slow on a tested computer so
-#the first approach worked better.
+   to the `PATH` environment variable (this is done in a graphical interface for
+   setting environment variables).
+
+ o Check out the latest SVN revision of the Python interface to
+   Gnuplot, which is the Python module file `Gnuplot.py`:
+!bc
+svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
+!ec
+
+ o Install `Gnuplot.py`:
+!bc
+cd gnuplot-py
+python setup.py bdist_wininst
+dist\gnuplot-py-1.8+.win32.exe
+!ec
+
+ o Check out the latest SVN revision of SciTools:
+!bc
+svn co http://scitools.googlecode.com/svn/trunk/ scitools
+!ec
+
+ o Install SciTools:
+!bc
+cd scitools
+python setup.py bdist_wininst
+dist\SciTools-0.4.win32.exe
+!ec
+
 
 _____Installing Matplotlib_____
 

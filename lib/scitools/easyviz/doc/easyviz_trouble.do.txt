@@ -14,53 +14,6 @@ gnuplot> plot sin(x)
 !ec
 This should result in a plot of the sine function on the screen.
 If this command does not work, Easyviz will not work with the Gnuplot
-backend. 
-
-=== Installing the Gnuplot Software on Windows ===
-
- o Download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
-   A possible URL is
-!bc
-http://puzzle.dl.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
-!ec
-   The zip file may have another name for a newer version of Gnuplot on
-   Windows.
-
- o Unzip the `gp424win32.zip` file to the folder
-!bc
-C:\gnuplot
-!ec
-
- o Add the folder name
-!bc
-C:\gnuplot\bin
-!ec
-   to the `PATH` environment variable (this is done in a graphical interface for
-   setting environment variables).
-
- o Check out the latest SVN revision of the Python interface to
-   Gnuplot, which is the Python module file `Gnuplot.py`:
-!bc
-svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
-!ec
-
- o Install `Gnuplot.py`:
-!bc
-cd gnuplot-py
-python setup.py bdist_wininst
-dist\gnuplot-py-1.8+.win32.exe
-!ec
-
- o Check out the latest SVN revision of SciTools:
-!bc
-svn co http://scitools.googlecode.com/svn/trunk/ scitools
-!ec
-
- o Install SciTools:
-!bc
-cd scitools
-python setup.py bdist_wininst
-dist\SciTools-0.4.win32.exe
-!ec
-
+backend. See the section *Installing Gnuplot* if you need help with 
+installing the Gnuplot program and its Python interface.
 
