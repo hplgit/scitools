@@ -1,4 +1,0 @@
-- boundary indicators must be separate class,
-  make a boind for each indicator (needs a grid ref, has a name,
-  has a list of node numbers or side numbers or whatever indicating
-  the parts of the boundary)
