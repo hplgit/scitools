@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# part of Lumpy (used by Lumpy.py)
 
 """Wrapper classes for use with tkinter.
 

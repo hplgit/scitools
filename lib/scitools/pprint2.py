@@ -1,7 +1,24 @@
-#  Modification of the Python module pprint: the module has a global variable
-#  float_format, which can be set to a printf format string, which will be
-#  used when writing out float objects.
-#  Modifications: Hans Petter Langtangen, hpl@simula.no
+#  Modification of the Python module pprint: the pprint2 module has a
+#  global variable float_format, which can be set to a printf format
+#  string, which will be used when writing out float objects.
+#  Lists, dicts, and tuples containing real numbers will be printed
+#  in a prettier way with pprint2.
+
+# >>> data = [1/3., 0.2, 0.1]
+# >>> data
+# [0.33333333333333331, 0.20000000000000001, 0.10000000000000001]
+# >>> import pprint
+# >>> pprint.pprint(data)
+# [0.33333333333333331, 0.20000000000000001, 0.10000000000000001]
+# >>> import scitools.pprint2 as pprint2
+# >>> pprint2.pprint(data)
+# [0.333333, 0.2, 0.1]
+# >>> pprint2.float_format = '%10.3E'
+# >>> pprint2.pprint(data)
+# [ 3.333E-01,  2.000E-01,  1.000E-01]
+
+#  Modifications by Hans Petter Langtangen, hpl@simula.no
+#------------------------------------------------------------------------
 
 #  Author:      Fred L. Drake, Jr.
 #               fdrake@acm.org

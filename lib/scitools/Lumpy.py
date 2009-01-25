@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# some adjustments to the original Lumpy.py code (marked "hpl code" below)
 
 """UML diagrams for Python
 
