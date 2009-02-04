@@ -981,3 +981,7 @@ class MatplotlibBackend(BaseClass):
     
 plt = MatplotlibBackend()  # create backend instance
 use(plt, globals())        # export public namespace of plt to globals()
+
+# We should close all figure windows on program exit:
+import atexit
+atexit.register(close, 'all')
