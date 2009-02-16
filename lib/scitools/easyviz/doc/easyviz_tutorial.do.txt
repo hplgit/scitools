@@ -8,8 +8,8 @@ corresponding $y$ values at these points, before we call the
 `plot(t,y)` command to make the curve plot.  Here is the complete
 program:
 
-!bc
-from scitools.all import *
+!bc pro
+from scitools.std import *
 
 def f(t):
     return t**2*exp(-t**2)
@@ -27,8 +27,8 @@ pre-allocate the `y` array and fill it with values, element by
 element, in a (slow) Python loop. Alternatively, we may operate
 on the whole `t` array at once, which yields faster and shorter code:
 
-!bc
-from scitools.all import *
+!bc pro
+from scitools.std import *
 
 def f(t):
     return t**2*exp(-t**2)
@@ -39,14 +39,14 @@ plot(t, y)
 !ec
 The `f` function can also be skipped, if desired, so that we can write
 directly
-!bc
+!bc cod
 y = t**2*exp(-t**2)
 !ec
 
 To include the plot in electronic documents, we need a hardcopy of the
 figure in PostScript, PNG, or another image format.  The `hardcopy`
 command produces files with images in various formats:
-!bc
+!bc cod
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 !ec
@@ -67,7 +67,7 @@ most plotting programs will automatically adjust the axes to the range of the
 data).
 All such things are easily added after the `plot` command:
 
-!bc
+!bc cod
 xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)')
@@ -79,7 +79,7 @@ Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" `plot` command where
 all the plot properties can be set at once:
 
-!bc
+!bc cod
 plot(t, y,
      xlabel='t',
      ylabel='y',
@@ -117,8 +117,8 @@ issue a `hold('on')` command. Alternatively, we can provide all
 data in a single `plot` command. A complete program illustrates the
 different approaches:
 
-!bc
-from scitools.all import *   # for curve plotting
+!bc pro
+from scitools.std import *   # for curve plotting
 
 def f1(t):
     return t**2*exp(-t**2)
@@ -174,7 +174,7 @@ example, `r-` represents a red (`r`) line (`-`), while `bo` means blue
 (`b`) circles (`o`). The line style specification is added as an
 argument after the $x$ and $y$ coordinate arrays of the curve:
 
-!bc
+!bc cod
 plot(t, y1, 'r-')
 hold('on')
 plot(t, y2, 'bo')
@@ -194,8 +194,8 @@ first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
 
-!bc
-from scitools.all import *
+!bc pro
+from scitools.std import *
 
 def f1(t):
     return t**2*exp(-t**2)
@@ -276,8 +276,8 @@ __Another Example.__ Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
 the $f_2(t)$ curve:
 
-!bc
-from scitools.all import *
+!bc pro
+from scitools.std import *
 
 def f1(t):
     return t**2*exp(-t**2)
@@ -319,7 +319,7 @@ are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
 
-!bc
+!bc cod
 t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 !ec
@@ -333,7 +333,7 @@ _____Interactive Plotting Sessions_____
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the `plot` command
 returns a result:
-!bc
+!bc py
 >>> t = linspace(0, 3, 51)
 >>> plot(t, t**2*exp(-t**2))
 [<scitools.easyviz.common.Line object at 0xb5727f6c>]
@@ -345,7 +345,7 @@ particular type of plot. The `plot` command returns a list of
 `Line` objects, one for each curve in the plot. These `Line`
 objects can be invoked to see, for instance, the value of different
 parameters in the plot:
-!bc
+!bc py
 >>> line, = plot(x, y, 'b')
 >>> getp(line)
 {'description': '',
@@ -369,8 +369,8 @@ individual plot files into a movie file.
 __Example.__ The function
 $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$ 
 is known as the Gaussian function or the probability density function
-of the normal or Gaussian distribution.  This bell-shaped function is
-"wide" large $s$ and "peak-formed" for small $s$, see Figure
+of the normal (or Gaussian) distribution.  This bell-shaped function is
+"wide" for large $s$ and "peak-formed" for small $s$, see Figure
 ref{fig:plot4}. The function is symmetric around $x=m$ ($m=0$ in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as $s$ is decreased. In Python we implement the
@@ -405,8 +405,8 @@ Now we are ready to take a look at the complete code
 for animating how the Gaussian function evolves as the $s$ parameter
 is decreased from 2 to 0.2:
 
-!bc
-from scitools.all import *
+!bc cod
+from scitools.std import *
 import time
 
 def f(x, m, s):
@@ -468,7 +468,7 @@ We recommend to always remove previously generated plot files before
 a new set of files is made. Otherwise, the movie may get old and new
 files mixed up. The following Python code removes all files
 of the form `tmp*.png`:
-!bc
+!bc cod
 import glob, os
 for filename in glob.glob('tmp*.png'):
     os.remove(filename)
@@ -476,7 +476,7 @@ for filename in glob.glob('tmp*.png'):
 These code lines should be inserted at the beginning of the code example
 above. Alternatively, one may store all plotfiles in a subfolder
 and later delete the subfolder. Here is a suitable code segment:
-!bc
+!bc cod
 import shutil, os
 subdir = 'temp'  # subfolder for plot files
 if os.path.isdir(subdir):  # does the subfolder already exist?
@@ -500,7 +500,7 @@ You can get complete control of the movie format and the
 name of the movie file by supplying more arguments to the
 `movie` function. First, let us generate an animated GIF
 file called `tmpmovie.gif`:
-!bc
+!bc cod
 movie('tmp_*.eps', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
@@ -515,13 +515,13 @@ argument. One can alternatively put the GIF file in a web page
 in an IMG tag such that a browser automatically displays the movie.
 
 An MPEG movie can be generated by the call
-!bc
+!bc cod
 movie('tmp_*.eps', encoder='ffmpeg', fps=4,
       output_file='tmpmovie1.mpeg',
 !ec
 Alternatively, we may use the `ppmtompeg` encoder from the Netpbm suite of
 image manipulation tools:
-!bc
+!bc cod
 movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
       output_file='tmpmovie2.mpeg',
 !ec
@@ -530,7 +530,7 @@ The `ppmtompeg` supports only a few (high) frame rates.
 The next sample call to `movie` uses the Mencoder tool and specifies 
 some additional arguments (video codec, video bitrate, and the 
 quantization scale):
-!bc
+!bc cod
 movie('tmp_*.eps', encoder='mencoder', fps=24,
       output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
@@ -553,25 +553,27 @@ _____Advanced Easyviz Topics_____
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants
 to fine-control the plot or how Easyviz behaves. First, we explain
-how to speed up the `from scitools.all import *` statement. 
+how to speed up the `from scitools.std import *` statement. 
 Second, we show how to operate with the plotting program directly and
 using plotting program-specific advanced features. Third, we explain
 how the user can grab `Figure` and `Axis` objects that Easyviz
 produces "behind the curtain".
 
 __Importing Just Easyviz.__
-The `from scitools.all import *` statement imports many modules and packages:
-  * `from scitools.easyviz import *`
-  * `from numpy import *`
-  * `from scipy import *` (if `scipy` is available)
-  * the Python modules `sys`, `os`, `math`, `operator`, `pprint`
-  * `from numpyutils import *` (SciTools module)
-  * the `StringFunction` class from `scitools.StringFunction` and the 
-    functions `watch` and `trace` from `scitools.debug`
-
+label{easyviz:imports}
+The `from scitools.std import *` statement imports many modules and packages::
+!bc cod
+from numpy import *    
+from scitools.numpyutils import *  # some convenience functions
+from numpy.lib.scimath import *
+from scipy import *                # if scipy is installed
+import sys, operator, math
+from scitools.StringFunction import StringFunction
+from glob import glob
+!ec
 The `scipy` import can take some time and lead to slow start-up of plot 
 scripts. A more minimalistic import for curve plotting is 
-!bc
+!bc cod
 from scitools.easyviz import *
 from numpy import *
 !ec
@@ -606,7 +608,7 @@ this object directly. Here is an example of the typical recipe, written
 after the core of the plot is made in the ordinary (plotting 
 program-independent) way:
 
-!bc
+!bc cod
 g = get_backend()
 if backend == 'gnuplot':
     # g is a Gnuplot object, work with Gnuplot commands directly:
@@ -637,7 +639,7 @@ providing the information in separate commands or as part of a `plot`
 command. The `gca` (get current axis) command returns an `Axis`
 object, whose `set` method can be used to set axis properties:
 
-!bc
+!bc cod
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      hardcopy='tmp2.eps')
@@ -656,7 +658,7 @@ The command `figure(3)` sets the current figure object to figure number
 
 Suppose we want to plot our `y1` and `y2` data in two separate windows.
 We need in this case to work with two `Figure` objects:
-!bc
+!bc cod
 plot(t, y1, 'r-', xlabel='t', ylabel='y',
      axis=[0, 4, -0.1, 0.6])
 
@@ -667,7 +669,7 @@ plot(t, y2, 'bo', xlabel='t', ylabel='y')
 We may now go back to the first figure (with the `y1` data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot:
-!bc
+!bc cod
 figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
@@ -684,7 +686,7 @@ show()
 The current `Figure` object is reached by `gcf` (get current figure),
 and the `dump` method dumps the internal parameters in the `Figure`
 object:
-!bc
+!bc cod
 fig = gcf(); print fig.dump()
 !ec
 These parameters may be of interest for troubleshooting when Easyviz
@@ -697,7 +699,7 @@ rows and `c` columns and set the current axis to axis number `a`.
 In the present case `subplot(2,1,1)` sets the current axis to
 the first set of axis in a "table" with two rows and one column.
 Here is the code for this third figure:
-!bc
+!bc cod
 figure()  # new, third figure
 # plot y1 and y2 as two axis in the same figure:
 subplot(2, 1, 1)
@@ -711,7 +713,7 @@ hardcopy('tmp2_3.eps')
 
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
-!bc
+!bc cod
 ax = axes(viewport=[left, bottom, width, height])
 !ec
 The four parameteres `left`, `bottom`, `width`, `height`

@@ -102,7 +102,7 @@ if _globaldata._load_scipy:
         del _import_list[-2]       # del the numpy entry (scipy overrides)
         _import_list.append("from scipy import *")
     except ImportError:
-        # no SciPy package, NumPy only
+        # ImportError is likely due to missin scipy
         if VERBOSE >= 2: print 'tried to import scipy, but could not find it'
         pass
     _t2 = _time.clock(); _import_times += 'scipy=%g ' % (_t2 - _t1)

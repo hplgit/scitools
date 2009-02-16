@@ -47,7 +47,7 @@ interpreter.
 
 
 import inspect, traceback
-from Gui import *
+from _Gui import *
 
 # get the version of Python
 v = sys.version.split()[0].split('.')

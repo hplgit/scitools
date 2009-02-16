@@ -2,6 +2,8 @@
 Import a set of modules. If modules are missing,
 one can get these as a comma-separated string, or
 one can raise exceptions.
+
+See test block for demo of how this module can be used.
 """
 
 def missing(*module_names):

@@ -120,7 +120,7 @@ choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
 
 An alternative method is to import a specific backend in a program. Instead
-of the `from scitools.all import *` statement one writes
+of the `from scitools.std import *` statement one writes
 !bc
 from numpy import *
 from scitools.easyviz.gnuplot_ import *  # work with Gnuplot

@@ -20,10 +20,10 @@ else:
     from distutils.core import setup
 
 setup(
-    #version = str(scitools.version), 
-    #author = ', '.join(scitools.author),
-    version = '0.51',
-    author = 'Hans Petter Langtangen',
+    version = str(scitools.version), 
+    author = ', '.join(scitools.author),
+    #version = '0.6',
+    #author = 'Hans Petter Langtangen',
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
     license = "BSD",

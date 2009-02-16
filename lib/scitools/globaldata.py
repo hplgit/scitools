@@ -1,6 +1,8 @@
 """
 Holds global data %s  
 in the scitools package, loaded from a configuration file.
+(This module also demonstrate how to work with global parameters
+accross a package in Python.)
 
 The default configuration file looks like this:
 

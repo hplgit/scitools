@@ -9,19 +9,19 @@ import os, sys, operator, math
 
 
 # to copied into this file by preprocess.py:
-#  #include "numpyload.py"
+#  #include "_numpyload.py"
 #  #include "numpyutils.py"
 
-#---- build doc string from numpyload/util doc strings ----
+#---- build doc string from _numpyload/util doc strings ----
 
-import numpyload as _load
+import _numpyload as _load
 _load.__doc__ += """
 
 Example on what gets imported
 -----------------------------
 
 (basic_NumPy holds the name of the Numeric
-Python module after import of numpytools (or numpyload):
+Python module after import of numpytools (or _numpyload):
 
 # default:
 unix/DOS> python -c "from numpytools import *; print basic_NumPy"
@@ -41,7 +41,7 @@ numarray
 """
 
 import numpyutils as _utils
-# insert numpyutils and numpyload documentation into the
+# insert numpyutils and _numpyload documentation into the
 # doc string of this numpytools module:
 __doc__ = __doc__ % (_load.__doc__, _utils.__doc__)
 # clean up:
