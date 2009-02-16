@@ -1,0 +1,31 @@
+
+_gnuplot.py:
+  Cross-platform execution of the Gnuplot program. Used in [1].
+
+gnuplot.bat:
+  Script for running Gnuplot on Windows (calls _gnuplot.py). Used in [1].
+
+file2interactive.py:
+  Utility for taking a set of Python statements in a file and
+  creating the corresponding interactive Python shell session.
+
+floatdiff.py:
+  Script for examining differences in regression tests involving
+  floating-point numbers. Used in [1].
+
+regression.py:
+  Simple front-end script to SciTools' Regression module. Used in [1].
+
+ps2mpeg.py:
+  Utility for turning a set of PostScript files into an MPEG movie,
+  using moeg_encode.
+
+profiler.py:
+  Script for simplifying the execution of Python's profiling tools. Used in [1].
+
+subst.py:
+  Script for subsituting a a phrase by another in a set of files.
+  Accepts regular expressions. Treated in [1].
+
+[1] H. P. Langtangen: Python Scripting for Computational Science. 
+    Third edition, second printing. Springer, 2009.

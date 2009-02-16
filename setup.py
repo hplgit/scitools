@@ -22,7 +22,7 @@ else:
 setup(
     #version = str(scitools.version), 
     #author = ', '.join(scitools.author),
-    version = '0.4',
+    version = '0.51',
     author = 'Hans Petter Langtangen',
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
@@ -32,11 +32,13 @@ setup(
     package_dir = {'': 'lib'},
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"), 
-		#os.path.join("scitools", "pyPDE"),
 		],
     package_data = {'': ['scitools.cfg']},
     scripts = [os.path.join('bin', f)
                for f in os.listdir('bin')
-               if not (f.startswith('.') or f.endswith('~') or
-                       f.endswith('.old') or f.endswith('.bak'))],
+               if not (f == 'README' or
+                       f.startswith('.') or
+                       f.endswith('~') or
+                       f.endswith('.old') or
+                       f.endswith('.bak'))],
     )

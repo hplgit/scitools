@@ -79,15 +79,18 @@ granted by Allen Downey to include these under a BSD license.
 -------------------------------------------------------------------------------
 5. Credits
 
-SciTools is mainly developed by Hans Petter Langtangen <hpl@simula.no>,
-however, some modules included in SciTools are written by others:
+SciTools was initially mainly developed by Hans Petter Langtangen
+<hpl@simula.no>. The Easyviz package was mainly developed by Johannes
+H. Ring <johannr@simula.no>.
+
+Some modules included in SciTools are written by others:
 
 Allen B. Downey <downey@allendowney.com> wrote Lumpy.py and Gui.py
 Imri Goldberg <lorgandon@gmail.com> wrote aplotter.py
 Fred L. Drake, Jr. <fdrake@acm.org> wrote pprint2.py
 Gael Varoquaux <gael.varoquaux@normalesup.org> wrote pyreport
 
-Other contributors:
+Code contributors include:
 
 Rolv E. Bredesen <rolveb@simula.no>
 Joachim B. Haga <jobh@simula.no>
@@ -95,7 +98,6 @@ Mario Pernici <Mario.Pernici@mi.infn.it>
 Johannes H. Ring <johannr@simula.no>
 Ilmar Wilbers <ilmarw@simula.no>
 Arve Knudsen <arvenk@simula.no>
-Lars Storjord <lstor@simula.no>
 
 -------------------------------------------------------------------------------
 6. Contact
