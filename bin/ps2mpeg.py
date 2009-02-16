@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+"""
+Turn a set of PostScript files into an MPEG movie.
+Each PostScript file becomes a frame in the movie.
+mpeg_encode is used to create the MPEG file.
+"""
+
 import sys, re, os, glob
 
 if len(sys.argv) < 2:
