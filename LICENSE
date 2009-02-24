@@ -1,4 +1,4 @@
-Copyright (c) 2007-2008, Hans Petter Langtangen <hpl@simula.no> and
+Copyright (c) 2007-2009, Hans Petter Langtangen <hpl@simula.no> and
 Simula Resarch Laboratory.
 
 All rights reserved.
@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Other files with different licenses:
 
-lib/scitools/Lumpy.py and lib/scitools/Gui.py:
+lib/scitools/Lumpy.py and lib/scitools/_Gui.py:
 
   Copyright 2005 Allen B. Downey
 
