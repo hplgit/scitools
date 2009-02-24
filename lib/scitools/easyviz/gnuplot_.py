@@ -1109,8 +1109,8 @@ class GnuplotBackend(BaseClass):
                     viewport = (0,0,1,1)
                 origin = viewport[:2]
                 size = 1/ncolumns, 1/nrows
-                self._g('set origin %g,%g' % origin)
-                self._g('set size %g,%g' % size)
+                self._g('set origin %s,%s' % (origin[0], origin[1]))
+                self._g('set size %s,%s' % (size[0], size[1]))
             plotitems = ax.getp('plotitems')
             plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
