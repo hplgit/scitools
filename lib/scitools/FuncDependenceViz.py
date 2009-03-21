@@ -28,7 +28,7 @@ class FuncDependenceViz:
         """
         import modulecheck
         modulecheck.exception("FuncDependenceViz module:",
-                              'Pmw', 'Tkinter', 'Gnuplot', 'Numeric')
+                              'Pmw', 'Tkinter', 'Gnuplot', 'numpy')
         
         self.master = master
         self.top = Tkinter.Frame(master, borderwidth=2)
@@ -208,7 +208,7 @@ class FuncDependenceViz:
             for funcname in self.funcs:
                 plots.append(Gnuplot.Data(
                     self.x, self.y[funcname],
-                    with="line %d" % line_counter))
+                    with_="line %d" % line_counter))
                 line_counter += 1
             self.g.plot(*tuple(plots))
         elif self.viztool == "Pmw.Blt.Graph":

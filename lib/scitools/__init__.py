@@ -62,3 +62,8 @@ author = __author__
 __acknowledgemets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
                       'Allen B. Downey', 'Imri Goldberg', \
                       'Fred L. Drake', 'Gael Varoquaux',
+
+# backward compatibility:
+import sys, std
+sys.modules['scitools.all'] = std
+del std, sys
