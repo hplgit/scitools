@@ -4,7 +4,7 @@
 Demonstration of the quiver command.
 """
 
-from scitools.all import *
+from scitools.std import *
 
 setp(interactive=False)
 

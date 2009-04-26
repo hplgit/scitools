@@ -1,5 +1,5 @@
 """Plot three curves. Use compact Easyviz syntax."""
-from scitools.all import *
+from scitools.std import *
 
 # plot three curves in the same plot:
 t = linspace(0, 3, 51)  # 51 points between 0 and 3

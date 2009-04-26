@@ -4,7 +4,7 @@
 Example on how to work with references to objects and the setp command.
 """
 
-from scitools.all import *
+from scitools.std import *
 
 setp(interactive=False)
 

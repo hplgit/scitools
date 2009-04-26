@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from scitools.all import *
+from scitools.std import *
 from numpy.random import rand
 
 # simple example:

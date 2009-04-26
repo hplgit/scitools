@@ -6,7 +6,7 @@ and add some backend specific commands. The example is based on the
 legend_demo.py file from Matplotlib.
 """
 
-from scitools.all import *
+from scitools.std import *
 
 a = linspace(0,3,150)
 b = linspace(0,3,150)

@@ -5,7 +5,7 @@ Demonstration of some more advanced examples on how to use the surf command
 to plot surfaces.
 """
 
-from scitools.all import *
+from scitools.std import *
 
 def test():
     """Converted version of the Klein Bottle demo in Matlab."""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from scitools.all import *
+from scitools.std import *
 
 # A simple contour plot of the peaks function:
 contour(peaks())

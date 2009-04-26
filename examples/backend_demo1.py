@@ -11,7 +11,7 @@ getp with only the handler argument will show full property list
 """
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no'
 
-from scitools.all import *
+from scitools.std import *
 
 def _pylab_patch_alpha(alpha=0.2):
     """Makes patches (e.g. fill objects) located in the current axes

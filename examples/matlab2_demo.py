@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from scitools.all import *
+from scitools.std import *
 
 # We start with a simple example using the plot command:
 

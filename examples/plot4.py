@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 import time
 
 def f(x, m, s):

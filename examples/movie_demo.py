@@ -5,7 +5,7 @@ Shows several ways of how one can create a movie file from a series of
 images by using the movie function in scitools.easyviz.
 """
 
-from scitools.all import *
+from scitools.std import *
 import os, time, glob
 
 x = seq(0, 15, 0.1)

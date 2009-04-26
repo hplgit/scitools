@@ -104,5 +104,11 @@ run
 apt-get install python-matplotlib dvipng
 !ec
 
+Usually, Matplotlib builds quite easily from the source of the package,
+using the standard Python build and install technique:
+!bc
+python setup.py install
+!ec
+
 ___Windows___
 You can download prebuilt binaries from the Matplotlib home page.

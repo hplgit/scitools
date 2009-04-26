@@ -49,9 +49,11 @@ package with more sophisticated widgets, included an interactive
 widget for curve plotting. This widget is based on the BLT package
 (an extension of Tk written in C).
 
-The BLT backend offers currenlty only basic 
+The BLT backend offers currenlty only basic plotting functionality.
 
 __Veusz__. 
 
 __VTK__. VTK (Visualization ToolKit) is a package primarily aimed at
 visualizing 2D and 3D scalar and vector fields by a range of techniques.
+VTK is used to achieve 2D and 3D visualizations of the same type as 
+Matlab offers.

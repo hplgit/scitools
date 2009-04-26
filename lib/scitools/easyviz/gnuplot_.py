@@ -766,6 +766,14 @@ class GnuplotBackend(BaseClass):
             else:
                 c = facecolor
             kwargs = {'with': 'boxes %s' % c}
+            legend = item.getp('legend')
+            if legend:
+                legend = eval(item.getp('legend'))[j]
+            kwargs['title'] = legend
+            #print "|%s|" % item.getp('legend')
+            # does not work:
+            #kwargs = {'with': 'boxes %s' % c,
+            #          'title': item.getp('legend'),}
             data.append(Gnuplot.Data(x_, y_, **kwargs))
         return data
 

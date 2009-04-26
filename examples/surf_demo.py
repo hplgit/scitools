@@ -2,7 +2,7 @@
 
 """Demonstration on how to use the surf command."""
 
-from scitools.all import *
+from scitools.std import *
 
 xv, yv = ndgrid(linspace(-2,2,21),linspace(-1,1,11))
 values = xv**2*yv-2*yv

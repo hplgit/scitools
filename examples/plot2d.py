@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 
 def f1(t):
     return t**2*exp(-t**2)

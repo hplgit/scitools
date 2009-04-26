@@ -2,7 +2,7 @@
 
 """Examples taken from fill_demo.py and fill_demo2.py in Matplotlib."""
 
-from scitools.all import *
+from scitools.std import *
 
 t = linspace(0.0, 1.0, 101)
 s = sin(2*2*pi*t)

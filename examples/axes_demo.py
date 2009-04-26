@@ -2,7 +2,7 @@
 
 """Demonstration on how to place arbitrary axes in the different backends."""
 
-from scitools.all import *
+from scitools.std import *
 
 x = linspace(0,1,51)
 y1 = sin(2*pi*x)

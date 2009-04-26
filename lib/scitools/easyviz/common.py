@@ -3345,6 +3345,21 @@ class BaseClass(object):
 
         Calling::
 
+            bar(Y)
+
+        will draw a bar for each of the elements in the array Y.
+        If Y is two-dimensional array, a group of bars from the
+        elements of each row of Y will be created.
+
+        Calling::
+
+            bar(x,Y)
+
+        is the same as above only that the values on the x axis is defined
+        by the array/list x. 
+
+        Calling::
+
            bar(data)
 
         where data is a dictionary on the form
@@ -3356,21 +3371,6 @@ class BaseClass(object):
         will draw m bars for every name (key in data), one for each key in
         data[name], where the height indicates the value. The name is placed
         beneath each of the bar groups on the x axis.
-        
-        Calling::
-
-            bar(Y)
-
-        will draw a bar for each of the elements in the vector/matrix Y.
-        If Y is a matrix, a group of bars from the elements of each row of
-        Y will be created.
-
-        Calling::
-
-            bar(x,Y)
-
-        is the same as above only that the values on the x axis is defined
-        by the vector x. 
 
         Calling::
 
@@ -3401,6 +3401,15 @@ class BaseClass(object):
 
         >>> figure()
         >>> bar(rand(4,3))
+        >>> data = array([[0.2, 1], [0.4, 0.8], [0.3, 0.6]])
+        >>> figure()
+        >>> bar(data,
+        ...     barticks=['method1', 'method2',  'method3'],
+        ...     legend=('optimized', 'standard'),
+        ...     axis=[-1,data.shape[0], 0,1.2],
+        ...     ylabel='normalized CPU-time',
+        ...     title='Comparison of optimized vs. standard run')
+
         """
         kwargs['description'] = 'bar: bar graph'
         ax, args, nargs = self._check_args(*args)

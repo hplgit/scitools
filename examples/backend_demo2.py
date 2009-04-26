@@ -10,7 +10,7 @@ Grab matplolib backend to prepare and tweak easyviz plots
 
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no>'
 
-from scitools.all import *
+from scitools.std import *
 
 def _pylab_thick_frame(lines=10,  width=5, size=8, labelsize=20):
     """Prepare matplotlib backend with parameters for a nice thick frame

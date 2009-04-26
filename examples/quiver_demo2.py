@@ -5,7 +5,7 @@ Demonstration of the quiver command in combination with other plotting
 commands.
 """
 
-from scitools.all import *
+from scitools.std import *
 
 setp(interactive=False)
 

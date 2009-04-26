@@ -1,4 +1,4 @@
-from scitools.all import *   # for curve plotting
+from scitools.std import *   # for curve plotting
 
 def f(t):
     return t**2*exp(-t**2)
