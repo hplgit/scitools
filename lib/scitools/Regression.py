@@ -751,7 +751,9 @@ class Verify:
         path = os.path.join(os.curdir, scriptfile)
         # path is executable since we made an os.chmod in self._diff
         failure, output = os_system(path, failure_handling='silent')
-        if failure: print 'Failure in regression test', path
+        if failure:
+            print 'Failure in regression test', path
+            print output
 
     def clean(self, dirname):
         return
