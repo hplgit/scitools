@@ -24,7 +24,7 @@ plot(t, y)
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. In this program we
 pre-allocate the `y` array and fill it with values, element by
-element, in a (slow) Python loop. Alternatively, we may operate
+element, in a Python loop. Alternatively, we may operate
 on the whole `t` array at once, which yields faster and shorter code:
 
 !bc pro
@@ -92,7 +92,7 @@ plot(t, y,
 
 With `show=False` one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-you generate a large number of plots in a loop.
+one generates a large number of plots in a loop.
 
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
@@ -110,7 +110,7 @@ _____Plotting Multiple Curves_____
 A common plotting task is to compare two or more curves, which
 requires multiple curves to be drawn in the same plot.
 Suppose we want to plot the two functions $f_1(t)=t^2\exp(-t^2)$
-and $f_2(t)=t^4\exp(-t^2)$. If we issue two `plot` commands after
+and $f_2(t)=t^4\exp(-t^2)$. If we write two `plot` commands after
 each other, two separate plots will be made. To make the second
 `plot` command draw the curve in the first plot, we need to
 issue a `hold('on')` command. Alternatively, we can provide all
@@ -164,8 +164,8 @@ When plotting multiple curves in the same plot, the individual curves
 get distinct default line styles, depending on the program that is
 used to produce the curve (and the settings for this program). It
 might well happen that you get a green and a red curve (which is bad
-for a significant portion of the male population).  We may therefore
-often want to control the line style in detail. Say we want the first
+for a significant portion of the male population).  Therefore,
+we often want to control the line style in detail. Say we want the first
 curve (`t` and `y1`) to be drawn as a red solid line and the second
 curve (`t` and `y2`) as blue circles at the discrete data points.  The
 Matlab-inspired syntax for specifying line types applies a letter for
@@ -405,7 +405,7 @@ Now we are ready to take a look at the complete code
 for animating how the Gaussian function evolves as the $s$ parameter
 is decreased from 2 to 0.2:
 
-!bc cod
+!bc pro
 from scitools.std import *
 import time
 

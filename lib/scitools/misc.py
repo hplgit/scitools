@@ -6,7 +6,6 @@ A collection of Python utilities originally developed for the
 import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 from scitools.StringFunction import StringFunction
-from numpy import *   # convenient to have for StringFunction objects
 
 def test_if_module_exists(modulename, msg='', raise_exception=False):
     """
