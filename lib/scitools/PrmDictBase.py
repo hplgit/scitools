@@ -205,7 +205,7 @@ Here is an example::
         if prm in d:
             if prm in self._type_check:
                 # prm should be type-checked
-                if isinstance(self._type_check[prm], int):
+                if isinstance(self._type_check[prm], (int,float)):
                     # (bool is subclass of int)
                     if self._type_check[prm]:
                         # type check against prev. value or None:
@@ -217,13 +217,13 @@ Here is an example::
                             can_set = True
                 elif isinstance(self._type_check[prm], (tuple,list,type)):
                     # self._type_check[prm] holds either the type or
-                    # a typle/list of types; test against them
+                    # a tuple/list of types; test against them
                     #print 'testing %s=%s against type %s' % (prm,value,self._type_check[prm])
                     if isinstance(value, self._type_check[prm]):
                         can_set = True
                     else:
                         raise TypeError, \
-                              '\n\n%s=%s: %s has type %, not %s' % \
+                              '\n\n%s=%s: %s has type %s, not %s' % \
                               (prm, value, prm, self._type_check[prm],
                                type(value))
 

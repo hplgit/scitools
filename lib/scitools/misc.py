@@ -242,7 +242,7 @@ def str2obj(s, globals=globals(), locals=locals(), debug=False):
     try:
         b = str2bool(s)
         return b
-    except ValueError, e:
+    except (ValueError, TypeError), e:
         # s is not a boolean value, try eval(s):
         try:
             b = eval(s, globals, locals)

@@ -64,6 +64,11 @@ __acknowledgemets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
                       'Fred L. Drake', 'Gael Varoquaux',
 
 # backward compatibility:
-import sys, std
+import sys, std, TkGUI
 sys.modules['scitools.all'] = std
-del std, sys
+#sys.modules['scitools.CanvasCoords'] = TkGUI
+#sys.modules['scitools.DrawFunction'] = TkGUI
+#sys.modules['scitools.FuncDependenceViz'] = TkGUI
+#sys.modules['scitools.FunctionSelector'] = TkGUI
+#sys.modules['scitools.ParameterInterface'] = TkGUI
+del std, sys, TkGUI
