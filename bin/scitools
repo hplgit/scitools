@@ -19,13 +19,13 @@ regression:
 
 ps2mpeg:
   Utility for turning a set of PostScript files into an MPEG movie,
-  using moeg_encode.
+  using mpeg_encode or ppmtompeg.
 
 profiler:
   Script for simplifying the execution of Python's profiling tools. Used in [1].
 
 subst:
-  Script for subsituting a a phrase by another in a set of files.
+  Script for subsituting a phrase by another in a set of files.
   Accepts regular expressions. Treated in [1].
 
 [1] H. P. Langtangen: Python Scripting for Computational Science. 
@@ -264,26 +264,31 @@ def main_profiler():
 
 
 
-def usage_ps2pmeg():
-        print """\
-    Usage: scitools ps2mpeg [-nocrop] frame0000.ps frame0001.ps ... [movie.mpeg]
-    (series of ps files to be included in an MPEG movie movie.mpeg)
-    """ % sys.argv[0]
+def usage_ps2mpeg():
+        print "Usage: scitools ps2mpeg [-nocrop] frame0000.ps frame0001.ps ..."\
+              " [movie.mpeg] (series of ps files to be included in an MPEG "\
+              " movie movie.mpeg)"
 
 def main_ps2mpeg():
     if len(sys.argv) < 3:
         usage_ps2mpeg()
         sys.exit(1)
 
-    # check that we have mpeg_encode:
+    # check that we have mpeg_encode or ppmtompeg:
     from scitools.misc import findprograms
-    if not findprograms('mpeg_encode'):
+    if not findprograms('mpeg_encode') or not findprograms('ppmtompeg'):
         print """
     ps2mpeg.py requires the mpeg_encode MPEG encoder program.
     Please install mpeg_encode, see URL:
     http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html
+
+    You may also use the ppmtompeg program included in the netpbm package
+    which is available in most distros.
     """
         sys.exit(1)
+    encoder = 'mpeg_encode'
+    if not findprograms(encoder):
+        encoder = 'ppmtompeg'
 
     # cropping takes time so we can omit that step:
     crop = 1
@@ -298,7 +303,7 @@ def main_ps2mpeg():
     else:
         mpeg_file = "movie.mpeg"
 
-    found = findprograms(('gs', 'convert', 'mpeg_encode'), write_message=True)
+    found = findprograms(('gs', 'convert', encoder), write_message=True)
     if not found:
         sys.exit(1)
 
@@ -430,7 +435,7 @@ BQSCALE		25
 REFERENCE_FRAME	ORIGINAL
 """ % vars())
     f.close()
-    failure = os.system("mpeg_encode " + mpeg_encode_file)
+    failure = os.system(encoder + " " + mpeg_encode_file)
     if failure:
         print '\n\nps2mpeg.py: could not make MPEG movie'
     else:
@@ -498,8 +503,9 @@ if __name__ == '__main__':
     try:
         program = sys.argv[1]
     except IndexError:
-        print '%s: missing argument "%s", must be one of\n%s' % \
-              (str(legal_programs)[1:-1])
+        print '%s: missing second argument, must be one of\n%s' % \
+              (sys.argv[0], str(legal_programs)[1:-1])
+        sys.exit(1)
 
     if program == 'subst':
         main_subst()
@@ -515,7 +521,7 @@ if __name__ == '__main__':
         main_floatdiff()
     elif program == 'help' or program == '--help' or program == '-h':
         for p in legal_programs:
-            exec('print usage_%()' % p)
+            exec('usage_%s()' % p)
     else:
         print 'Cannot recognize command', program
     
