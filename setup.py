@@ -7,7 +7,22 @@ Usage:
 python setup.py install [, --prefix=$PREFIX]
 """
 
-import os, sys, socket, re, glob
+import os, sys, socket, re, glob, platform
+
+scripts = [os.path.join("bin", "scitools"), os.path.join("bin", "pyreport")]
+
+if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
+    # In the Windows command prompt we can't execute Python scripts 
+    # without a .py extension. A solution is to create batch files
+    # that runs the different scripts.
+    batch_files = []
+    for script in scripts:
+        batch_file = script + ".bat"
+        f = open(batch_file, "w")
+        f.write('python "%%~dp0\%s" %%*\n' % os.path.split(script)[1])
+        f.close()
+        batch_files.append(batch_file)
+    scripts.extend(batch_files)
 
 # make sure we import from scitools in this package, not an installed one:
 sys.path.insert(0, os.path.join('lib'))
@@ -34,11 +49,8 @@ setup(
                 os.path.join("scitools", "easyviz"), 
 		],
     package_data = {'': ['scitools.cfg']},
-    scripts = [os.path.join('bin', f)
-               for f in os.listdir('bin')
-               if not (f == 'README' or
-                       f.startswith('.') or
-                       f.endswith('~') or
-                       f.endswith('.old') or
-                       f.endswith('.bak'))],
+    scripts = scripts,
+    data_files=[(os.path.join("share", "man", "man1"),
+                 [os.path.join("doc", "man", "man1", "scitools.1.gz"),
+                  os.path.join("doc", "man", "man1", "pyreport.1.gz")])],
     )
