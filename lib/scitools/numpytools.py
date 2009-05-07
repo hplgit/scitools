@@ -210,8 +210,7 @@ _NumPy_modules = (
     ('RNG', '', 'numpy.random'),
     ('FFT', 'numarray.fft', 'numpy.fft'),
     ('MLab', 'numarray.linear_algebra.mlab', 'numpy.oldnumeric.mlab'),
-    #('MA', 'numarray.ma.MA', 'numpy.core.ma'),
-    ('MA', 'numarray.ma.MA', 'numpy.ma'), # use this line for newer numpy.
+    ('MA', 'numarray.ma.MA', 'numpy.ma'),
     )
      
 if basic_NumPy == 'numpy':
@@ -1206,7 +1205,7 @@ def norm_inf(u):
 
 def solve_tridiag_linear_system(A, b):
     """
-    Solve a tridiagonal linear system of the form::
+    Solve an n times n tridiagonal linear system of the form::
     
      A[0,1]*x[0] + A[0,2]*x[1]                                        = 0
      A[1,0]*x[0] + A[1,1]*x[1] + A[1,2]*x[2]                          = 0
@@ -1218,8 +1217,9 @@ def solve_tridiag_linear_system(A, b):
      ...
                                     A[n-1,0]*x[n-2] + A[n-1,1]*x[n-1] = 0
 
-    That is, the diagonal is stored in A[:,1], the subdiagonal
-    is stored in A[1:,0], and the superdiagonal is stored in A[:n-2,2].
+    The diagonal of the coefficent matrix is stored in A[:,1],
+    the subdiagonal is stored in A[1:,0], and the superdiagonal
+    is stored in A[:-1,2].
     """
 
     #The storage is not memory friendly in Python/C (diagonals stored
@@ -1227,9 +1227,22 @@ def solve_tridiag_linear_system(A, b):
     #computing, a copy is taken and the F77 routine works with the
     #same algorithm and hence optimal (columnwise traversal)
     #Fortran storage.
-    
+
+    c, d = factorize_tridiag_matrix(A)
+    return solve_tridiag_factored_system(b, A, c, d)
+
+
+def factorize_tridiag_matrix(A):
+    """
+    Perform the factorization step only in solving a tridiagonal
+    linear system. See the function solve_tridiag_linear_system
+    for how the matrix A is stored.
+    Two arrays, c and d, are returned, and these represent,
+    together with superdiagonal A[:-1,2], the factorized form of
+    A. To solve a system with solve_tridiag_factored_system,
+    A, c, and d must be passed as arguments.
+    """
     n = len(b)
-    x = zeros(n, 'd')  # solution
     # scratch arrays:
     d = zeros(n, 'd');  c = zeros(n, 'd');  m = zeros(n, 'd')
 
@@ -1240,14 +1253,24 @@ def solve_tridiag_linear_system(A, b):
         m[k] = A[k,0]/d[k-1]
         d[k] = A[k,1] - m[k]*A[k-1,2]
         c[k] = b[k] - m[k]*c[k-1]
-    x[n-1] = c[n-1]/d[n-1]
+    return c, d
+
+
+def solve_tridiag_factored_system(b, A, c, d):
+    """
+    The backsubsitution part of solving a tridiagonal linear system.
+    The right-hand side is b, while A, c, and d represent the
+    factored matrix (see the factorize_tridiag_matrix function).
+    The solution x to A*x=b is returned.
+    """
+    n = len(b)
+    x = zeros(n, 'd')  # solution
 
     # back substitution:
+    x[n-1] = c[n-1]/d[n-1]
     for k in iseq(start=n-2, stop=0, inc=-1):
         x[k] = (c[k] - A[k,2]*x[k+1])/d[k]
-
     return x
-
 
 
 
@@ -1713,7 +1736,6 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
         for i in range(len(x)):
             x[i] = (bin_edges[i] + bin_edges[i+1])/2.0
     return x, y
-
         
 
 def factorial(n, method='reduce'):

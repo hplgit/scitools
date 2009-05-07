@@ -24,7 +24,8 @@ set of keystrokes using a Matlab-like syntax. A simple::
 
         t = linspace(0, 3, 51)    # 51 points between 0 and 3
         y = t**2*exp(-t**2)
-        plot(t, y) 
+        plot(t, y)
+
 
 plots the data in (the NumPy array) t versus the data in (the NumPy
 array) y. If you need legends, control of the axis, as well as
@@ -50,6 +51,7 @@ commands::
         hardcopy('tmp0.ps')  # this one can be included in LaTeX
         hardcopy('tmp0.png') # this one can be included in HTML
 
+
 Easyviz also allows these additional function calls to be executed
 as a part of the plot call::
 
@@ -63,6 +65,7 @@ as a part of the plot call::
         
         hardcopy('tmp0.png') # this one can be included in HTML
 
+
 A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands::
 
@@ -75,6 +78,7 @@ as an elevated surface with colors using these commands::
               clabels='on',
               hidden='on',
               show=True)
+
 
 
 *Second princple.* Easyviz is just a unified interface to other
@@ -120,18 +124,20 @@ or by adding a command-line option::
 
          --SCITOOLS_easyviz_backend name
 
+
 where name is the name of the backend: gnuplot, vtk, matplotlib,
 blt, etc. Which backend you
 choose depends on what you have available on your computer system and
 what kind of plotting functionality you want.
 
 An alternative method is to import a specific backend in a program. Instead
-of the from scitools.all import * statement one writes::
+of the from scitools.std import * statement one writes::
 
         from numpy import *
         from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
         # or
         from scitools.easyviz.vtk_ import *      # work with VTK
+
 
 Note the trailing underscore in the module names for the various backends.
 
@@ -145,6 +151,7 @@ backend in Easyviz can be set::
 
         [easyviz]
         backend = vtk
+
 
 A .scitools.cfg file can be placed in the current working folder,
 thereby affecting plots made in this folder, or it can be located in
@@ -181,7 +188,7 @@ corresponding y values at these points, before we call the
 plot(t,y) command to make the curve plot.  Here is the complete
 program::
 
-        from scitools.all import *
+        from scitools.std import *
         
         def f(t):
             return t**2*exp(-t**2)
@@ -193,13 +200,14 @@ program::
         
         plot(t, y)
 
+
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. In this program we
 pre-allocate the y array and fill it with values, element by
-element, in a (slow) Python loop. Alternatively, we may operate
+element, in a Python loop. Alternatively, we may operate
 on the whole t array at once, which yields faster and shorter code::
 
-        from scitools.all import *
+        from scitools.std import *
         
         def f(t):
             return t**2*exp(-t**2)
@@ -208,10 +216,12 @@ on the whole t array at once, which yields faster and shorter code::
         y = f(t)                  # compute all f values at once
         plot(t, y)
 
+
 The f function can also be skipped, if desired, so that we can write
 directly::
 
         y = t**2*exp(-t**2)
+
 
 
 To include the plot in electronic documents, we need a hardcopy of the
@@ -220,6 +230,7 @@ command produces files with images in various formats::
 
         hardcopy('tmp1.eps') # produce PostScript
         hardcopy('tmp1.png') # produce PNG
+
 
 The filename extension determines the format: .ps or
 .eps for PostScript, and .png for PNG. 
@@ -245,6 +256,7 @@ All such things are easily added after the plot command::
         axis([0, 3, -0.05, 0.6])   # [tmin, tmax, ymin, ymax]
         title('My First Easyviz Demo')
 
+
 This syntax is inspired by Matlab to make the switch between
 Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" plot command where
@@ -260,15 +272,16 @@ all the plot properties can be set at once::
              show=True)
 
 
+
 With show=False one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-you generate a large number of plots in a loop.
+one generates a large number of plots in a loop.
 
 Note that we in the curve legend write t square as t^2 (LaTeX style)
 rather than t**2 (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
 programs (Gnuplot is one example). 
-See Figure fig:plot1c for how the modified
+See Figure fig:plot1c for what the modified
 plot looks like and how t^2 is typeset in Gnuplot.
 
 
@@ -281,14 +294,14 @@ Plotting Multiple Curves
 A common plotting task is to compare two or more curves, which
 requires multiple curves to be drawn in the same plot.
 Suppose we want to plot the two functions f_1(t)=t^2\exp(-t^2)
-and f_2(t)=t^4\exp(-t^2). If we issue two plot commands after
+and f_2(t)=t^4\exp(-t^2). If we write two plot commands after
 each other, two separate plots will be made. To make the second
 plot command draw the curve in the first plot, we need to
 issue a hold('on') command. Alternatively, we can provide all
 data in a single plot command. A complete program illustrates the
 different approaches::
 
-        from scitools.all import *   # for curve plotting
+        from scitools.std import *   # for curve plotting
         
         def f1(t):
             return t**2*exp(-t**2)
@@ -317,6 +330,7 @@ different approaches::
              title='Plotting two curves in the same plot',
              hardcopy='tmp2.eps')
 
+
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure fig:plot2a.
@@ -335,8 +349,8 @@ When plotting multiple curves in the same plot, the individual curves
 get distinct default line styles, depending on the program that is
 used to produce the curve (and the settings for this program). It
 might well happen that you get a green and a red curve (which is bad
-for a significant portion of the male population).  We may therefore
-often want to control the line style in detail. Say we want the first
+for a significant portion of the male population).  Therefore,
+we often want to control the line style in detail. Say we want the first
 curve (t and y1) to be drawn as a red solid line and the second
 curve (t and y2) as blue circles at the discrete data points.  The
 Matlab-inspired syntax for specifying line types applies a letter for
@@ -352,6 +366,7 @@ argument after the x and y coordinate arrays of the curve::
         # or
         plot(t, y1, 'r-', t, y2, 'bo')
 
+
 The effect of controlling the line styles can be seen in 
 Figure fig:plot2c.
 
@@ -362,15 +377,9 @@ We can grab every 4 points out of the t array by using an appropriate
 slice: t2 = t[::4]. Note that the first colon means the range from the
 first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
-when we pick out a set of values of the array.
+when we pick out a set of values of the array::
 
-In this plot we also adjust the size of the line and the circles by
-adding an integer: r-6 means a red line with thickness 6 and bo5
-means red circles with size 5. The effect of the given line thickness
-and symbol size depends on the underlying plotting program. For
-the Gnuplot program one can view the effect in Figure fig:plot2g::
-
-        from scitools.all import *
+        from scitools.std import *
         
         def f1(t):
             return t**2*exp(-t**2)
@@ -390,6 +399,13 @@ the Gnuplot program one can view the effect in Figure fig:plot2g::
              title='Plotting two curves in the same plot',
              hardcopy='tmp2.eps')
 
+
+
+In this plot we also adjust the size of the line and the circles by
+adding an integer: r-6 means a red line with thickness 6 and bo5
+means red circles with size 5. The effect of the given line thickness
+and symbol size depends on the underlying plotting program. For
+the Gnuplot program one can view the effect in Figure fig:plot2g.
 
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3).
 
@@ -445,7 +461,7 @@ which means a black solid line with black crosses at the data points.
 curve where the data points are slightly randomly distributed around
 the f_2(t) curve::
 
-        from scitools.all import *
+        from scitools.std import *
         
         def f1(t):
             return t**2*exp(-t**2)
@@ -477,19 +493,24 @@ the f_2(t) curve::
         hardcopy('tmp3.eps') 
         hardcopy('tmp3.png')
 
+
 The plot is shown in Figure fig:plot3.
 
 FIGURE:[figs/plot3.eps] A plot with three curves.
 
 *Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
-Here is an example on minimalistic syntax for
+Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples::
 
         t = linspace(0, 3, 51)
         plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 
 
+
+*More Examples.* The examples in this tutorial, as well as
+additional examples, can be found in the examples directory in the
+root directory of the SciTools source code tree.
 
 Interactive Plotting Sessions
 -----------------------------
@@ -501,6 +522,7 @@ returns a result::
         >>> t = linspace(0, 3, 51)
         >>> plot(t, t**2*exp(-t**2))
         [<scitools.easyviz.common.Line object at 0xb5727f6c>]
+
 
 Most users will just ignore this output line.
 
@@ -519,6 +541,7 @@ parameters in the plot::
          'pointsize': 1.0,
          ...
 
+
 Such output is mostly of interest to advanced users.
 
 
@@ -528,21 +551,20 @@ easyviz:movie
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,
-plots stored in files. Thereafter we must use a tool to combine the
-individual plot files into a movie file. We shall illustrate the
-process with an example.
+plots stored in files.  Thereafter we must use a tool to combine the
+individual plot files into a movie file.
 
-The function
-f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2),
-known as the "Gaussian bell function",
-is a "wide" function for large s and "peak-formed" for small s,
-see Figure fig:plot4. The function is symmetric around x=m
-(m=0 in the figure).
-Our goal is to make an animation where we see how this function evolves
-as s is decreased. In Python we implement the formula above as
-a function f(x, m, s). 
+*Example.* The function
+f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2) 
+is known as the Gaussian function or the probability density function
+of the normal (or Gaussian) distribution.  This bell-shaped function is
+"wide" for large s and "peak-formed" for small s, see Figure
+fig:plot4. The function is symmetric around x=m (m=0 in the
+figure).  Our goal is to make an animation where we see how this
+function evolves as s is decreased. In Python we implement the
+formula above as a function f(x, m, s).
 
-FIGURE:[figs/plot4.eps] Different shapes of a Gaussian bell function.
+FIGURE:[figs/plot4.eps] Different shapes of a Gaussian function.
 
 The animation is created by varying s in a loop and for each s
 issue a plot command. A moving curve is then visible on the screen.
@@ -568,10 +590,10 @@ function value is very small already 3s away from x=m. We may therefore
 limit the x coordinates to [m-3s,m+3s].
 
 Now we are ready to take a look at the complete code
-for animating how the Gaussian bell curve evolves as the s parameter
+for animating how the Gaussian function evolves as the s parameter
 is decreased from 2 to 0.2::
 
-        from scitools.all import *
+        from scitools.std import *
         import time
         
         def f(x, m, s):
@@ -592,34 +614,71 @@ is decreased from 2 to 0.2::
             y = f(x, m, s)
             plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
                  xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-                 hardcopy='tmp_%04d.png' % counter)
+                 hardcopy='tmp%04d.png' % counter)
             counter += 1
             #time.sleep(0.2)  # can insert a pause to control movie speed
         
         # make movie file the simplest possible way:
-        movie('tmp_*.png')
+        movie('tmp*.png')
 
 
-First note that the s values are decreasing (linspace handles this
+
+Note that the s values are decreasing (linspace handles this
 automatically if the start value is greater than the stop value).
 Also note that we, simply because we think it is visually more
 attractive, let the y axis go from -0.1 although the f function is
 always greater than zero.
 
-For each frame (plot) in the movie we store the plot in a file.  The
+*Remarks on Filenames.* For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
-of the form stem0001.ext, stem0002.ext, stem0003.ext, etc.,
-since an alphabetic sort of the filenames then gives the right
-sequence of the files (and so does the expression stem*.ext used
-in the operating system or in Python's fnmatch or glob modules).
-In our example, stem is tmp_, and .ext is .eps
-(which implies the PostScript format in the hardcopy).
-The printf format 04d pads the integers with zeros such that
-1 becomes 0001, 13 becomes 0013 and so on.
+of the form tmp0001.png, tmp0002.png, tmp0003.png, etc.  The
+printf format 04d pads the integers with zeros such that 1 becomes
+0001, 13 becomes 0013 and so on.  The expression tmp*.png will
+now expand (by an alphabetic sort) to a list of all files in proper
+order. Without the padding with zeros, i.e., names of the form
+tmp1.png, tmp2.png, ..., tmp12.png, etc., the alphabetic order
+will give a wrong sequence of frames in the movie. For instance, 
+tmp12.png will appear before tmp2.png.
 
-Having a set of stem*.ext files, one can simply generate a movie by
-a movie('stem*.ext') call. The movie function generates a movie
+Note that the names of plot files specified when making hardopies must
+be consistent with the specification of names in the call to movie.
+Typically, one applies a Unix wildcard notation in the call to
+movie, say plotfile*.eps, where the asterix will match any set of
+characters. When specifying hardcopies, we must then use a filename
+that is consistent with plotfile*.eps, that is, the filename must
+start with plotfile and end with .eps, but in between
+these two parts we are free to construct (e.g.) a frame number padded
+with zeros.
+
+We recommend to always remove previously generated plot files before
+a new set of files is made. Otherwise, the movie may get old and new
+files mixed up. The following Python code removes all files
+of the form tmp*.png::
+
+        import glob, os
+        for filename in glob.glob('tmp*.png'):
+            os.remove(filename)
+
+
+These code lines should be inserted at the beginning of the code example
+above. Alternatively, one may store all plotfiles in a subfolder
+and later delete the subfolder. Here is a suitable code segment::
+
+        import shutil, os
+        subdir = 'temp'  # subfolder for plot files
+        if os.path.isdir(subdir):  # does the subfolder already exist?
+            shutil.rmtree(subdir)  # delete the whole folder
+        os.mkdir(subdir) # make new subfolder
+        os.chdir(subdir) # move to subfolder
+        # do all the plotting
+        # make movie
+        os.chdir(os.pardir)  # optional: move up to parent folder
+
+
+
+*Movie Formats.* Having a set of (e.g.) tmp*.png files, one can simply generate a movie by
+a movie('tmp*.png') call. The movie function generates a movie
 file called movie.avi (AVI format), movie.mpeg (MPEG format), or
 movie.gif (animated GIF format) in the current working
 directory. The movie format depends on the encoders found on your
@@ -632,6 +691,7 @@ file called tmpmovie.gif::
 
         movie('tmp_*.eps', encoder='convert', fps=2,
               output_file='tmpmovie.gif')
+
 
 The generation of animated GIF images applies the convert program
 from the ImageMagick suite. This program must of course be installed
@@ -648,11 +708,13 @@ An MPEG movie can be generated by the call::
         movie('tmp_*.eps', encoder='ffmpeg', fps=4,
               output_file='tmpmovie1.mpeg',
 
+
 Alternatively, we may use the ppmtompeg encoder from the Netpbm suite of
 image manipulation tools::
 
         movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
               output_file='tmpmovie2.mpeg',
+
 
 The ppmtompeg supports only a few (high) frame rates.
 
@@ -666,6 +728,17 @@ quantization scale)::
 
 
 
+Playing movie files can be done by a lot of programs. Windows Media
+Player is a default choice on Windows machines. On Unix, a variety
+of tools can be used. For animated GIF files the animate program
+from the ImageMagick suite is suitable, or one can simply
+show the file in a web page with the HTML command
+<img src="tmpmovie.gif">. AVI and MPEG files can be played by,
+for example, the
+myplayer, vlc, or totem programs.
+
+
+
 
 Advanced Easyviz Topics
 -----------------------
@@ -673,26 +746,30 @@ Advanced Easyviz Topics
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants
 to fine-control the plot or how Easyviz behaves. First, we explain
-how to speed up the from scitools.all import * statement. 
+how to speed up the from scitools.std import * statement. 
 Second, we show how to operate with the plotting program directly and
 using plotting program-specific advanced features. Third, we explain
 how the user can grab Figure and Axis objects that Easyviz
 produces "behind the curtain".
 
-*Importing Just Easyviz.* The from scitools.all import * statement imports many modules and packages:
-  * from scitools.easyviz import *
-  * from numpy import *
-  * from scipy import * (if scipy is available)
-  * the Python modules sys, os, math, operator, pprint
-  * from numpyutils import * (SciTools module)
-  * the StringFunction class from scitools.StringFunction and the 
-    functions watch and trace from scitools.debug
+*Importing Just Easyviz.* easyviz:imports
+The from scitools.std import * statement imports many modules and packages::
+!bc   cod
+        from numpy import *    
+        from scitools.numpyutils import *  # some convenience functions
+        from numpy.lib.scimath import *
+        from scipy import *                # if scipy is installed
+        import sys, operator, math
+        from scitools.StringFunction import StringFunction
+        from glob import glob
+
 
 The scipy import can take some time and lead to slow start-up of plot 
 scripts. A more minimalistic import for curve plotting is 
-!bc  
+!bc   cod
         from scitools.easyviz import *
         from numpy import *
+
 
 Alternatively, one can edit the scitools.cfg configure file or add
 one's own .scitools.cfg file with redefinition of selected options,
@@ -732,6 +809,7 @@ program-independent) way::
             g.refresh()
             g.hardcopy('tmp2.eps')  # make new hardcopy
 
+
 We refer to the Gnuplot manual for the features of this package and
 the syntax of the commands. The idea is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
@@ -764,6 +842,7 @@ object, whose set method can be used to set axis properties::
         show()  # show the plot again after ax.setp actions
 
 
+
 The figure() call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command figure(3) sets the current figure object to figure number
@@ -779,6 +858,7 @@ We need in this case to work with two Figure objects::
         
         plot(t, y2, 'bo', xlabel='t', ylabel='y')
 
+
 We may now go back to the first figure (with the y1 data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot::
@@ -789,6 +869,7 @@ version of the plot::
         show()
         hardcopy('tmp2_1.eps')
 
+
 We can also adjust figure 2::
 
         figure(2)  # go to second figure
@@ -796,11 +877,13 @@ We can also adjust figure 2::
         hardcopy('tmp2_2.eps')
         show()
 
+
 The current Figure object is reached by gcf (get current figure),
 and the dump method dumps the internal parameters in the Figure
 object::
 
         fig = gcf(); print fig.dump()
+
 
 These parameters may be of interest for troubleshooting when Easyviz
 does not produce what you expect.
@@ -824,10 +907,12 @@ Here is the code for this third figure::
         hardcopy('tmp2_3.eps')
 
 
+
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command::
 
         ax = axes(viewport=[left, bottom, width, height])
+
 
 The four parameteres left, bottom, width, height
 are location values between 0 and 1 ((0,0) is the lower-left corner 
@@ -880,6 +965,7 @@ the plot command for curves::
         values = sin(sqrt(xv**2 + yv**2))
         h = mesh(xv, yv, values)
 
+
 The mesh command returns a reference to a new Surface object, here
 stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
@@ -893,6 +979,7 @@ The corresponding scalar computations using a double loop read::
             for j in xrange(y.size):
                 values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
 
+
 However, for the mesh command to work, we need the vectorized
 extensions xv and yv of x and y.
 
@@ -902,6 +989,7 @@ The surf command employs the same syntax, but results in a different
 plot (see Figure fig:surf_ex1)::
 
         surf(xv, yv, values)
+
 
 
 FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend).
@@ -917,6 +1005,7 @@ The surf command offers many possibilities to adjust the resulting plot::
         view(35,45)
         show()
 
+
 Here we have specified a flat shading model, added a color bar, changed
 the color map to hot, set some suitable axis values, and changed the
 view point (the view takes two arguments: the azimuthal rotation and
@@ -930,6 +1019,7 @@ statement (just as Easyviz offers for the plot command)::
              colormap=hot(),
              axis=[-6,6,-6,6,-1.5,1.5],
              view=[35,45])
+
 
 Figure fig:surf_ex2 displays the result.
 
@@ -974,6 +1064,7 @@ The basic syntax follows that of mesh and surf::
 
         contour(xv, yv, values)
 
+
 By default, five uniformly spaced contour level curves are drawn, see
 Figure fig:contour_ex1. 
 
@@ -985,6 +1076,7 @@ argument::
         n = 15   # number of desired contour levels
         contour(xv, yv, values, n)
 
+
 The result can be seen in Figure fig:contour_ex2. 
 
 FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend).
@@ -995,6 +1087,7 @@ contour levels to be drawn can easily be specified as a list::
 
         levels = [-0.5, 0.1, 0.3, 0.9]
         contour(xv, yv, values, levels, clabels='on')
+
 
 Now, the levels list specify the values of the contour levels, and
 the clabel keyword allows labeling of the level values in the plot.
@@ -1012,6 +1105,7 @@ The contourf command,
 !bc  
         contourf(xv, yv, values)
 
+
 gives a filled contour plot as shown in Figure fig:contourf_ex1.
 Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
@@ -1022,6 +1116,7 @@ The contour lines can be "lifted up" in 3D space, as shown in Figure
 fig:contour3_ex1, using the contour3 command::
 
         contour3(xv, yv, values, 15)
+
 
 
 FIGURE:[figs/contour3_ex1.eps] Example on the contour3 command for elevated contour levels (Gnuplot backend).
@@ -1040,6 +1135,7 @@ commands::
               grid='off',
               view=(30,40))
 
+
 The resulting plots are displayed in Figures fig:meshc_ex1 and
 fig:surfc_ex1.
 
@@ -1057,6 +1153,7 @@ flat surface viewed from above. The simplest form of this command
 follows the syntax of the other commands::
 
         pcolor(xv, yv, values)
+
 
 We can set the color shading in a pseudocolor plot either by giving
 the shading keyword argument to pcolor or by calling the shading
@@ -1091,6 +1188,7 @@ then looks as follows::
         axis('tight')
         show()
 
+
 After creating some scalar volume data with the flow function, we
 create an isosurface with the isovalue -3. The isosurface is then
 set a bit transparent (opacity=0.5) before we specify the shading
@@ -1113,6 +1211,7 @@ Here is another example that demonstrates the isosurface command
         view([-65,20])
         axis('tight')
         show()
+
 
 Figure fig:isosurface2 shows the resulting plot.
 
@@ -1139,6 +1238,7 @@ slice_ command::
         zslice = [-2, 0]
         slice_(x, y, z, v, xslice, yslice, zslice,
                colormap=hsv(), grid='off')
+
 
 Note that we here use the SciTools function seq for specifying a
 uniform partitioning of an interval - the linspace function from
@@ -1170,6 +1270,7 @@ using 3D scalar field data from the flow function::
         view(3)
         show()
 
+
 The first four arguments given to contourslice in this example are
 the extended coordinates of the grid (x, y, z) and the 3D scalar
 field values in the volume (v). The next three arguments defines the
@@ -1195,6 +1296,7 @@ three-dimensional MRI data set::
         # Displaying a 2D Contour Slice:
         contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
 
+
 The MRI data set is loaded from the file mri_matlab_v6.mat with the
 aid from the loadmat function available in the io module in the
 SciPy package. We then create a 2D contour slice plot with one slice
@@ -1203,7 +1305,7 @@ in the plane z=8. Figure fig:contourslice3 displays the result.
 FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend).
 
 
-Visualization of vector fields
+Visualization of Vector Fields
 ------------------------------
 
 A vector field is a function from space or space-time to a vector
@@ -1232,6 +1334,7 @@ goes as follows::
         uv, vv = gradient(values)
         quiver(xv, yv, uv, vv)
 
+
 Our vector field in this example is simply the gradient of the scalar
 field used to illustrate the commands for 2D scalar field plotting.
 The gradient function computes the gradient using finite difference
@@ -1248,6 +1351,7 @@ additional argument to scale the default lengths::
 
         scale = 2
         quiver(xv, yv, uv, vv, scale)
+
 
 This value of scale will thus stretch the vectors to their double length. 
 To turn off the automatic scaling, we can set the scale value to zero.
@@ -1272,7 +1376,8 @@ associated gradient field::
         figure(2)
         contour(xv, yv, values, 15) 
         hold('on')
-        quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
+        quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
+
 
 The resulting plots can be seen in Figure fig:quiver_ex2 and
 fig:quiver_ex3. 
@@ -1291,6 +1396,7 @@ backend supports 3D quiver plots. A simple example of plotting the
         vv = yv
         wv = zv
         quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
+
 
 The strings 'filled' and 'r' are optional and makes the arrows
 become filled 
@@ -1340,6 +1446,7 @@ the wind data set and then draw some stream lines from it::
         streamline(x, y, z, u, v, w, sx, sy, sz,
                    view=3, axis=[60,140,10,60,-5,20])
 
+
 The wind data set is stored in a binary `.mat`-file called
 wind.mat. To load the data in this file into Python, we can use the
 loadmat function which is available through the io module in
@@ -1356,6 +1463,7 @@ point coordinates for the stream lines. In this example, we have used
 the ndgrid command to define the starting points with the line::
 
         sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
+
 
 This command defines starting points which all lie on x=80,
 y=20,30,40,50, and z=0,5,10,15. We now have all the data we need
@@ -1376,6 +1484,7 @@ same wind data set::
         	   axis='tight',
         	   shading='interp')
 
+
 The arrays sx, sy, and sz are the same as in the previous
 example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
@@ -1391,6 +1500,7 @@ Finally, we illustrate the streamribbon command::
                      view=3,
                      axis='tight',
                      shading='interp')
+
 
 Figure fig:streamribbon_ex1 shows the resulting stream ribbons.
 
@@ -1482,10 +1592,12 @@ method in a Axis instance::
         ax = gca()                  # get current axis
         ax.setp(xmin=-2, xmax=2)
 
+
 To extract the values of these limits we can write::
 
         xmin = ax.getp('xmin')
         xmax = ax.getp('xmax')
+
 
 Normal use will seldom involve setp and getp functions, since most
 users will apply the Matlab-inspired interface and set, e.g., the
@@ -1498,7 +1610,164 @@ limits by::
 
 
 
-"""
+
+
+
+
+
+
+Installation
+============
+
+Easyviz comes with the SciTools package, so to install Easyviz, you
+just go to the scitools folder and run::
+
+        Unix/DOS> python setup.py install
+
+
+Easyviz is reached as the package scitools.easyviz and can be
+imported in several ways (see the paragraph heading
+"Importing Just Easyviz" in the Tutorial).
+
+Easyviz will not work unless you have one or more plotting programs
+correctly installed. Below, we have collected some information on installing
+various programs. This information is in a very preliminary and incomplete
+stage.
+
+Installing Gnuplot
+------------------
+
+Linux/Unix
+~~~~~~~~~~
+
+*Compile from Source.* Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
+easily on most Unix systems. You also need the Gnuplot Python
+module, which can be obtained from gnuplot-py.sourceforge.net.
+
+*Debian/Ubuntu.* Prebuilt versions are available for Debian/Ubuntu:
+run::
+
+        apt-get install gnuplot gnuplot-x11 python-gnuplot
+
+
+
+Windows
+~~~~~~~
+
+On Windows, one can either use Gnuplot under Cygwin or use a precompiled
+binary from sourgeforce.net.
+
+*Using the Gnuplot Cygwin package.* In this case there are two things that needs to be changed in the
+gp_cygwin.py file in the top-level directory of the Gnuplot.py
+source tree. First you need to change the gnuplot_command variable
+to gnuplot instead of pgnuplot.exe. Then you should change the
+default_term variable to x11 instead of windows since the
+Gnuplot Cygwin package is not compiled with the Windows
+terminal. Finally, install Gnuplot.py (python setup.py install)
+and launch X11 by running startx from a Cygwin prompt. Try to run
+the test.py script that comes with Gnuplot.py. If everything
+works, Easyviz can use Gnuplot.
+
+*Using Gnuplot Binaries.* 1. Download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+   A possible URL is::
+
+        http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
+
+
+   The zip file may have another name for a newer version of Gnuplot on
+   Windows.
+
+2. Unzip the gp424win32.zip file to the folder::
+
+        C:\gnuplot
+
+
+
+3. Add the folder name::
+
+        C:\gnuplot\bin
+
+
+   to the PATH environment variable (this is done in a graphical interface for
+   setting environment variables).
+
+4. Check out the latest SVN revision of the Python interface to
+   Gnuplot, which is the Python module file Gnuplot.py::
+
+        svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
+
+
+
+5. Install Gnuplot.py::
+
+        cd gnuplot-py
+        python setup.py bdist_wininst
+        dist\gnuplot-py-1.8+.win32.exe
+
+
+
+6. Check out the latest SVN revision of SciTools::
+
+        svn co http://scitools.googlecode.com/svn/trunk/ scitools
+
+
+
+7. Install SciTools::
+
+        cd scitools
+        python setup.py bdist_wininst
+        dist\SciTools-0.4.win32.exe
+
+
+
+
+Installing Matplotlib
+---------------------
+
+Linux/Unix
+~~~~~~~~~~
+
+*Debian/Ubuntu.* Prebuilt versions are available for Debian/Ubuntu:
+run::
+
+        apt-get install python-matplotlib dvipng
+
+
+
+Usually, Matplotlib builds quite easily from the source of the package,
+using the standard Python build and install technique::
+
+        python setup.py install
+
+
+
+Windows
+~~~~~~~
+You can download prebuilt binaries from the Matplotlib home page.
+
+Troubleshooting
+===============
+
+
+Check Your Backends!
+~~~~~~~~~~~~~~~~~~~~
+
+When you encounter a problem with Easyviz plotting, make sure that the
+backend works correctly on its own (there may, e.g., be installation
+problems with the backend - Easyviz just calls the backend to do the
+plotting). 
+
+For the Gnuplot backend you can try the following commands in a
+terminal window::
+
+        Unix/DOS> gnuplot
+        gnuplot> plot sin(x)
+
+
+This should result in a plot of the sine function on the screen.
+If this command does not work, Easyviz will not work with the Gnuplot
+backend. See the section *Installing Gnuplot* if you need help with 
+installing the Gnuplot program and its Python interface."""
 
 __author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
 
