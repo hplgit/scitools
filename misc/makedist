@@ -1,0 +1,53 @@
+#!/bin/bash
+# This script creates a new release of SciTools
+
+# Make sure we have the current version
+echo '--- Synchronizing repository'
+sleep 1
+svn update
+svn commit
+
+# Update ChangeLog
+echo "Updating ChangeLog with svn2cl"
+svn2cl --break-before-msg=2 --authors=misc/authors.xml --group-by-day 
+
+# Update version numbers
+echo '--- Update version number in lib/scitools/__init__.py'
+sleep 1
+emacs -nw lib/scitools/__init__.py
+
+# Get the version number
+VERSION=`python -c "import sys;sys.path.insert(0, 'lib');import scitools;print scitools.__version__"`
+echo "--- Version number is $VERSION"
+
+# Tag repository
+svn copy https://scitools.googlecode.com/svn/trunk \
+  https://scitools.googlecode.com/svn/tags/$VERSION \
+  -m "Tagging release $VERSION of SciTools."
+
+# Commit changes to svn
+echo '--- Committing changes to repository'
+sleep 1
+svn commit
+
+# Create archive
+echo "--- Creating release $VERSION of SciTools"
+rm -rf build
+mkdir build
+cd build
+svn export http://scitools.googlecode.com/svn/trunk scitools-$VERSION
+tar czf scitools-$VERSION.tar.gz scitools-$VERSION
+cd ..
+
+# Create Windows installer
+rm -f dist/SciTools-$VERSION.win32.exe
+python setup.py bdist_wininst
+
+# Upload files to googlecode
+echo '--- Uploading files to googlecode'
+googlecode_upload.py --project=scitools build/scitools-$VERSION.tar.gz
+googlecode_upload.py --project=scitools dist/SciTools-$VERSION.win32.exe
+
+# Edit web pages
+echo '--- Edit web pages'
+firefox http://code.google.com/p/scitools/

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<authors xmlns:html="http://www.w3.org/1999/xhtml">
+ <author uid="hpl">
+  Hans Petter Langtangen &lt;hpl@simula.no&gt;
+ </author>
+ <author uid="langtangen">
+  Hans Petter Langtangen &lt;hpl@simula.no&gt;
+ </author>
+ <author uid="rolv">
+  Rolv Erlend Bredesen &lt;rolv@simula.no&gt;
+ </author>
+ <author uid="arvenk">
+  Arve Knudsen &lt;arvenk@simula.no&gt;
+ </author>
+ <author uid="johannr">
+  Johannes Ring &lt;johannr@simula.no&gt;
+ </author>
+ <author uid="johannes.ring">
+  Johannes Ring &lt;johannr@simula.no&gt;
+ </author>
+ <author uid="ilmarw">
+  Ilmar Wilbers &lt;ilmarw@simula.no&gt;
+ </author>
+ <author uid="lstor">
+  Lars Storjord &lt;lstor@simula.no&gt;
+ </author>
+</authors>
