@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 
 # plot two curves in the same plot:
 x = seq(0, 15, 0.2)   # 0, 0.2, 0.4, ...., 15

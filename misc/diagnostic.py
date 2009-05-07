@@ -459,7 +459,7 @@ def test_veusz():
     wait(2)
 
 def test_easyviz():
-    from scitools.all import linspace, ndgrid, plot, contour, peaks, \
+    from scitools.std import linspace, ndgrid, plot, contour, peaks, \
          quiver, surfc, backend, get_backend
     n = 21
     x = linspace(-3, 3, n)

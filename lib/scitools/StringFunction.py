@@ -138,7 +138,7 @@ class StringFunction:
 
     from numpy import *
     # or
-    from scitools.all import *
+    from scitools.std import *
     # or
     from numpy import sin, cos
 

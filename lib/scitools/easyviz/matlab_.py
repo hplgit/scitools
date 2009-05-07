@@ -13,7 +13,7 @@ scitools.cfg under the [easyviz] section
 
 and then
 
-  from scitools.all import *
+  from scitools.std import *
 
 or if just easyviz is needed
 
@@ -33,7 +33,7 @@ However, this seems to be fixed by closing the figure window between each
 call to hardcopy. A short example follows next (see also
 http://www.mathworks.com/support/solutions/data/1-1A62W.html).
 
-  from scitools.all import *
+  from scitools.std import *
   x = linspace(0,5,31)
   for i in range(10):
       plot(x,cos(-0.1*i+x),ymin=-1.1,ymax=1.1)

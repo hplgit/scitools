@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 from time import sleep
 
 x = seq(0, 15, 0.1)

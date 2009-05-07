@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 
 x = seq(0, 15, 0.2)
 y = sin(x)*x

@@ -16,7 +16,7 @@ scitools.cfg under the [easyviz] section
 
 and then
 
-  from scitools.all import *
+  from scitools.std import *
 
 or if just easyviz is needed
 
@@ -30,7 +30,7 @@ EXAMPLES:
 
 We start with a simple example using the plot command:
 
->>> from scitools.all import *
+>>> from scitools.std import *
 >>> x = linspace(-2,2,5)
 >>> plot(x,x**2,'b-s',title='Simple plot')
 [<scitools.easyviz.common.Line object at 0xb7de244c>]

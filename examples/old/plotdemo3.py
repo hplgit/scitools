@@ -1,4 +1,4 @@
-from scitools.all import *
+from scitools.std import *
 from time import sleep
 backend = get_backend()
 if backend == 'blt_':

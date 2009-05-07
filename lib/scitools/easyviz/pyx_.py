@@ -13,7 +13,7 @@ scitools.cfg under the [easyviz] section
 
 and then
 
-  from scitools.all import *
+  from scitools.std import *
 
 or if just easyviz is needed
 
