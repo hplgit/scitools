@@ -4,23 +4,6 @@ Functionality of this module that extends Numerical Python
 
 The following extensions to Numerical Python are also defined:
 
- - seq
-           seq(a,b,s, [type]) computes numbers from a up to and
-           including b in steps of s and (default) type float_
-           sequence = seq (for backward compatibility)
-
- - iseq:
-           as seq, but integer counters are computed
-           (iseq is an alternative to range where the
-           upper limit is included in the sequence - this can
-           be important for direct mapping of indices between
-           mathematics and Python code)
-           isequence = iseq (for backward compatibility)
-
- - arr:
-           simplified/unified interface to creating NumPy
-           arrays (see its doc string)
-
  - solve_tridiag_linear_system:
            returns the solution of a tridiagonal linear system
 
@@ -47,8 +30,22 @@ The following extensions to Numerical Python are also defined:
            float_eq(a,b,tol) means abs(a-b) < tol
            works for both scalar and array arguments
 
+ - cut_noise:
+           set all small (noise) elements of an array to zero
+
+ - Gram_Schmidt:
+           compute orthogonal/orthonormal vectors via the Gram-Schmidt process
+
+ - rank:
+           compute the rank of a matrix
+
+ - orth:
+           compute an orthonormal basis from a matrix (taken from scipy.linalg
+           to avoid scipy dependence)
+           
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf: 
-           norms for multi-dimensional arrays viewed as vectors
+           discrete and continuous norms for multi-dimensional arrays
+           viewed as vectors
 
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
@@ -56,6 +53,24 @@ The following extensions to Numerical Python are also defined:
  - factorial:
            compute the factorial n! by various methods (iterative,
            recursive, reduce, functional, scipy, etc)
+
+ - seq
+           seq(a,b,s, [type]) computes numbers from a up to and
+           including b in steps of s and (default) type float_
+           sequence = seq (for backward compatibility)
+
+ - iseq:
+           as seq, but integer counters are computed
+           (iseq is an alternative to range where the
+           upper limit is included in the sequence - this can
+           be important for direct mapping of indices between
+           mathematics and Python code)
+           isequence = iseq (for backward compatibility)
+
+ - arr:
+           simplified/unified interface to creating various types of
+           NumPy arrays (see its doc string)
+
 
 """
 
@@ -69,246 +84,6 @@ if __name__.find('numpyutils') != -1:
 
 import operator
 
-def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
-    """
-    As asarray, but a warning or exception is issued if the
-    a array is copied.
-    """
-    a_new = asarray(a, dtype)
-    # must drop numpy's order argument since it conflicts
-    # with Numeric's savespace
-
-    # did we copy?
-    if a_new is not a:
-        # we do not return the identical array, i.e., copy has taken place
-        msg = '%s  copy of array %s, from %s to %s' % \
-              (comment, a.shape, type(a), type(a_new))
-        if message == 'warning':
-            print 'Warning: %s' % msg
-        elif message == 'exception':
-            raise TypeError, msg
-    return a_new
-
-
-def seq(min=0.0, max=None, inc=1.0, type=float,
-        return_type='NumPyArray'):
-    """
-    Generate numbers from min to (and including!) max,
-    with increment of inc. Safe alternative to arange.
-    The return_type string governs the type of the returned
-    sequence of numbers ('NumPyArray', 'list', or 'tuple').
-    """
-    if max is None: # allow sequence(3) to be 0., 1., 2., 3.
-        # take 1st arg as max, min as 0, and inc=1
-        max = min; min = 0.0; inc = 1.0
-    r = arange(min, max + inc/2.0, inc, type)
-    if return_type == 'NumPyArray' or return_type == ndarray:
-        return r
-    elif return_type == 'list':
-        return r.tolist()
-    elif return_type == 'tuple':
-        return tuple(r.tolist())
-
-
-def iseq(start=0, stop=None, inc=1):
-    """
-    Generate integers from start to (and including) stop,
-    with increment of inc. Alternative to range/xrange.
-    """
-    if stop is None: # allow isequence(3) to be 0, 1, 2, 3
-        # take 1st arg as stop, start as 0, and inc=1
-        stop = start; start = 0; inc = 1
-    return xrange(start, stop+inc, inc)
-
-sequence = seq  # backward compatibility
-isequence = iseq  # backward compatibility
-
-
-def arr(shape=None, element_type=float,
-        interval=None, 
-        data=None, copy=True,
-        file_=None,
-        order='C'):
-    """
-    Compact and flexible interface for creating NumPy arrays,
-    including several consistency and error checks.
-
-    @param shape:        length of each dimension
-    @type  shape:        tuple or int
-    @param data:         list, tuple, or NumPy array with data elements
-    @param copy:         copy data if true, share data if false
-    @type  copy:         boolean
-    @param element_type: float, int, int16, float64, bool, etc.
-    @param interval:     make elements from a to b (shape gives no of elms)
-    @type  interval:     tuple or list
-    @param file_:        filename or file object containing array data
-    @type  file_:        string
-    @param order:        'Fortran' or 'C' storage
-    @type  order:        string
-    @return:             created Numerical Python array
-
-    The array can be created in four ways:
-    
-      1. as zeros (just shape specified),
-
-      2. as uniformly spaced coordinates in an interval [a,b]
-
-      3. as a copy of or reference to (depending on copy=True,False resp.)
-         a list, tuple, or NumPy array (provided as the data argument),
-
-      4. from data in a file (for one- or two-dimensional real-valued arrays).
-
-    The function calls the underlying NumPy functions zeros, array and
-    linspace (see the NumPy manual for the functionality of these
-    functions).  In case of data in a file, the first line determines
-    the number of columns in the array. The file format is just rows
-    and columns with numbers, no decorations (square brackets, commas,
-    etc.) are allowed.
-
-    >>> arr((3,4))
-    array([[ 0.,  0.,  0.,  0.],
-           [ 0.,  0.,  0.,  0.],
-           [ 0.,  0.,  0.,  0.]])
-
-    >>> arr(4, element_type=int) + 4  # integer array
-    array([4, 4, 4, 4])
-
-    >>> arr(3, interval=[0,2])
-    array([ 0.,  1.,  2.])
-           
-    >>> somelist=[[0,1],[5,5]]
-    >>> a = arr(data=somelist)
-    >>> a  # a has always float elements by default
-    array([[ 0.,  1.],
-           [ 5.,  5.]])
-    >>> a = arr(data=somelist, element_type=int)
-    >>> a
-    array([[0, 1],
-           [5, 5]])
-    >>> b = a + 1
-    
-    >>> c = arr(data=b, copy=False)  # let c share data with b
-    >>> b is c
-    True
-    >>> id(b) == id(c)
-    True
-
-    >>> # make a file with array data:
-    >>> f = open('tmp.dat', 'w')
-    >>> f.write('''\
-    ... 1 3
-    ... 2 6
-    ... 3 12
-    ... 3.5 20
-    ... ''')
-    >>> f.close()
-    >>> # read array data from file:
-    >>> a = arr(file_='tmp.dat')
-    >>> a
-    array([[  1. ,   3. ],
-           [  2. ,   6. ],
-           [  3. ,  12. ],
-           [  3.5,  20. ]])
-    """
-    if data is None and file_ is None and shape is None:
-        return None
-    
-    if data is not None:
-
-        if not operator.isSequenceType(data):
-            raise TypeError, 'arr: data argument is not a sequence type'
-        
-        if isinstance(shape, (list,tuple)):
-            # check that shape and data are compatible:
-            if reduce(operator.mul, shape) != size(data):
-                raise ValueError, \
-                      'arr: shape=%s is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
-        elif isinstance(shape, int):
-            if shape != size(data):
-                raise ValueError, \
-                      'arr: shape=%d is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
-        elif shape is None:
-            if isinstance(data, (list,tuple)) and copy == False:
-                # cannot share data (data is list/tuple)
-                copy = True
-            return array(data, dtype=element_type, copy=copy, order=order)
-        else:
-            raise TypeError, \
-                  'shape is %s, must be list/tuple or int' % type(shape)
-    elif file_ is not None:
-        if not isinstance(file_, (basestring, file, StringIO)):
-            raise TypeError, \
-                  'file_ argument must be a string (filename) or '\
-                  'open file object, not %s' % type(file_)
-
-        if isinstance(file_, basestring):
-            file_ = open(file_, 'r')
-        # skip blank lines:
-        while True:
-            line1 = file_.readline().strip()
-            if line1 != '':
-                break
-        ncolumns = len(line1.split())
-        file_.seek(0)
-        # we assume that array data in file has element_type=float:
-        if not (element_type == float or element_type == 'd'):
-            raise ValueError, 'element_type must be float_/"%s", not "%s"' % \
-                  ('d', element_type)
-        
-        d = array([float(word) for word in file_.read().split()])
-        if isinstance(file_, basestring):
-            f.close()
-        # shape array d:
-        if ncolumns > 1:
-            suggested_shape = (int(len(d)/ncolumns), ncolumns)
-            total_size = suggested_shape[0]*suggested_shape[1]
-            if total_size != len(d):
-                raise ValueError, \
-                'found %d array entries in file "%s", but first line\n'\
-                'contains %d elements - no shape is compatible with\n'\
-                'these values' % (len(d), file, ncolumns)
-            d.shape = suggested_shape
-        if shape is not None:
-            if shape != d.shape:
-                raise ValueError, \
-                'shape=%s is not compatible with shape %s found in "%s"' % \
-                (shape, d.shape, file)
-        return d
-
-    elif interval is not None and shape is not None:
-        if not isinstance(shape, int):
-            raise TypeError, 'For array values in an interval, '\
-                  'shape must be an integer'
-        if not isinstance(interval, (list,tuple)):
-            raise TypeError, 'interval must be list or tuple, not %s' % \
-                  type(interval)
-        if len(interval) != 2:
-            raise ValueError, 'interval must be a 2-tuple (or list)'
-
-        try:
-            return linspace(interval[0], interval[1], shape)
-        except MemoryError, e:
-            # print more information (size of data):
-            print e, 'of size %s' % shape
-
-    else:
-        # no data, no file, just make zeros
-
-        if not isinstance(shape, (tuple, int, list)):
-            raise TypeError, \
-           'arr: shape (1st arg) must be tuple or int'
-        if shape is None:
-            raise ValueError, \
-            'arr: either shape, data, or from_function must be specified'
-
-        try:
-            return zeros(shape, dtype=element_type, order=order)
-        except MemoryError, e:
-            # print more information (size of data):
-            print e, 'of size %s' % shape
-    
 def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
              memoryorder=None):
     """
@@ -360,7 +135,7 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
            [ 0.,  1.]]))
 
 
-    Why has SciTools its own meshgrid function when NumPy has three
+    Why does SciTools has its own meshgrid function when NumPy has three
     similar functions, `mgrid`, `ogrid`, and `meshgrid`?
     The `meshgrid` function in NumPy is limited to two dimensions only, while
     the SciTools version can also work with 3D grids. In addition,
@@ -618,45 +393,199 @@ def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
                   (type(a), type(b))
     
 
+def cut_noise(a, tol=1E-10):
+    """
+    Set elements in array a to zero if the absolute value is
+    less than tol.
+    """
+    a[abs(a) < tol] = 0
+    return a
+
+
+def Gram_Schmidt1(vecs, row_wise_storage=True):
+    """
+    Apply the Gram-Schmidt orthogonalization algorithm to a set
+    of vectors. vecs is a two-dimensional array where the vectors
+    are stored row-wise, or vecs may be a list of vectors, where
+    each vector can be a list or a one-dimensional array.
+    An array basis is returned, where basis[i,:] (row_wise_storage
+    is True) or basis[:,i] (row_wise_storage is False) is the i-th
+    orthonormal vector in the basis.
+
+    This function does not handle null vectors, see Gram_Schmidt
+    for a (slower) function that does.
+    """
+    from numpy.linalg import inv
+    from math import sqrt
+
+    vecs = asarray(vecs)  # transform to array if list of vectors
+    m, n = vecs.shape
+    basis = array(transpose(vecs))
+    eye = identity(n).astype(float)
+    
+    basis[:,0] /= sqrt(dot(basis[:,0], basis[:,0]))
+    for i in range(1, m):
+	v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
+    	U = basis[:,:i]
+	P = eye - dot(U, dot(inv(dot(transpose(U), U)), transpose(U)))
+	basis[:, i] = dot(P, v)
+	basis[:, i] /= sqrt(dot(basis[:, i], basis[:, i]))
+
+    return transpose(basis) if row_wise_storage else basis
+
+
+def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
+                 normalize=False, remove_null_vectors=False,
+                 remove_noise=False):
+    """
+    Apply the Gram-Schmidt orthogonalization algorithm to a set
+    of vectors. vecs is a two-dimensional array where the vectors
+    are stored row-wise, or vecs may be a list of vectors, where
+    each vector can be a list or a one-dimensional array.
+
+    The argument tol is a tolerance for null vectors (the absolute
+    value of all elements must be less than tol to have a null
+    vector).
+
+    If normalize is True, the orthogonal vectors are normalized to form
+    an orthonormal basis.
+
+    If remove_null_vectors is True, all null vectors are removed from
+    the resulting basis.
+
+    If remove_noise is True, all elements whose absolute values are
+    less than tol are set to zero.
+
+    An array basis is returned, where basis[i,:] (row_wise_storage
+    is True) or basis[:,i] (row_wise_storage is False) is the i-th
+    orthogonal vector in the basis.
+
+    This function handles null vectors, see Gram_Schmidt1
+    for a (faster) function that does not.
+    """
+    # The algorithm below views vecs as a matrix A with the vectors
+    # stored as columns:
+    vecs = asarray(vecs)  # transform to array if list of vectors
+    if row_wise_storage:
+        A = transpose(vecs).copy()
+    else:
+        A = vecs.copy()
+
+    m,n = A.shape
+    V = zeros((m,n))
+    
+    for j in xrange(n):
+        v0 = A[:,j]
+        v = v0.copy()
+        for i in xrange(j):
+            vi = V[:,i]
+
+            if (abs(vi) > tol).any():
+                v -= (vdot(v0,vi)/vdot(vi,vi))*vi
+        V[:,j] = v
+
+    if remove_null_vectors:
+        indices = [i for i in xrange(n) if (abs(V[:,i]) < tol).all()]
+        V = V[ix_(range(m), indices)]
+
+    if normalize:
+        for j in xrange(V.shape[1]):
+            V[:,j] /= linalg.norm(V[:,j])
+
+    if remove_noise:
+        V = cut_noise(V, tol)
+        
+    return transpose(V) if row_wise_storage else V
+
+
+def rank(A):
+    """
+    Returns the rank of a matrix A (rank means an estimate of
+    the number of linearly independent rows or columns).
+    """
+    A = asarray(A)
+    u, s, v = svd(A)
+    maxabs = norm(x)	
+    maxdim = max(A.shape)
+    tol = maxabs*maxdim*1E-13
+    r = s > tol
+    return sum(r)
+
+
+def orth(A):
+    """
+    (Plain copy from scipy.linalg.orth - this one here applies numpy.svd
+    and avoids the need for having scipy installed.)
+    
+    Construct an orthonormal basis for the range of A using SVD
+
+    Parameters
+    ----------
+    A : array, shape (M, N)
+
+    Returns
+    -------
+    Q : array, shape (M, K)
+        Orthonormal basis for the range of A.
+        K = effective rank of A, as determined by automatic cutoff
+
+    See also
+    --------
+    svd : Singular value decomposition of a matrix
+
+    """
+    u,s,vh = svd(A)
+    M,N = A.shape
+    tol = max(M,N)*numpy.amax(s)*eps
+    num = numpy.sum(s > tol,dtype=int)
+    Q = u[:,:num]
+    return Q
+
+
+
+# the norm_* functions also work for arrays with dimensions larger than 2,
+# in contrast to (most of) the numpy.linalg.norm function
+
 def norm_l2(u):
     """
-    l2 norm of a multi-dimensional array u viewed as a vector
-    (norm=sqrt(dot(u.flat,u.flat))).
+    Standard l2 norm of a multi-dimensional array u viewed as a vector.
     """
-    return math.sqrt(innerproduct(u.flat, u.flat))
+    return linalg.norm(u.ravel())
 
 def norm_L2(u):
     """
     L2 norm of a multi-dimensional array u viewed as a vector
-    (norm=sqrt(dot(u.flat,u.flat)/n)).
+    (norm is norm_l2/n, where n is length of u (no of elements)).
 
     If u holds function values and the norm of u is supposed to
     approximate an integral (L2 norm) of the function, this (and
     not norm_l2) is the right norm function to use.
     """
-    return norm_l2(u)/sqrt(float(size(u)))
+    return norm_l2(u)/sqrt(float(u.size))
 
 def norm_l1(u):
     """
     l1 norm of a multi-dimensional array u viewed as a vector
-    (norm=sum(abs(u.flat))).
+    (norm=sum(abs(u.ravel()))).
     """
-    return sum(abs(u.flat))
+    #return sum(abs(u.ravel()))
+    return linalg.norm(u.ravel(),1)
 
 def norm_L1(u):
     """
     L1 norm of a multi-dimensional array u viewed as a vector
-    (norm=sum(abs(u.flat))).
+    (norm=sum(abs(u.ravel()))).
 
     If u holds function values and the norm of u is supposed to
     approximate an integral (L1 norm) of the function, this (and
     not norm_l1) is the right norm function to use.
     """
-    return norm_l1(u)/float(size(u))
+    return norm_l1(u)/float(u.size)
 
 def norm_inf(u):
     """Infinity/max norm of a multi-dimensional array u viewed as a vector."""
-    return abs(u).max()
+    #return abs(u.ravel()).max()
+    return linalg.norm(u.ravel(), inf)
 
 
 def solve_tridiag_linear_system(A, b):
@@ -1161,15 +1090,11 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
     If piecewise_constant is True, the (x,y) arrays gives a piecewise
     constant curve when plotted, otherwise the (x,y) arrays gives a
     piecewise linear curve where the x coordinates coincide with the
-    center points in each bin.
+    center points in each bin. The function makes use of
+    numpy.lib.function_base.histogram with some additional code
+    (for a piecewise curve or displaced x values to the centes of
+    the bins).
     """
-    # old primitive code based on ScientificPython:
-    #from Scientific.Statistics.Histogram import Histogram
-    #h = Histogram(samples, nbins)
-    #h.normalizeArea() # let h be a density (unit area)
-    #print h.array[:,0], '\n', h.array[:,1]
-    #return h.array[:,0], h.array[:,1]
-    # new code based on numpy:
     import sys
     if 'numpy' in sys.modules:
         y0, bin_edges = histogram(samples, bins=nbins, normed=True, new=True)
@@ -1251,6 +1176,270 @@ def factorial(n, method='reduce'):
         raise ValueError, 'factorial: method="%s" is not supported' % method
 
 
+def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
+    """
+    As asarray, but a warning or exception is issued if the
+    a array is copied.
+    """
+    a_new = asarray(a, dtype)
+    # must drop numpy's order argument since it conflicts
+    # with Numeric's savespace
+
+    # did we copy?
+    if a_new is not a:
+        # we do not return the identical array, i.e., copy has taken place
+        msg = '%s  copy of array %s, from %s to %s' % \
+              (comment, a.shape, type(a), type(a_new))
+        if message == 'warning':
+            print 'Warning: %s' % msg
+        elif message == 'exception':
+            raise TypeError, msg
+    return a_new
+
+
+def seq(min=0.0, max=None, inc=1.0, type=float,
+        return_type='NumPyArray'):
+    """
+    Generate numbers from min to (and including!) max,
+    with increment of inc. Safe alternative to arange.
+    The return_type string governs the type of the returned
+    sequence of numbers ('NumPyArray', 'list', or 'tuple').
+    """
+    if max is None: # allow sequence(3) to be 0., 1., 2., 3.
+        # take 1st arg as max, min as 0, and inc=1
+        max = min; min = 0.0; inc = 1.0
+    r = arange(min, max + inc/2.0, inc, type)
+    if return_type == 'NumPyArray' or return_type == ndarray:
+        return r
+    elif return_type == 'list':
+        return r.tolist()
+    elif return_type == 'tuple':
+        return tuple(r.tolist())
+
+
+def iseq(start=0, stop=None, inc=1):
+    """
+    Generate integers from start to (and including) stop,
+    with increment of inc. Alternative to range/xrange.
+    """
+    if stop is None: # allow isequence(3) to be 0, 1, 2, 3
+        # take 1st arg as stop, start as 0, and inc=1
+        stop = start; start = 0; inc = 1
+    return xrange(start, stop+inc, inc)
+
+sequence = seq  # backward compatibility
+isequence = iseq  # backward compatibility
+
+
+def arr(shape=None, element_type=float,
+        interval=None, 
+        data=None, copy=True,
+        file_=None,
+        order='C'):
+    """
+    Compact and flexible interface for creating NumPy arrays,
+    including several consistency and error checks.
+
+    @param shape:        length of each dimension
+    @type  shape:        tuple or int
+    @param data:         list, tuple, or NumPy array with data elements
+    @param copy:         copy data if true, share data if false
+    @type  copy:         boolean
+    @param element_type: float, int, int16, float64, bool, etc.
+    @param interval:     make elements from a to b (shape gives no of elms)
+    @type  interval:     tuple or list
+    @param file_:        filename or file object containing array data
+    @type  file_:        string
+    @param order:        'Fortran' or 'C' storage
+    @type  order:        string
+    @return:             created Numerical Python array
+
+    The array can be created in four ways:
+    
+      1. as zeros (just shape specified),
+
+      2. as uniformly spaced coordinates in an interval [a,b]
+
+      3. as a copy of or reference to (depending on copy=True,False resp.)
+         a list, tuple, or NumPy array (provided as the data argument),
+
+      4. from data in a file (for one- or two-dimensional real-valued arrays).
+
+    The function calls the underlying NumPy functions zeros, array and
+    linspace (see the NumPy manual for the functionality of these
+    functions).  In case of data in a file, the first line determines
+    the number of columns in the array. The file format is just rows
+    and columns with numbers, no decorations (square brackets, commas,
+    etc.) are allowed.
+
+    >>> arr((3,4))
+    array([[ 0.,  0.,  0.,  0.],
+           [ 0.,  0.,  0.,  0.],
+           [ 0.,  0.,  0.,  0.]])
+
+    >>> arr(4, element_type=int) + 4  # integer array
+    array([4, 4, 4, 4])
+
+    >>> arr(3, interval=[0,2])
+    array([ 0.,  1.,  2.])
+           
+    >>> somelist=[[0,1],[5,5]]
+    >>> a = arr(data=somelist)
+    >>> a  # a has always float elements by default
+    array([[ 0.,  1.],
+           [ 5.,  5.]])
+    >>> a = arr(data=somelist, element_type=int)
+    >>> a
+    array([[0, 1],
+           [5, 5]])
+    >>> b = a + 1
+    
+    >>> c = arr(data=b, copy=False)  # let c share data with b
+    >>> b is c
+    True
+    >>> id(b) == id(c)
+    True
+
+    >>> # make a file with array data:
+    >>> f = open('tmp.dat', 'w')
+    >>> f.write('''\
+    ... 1 3
+    ... 2 6
+    ... 3 12
+    ... 3.5 20
+    ... ''')
+    >>> f.close()
+    >>> # read array data from file:
+    >>> a = arr(file_='tmp.dat')
+    >>> a
+    array([[  1. ,   3. ],
+           [  2. ,   6. ],
+           [  3. ,  12. ],
+           [  3.5,  20. ]])
+    """
+    if data is None and file_ is None and shape is None:
+        return None
+    
+    if data is not None:
+
+        if not operator.isSequenceType(data):
+            raise TypeError, 'arr: data argument is not a sequence type'
+        
+        if isinstance(shape, (list,tuple)):
+            # check that shape and data are compatible:
+            if reduce(operator.mul, shape) != size(data):
+                raise ValueError, \
+                      'arr: shape=%s is not compatible with %d '\
+                      'elements in the provided data' % (shape, size(data))
+        elif isinstance(shape, int):
+            if shape != size(data):
+                raise ValueError, \
+                      'arr: shape=%d is not compatible with %d '\
+                      'elements in the provided data' % (shape, size(data))
+        elif shape is None:
+            if isinstance(data, (list,tuple)) and copy == False:
+                # cannot share data (data is list/tuple)
+                copy = True
+            return array(data, dtype=element_type, copy=copy, order=order)
+        else:
+            raise TypeError, \
+                  'shape is %s, must be list/tuple or int' % type(shape)
+    elif file_ is not None:
+        if not isinstance(file_, (basestring, file, StringIO)):
+            raise TypeError, \
+                  'file_ argument must be a string (filename) or '\
+                  'open file object, not %s' % type(file_)
+
+        if isinstance(file_, basestring):
+            file_ = open(file_, 'r')
+        # skip blank lines:
+        while True:
+            line1 = file_.readline().strip()
+            if line1 != '':
+                break
+        ncolumns = len(line1.split())
+        file_.seek(0)
+        # we assume that array data in file has element_type=float:
+        if not (element_type == float or element_type == 'd'):
+            raise ValueError, 'element_type must be float_/"%s", not "%s"' % \
+                  ('d', element_type)
+        
+        d = array([float(word) for word in file_.read().split()])
+        if isinstance(file_, basestring):
+            f.close()
+        # shape array d:
+        if ncolumns > 1:
+            suggested_shape = (int(len(d)/ncolumns), ncolumns)
+            total_size = suggested_shape[0]*suggested_shape[1]
+            if total_size != len(d):
+                raise ValueError, \
+                'found %d array entries in file "%s", but first line\n'\
+                'contains %d elements - no shape is compatible with\n'\
+                'these values' % (len(d), file, ncolumns)
+            d.shape = suggested_shape
+        if shape is not None:
+            if shape != d.shape:
+                raise ValueError, \
+                'shape=%s is not compatible with shape %s found in "%s"' % \
+                (shape, d.shape, file)
+        return d
+
+    elif interval is not None and shape is not None:
+        if not isinstance(shape, int):
+            raise TypeError, 'For array values in an interval, '\
+                  'shape must be an integer'
+        if not isinstance(interval, (list,tuple)):
+            raise TypeError, 'interval must be list or tuple, not %s' % \
+                  type(interval)
+        if len(interval) != 2:
+            raise ValueError, 'interval must be a 2-tuple (or list)'
+
+        try:
+            return linspace(interval[0], interval[1], shape)
+        except MemoryError, e:
+            # print more information (size of data):
+            print e, 'of size %s' % shape
+
+    else:
+        # no data, no file, just make zeros
+
+        if not isinstance(shape, (tuple, int, list)):
+            raise TypeError, \
+           'arr: shape (1st arg) must be tuple or int'
+        if shape is None:
+            raise ValueError, \
+            'arr: either shape, data, or from_function must be specified'
+
+        try:
+            return zeros(shape, dtype=element_type, order=order)
+        except MemoryError, e:
+            # print more information (size of data):
+            print e, 'of size %s' % shape
+    
+
+def _test():
+    # test norm functions for multi-dimensional arrays:
+    a = array(range(27))
+    a.shape = (3,3,3)
+    functions = [norm_l2, norm_L2, norm_l1, norm_L1, norm_inf]
+    results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]
+    for f, r in zip(functions, results):
+        if not float_eq(f(a), r):
+            print '%s failed: result=%g, not %g' % (f.__name__, f(a), r)
+
+    # Gram-Schmidt:
+    A = array([[1,2,3], [3,4,5], [6,4,1]], float)
+    V1 = Gram_Schmidt(A, normalize=True)
+    V2 = Gram_Schmidt1(A)
+    if not float_eq(V1, V2):
+        print 'The two Gram_Schmidt versions did not give equal results'
+        print 'Gram_Schmidt:\n', V1
+        print 'Gram_Schmidt1:\n', V2
+
+
+if __name__ == '__main__':
+    from numpy import *
+    _test()
 
     
     
