@@ -450,14 +450,14 @@ class Line(PlotProperties):
     def _set_data(self, x, y, z=None):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['dims'] = (len(x), 1, 1)
-        self._prop['numberofpoints'] = len(x)
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['dims'] = (x.size, 1, 1)
+        self._prop['numberofpoints'] = x.size
         if z is not None:
             self._set_lim(z, 'zlim')
-            self._prop['zdata'] = z
-            self._prop['dims'] = (len(x), len(y), 1)
+            self._prop['zdata'] = asarray(z)
+            self._prop['dims'] = (x.size, y.size, 1)
 
 
 class Bars(PlotProperties):
@@ -533,8 +533,8 @@ class Bars(PlotProperties):
             pass
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
         n = len(x)
         self._prop['dims'] = (n, 1, 1)
         self._prop['numberofpoints'] = n
@@ -593,9 +593,9 @@ class Surface(PlotProperties):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
         self._set_lim(z, 'zlim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['zdata'] = z
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['zdata'] = asarray(z)
         nx, ny = shape(z)
         self._prop['dims'] = (nx, ny, 1)
         self._prop['numberofpoints'] = nx*ny
@@ -677,9 +677,9 @@ class Contours(PlotProperties):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
         self._set_lim(z, 'zlim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['zdata'] = z
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['zdata'] = asarray(z)
         nx, ny = shape(z)
         self._prop['dims'] = (nx, ny, 1)
         self._prop['numberofpoints'] = len(ravel(z))
@@ -789,12 +789,12 @@ class VelocityVectors(PlotProperties):
         self._set_lim(y, 'ylim')
         if z is not None:
             self._set_lim(z, 'zlim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['zdata'] = z
-        self._prop['udata'] = u
-        self._prop['vdata'] = v
-        self._prop['wdata'] = w
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['zdata'] = asarray(z)
+        self._prop['udata'] = asarray(u)
+        self._prop['vdata'] = asarray(v)
+        self._prop['wdata'] = asarray(w)
         if rank(u) == 1:
             self._prop['dims'] = (len(u), 1, 1)
         elif rank(u) == 2:
@@ -929,12 +929,12 @@ class Streams(PlotProperties):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
         self._set_lim(z, 'zlim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['zdata'] = z
-        self._prop['udata'] = u
-        self._prop['vdata'] = v
-        self._prop['wdata'] = w
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['zdata'] = asarray(z)
+        self._prop['udata'] = asarray(u)
+        self._prop['vdata'] = asarray(v)
+        self._prop['wdata'] = asarray(w)
         self._prop['startx'] = sx
         self._prop['starty'] = sy
         self._prop['startz'] = sz
@@ -1058,10 +1058,10 @@ class Volume(PlotProperties):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
         self._set_lim(z, 'zlim')
-        self._prop['xdata'] = x
-        self._prop['ydata'] = y
-        self._prop['zdata'] = z
-        self._prop['vdata'] = v
+        self._prop['xdata'] = asarray(x)
+        self._prop['ydata'] = asarray(y)
+        self._prop['zdata'] = asarray(z)
+        self._prop['vdata'] = asarray(v)
         if slices:
             self._prop['slices'] = slices
         if isovalue is not None:
