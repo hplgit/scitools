@@ -35,10 +35,10 @@ from common import *
 from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check, system
+from scitools.misc import test_if_module_exists , system
 from misc import arrayconverter, _update_from_config_file, _check_type
 
-check('Gnuplot', msg='You need to install the Gnuplot.py package.')
+test_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
 import Gnuplot
 import tempfile
 import os
@@ -1202,6 +1202,15 @@ class GnuplotBackend(BaseClass):
         except AttributeError:
             pass
 
+    def text(self, x, y, text,
+             fontname=Axis._local_prop['fontname'],
+             fontsize=Axis._local_prop['fontsize']):
+        """Write text at position (x,y) in a curveplot."""
+        s = 'set label "%s" at %f,%f font "%s,%d"' % \
+            (text, x, y, fontname, fontsize)
+        self._g(s)
+        self._g.refresh()
+        
     def hardcopy_old(self, filename, **kwargs):
         """
         Currently supported extensions in Gnuplot backend:

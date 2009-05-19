@@ -33,7 +33,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 
 import os
 import tempfile
@@ -42,8 +42,7 @@ VISIT_ARGS = os.environ.get('VISIT_ARGS', ["-nosplash"])
 if isinstance(VISIT_ARGS, str):
     VISIT_ARGS = VISIT_ARGS.split()
 
-check('visit', msg='You need to install the VisIt package. Also make sure' \
-      'the visit Python module is in the PYTHONPATH environment variable.')
+test_if_module_exists('visit', msg='You need to install the VisIt package. Also make sure the visit Python module is in the PYTHONPATH environment variable.', abort=False)
 import visit
 for arg in VISIT_ARGS:
     visit.AddArgument(arg)

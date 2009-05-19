@@ -40,10 +40,10 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 from scitools.numpyutils import floor, linspace, array
 
-check('Pmw', msg='You need to install the Pmw package.')
+test_if_module_exists('Pmw', msg='You need to install the Pmw package.', abort=False)
 import Pmw
 import Tkinter
 

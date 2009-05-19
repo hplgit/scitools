@@ -63,17 +63,14 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 
-try:
-    import grace_np
-except ImportError:
-    try:
-        from pygrace import grace_np
-    except ImportError:
-        # grace_np is not available
-        check('grace_np',
-              msg='You need to install grace_np.py or the pygrace package.')
+if test_if_module_exists('grace_np', msg='You need to install the grace_np.py package.', abort=False):
+    import grace_up
+elif test_if_module_exists('pygrace', msg='You need to install the pygrace package.', abort=False):
+    from pygrace import grace_np
+else:
+    raise ImportError('Cannot import pygrace or grace_np')
 
 
 class GraceBackend(BaseClass):

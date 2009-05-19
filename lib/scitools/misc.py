@@ -7,28 +7,36 @@ import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 from scitools.StringFunction import StringFunction
 
-def test_if_module_exists(modulename, msg='', raise_exception=False):
+def test_if_module_exists(modulename, msg='',
+                          raise_exception=False, abort=True):
     """
     Test if modulename can be imported, and if not, write
-    an error message.
+    an error message and (optionally) raise an exception, continue or
+    abort with sys.exit(1).
     """
     try:
         __import__(modulename)
+        return True
     except ImportError:
         import debug
         message = 'Could not import module "%s" - it is '\
-                  'not installed on your system, and you need this '\
-                  'module to proceed. %s\n' % \
+                  'not installed on your system. %s\n' % \
                   (modulename, msg)
         if raise_exception:
-            print 'The problem arose in ', 
-            debug.trace(frameno=-3)
+            if msg:
+                print message
+                #print 'The problem arose in ', 
+                debug.trace(frameno=-3)
             raise ImportError, message
         else:
-            print '\n', message
-            print 'The problem arose in ', 
-            debug.trace(frameno=-3)
-            sys.exit(1)
+            if msg:
+                print '\n', message
+                #print 'The problem arose in ', 
+                debug.trace(frameno=-3)
+            if abort:
+                sys.exit(1)
+            else:
+                return False
 
 def func_to_method(func, class_, method_name=None):
     """

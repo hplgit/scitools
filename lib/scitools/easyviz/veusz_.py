@@ -60,9 +60,10 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 
-check('veusz', msg='You need to install the Veusz package.')
+test_if_module_exists('veusz', msg='You need to install the Veusz package.', abort=False)
+
 import veusz.embed
 import os
 

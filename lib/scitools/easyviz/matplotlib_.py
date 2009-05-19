@@ -30,10 +30,10 @@ from __future__ import division
 from common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 from misc import _update_from_config_file
 
-check('matplotlib', msg='You need to install the Matplotlib package.')
+test_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
 import matplotlib
 import matplotlib.colors
 # Override values from the matplotlib configuration file with values
@@ -396,9 +396,11 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Adding a line"
         # get data:
-        x = item.getp('xdata')
-        y = item.getp('ydata')
+        x = squeeze(item.getp('xdata'))
+        y = squeeze(item.getp('ydata'))
         z = item.getp('zdata')
+        if z is not None:
+            z = squeeze(z)
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
@@ -411,19 +413,20 @@ class MatplotlibBackend(BaseClass):
             print "No support for plot3 in Matplotlib."
         else:
             # no zdata, add a 2D curve:
-            l, = self._g.plot(x,y,fmt,linewidth=width)
+            #l, = self._g.plot(x,y,fmt,linewidth=width)
+            l = self._g.plot(x,y,fmt,linewidth=width)
             legend = item.getp('legend')
             if legend:
-                l.set_label(legend)
+                l[0].set_label(legend)
 
     def _add_filled_line(self, item):
         """Add a 2D or 3D filled curve."""
         if DEBUG:
             print "Adding a line"
         # get data:
-        x = item.getp('xdata')
-        y = item.getp('ydata')
-        z = item.getp('zdata')
+        x = squeeze(item.getp('xdata'))
+        y = squeeze(item.getp('ydata'))
+        z = squeeze(item.getp('zdata'))
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
@@ -448,18 +451,18 @@ class MatplotlibBackend(BaseClass):
             print "No support for fill3 in Matplotlib."            
         else:
             # no zdata, add a filled 2D curve:
-            l, = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
+            l = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
                               linewidth=width, alpha=opacity)
             legend = item.getp('legend')
             if legend:
-                l.set_label(legend)
+                l[0].set_label(legend)
 
     def _add_bar_graph(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a bar graph"
         # get data:
-        x = item.getp('xdata')
-        y = item.getp('ydata')
+        x = squeeze(item.getp('xdata'))
+        y = squeeze(item.getp('ydata'))
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
@@ -847,6 +850,14 @@ class MatplotlibBackend(BaseClass):
             # Or is there a better way to draw the current figure without
             # calling pylab.show()?
             #self._g.show()
+
+    def text(self, x, y, text,
+             fontname=Axis._local_prop['fontname'],
+             fontsize=Axis._local_prop['fontsize']):
+        """Write text at position (x,y) in a curveplot."""
+        # probably:
+        self._g.text(x, y, text, family=fontname, size=fontsize)
+        
 
     def hardcopy(self, filename, **kwargs):
         """

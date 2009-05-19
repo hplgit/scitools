@@ -334,8 +334,11 @@ def config_parser_frontend(basename,
                     try:
                         v = sys.argv[sys.argv.index(cml_option) + 1]
                     except:
-                        print '%s option must be followed by a value\n' % \
-                              cml_option
+                        print """
+%s command-line option must be followed by a value!
+""" % cml_option
+                        sys.exit(1)
+                        
                     data[section][option][VALUE] = \
                            data[section][option][STR2TYPE](v)
 

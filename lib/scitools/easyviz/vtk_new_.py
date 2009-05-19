@@ -38,15 +38,15 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 from scitools.numpyutils import allclose
 from misc import _update_from_config_file
 
-check('vtk', msg='You need to install the vtk package.')
+test_if_module_exists('vtk', msg='You need to install the vtk package.', abort=False)
 import vtk
 import os
 
-check('Tkinter', msg='You need to install the Tkinter package.')
+test_if_module_exists('Tkinter', msg='You need to install the Tkinter package.')
 import Tkinter
 try:
     import vtkTkRenderWidget

@@ -2,6 +2,28 @@ from scitools.numpyutils import zeros, ones, exp, reshape, ravel, \
      ndgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos
 from scitools.numpytools import NumPyArray, NumPy_type, NumPy_dtype
 
+def available_backends():
+    """Return a list of the available backends."""
+    import os
+    from scitools.misc import test_if_module_exists
+    files = os.listdir(os.path.dirname(__file__))
+    files.remove('template_.py')
+    if '__init__.py' in files:
+        files.remove('__init__.py')
+    backends = [f for f in files if f.endswith('_.py')]
+    available = []
+    print '\nChecking if you have all the Easyviz backends...'
+    for b in backends:
+        module = 'scitools.easyviz.' + b[:-3]
+        try:
+            test_if_module_exists(module, abort=False, raise_exception=True, msg='')
+            available.append(module[17:])
+        except ImportError:
+            pass
+            #print "You can't use the %s backend" % module
+    return available
+            
+    
 def peaks(*args):
     # z = peaks()
     # z = peaks(n)

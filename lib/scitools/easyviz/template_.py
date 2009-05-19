@@ -33,9 +33,9 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists as check
+from scitools.misc import test_if_module_exists 
 
-#check('<package>', msg='You need to install the <package> package.')
+#test_if_module_exists('<package>', msg='You need to install the <package> package.', abort=False)
 #import <package>
 
 

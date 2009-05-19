@@ -2217,6 +2217,14 @@ class BaseClass(object):
         pickle.dump(self._figs, handle)
         handle.close()
 
+    def text(self, x, y, text,
+             fontname=Axis._local_prop['fontname'],
+             fontsize=Axis._local_prop['fontsize']):
+        """Write text at position (x,y) in a curveplot."""
+        # must be implemented in subclass
+        raise NotImplementedError, 'text not implemented in class %s' % \
+              self.__class__.__name__
+        
     def hardcopy(self, filename, **kwargs): 
         """
         Save a hardcopy of the current figure to file (with the given
