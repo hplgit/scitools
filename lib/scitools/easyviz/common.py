@@ -452,12 +452,13 @@ class Line(PlotProperties):
         self._set_lim(y, 'ylim')
         self._prop['xdata'] = asarray(x)
         self._prop['ydata'] = asarray(y)
-        self._prop['dims'] = (x.size, 1, 1)
-        self._prop['numberofpoints'] = x.size
+        self._prop['dims'] = (self._prop['xdata'].size, 1, 1)
+        self._prop['numberofpoints'] = self._prop['xdata'].size
         if z is not None:
             self._set_lim(z, 'zlim')
             self._prop['zdata'] = asarray(z)
-            self._prop['dims'] = (x.size, y.size, 1)
+            self._prop['dims'] = (self._prop['xdata'].size,
+                                  self._prop['ydata'].size, 1)
 
 
 class Bars(PlotProperties):
@@ -1987,7 +1988,8 @@ class BaseClass(object):
               self.__class__.__name__
 
     def _check_args(self, *args):
-        """Return the current axis, the argument list args, and the number of
+        """
+        Return the current axis, the argument list args, and the number of
         arguments in args. If the first argument in args is an Axis instance,
         this will be returned instead of the current axis. The Axis instancce
         is then removed from the argument list and the number of arguments
@@ -2970,7 +2972,7 @@ class BaseClass(object):
                                                   y=args[i+1],
                                                   format=''))
             del kwargs['x']  # x in kwargs is no longer needed
-        else: # Normal case
+        else: # Normal case!
             # If an odd number, larger than 2, of non-strings in args are
             # between two string arguments, something is wrong.
             # If the odd number is one, the argument x='auto' is passed.

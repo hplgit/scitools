@@ -33,15 +33,15 @@ The following extensions to Numerical Python are also defined:
  - cut_noise:
            set all small (noise) elements of an array to zero
 
- - Gram_Schmidt:
-           compute orthogonal/orthonormal vectors via the Gram-Schmidt process
-
- - rank:
+ - matrix_rank:
            compute the rank of a matrix
 
  - orth:
            compute an orthonormal basis from a matrix (taken from scipy.linalg
            to avoid scipy dependence)
+           
+ - null:
+           compute the null space of a matrix
            
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf: 
            discrete and continuous norms for multi-dimensional arrays
@@ -393,6 +393,10 @@ def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
                   (type(a), type(b))
     
 
+def length(a):
+    """Return the length of the largest dimension of array a."""
+    return max(a.shape)
+
 def cut_noise(a, tol=1E-10):
     """
     Set elements in array a to zero if the absolute value is
@@ -498,7 +502,7 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
     return transpose(V) if row_wise_storage else V
 
 
-def rank(A):
+def matrix_rank(A):
     """
     Returns the rank of a matrix A (rank means an estimate of
     the number of linearly independent rows or columns).
@@ -541,6 +545,29 @@ def orth(A):
     Q = u[:,:num]
     return Q
 
+
+def null(A, tol=1e-10, row_wise_storage=True):
+    """
+    Return the null space of a matrix A.
+    If row_wise_storage is True, a two-dimensional array where the
+    vectors that span the null space are stored as rows, otherwise
+    they are stored as columns.
+
+    Code by Bastian Weber based on code by Robert Kern and Ryan Krauss.
+    """
+    n, m = A.shape
+    if n > m :
+        return transpose(null(transpose(A), tol))
+
+    u, s, vh = linalg.svd(A)
+    s = append(s, zeros(m))[0:m] 
+    null_mask = (s <= tol)
+    null_space = compress(null_mask, vh, axis=0)
+    null_space = conjugate(null_space)  # in case of complex values
+    if row_wise_storage:
+        return null_space
+    else:
+        return transpose(null_space)
 
 
 # the norm_* functions also work for arrays with dimensions larger than 2,
@@ -1435,6 +1462,14 @@ def _test():
         print 'The two Gram_Schmidt versions did not give equal results'
         print 'Gram_Schmidt:\n', V1
         print 'Gram_Schmidt1:\n', V2
+
+    # Null space:
+    K = array([[1,2,3], [1,2,3], [0,0,0], [-1, -2, -3]], float)
+    #K = random.random(3*7).reshape(7,3) # does not work...
+    print 'K=\n', K
+    print 'null(K)=\n', null(K)
+    r = K*null(K)
+    print 'K*null(K):', r
 
 
 if __name__ == '__main__':

@@ -1,3 +1,12 @@
+=== The Plot Window Disappears Quickly ===
+
+Add
+!bc cod
+raw_input('Press Enter: ')
+!ec
+at the end of the program. The plot window is killed when the program
+terminates, and this satement postpones the termination until the user
+hits the Enter key.
 
 === Check Your Backends! ===
 
@@ -8,7 +17,7 @@ plotting).
 
 For the Gnuplot backend you can try the following commands in a
 terminal window:
-!bc
+!bc rpy
 Unix/DOS> gnuplot
 gnuplot> plot sin(x)
 !ec

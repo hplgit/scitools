@@ -56,6 +56,18 @@ Figure ref{fig:plot1a} displays the resulting plot.
 
 FIGURE:[figs/plot1a.eps] A simple plot in PostScript format.
 
+On some platforms, some backends may result in a plot that is shown in
+just a fraction of a second on the screen before the plot window disappears
+(using the Gnuplot backend on Windows machines or using the Matplotlib
+backend constitute two examples). To make the window stay on the screen,
+add
+!bc cod
+raw_input('Press Enter: ')
+!ec
+at the end of the program. The plot window is killed when the program
+terminates, and this satement postpones the termination until the user
+hits the Enter key.
+
 
 _____Decorating the Plot_____
 
