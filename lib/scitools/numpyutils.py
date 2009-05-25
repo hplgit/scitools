@@ -475,7 +475,7 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
     else:
         A = vecs.copy()
 
-    m,n = A.shape
+    m, n = A.shape
     V = zeros((m,n))
     
     for j in xrange(n):
