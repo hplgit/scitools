@@ -115,51 +115,6 @@ simple and unified, and complicated things are not more complicated than
 they would otherwise be. You can always start out with the simple
 commands - and jump to complicated fine-tuning only when strictly needed.
 
-Controlling the Backend
------------------------
-
-The Easyviz backend can either be set in a config file (see Config File
-below), by importing a special backend in the program,
-or by adding a command-line option::
-
-         --SCITOOLS_easyviz_backend name
-
-
-where name is the name of the backend: gnuplot, vtk, matplotlib,
-blt, etc. Which backend you
-choose depends on what you have available on your computer system and
-what kind of plotting functionality you want.
-
-An alternative method is to import a specific backend in a program. Instead
-of the from scitools.std import * statement one writes::
-
-        from numpy import *
-        from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
-        # or
-        from scitools.easyviz.vtk_ import *      # work with VTK
-
-
-Note the trailing underscore in the module names for the various backends.
-
-
-Config File
------------
-
-Easyviz is a subpackage of SciTools, and the the SciTools configuration
-file, called scitools.cfg has a section [easyviz] where the
-backend in Easyviz can be set::
-
-        [easyviz]
-        backend = vtk
-
-
-A .scitools.cfg file can be placed in the current working folder,
-thereby affecting plots made in this folder, or it can be located in
-the user's home folder, which will affect all plotting sessions for
-the user in question. There is also a common SciTools config file
-scitools.cfg for the whole site (located in the directory where the
-scitools package is installed).
-
 
 Tutorial
 ========
@@ -237,6 +192,19 @@ The filename extension determines the format: .ps or
 Figure fig:plot1a displays the resulting plot.
 
 FIGURE:[figs/plot1a.eps] A simple plot in PostScript format.
+
+On some platforms, some backends may result in a plot that is shown in
+just a fraction of a second on the screen before the plot window disappears
+(using the Gnuplot backend on Windows machines or using the Matplotlib
+backend constitute two examples). To make the window stay on the screen,
+add::
+
+        raw_input('Press Enter: ')
+
+
+at the end of the program. The plot window is killed when the program
+terminates, and this satement postpones the termination until the user
+hits the Enter key.
 
 
 Decorating the Plot
@@ -508,6 +476,12 @@ comparing the two sample functions we have used in the previous examples::
 
 
 
+*Text.* A text can be placed at a point (x,y) using the call::
+
+        text(x, y, 'Some text')
+
+
+
 *More Examples.* The examples in this tutorial, as well as
 additional examples, can be found in the examples directory in the
 root directory of the SciTools source code tree.
@@ -744,13 +718,63 @@ Advanced Easyviz Topics
 -----------------------
 
 The information in the previous sections aims at being sufficient for
-the daily work with plotting curves. Sometimes, however, one wants
-to fine-control the plot or how Easyviz behaves. First, we explain
-how to speed up the from scitools.std import * statement. 
-Second, we show how to operate with the plotting program directly and
-using plotting program-specific advanced features. Third, we explain
-how the user can grab Figure and Axis objects that Easyviz
-produces "behind the curtain".
+the daily work with plotting curves. Sometimes, however, one wants to
+fine-control the plot or how Easyviz behaves. First, we explain how to
+set the backend. Second, we tell how to speed up the from
+scitools.std import * statement.  Third, we show how to operate with
+the plotting program directly and using plotting program-specific
+advanced features. Fourth, we explain how the user can grab Figure
+and Axis objects that Easyviz produces "behind the curtain".
+
+*Controlling the Backend.* The Easyviz backend can either be set in a config file (see Config File
+below), by importing a special backend in the program,
+or by adding a command-line option::
+
+         --SCITOOLS_easyviz_backend name
+
+
+where name is the name of the backend: gnuplot, vtk,
+matplotlib, etc. Which backend you choose depends on what you have
+available on your computer system and what kind of plotting
+functionality you want.
+
+An alternative method is to import a specific backend in a program. Instead
+of the from scitools.std import * statement one writes::
+
+        from numpy import *
+        from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+        # or
+        from scitools.easyviz.vtk_ import *      # work with VTK
+
+
+Note the trailing underscore in the module names for the various backends.
+
+Easyviz is a subpackage of SciTools, and the the SciTools configuration
+file, called scitools.cfg has a section [easyviz] where the
+backend in Easyviz can be set::
+
+        [easyviz]
+        backend = vtk
+
+
+A .scitools.cfg file can be placed in the current working folder,
+thereby affecting plots made in this folder, or it can be located in
+the user's home folder, which will affect all plotting sessions for
+the user in question. There is also a common SciTools config file
+scitools.cfg for the whole site (located in the directory where the
+scitools package is installed).
+
+The following program prints a list of the names of the
+available backends on your computer system::
+
+        from scitools.std import *
+        backends = available_backends()
+        print 'Available backends:', backends
+
+
+There will be quite some output explaining the missing backends and
+what must be installed to use these backends.
+
 
 *Importing Just Easyviz.* easyviz:imports
 The from scitools.std import * statement imports many modules and packages::
@@ -794,11 +818,11 @@ Figure fig:plot2i.
 
 FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands.
 
-Easyviz does not support text and arrows at arbitrary places inside
-the plot, but Gnuplot does. If we use Gnuplot as backend, we may grab
-the Gnuplot object and issue Gnuplot commands to
-this object directly. Here is an example of the typical recipe, written
-after the core of the plot is made in the ordinary (plotting 
+Easyviz does not support arrows at arbitrary places inside the plot,
+but Gnuplot does. If we use Gnuplot as backend, we may grab the
+Gnuplot object and issue Gnuplot commands to this object
+directly. Here is an example of the typical recipe, written after the
+core of the plot is made in the ordinary (plotting
 program-independent) way::
 
         g = get_backend()
@@ -1748,6 +1772,17 @@ You can download prebuilt binaries from the Matplotlib home page.
 Troubleshooting
 ===============
 
+The Plot Window Disappears Quickly
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add::
+
+        raw_input('Press Enter: ')
+
+
+at the end of the program. The plot window is killed when the program
+terminates, and this satement postpones the termination until the user
+hits the Enter key.
 
 Check Your Backends!
 ~~~~~~~~~~~~~~~~~~~~
@@ -1769,9 +1804,9 @@ If this command does not work, Easyviz will not work with the Gnuplot
 backend. See the section *Installing Gnuplot* if you need help with 
 installing the Gnuplot program and its Python interface."""
 
-__author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
+__author__ = "Johannes H. Ring, Hans Petter Langtangen, Rolv Erlend Bredesen"
 
-_import_list = []  # used as in basics.py
+_import_list = []  # used as in basics.py to keep track of what we import
 import time as _time; _t0 = _time.clock();
 _import_times = 'easyviz import times: '
 
