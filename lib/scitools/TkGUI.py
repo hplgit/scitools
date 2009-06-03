@@ -7,7 +7,11 @@ the book "Python Scripting for Computational Science".
 # ParameterInterface
 #
 
-import Pmw, Tkinter, os
+import Tkinter, os
+try:
+    import Pmw
+except ImportError:
+    raise ImportError('You need to install the Pmw module')
 
 class DrawFunction:
     """

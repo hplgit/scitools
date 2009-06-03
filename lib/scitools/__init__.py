@@ -63,12 +63,18 @@ __acknowledgemets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
                       'Allen B. Downey', 'Imri Goldberg', \
                       'Fred L. Drake', 'Gael Varoquaux',
 
-# backward compatibility:
-import sys, std, TkGUI
+# for backward compatibility:
+import sys, std
 sys.modules['scitools.all'] = std
-#sys.modules['scitools.CanvasCoords'] = TkGUI
-#sys.modules['scitools.DrawFunction'] = TkGUI
-#sys.modules['scitools.FuncDependenceViz'] = TkGUI
-#sys.modules['scitools.FunctionSelector'] = TkGUI
-#sys.modules['scitools.ParameterInterface'] = TkGUI
-del std, sys, TkGUI
+try:
+    import TkGUI
+    sys.modules['scitools.CanvasCoords'] = TkGUI
+    sys.modules['scitools.DrawFunction'] = TkGUI
+    sys.modules['scitools.FuncDependenceViz'] = TkGUI
+    sys.modules['scitools.FunctionSelector'] = TkGUI
+    sys.modules['scitools.ParameterInterface'] = TkGUI
+    del TkGUI
+except:
+    pass  # Pmw and other graphics might be missing - this is not crucial
+
+del std, sys 

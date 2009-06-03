@@ -23,6 +23,10 @@ ps2mpeg.py:
 profiler.py:
   Script for simplifying the execution of Python's profiling tools. Used in [1].
 
+pyreport:
+  Modification of the original pyreport utility so that it works with
+  Easyviz.
+
 subst.py:
   Script for subsituting a a phrase by another in a set of files.
   Accepts regular expressions. Treated in [1].

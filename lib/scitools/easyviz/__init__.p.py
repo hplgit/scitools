@@ -2,9 +2,9 @@
 # #include "doc/easyviz.dst.txt"
 """
 
-__author__ = "Johannes H. Ring, Rolv Erlend Bredesen, Hans Petter Langtangen"
+__author__ = "Johannes H. Ring, Hans Petter Langtangen, Rolv Erlend Bredesen"
 
-_import_list = []  # used as in basics.py
+_import_list = []  # used as in basics.py to keep track of what we import
 import time as _time; _t0 = _time.clock();
 _import_times = 'easyviz import times: '
 

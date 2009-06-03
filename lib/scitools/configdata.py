@@ -186,6 +186,9 @@ def config_parser_frontend(basename,
       MATHPACK_my_section_my_first_option
       --MATHPACK_my_section_my_first_option
 
+    Such command-line options and values are removed from sys.argv after
+    being read.
+
     A convenient feature of configuration files is that variable interpolation
     is possible(see the documentation of ConfigParser in the Python
     Library Reference). Here is an example::
@@ -332,8 +335,12 @@ def config_parser_frontend(basename,
                 cml_option = '--' + envir_var_name
                 if cml_option in sys.argv:
                     try:
-                        v = sys.argv[sys.argv.index(cml_option) + 1]
-                    except:
+                        i = sys.argv.index(cml_option)
+                        v = sys.argv[i+1]
+                        # remove config option and value from sys.argv:
+                        del sys.argv[i]  # option
+                        del sys.argv[i]  # value
+                    except IndexError:
                         print """
 %s command-line option must be followed by a value!
 """ % cml_option
