@@ -3,7 +3,6 @@
 
 %s
 """
-__id__ = '$Id: numpytools.ppy 162 2006-11-09 12:36:28Z rolv $'
     
 import os, sys, operator, math
 
