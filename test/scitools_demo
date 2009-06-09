@@ -1,4 +1,7 @@
 #!/bin/sh
+# Demo of the bin/scitools script.
+# See test/verify1.verify for a more complete regression test of bin/scitools.
+
 
 # subst:
 
@@ -17,6 +20,8 @@ scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' tmp1.py
 
 
 # file2interactive:
+
+# first make a file with statements:
 cat > tmp2.py <<EOF
 import os
 origdir = os.getcwd()
@@ -26,3 +31,6 @@ origdir
 EOF
 
 scitools file2interactive tmp2.py
+
+# fake interactive typing (needs manual Return at each line):
+#scitools file2interactive tmp2.py human
