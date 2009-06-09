@@ -1,35 +1,13 @@
+This directory contains two executables:
 
-_gnuplot.py:
-  Cross-platform execution of the Gnuplot program. Used in [1].
+  - pyreport: a modified version of pyreport where the graphics works
+    with Easyviz, i.e., show() makes Easyviz display a plot in the
+    report (the original version of pyreport was written by Gael
+    Varoquaux, while Johannes H. Ring made the modifications for
+    Easyviz).
 
-gnuplot.bat:
-  Script for running Gnuplot on Windows (calls _gnuplot.py). Used in [1].
+  - scitools: a generic binary for all separate scripts from previous
+    versions of SciTools (regression.py, subst.py, etc.). 
+    Run scitools help or scitools --help to get a discription of what 
+    this script can do.
 
-file2interactive.py:
-  Utility for taking a set of Python statements in a file and
-  creating the corresponding interactive Python shell session.
-
-floatdiff.py:
-  Script for examining differences in regression tests involving
-  floating-point numbers. Used in [1].
-
-regression.py:
-  Simple front-end script to SciTools' Regression module. Used in [1].
-
-ps2mpeg.py:
-  Utility for turning a set of PostScript files into an MPEG movie,
-  using moeg_encode.
-
-profiler.py:
-  Script for simplifying the execution of Python's profiling tools. Used in [1].
-
-pyreport:
-  Modification of the original pyreport utility so that it works with
-  Easyviz.
-
-subst.py:
-  Script for subsituting a a phrase by another in a set of files.
-  Accepts regular expressions. Treated in [1].
-
-[1] H. P. Langtangen: Python Scripting for Computational Science. 
-    Third edition, second printing. Springer, 2009.

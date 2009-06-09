@@ -2,6 +2,7 @@
 legal_programs = 'subst', 'regression', 'profiler', 'ps2mpeg', 'floatdiff', \
                  'file2interactive'
 
+__doc__ = \
 """
 The scitools script takes a command and runs a corresponding utility.
 The available commands are listed below.
@@ -15,7 +16,7 @@ floatdiff:
   floating-point numbers. Used in [1].
 
 regression:
-  Simple front-end script to SciTools' Regression module. Used in [1].
+  Simple front-end script to the scitools.Regression module. Used in [1].
 
 ps2mpeg:
   Utility for turning a set of PostScript files into an MPEG movie,
@@ -28,6 +29,38 @@ subst:
   Script for subsituting a phrase by another in a set of files.
   Accepts regular expressions. Treated in [1].
 
+
+Examples:
+
+1. Substitute "compute_X(" calls, where X is any name, by
+   "calculate_X(" in a series of files code*.py:
+
+scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' code*.py
+
+Options -s, -m and -x can be issued to turn on pattern matching
+modifies (regular expression flags): re.S/re.DOTALL, re.m/re.MULTILINE
+and re.X/re.VERBOSE, respectively.
+
+
+2. Create an interactive session from a file with a list of statements:
+
+Unix> cat tmp2.py
+import os
+origdir = os.getcwd()
+os.chdir(os.pardir)
+os.getcwd()
+origdir
+
+Unix> scitools file2interactive tmp2.py
+>>> import os
+>>> origdir = os.getcwd()
+>>> os.chdir(os.pardir)
+>>> os.getcwd()
+'/Volumes/Shared/main/vc/scitools'
+>>> origdir
+'/Volumes/Shared/main/vc/scitools/test'
+
+   
 [1] H. P. Langtangen: Python Scripting for Computational Science. 
     Third edition, second printing. Springer, 2009.
 """
@@ -503,7 +536,7 @@ if __name__ == '__main__':
     try:
         program = sys.argv[1]
     except IndexError:
-        print '%s: missing second argument, must be one of\n%s' % \
+        print '%s: missing first argument, must be help, --help, -h or one of\n%s\n\n' % \
               (sys.argv[0], str(legal_programs)[1:-1])
         sys.exit(1)
 
@@ -522,6 +555,7 @@ if __name__ == '__main__':
     elif program == 'help' or program == '--help' or program == '-h':
         for p in legal_programs:
             exec('usage_%s()' % p)
+        print '\n', __doc__
     else:
         print 'Cannot recognize command', program
     
