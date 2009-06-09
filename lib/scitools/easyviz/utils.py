@@ -1,6 +1,5 @@
 from scitools.numpyutils import zeros, ones, exp, reshape, ravel, \
      ndgrid, seq, linspace, arctan2, sqrt, shape, log, sin, cos
-from scitools.numpytools import NumPyArray, NumPy_type, NumPy_dtype
 
 def available_backends():
     """Return a list of the available backends."""
