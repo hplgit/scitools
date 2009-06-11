@@ -1570,9 +1570,9 @@ for (int k=0; k<nz; k++) {
             try:
                 writer = vtk_image_writers[ext.lower()]
             except KeyError:
-                raise TypeError, \
-                      "hardcopy: Extension '%s' is currently not supported." \
-                      % ext
+                raise TypeError(
+                    "hardcopy: Extension '%s' is currently not supported." \
+                    % ext)
             if ext.lower() in ('.jpg', '.jpeg'):
                 writer.SetQuality(jpeg_quality)
                 writer.SetProgressive(progressive)

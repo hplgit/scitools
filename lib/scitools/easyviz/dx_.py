@@ -146,8 +146,8 @@ class _DXFigure(object):
 
     def send(self, cmd):
         if not isinstance(cmd, str):
-            raise ValueError, 'DX command must be string, not %s' \
-                  % type(cmd)
+            raise ValueError('DX command must be string, not %s' \
+                             % type(cmd))
         self.script += cmd + '\n'
         if not cmd.startswith('//'):  # don't send comments to DX
             DX.DXLSend(self.conn, cmd)

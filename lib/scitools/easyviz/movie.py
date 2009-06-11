@@ -50,15 +50,15 @@ class MovieEncoder(object):
                     encoder = enc
                     break
             if encoder is None:
-                raise Exception, "None of the supported encoders are installed"
+                raise Exception("None of the supported encoders are installed")
             self._prop['encoder'] = encoder
         else:
             if not encoder in self._legal_encoders:
-                raise ValueError, "encoder must be %s, not '%s'" % \
-                      (self._legal_encoders, encoder)
+                raise ValueError("encoder must be %s, not '%s'" % \
+                                 (self._legal_encoders, encoder))
             if not findprograms(encoder):
-                raise Exception, "The selected encoder (%s) is not installed" \
-                      % encoder
+                raise Exception("The selected encoder (%s) is not installed" \
+                                % encoder)
 
         # determine the file type of the input files:
         if isinstance(input_files, (tuple,list)):
@@ -66,15 +66,15 @@ class MovieEncoder(object):
         elif isinstance(input_files, str):
             file_ = input_files
         else:
-            raise ValueError, "The input files must be given as either a "\
-                  "list/tuple of strings or a string, not '%s'" % \
-                  type(input_files)
+            raise ValueError("The input files must be given as either a "\
+                             "list/tuple of strings or a string, not '%s'" % \
+                             type(input_files))
 
         # check that the input files do exist:
         if isinstance(input_files, str):
             all_input_files = glob.glob(input_files)
             if not all_input_files:
-                raise IOError, 'No files of the form %s exist.' % input_files
+                raise IOError('No files of the form %s exist.' % input_files)
         else:
             all_input_files = input_files
         for f in all_input_files:
@@ -83,15 +83,15 @@ class MovieEncoder(object):
                 print 'Input file %s does not exist.' % f
                 error_encountered = True
         if error_encountered:
-            raise IOError, 'Some input files were not found.'
+            raise IOError('Some input files were not found.')
 
         fname, ext = os.path.splitext(file_)
         if not ext:
-            raise ValueError, "Unable to determine file type from file name."
+            raise ValueError("Unable to determine file type from file name.")
         file_type = ext[1:] # remove the . (dot)
         if not file_type in self._legal_file_types:
-            raise TypeError, "file type must be %s, not '%s'" % \
-                  (self._legal_file_types, file_type)
+            raise TypeError("File type must be %s, not '%s'" % \
+                            (self._legal_file_types, file_type))
         self._prop['file_type'] = file_type
         
     def encode(self):
@@ -99,8 +99,8 @@ class MovieEncoder(object):
         # check that the selected encoder is legal:
         encoder = self._prop['encoder']
         if not encoder in self._legal_encoders:
-            raise ValueError, "encoder must be one of %s, not '%s'" % \
-                  (self._legal_encoders, encoder)
+            raise ValueError("Encoder must be one of %s, not '%s'" % \
+                             (self._legal_encoders, encoder))
 
         # get command string:
         exec('cmd=self._%s()' % encoder)
@@ -147,9 +147,9 @@ class MovieEncoder(object):
             files = glob.glob(files)
             files.sort()
         if not files:
-            raise ValueError, \
-                  "'%s' is not a valid file specification or the files " \
-                  "does not exist." % files
+            raise ValueError(
+                "'%s' is not a valid file specification or the files " \
+                "does not exist." % files)
         cmd += ' %s' % (' '.join(files))
 
         # set output file:
@@ -157,10 +157,9 @@ class MovieEncoder(object):
             self._prop['output_file'] = 'movie.gif'
         output_file = self._prop['output_file']
         if os.path.isfile(output_file) and not self._prop['overwrite_output']:
-            raise Exception, \
-                  "Output file '%s' already exist. Use" \
-                  " 'overwrite_output=True' to overwrite the file." \
-                  % output_file
+            raise Exception("Output file '%s' already exist. Use" \
+                            " 'overwrite_output=True' to overwrite the file." \
+                            % output_file)
         cmd += ' %s' % output_file
 
         return cmd
@@ -184,9 +183,9 @@ class MovieEncoder(object):
             files = glob.glob(files)
             files.sort()
             if not files:
-                raise ValueError, \
-                      "'%s' is not a valid file specification or the files "\
-                      "does not exist." % self._prop['input_files']
+                raise ValueError(
+                    "'%s' is not a valid file specification or the files "\
+                    "does not exist." % self._prop['input_files'])
         if isinstance(files, (list,tuple)):
             if not file_type in ['jpg', 'png'] or \
                    self._prop['force_conversion']:
@@ -241,10 +240,9 @@ class MovieEncoder(object):
             self._prop['output_file'] = 'movie.avi'
         output_file = self._prop['output_file']
         if os.path.isfile(output_file) and not self._prop['overwrite_output']:
-            raise Exception, \
-                  "Output file '%s' already exist. Use" \
-                  " 'overwrite_output=True' to overwrite the file." \
-                  % output_file
+            raise Exception("Output file '%s' already exist. Use" \
+                            " 'overwrite_output=True' to overwrite the file." \
+                            % output_file)
         cmd += ' -o %s' % output_file
         if self._prop['quiet']:
             cmd += ' > /dev/null 2>&1'
@@ -326,9 +324,8 @@ class MovieEncoder(object):
         if self._prop['fps'] in legal_frame_rates:
             fps = self._prop['fps']
         else:
-            raise ValueError, \
-                  "%s only supports the following frame rates: %s" % \
-                  (encoder, legal_frame_rates)
+            raise ValueError("%s only supports the these frame rates: %s" % \
+                             (encoder, legal_frame_rates))
 
         # set aspect ratio:
         legal_aspects = (1.0, 0.6735, 0.7031, 0.7615, 0.8055,
@@ -337,9 +334,9 @@ class MovieEncoder(object):
         aspect = self._prop['aspect']
         if aspect is not None:
             if aspect not in legal_aspects:
-                raise ValueError, \
+                raise(ValueError, \
                       "%s only supports the following aspect ratios: %s" % \
-                      (encoder, legal_aspects)
+                      (encoder, legal_aspects))
         else:
             aspect = 1.0
         print aspect
@@ -357,9 +354,9 @@ class MovieEncoder(object):
             files = glob.glob(files)
             files.sort()
         if not files:
-            raise ValueError, \
-                  "'%s' is not a valid file specification or the files " \
-                  "does not exist." % files
+            raise ValueError(
+                "'%s' is not a valid file specification or the files " \
+                "does not exist." % files)
         size = self._get_size()
         if size is not None or self._prop['file_type'] != 'pnm' or \
                self._prop['force_conversion']:
@@ -377,10 +374,9 @@ class MovieEncoder(object):
             self._prop['output_file'] = 'movie.mpeg'
         mpeg_file = self._prop['output_file']
         if os.path.isfile(mpeg_file) and not self._prop['overwrite_output']:
-            raise Exception, \
-                  "Output file '%s' already exist. Use" \
-                  " 'overwrite_output=True' to overwrite the file." \
-                  % mpeg_file
+            raise Exception("Output file '%s' already exist. Use" \
+                            " 'overwrite_output=True' to overwrite the file." \
+                            % mpeg_file)
 
         # set pattern (sequence of I, P, and B frames):
         pattern = self._prop['pattern']
@@ -503,7 +499,7 @@ FORCE_ENCODE_LAST_FRAME
         elif findprograms(png2yuv):
             cmd += png2yuv
         else:
-            raise Exception, "png2yuv or jpeg2yuv is not installed"
+            raise Exception("png2yuv or jpeg2yuv is not installed")
         cmd += ' -f 25' # frame rate
         cmd += ' -I p'  # interlacing mode: p = none / progressive
         cmd += ' -j "%s"' % files # set image files
@@ -526,10 +522,9 @@ FORCE_ENCODE_LAST_FRAME
             self._prop['output_file'] = 'movie.mpeg'
         output_file = self._prop['output_file']
         if os.path.isfile(output_file) and not self._prop['overwrite_output']:
-            raise Exception, \
-                  "Output file '%s' already exist. Use" \
-                  " 'overwrite_output=True' to overwrite the file." \
-                  % output_file
+            raise Exception("Output file '%s' already exist. Use" \
+                            " 'overwrite_output=True' to overwrite the file." \
+                            % output_file)
 
         cmd += ' | '
         cmd += encoder
@@ -549,8 +544,8 @@ FORCE_ENCODE_LAST_FRAME
                      '30': 5, '50': 6, '59.94': 7, '60': 8}
         fps = str(self._prop['fps'])
         if not fps in legal_fps:
-            raise ValueError, "fps must be %s, not %s" % \
-                  (fps_convert.keys(), fps)
+            raise ValueError("fps must be %s, not %s" % \
+                             (fps_convert.keys(), fps))
         cmd += ' -F %s' % legal_fps[fps]
         #cmd += ' --cbr' # constant bit rate
         gop_size = self._prop['gop_size']
@@ -569,9 +564,9 @@ FORCE_ENCODE_LAST_FRAME
                         aspect = legal_aspects[key]
                         break
                 if aspect not in legal_aspects.values():
-                    raise ValueError, \
-                          "aspect must be either 1:1, 4:3, 16:9, or 2.21:1," \
-                          " not '%s'" % aspect
+                    raise ValueError(
+                        "aspect must be either 1:1, 4:3, 16:9, or 2.21:1," \
+                        " not '%s'" % aspect)
             cmd += ' -a %s' % aspect
 
         # set output file:
@@ -611,7 +606,7 @@ FORCE_ENCODE_LAST_FRAME
         elif findprograms(convert):
             app = convert
         elif not findprograms((anytopnm, pnmtoany)):
-            raise Exception, "neither %s nor %s was found" % (convert,anytopnm)
+            raise Exception("Neither %s nor %s was found" % (convert,anytopnm))
         
         quiet = self._prop['quiet']
         new_files = []

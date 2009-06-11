@@ -107,7 +107,7 @@ class UniformBoxGrid(object):
     def _more_init(self):
         if self.nsd == 0:
             # no coordinates initialized...
-            raise TypeError, 'too few arguments to UniformBoxGrid constructor'
+            raise TypeError('too few arguments to UniformBoxGrid constructor')
 
         # convert lists to tuples (for constness):
         self.shape = tuple(self.shape)
@@ -170,13 +170,13 @@ class UniformBoxGrid(object):
         i = re.findall(indices, s)
         nsd = len(d)
         if nsd != len(i):
-            raise ValueError, 'could not parse "%s"' % s
+            raise ValueError('could not parse "%s"' % s)
         kwargs = {}
         dirnames = ('x', 'y', 'z')
         for dir in range(nsd):
             if not isinstance(d[dir], (list,tuple)) or len(d[dir]) != 2 or \
                not isinstance(i[dir], (list,tuple)) or len(i[dir]) != 2:
-                raise ValueError, 'syntax error in "%s"' % s
+                raise ValueError('syntax error in "%s"' % s)
 
             kwargs[dirnames[dir]] = (float(d[dir][0]), float(d[dir][1]))
             kwargs['n'+dirnames[dir]] = int(i[dir][1]) - int(i[dir][0]) # no of cells!
@@ -215,8 +215,8 @@ class UniformBoxGrid(object):
             
 
     def __setitem__(self, i, value):
-        raise AttributeError, 'subscript assignment is not valid for '\
-              '%s instances' % self.__class__.__name__
+        raise AttributeError('subscript assignment is not valid for '\
+                             '%s instances' % self.__class__.__name__)
 
     def ncells(self, i):
         """Return no of cells in direction i."""
@@ -333,8 +333,8 @@ class UniformBoxGrid(object):
             self.compatible(a)
         except (IndexError,TypeError), e:
             print 'e=',e, type(e), e.__class__.__name__
-            raise e.__class__, \
-                  'BoxGrid.vectorized_eval(f):\n%s, BUT:\n%s' % (msg, e)
+            raise e.__class__('BoxGrid.vectorized_eval(f):\n%s, BUT:\n%s' % \
+                              (msg, e))
         return a
         
     def init_fromstring(s):
@@ -349,14 +349,14 @@ class UniformBoxGrid(object):
         compatible with the grid.
         """
         if not isinstance(data_array, ndarray):
-            raise TypeError, 'data %s is %s, not NumPy array' % \
-                  (name_of_data_array, type(data_array))
+            raise TypeError('data %s is %s, not NumPy array' % \
+                            (name_of_data_array, type(data_array)))
         else:
             if data_array.shape != self.shape:
-                raise IndexError, \
-                  "data %s of shape %s is not "\
-                  "compatible with the grid's shape %s" % \
-                  (name_of_data_array, data_array.shape, self.shape)
+                raise IndexError("data %s of shape %s is not "\
+                                 "compatible with the grid's shape %s" % \
+                                 (name_of_data_array, data_array.shape,
+                                  self.shape))
         return True # if we haven't raised any exceptions
 
     def iter(self, domain_part='all', vectorized_version=True):
@@ -460,8 +460,8 @@ class UniformBoxGrid(object):
         elif self.iterator_domain == 'interior_edges':
             print 'iterator over "interior_edges" is not implemented'
         else:
-            raise ValueError, 'iterator over "%s" is not impl.' % \
-                  self.iterator_domain
+            raise ValueError('iterator over "%s" is not impl.' % \
+                             self.iterator_domain)
         
 #    "def __next__(self):"
         """

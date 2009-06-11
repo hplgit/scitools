@@ -28,7 +28,7 @@ def exception(msg, *module_names):
     """
     s = missing(*module_names)
     if s:
-        raise ImportError, "%s missing the module(s) %s" % (msg,s)
+        raise ImportError("%s missing the module(s) %s" % (msg,s))
 
 def message(module, critical=1, msg=None):
     """

@@ -155,8 +155,7 @@ def readfile(filename, commentchar='#'):
 def write_v1(fileobj, a):
     """Write a two-dim. NumPy array a in tabular form to fileobj."""
     if len(a.shape) != 2:
-        raise TypeError, \
-              "a 2D array is required, shape now is "+str(a.shape)
+        raise TypeError("a 2D array is required, shape now is "+str(a.shape))
     for i in range(a.shape[0]):
         for j in range(a.shape[1]):
             fileobj.write(str(a[i,j]) + "\t")
@@ -195,8 +194,7 @@ def write(fileobj, a):
     # written by Mario Pernici <Mario.Pernici@mi.infn.it>
     
     if len(a.shape) != 2:
-        raise TypeError, \
-              "a 2D array is required, shape now is "+str(a.shape)
+        raise TypeError("a 2D array is required, shape now is "+str(a.shape))
     N = 512
     shape0 = a.shape[0]
     shape1 = a.shape[1]

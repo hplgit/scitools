@@ -45,10 +45,9 @@ class Field(object):
         # disconnect from grid:
         # strange error here if two fields have the same name...............
         if self.name not in self.grid.fields:
-            raise KeyError, \
-                  '%s is not registered as field name in grid; '\
+            raise KeyError('%s is not registered as field name in grid; '\
                   'maybe another field has the same name and has '\
-                  'removed the name?' % self.name
+                  'removed the name?' % self.name)
         del self.grid.fields[self.name]
 
 class BoxField(Field):
@@ -83,10 +82,10 @@ class BoxField(Field):
             if values.shape == required_shape:
                 self.values = values  # field data are provided
             else:
-                raise ValueError, \
+                raise ValueError(
                       'values array are incompatible with grid size; '\
                       'shape is %s while required shape is %s' % \
-                      (values.shape, required_shape)
+                      (values.shape, required_shape))
         else:
             # create array of scalar field grid point values:
             self.values = zeros(required_shape)

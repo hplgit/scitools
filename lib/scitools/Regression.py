@@ -166,7 +166,7 @@ class TestRun:
         
         self.logfile  = os.path.join(os.getcwd(),logfile)
         if string.find(logfile, '.v') == -1:
-            raise 'error in logfile name; must contain .v suffix'
+            raise ValueError('error in logfile name; must contain .v suffix')
         
         # remove logfile if it exists:
         if os.path.isfile(self.logfile): os.remove(self.logfile)
@@ -812,7 +812,7 @@ class VerifyDiffpack(Verify):
 class FloatDiff:
     def __init__(self, master, file1, file2):
         if not _has_TkPmw:  # global variable set in top of the script
-            raise ImportError, 'Could not import Tkinter and Pmw'
+            raise ImportError('Could not import Tkinter and Pmw')
         
         self.master = master
         self.top = Tkinter.Frame(master, borderwidth=5)

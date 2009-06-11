@@ -1,4 +1,13 @@
 """
+Note:
+This module stems from the days when there were three (almost) competing
+Numerical Python implementations around and people wanted to be able
+to switch between these implementations in their Python programs.
+Nowadays, numpy is the dominating module, and the use of _numpyload and
+numpytools is no longer particularly fruitful. For backward compatibility
+of scitools, the two modules still exist.
+
+
 Unified interface to Numeric, numarray, and numpy
 =================================================
 
@@ -182,8 +191,8 @@ if basic_NumPy is None:
 if basic_NumPy is None:  basic_NumPy = 'numpy' # final default choice
 
 if basic_NumPy not in ('Numeric', 'numarray', 'numpy'):
-    raise ImportError, 'cannot decide which Numerical Python '\
-          'implementation to use (ended up with "%s")' % basic_NumPy
+    raise ImportError('cannot decide which Numerical Python '\
+          'implementation to use (ended up with "%s")' % basic_NumPy)
 
 #print 'from', basic_NumPy, 'import *'
 
@@ -237,9 +246,9 @@ if basic_NumPy == 'numpy':
         LinearAlgebra.eigenvectors = linalg.eig
 
     except ImportError, e:
-        raise ImportError, '%s\nnumpy import failed!\n'\
+        raise ImportError('%s\nnumpy import failed!\n'\
               'see doc of %s module for how to choose Numeric instead' % \
-              (e, __name__)
+              (e, __name__))
 
 
     def array_output_precision(no_of_decimals):
@@ -257,7 +266,7 @@ if basic_NumPy == 'numpy':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)        
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -270,7 +279,7 @@ if basic_NumPy == 'numpy':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = ndarray
 
@@ -284,17 +293,17 @@ if basic_NumPy == 'numarray':
         # RNG is not supported, make an object that gives an error message:
         class __Dummy:
             def __getattr__(self, name):
-                raise ImportError, 'You have chosen the numarray package, '\
-                'but it does not have the functionality of the RNG module'
+                raise ImportError('You have chosen the numarray package, '\
+                'but it does not have the functionality of the RNG module')
         RNG = __Dummy()
         del _Numeric_name, _numarray_name, _dummy1, __Dummy, _NumPy_modules
         
         from numarray import *
 
     except ImportError, e:
-        raise ImportError, '%s\nnumarray import failed!\n'\
+        raise ImportError('%s\nnumarray import failed!\n'\
         'see doc of %s module for how to choose Numeric instead' % \
-        (e, __name__)
+        (e, __name__))
 
     def array_output_precision(no_of_decimals):
         """Set no of decimals in printout of arrays."""
@@ -311,7 +320,7 @@ if basic_NumPy == 'numarray':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)        
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -324,7 +333,7 @@ if basic_NumPy == 'numarray':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = NumArray
 
@@ -385,9 +394,9 @@ if basic_NumPy == 'Numeric':
         del _problems
         
     except ImportError, e:
-        raise ImportError, '%s\nNumeric import failed!\n'\
+        raise ImportError('%s\nNumeric import failed!\n'\
         'see doc of %s module for how to choose numarray instead' % \
-        (e, __name__)
+        (e, __name__))
 
 
     # fix of matrixmultiply bug in Numeric (according to Fernando Perez,
@@ -415,7 +424,7 @@ if basic_NumPy == 'Numeric':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -429,7 +438,7 @@ if basic_NumPy == 'Numeric':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = ArrayType
 

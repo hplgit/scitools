@@ -27,7 +27,7 @@ def test_if_module_exists(modulename, msg='',
                 print message
                 #print 'The problem arose in ', 
                 debug.trace(frameno=-3)
-            raise ImportError, message
+            raise ImportError(message)
         else:
             if msg:
                 print '\n', message
@@ -87,12 +87,12 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
         if failure_handling == 'warning':
             print 'Warning:', msg
         elif failure_handling == 'exception':
-            raise OSError, msg
+            raise OSError(msg)
         elif failure_handling == 'silent':
             pass
         else:
-            raise ValueError, 'wrong value "%s" of failure_handling' % \
-                  failure_handling
+            raise ValueError('wrong value "%s" of failure_handling' % \
+                             failure_handling)
 
     return failure, output
 
@@ -129,8 +129,8 @@ def read_cml(option, default=None, argv=sys.argv):
     except ValueError:
         return str(default)
     except IndexError:
-        raise IndexError, 'array of command-line arguments is too short; '\
-              'no value after %s option' % option
+        raise IndexError('array of command-line arguments is too short; '\
+                         'no value after %s option' % option)
 
 
     
@@ -155,11 +155,11 @@ def str2bool(s):
         elif s2 in false_values:
             return False
         else:
-            raise ValueError, '"%s" is not a boolean value %s' % \
-                  (s, true_values+false_values)
+            raise ValueError('"%s" is not a boolean value %s' % \
+                             (s, true_values+false_values))
     else:
-        raise TypeError, '%s %s cannot be converted to bool' % \
-              (s, type(s))
+        raise TypeError('%s %s cannot be converted to bool' % \
+                        (s, type(s)))
     
 
 def str2obj(s, globals=globals(), locals=locals(), debug=False):
@@ -333,8 +333,8 @@ def interpret_as_callable_or_StringFunction(s, iv, globals=globals()):
         if callable(evaled_s):
             return evaled_s
         else:
-            raise ValueError, \
-            'string "%s" could be evaluated, but is not callable' % s
+            raise ValueError(
+                'string "%s" could be evaluated, but is not callable' % s)
     except NameError, e:
         try:
             if isinstance(iv, str):  # single indep. variable?
@@ -342,9 +342,9 @@ def interpret_as_callable_or_StringFunction(s, iv, globals=globals()):
             func = StringFunction(s, independent_variables=iv,
                                   globals=globals)
         except Exception, e:
-            raise ValueError, \
-            '%s\n"%s" must be a function name, instance creation, \
-            or string formula!' % (e, s)
+            raise ValueError(
+                '%s\n"%s" must be a function name, instance creation, \
+                or string formula!' % (e, s))
         return func
 
 
@@ -373,9 +373,9 @@ def read_cml_func(option, default_func, iv='t', globals=globals()):
         try:
             value = sys.argv[i+1]
         except IndexError:
-            raise IndexError, \
-                  'no value after option %s on the command line' \
-                  % option
+            raise IndexError(
+                'no value after option %s on the command line' \
+                % option)
         value = interpret_as_callable_or_StringFunction\
                 (value, iv, globals=globals)
     else:
@@ -577,9 +577,8 @@ def findprograms(programs, searchlibs=[], write_message=False):
             if os.path.isfile(fullpath):
                 return True
         else:
-            raise TypeError, \
-                  'platform %s/%s not supported' % \
-                  (sys.platform, os.name)
+            raise TypeError('platform %s/%s not supported' % \
+                            (sys.platform, os.name))
         return False # otherwise
         
     path = os.environ['PATH']  # /usr/bin:/usr/local/bin:/usr/X11/bin
@@ -700,7 +699,7 @@ def preprocess_all_files(rootdir, options=''):
     """
     # first check that the user has the preprocess script:
     if not findprograms('preprocess'):
-        raise SystemError, 'The preprocess program could not be found'
+        raise SystemError('The preprocess program could not be found')
     
     def treat_a_dir(fileinfo, d, files):
         warning = """\
@@ -765,7 +764,7 @@ def pow_eff(a,b, powfunc=math.pow):
             return r
         else:
             if a < 0:
-                raise ValueError, 'pow(a,b) with a=%g<0'
+                raise ValueError('pow(a,b) with a=%g<0')
             else:
                 return powfunc(a, b)
 
@@ -1041,7 +1040,7 @@ def checkmathfunc(f, args):
 
     # run f with 1D and 3D arrays, compare result with
     # corresponding loops and scalar evaluations
-    raise Exception, 'NOT IMPLEMENTED YET'
+    raise NotImplementedError('NOT IMPLEMENTED YET')
 
 
 def memusage(_proc_pid_stat = '/proc/%s/stat'%(os.getpid())):
@@ -1173,7 +1172,7 @@ def cmldict(argv, cmlargs=None, validity=0):
             value = argv[arg_counter] 
             cmlargs[option] = value
         elif validity:
-            raise ValueError, "The option %s is not registered" % option
+            raise ValueError("The option %s is not registered" % option)
         arg_counter += 1
     return cmlargs
 

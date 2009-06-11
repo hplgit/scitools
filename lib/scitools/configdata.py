@@ -29,7 +29,7 @@ def tobool(value):
     elif isinstance(value, int):
         return bool(value)
     else:
-        raise ValueError, 'the value %s cannot be converted to bool' % value
+        raise ValueError('the value %s cannot be converted to bool' % value)
     return value
 
 def _option_interpolation_error(files, section, option, value,
@@ -38,11 +38,11 @@ def _option_interpolation_error(files, section, option, value,
         r = 'r'
     else:
         r = ''
-    raise ValueError, 'configuration file error in %s\n'\
-          'section [%s], option "%s": do not use %s<%s>\n'\
-          'specifications in options that are to be '\
-          'substituted in other options: %s' % \
-          (files, section, option, r, str2type, value)
+    raise ValueError('configuration file error in %s\n'\
+                     'section [%s], option "%s": do not use %s<%s>\n'\
+                     'specifications in options that are to be '\
+                     'substituted in other options: %s' % \
+                     (files, section, option, r, str2type, value))
     
 def load_config_file(name, 
                      default_file_location=None,

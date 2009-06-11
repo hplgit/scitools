@@ -903,7 +903,7 @@ class MatplotlibBackend(BaseClass):
                     num = fignr
                     break
         else:
-            raise ValueError, "closefig: cannot close figure '%s'" % arg
+            raise ValueError("closefig: cannot close figure '%s'" % arg)
         self._g.close(num)
         #del self._figs[num]._g
         #del self._figs[num]
@@ -934,23 +934,23 @@ class MatplotlibBackend(BaseClass):
         return pylab.cm.get_cmap('pink', m)
     
     def white(self, m=None):
-        raise NotImplementedError, 'white not implemented in class %s' % \
-              self.__class__.__name__
+        raise NotImplementedError('white not implemented in class %s' % \
+                                  self.__class__.__name__)
     
     def flag(self, m=None):
         return pylab.cm.get_cmap('flag', m)
     
     def lines(self, m=None):
-        raise NotImplementedError, 'lines not implemented in class %s' % \
-              self.__class__.__name__
+        raise NotImplementedError('lines not implemented in class %s' % \
+                                  self.__class__.__name__)
     
     def colorcube(self, m=None):
-        raise NotImplementedError, 'colorcube not implemented in class %s' % \
-              self.__class__.__name__
+        raise NotImplementedError('colorcube not implemented in class %s' % \
+                                  self.__class__.__name__)
     
     def vga(self, m=None):
-        raise NotImplementedError, 'vga not implemented in class %s' % \
-              self.__class__.__name__
+        raise NotImplementedError('vga not implemented in class %s' % \
+                                  self.__class__.__name__)
     
     def jet(self, m=None):
         return pylab.cm.get_cmap('jet', m)

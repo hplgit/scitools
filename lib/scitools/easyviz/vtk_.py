@@ -1024,7 +1024,7 @@ class VtkBackend(BaseClass):
                 elif func == 'isosurface':
                     self._add_isosurface(item, sgrid)
             else:
-                raise NotImplementedError, '%s not yet implemented' % item
+                raise NotImplementedError('%s not yet implemented' % item)
 
             self._axis._vtk_apd.Update()
 
@@ -1266,7 +1266,7 @@ class VtkBackend(BaseClass):
                        The default is False (no compression).
         """
         if not filename:
-            raise TypeError, "hardcopy: No filename given, cannot save figure."
+            raise TypeError("hardcopy: No filename given, cannot save figure.")
 
         self.setp(**kwargs)
 
@@ -1312,15 +1312,15 @@ class VtkBackend(BaseClass):
             try:
                 writer = image_writers[ext.lower()]
             except KeyError:
-                raise TypeError, \
-                      "hardcopy: File format '%s' is currently not supported."\
-                      % ext
+                raise TypeError(
+                    "hardcopy: File format '%s' is currently not supported."\
+                    % ext)
             try:
                 writer.SetQuality(int(quality))
                 writer.SetProgressive(bool(progressive))
             except ValueError:
-                raise ValueError, \
-                      "hardcopy: Integer required for the 'quality' argument."
+                raise ValueError(\
+                      "hardcopy: Integer required for the 'quality' argument.")
             except AttributeError:
                 pass # only vtkJPEGWriter has quality and progressive attrs.
             writer.SetFileName(filename)
@@ -1335,8 +1335,8 @@ class VtkBackend(BaseClass):
         nargs = len(args)
         if nargs == 2: # brighten(map,beta)
             if not isinstance(args[0], vtk.vtkLookupTable):
-                raise ValueError, "brighten: map must be %s, not %s" % \
-                      (type(vtk.vtkLookupTable), type(args[0]))
+                raise ValueError("brighten: map must be %s, not %s" % \
+                                 (type(vtk.vtkLookupTable), type(args[0])))
             lut, beta = args
         elif nargs == 1: # brighten(beta)
             if not hasattr(self._axis, '_vtk_colormap'):
@@ -1345,7 +1345,7 @@ class VtkBackend(BaseClass):
             lut = self._axis._vtk_colormap
             beta = args[0]
         if not isinstance(beta, (float,int)) or (beta <= -1 or beta >= 1):
-            raise ValueError, "brighten: beta must be between -1 and 1"
+            raise ValueError("brighten: beta must be between -1 and 1")
         # all is OK, change colormap:
         hue = lut.GetHueRange()
         val = lut.GetValueRange()

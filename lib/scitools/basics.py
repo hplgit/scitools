@@ -121,8 +121,7 @@ if not has_scipy:
             from numpy.lib.scimath import *   # more general sin, cos etc
 
         except ImportError:
-            raise ImportError, \
-                  'numpy was requested, but it could not be found'
+            raise ImportError('numpy was requested, but it could not be found')
         _t2 = _time.clock(); _import_times += 'numpy=%g ' % (_t2 - _t1)
 
 # nice to have imports:

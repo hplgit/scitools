@@ -38,7 +38,7 @@ class ManyDiscretizationPrm(object):
         len(p) must be 2*len(d) in this model
         """
         if len(p) != 2*len(d):
-            raise ValueError, 'len(p)=%d != 2*len(d)=%d' % (len(p),2*len(d))
+            raise ValueError('len(p)=%d != 2*len(d)=%d' % (len(p),2*len(d)))
         sum = 0
         for i in range(len(d)):
             sum += p[2*i] * d[i]**p[2*i+1]
@@ -59,7 +59,7 @@ class ManyDiscretizationPrm(object):
         @return: list of fitted paramters.
         """
         if len(d) != len(e):
-            raise ValueError, 'len(d) != len(e)'
+            raise ValueError('len(d) != len(e)')
         # transform d and e to the data format required by
         # the Scientific package:
         data = []
@@ -129,10 +129,10 @@ class OneDiscretizationPrm(object):
         @return: a, C; a is the exponent, C is the factor in front.
         """
         if len(d) != len(e):
-            raise ValueError, 'd and e must have the same length'
+            raise ValueError('d and e must have the same length')
         if not isinstance(d[0], (float,int)):
-            raise TypeError, \
-            'd must be an array of numbers, not %s' % str(type(d[0]))
+            raise TypeError('d must be an array of numbers, not %s' % \
+                            str(type(d[0])))
         # transform d and e to the data format required by
         # the Scientific package:
         data = []
@@ -151,7 +151,7 @@ class OneDiscretizationPrm(object):
         a formula for two successive experiments.
         """
         if len(d) != len(e):
-            raise ValueError, 'd and e must have the same length'
+            raise ValueError('d and e must have the same length')
         
         rates = []
         for i in range(1, len(d)):

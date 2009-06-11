@@ -1168,7 +1168,7 @@ class Matlab2Backend(BaseClass):
                     num = fignr
                     break
         else:
-            raise ValueError, "closefig: cannot close figure '%s'" % arg
+            raise ValueError("closefig: cannot close figure '%s'" % arg)
         self._script += "close(%s)\n" % num
         #del self._figs[num]._g
         #del self._figs[num]

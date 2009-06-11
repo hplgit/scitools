@@ -231,7 +231,7 @@ class DrawFunction:
         try:
             return self.xcoor, self.f
         except:
-            raise AttributeError, 'No drawing! Draw the curve first!'
+            raise AttributeError('No drawing! Draw the curve first!')
     
 
 def points2grid(x, y, xcoor):
@@ -253,7 +253,7 @@ def points2grid(x, y, xcoor):
             # linear interpolation:
             f[i] = y[L] + (y[R]-y[L])/(x[R]-x[L])*(xi-x[L])
         else:
-            raise ValueError, "bug"
+            raise ValueError("bug")
     return f
 
 
@@ -465,13 +465,14 @@ class InputPrm:
             try:
                 q = PQ.PhysicalQuantity('1.0 ' + str(self.unit))
             except:
-                raise ValueError, \
-                'unit=%s is an illegal physical unit' % str(self.unit)
+                raise ValueError(
+                    'unit=%s is an illegal physical unit' % str(self.unit))
             if self.str2type is float or self.str2type is int:
                 pass  # must have float or int when units are present
             else:
-                raise ValueError, \
-                'str2type must be float or int, not %s' % str(self.str2type)
+                raise ValueError(
+                    'str2type must be float or int, not %s' % \
+                    str(self.str2type))
 
         self.set(default)  # set parameter value
         scitools.modulecheck.exception('InputPrm constructor', 'Scientific')
@@ -524,12 +525,12 @@ class InputPrm:
                 try:
                     self.pq = PQ.PhysicalQuantity(v)
                 except:
-                    raise ValueError, '%s should be %s; illegal syntax' % \
-                          (v, self.str2type.__name__)
+                    raise ValueError('%s should be %s; illegal syntax' % \
+                                     (v, self.str2type.__name__))
                 if not self.pq.isCompatible(self.unit):
-                    raise ValueError, \
-                    'illegal unit (%s); %s is registered with unit %s' % \
-                    (v, self.name, self.unit)
+                    raise ValueError(
+                        'illegal unit (%s); %s is registered with unit %s' % \
+                        (v, self.name, self.unit))
                 self.pq.convertToUnit(self.unit)
                 v = self.str2type(str(self.pq).split()[0])
                 return v
@@ -541,9 +542,9 @@ class InputPrm:
                 # check if a unit was given:
                 try:
                     PQ.PhysicalQuantity(v)
-                    raise ValueError, \
-                    'parameter %s given with dimension: %s, but '\
-                    'dimension is not registered' % (self.name,v)
+                    raise ValueError(
+                        'parameter %s given with dimension: %s, but '\
+                        'dimension is not registered' % (self.name,v))
                 except:
                     pass
             return self.str2type(v)
@@ -555,8 +556,8 @@ class InputPrm:
             except:
                 return PQ.PhysicalQuantity(self.get_wunit())
         else:
-            raise AttributeError, 'parameter %s has no registered unit' % \
-                  self.name
+            raise AttributeError('parameter %s has no registered unit' % \
+                                 self.name)
 
     def _scan(self, s):
         """Interpret string s. Return number (for self._v)."""
@@ -615,9 +616,9 @@ class InputPrmGUI(InputPrm):
             # use Tkinter variables
             self.make_GUI_variable_Tk(str2type, unit, name)
         else:
-            raise ValueError, \
-                  'The desired GUI toolkit %s is not supported' % \
-                  InputPrmGUI.GUI_toolkit
+            raise ValueError(
+                'The desired GUI toolkit %s is not supported' % \
+                InputPrmGUI.GUI_toolkit)
         # How to implement support for other toolkits:
         # self._v must point to an object with a get and set method
         # for extracting and setting the value of the parameter in
@@ -674,31 +675,31 @@ class InputPrmGUI(InputPrm):
             elif str2type == str2obj:
                 self._v = Tkinter.StringVar()
             else:
-                raise ValueError, \
-                'str2type %s for parameter %s is not supported' % \
-                (str2type, name)
+                raise ValueError(
+                    'str2type %s for parameter %s is not supported' % \
+                    (str2type, name))
 
     def make_widget(self):
         if InputPrmGUI.GUI_toolkit.startswith('Tk'):
             self.make_widget_Tk()
         else:
-            raise ValueError, \
-                  'The desired GUI toolkit %s is not supported' % \
-                  InputPrmGUI.GUI_toolkit
+            raise ValueError(
+                'The desired GUI toolkit %s is not supported' % \
+                InputPrmGUI.GUI_toolkit)
 
     def make_widget_Tk(self):
         """Make Tk widget according to self._widget_type."""
         if self.name is None:
-            raise TypeError, "name attribute must be set before "\
-                  "widget can be created"
+            raise TypeError("name attribute must be set before "\
+                            "widget can be created")
         if self.parent is None:
-            raise TypeError, "parent attribute must be set before "\
-                  "widget can be created"
+            raise TypeError("parent attribute must be set before "\
+                            "widget can be created")
         # consistency/type check of values, if it is supplied:
         if self._values is not None:
             if type(self._values) != type([]) and \
                type(self._values) != type(()):
-                raise TypeError, "values attribute must be list or tuple"
+                raise TypeError("values attribute must be list or tuple")
 
         if self.unit is None:
             label = self.name
@@ -718,9 +719,9 @@ class InputPrmGUI(InputPrm):
         elif self._widget_type == 'slider':
             # we require values:
             if self._values is None:
-                raise TypeError, \
-                      "values attribute must be set for slider '%s'" % \
-                      self.name
+                raise TypeError(
+                    "values attribute must be set for slider '%s'" % \
+                    self.name)
 
             min = float(self._values[0]); max = float(self._values[1])
             try:
@@ -739,9 +740,9 @@ class InputPrmGUI(InputPrm):
         elif self._widget_type == 'option':
             # we require values, which now contains the option values
             if self._values is None:
-                raise TypeError, \
-                      "values attribute must be set for option menu '%s'" % \
-                      self.name
+                raise TypeError(
+                    "values attribute must be set for option menu '%s'" % \
+                    self.name)
 
             self.widget = Pmw.OptionMenu(self.parent,
                labelpos='w',  # n, nw, ne, e and so on
@@ -814,8 +815,8 @@ class InputPrmCGI(InputPrm):
     def make_form_entry(self):
         """Write the form's input field, according to widget_type."""
         if self.name is None:
-            raise TypeError, "name attribute must be set before "\
-                  "widget can be created"
+            raise TypeError("name attribute must be set before "\
+                            "widget can be created")
 
         value = str(self.get())
         
@@ -826,9 +827,9 @@ class InputPrmCGI(InputPrm):
         elif self._widget_type == 'option':
             # we require values, which now contains the option values
             if self._values is None:
-                raise TypeError, \
-                      "values attribute must be set for option menu '%s'" % \
-                      self.name
+                raise TypeError(
+                    "values attribute must be set for option menu '%s'" % \
+                    self.name)
 
             s += """<SELECT NAME="%s" SIZE=1 VALUE="%s">\n""" % \
                  (self.name, value)
@@ -887,7 +888,7 @@ def createInputPrm(interface, name, default, str2type=None,
                         values=values, form=form,
                         help=help, unit=unit, cmlarg=cmlarg)
     else:
-        raise ValueError, "interface '%s' not supported" % interface
+        raise ValueError("interface '%s' not supported" % interface)
     
     return p
 
@@ -957,8 +958,8 @@ class Parameters:
                 elif p.widget_type == 'checkbutton':
                     self.checkbt_sequence.append(p)
                 else:
-                    raise ValueError, 'unknown widget_type "%s"' \
-                          % p.widget_type
+                    raise ValueError('unknown widget_type "%s"' \
+                                     % p.widget_type)
         elif self._interface == 'CGI':
             for p in self._seq:
                 p.form = self._form
@@ -1094,8 +1095,8 @@ def parametersGUI(p, parent, pack_side='top',
     for obj in p.parameters_sequence:
         # must be set on beforehand: obj.widget_type = 'entry'
         if obj.widget_type is None:
-            raise TypeError, "widget_type attribute "\
-                  "must be set for InputPrmGUI '%s'" % obj.name
+            raise TypeError("widget_type attribute "\
+                            "must be set for InputPrmGUI '%s'" % obj.name)
         obj.parent = frame
         obj.make_widget()
         #obj.widget.pack(side='top', padx=5, pady=5, fill='x', expand=1)
@@ -1392,9 +1393,9 @@ class AutoSimVizGUI:
         """
         if isinstance(graph, (list,tuple)):
             if len(graph) != 1:
-                raise TypeError, \
-                'graph argument is a list of length %d>1, should be scalar' %\
-                len(graph)
+                raise TypeError(
+                    'graph argument is a list of length %d>1, should be scalar' %\
+                    len(graph))
             else:
                 graph = graph[0]
                 
@@ -1648,9 +1649,8 @@ class FuncSpec:
         self.name = name
         self.representation = representation
         if not self.name:
-            raise ValueError, \
-                  'name keyword must be set when creating a '\
-                  'FuncSpec object'
+            raise ValueError('name keyword must be set when creating a '\
+                             'FuncSpec object')
         
         self.configure(
             parameters=parameters,
@@ -1671,9 +1671,9 @@ class FuncSpec:
                 self.parameters = \
                    Parameters(interface='GUI', prm_dict=self.parameters)
             if not isinstance(self.parameters, Parameters):
-                raise TypeError, \
-                  'parameters must be a dictionary or Parameters object, '\
-                  'not a %s' % type(self.parameters)
+                raise TypeError(
+                    'parameters must be a dictionary or Parameters object, '\
+                    'not a %s' % type(self.parameters))
 
         if 'independent_variables' in kwargs:
             self.independent_variables = kwargs['independent_variables']
@@ -1684,9 +1684,9 @@ class FuncSpec:
         if 'function_object' in kwargs:
             self.function_object = kwargs['function_object']
             if type(self.function_object) == types.ClassType:
-                raise TypeError, \
-                'class type, not instance, provided as '\
-                'function_object for %s' % self.name
+                raise TypeError(
+                    'class type, not instance, provided as '\
+                    'function_object for %s' % self.name)
         if 'vector' in kwargs:
             self.vector = kwargs['vector']
         if 'description' in kwargs:
@@ -1700,50 +1700,49 @@ class FuncSpec:
         
     def ok(self):
         if not isinstance(self.independent_variables, (list, tuple)):
-            raise TypeError, \
-                  'independent_variables must be list or tuple, not %s' % \
-                  type(self.independent_variables)
+            raise TypeError(
+                'independent_variables must be list or tuple, not %s' % \
+                type(self.independent_variables))
 
         if self.formula is not None:
             if not isinstance(self.formula, basestring):
-                raise TypeError, \
-                      'formula must be string, not %s' % type(self.formula)
+                raise TypeError(
+                    'formula must be string, not %s' % type(self.formula))
 
         if self.image is not None:
             if not isinstance(self.image, basestring):
-                raise TypeError, \
-                      'image must be string (filename), not %s' % \
-                      type(self.image)
+                raise TypeError(
+                    'image must be string (filename), not %s' % \
+                    type(self.image))
             if not os.path.isfile(self.image):
-                raise ValueError, 'file %s not found' % self.image
+                raise ValueError('file %s not found' % self.image)
 
         if not isinstance(self.vector, int):
-            raise TypeError, \
-                  'vector must be int (0=scalar, >=1: no of vector comp.), '\
-                  'not %s' % type(self.vector)
+            raise TypeError(
+                'vector must be int (0=scalar, >=1: no of vector comp.), '\
+                'not %s' % type(self.vector))
 
         if self.description is not None:
             if not isinstance(self.description, basestring):
-                raise TypeError, \
-                      'description must be string, not %s' % \
-                      type(self.description)
+                raise TypeError(
+                    'description must be string, not %s' % \
+                    type(self.description))
 
         if self.xcoor is not None:
             if not isinstance(self.xcoor, ndarray):
-                raise TypeError, \
-                      'xcoor must be a NumPy array, not %s' % type(self.xcoor)
+                raise TypeError(
+                    'xcoor must be a NumPy array, not %s' % type(self.xcoor))
 
         if self.scrolled_frame != False:
             if not isinstance(self.scrolled_frame, dict):
-                raise TypeError, 'scrolled_frame must be True or dict, '\
-                      'not %s' % type(self.scrolled_frame)
+                raise TypeError('scrolled_frame must be True or dict, '\
+                                'not %s' % type(self.scrolled_frame))
             
 
     def get_independent_variables(self):
         if not self.independent_variables:
-            raise ValueError, \
-                  'FuncSpec for "%s" has no list of independent '\
-                  'variables' % self.name
+            raise ValueError('FuncSpec for "%s" has no list of independent '\
+                             'variables' % self.name)
         text = 'independent variable'
         if len(self.independent_variables) > 1:
             text += 's'
@@ -1834,15 +1833,16 @@ class UserFunction:
                 try:
                     f = self.fspec.function_object
                 except:
-                    raise AttributeError, \
-                          'FuncSpec "%s" used in UserFunction has '\
-                          'no function_object set' % self.fspec.name
+                    raise AttributeError(
+                        'FuncSpec "%s" used in UserFunction has '\
+                        'no function_object set' % self.fspec.name)
                 if hasattr(f, name):
                     setattr(f, name, d[name])
                 else:
-                    raise NameError, 'expected parameter name %s '\
-                          'as attribute in function object '\
-                          '\n(dir(function object)=%s)' % (name,dir(f))
+                    raise NameError('expected parameter name %s '\
+                                    'as attribute in function object '\
+                                    '\n(dir(function object)=%s)' % \
+                                    (name,dir(f)))
         return wrap2callable(self.fspec.function_object)
 
 
@@ -1850,9 +1850,8 @@ class Drawing(UserFunction):
     def __init__(self, parent, func_spec):
         UserFunction.__init__(self, parent, func_spec)
         if self.fspec.xcoor is None:
-            raise ValueError, \
-                  'want DrawFunction widget, but no xcoor info'\
-                  ' in the FuncSpec object'
+            raise ValueError('want DrawFunction widget, but no xcoor info'\
+                             ' in the FuncSpec object')
         self.drawing = DrawFunction(self.fspec.xcoor, self.top)
         self.drawing.pack(padx=10, pady=10)
                 
@@ -2281,7 +2280,7 @@ class FuncDependenceViz:
             # add dx/2 to upper limit to ensure self.n entries:
             x = arange(self.xmin.get(), self.xmax.get()+dx/2, dx, float)
             if x.shape[0] != self.n.get():
-                raise IndexError, "x has wrong length"
+                raise IndexError("x has wrong length")
             self.x = x
 
             self.y = {}

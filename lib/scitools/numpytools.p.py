@@ -115,26 +115,26 @@ if __name__ == '__main__':
             x = Numeric.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of  Numeric and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of  Numeric and %s"\
+                    %N.basic_NumPy)
             import numarray
             x = numarray.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
 
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of numarray and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of numarray and %s"\
+                    %N.basic_NumPy)
 
             import numpy
             x = numpy.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
             #assert N.rank(X) == 3
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of numpy and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of numpy and %s"\
+                    %N.basic_NumPy)
             
         def testMeshGrid_DenseFromNodenseMeshgridOutput(self):
             # sparse fails for dense output when input has singleton dimensions

@@ -174,7 +174,7 @@ Here is an example::
             _set = False
             for d in self._prm_list:
                 if len(d.keys()) == 0:
-                    raise ValueError, 'self._prm_list is wrong (empty)'
+                    raise ValueError('self._prm_list is wrong (empty)')
                 try:
                     if self.set_in_dict(prm, kwargs[prm], d):
                         _set = True
@@ -191,8 +191,7 @@ Here is an example::
                     message('%s=%s assigned in self.user_prm' % \
                             (prm, kwargs[prm]))
                 else:
-                    raise NameError, \
-                          'parameter "%s" not registered' % prm
+                    raise NameError('parameter "%s" not registered' % prm)
         self._update()
 
     def set_in_dict(self, prm, value, d):
@@ -222,17 +221,16 @@ Here is an example::
                     if isinstance(value, self._type_check[prm]):
                         can_set = True
                     else:
-                        raise TypeError, \
-                              '\n\n%s=%s: %s has type %s, not %s' % \
-                              (prm, value, prm, self._type_check[prm],
-                               type(value))
+                        raise TypeError('\n\n%s=%s: %s has type %s, not %s' % \
+                                        (prm, value, prm, self._type_check[prm],
+                                         type(value)))
 
                 elif callable(self._type_check[prm]):
                     can_set = self._type_check[prm](value)
                 else:
-                    raise TypeError, 'self._type_check["%s"] has an '\
-                          'illegal value %s' % \
-                          (prm, self._type_check[prm])
+                    raise TypeError('self._type_check["%s"] has an '\
+                                    'illegal value %s' % \
+                                    (prm, self._type_check[prm]))
             else:
                 can_set = True
         else:

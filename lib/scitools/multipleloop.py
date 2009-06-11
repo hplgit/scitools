@@ -167,7 +167,7 @@ def _outer(a, b):
     """
     all = []
     if not isinstance(a, list):
-        raise TypeError, 'a must be a list'
+        raise TypeError('a must be a list')
     if isinstance(b, (float,int,complex,basestring)):  b = [b]  # scalar?
 
     if len(a) == 0:
@@ -178,7 +178,7 @@ def _outer(a, b):
         for j in b:
             for i in a:
                 if not isinstance(i, list):
-                    raise TypeError, 'a must be list of list'
+                    raise TypeError('a must be list of list')
                 # note: i refers to a list; i.append(j) changes
                 # the underlying list (in a), which is not what
                 # we want, we need a copy, extend the copy, and
@@ -419,7 +419,7 @@ class MultipleLoop:
 
     def next(self):
         if self.counter > len(self.options)-1:
-            raise StopIteration
+            raise StopIteration()
         self.cmlargs = self.options[self.counter]
         self.parameters = self.all[self.counter]
         self.varied_parameters = \

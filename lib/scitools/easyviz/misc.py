@@ -22,8 +22,8 @@ def _toggle_state(state):
 
 def _check_type(var, name, type):
     if not isinstance(var, type):
-        raise TypeError, 'variable "%s"=%s is not of %s' % \
-              (name, var, str(type))
+        raise TypeError('variable "%s"=%s is not of %s' % \
+                        (name, var, str(type)))
     else:
         return True
 
@@ -31,8 +31,8 @@ def _check_size(a, a_name, expected_size):
     if isinstance(expected_size, int):
         expected_size = (expected_size,) 
     if shape(a) != expected_size:
-        raise ValueError, '%s has shape %s, expected %s' % \
-              (a_name, a.shape, expected_size)
+        raise ValueError('%s has shape %s, expected %s' % \
+                         (a_name, a.shape, expected_size))
 
 def _check_xyzv(*args, **kwargs):
     nargs = len(args)
@@ -42,12 +42,12 @@ def _check_xyzv(*args, **kwargs):
     elif nargs == 4:
         x, y, z, v = [asarray(a) for a in args]
     else:
-        raise ValueError, "_check_xyzv: wrong number of arguments"
+        raise ValueError("_check_xyzv: wrong number of arguments")
 
     try:
         nx, ny, nz = shape(v)
     except:
-        raise ValueError, '_check_xyzv: v must be 3D, not %dD' % len(shape(v))
+        raise ValueError('_check_xyzv: v must be 3D, not %dD' % len(shape(v)))
 
     indexing = kwargs.get('indexing', 'ij')
 
@@ -121,12 +121,12 @@ def _check_xyz(*args, **kwargs):
     elif nargs == 3:
         x, y, z = [asarray(a) for a in args]
     else:
-        raise TypeError, "_check_xyz: wrong number of arguments"
+        raise TypeError("_check_xyz: wrong number of arguments")
     
     try:
         nx, ny = shape(z)
     except:
-        raise ValueError, "z must be 2D, not %dD" % len(shape(z))
+        raise ValueError("z must be 2D, not %dD" % len(shape(z)))
 
     indexing = kwargs.get('indexing', 'ij')
 
@@ -162,7 +162,7 @@ def _check_xyuv(*args, **kwargs):
     elif nargs == 4:
         x, y, u, v = [asarray(a) for a in args]
     else:
-        raise TypeError, "_check_xyuv: wrong number of arguments"
+        raise TypeError("_check_xyuv: wrong number of arguments")
     
     indexing = kwargs.get('indexing', 'ij')
 
@@ -207,8 +207,7 @@ def _check_xyuv(*args, **kwargs):
                        "_check_xyuv: y has shape %s, expected %s, %s, " \
                        "or %s" % (shape(y), (nx,ny), (nx,1), (nx,))
     else:
-        raise ValueError, \
-              "_check_xyuv: u must be 1D or 2D, not %dD" % len(us)
+        raise ValueError("_check_xyuv: u must be 1D or 2D, not %dD" % len(us))
         
     return x, y, u, v
 
@@ -220,7 +219,7 @@ def _check_xyzuvw(*args, **kwargs):
     elif nargs == 6:
         x, y, z, u, v, w = [asarray(a) for a in args]
     else:
-        raise TypeError, "_check_xyzuvw: wrong number of arguments"
+        raise TypeError("_check_xyzuvw: wrong number of arguments")
 
     indexing = kwargs.get('indexing', 'xy')
 
@@ -272,8 +271,8 @@ def _check_xyzuvw(*args, **kwargs):
                "_check_xyzuvw: z has shape %s, expected %s, %s, or %s" % \
                (shape(z), us, (1,1,nz), (nz,))
     else:
-        raise ValueError, \
-              "_check_xyzuvw: u must be 1D, 2D, or 3D, not %dD" % len(us)
+        raise ValueError(
+            "_check_xyzuvw: u must be 1D, 2D, or 3D, not %dD" % len(us))
 
     return x, y, z, u, v, w
 

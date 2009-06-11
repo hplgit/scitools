@@ -181,16 +181,16 @@ class StringFunction:
             # one character)
             name = kwargs['independent_variable'] # 'x', 't', 'dudt' etc.
             if not isinstance(name, str):
-                raise ValueError, \
-                      'name "%s" of independent variable is illegal' % name
+                raise ValueError(
+                    'name "%s" of independent variable is illegal' % name)
             self._var = (name,)
         else:
             names = kwargs.get('independent_variables', ('x',))
             if isinstance(names, str):
                 names = (names,)
             elif not isinstance(names, (list,tuple)):
-                raise ValueError, \
-                      'independent variables=%s is invalid' % names
+                raise ValueError(
+                    'independent variables=%s is invalid' % names)
             self._var = tuple(names)
         # user's globals() array (with relevant imported modules/functions):
         self._globals = kwargs.get('globals', globals())

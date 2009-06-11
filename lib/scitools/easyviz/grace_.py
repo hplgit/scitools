@@ -843,8 +843,8 @@ class GraceBackend(BaseClass):
             ext = '.ps'  # no extension given, assume .ps
             filename += ext
         elif ext not in ext2dev:
-            raise ValueError, "hardcopy: extension must be %s, not '%s'" % \
-                  (ext2dev.keys(), ext)
+            raise ValueError("hardcopy: extension must be %s, not '%s'" % \
+                             (ext2dev.keys(), ext))
 
         device = ext2dev[ext]
         if ext == '.agr':

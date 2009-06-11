@@ -452,11 +452,11 @@ class Plotter(object):
 					if self.draw_axes and cur_y == y_zero_coord and draw_symbol == "-":
 						cur_draw_symbol = "="
 					output_buffer[int(x0+slope*y)][cur_y] = cur_draw_symbol
-		except:
+		except Exception, e:
 			print start, end
 			print start_coord, end_coord
 			print plot_data
-			raise
+			raise e
 
 		return False            
 		

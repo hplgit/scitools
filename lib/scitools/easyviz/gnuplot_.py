@@ -992,7 +992,7 @@ class GnuplotBackend(BaseClass):
 
         msg = "Currently no support for '%s' in the Gnuplot backend." % \
               item.getp('function')
-        raise NotImplementedError, msg
+        raise NotImplementedError(msg)
 
     def _add_isosurface(self, item):
         if DEBUG:
@@ -1005,7 +1005,7 @@ class GnuplotBackend(BaseClass):
 
         msg = "Currently no support for '%s' in the Gnuplot backend." % \
               item.getp('function')
-        raise NotImplementedError, msg
+        raise NotImplementedError(msg)
 
     def _add_slices(self, item):
         if DEBUG:
@@ -1024,7 +1024,7 @@ class GnuplotBackend(BaseClass):
 
         msg = "Currently no support for '%s' in the Gnuplot backend." % \
               item.getp('function')
-        raise NotImplementedError, msg
+        raise NotImplementedError(msg)
 
     def _add_contourslices(self, item):
         if DEBUG:
@@ -1050,7 +1050,7 @@ class GnuplotBackend(BaseClass):
 
         msg = "Currently no support for '%s' in the Gnuplot backend." % \
               item.getp('function')
-        raise NotImplementedError, msg
+        raise NotImplementedError(msg)
 
     def _set_figure_size(self, fig):
         if DEBUG:
@@ -1239,8 +1239,8 @@ class GnuplotBackend(BaseClass):
             ext = '.ps'
             filename += ext
         elif ext not in ext2term:
-            raise ValueError, "hardcopy: extension must be %s, not '%s'" % \
-                  (ext2term.keys(), ext)
+            raise ValueError("hardcopy: extension must be %s, not '%s'" % \
+                             (ext2term.keys(), ext))
         terminal = ext2term.get(ext, 'postscript')
         
         self.setp(**kwargs)
@@ -1327,8 +1327,8 @@ class GnuplotBackend(BaseClass):
             ext = '.ps'
             filename += ext
         elif ext not in ext2term:
-            raise ValueError, "hardcopy: extension must be %s, not '%s'" % \
-                  (ext2term.keys(), ext)
+            raise ValueError("hardcopy: extension must be %s, not '%s'" % \
+                             (ext2term.keys(), ext))
         terminal = ext2term.get(ext, 'postscript')
         
         self.setp(**kwargs)

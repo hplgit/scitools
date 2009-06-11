@@ -47,7 +47,7 @@ import sys
 from contextlib import contextmanager  
 
 if float(sys.version[:3]) < 2.5:
-    raise ImportError, "This module requires version 2.5 of python"
+    raise ImportError("This module requires version >= 2.5 of python")
 
 _std_err = sys.stderr
 _tmp_err =  StringIO.StringIO() # stream for hidden stderr
@@ -87,8 +87,8 @@ def _test_with_statement():
     except SyntaxError:
         print "Success: '%s' did not compile" %statement
     else: 
-        raise Exception, "Statement: '%s' should not have been compiled" \
-              %statement
+        raise Exception("Statement: '%s' should not have been compiled" \
+                        % statement)
     
     # Setup error redirection 
     std_err = sys.stderr

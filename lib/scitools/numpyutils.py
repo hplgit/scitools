@@ -389,8 +389,8 @@ def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
         try:
             return allclose(a, b, rtol, atol)
         except:
-            raise TypeError, 'Illegal types: a is %s and b is %s' % \
-                  (type(a), type(b))
+            raise TypeError('Illegal types: a is %s and b is %s' % \
+                            (type(a), type(b)))
     
 
 def length(a):
@@ -702,7 +702,7 @@ try:
 except:
     class NumPy2BltVector:
         def __init__(self, array):
-            raise ImportError, "Python is not compiled with BLT"
+            raise ImportError("Python is not working properly with BLT")
 
 try:
     from scitools.StringFunction import StringFunction
@@ -965,7 +965,7 @@ def wrap2callable(f, **kwargs):
     elif operator.isCallable(f):
         return f
     else:
-        raise TypeError, 'f of type %s is not callable' % type(f)
+        raise TypeError('f of type %s is not callable' % type(f))
 
 
 # problem: setitem in ArrayGen does not support multiple indices
@@ -1161,7 +1161,7 @@ def factorial(n, method='reduce'):
     scipy                     |   131.18
     """
     if not isinstance(n, (int, long, float)):
-        raise TypeError, 'factorial(n): n must be integer not %s' % type(n)
+        raise TypeError('factorial(n): n must be integer not %s' % type(n))
     n = long(n)
 
     if n == 0 or n == 1:
@@ -1200,7 +1200,7 @@ def factorial(n, method='reduce'):
             return reduce(operator.mul, xrange(2, n+1))
             # or return factorial(n)
     else:
-        raise ValueError, 'factorial: method="%s" is not supported' % method
+        raise ValueError('factorial: method="%s" is not supported' % method)
 
 
 def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
@@ -1220,7 +1220,7 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
         if message == 'warning':
             print 'Warning: %s' % msg
         elif message == 'exception':
-            raise TypeError, msg
+            raise TypeError(msg)
     return a_new
 
 
@@ -1350,32 +1350,32 @@ def arr(shape=None, element_type=float,
     if data is not None:
 
         if not operator.isSequenceType(data):
-            raise TypeError, 'arr: data argument is not a sequence type'
+            raise TypeError('arr: data argument is not a sequence type')
         
         if isinstance(shape, (list,tuple)):
             # check that shape and data are compatible:
             if reduce(operator.mul, shape) != size(data):
-                raise ValueError, \
-                      'arr: shape=%s is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
+                raise ValueError(
+                    'arr: shape=%s is not compatible with %d '\
+                    'elements in the provided data' % (shape, size(data)))
         elif isinstance(shape, int):
             if shape != size(data):
-                raise ValueError, \
-                      'arr: shape=%d is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
+                raise ValueError(
+                    'arr: shape=%d is not compatible with %d '\
+                    'elements in the provided data' % (shape, size(data)))
         elif shape is None:
             if isinstance(data, (list,tuple)) and copy == False:
                 # cannot share data (data is list/tuple)
                 copy = True
             return array(data, dtype=element_type, copy=copy, order=order)
         else:
-            raise TypeError, \
-                  'shape is %s, must be list/tuple or int' % type(shape)
+            raise TypeError(
+                'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
         if not isinstance(file_, (basestring, file, StringIO)):
-            raise TypeError, \
-                  'file_ argument must be a string (filename) or '\
-                  'open file object, not %s' % type(file_)
+            raise TypeError(
+                'file_ argument must be a string (filename) or '\
+                'open file object, not %s' % type(file_))
 
         if isinstance(file_, basestring):
             file_ = open(file_, 'r')
@@ -1388,8 +1388,8 @@ def arr(shape=None, element_type=float,
         file_.seek(0)
         # we assume that array data in file has element_type=float:
         if not (element_type == float or element_type == 'd'):
-            raise ValueError, 'element_type must be float_/"%s", not "%s"' % \
-                  ('d', element_type)
+            raise ValueError('element_type must be float_/"%s", not "%s"' % \
+                             ('d', element_type))
         
         d = array([float(word) for word in file_.read().split()])
         if isinstance(file_, basestring):
@@ -1399,27 +1399,27 @@ def arr(shape=None, element_type=float,
             suggested_shape = (int(len(d)/ncolumns), ncolumns)
             total_size = suggested_shape[0]*suggested_shape[1]
             if total_size != len(d):
-                raise ValueError, \
-                'found %d array entries in file "%s", but first line\n'\
-                'contains %d elements - no shape is compatible with\n'\
-                'these values' % (len(d), file, ncolumns)
+                raise ValueError(
+                    'found %d array entries in file "%s", but first line\n'\
+                    'contains %d elements - no shape is compatible with\n'\
+                    'these values' % (len(d), file, ncolumns))
             d.shape = suggested_shape
         if shape is not None:
             if shape != d.shape:
-                raise ValueError, \
-                'shape=%s is not compatible with shape %s found in "%s"' % \
-                (shape, d.shape, file)
+                raise ValueError(
+                    'shape=%s is not compatible with shape %s found in "%s"' % \
+                    (shape, d.shape, file))
         return d
 
     elif interval is not None and shape is not None:
         if not isinstance(shape, int):
-            raise TypeError, 'For array values in an interval, '\
-                  'shape must be an integer'
+            raise TypeError('For array values in an interval, '\
+                            'shape must be an integer')
         if not isinstance(interval, (list,tuple)):
-            raise TypeError, 'interval must be list or tuple, not %s' % \
-                  type(interval)
+            raise TypeError('interval must be list or tuple, not %s' % \
+                            type(interval))
         if len(interval) != 2:
-            raise ValueError, 'interval must be a 2-tuple (or list)'
+            raise ValueError('interval must be a 2-tuple (or list)')
 
         try:
             return linspace(interval[0], interval[1], shape)
@@ -1431,11 +1431,10 @@ def arr(shape=None, element_type=float,
         # no data, no file, just make zeros
 
         if not isinstance(shape, (tuple, int, list)):
-            raise TypeError, \
-           'arr: shape (1st arg) must be tuple or int'
+            raise TypeError('arr: shape (1st arg) must be tuple or int')
         if shape is None:
-            raise ValueError, \
-            'arr: either shape, data, or from_function must be specified'
+            raise ValueError(
+                'arr: either shape, data, or from_function must be specified')
 
         try:
             return zeros(shape, dtype=element_type, order=order)

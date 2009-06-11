@@ -19,9 +19,8 @@ class NumPyDB:
             # check if files are there:
             if not os.path.isfile(self.dn) or \
                not os.path.isfile(self.pn):
-                raise IOError, \
-                      "Could not find the files %s and %s" %\
-                      (self.dn, self.pn)
+                raise IOError("Could not find the files %s and %s" %\
+                              (self.dn, self.pn))
             # load mapfile into list of tuples:
             fm = open(self.pn, 'r')
             lines = fm.readlines()
@@ -64,13 +63,11 @@ class NumPyDB:
 
     def dump(self, a, identifier):  # empty base class func.
         """Dump NumPy array a with identifier."""
-        raise NameError, \
-              "dump is not implemented; must be impl. in subclass"
+        raise NameError("dump is not implemented; must be impl. in subclass")
 
     def load(self, identifier, bestapprox=None):
         """Load NumPy array with identifier or find best approx."""
-        raise NameError, \
-              "load is not implemented; must be impl. in subclass"
+        raise NameError("load is not implemented; must be impl. in subclass")
 
 
 class NumPyDB_text(NumPyDB):
@@ -279,7 +276,7 @@ def main(n, length, method, name):
     elif method == "text":
         dataout = NumPyDB_text(name, 'store')
     else:
-        raise "illegal method name='%s'" % method
+        raise ValueError("illegal method name='%s'" % method)
 
     import time
     t0 = time.clock()
@@ -299,7 +296,7 @@ def main(n, length, method, name):
     elif method == "text":
         datain = NumPyDB_text(name, 'load')
     else:
-        raise "illegal method name='%s'" % method
+        raise ValueError("illegal method name='%s'" % method)
 
     w = datain.load('time=4')
     print "identifier='time=4':", w

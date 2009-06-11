@@ -91,8 +91,8 @@ def get_argname_in_call(call_name, arg_no):
         argname = args.split(',')[arg_no-1].strip()
         return argname, where
     else:
-        raise ValueError, 'pattern="%s" does not match "%s"' % \
-              (pattern, func_call)
+        raise ValueError('pattern="%s" does not match "%s"' % \
+                         (pattern, func_call))
 
 
 def right_length(a, length):
@@ -104,9 +104,9 @@ def right_length(a, length):
     """
     if len(a) != length:
         a_name, where = get_argname_in_call('right_length', 1)
-        raise ValueError, \
-        '%s\n%s has length %s, which is not compatible with '\
-        'assumed length %s' % (where, a_name, len(a), length)
+        raise ValueError(
+            '%s\n%s has length %s, which is not compatible with '\
+            'assumed length %s' % (where, a_name, len(a), length))
     else:
         return True
 
@@ -118,15 +118,15 @@ def right_size1(a, shape):
     @param shape: the expected shape of a. @type shape: int or tuple
     """
     if not hasattr(a, 'shape'):
-        raise TypeError, '%s is %s and not a NumPy array' % \
-              (a_name, type(a))
+        raise TypeError('%s is %s and not a NumPy array' % \
+                        (a_name, type(a)))
     if isinstance(shape, int):
         shape = (shape,)  # wrap in tuple
     if a.shape != shape:
         a_name, where = get_argname_in_call('right_size1', 1)
-        raise ValueError, \
-        '%s\n%s has size %s, which is not compatible with assumed size %s' \
-                      % (where, a_name, a.shape, shape)
+        raise ValueError(
+            '%s\n%s has size %s, which is not compatible with assumed size %s' \
+            % (where, a_name, a.shape, shape))
     else:
         return True
 
@@ -139,14 +139,14 @@ def right_size2(a1, a2):
     if hasattr(a1, 'shape') and hasattr(a2, 'shape'):
         pass # ok, a1 and a2 are NumPy arrays
     else:
-        raise TypeError, '%s is %s and %s is %s - both must be NumPy arrays' \
-              % (a1_name, type(a1), a2_name, type(a2))
+        raise TypeError('%s is %s and %s is %s - both must be NumPy arrays' \
+                        % (a1_name, type(a1), a2_name, type(a2)))
     if a1.shape != a2.shape:
         a1_name, where = get_argname_in_call('right_size2', 1)
         a2_name, where = get_argname_in_call('right_size2', 2)
-        raise ValueError, \
-        '%s\n%s has size %s, which is not compatible with size %s of %s' \
-          % (where, a1_name, a1.shape, a2.shape, a2_name)
+        raise ValueError(
+            '%s\n%s has size %s, which is not compatible with size %s of %s' \
+            % (where, a1_name, a1.shape, a2.shape, a2_name))
     else:
         return True
 
@@ -259,8 +259,9 @@ def right_type(a, expected_types):
                     break
     if not match:
         a_name, where = get_argname_in_call('right_type', 1)
-        raise TypeError, '%s\n%s is of type %s, while we expected %s' % \
-          (where, a_name, t, ' or '.join([str(e) for e in expected_types]))
+        raise TypeError('%s\n%s is of type %s, while we expected %s' % \
+                        (where, a_name, t,
+                         ' or '.join([str(e) for e in expected_types])))
     else:
         return True
         
@@ -277,7 +278,7 @@ def wrong_type(a, comment=''):
     """
     tp = get_type(a)
     a_name, where = get_argname_in_call('wrong_type', 1)
-    raise TypeError, '%s is of wrong type (%s). %s' % (a_name, tp, comment)
+    raise TypeError('%s is of wrong type (%s). %s' % (a_name, tp, comment))
 
 
 _SAFECODE = True

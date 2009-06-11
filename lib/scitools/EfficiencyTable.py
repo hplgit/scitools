@@ -103,7 +103,7 @@ class EfficiencyTable:
 
         if best == 1.0E+20:
             # did not find any CPU time > cpu_eps
-            raise ValueError, 'too small CPU times (all less than %E)' % cpu_eps
+            raise ValueError('too small CPU times (all less than %E)' % cpu_eps)
         return best, best_key
     
     def __str__(self):
