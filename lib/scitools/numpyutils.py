@@ -27,7 +27,7 @@ The following extensions to Numerical Python are also defined:
            indexing
            
  - ndgrid:
-           same as calling meshgrid with indexing='ij' (grid indexing)
+           same as calling meshgrid with indexing='ij' (matrix indexing)
            
  - float_eq:
            operator == for float operands with tolerance,
@@ -102,10 +102,11 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     >>> y=linspace(0,1,2)        # coordinates along y axis
     >>> xv, yv = meshgrid(x,y)   # extend x and y for a 2D xy grid
     >>> xv
-    array([[ 0. ,  0.5,  1. ]])
+    array([[ 0. ,  0.5,  1. ],
+           [ 0. ,  0.5,  1. ]])
     >>> yv
-    array([[ 0.],
-           [ 1.]])
+    array([[ 0.,  0.,  0.],
+           [ 1.,  1.,  1.]])
     >>> xv, yv = meshgrid(x,y, sparse=True)  # make sparse output arrays
     >>> xv
     array([[ 0. ,  0.5,  1. ]])
@@ -117,26 +118,31 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     >>> z=5
     >>> xv, yv, zc = meshgrid(x,y,z)   
     >>> xv
-    array([[ 0. ,  0.5,  1. ]])
+    array([[ 0. ,  0.5,  1. ],
+           [ 0. ,  0.5,  1. ]])
     >>> yv
-    array([[ 0.],
-           [ 1.]])
+    array([[ 0.,  0.,  0.],
+           [ 1.,  1.,  1.]])
     >>> zc
     5
 
     >>> # 2D slice of a 3D grid, with x=const:
     >>> meshgrid(2,y,x)  
-    (2, array([[ 0.,  1.]]), array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]))
+    (2, array([[ 0.,  1.],
+           [ 0.,  1.],
+           [ 0.,  1.]]), array([[ 0. ,  0. ],
+           [ 0.5,  0.5],
+           [ 1. ,  1. ]]))
     >>> meshgrid(0,1,5, sparse=True)  # just a 3D point
     (0, 1, 5)
     >>> meshgrid(y)      # 1D grid; y is just returned
     array([ 0.,  1.])
     >>> meshgrid(x,y, indexing='ij')  # change to matrix indexing
-    (array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]), array([[ 0.,  1.]]))
+    (array([[ 0. ,  0. ],
+           [ 0.5,  0.5],
+           [ 1. ,  1. ]]), array([[ 0.,  1.],
+           [ 0.,  1.],
+           [ 0.,  1.]]))
 
     Why does SciTools has its own meshgrid function when NumPy has three
     similar functions, `mgrid`, `ogrid`, and `meshgrid`?
@@ -195,7 +201,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     the first two input and output arguments:
     >>> yv, xv = numpy.meshgrid(y, x)
     >>> # same as:
-    >>> xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
+    >>> xv, yv = meshgrid(x, y, indexing='ij')
     However, we think it is clearer to have the logical "x, y"
     sequence on the left-hand side and instead adjust a keyword argument.
     """
