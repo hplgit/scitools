@@ -1,2 +1,87 @@
+Version 0.6:
+
+* Numerous bugfixes have been performed.
+	
+* The all module is renamed to std, i.e.,
+
+	from scitools.all import *
+
+  should now read
+
+	from scitools.std import *
+
+  The old name "all" is still available as a synonym for std, implying
+  that old programs will work. (The "all" name is misleading as only
+  a small portion of scitools is actually imported.)
+	
+* Removed all the separate scripts subst.py, regression.py, etc. in the
+  bin directory. Now there is only one scitools executable in bin,
+  called scitools. The old scripts are recovered by giving their name
+  (except the .py extension) to scitools. That is, the old subst.py,
+  regression.py, ps2mpeg.py, file2interactive.py scripts are now run as 
+
+	scitools subst ...
+	scitools regression ...
+	scitools ps2mpeg ...
+	scitools file2interactive ...
+
+  and so forth for the other scripts. Type scitools --help to see more.
+  The old script names subst.py, regression.py will be available if
+  one installs the software associated with the book [1] (e.g., the
+  subst.py script in that software package is just an execution of
+  scitools subst).
+	
+* Added ppmtompeg as alternative to mpeg_encode in ps2mpeg.
+
+* Changed all raise statements to function calls (preparation for Py 3.0).
+	
 * Added support for more open commands in sound.play
   in order to support more Linux distributions.
+
+* Added (preliminary) support for a text function easyviz.
+
+* Updated the Easyviz documentation.
+
+* Made an available_backends function for listing the backends for Easyviz.
+
+* All sequences passed to Easyviz are passed through numpy.asarray so that
+  the sequences are arrays inside Easyviz.
+
+* Added some Matlab-style functions in numpyutils.py: orth, matrix_rank,
+  null. Reworked all norm* functions.
+
+* Merged the modules DrawFunction.py, FuncDependenceViz.py,
+  FunctionSelector.py, ParameterInterface.py and CanvasCoords.py 
+  into TkGUI.py to store all modules with Tk and Pmw graphics in
+  one place (these modules are mostly used in the book [1]).
+  For backward compatibility,  __init__.py defines the old names.
+  That is, from ParameterInterface import * will still work, but
+  actually this means from TkGUI import *.
+
+* Improved bar plots in Easyviz.
+
+* The old plotdemo* files are moved to examples/old.
+
+* Removed hgtools.py as it was too specialized for qualifying for scitools.
+
+* Removed timer.py as this name is likely to clash with other scripts on
+  a computer system.
+
+* Removed immature subpackages odeiface and pyPDE.
+
+* Removed the DocWriter module. It is now in the Doconce package (to be
+  released - until then, send mail to hpl@simula.no to obtain that package).
+
+* Reimplemented the misc.str2type function in a smarter way.
+
+* New str2bool function in misc.py. Takes on, off, false, true, False, True,
+  yes, no, etc. as input and turns the string to a bool. For user interfaces.
+
+* Removed the functions guesstype (not used) and findvalue.
+  scitools.misc.str2obj now solves the problem in a better way.
+
+* Calling figure(...) in Easyviz now returns a Figure object.
+
+
+[1] H. P. Langtangen: Python Scripting for Computational Science.
+3rd edition, 2nd printing, Springer, 2009.
