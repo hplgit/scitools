@@ -33,6 +33,8 @@ Version 0.6:
 	
 * Added ppmtompeg as alternative to mpeg_encode in ps2mpeg.
 
+* Renamed the save function in the matlab2 backend to save_m.
+
 * Changed all raise statements to function calls (preparation for Py 3.0).
 	
 * Added support for more open commands in sound.play

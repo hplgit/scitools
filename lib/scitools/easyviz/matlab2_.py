@@ -3,7 +3,7 @@ With this backend one can create Matlab scripts (M-files) with Matlab
 commands from scripts with Easyviz commands. The interactive and show
 attributes are by default turned off in this backend and one should
 therefore call either show or hardcopy (both calling _replot) before
-saving the Matlab script with a call to save. To use this backend, one
+saving the Matlab script with a call to save_m. To use this backend, one
 can run a script somefile.py like
 
   python somefile.py --SCITOOLS_easyviz_backend matlab2
@@ -66,10 +66,10 @@ axis on,...
 
 >>>
 
-We can now store these commands in a Matlab script by calling the save
+We can now store these commands in a Matlab script by calling the save_m
 function:
 
->>> save('mytest.m')
+>>> save_m('mytest.m')
 
 In this case, the file mytest.m will be placed in the current working
 directory and we can then run the file in Matlab, e.g., with the following
@@ -89,14 +89,14 @@ Now we create a contour plot in combination with a quiver plot:
 >>> uu, vv = gradient(zz)
 >>> quiver(xx,yy,uu,vv,hold='off')
 >>> hardcopy('tmp0.ps',color=True)
->>> save('mytest2.m')
+>>> save_m('mytest2.m')
 
 Here, we begin by calling reset(). This ensures that the string with the
 Matlab commands is empty before we start calling different plotting
 commands. After calling contour and quiver, we use the hardcopy command to
 store the plot to a PostScript file. As mentioned above, hardcopy calls
 _replot so there is no need to call show in this case. At the end we call
-save to store the Matlab commands in the file mytest2.m. We can then run
+save_m to store the Matlab commands in the file mytest2.m. We can then run
 the script as we did above:
 
 >>> os.system("matlab -nojvm -nosplash -r 'mytest2;quit'")
@@ -1023,7 +1023,7 @@ class Matlab2Backend(BaseClass):
                 print "\nDumping plot data to screen\n"
                 debug(self)
             fname = "easyviz_tmp_mfile.m"
-            self.save(fname)
+            self.save_m(fname)
             basename, ext = os.path.splitext(fname)
             os.system('xterm -e "%s -r %s"' % (MATLAB_CMD_STR,basename))
             #os.remove(fname)
@@ -1123,7 +1123,7 @@ class Matlab2Backend(BaseClass):
 
         if False and has_matlab:
             fname = tempfile.mktemp(suffix='.m')
-            self.save(fname)
+            self.save_m(fname)
             path, fname = os.path.split(fname)
             basename, ext = os.path.splitext(fname)
             statement = '"%s;quit"' % basename
@@ -1137,7 +1137,7 @@ class Matlab2Backend(BaseClass):
         """
         self._script = ""
 
-    def save(self, filename):
+    def save_m(self, filename):
         """
         Save the Matlab commands for the current figure(s) in a M-file
         script.
