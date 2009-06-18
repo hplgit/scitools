@@ -1,6 +1,7 @@
 from common import *
 from scitools.numpyutils import ravel, zeros, array, allclose, rank, \
      meshgrid, newaxis
+from scitools.globaldata import DEBUG, VERBOSE
 from scitools.numpytools import NumPy_dtype
 from scitools.misc import test_if_module_exists 
 
@@ -76,7 +77,8 @@ class VtkBackend(BaseClass):
             del _image_fact
             del v
         except Exception, msg:
-            print "No mesa", msg
+            if DEBUG:
+                print "No mesa", msg
 
     def _create_Tk_gui(self):
         fig = self.gcf()
@@ -1181,6 +1183,8 @@ class VtkBackend(BaseClass):
                 try:
                     width, height = fig.getp('size')
                 except TypeError:
+                    width, height = (640, 480)
+                if width is None or height is None:
                     width, height = (640, 480)
                 fig._g.SetSize(width, height)
                 fig._g.OffScreenRenderingOn()
