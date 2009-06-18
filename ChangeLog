@@ -38,7 +38,7 @@ Version 0.6:
 * Added support for more open commands in sound.play
   in order to support more Linux distributions.
 
-* Added (preliminary) support for a text function easyviz.
+* Added (preliminary) support for a text function in easyviz.
 
 * Updated the Easyviz documentation.
 
