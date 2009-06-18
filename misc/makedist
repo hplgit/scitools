@@ -7,10 +7,6 @@ sleep 1
 svn update
 svn commit
 
-# Update ChangeLog
-echo "Updating ChangeLog with svn2cl"
-svn2cl --break-before-msg=2 --authors=misc/authors.xml --group-by-day 
-
 # Update version numbers
 echo '--- Update version number in lib/scitools/__init__.py'
 sleep 1
