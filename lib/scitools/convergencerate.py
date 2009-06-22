@@ -109,7 +109,7 @@ class OneDiscretizationPrm(object):
         log(e[i]) = log(C[i]) + a*log(d[i])
         """
         A = transpose(array([d, zeros(len(d), Float)+1]))
-        sol = LinearAlgebra.linear_least_squares(A, e)
+        sol = LinearAlgebra.lstsq(A, e)
         a, logC = sol[0]
         C = inv_log(logC)
         return a, C
@@ -200,16 +200,16 @@ class OneDiscretizationPrm(object):
             g1('set pointsize 2')
             g1('set title "%s"' % plot_title)
             data = Gnuplot.Data(d, e,
-                                with='points', title='data')
+                                **{'with': 'points', 'title': 'data'})
             fit1 = Gnuplot.Func('%(C)g*x**%(a)g' % vars(),
-                                with='lines',
-                                title='linear log-log least-squares fit')
+                                **{'with': 'lines',
+                                   'title': 'linear log-log least-squares fit'})
             fit2 = Gnuplot.Func('%(C2)g*x**%(a2)g' % vars(),
-                                with='lines',
-                                title='nonlinear direct least-squares fit')
+                                **{'with': 'lines',
+                   'title': 'nonlinear direct least-squares fit'})
             fit3 = Gnuplot.Func('%(C3)g*x**%(a3)g' % vars(),
-                                with='lines',
-                                title='successive rates; two last experiments')
+                                **{'with': 'lines',
+                   'title': 'successive rates; two last experiments'})
             g1.plot(data, fit1, fit2, fit3)
             time.sleep(2)
 
@@ -219,23 +219,23 @@ class OneDiscretizationPrm(object):
         g2('set pointsize 2')
         g2('set title "%s"' % plot_title)
         data = Gnuplot.Data(log(d), log(e),
-                            with='points', title='data')
+                            **{'with': 'points', 'title': 'data'})
         curves = [data]
         fit1 = Gnuplot.Func('%g + %g*x' % (log(C), a),
-                            with='lines',
-        title='linear log-log least-squares fit: %.1f*h^%.1f' % (C, a))
+                            **{'with': 'lines',
+        'title': 'linear log-log least-squares fit: %.1f*h^%.1f' % (C, a)})
         curves.append(fit1)
         if C2 > 0:
             fit2 = Gnuplot.Func('%g + %g*x' % (log(C2), a2),
-                                with='lines',
-            title='nonlinear direct least-squares fit: %.1f*h^%.1f' % \
-                                (C2, a2))
+                                **{'with': 'lines',
+            'title': 'nonlinear direct least-squares fit: %.1f*h^%.1f' % \
+                                   (C2, a2)})
             curves.append(fit2)
         if C3 > 0:
             fit3 = Gnuplot.Func('%g + %g*x' % (log(C3), a3),
-                                with='lines',
-            title='successive rates; two last experiments: %.1f*h^%.1f' % \
-                                (C3, a3))
+                                **{'with': 'lines',
+            'title': 'successive rates; two last experiments: %.1f*h^%.1f' % \
+                                   (C3, a3)})
             curves.append(fit3)
         g2.plot(*curves)
         g2.hardcopy(filename=filename, enhanced=1, mode='eps',
@@ -288,7 +288,7 @@ def __many_discrprm_log_fit(d, e, factors):
     """
     # not ready, just a copy:
     A = transpose(array([d, zeros(len(d), Float)+1]))
-    sol = LinearAlgebra.linear_least_squares(A, e)
+    sol = LinearAlgebra.lstsq(A, e)
     a, logC = sol[0]
     C = inv_log(logC)
     return a, C
