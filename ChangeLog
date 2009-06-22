@@ -46,9 +46,6 @@ Version 0.6:
 
 * Made an available_backends function for listing the backends for Easyviz.
 
-* All sequences passed to Easyviz are passed through numpy.asarray so that
-  the sequences are arrays inside Easyviz.
-
 * Added some Matlab-style functions in numpyutils.py: orth, matrix_rank,
   null. Reworked all norm* functions.
 
