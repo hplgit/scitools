@@ -259,7 +259,11 @@ class UniformBoxGrid(object):
         return s
 
     def __str__(self):
-        return self.__repr__()
+        """Pretty print, using the syntax of init_fromstring."""
+        domain = 'x'.join(['[%g,%g]' % (min_, max_) \
+                           for min_, max_ in zip(self.min_coor, self.max_coor)])
+        indices = 'x'.join(['[0:%d]' % div for div in self.division])
+        return 'domain=%s  indices=%s' % (domain, indices)
                       
     def interpolator(self, point_values):
         """
@@ -583,9 +587,6 @@ class UniformBoxGrid(object):
         a grid line).
 
         >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
-        >>> print g2
-        UniformBoxGrid(min=[-1. -1.], max=[ 1.  2.],
-                       division=[3, 4], dirnames=('x', 'y'))
         >>> print g2.coor
         [array([-1.        , -0.33333333,  0.33333333,  1.        ]),
          array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]
@@ -613,7 +614,9 @@ class UniformBoxGrid(object):
         line_slice = start_snapped[:]
         line_slice[direction] = \
             slice(start_snapped[direction], end_snapped[direction]+1, 1)
-        return tuple(line_slice)
+        # note that if all start_match are true, then the plane
+        # was not snapped
+        return tuple(line_slice), not array(start_match).all()
 
         
     def gridplane_slice(self, value, constant_coor=0):
@@ -636,7 +639,9 @@ class UniformBoxGrid(object):
         plane_slice = [slice(start_snapped[i], end_snapped[i]+1, 1) \
                        for i in range(self.nsd)]
         plane_slice[constant_coor] = start_nearest[constant_coor]
-        return tuple(plane_slice)
+        # note that if all start_match are true, then the plane
+        # was not snapped
+        return tuple(plane_slice), not array(start_match).all()
         
 
         

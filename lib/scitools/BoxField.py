@@ -56,6 +56,7 @@ class BoxField(Field):
             # the various vector components:
             required_shape = list(self.grid.shape)
             required_shape.append(vector)
+            # required_shape has length self.grid.nsd+1 for vector fields
         else:
             required_shape = self.grid.shape
 
@@ -83,10 +84,64 @@ class BoxField(Field):
     # function call is required compared to NumPy array indexing:
     def __getitem__(self, i):  return self.values[i]
     def __setitem__(self, i, v):  self.values[i] = v
+
+    def gridline(self, start_coor, direction=0, end_coor=None):
+        """
+        Return a coordinate array and corresponding field values
+        along a line starting with start_coor, in the given
+        direction, and ending in end_coor (default: grid boundary).
+
+        >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
+        >>> print g2
+        UniformBoxGrid(min=[-1. -1.], max=[ 1.  2.],
+        division=[3, 4], dirnames=('x', 'y'))
+        >>> print g2.coor
+        [array([-1.        , -0.33333333,  0.33333333,  1.        ]),
+        array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]
+
+        >>> u = BoxField(g2, 'u')
+        >>> u.values = u.grid.vectorized_eval(lambda x,y: x + y)
+        >>> xc, uc, fixed_coor, snapped = u.gridline((-1,0.5), 0)
+        >>> print xc
+        [-1.         -0.33333333  0.33333333  1.        ]
+        >>> print uc
+        [-0.5         0.16666667  0.83333333  1.5       ]
+        >>> print fixed_coor, snapped
+        [0.5] False
+        >>> #plot(xc, uc, title='u(x, y=%g)' % fixed_coor)
+        """
+        slice_index, snapped = \
+             self.grid.gridline_slice(start_coor, direction, end_coor)
+        fixed_coor = [self.grid[s][i] for s,i in enumerate(slice_index) \
+                      if not isinstance(i, slice)]
+        return self.grid.coor[direction][slice_index[direction].start:\
+                                         slice_index[direction].stop], \
+               self.values[slice_index], fixed_coor, snapped
+    
+    def gridplane(self, value, constant_coor=0):
+        """
+        Return two one-dimensional coordinate arrays and
+        corresponding field values over a plane where one coordinate,
+        constant_coor, is fixed at a value.
+        The plane is snapped onto a grid plane such that the points
+        in the plane coincide with the grid points.
+        """
+        slice_index, snapped = self.grid.gridplane_slice(value, constant_coor)
+        if constant_coor == 0:
+            x = self.grid.coor[1]
+            y = self.grid.coor[2]
+        elif constant_coor == 1:
+            x = self.grid.coor[0]
+            y = self.grid.coor[2]
+        elif constant_coor == 2:
+            x = self.grid.coor[0]
+            y = self.grid.coor[1]
+        fixed_coor = self.grid.coor[constant_coor][slice_index[constant_coor]]
+        return x, y, self.values[slice_index], fixed_coor, snapped
     
 
 def _test(g):
-    print 'g=%s' % str(g)
+    print 'grid: %s' % g
 
     # function: 1 + x + y + z
     def f(*args):
@@ -122,13 +177,46 @@ def _test(g):
     v_index = list(midptindex); v_index.append(slice(g.nsd))
     print 'v at %s: %s' % (midptindex, v[v_index])
 
+    # test extraction of lines:
+    if u.grid.nsd >= 2:
+        direction = u.grid.nsd-1
+        coor, u_coor, fixed_coor, snapped = \
+              u.gridline(u.grid.min_coor, direction)
+        if snapped: print 'Error: snapped line'
+        print 'line in x[%d]-direction, starting at %s' % \
+              (direction, u.grid.min_coor)
+        print coor
+        print u_coor
+
+        direction = 0
+        point = u.grid.min_coor.copy()
+        point[direction+1] = u.grid.max_coor[direction+1]
+        coor, u_coor, fixed_coor, snapped = \
+              u.gridline(u.grid.min_coor, direction)
+        if snapped: print 'Error: snapped line'
+        print 'line in x[%d]-direction, starting at %s' % \
+              (direction, point)
+        print coor
+        print u_coor
+
+    if u.grid.nsd == 3:
+        y_center = (u.grid.max_coor[1] + u.grid.min_coor[1])/2.0
+        xc, yc, uc, fixed_coor, snapped = \
+            u.gridplane(value=y_center, constant_coor=1)
+        print 'Plane y=%g:' % fixed_coor,
+        if snapped: print ' (snapped from y=%g)' % y_center
+        else: print
+        print xc
+        print yc
+        print uc
+
 def _test2():
-    g1 = UniformBoxGrid(x=(0,1), nx=4)
+    g1 = UniformBoxGrid(min=0, max=1, division=4)
     _test(g1)
-    spec = '[0,1]x[-1,2] with indices [0:3]x[0:2]'
+    spec = '[0,1]x[-1,2] with indices [0:4]x[0:3]'
     g2 = UniformBoxGrid.init_fromstring(spec)
     _test(g2)
-    g3 = UniformBoxGrid(x=(0,1), nx=4, y=(0,1), ny=1, z=(-1,1), nz=2)
+    g3 = UniformBoxGrid(min=(0,0,-1), max=(1,1,1), division=(4,3,2))
     _test(g3)
     
 if __name__ == '__main__':
