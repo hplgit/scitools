@@ -6,11 +6,6 @@ Class for a scalar (or vector) field over a BoxGrid or UniformBoxGrid grid.
 from scitools.BoxGrid import BoxGrid, UniformBoxGrid, X, Y, Z
 from numpy import zeros, array
 
-# ideas:
-# connect grid to field, field to grid
-# disconnet in field's constructor, connect in field's constructor
-# do not copy data from grid to field (nsd etc.), always look up grid
-# (make local copies in algorithms for speed)
 
 class Field(object):
     """
@@ -25,12 +20,6 @@ class Field(object):
                  **kwargs):
         self.grid = grid
 
-        try:
-            self.grid.fields
-        except:
-            self.grid.fields = {}  # make attribute in grid
-        self.grid.fields[name] = self
-
         self.name = name
         self.independent_variables = independent_variables
         if self.independent_variables is None:
@@ -41,14 +30,6 @@ class Field(object):
         self.meta = {'description': description,}
         self.meta.update(kwargs)  # user can add more meta information
 
-    def __del__(self):
-        # disconnect from grid:
-        # strange error here if two fields have the same name...............
-        if self.name not in self.grid.fields:
-            raise KeyError('%s is not registered as field name in grid; '\
-                  'maybe another field has the same name and has '\
-                  'removed the name?' % self.name)
-        del self.grid.fields[self.name]
 
 class BoxField(Field):
     """
@@ -64,7 +45,7 @@ class BoxField(Field):
         @param grid: grid instance.
         @param name: name of the field.
         @param vector: scalar field if 0, otherwise the no of vector
-        components (dimensions).
+        components (spatial dimensions of vector field).
         @param kwargs: optional keyword arguments, stored as metadata in
         the field (see class Field)
         """

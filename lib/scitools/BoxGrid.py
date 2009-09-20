@@ -4,7 +4,8 @@ Class for uniform and non-uniform grid on an interval, rectangle, or box.
 """
 
 from scitools.errorcheck import right_type, wrong_type
-from scitools.numpyutils import ndgrid, seq, ndarray, wrap2callable
+from scitools.numpyutils import ndgrid, ndarray, wrap2callable, array, \
+     zeros, linspace
 
 # constants for indexing the space directions:
 X = X1 = 0
@@ -14,17 +15,16 @@ Z = X3 = 2
 
 class UniformBoxGrid(object):
     """
-    Simple uniform grid on an interval, rectangle or box.
+    Simple uniform grid on an interval, rectangle, box, or hypercube.
 
     Accessible attributes (after initialization):
     
-    @ivar nsd          : no of space dimensions
-    @ivar xmin, xmax   : extent of grid in x dir.
-    @ivar ymin, ymax   : extent of grid in y dir.
-    @ivar zmin, zmax   : extent of grid in z dir.
-    @ivar nx, ny, nz   : no of cells in each dir.
-    @ivar dx, dy, dz   : grid spacings
-    @ivar dirnames     : names of the space dir. ('x', 'y', etc.)
+    @ivar nsd          : no of spatial dimensions in the grid
+    @ivar min_coor     : array of minimum coordinates
+    @ivar max_coor     : array of maximum coordinates
+    @ivar division     : array of cell divisions in the 
+    @ivar delta        : array of grid spacings
+    @ivar dirnames     : names of the space directions ('x', 'y', etc.)
     
     @ivar shape        : (nx+1, ny+1, ...); dimension of array over grid
     @ivar coor         : list of coordinates; coor[i]  holds coordinates
@@ -35,91 +35,78 @@ class UniformBoxGrid(object):
                          self.coor[self.dirnames['x']][k]
                          Note that X, Y, Z are predefined constants 0, 1, 2
                    
-    @ivar xcoor        : nickname for self.coor[0] (self.coor[X])
-    @ivar ycoor, zcoor : nicknames for self.coor[1] and self.coor[2]
-
     @ivar coorv        : expanded version of coor for vectorized expressions
                          (in 2D, self.coorv[0] = self.coor[0][:,newaxis,newaxis])
-    @ivar xcoorv, ycoorv, zcoorv: nickname for self.coorv[i], i=0,1,2
+    @ivar tolerance    : small geometric tolerance based on grid coordinates
     """
     def __init__(self,
-                 x=None, nx=None,
-                 y=None, ny=None,
-                 z=None, nz=None):
+                 min=(0,0),                  # minimum coordinates
+                 max=(1,1),                  # maximum coordinates
+                 division=(4,4),             # cell divisions
+                 dirnames=('x', 'y', 'z')):  # names of the directions
         """
-        Initialize a BoxGrid by giving domain range and number of
-        cells in each space direction.
+        Initialize a BoxGrid by giving domain range (minimum and
+        maximum coordinates: min and max tuples/lists/arrays)
+        and number of cells in each space direction (division tuple/list/array).
+        The dirnames tuple/list holds the names of the coordinates in
+        the various spatial directions.
 
-        >>> g = UniformBoxGrid(x=(0,1), nx=10)
-        >>> g = UniformBoxGrid(x=(0,1), nx=10, y=(-1,1), ny=4)
-        >>> g = UniformBoxGrid(x=(0,2), nx=10, y=(0,1), ny=4, z=(-1,1), nz=14)
+        >>> g = UniformBoxGrid(min=0, max=1, division=10)
+        >>> g = UniformBoxGrid(min=(0,-1), max=(1,1), division=(10,4))
+        >>> g = UniformBoxGrid(min=(0,0,-1), max=(2,1,1), division=(2,3,5))
         """
-        self.nsd = 0
-        self.dirnames = []
-        self.coor = []
-        self.shape = []
-
+        # Allow int/float specifications in one-dimensional grids
+        # (just turn to lists for later multi-dimensional processing)
+        if isinstance(min, (int,float)):
+            min = [min]
+        if isinstance(max, (int,float)):
+            max = [max]
+        if isinstance(division, (int,float)):
+            division = [division]
+        if isinstance(dirnames, str):
+            dirnames = [dirnames]
         
-        if x is not None and nx is not None:
-            right_type(x, (list,tuple))
-            right_type(x[0], (float,int))
-            right_type(x[1], (float,int))
-            right_type(nx, int)
+        self.nsd = len(min)
+        # strip dirnames down to right space dim (in case the default
+        # with three components were unchanged by the user):
+        dirnames = dirnames[:self.nsd]
 
-            self.nsd += 1
-            self.nx = nx; self.xmin = x[0]; self.xmax = x[1]
-            self.dx = (self.xmax-self.xmin)/float(nx)
-            self.coor.append(seq(self.xmin, self.xmax, self.dx))
-            self.xcoor = self.coor[-1]
-            self.dirnames.append('x')
-            self.shape.append(nx+1)
+        # check consistent lengths:
+        for a in max, division:
+            if len(a) != self.nsd:
+                raise ValueError(
+                    'Incompatible lengths of arguments to constructor'\
+                    ' (%d != %d)' % (len(a), self.nsd))
 
-        if y is not None and ny is not None:
-            right_type(y, (list,tuple))
-            right_type(y[0], (float,int))
-            right_type(y[1], (float,int))
-            right_type(ny, int)
+        self.min_coor = array(min, float)
+        self.max_coor = array(max, float)
+        self.dirnames = dirnames
+        self.division = division
+        self.coor = [None]*self.nsd
+        self.shape = [0]*self.nsd
+        self.delta = zeros(self.nsd)
 
-            self.nsd += 1
-            self.ny = ny; self.ymin = y[0]; self.ymax = y[1]
-            self.dy = (self.ymax-self.ymin)/float(ny)
-            self.coor.append(seq(self.ymin, self.ymax, self.dy))
-            self.ycoor = self.coor[-1]
-            self.dirnames.append('y')
-            self.shape.append(ny+1)
-
-        if z is not None and nz is not None:
-            right_type(z, (list,tuple))
-            right_type(z[0], (float,int))
-            right_type(z[1], (float,int))
-            right_type(nz, int)
-
-            self.nsd += 1
-            self.nz = nz; self.zmin = z[0]; self.zmax = z[1]
-            self.dz = (self.zmax-self.zmin)/float(nz)
-            self.coor.append(seq(self.zmin, self.zmax, self.dz))
-            self.zcoor = self.coor[-1]
-            self.dirnames.append('z')
-            self.shape.append(nz+1)
-
+        for i in range(self.nsd):
+            self.delta[i] = \
+                 (self.max_coor[i] -  self.min_coor[i])/float(self.division[i])
+            self.shape[i] = self.division[i] + 1  # no of grid points
+            self.coor[i] = \
+                 linspace(self.min_coor[i], self.max_coor[i], self.shape[i])
         self._more_init()
 
     def _more_init(self):
-        if self.nsd == 0:
-            # no coordinates initialized...
-            raise TypeError('too few arguments to UniformBoxGrid constructor')
-
-        # convert lists to tuples (for constness):
         self.shape = tuple(self.shape)
-        # self.dirnames needs list functionality
-        
         self.coorv = ndgrid(*self.coor)
         if not isinstance(self.coorv, (list,tuple)):
             # 1D grid, wrap self.coorv as list:
             self.coorv = [self.coorv]
-        # xcoorv, ycoorv, etc:
+
+        self.tolerance = (max(self.max_coor) - min(self.min_coor))*1E-14
+
+        # nicknames: xcoor, ycoor, xcoorv, ycoorv, etc
         for i in range(self.nsd):
-            self.__dict__[self.dirnames[i]+'coorv'] = self.coor[i]
+            self.__dict__[self.dirnames[i]+'coor'] = self.coor[i]
+            self.__dict__[self.dirnames[i]+'coorv'] = self.coorv[i]
 
         if self.nsd == 3:
             # make boundary coordinates for vectorization:
@@ -147,17 +134,23 @@ class UniformBoxGrid(object):
         >>> s = "domain=[0,10] indices=[0:11]"
         >>> data = BoxGrid.string2griddata(s)
         >>> data
-        {'nx': 11, 'x': (0.0, 10.0)}
+        {'dirnames': ('x', 'y'), 'division': [10], 'max': [10], 'min': [0]}
 
         >>> s = "domain=[0.2,0.5]x[0,2E+00] indices=[0:20]x[0:100]"
         >>> data = BoxGrid.string2griddata(s)
         >>> data
-        {'nx': 20, 'x': (0.20000000000000001, 0.5), 'y': (0.0, 2.0), 'ny': 100}
+        {'dirnames': ('x', 'y', 'z'),
+         'division': [19, 99],
+         'max': [0.5, 2],
+         'min': [0.2, 0]}
 
-        >>> s = "[0,1]x[0,2]x[-1,1.5] [0:25]x[0:10]x[0:15]"
+        >>> s = "[0,1]x[0,2]x[-1,1.5] [0:25]x[0:10]x[0:16]"
         >>> data = BoxGrid.string2griddata(s)
         >>> data
-        {'nx': 25, 'ny': 10, 'nz': 15, 'y': (0.0, 2.0), 'x': (0.0, 1.0), 'z': (-1.0, 1.5)}
+        {'dirnames': ('x', 'y', 'z'),
+         'division': [24, 9, 15],
+         'max': [1.0, 2.0, 1.5],
+         'min': [0.0, 0.0, -1.0]}
 
         The data dictionary can be used as keyword arguments to the
         class UniformBoxGrid constructor.
@@ -178,8 +171,14 @@ class UniformBoxGrid(object):
                not isinstance(i[dir], (list,tuple)) or len(i[dir]) != 2:
                 raise ValueError('syntax error in "%s"' % s)
 
-            kwargs[dirnames[dir]] = (float(d[dir][0]), float(d[dir][1]))
-            kwargs['n'+dirnames[dir]] = int(i[dir][1]) - int(i[dir][0]) # no of cells!
+            # old syntax (nx, xmin, xmax, ny, ymin, etc.):
+            #kwargs[dirnames[dir]] = (float(d[dir][0]), float(d[dir][1]))
+            #kwargs['n'+dirnames[dir]] = int(i[dir][1]) - int(i[dir][0]) # no of cells!
+            kwargs['min'] = [float(d[dir][0]) for dir in range(nsd)]
+            kwargs['max'] = [float(d[dir][1]) for dir in range(nsd)]
+            kwargs['division'] = [int(i[dir][1]) - int(i[dir][0]) \
+                                  for dir in range(nsd)]
+            kwargs['dirnames'] = dirnames[:nsd]
         return kwargs
     string2griddata = staticmethod(string2griddata)
 
@@ -189,16 +188,16 @@ class UniformBoxGrid(object):
         name i, or return the coordinate of a point if i is an nsd-tuple.
         
         >>> g = UniformBoxGrid(x=(0,1), y=(-1,1), nx=2, ny=4)  # xy grid
-        >>> g[0][0] == g.xmin     # min coor in direction 0
+        >>> g[0][0] == g.min[0]   # min coor in direction 0
         True
-        >>> g['x'][0] == g.xmin   # min coor in direction 'x'
+        >>> g['x'][0] == g.min[0]   # min coor in direction 'x'
         True
         >>> g[0,4]
         (0.0, 1.0)
-        >>> g = UniformBoxGrid(y=(0,1), z=(-1,1), ny=2, nz=4)  # yz grid
-        >>> g[1][0] == g.zmin     # min coor in direction 1 (now z!)
+        >>> g = UniformBoxGrid(min=(0,-1), max=(1,1), division=(2,4), dirnames=('y', 'z'))
+        >>> g[1][0] == g.min[1]
         True
-        >>> g['z'][0] == g.zmin   # min coor in direction 'z'
+        >>> g['z'][0] == g.min[1]   # min coor in direction 'z'
         True
         """
         if isinstance(i, str):
@@ -254,14 +253,9 @@ class UniformBoxGrid(object):
         return n
 
     def __repr__(self):
-        s = self.__class__.__name__ + '('
-        args = []
-        for i in range(len(self.coor)):
-            p = self.dirnames[i]
-            args.append('%s=(%g,%g), n%s=%d' % \
-                        (p, self.coor[i][0], self.coor[i][-1],
-                         p, len(self.coor[i])-1))
-        s += ', '.join(args) + ')'
+        s = self.__class__.__name__ + \
+            '(min=%s, max=%s, division=%s, dirnames=%s)' % \
+            (self.min_coor, self.max_coor, self.division, self.dirnames)
         return s
 
     def __str__(self):
@@ -275,7 +269,7 @@ class UniformBoxGrid(object):
         at an arbitrary point.
 
         2D Example:
-        given a filled array point_values[i][j], compute
+        given a filled array point_values[i,j], compute
         interpolator = grid.interpolator(point_values)
         v = interpolator(0.1243, 9.231)  # interpolate point_values
         
@@ -315,7 +309,7 @@ class UniformBoxGrid(object):
          [ 0.30955988  0.43202561  0.60294031  0.84147098]]
 
         >>> # f(x,y) = 2: (requires special consideration)
-        >>> a = g.vectorized_eval(lambda x,y: arr(g.shape)+2)
+        >>> a = g.vectorized_eval(lambda x,y: zeros(g.shape)+2)
         >>> print a
         [[ 2.  2.  2.  2.]
          [ 2.  2.  2.  2.]
@@ -339,7 +333,6 @@ class UniformBoxGrid(object):
         
     def init_fromstring(s):
         data = UniformBoxGrid.string2griddata(s)
-        print 'interpreted string, data=\n', data
         return UniformBoxGrid(**data)
     init_fromstring = staticmethod(init_fromstring)
 
@@ -493,55 +486,189 @@ class UniformBoxGrid(object):
                             for k in xrange(slices[2].start, slices[2].stop):
                                 yield [i, j, k]
                              
+
+    def locate_cell(self, point):
+        """
+        Given a point (x, (x,y), (x,y,z)), locate the cell in which
+        the point is located, and return
+        1) the (i,j,k) vertex index
+        of the "lower-left" grid point in this cell,
+        2) the distances (dx, (dx,dy), or (dx,dy,dz)) from this point to
+        the given point,
+        3) a boolean list if point matches the
+        coordinates of any grid lines. If a point matches
+        the last grid point in a direction, the cell index is
+        set to the max index such that the (i,j,k) index can be used
+        directly for look up in an array of values. The corresponding
+        element in the distance array is then set 0.
+        4) the indices of the nearest grid point.
+        
+        The method only works for uniform grid spacing.
+        Used for interpolation.
+
+        >>> g1 = UniformBoxGrid(min=0, max=1, division=4)
+        >>> cell_index, distance, match, nearest = g1.locate_cell(0.7)
+        >>> print cell_index
+        [2]
+        >>> print distance
+        [ 0.2]
+        >>> print match
+        [False]
+        >>> print nearest
+        [3]
+        >>>
+        >>> g1.locate_cell(0.5)
+        ([2], array([ 0.]), [True], [2])
+        >>>
+        >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
+        >>> print g2.coor
+        [array([-1.        , -0.33333333,  0.33333333,  1.        ]), array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]
+        >>> g2.locate_cell((0.2,0.2))
+        ([1, 1], array([ 0.53333333,  0.45      ]), [False, False], [2, 2])
+        >>> g2.locate_cell((1,2))
+        ([3, 4], array([ 0.,  0.]), [True, True], [3, 4])
+        >>>
+        >>>
+        >>>
+        """
+        if isinstance(point, (int,float)):
+            point = [point]
+        nsd = len(point)
+        if nsd != self.nsd:
+            raise ValueError('point=%s has wrong dimension (this is a %dD grid!)' % \
+                             (point, self.nsd))
+        #index = zeros(nsd, int)
+        index = [0]*nsd
+        distance = zeros(nsd)
+        grid_point = [False]*nsd
+        nearest_point = [0]*nsd
+        for i, coor in enumerate(point):
+            # is point inside the domain?
+            if coor < self.min_coor[i] or coor > self.max_coor[i]:
+                raise ValueError(
+                    'locate_cell: point=%s is outside the domain [%s,%s]' % \
+                    point, self.min_coor[i], self.max_coor[i])
+            index[i] = int((coor - self.min_coor[i])//self.delta[i])  # (need integer division)
+            distance[i] = coor - (self.min_coor[i] + index[i]*self.delta[i])
+            if distance[i] > self.delta[i]/2:
+                nearest_point[i] = index[i] + 1
+            else:
+                nearest_point[i] = index[i]
+            if abs(distance[i]) < self.tolerance:
+                grid_point[i] = True
+                nearest_point[i] = index[i]
+            if (abs(distance[i] - self.delta[i])) < self.tolerance:
+                # last cell, update index such that it coincides with the point
+                grid_point[i] = True
+                index[i] += 1
+                nearest_point[i] = index[i]
+                distance[i] = 0.0
                 
+        return index, distance, grid_point, nearest_point
+
+    def interpolate(v0, v1, x0, x1, x):
+        return v0 + (v1-v0)/float(x1-x0)*(x-x0)
+
+    def gridline_slice(self, start_coor, direction=0, end_coor=None):
+        """
+        Compute start and end indices of a line through the grid,
+        and return a tuple that can be used as slice for the
+        grid points along the line.
+        
+        The line's must be in x, y or z direction (direction=0,1 or 2).
+        If end_coor=None, the line ends where the grid ends.
+        start_coor holds the coordinates of the start of the line.
+        If start_coor does not coincide with one of the grid points,
+        the line is snapped onto the grid (i.e., the line coincides with
+        a grid line).
+
+        >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
+        >>> print g2
+        UniformBoxGrid(min=[-1. -1.], max=[ 1.  2.],
+                       division=[3, 4], dirnames=('x', 'y'))
+        >>> print g2.coor
+        [array([-1.        , -0.33333333,  0.33333333,  1.        ]),
+         array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]
+
+        >>> g2.gridline_slice((-1, 0.5), 0)
+        (slice(0, 4, 1), 2)
+
+        >>> g2.gridline_slice((-0.9, 0.4), 0)
+        (slice(0, 4, 1), 2)
+
+        >>> g2.gridline_slice((-0.2, -1), 1)
+        (1, slice(0, 5, 1))
+        """
+        start_cell, start_distance, start_match, start_nearest = \
+                    self.locate_cell(start_coor)
+        start_snapped = start_nearest[:]
+        if end_coor is None:
+            end_snapped = start_snapped[:]
+            end_snapped[direction] = self.division[direction] # highest legal index
+        else:
+            end_cell, end_distance, end_match, end_nearest = \
+                      self.locate_cell(end_coor)
+            end_snapped = end_nearest[:]
+        # recall that upper index limit must be +1 in a slice:
+        line_slice = start_snapped[:]
+        line_slice[direction] = \
+            slice(start_snapped[direction], end_snapped[direction]+1, 1)
+        return tuple(line_slice)
+
+        
+    def gridplane_slice(self, value, constant_coor=0):
+        """
+        Compute a slice for a plane through the grid,
+        defined by coor[constant_coor]=value.
+        Return a tuple that can be used as slice.
+        If value does not correspond to an existing grid plance,
+        the value is snapped onto the grid.
+        """
+        start_coor = self.min_coor.copy()
+        start_coor[constant_coor] = value
+        start_cell, start_distance, start_match, start_nearest = \
+                    self.locate_cell(start_coor)
+        start_snapped = [0]*self.nsd
+        start_snapped[constant_coor] = start_nearest[constant_coor]
+        # recall that upper index limit must be +1 in a slice:
+        end_snapped = [self.division[i] for i in range(self.nsd)]
+        end_snapped[constant_coor] = start_snapped[constant_coor]
+        plane_slice = [slice(start_snapped[i], end_snapped[i]+1, 1) \
+                       for i in range(self.nsd)]
+        plane_slice[constant_coor] = start_nearest[constant_coor]
+        return tuple(plane_slice)
+        
+
+        
 class BoxGrid(UniformBoxGrid):
     """
     Extension of class UniformBoxGrid to non-uniform box grids.
     The coordinate vectors (in each space direction) can have
     arbitrarily spaced coordinate values.
+
+    The coor argument must be a list of nsd (number of
+    space dimension) components, each component contains the
+    grid coordinates in that space direction (stored as an array).
     """
-    def __init__(self, x=None, y=None, z=None):
-        self.nsd = 0
-        self.dirnames = []
-        self.coor = []
-        self.shape = []
-
-        if x is not None:
-            right_type(x, (list,tuple,ndarray))
-
-            self.nsd += 1
-            self.nx = len(x)-1; self.xmin = x[0]; self.xmax = x[-1]
-            self.dx = None  # varies
-            self.coor.append(x.copy())
-            self.xcoor = self.coor[-1]
-            self.dirnames.append('x')
-            self.shape.append(nx+1)
-
-        if y is not None:
-            right_type(y, (list,tuple,ndarray))
-
-            self.nsd += 1
-            self.ny = len(y)-1; self.ymin = y[0]; self.ymax = y[-1]
-            self.dy = None  # varies
-            self.coor.append(y.copy())
-            self.ycoor = self.coor[-1]
-            self.dirnames.append('y')
-            self.shape.append(ny+1)
-
-        if z is not None:
-            right_type(z, (list,tuple,ndarray))
-
-            self.nsd += 1
-            self.nz = len(z)-1; self.zmin = z[0]; self.zmax = z[-1]
-            self.dz = None  # varies
-            self.coor.append(z.copy())
-            self.zcoor = self.coor[-1]
-            self.dirnames.append('z')
-            self.shape.append(nz+1)
-
-        self._more_init()
+    def __init__(self, coor, dirnames=('x', 'y', 'z')):
         
-def _test(g):
+        UniformBoxGrid.__init__(self,
+                                min=[a[0] for a in coor],
+                                max=[a[-1] for a in coor],
+                                division=[len(a) for a in coor],
+                                dirnames=dirnames)
+        # override:
+        self.coor = coor
+
+    def __repr__(self):
+        s = self.__class__.__name__ + '(coor=%s)' % self.coor
+        return s
+
+    def locate_cell(self, point):
+        raise NotImplementedError
+    
+        
+def _test(g, points=None):
     print 'g=%s' % str(g)
     # dump all the contents of a grid object:
     import scitools.misc;  scitools.misc.dump(g, hide_nonpublic=False)
@@ -554,6 +681,7 @@ def _test(g):
         return 2
     fv_arr = g.vectorized_eval(fv)
     fs_arr = zeros(g.shape)
+
     coor = [0.0]*g.nsd
     itparts = ['all', 'interior', 'all_boundary', 'interior_boundary',
                'corners']
@@ -576,36 +704,44 @@ def _test(g):
             print slices
     # boundary slices...
 
+    if points is not None:
+        print '\n\nInterpolation in', g, '\n', g.coor
+        for p in points:
+            index, distance = g.locate_cell(p)
+            print 'point %s is in cell %s, distance=%s' % (p, index, distance)
+    
+
 def _test2():
-    g1 = UniformBoxGrid(x=(0,1), nx=4)
-    _test(g1)
+    g1 = UniformBoxGrid(min=0, max=1, division=4)
+    _test(g1, [0.7, 0.5])
     spec = '[0,1]x[-1,2] with indices [0:3]x[0:2]'
     g2 = UniformBoxGrid.init_fromstring(spec)
-    _test(g2)
-    g3 = UniformBoxGrid(x=(0,1), nx=4, y=(0,1), ny=1, z=(-1,1), nz=2)
+    _test(g2, [(0.2,0.2), (1,2)])
+    g3 = UniformBoxGrid(min=(0,0,-1), max=(1,1,1), division=(4,1,2))
     _test(g3)
     print 'g3=\n%s' % str(g3)
     print 'g3[Z]=', g3[Z]
     print 'g3[Z][1] =', g3[Z][1]
-    print 'dx, dy, dz spacings:', g3.dx, g3.dy, g3.dz
-    g4 = UniformBoxGrid(y=(0,1), ny=4, z=(-1,1), nz=2)
+    print 'dx, dy, dz spacings:', g3.delta
+    g4 = UniformBoxGrid(min=(0,-1), max=(1,1),
+                        division=(4,2), dirnames=('y','z'))
     _test(g4)
     print 'g4["y"][-1]:', g4["y"][-1]
     
 def _test4():
     from numpy import sin, zeros, exp
     # check vectorization evaluation:
-    g = UniformBoxGrid(x=(0,1), y=(0,1), nx=3, ny=3)
+    g = UniformBoxGrid(min=(0,0), max=(1,1), division=(3,3))
     try:
         g.vectorized_eval(lambda x,y: 2)
     except TypeError, msg:
         # fine, expect to arrive here
-        print msg
+        print '*** Expected error in this test:', msg
     try:
         g.vectorized_eval(lambda x,y: zeros((2,2))+2)
     except IndexError, msg:
         # fine, expect to arrive here
-        print msg
+        print '*** Expected error in this test:', msg
 
     a = g.vectorized_eval(lambda x,y: sin(x)*exp(y-x))
     print a
