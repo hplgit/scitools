@@ -85,11 +85,23 @@ class BoxField(Field):
     def __getitem__(self, i):  return self.values[i]
     def __setitem__(self, i, v):  self.values[i] = v
 
-    def gridline(self, start_coor, direction=0, end_coor=None):
+    def __str__(self):
+        if len(self.values.shape) > self.grid.nsd:
+            s = 'Vector field with %d components' % self.values.shape[-1]
+        else:
+            s = 'Scalar field'
+        s += ', over ' + str(self.grid)
+        return s
+
+    def gridline(self, start_coor, direction=0, end_coor=None,
+                 snap=True):
         """
         Return a coordinate array and corresponding field values
         along a line starting with start_coor, in the given
         direction, and ending in end_coor (default: grid boundary).
+
+        If snap is True, the line is snapped onto the grid, otherwise
+        values along the line must be interpolated (not yet implemented).
 
         >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
         >>> print g2
@@ -110,6 +122,9 @@ class BoxField(Field):
         [0.5] False
         >>> #plot(xc, uc, title='u(x, y=%g)' % fixed_coor)
         """
+        if not snap:
+            raise Not ImplementedError('Use snap=True, no interpolation impl.')
+
         slice_index, snapped = \
              self.grid.gridline_slice(start_coor, direction, end_coor)
         fixed_coor = [self.grid[s][i] for s,i in enumerate(slice_index) \
@@ -118,14 +133,19 @@ class BoxField(Field):
                                          slice_index[direction].stop], \
                self.values[slice_index], fixed_coor, snapped
     
-    def gridplane(self, value, constant_coor=0):
+    def gridplane(self, value, constant_coor=0, snap=True):
         """
         Return two one-dimensional coordinate arrays and
         corresponding field values over a plane where one coordinate,
         constant_coor, is fixed at a value.
-        The plane is snapped onto a grid plane such that the points
-        in the plane coincide with the grid points.
+
+        If snap is True, the plane is snapped onto a grid plane such
+        that the points in the plane coincide with the grid points.
+        Otherwise, the returned values must be interpolated (not yet impl.).
         """
+        if not snap:
+            raise Not ImplementedError('Use snap=True, no interpolation impl.')
+
         slice_index, snapped = self.grid.gridplane_slice(value, constant_coor)
         if constant_coor == 0:
             x = self.grid.coor[1]

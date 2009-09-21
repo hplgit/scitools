@@ -579,12 +579,17 @@ class UniformBoxGrid(object):
         and return a tuple that can be used as slice for the
         grid points along the line.
         
-        The line's must be in x, y or z direction (direction=0,1 or 2).
+        The line must be in x, y or z direction (direction=0,1 or 2).
         If end_coor=None, the line ends where the grid ends.
         start_coor holds the coordinates of the start of the line.
         If start_coor does not coincide with one of the grid points,
         the line is snapped onto the grid (i.e., the line coincides with
         a grid line).
+
+        Return: tuple with indices and slice describing the grid point
+        indices that make up the line, plus a boolean "snapped" which is
+        True if the original line did not coincide with any grid line,
+        meaning that the returned line was snapped onto to the grid.
 
         >>> g2 = UniformBoxGrid.init_fromstring('[-1,1]x[-1,2] [0:3]x[0:4]')
         >>> print g2.coor
@@ -592,16 +597,23 @@ class UniformBoxGrid(object):
          array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]
 
         >>> g2.gridline_slice((-1, 0.5), 0)
-        (slice(0, 4, 1), 2)
+        ((slice(0, 4, 1), 2), False)
 
         >>> g2.gridline_slice((-0.9, 0.4), 0)
-        (slice(0, 4, 1), 2)
+        ((slice(0, 4, 1), 2), True)
 
         >>> g2.gridline_slice((-0.2, -1), 1)
-        (1, slice(0, 5, 1))
+        ((1, slice(0, 5, 1)), True)
+
         """
+        
         start_cell, start_distance, start_match, start_nearest = \
                     self.locate_cell(start_coor)
+        # If snapping the line onto to the grid is not desired, the
+        # start_cell and start_match lists must be used for interpolation
+        # (i.e., interpolation is needed in the directions i where
+        # start_match[i] is False).
+        
         start_snapped = start_nearest[:]
         if end_coor is None:
             end_snapped = start_snapped[:]
@@ -623,9 +635,11 @@ class UniformBoxGrid(object):
         """
         Compute a slice for a plane through the grid,
         defined by coor[constant_coor]=value.
-        Return a tuple that can be used as slice.
-        If value does not correspond to an existing grid plance,
-        the value is snapped onto the grid.
+        
+        Return a tuple that can be used as slice, plus a boolean
+        parameter "snapped" reflecting if the plane was snapped
+        onto a grid plane (i.e., value did not correspond to
+        an existing grid plane).
         """
         start_coor = self.min_coor.copy()
         start_coor[constant_coor] = value
@@ -639,9 +653,7 @@ class UniformBoxGrid(object):
         plane_slice = [slice(start_snapped[i], end_snapped[i]+1, 1) \
                        for i in range(self.nsd)]
         plane_slice[constant_coor] = start_nearest[constant_coor]
-        # note that if all start_match are true, then the plane
-        # was not snapped
-        return tuple(plane_slice), not array(start_match).all()
+        return tuple(plane_slice), not start_match[constant_coor]
         
 
         
