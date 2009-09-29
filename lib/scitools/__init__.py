@@ -78,6 +78,5 @@ try:
     except:
         pass  # Pmw and other graphics might be missing - this is not crucial
 
-    del std, sys 
 except:
     pass

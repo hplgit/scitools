@@ -974,22 +974,32 @@ class Download(threading.Thread):
 
 def hardware_info():
     """
-    Extract as much information about the current hardware as possible.
-    Python's platform module is used (functions uname, python_version,
-    python_build).
+    Note: This function is very simple - NumPy has a much more sophisticated
+    module for extracting hardware and CPU information:
+    numpy.distutils.cpuinfo. Here is an example on its usage::
 
-    If files such as /proc/cpuinfo are available, these are read and
-    information returned as "cpuinfo".
+      import numpy.distutils.cpuinfo, pprint
+      pprint.pprint(numpy.distutils.cpuinfo.cpu.info)
+
+    The present hardware_info function serves more as an illustration of
+    how one can easily obtain the most basic hardware information using
+    tools that comes with Python or are easily available from the system.
+
+    ---------------------------------------------------------------------------
+    
+    Extract hardware information using Python's platform module
+    and (if available) files such as /proc/cpuinfo.
 
     Return: dictionary with keys "uname", "identifier", "python version",
-    "python build". The "identifier" entry is a string that can be
+    "python build", and "cpuinfo".
+    The "identifier" entry is a string that can be
     used in filenames (the string returned from platform.platform()).
 
     Recommended use::
 
       from scitools.misc import hardware_info
       import pprint; pprint.pprint(hardware_info())
-      
+
     """
     result = {}
     
