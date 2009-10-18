@@ -33,6 +33,8 @@ The following extensions to Numerical Python are also defined:
            operator == for float operands with tolerance,
            float_eq(a,b,tol) means abs(a-b) < tol
            works for both scalar and array arguments
+           (similar functions for other operations exists:
+           float_le, float_lt, float_ge, float_gt, float_ne)
 
  - cut_noise:
            set all small (noise) elements of an array to zero
@@ -87,6 +89,8 @@ if __name__.find('numpyutils') != -1:
 # modules (Numeric, numpy, numarray)
 
 import operator
+from FloatComparison import float_eq, float_ne, float_lt, float_le, \
+     float_gt, float_ge
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
@@ -345,29 +349,6 @@ def ndgrid(*args,**kwargs):
     """
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
-
-
-def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
-    """
-    Approximate test a==b for float variables.
-    Returns true if abs(a-b) < atol + rtol*abs(b).
-    atol comes into play when abs(b) is large.
-    When a and b are NumPy arrays, NumPy's allclose function is called
-    (but float_eq's default tolerances are much stricter than those of
-    allclose).
-    """
-    if isinstance(a, float):
-        return math.fabs(a-b) < atol + rtol*math.fabs(b)
-    elif isinstance(a, complex):
-        return float_eq(a.real, b.real, rtol, atol) and \
-               float_eq(a.imag, b.imag, rtol, atol)
-    else: # assume NumPy array
-        try:
-            return allclose(a, b, rtol, atol)
-        except:
-            raise TypeError('Illegal types: a is %s and b is %s' % \
-                            (type(a), type(b)))
-    
 
 def length(a):
     """Return the length of the largest dimension of array a."""
@@ -1418,8 +1399,8 @@ def arr(shape=None, element_type=float,
             # print more information (size of data):
             print e, 'of size %s' % shape
     
-
 def _test():
+    _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:
     a = array(range(27))
     a.shape = (3,3,3)
@@ -1450,6 +1431,3 @@ def _test():
 if __name__ == '__main__':
     from numpy import *
     _test()
-
-    
-    

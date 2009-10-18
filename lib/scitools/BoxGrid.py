@@ -255,7 +255,9 @@ class UniformBoxGrid(object):
     def __repr__(self):
         s = self.__class__.__name__ + \
             '(min=%s, max=%s, division=%s, dirnames=%s)' % \
-            (self.min_coor, self.max_coor, self.division, self.dirnames)
+            (self.min_coor.tolist(),
+             self.max_coor.tolist(),
+             self.division, self.dirnames)
         return s
 
     def __str__(self):
