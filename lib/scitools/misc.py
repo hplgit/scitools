@@ -1227,6 +1227,40 @@ def f(a, b, max=1.2, min=2.2):  # some function
     print 'a=%g, b=%g, max=%g, min=%g' % (a,b,max,min)
 
 
+class DoNothing(object):
+    """
+    Handy class for making other objects inactive.
+    For example, say a plot function returns a plot object that
+    is used widely in a code to create windows with visualizations
+    on the screen, and you want to turn off the effect of plot::
+
+    >>> from scitools.misc import DoNothing
+    >>> plot = DoNothing()
+    >>> viz = plot(u, wireframe=True, title='My plot')
+    >>> type(viz)
+    <class 'scitools.misc.DoNothing'>
+    >>> viz.update(T)
+    trying update but no action
+    >>> q = viz.properties()
+    trying properties but no action
+    >>> type(q)
+    <class 'scitools.misc.DoNothing'>
+
+    Whatever we do, we always get a DoNothing object, with which we can
+    do whater we want to, but nothing will ever happen.
+    """
+    def __init__(self, *args, **kwargs):
+        pass
+    def __call__(self, *args, **kwargs):
+        return DoNothing()
+    def __repr__(self):
+        return ''
+    def __str__(self):
+        return repr(self)
+    def __getattribute__(self, name):
+        print 'trying %s but no action' % name
+        return DoNothing()
+    
 if __name__ == '__main__':
     task = 'Command'
     try:

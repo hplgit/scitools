@@ -7,7 +7,7 @@ from scitools.BoxGrid import BoxGrid, UniformBoxGrid, X, Y, Z
 from numpy import zeros, array, transpose
 
 __all__ = ['BoxField', 'BoxGrid', 'UniformBoxGrid', 'X', 'Y', 'Z',
-           'dolfin_function2BoxField']
+           'dolfin_function2BoxField', 'update_from_dolfin_array']
 
 
 class Field(object):
@@ -82,29 +82,40 @@ class BoxField(Field):
         if vector > 0:
             # for a vector field we add a "dimension" in values for
             # the various vector components:
-            required_shape = list(self.grid.shape)
-            required_shape.append(vector)
+            self.required_shape = list(self.grid.shape)
+            self.required_shape.append(vector)
             # required_shape has length self.grid.nsd+1 for vector fields
         else:
-            required_shape = self.grid.shape
+            self.required_shape = self.grid.shape
 
         if 'values' in kwargs:
             values = kwargs['values']
-            if values is not None: 
-                if values.shape == required_shape:
-                    self.values = values  # field data are provided
-                else:
-                    raise ValueError(
-                          'values array are incompatible with grid size; '\
-                          'shape is %s while required shape is %s' % \
-                          (values.shape, required_shape))
+            self.set_values(values)
         else:
             # create array of scalar field grid point values:
-            self.values = zeros(required_shape)
+            self.values = zeros(self.required_shape)
 
         # doesn't  work: self.__getitem__ = self.values.__getitem__
         #self.__setitem__ = self.values.__setitem__
 
+    def copy_values(self, values):
+        """Take a copy of the values array and reshape it if necessary."""
+        self.set_values(values.copy())
+
+    def set_values(self, values):
+        """Attach the values array to this BoxField object."""
+        if values.shape == self.required_shape:
+            self.values = values  # field data are provided
+        else:
+            try:
+                values.shape = self.required_shape
+                self.values = values
+            except ValueError:
+                raise ValueError(
+                    'values array are incompatible with grid size; '\
+                    'shape is %s while required shape is %s' % \
+                    (values.shape, self.required_shape))
+        
     def update(self):
         """Update the self.values array (if grid has been changed)."""
         if self.grid.shape != self.values.shape:
@@ -270,6 +281,24 @@ def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
         raise ValueError('DOLFIN function has vector of size %s while the provided mesh demands %s' % (nodal_values.size, grid.shape))
     
     return BoxField(grid, name=dolfin_function.name(), values=nodal_values)
+
+def update_from_dolfin_array(dolfin_array, box_field):
+    """
+    Update the values in a BoxField object box_field with a new
+    DOLFIN array (dolfin_array). The array must be reshaped and
+    transposed in the right way
+    (therefore box_field.copy_values(dolfin_array) will not work).
+    """
+    nodal_values = dolfin_array.copy()
+    if len(nodal_values.shape) > 1:
+        raise NotImplementedError # no support for vector valued functions yet
+                                  # the problem is in _rank12rankd_mesh
+    try:
+        nodal_values = _rank12rankd_mesh(nodal_values, box_field.grid.shape)
+    except ValueError, e:
+        raise ValueError('DOLFIN function has vector of size %s while the provided mesh demands %s' % (nodal_values.size, grid.shape))
+    box_field.set_values(nodal_values)
+    return box_field
     
 def _test(g):
     print 'grid: %s' % g

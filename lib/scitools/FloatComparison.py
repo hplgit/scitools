@@ -126,7 +126,6 @@ class FloatComparison:
                 #r = numpy.abs(a-b) < atol + rtol*numpy.abs(b)
                 #return r.all()
             except Exception, e:
-                print 'Exception:', e
                 raise TypeError('Illegal types: a is %s and b is %s' % \
                                 (type(a), type(b)))
 
@@ -218,7 +217,6 @@ float_gt.__doc__ = '    Test if a > b within some tolerance.\n' + \
 float_ge = FloatComparison('>=')
 float_ge.__doc__ = '    Test if a >= b within some tolerance.\n' + \
                    FloatComparison.__doc__
-print float_ge.__doc__
 
 def _test():
     """Verify FloatComparison functions."""
