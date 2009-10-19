@@ -1230,9 +1230,12 @@ def f(a, b, max=1.2, min=2.2):  # some function
 class DoNothing(object):
     """
     Handy class for making other objects inactive.
+    (DoNothing is a generic dispatcher, accepting anyting and
+    doing nothing.)
+    
     For example, say a plot function returns a plot object that
     is used widely in a code to create windows with visualizations
-    on the screen, and you want to turn off the effect of plot::
+    on the screen, and you want to turn off all these visualizations::
 
     >>> from scitools.misc import DoNothing
     >>> plot = DoNothing()

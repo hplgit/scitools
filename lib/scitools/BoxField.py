@@ -81,10 +81,9 @@ class BoxField(Field):
         
         if vector > 0:
             # for a vector field we add a "dimension" in values for
-            # the various vector components:
-            self.required_shape = list(self.grid.shape)
-            self.required_shape.append(vector)
-            # required_shape has length self.grid.nsd+1 for vector fields
+            # the various vector components (first index):
+            self.required_shape = [vector]
+            self.required_shape += list(self.grid.shape)
         else:
             self.required_shape = self.grid.shape
 
@@ -218,12 +217,9 @@ def _rank12rankd_mesh(a, shape):
     if len(a.shape) == 1:
         return a.reshape(shape).transpose()
     else:
-        # reshape first dimension, keep the others
-        total_shape = shape + list(a.shape[1:])
-        print 'total shape:', total_shape
-        a = a.reshape(total_shape)
-        return transpose(a, axes=None)
-    #return transpose(a, axes=range(len(shape)))
+        raise ValueError('array a cannot be multi-dimensional (not %s), ' \
+                         'break it up into one-dimensional components' \
+                         % a.shape)
 
 def dolfin_mesh2UniformBoxGrid(dolfin_mesh, division):
     """
@@ -245,17 +241,18 @@ def dolfin_mesh2BoxGrid(dolfin_mesh, division):
     """
     c = dolfin_mesh.coordinates() # numpy array
     shape = [n+1 for n in division]  # shape for points in each dir.
-    raise NotImplementedError # must redo how to reshape vector fields
-    c = _rank12rankd_mesh(c, shape)  # Ooops, might not work!!! works for scalars...
-    print 'reshaped coor:\n', c
-    print c[1,2]
-    if len(c.shape) == 1:
-        coor = [c]
-    elif len(c.shape) == 2:
-        coor = [c[:,0], c[0,:]]
-    elif len(c.shape) == 3:
-        coor = [c[:,0,0], c[0,:,0], c[0,0,:]]
-        
+
+    c2 = [c[:,i] for i in range(c.shape[1])]  # split x,y,z components
+    for i in range(c.shape[1]):
+        c2[i] = _rank12rankd_mesh(c2[i], shape)
+    # extract coordinates in the different directions
+    coor = []
+    if len(c2) == 1:
+        coor = [c2[0][:]]
+    elif len(c2) == 2:
+        coor = [c2[0][:,0], c2[1][0,:]]
+    elif len(c2) == 3:
+        coor = [c2[0][:,0,0], c2[1][0,:,0], c2[2][0,0,:]]
     return BoxGrid(coor)
 
 
@@ -268,19 +265,33 @@ def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
     then x[1] axis, and so on.
     """
     nodal_values = dolfin_function.vector().array().copy()
-    if len(nodal_values.shape) > 1:
-        raise NotImplementedError # no support for vector valued functions yet
-                                  # the problem is in _rank12rankd_mesh
+
     if uniform_mesh:
         grid = dolfin_mesh2UniformBoxGrid(dolfin_mesh, division)
     else:
         grid = dolfin_mesh2BoxGrid(dolfin_mesh, division)
-    try:
-        nodal_values = _rank12rankd_mesh(nodal_values, grid.shape)
-    except ValueError, e:
-        raise ValueError('DOLFIN function has vector of size %s while the provided mesh demands %s' % (nodal_values.size, grid.shape))
-    
-    return BoxField(grid, name=dolfin_function.name(), values=nodal_values)
+
+    if nodal_values.size > grid.npoints:
+        # vector field, treat each component separately
+        ncomponents = int(nodal_values.size/grid.npoints)
+        try:
+            nodal_values.shape = (ncomponents, grid.npoints)
+        except ValueError, e:
+            raise ValueError('Vector field (nodal_values) has length %d, there are %d grid points, and this does not match with %d components' % (nodal_values.size, grid.npoints, ncomponents))
+        vector_field = [_rank12rankd_mesh(nodal_values[i,:].copy(),
+                                          grid.shape) \
+                        for i in range(ncomponents)]
+        nodal_values = array(vector_field)
+        bf = BoxField(grid, name=dolfin_function.name(),
+                      vector=ncomponents, values=nodal_values)
+    else:
+        try:
+            nodal_values = _rank12rankd_mesh(nodal_values, grid.shape)
+        except ValueError, e:
+            raise ValueError('DOLFIN function has vector of size %s while the provided mesh has %d points and shape %s' % (nodal_values.size, grid.npoints, grid.shape))
+        bf = BoxField(grid, name=dolfin_function.name(),
+                      vector=0, values=nodal_values)
+    return bf
 
 def update_from_dolfin_array(dolfin_array, box_field):
     """

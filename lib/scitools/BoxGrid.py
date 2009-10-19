@@ -38,6 +38,7 @@ class UniformBoxGrid(object):
     @ivar coorv        : expanded version of coor for vectorized expressions
                          (in 2D, self.coorv[0] = self.coor[0][:,newaxis,newaxis])
     @ivar tolerance    : small geometric tolerance based on grid coordinates
+    @ivar npoints      : total number of grid points
     """
     def __init__(self,
                  min=(0,0),                  # minimum coordinates
@@ -101,6 +102,10 @@ class UniformBoxGrid(object):
             # 1D grid, wrap self.coorv as list:
             self.coorv = [self.coorv]
 
+        self.npoints = 1
+        for i in range(len(self.shape)):
+            self.npoints *= self.shape[i]
+            
         self.tolerance = (max(self.max_coor) - min(self.min_coor))*1E-14
 
         # nicknames: xcoor, ycoor, xcoorv, ycoorv, etc
@@ -674,7 +679,7 @@ class BoxGrid(UniformBoxGrid):
         UniformBoxGrid.__init__(self,
                                 min=[a[0] for a in coor],
                                 max=[a[-1] for a in coor],
-                                division=[len(a) for a in coor],
+                                division=[len(a)-1 for a in coor],
                                 dirnames=dirnames)
         # override:
         self.coor = coor
@@ -684,7 +689,7 @@ class BoxGrid(UniformBoxGrid):
         return s
 
     def locate_cell(self, point):
-        raise NotImplementedError
+        raise NotImplementedError('Cannot locate point in cells in non-uniform grids')
     
         
 def _test(g, points=None):
