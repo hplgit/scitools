@@ -1238,14 +1238,14 @@ class DoNothing(object):
     on the screen, and you want to turn off all these visualizations::
 
     >>> from scitools.misc import DoNothing
-    >>> plot = DoNothing()
+    >>> plot = DoNothing('Plotting turned off')
     >>> viz = plot(u, wireframe=True, title='My plot')
     >>> type(viz)
     <class 'scitools.misc.DoNothing'>
     >>> viz.update(T)
-    trying update but no action
+    trying update but no action (DoNothing object)
     >>> q = viz.properties()
-    trying properties but no action
+    trying properties but no action (DoNothing object)
     >>> type(q)
     <class 'scitools.misc.DoNothing'>
 
@@ -1261,9 +1261,9 @@ class DoNothing(object):
     def __str__(self):
         return repr(self)
     def __getattribute__(self, name):
-        print 'trying %s but no action' % name
+        print 'trying %s but no action (DoNothing object)' % name
         return DoNothing()
-    
+        
 if __name__ == '__main__':
     task = 'Command'
     try:
