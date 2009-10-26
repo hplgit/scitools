@@ -16,9 +16,9 @@ Please check your plotting program independently of Easyviz, as
 described in the *Check Your Backends!* section of the *Troubleshooting*
 chapter, if you encounter strange errors during Easyviz plotting.
 
-_____Installing Gnuplot_____
+======= Installing Gnuplot =======
 
-___Linux/Unix___
+======= Linux/Unix =======
 
 __Compile from Source.__
 Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
@@ -32,7 +32,7 @@ run
 apt-get install gnuplot gnuplot-x11 python-gnuplot
 !ec
 
-___Windows___
+======= Windows =======
 
 On Windows, one can either use Gnuplot under Cygwin or use a precompiled
 binary from sourgeforce.net.
@@ -97,9 +97,9 @@ dist\SciTools-0.4.win32.exe
 !ec
 
 
-_____Installing Matplotlib_____
+======= Installing Matplotlib =======
 
-___Linux/Unix___
+======= Linux/Unix =======
 
 __Debian/Ubuntu.__
 Prebuilt versions are available for Debian/Ubuntu:
@@ -114,5 +114,5 @@ using the standard Python build and install technique:
 python setup.py install
 !ec
 
-___Windows___
+======= Windows =======
 You can download prebuilt binaries from the Matplotlib home page.

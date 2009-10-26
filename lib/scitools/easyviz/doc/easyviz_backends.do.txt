@@ -1,4 +1,4 @@
-_____Easyviz Backends_____
+======= Easyviz Backends =======
 
 As we have mentioned earlier, Easyviz is just a unified interface to
 other plotting packages, which we refer to as backends. We have

@@ -1,4 +1,4 @@
-_____Main Objects_____
+======= Main Objects =======
 
 All code that is common to all backends is gathered together in a file
 called `common.py`. For each backend there is a separate file where

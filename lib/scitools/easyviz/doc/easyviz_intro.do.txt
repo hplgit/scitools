@@ -16,7 +16,7 @@ If you encounter problems with using Easyviz, please visit the
 end of the documentation.
 
 
-_____Guiding Principles_____
+======= Guiding Principles =======
 
 __First principle.__ Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple

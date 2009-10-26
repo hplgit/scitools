@@ -3,11 +3,11 @@
 #AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
 #DATE: Aug 08, 2008
 
-_______Easyviz_______
+======= Easyviz =======
 
 # #include "easyviz_intro.do.txt"
 
-_______Tutorial_______
+======= Tutorial =======
 
 This tutorial starts with plotting a single curve with a simple
 `plot(x,y)` command. Then we add a legend, axis labels, a title, etc.
@@ -27,14 +27,14 @@ treated next, before we show how 2D and 3D vector fields can be handled.
 
 # #include "easyviz_2D3D.do.txt"
 
-_______Design_______
+======= Design =======
 
 # #include "easyviz_design.do.txt"
 
-_______Installation_______
+======= Installation =======
 
 # #include "easyviz_install.do.txt"
 
-_______Troubleshooting_______
+======= Troubleshooting =======
 
 # #include "easyviz_trouble.do.txt"

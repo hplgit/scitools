@@ -1,4 +1,4 @@
-_____Plotting a Single Curve_____
+======= Plotting a Single Curve =======
 
 
 Let us plot the curve $y = t^2\exp(-t^2)$|$y = t**2*exp(-t**2)$ for
@@ -69,7 +69,7 @@ terminates, and this satement postpones the termination until the user
 hits the Enter key.
 
 
-_____Decorating the Plot_____
+======= Decorating the Plot =======
 
 The $x$ and $y$ axis in curve plots should have labels, here $t$ and
 $y$, respectively. Also, the curve should be identified with a label,
@@ -117,7 +117,7 @@ plot looks like and how `t^2` is typeset in Gnuplot.
 FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted.
 
 
-_____Plotting Multiple Curves_____
+======= Plotting Multiple Curves =======
 
 A common plotting task is to compare two or more curves, which
 requires multiple curves to be drawn in the same plot.
@@ -170,7 +170,7 @@ FIGURE:[figs/plot2a.eps] Two curves in the same plot.
 
 
 
-_____Controlling Line Styles_____
+======= Controlling Line Styles =======
 
 When plotting multiple curves in the same plot, the individual curves
 get distinct default line styles, depending on the program that is
@@ -345,7 +345,7 @@ __More Examples.__ The examples in this tutorial, as well as
 additional examples, can be found in the `examples` directory in the
 root directory of the SciTools source code tree.
 
-_____Interactive Plotting Sessions_____
+======= Interactive Plotting Sessions =======
 
 All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the `plot` command
@@ -375,7 +375,7 @@ parameters in the plot:
 Such output is mostly of interest to advanced users.
 
 
-_____Making Animations_____
+======= Making Animations =======
 label{easyviz:movie}
 
 A sequence of plots can be combined into an animation and stored in a
@@ -565,7 +565,7 @@ for example, the
 
 
 
-_____Advanced Easyviz Topics_____
+======= Advanced Easyviz Topics =======
 
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants to
