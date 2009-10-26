@@ -571,8 +571,8 @@ for example, the
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants to
 fine-control the plot or how Easyviz behaves. First, we explain how to
-set the backend. Second, we tell how to speed up the `from
-scitools.std import *` statement.  Third, we show how to operate with
+set the backend. Second, we tell how to speed up the 
+`from scitools.std import *` statement.  Third, we show how to operate with
 the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab `Figure`
 and `Axis` objects that Easyviz produces "behind the curtain".
