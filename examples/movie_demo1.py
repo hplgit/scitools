@@ -1,7 +1,7 @@
 from scitools.std import *
 import time, glob, os
 
-# clean up old frames:
+# always clean up old hardcopies first:
 for name in glob.glob('tmp_*.eps'):
     os.remove(name)
 

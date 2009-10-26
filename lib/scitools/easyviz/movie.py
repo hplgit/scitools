@@ -42,6 +42,9 @@ class MovieEncoder(object):
             if key in self._prop:
                 self._prop[key] = kwargs[key]
 
+        # provide some space before print statements:
+        print '\n\n\n'
+
         # determine which encoder to be used:
         encoder = self._prop['encoder']
         if encoder is None:
@@ -74,13 +77,23 @@ class MovieEncoder(object):
 
         # check that the input files do exist:
         if isinstance(input_files, str):
-            all_input_files = glob.glob(input_files)
+            # are input_files on ffmpeg/mpeg2enc format or Unix wildcard format?
+            ffmpeg_format = r'(.+)%\d+d(\..+)'
+            m = re.search(ffmpeg_format, input_files, re.DOTALL)
+            if m:
+                wildcard_format = m.group(1) + '*' + m.group(2)
+            else:
+                wildcard_format = input_files
+            all_input_files = glob.glob(wildcard_format)
             if not all_input_files:
-                raise IOError('No files of the form %s exist.' % input_files)
-        else:
+                print 'No files of the form %s exist.' % input_files
+            else:
+                print 'Found %d files of the format %s.' % \
+                      (len(all_input_files), input_files)
+        else:  # list of specific filenames
             all_input_files = input_files
+        error_encountered = False
         for f in all_input_files:
-            error_encountered = False
             if not os.path.isfile(f):
                 print 'Input file %s does not exist.' % f
                 error_encountered = True
@@ -715,6 +728,14 @@ def movie(input_files, **kwargs):
     'movie.avi', 'movie.mpeg', or 'movie.gif' (depending on the
     encoding tool chosen by the movie function). The file resides in
     the current working directory.
+
+    Note: We strongly recommend to always clean up previously generated
+    files for the frames in movies:
+
+        for f in glob.glob('image_*.eps'):
+            os.remove(f)
+
+    Otherwise, there is a danger of mixing old and new files in the movie.
 
     One can easily specify the name of the movie file and explicitly
     specify the encoder. For example, an animated GIF movie can be

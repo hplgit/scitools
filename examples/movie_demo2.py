@@ -19,8 +19,8 @@ def f2(x, t):
 dt = 0.1    # time step
 tstop = 15  # end time
 
-# make hardcopy of the animation:
-# (first clean up old tmp_*.png files)
+# Make hardcopies of the frames in the animation:
+# (first clean up old tmp_*.png files!)
 for file in glob.glob('tmp_*.png'):
     os.remove(file)
 
@@ -55,7 +55,10 @@ files = glob.glob('tmp_*.png')
 files.sort()  # this might not be necessary
 movie(files, encoder='mpeg_encode', output_file='movie.mpeg')
 
-# This last example shows how to create an mpeg4 file using MEncoder:
+# This last example shows how to create an mpeg4 file using MEncoder
+# (note that we specify the filenames as tmp_%04d.png to avoid
+# making copies of all the frames, see the doc string in the
+# movie function):
 movie('tmp_%04d.png',
       encoder='mencoder',
       vcodec='mpeg4',
