@@ -735,7 +735,7 @@ def movie(input_files, **kwargs):
         for f in glob.glob('image_*.eps'):
             os.remove(f)
 
-    Otherwise, there is a danger of mixing old and new files in the movie.
+    Otherwise, there is a danger of mixing old and new files in the movie!
 
     One can easily specify the name of the movie file and explicitly
     specify the encoder. For example, an animated GIF movie can be
@@ -758,6 +758,13 @@ def movie(input_files, **kwargs):
     Here, we have also specified the video codec to be mpeg2video, the video
     bitrate to be 2400 kbps, the quantization scale (quality) to be 4, and
     the number of frames per second to be 10.
+
+    Demo programs showing various use of the movie function can be
+    found as the files movie_demo*.py files in the examples directory
+    of the scitools source code tree.
+
+    Suitable movie players are vlc for MPEG and AVI formats, and
+    animate for animated GIF files.
     
     Below follows a more detailed description of the various arguments that
     are available in this function.

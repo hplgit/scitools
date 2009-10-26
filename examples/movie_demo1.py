@@ -2,7 +2,7 @@ from scitools.std import *
 import time, glob, os
 
 # always clean up old hardcopies first:
-for name in glob.glob('tmp_*.eps'):
+for name in glob.glob('tmp_*.eps') + glob.glob('tmp_*.eps'):
     os.remove(name)
 
 def f(x, m, s):
@@ -50,5 +50,5 @@ movie('tmp_*.png', encoder='ppmtompeg', fps=24,
 
 # requires ffmpeg package:
 movie('tmp_*.png', encoder='ffmpeg', fps=4,
-      output_file='tmpmovie3.mpeg')
+      output_file='tmpmovie3.avi')
 

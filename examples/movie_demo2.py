@@ -66,3 +66,12 @@ movie('tmp_%04d.png',
       qscale=1,
       output_file='movie.avi',
       fps=10)
+
+print """
+
+Try to watch movie.avi, movie.mpeg and movie.gif:
+
+Unix> vlc movie.avi
+Unix> vlc movie.mpeg
+Unix> animate movie.gif
+"""
