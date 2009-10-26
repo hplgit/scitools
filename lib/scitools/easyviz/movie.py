@@ -50,7 +50,9 @@ class MovieEncoder(object):
                     encoder = enc
                     break
             if encoder is None:
-                raise Exception("None of the supported encoders are installed")
+                raise Exception("None of the supported encoders are installed."\
+                                "Please install an encoder from this list:\n%s"\
+                                 % (', '.join(_legal_encoders)))
             self._prop['encoder'] = encoder
         else:
             if not encoder in self._legal_encoders:
@@ -107,10 +109,11 @@ class MovieEncoder(object):
 
         # run command:
         if not self._prop['quiet']:
-            print "Running: \n\n%s\n" % cmd
+            print "\nscitools.easyviz.movie function runs the command: \n\n%s\n" % cmd
         failure = os.system(cmd)
         if failure:
-            print '\n\ncould not make movie'
+            print '\n\nscitools.easyviz.movie could not make movie'
+            raise SystemError('Check error messages from the encoder in the terminal window')
         elif not self._prop['quiet']:
             print "\n\nmovie in output file", self._prop['output_file']
             

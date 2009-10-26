@@ -11,6 +11,11 @@ offers only basic control of plots: curves, linestyles, legends,
 title, axis extent and names.  More fine-tuning of plots can be done
 by adding backend-specific commands.
 
+If you encounter problems with using Easyviz, please visit the 
+*Troubleshooting* chapter and the *Installation* chapter at the
+end of the documentation.
+
+
 _____Guiding Principles_____
 
 __First principle.__ Array data can be plotted with a minimal

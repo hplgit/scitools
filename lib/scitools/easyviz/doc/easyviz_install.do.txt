@@ -12,6 +12,10 @@ correctly installed. Below, we have collected some information on installing
 various programs. This information is in a very preliminary and incomplete
 stage.
 
+Please check your plotting program independently of Easyviz, as
+described in the *Check Your Backends!* section of the *Troubleshooting*
+chapter, if you encounter strange errors during Easyviz plotting.
+
 _____Installing Gnuplot_____
 
 ___Linux/Unix___

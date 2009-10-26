@@ -1,12 +1,13 @@
 === The Plot Window Disappears Quickly ===
 
-Add
+Depending on the backend used for plotting
+with Easyviz, the plot window may be killed when the program
+terminates. Adding a statement that makes the program halt provides a
+remedy:
 !bc cod
 raw_input('Press Enter: ')
 !ec
-at the end of the program. The plot window is killed when the program
-terminates, and this satement postpones the termination until the user
-hits the Enter key.
+The plot window will now stay on the screen until hitting the Enter key.
 
 === Check Your Backends! ===
 
@@ -15,6 +16,7 @@ backend works correctly on its own (there may, e.g., be installation
 problems with the backend - Easyviz just calls the backend to do the
 plotting). 
 
+__Gnuplot.__
 For the Gnuplot backend you can try the following commands in a
 terminal window:
 !bc rpy
@@ -23,6 +25,51 @@ gnuplot> plot sin(x)
 !ec
 This should result in a plot of the sine function on the screen.
 If this command does not work, Easyviz will not work with the Gnuplot
-backend. See the section *Installing Gnuplot* if you need help with 
+backend. A common problem is that Gnuplot is installed, but the path
+to the Gnuplot executable is not registered in the `PATH` environment
+variable. See the section *Installing Gnuplot* if you need help with 
 installing the Gnuplot program and its Python interface.
+
+__Matplotlib.__
+The following code tests if you have installed Matplotlib correctly:
+!bc
+import matplotlib.pyplot as plt
+import numpy
+x = numpy.linspace(0, 2*numpy.pi, 101)
+y = numpy.sin(x)
+plt.plot(x, y)
+plt.show()
+raw_input('Press Enter: ')  # wait, otherwise the plot window disappears
+!ec
+In case of problems, go to the Matplotlib source directory, remove the
+`build` subdirectory, and try a new install with `python setup.py install`.
+
+=== Trouble with Movie Making ===
+
+The call to `movie` demands that you have video encoders installed.
+The legal encoders are `mencoder`, `ffmpeg`, `mpeg_encode`, `ppmtompeg`,
+`mpeg2enc`, and `convert`. Some of these also require additional
+software to be installed.
+
+To install (e.g.) `convert`, you need to install the ImageMagick
+software suite, since `convert` is a part of that package. ImageMagick
+is easy to install on most platforms. The `ppmtompeg` encoder is a part
+of the Netpbm software, while `mpeg2enc` is a part of `mjpegtools`.
+
+On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the `movie` function:
+!bc
+Unix> sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
+!ec
+
+When something goes wrong with the movie making, check the output in
+the terminal window. By default, Easyviz prints the command that makes
+the movie. You can manually copy this command and run it again to start
+finding out what can be wrong. Just switching to a different encoder can be
+a quick remedy. The switch is done with the `encoder` keyword argument
+to `movie`, e.g.,
+!bc
+# make animated GIF movie in the file tmpmovie.gif:
+movie('tmp_*.png', encoder='convert', fps=2,
+      output_file='tmpmovie.gif')
+!ec
 
