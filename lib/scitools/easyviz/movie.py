@@ -297,7 +297,7 @@ class MovieEncoder(object):
         cmd += ' -i "%s"' % files
         vbitrate = self._prop['vbitrate']
         if vbitrate is None:
-            vbitrate = 800
+            vbitrate = "800k"
         cmd += ' -b %s' % vbitrate
         cmd += ' -r %s' % self._prop['fps']
         size = self._get_size()
