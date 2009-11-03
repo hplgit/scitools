@@ -25,9 +25,30 @@ if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
     scripts.extend(batch_files)
 
 # make sure we import from scitools in this package, not an installed one:
-sys.path.insert(0, os.path.join('lib'))
-import scitools
-    
+sys.path.insert(0, os.path.join('lib')); import scitools
+
+default_easyviz_backend = 'gnuplot'
+config_file = os.path.join('lib', 'scitools', 'scitools.cfg')
+if '--easyviz_backend' in sys.argv:
+    try:
+        default_easyviz_backend = \
+           sys.argv[sys.argv.index('--easyviz_backend') + 1]
+    except IndexError:
+        print '--easyviz_backend must be followed by a name like '\
+              '\ngnuplot, matplotlib, etc.'
+        sys.exit(1)
+    if default_easyviz_backend != 'gnuplot':
+        os.rename(config_file, config_file + '.cop')
+        infile = open(config_file + '.cop', 'r')
+        outfile = open(config_file, 'w')
+        for line in infile:
+            if line.lstrip().startswith('backend'):
+                outfile.write('backend     = %s  ; default backend\n' % \
+                              default_easyviz_backend)
+            else:
+                outfile.write(line)
+        infile.close();  outfile.close()
+
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
     from setuptools import setup, Extension
@@ -37,8 +58,6 @@ else:
 setup(
     version = str(scitools.version), 
     author = ', '.join(scitools.author),
-    #version = '0.6',
-    #author = 'Hans Petter Langtangen',
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
     license = "BSD",
@@ -54,3 +73,7 @@ setup(
                  [os.path.join("doc", "man", "man1", "scitools.1.gz"),
                   os.path.join("doc", "man", "man1", "pyreport.1.gz")])],
     )
+
+if os.path.isfile(config_file + '.cop'):
+    os.rename(config_file + '.cop', config_file)
+

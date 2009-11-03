@@ -18,11 +18,11 @@ etc.
 -------------------------------------------------------------------------------
 2. Dependencies
 
-SciTools only requirements are Python and some sort of Numerical Python
-(NumPy, Numeric, or Numarray). For most users we recommend to use NumPy
-(see http://numpy.org), however, it might be necessary in some cases to
-install Numeric and/or Numarray as well since some older Python modules
-may lack support for the new NumPy module.
+SciTools only requirements are Python (see http://python.org)
+and Numerical Python (see http://numpy.org). In the past, SciTools
+worked transparently with NumPy, Numeric, and Numarray, through its
+numpytools module. Although this module still works, we recommend
+users to use NumPy only.
 
 -------------------------------------------------------------------------------
 3. Installation
@@ -33,11 +33,30 @@ There are several different ways of installing SciTools:
   
      python setup.py install [,--prefix=$PREFIX]
 
+   This install makes SciTools use Gnuplot as plotting engine, which is
+   appropriate if you have the Gnuplot plotting program and the Gnuplot.py
+   Python package installed. If not, we recommend to have Matplotlib
+   as plotting engine. Then you write
+
+     python setup.py install --easyviz_backend matplotlib [,--prefix=$PREFIX]
+
+   This install requires you to have Matplotlib installed, but that is as
+   easy as installing SciTools (just a python setup.py install).
+
+   The default plotting engine is specified in the file scitools.cfg in the
+   scitools package directory, and the --easyviz_backend option leads to
+   an automatic edit of the "backend" line in that configuration file.
+   You can equally well edit the scitools.cfg file manually (look for the
+   [easyviz] section and the "backend =" line).
+
  - Setuptools using eggs
 
    First build the egg with the following command	
     
-     python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg	
+     python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg
+
+   The --easyviz_backend option can be used, as described above, to
+   change the default plotting engine from Gnuplot to another program.
 
    Then install the created egg using easy_install
 
@@ -48,6 +67,8 @@ There are several different ways of installing SciTools:
    Put the lib subdirectory in a directory contained in PYTHONPATH,
    and the bin subdirectory in a directory contained in PATH.
    (This gives access to the directories for scitools, easyviz, etc.)
+   Edit the scitools.cfg file to set the desired default plotting engine
+   (look for the "backend =" line in the [easyviz] section).
 
  - Debian/Ubuntu packages
 
