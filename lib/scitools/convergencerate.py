@@ -166,6 +166,7 @@ class OneDiscretizationPrm(object):
             C = 0
         return rates, C
 
+'''
     def analyze(d, e, initial_guess=None,
                 plot_title='', filename='tmp.ps'):
         """
@@ -242,13 +243,14 @@ class OneDiscretizationPrm(object):
                     color=0, fontname='Times-Roman', fontsize=18)
         time.sleep(2)
         
+    analyze = staticmethod(analyze)
+'''
 
     error_model = staticmethod(error_model)
     loglog_error_model = staticmethod(loglog_error_model)
     linear_loglog_fit = staticmethod(linear_loglog_fit)
     nonlinear_fit = staticmethod(nonlinear_fit)
     pairwise_rates = staticmethod(pairwise_rates)
-    analyze = staticmethod(analyze)
 
 # convenience function:
 def convergence_rate(discretization_prm, error):

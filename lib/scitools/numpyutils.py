@@ -95,7 +95,8 @@ from FloatComparison import float_eq, float_ne, float_lt, float_le, \
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
     """
-    Extension of numpy.meshgrid to 1D, 2D and 3D problems.
+    Extension of numpy.meshgrid to 1D, 2D and 3D problems, and also
+    support of both "matrix" and "grid" numbering.
     
     This extended version makes 1D/2D/3D coordinate arrays for
     vectorized evaluations of 1D/2D/3D scalar/vector fields over

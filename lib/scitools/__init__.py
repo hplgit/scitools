@@ -59,9 +59,9 @@ __author__ = 'Johannes H. Ring', 'Hans Petter Langtangen', \
              'Ilmar Wilbers', 'Rolv E. Bredesen'
 author = __author__
 
-__acknowledgemets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
-                      'Allen B. Downey', 'Imri Goldberg', \
-                      'Fred L. Drake', 'Gael Varoquaux',
+__acknowledgmets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
+                     'Allen B. Downey', 'Imri Goldberg', \
+                     'Fred L. Drake', 'Gael Varoquaux',
 
 try:
     # for backward compatibility:
