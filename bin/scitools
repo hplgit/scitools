@@ -309,7 +309,7 @@ def main_ps2mpeg():
 
     # check that we have mpeg_encode or ppmtompeg:
     from scitools.misc import findprograms
-    if not findprograms('mpeg_encode') or not findprograms('ppmtompeg'):
+    if not findprograms('mpeg_encode') and not findprograms('ppmtompeg'):
         print """
     ps2mpeg.py requires the mpeg_encode MPEG encoder program.
     Please install mpeg_encode, see URL:
