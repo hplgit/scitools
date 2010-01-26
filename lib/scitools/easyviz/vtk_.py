@@ -11,6 +11,10 @@ import vtk
 import os
 
 import Tkinter
+# use old behavior in Tkinter module to get around issue with Tcl
+# (more info: http://www.python.org/doc/2.3/whatsnew/node18.html)
+Tkinter.wantobjects = 0
+
 try: import vtkTkRenderWidget
 except:
     from vtk.tk import vtkTkRenderWidget
