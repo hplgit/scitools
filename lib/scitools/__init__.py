@@ -2,7 +2,7 @@
 SciTools is a Python package containing lots of useful tools for
 scientific computing in Python. The package is built on top of other
 widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
-etc.
+Matplotlib, VTK, etc.
 
 The standard SciTools import statement reads::
 
@@ -53,7 +53,7 @@ Some preliminary/unfinished modules include
 See the different modules for more detailed information.
 """
 
-__version__ = '0.6'
+__version__ = '0.6.3'
 version = __version__
 __author__ = 'Johannes H. Ring', 'Hans Petter Langtangen', \
              'Ilmar Wilbers', 'Rolv E. Bredesen'
@@ -75,8 +75,8 @@ try:
         sys.modules['scitools.FunctionSelector'] = TkGUI
         sys.modules['scitools.ParameterInterface'] = TkGUI
         del TkGUI
-    except:
+    except ImportError:
         pass  # Pmw and other graphics might be missing - this is not crucial
 
-except:
+except ImportError:
     pass

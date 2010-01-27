@@ -6,9 +6,9 @@ This module just contains two import statements::
   from scitools.easyviz import *
   from scitools.basics  import *
 
-The former imports plot, movie, legend, title, and most other
-convienient functions from the Easyviz plotting tool.
-The latter performs::
+The former imports plot, movie, legend, title, mesh, surf,
+contour, quiver, and most other convienient functions from the
+Easyviz plotting tool. The latter import statement performs::
 
   from numpy import *    
   from scitools.numpyutils import *  # some convenience functions

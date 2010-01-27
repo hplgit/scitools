@@ -110,9 +110,16 @@ class FloatComparison:
         self.rtol, self.atol = rtol, atol
 
     def __call__(self, a, b, rtol=None, atol=None):
+        """
+        Compares a with b: a == b, a!= b, a < b, etc., depending
+        on how this FloatComparison was initialized.
+        a and b can be numbers or arrays. The comparison is actually
+        performed in the methods eq, ne, lt, le, etc.
+        """
         return self.operation(a, b, rtol, atol)
     
     def eq(self, a, b, rtol=None, atol=None):
+        """Tests a == b with tolerance."""
         if rtol is None: rtol = self.rtol
         if atol is None: atol = self.atol
         if isinstance(a, float):
@@ -130,6 +137,7 @@ class FloatComparison:
                                 (type(a), type(b)))
 
     def ne(self, a, b, rtol=None, atol=None):
+        """Tests a != b with tolerance."""
         return not self.eq(a, b, rtol, atol)
     
     def set_absolute_tolerance(self, atol):
@@ -145,6 +153,7 @@ class FloatComparison:
         return self.rtol
             
     def lt(self, a, b, rtol=None, atol=None):
+        """Tests a < b with tolerance."""
         if rtol is None: rtol = self.rtol
         if atol is None: atol = self.atol
         if isinstance(a, float):
@@ -161,9 +170,11 @@ class FloatComparison:
                                 (type(a), type(b)))
 
     def le(self, a, b, rtol=None, atol=None):
+        """Tests a <= b with tolerance."""
         return self.lt(a, b, rtol, atol)
 
     def gt(self, a, b, rtol=None, atol=None):
+        """Tests a > b with tolerance."""
         if rtol is None: rtol = self.rtol
         if atol is None: atol = self.atol
         if isinstance(a, float):
@@ -180,6 +191,7 @@ class FloatComparison:
                                 (type(a), type(b)))
 
     def ge(self, a, b, rtol=None, atol=None):
+        """Tests a >= b with tolerance."""
         return self.gt(a, b, rtol, atol)
 
     def __str__(self):
