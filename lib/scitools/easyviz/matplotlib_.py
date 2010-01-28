@@ -135,6 +135,7 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Setting title"
         title = ax.getp('title')
+        title = self._fix_latex(title)
         if title:
             self._g.title(title)
     
@@ -392,7 +393,7 @@ class MatplotlibBackend(BaseClass):
         width = item.getp('linewidth')
         return marker, color, style, width
 
-    def _fix_legend(self, legend):
+    def _fix_latex(self, legend):
         """Enclose legend in $$ if latex syntax is detected."""
         legend = legend.strip()
         if len(legend) >= 2 and legend[0] !='$' and legend[-1] != '$':
@@ -417,6 +418,11 @@ class MatplotlibBackend(BaseClass):
                          ('acos', 'arccos'),]
                 for func, newfunc in funcs:
                     legend = _fix_func(func, newfunc, legend)
+                if '**' in legend:
+                    legend = legend.replace('**', '^')
+                if '*' in legend:
+                    #legend = legend.replace('*', '\\cdot')
+                    legend = legend.replace('*', ' ')
 
         return legend
 
@@ -445,7 +451,7 @@ class MatplotlibBackend(BaseClass):
             #l, = self._g.plot(x,y,fmt,linewidth=width)
             l = self._g.plot(x,y,fmt,linewidth=width)
             legend = item.getp('legend')
-            legend = self._fix_legend(legend)
+            legend = self._fix_latex(legend)
             if legend:
                 l[0].set_label(legend)
 
@@ -484,7 +490,7 @@ class MatplotlibBackend(BaseClass):
             l = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
                               linewidth=width, alpha=opacity)
             legend = item.getp('legend')
-            legend = self._fix_legend(legend)
+            legend = self._fix_latex(legend)
             if legend:
                 l[0].set_label(legend)
 
@@ -554,7 +560,7 @@ class MatplotlibBackend(BaseClass):
         z = item.getp('zdata')           # scalar field
         c = item.getp('cdata')           # pseudocolor data (can be None)
         legend = item.getp('legend')
-        legend = self._fix_legend(legend)
+        legend = self._fix_latex(legend)
 
         if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
@@ -595,7 +601,7 @@ class MatplotlibBackend(BaseClass):
         y = squeeze(item.getp('ydata'))  # grid component in y-direction
         z = item.getp('zdata')           # scalar field
         legend = item.getp('legend')
-        legend = self._fix_legend(legend)
+        legend = self._fix_latex(legend)
 
         if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
@@ -660,7 +666,7 @@ class MatplotlibBackend(BaseClass):
         indexing = item.getp('indexing')
 
         legend = item.getp('legend')
-        legend = self._fix_legend(legend)
+        legend = self._fix_latex(legend)
 
         # scale the vectors according to this variable (scale=0 should
         # turn off automatic scaling):
@@ -860,7 +866,7 @@ class MatplotlibBackend(BaseClass):
                     elif func == 'contourslice':
                         self._add_contourslices(item)
                 legend = item.getp('legend')
-                legend = self._fix_legend(legend)
+                legend = self._fix_latex(legend)
                 if legend:
                     # add legend to plot
                     legends = True
