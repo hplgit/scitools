@@ -39,7 +39,7 @@ axis('tight')
 setp(phandles, linewidth=4)
 show()
 #sleep(3)
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 ## hardcopy('tmp_contourslice2b.eps')
 ## hardcopy('tmp_contourslice2b.png')

@@ -44,5 +44,4 @@ title('A figure with two plots')
 show()
 #hardcopy('tmp2_3.eps')  # illegal in multiplot mode
 
-
-
+raw_input('Press Return key to quit: ')

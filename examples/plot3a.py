@@ -29,3 +29,5 @@ ylabel('y')
 show()
 hardcopy('tmp3.eps') 
 hardcopy('tmp3.png')
+
+raw_input('Press Return key to quit: ')

@@ -30,3 +30,5 @@ g.refresh()
 g.hardcopy('tmp2.eps')  # make new hardcopy
 
 fig = gcf(); print fig.dump()
+
+raw_input('Press Return key to quit: ')

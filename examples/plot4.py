@@ -17,3 +17,5 @@ for s in s_start, 1, s_stop:
     legend('s=%s' %s)
 title('A Gaussian Bell Function')
 hardcopy('tmp4.eps')
+
+raw_input('Press Return key to quit: ')

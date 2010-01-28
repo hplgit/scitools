@@ -16,3 +16,5 @@ plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
      hardcopy='tmp2.eps')
+
+raw_input('Press Return key to quit: ')

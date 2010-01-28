@@ -36,4 +36,4 @@ show()
 #hardcopy('mesh1c.eps', color=True)
 #hardcopy('mesh1c.png', color=True)
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

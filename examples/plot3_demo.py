@@ -32,4 +32,4 @@ subplot(223);  plot3(x,y,z,view=[90,90])
 subplot(224);  plot3(x,y,z,view=[90,0])
 show()
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

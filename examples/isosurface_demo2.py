@@ -40,7 +40,7 @@ daspect([1,1,.4])
 
 show()
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 #hardcopy('tmp_isosurf2a.eps')
 #hardcopy('tmp_isosurf2a.png')

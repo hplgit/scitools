@@ -17,4 +17,4 @@ slice_(x,y,z,v,xslice,yslice,zslice,grid='off')
 #hardcopy('tmp_slice1.eps')
 #hardcopy('tmp_slice1.png')
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

@@ -33,4 +33,4 @@ sl = streamline(x,y,z,u,v,w,sx,sy,sz,
                 axis=[60,140,10,60,-5,20])
 
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

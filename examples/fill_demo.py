@@ -15,7 +15,7 @@ s = sin(2*pi*t)
 c = sin(4*pi*t)
 fill(t, s, 'b', t, c, 'g', opacity=0.2)
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 legend('domain1', 'domain2')
 clf()

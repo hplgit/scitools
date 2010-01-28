@@ -38,7 +38,7 @@ axis('tight')
 #lighting('phong')
 show()
 #sleep(3)
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 #hardcopy('tmp_isosurf1b.eps')
 #hardcopy('tmp_isosurf1b_lq.eps', vector_file=False)

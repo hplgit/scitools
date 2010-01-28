@@ -58,5 +58,5 @@ if __name__ == '__main__':
         # Don't use normal hardcopy after an update in backend
         plt._g.savefig('transparent_fill.png') 
 
-    raw_input('press enter')
+    raw_input('Press Return key to quit: ')
     

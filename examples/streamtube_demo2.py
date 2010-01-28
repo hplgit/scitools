@@ -59,7 +59,7 @@ grid('off')
 
 show()
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 #hardcopy('tmp_streamtube2.eps')
 #hardcopy('tmp_streamtube2_lq.eps', vector_file=False)

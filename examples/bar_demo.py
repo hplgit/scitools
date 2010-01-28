@@ -32,4 +32,4 @@ bar(rand(5,4),'r',shading='interp')
 figure()
 bar(rand(3,3),facecolor='b',edgecolor='r')
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

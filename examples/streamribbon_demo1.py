@@ -41,7 +41,7 @@ streamribbon(x,y,z,u,v,w,sx,sy,sz,
              camlight='right',
              lighting='gouraud')
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
 
 #hardcopy('tmp_streamribbon1b_hq.eps')
 #hardcopy('tmp_streamribbon1b_lq.eps', vector_file=False)

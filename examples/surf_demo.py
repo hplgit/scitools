@@ -50,4 +50,4 @@ surf(xv,yv,values)
 #hardcopy('surf1d.eps')
 #hardcopy('surf1d.png')
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

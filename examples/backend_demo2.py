@@ -100,5 +100,5 @@ if __name__ == '__main__':
                     horizontalalignment='right',
                     transform=pylab.gca().transAxes)  # figure coordinates
             
-    raw_input('press enter')
+    raw_input('Press Return key to quit: ')
     

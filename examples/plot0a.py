@@ -24,3 +24,4 @@ show()
 
 hardcopy('tmp0.eps')  # this one can be included in latex
 hardcopy('tmp0.png') # this one can be included in HTML
+raw_input('Press Return key to quit: ')

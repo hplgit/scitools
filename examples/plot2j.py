@@ -22,3 +22,5 @@ show()  # show the plot again after ax.setp actions
 
 print ax.dump()
 fig = gcf(); print fig.dump()
+
+raw_input('Press Return key to quit: ')

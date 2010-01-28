@@ -42,5 +42,5 @@ show()
 #hardcopy('subplot1b.eps', color=True)
 #hardcopy('subplot1b.png', color=True)
 
-raw_input("press enter")
+raw_input("Press Return key to quit: ")
 

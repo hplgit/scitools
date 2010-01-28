@@ -19,3 +19,4 @@ plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      show=True)
 
 hardcopy('tmp0.png') # this one can be included in HTML
+raw_input('Press Return key to quit: ')

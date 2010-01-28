@@ -67,4 +67,4 @@ view(65,45)
 
 show()
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

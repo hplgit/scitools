@@ -37,4 +37,4 @@ camdolly(0,0,.5)
 
 show()
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')

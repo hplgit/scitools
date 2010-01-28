@@ -37,4 +37,4 @@ show()
 #hardcopy('quiver2b.eps')
 #hardcopy('quiver2b.png')
 
-raw_input("press enter")
+raw_input("Press Return key to quit: ")

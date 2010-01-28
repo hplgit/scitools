@@ -10,3 +10,4 @@ for i in xrange(len(t)):
 
 plot(t, y)
 
+raw_input('Press Return key to quit: ')

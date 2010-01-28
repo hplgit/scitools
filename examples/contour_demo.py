@@ -41,4 +41,4 @@ figure()
 values = peaks(201)
 contourf(values, 10, caxis=[-20, 20], title='Filled Contour Plot')
 
-raw_input('press enter')
+raw_input('Press Return key to quit: ')
