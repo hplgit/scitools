@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Demo of the bin/scitools script.
 # See test/verify1.verify for a more complete regression test of bin/scitools.
 
@@ -18,6 +18,22 @@ EOF
 
 scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' tmp1.py
 
+# rename:
+names="oslo trondheim bergen stavanger"
+for i in $names; do
+    touch tmp_${i}_set${RANDOM}.dat
+done
+echo "files:"
+/bin/ls -1 tmp_*.dat
+echo 'rename: change name from (e.g.) tmp_oslo_set143 set_143_oslo.dat'
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+echo "new names:"
+/bin/ls -1 set_*
+echo "copies of old files:"
+/bin/ls -1 tmp_*
+scitools rename dat data set*.dat
+/bin/ls -1 set_*.data
+rm -f set_*.dat* tmp_*.dat*
 
 # file2interactive:
 
