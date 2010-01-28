@@ -4,7 +4,7 @@ Install scitools with easyviz
 
 Usage:
 
-python setup.py install [, --prefix=$PREFIX]
+python setup.py install [, --prefix=$PREFIX --easyviz_backend backendname]
 """
 
 import os, sys, socket, re, glob, platform
@@ -27,17 +27,28 @@ if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
 # make sure we import from scitools in this package, not an installed one:
 sys.path.insert(0, os.path.join('lib')); import scitools
 
-default_easyviz_backend = 'gnuplot'
+# NOTE: now we force matplotlib as default backend if it is installed:
+try:
+    import matplotlib
+    default_easyviz_backend = 'matplotlib'
+except ImportError:
+    default_easyviz_backend = 'gnuplot'
+
+# modify config file so that it sets the wanted backend for easyviz
 config_file = os.path.join('lib', 'scitools', 'scitools.cfg')
-if '--easyviz_backend' in sys.argv:
-    try:
-        default_easyviz_backend = \
-           sys.argv[sys.argv.index('--easyviz_backend') + 1]
-    except IndexError:
-        print '--easyviz_backend must be followed by a name like '\
-              '\ngnuplot, matplotlib, etc.'
-        sys.exit(1)
+if '--easyviz_backend' in sys.argv or default_easyviz_backend != 'gnuplot':
+    if '--easyviz_backend' in sys.argv:
+        try:
+            default_easyviz_backend = \
+                sys.argv[sys.argv.index('--easyviz_backend') + 1]
+        except IndexError:
+            print '--easyviz_backend must be followed by a name like '\
+                '\ngnuplot, matplotlib, etc.'
+            sys.exit(1)
+    print 'default scitools.easyviz backend is now', default_easyviz_backend
+    print 'could be set by the --easyviz_backend option to setup.py'
     if default_easyviz_backend != 'gnuplot':
+        # write new config file and change backend line
         os.rename(config_file, config_file + '.cop')
         infile = open(config_file + '.cop', 'r')
         outfile = open(config_file, 'w')
