@@ -396,7 +396,7 @@ class MatplotlibBackend(BaseClass):
     def _fix_latex(self, legend):
         """Enclose legend in $$ if latex syntax is detected."""
         legend = legend.strip()
-        if len(legend) >= 2 and legend[0] !='$' and legend[-1] != '$':
+        if len(legend) >= 2 and legend[0] != '$' and legend[-1] != '$':
             chars = '\\', '^', '_'
             latex = False
             for c in chars:
@@ -404,7 +404,17 @@ class MatplotlibBackend(BaseClass):
                     latex = True
                     break
             if latex:
+                # make this math:
                 legend = '$' + legend + '$'
+
+                # enclose words in \hbox{}'es:
+                word = r'(\s?[A-Za-z][a-z]*[ :;,$] ?)'
+                if re.search(word, legend):
+                    legend = re.sub(word, r'\hbox{\g<1>}', legend)
+                # remove internal $ chars:
+                legend = legend.replace('$', '')
+                legend = '$' + legend + '$'
+
                 # fix sin, cos, exp, ln, log, etc:
                 def _fix_func(func, newfunc, legend):
                     if re.search(r'[^\\]'+func, legend):
@@ -423,7 +433,7 @@ class MatplotlibBackend(BaseClass):
                 if '*' in legend:
                     #legend = legend.replace('*', '\\cdot')
                     legend = legend.replace('*', ' ')
-
+                #print 'latex fix:', legend
         return legend
 
     def _add_line(self, item):
