@@ -4,16 +4,6 @@ scientific computing in Python. The package is built on top of other
 widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
 Matplotlib, VTK, etc.
 
-The standard SciTools import statement reads::
-
-  from scitools.std import *
-
-This statement imports from numpy, scipy (if available),
-scitools.numpytools (many numerical convenince functions), and all
-Easyviz plotting capabilities. (See the documentation of
-scitools.std for a precise list of imports implied by the
-above statement.)
-
 The SciTools package contains a lot of modules:
 
   * easyviz: package for unified Matlab-like plotting syntax
@@ -29,13 +19,13 @@ The SciTools package contains a lot of modules:
   * multipleloop: makes a loop from all combinations of a set of parameters
   * EfficiencyTable: nice table report from efficiency experiments
   * globaldata: holds all global data in the scitools package
-  * sound: tools for sound generation and manipulation
-  * aplotter: plots curves in pure ASCII
+  * sound: tools for easy sound generation and manipulation
+  * aplotter: curve plotting in pure ASCII
   * Lumpy: visualization of the data structures in a Python program
 
-Some modules are closely related to text in the book "Python Scripting
-for Computational Science", by H. P. Langtangen. 3rd edition, 2nd printing,
-Springer, 2009:
+Some modules and classes are closely related to and explained in the
+text in the book "Python Scripting for Computational Science", by
+H. P. Langtangen, 3rd edition, 2nd printing, Springer, 2009:
 
   * NumPyDB: a simple database for holding NumPy arrays
   * Regression: module for performing regression tests (also with floats)
@@ -46,14 +36,24 @@ Springer, 2009:
   * ParameterInterface: a simplified GUI generator for simulation programs
   * PrmDictBase: module for holding parameters in simulation programs
 
-Some preliminary/unfinished modules include
-  * BoxGrid: a structured grid in d dimension
+Some preliminary modules include
+  * BoxGrid: a structured grid in 1D, 2D, or 2D
   * BoxField: a scalar or vector field over a BoxGrid
 
 See the different modules for more detailed information.
+
+The standard SciTools import statement reads::
+
+  from scitools.std import *
+
+This statement imports from numpy, scipy (if available),
+scitools.numpytools (many numerical convenince functions), and all
+Easyviz plotting capabilities. (See the documentation of
+scitools.std for a precise list of imports implied by the
+above statement.)
 """
 
-__version__ = '0.6.3'
+__version__ = '0.7'
 version = __version__
 __author__ = 'Johannes H. Ring', 'Hans Petter Langtangen', \
              'Ilmar Wilbers', 'Rolv E. Bredesen'

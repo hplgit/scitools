@@ -1,16 +1,32 @@
 #!/usr/bin/env python
 """
-Generate combination of multiple-valued parameters.
+This module provides a tool for handling computer experiments with
+of a set of input parameters, where each input parameter
+is varied in a prescribed fashion.
 
-The purpose of this module is to set up parameter studies
-based on a certain input format for variables where multiple
-values of each parameter can be given.
+In short, the parameters are held in a dictionary where the keys are
+the names of the parameters and the values are the numerical, string
+or other values of the parameters.  The value can take on multiple
+values: e.g., an integer parameter 'a' can have values -1, 1 and
+10. Similarly, a string parameter 'method' can have values 'Newton'
+and 'Bisection'. The module will generate all combination of all
+parameters and values, which in the mentioned example will be 
+(-1, 'Newton'), (1, 'Newton'), (10, 'Newton'), (-1, 'Bisection'), 
+(1, 'Bisection'), and (10, 'Bisection'). Particular combination
+of values can easily be removed. 
 
-Case::
+The usage and implementation of the module are documented in the
+book "Python Scripting for Computational Science" (H. P. Langtangen,
+Springer, 2009), Chapter 12.1.
+
+
+Simple use of basic functionality in the module (see the book for
+explanations and more comprehensive examples)::
 
 >>> # parameter names and multiple values,
->>> #using multipleloop syntax:
+>>> # using the special multipleloop syntax:
 >>> p = {'w': '[0.7:1.3,0.1]', 'b': '1 & 0.3 & 0', 'func': 'y & siny'}
+
 >>> input2values(p['b'])  # turn '1 & 0.3 & 0' into list
 [1, 0.29999999999999999, 0]
 
