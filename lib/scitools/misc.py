@@ -1263,6 +1263,10 @@ class DoNothing(object):
     def __getattribute__(self, name):
         print 'trying %s but no action (DoNothing object)' % name
         return DoNothing()
+    def __iter__(self):
+        return self
+    def next(self):
+        raise StopIteration()
         
 if __name__ == '__main__':
     task = 'Command'

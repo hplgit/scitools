@@ -33,21 +33,28 @@ There are several different ways of installing SciTools:
   
      python setup.py install [,--prefix=$PREFIX]
 
-   This install makes SciTools use Gnuplot as plotting engine, which is
-   appropriate if you have the Gnuplot plotting program and the Gnuplot.py
-   Python package installed. If not, we recommend to have Matplotlib
-   as plotting engine. Then you write
+   This install makes SciTools use Matplotlib as plotting engine, if it
+   finds a working Matplotlib. Otherwise Gnuplot is used (which requires
+   both the Gnuplot program in C and the Python interface Gnuplot.py to
+   be installed).
+   You can specify the desired plotting engine on the command line, e.g.,
 
-     python setup.py install --easyviz_backend matplotlib [,--prefix=$PREFIX]
+     python setup.py install --easyviz_backend gnuplot [,--prefix=$PREFIX]
 
-   This install requires you to have Matplotlib installed, but that is as
-   easy as installing SciTools (just a python setup.py install).
+   Installing Matplotlib is easy on most platforms, just download the
+   tarball, pack it out, and run python setup.py install.
 
    The default plotting engine is specified in the file scitools.cfg in the
    scitools package directory, and the --easyviz_backend option leads to
-   an automatic edit of the "backend" line in that configuration file.
-   You can equally well edit the scitools.cfg file manually (look for the
-   [easyviz] section and the "backend =" line).
+   an automatic edit of the "backend" line in the [easyviz] section of 
+   that configuration file.
+   Don't edit the scitools.cfg file manually (use the --easyviz_backend
+   option) because setup.py will override your edits of the easyviz backend.
+   However, all other edits of the configuration file can be edited.
+   For example, the Matplotlib GUI is set to TkAgg (i.e., using Tkinter,
+   which is standard in most Python installations). The GUI can be set
+   to other values, such as Qt4Agg (provided you have Qt4 and a Python
+   interface to it).
 
  - Setuptools using eggs
 
@@ -56,7 +63,7 @@ There are several different ways of installing SciTools:
      python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg
 
    The --easyviz_backend option can be used, as described above, to
-   change the default plotting engine from Gnuplot to another program.
+   change the default plotting engine.
 
    Then install the created egg using easy_install
 

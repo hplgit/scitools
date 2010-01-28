@@ -1,3 +1,46 @@
+Version 0.7:
+
+* The most significant change for existing users is that Matplotlib is
+  now the default plotting engine. Installing SciTools with Gnuplot as
+  plotting engine must now be done by the command
+
+	python setup.py install --easyviz_backend gnuplot
+
+  In general, Matplotlib is smoother to install than Gnuplot. However,
+  some existing programs using Gnuplot's 2D scalar and vector field
+  capabilities will now fail because Matplotlib does not have this
+  functionality. 
+
+* Numerous bugfixes have been performed. Some documentation and code
+  have been cleaned up. More examples are included.
+
+* The scitools script has a new option "rename" for renaming a bunch
+  of files using regular expressions. Run scitools rename to see a
+  powerful example.
+	
+* A new module FloatComparison has been made for comparing floating-point
+  numbers and arrays in a unified way (replacements of ==, !=, <, etc.).
+  The old unified float_eq(a, b, atol=..., rtol=...) is still there and
+  the main tool for doing a == b with a tolerance.
+
+* A new DoNothing class in misc.py is handy when you want to remove
+  some actions in your code, but not change the code. See the doc string.
+  A new function turn_off_plotting applies DoNothing to effectively
+  make all plotting statements inactive (this is often desired during
+  heavy debugging of the non-plotting parts of a program). Just write
+
+     turn_off_plotting(globals())
+
+  before the first plot call.
+
+* The BoxGrid and BoxField classes for structured grids and associated
+  scalar and vector fields are updated and applied more by the developers.
+
+* The old numpytools module is no longer supported, and we recommend to
+  use plain numpy or numpyutils (=numpy + some utility functions).
+  There is no longer (in general) support of Numeric and numarray in SciTools.
+
+
 Version 0.6:
 
 * Numerous bugfixes have been performed.

@@ -42,6 +42,7 @@ _update_from_config_file(matplotlib.rcParams, section='matplotlib')
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
 import pylab
+import re
 
 
 class MatplotlibBackend(BaseClass):
@@ -391,6 +392,34 @@ class MatplotlibBackend(BaseClass):
         width = item.getp('linewidth')
         return marker, color, style, width
 
+    def _fix_legend(self, legend):
+        """Enclose legend in $$ if latex syntax is detected."""
+        legend = legend.strip()
+        if len(legend) >= 2 and legend[0] !='$' and legend[-1] != '$':
+            chars = '\\', '^', '_'
+            latex = False
+            for c in chars:
+                if c in legend:
+                    latex = True
+                    break
+            if latex:
+                legend = '$' + legend + '$'
+                # fix sin, cos, exp, ln, log, etc:
+                def _fix_func(func, newfunc, legend):
+                    if re.search(r'[^\\]'+func, legend):
+                        legend = legend.replace(func, '\\'+newfunc)
+                    return legend
+                funcs = 'sin', 'cos', 'tan', 'exp', 'ln', 'log', \
+                        'sinh', 'cosh', 'tanh'
+                for func in funcs:
+                    legend = _fix_func(func, func, legend)
+                funcs = [('atan', 'arctan'), ('asin', 'arcsin'), 
+                         ('acos', 'arccos'),]
+                for func, newfunc in funcs:
+                    legend = _fix_func(func, newfunc, legend)
+
+        return legend
+
     def _add_line(self, item):
         """Add a 2D or 3D curve to the scene."""
         if DEBUG:
@@ -416,6 +445,7 @@ class MatplotlibBackend(BaseClass):
             #l, = self._g.plot(x,y,fmt,linewidth=width)
             l = self._g.plot(x,y,fmt,linewidth=width)
             legend = item.getp('legend')
+            legend = self._fix_legend(legend)
             if legend:
                 l[0].set_label(legend)
 
@@ -454,6 +484,7 @@ class MatplotlibBackend(BaseClass):
             l = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
                               linewidth=width, alpha=opacity)
             legend = item.getp('legend')
+            legend = self._fix_legend(legend)
             if legend:
                 l[0].set_label(legend)
 
@@ -523,6 +554,7 @@ class MatplotlibBackend(BaseClass):
         z = item.getp('zdata')           # scalar field
         c = item.getp('cdata')           # pseudocolor data (can be None)
         legend = item.getp('legend')
+        legend = self._fix_legend(legend)
 
         if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
@@ -563,6 +595,7 @@ class MatplotlibBackend(BaseClass):
         y = squeeze(item.getp('ydata'))  # grid component in y-direction
         z = item.getp('zdata')           # scalar field
         legend = item.getp('legend')
+        legend = self._fix_legend(legend)
 
         if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
@@ -627,6 +660,7 @@ class MatplotlibBackend(BaseClass):
         indexing = item.getp('indexing')
 
         legend = item.getp('legend')
+        legend = self._fix_legend(legend)
 
         # scale the vectors according to this variable (scale=0 should
         # turn off automatic scaling):
@@ -826,6 +860,7 @@ class MatplotlibBackend(BaseClass):
                     elif func == 'contourslice':
                         self._add_contourslices(item)
                 legend = item.getp('legend')
+                legend = self._fix_legend(legend)
                 if legend:
                     # add legend to plot
                     legends = True

@@ -62,11 +62,11 @@ just a fraction of a second on the screen before the plot window disappears
 backend constitute two examples). To make the window stay on the screen,
 add
 !bc cod
-raw_input('Press Enter: ')
+raw_input('Press the Return key to quit: ')
 !ec
 at the end of the program. The plot window is killed when the program
 terminates, and this satement postpones the termination until the user
-hits the Enter key.
+hits the Return key.
 
 
 ======= Decorating the Plot =======

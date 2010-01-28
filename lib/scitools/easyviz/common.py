@@ -5233,15 +5233,31 @@ class BaseClass(object):
                                   self.__class__.__name__)
 
 
-def use(plt, namespace=globals()):
-    """Export the namespace of backend instance to namespace."""
+def turn_off_plotting(namespace=globals()):
+    """Call turn_off_plotting(globals()) to turn off all plotting."""
+    use(namespace['plt'], namespace, True)
+
+def use(plt, namespace=globals(), neutralize=False):
+    """
+    Export the namespace of backend instance to namespace.
+    If neutralize is True, the plt object will be replaced
+    by a scitools.misc.DoNothing object so that no plotting
+    command will do anything. This can be used to efficiently
+    turn off all plotting in a program.
+    Just call turn_off_plotting(globals()) before the first
+    plot command in your program.
+    """
     plt_dict = {}
+    plt_orig = plt
+    if neutralize:
+        import scitools.misc
+        plt = scitools.misc.DoNothing()
     plt_dict['plt'] = plt
-    for item in plt.__dict__:
+    for item in plt_orig.__dict__:
         plt_dict[item] = eval('plt.'+item)                                   
-    for item in dir(plt.__class__):
+    for item in dir(plt_orig.__class__):
         if not '__' in item:  
-            plt_dict[item] = eval('plt.'+item) 
+            plt_dict[item] = eval('plt.'+item)
     namespace.update(plt_dict)  # Add to global namespace 
 
     # If this module is imported
@@ -5256,7 +5272,7 @@ def use(plt, namespace=globals()):
         pass
     del(__all__)
 
-        
+
 def debug(plt, level=10):
 
     def print_(item, spaces=10):
