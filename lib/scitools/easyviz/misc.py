@@ -12,7 +12,11 @@ def _update_from_config_file(d, section='easyviz'):
     for key in d:
         data = scitools.globaldata._config_data.get(section,{})
         if key in data:
-            d[key] = data[key][0]
+            try:
+                d[key] = data[key][0]
+            except Exception, e:
+                raise Exception('%s, trying to set key=%s to "%s"' % \
+                                (str(e), key, data[key][0]))
 
 def _toggle_state(state):
     if state == 'off' or not state:
