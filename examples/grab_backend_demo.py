@@ -25,7 +25,7 @@ title('Minimum Message Length')
 show()
 
 print "Let us now tune the plot by grabbing the backend."
-raw_input('Press Return key to quit:  to continue')
+raw_input('Press Return key to continue:')
 
 # Grab the backend and fine tune the plot:
 g = get_backend()
@@ -100,7 +100,7 @@ elif backend == 'blt':
     pass
 
 print "Now we store a hardcopy of the tuned plot."
-raw_input('Press Return key to quit:  to continue')
+raw_input('Press Return key to continue:')
 
 #hardcopy('grab_backend1.eps')  # Will destroy all changes!
 #hardcopy('grab_backend1.png')  # Will destroy all changes!

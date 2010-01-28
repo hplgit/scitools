@@ -43,4 +43,4 @@ if backend == 'matlab2':
 elif backend == 'veusz':
     save('test_axes.vsz')
 
-raw_input('Press Return key to quit:  to continue')
+raw_input('Press Return key to quit:')
