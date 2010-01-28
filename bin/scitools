@@ -25,6 +25,10 @@ ps2mpeg:
 profiler:
   Script for simplifying the execution of Python's profiling tools. Used in [1].
 
+rename:
+  Script for renaming a set of files by substituting one string or
+  regular expression with another.
+
 subst:
   Script for subsituting a phrase by another in a set of files.
   Accepts regular expressions. Treated in [1].
@@ -42,7 +46,28 @@ modifies (regular expression flags): re.S/re.DOTALL, re.m/re.MULTILINE
 and re.X/re.VERBOSE, respectively.
 
 
-2. Create an interactive session from a file with a list of statements:
+2. Rename files with names like 
+
+tmp_bergen_set15060.dat                                         
+tmp_oslo_set31897.dat
+tmp_stavanger_set21864.dat
+tmp_trondheim_set15358.dat
+
+to files with names like
+
+set_15060_bergen.dat
+set_15358_trondheim.dat
+set_21864_stavanger.dat
+set_31897_oslo.dat
+
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+
+A simple further rename is to replace the .dat extension with .data:
+
+scitools rename dat data set*.dat
+
+
+3. Create an interactive session from a file with a list of statements:
 
 Unix> cat tmp2.py
 import os
@@ -67,6 +92,22 @@ Unix> scitools file2interactive tmp2.py
 
 
 import os, re, sys, shutil, glob
+
+def wildcard_notation(files):
+    """
+    On Unix, a command-line argument like *.py is expanded
+    by the shell. This is not done on Windows, where we must
+    use glob.glob inside Python. This function provides a
+    uniform solution.
+    """
+    if isinstance(files, basestring):
+        files = [files]  # ensure list
+    if sys.platform[:3] == 'win':
+        import glob, operator
+        filelist = [glob.glob(arg) for arg in files]
+        files = reduce(operator.add, filelist)  # flatten
+    return files
+
 
 def usage_subst():
     print 'Usage: scitools subst [-s -m -x --restore] pattern '\
@@ -138,8 +179,61 @@ def main_subst():
             print 'restoring %s as %s' % (oldfile,newfile)
     else:
         pattern = args[0]; replacement = args[1]
-        s = subst(pattern, replacement, args[2:], pmm)
+        s = subst(pattern, replacement, wildcard_notation(args[2:]), pmm)
         print s  # print info about substitutions
+
+def usage_rename():
+    print 'Usage: scitools rename from_regex to_regex file1 file2 ...'
+
+doc_rename = """
+Rename a set of files using the power of regular expressions.
+
+Example: Suppose we have a set of files with names
+
+tmp_bergen_set15060.dat
+tmp_oslo_set31897.dat
+tmp_stavanger_set21864.dat
+tmp_trondheim_set15358.dat
+
+and that we want to rename these to 
+
+set_15060_bergen.dat
+set_15358_trondheim.dat
+set_21864_stavanger.dat
+set_31897_oslo.dat
+
+The following command, utilizing regular expressions with two
+groups, performs the task:
+
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+
+Copies of the old files are taken for backup and given an extension .old~~:
+
+tmp_bergen_set15060.dat.old~~
+tmp_oslo_set31897.dat.old~~
+tmp_stavanger_set21864.dat.old~~
+tmp_trondheim_set15358.dat.old~~
+"""    
+
+def rename(from_regex, to_regex, filenames, backup=True):
+    # could compile reg.expressions for efficiency
+    for filename in filenames:
+        newname = re.sub(from_regex, to_regex, filename)
+        if backup:
+            shutil.copy(filename, filename + '.old~~')
+        print '%s renamed to %s' % (filename, newname)
+        os.rename(filename, newname)
+
+def main_rename():
+    if len(sys.argv) < 4:
+        usage_rename()
+        print doc_rename
+        sys.exit(1)
+
+    from_regex, to_regex = sys.argv[2], sys.argv[3]
+    files = wildcard_notation(sys.argv[4:])
+    rename(from_regex, to_regex, files)
+
 
 def usage_file2interactive():
     print 'Usage: scitools file2interactive filename [human]'
@@ -542,6 +636,8 @@ if __name__ == '__main__':
 
     if program == 'subst':
         main_subst()
+    elif program == 'rename':
+        main_rename()
     elif program == 'file2interactive':
         main_file2interactive()
     elif program == 'profiler':
