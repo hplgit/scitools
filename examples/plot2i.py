@@ -26,8 +26,8 @@ if g.__class__.__name__ == 'Gnuplot':
     g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
     g('save "tmp.gnu"')  # save all settings for later tuning
-g.refresh()
-g.hardcopy('tmp2.eps')  # make new hardcopy
+    g.refresh()
+    g.hardcopy('tmp2.eps')  # make new hardcopy
 
 fig = gcf(); print fig.dump()
 

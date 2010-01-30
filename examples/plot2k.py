@@ -21,7 +21,7 @@ plot(t, y2, 'bo', xlabel='t', ylabel='y')
 
 # pause so the user can really see that we add features
 # to the plot below:
-raw_input('Press Return: ')
+raw_input('Press Return to continue: ')
 
 figure(1)  # go back to first figure
 title('One curve')

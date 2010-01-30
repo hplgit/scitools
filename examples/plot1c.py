@@ -13,3 +13,5 @@ plot(t, y,
      title='My First Easyviz Demo',
      hardcopy='tmp1.eps',
      show=True)
+
+raw_input('Press Return key to quit: ')
