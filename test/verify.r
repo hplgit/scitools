@@ -21,6 +21,100 @@
 <P><A HREF="/home/hpl/vc/scitools/test/tmp.test1_fdiff.sh">Floating-point difference between test1.vd and test1.rd without any approximations</A>
 
 </BODY></HTML>
+MPEG ENCODER STATS (1.5b)
+------------------------
+TIME STARTED:  Sat Jan 30 18:44:27 2010
+MACHINE:  unknown
+FIRST FILE:  ./tmp_0000.ppm
+LAST FILE:  ./tmp_0012.ppm
+PATTERN:  i
+GOP_SIZE:  30
+SLICES PER FRAME:  1
+RANGE:  +/-10
+PIXEL SEARCH:  HALF
+PSEARCH:  LOGARITHMIC
+BSEARCH:  CROSS2
+QSCALE:  8 10 25
+REFERENCE FRAME:  ORIGINAL
+
+
+Creating new GOP (closed = T) before frame 0
+FRAME 0 (I):  0 seconds  (2995920 bits/s output)
+FRAME 1 (I):  0 seconds  (3037200 bits/s output)
+FRAME 2 (I):  0 seconds  (3092160 bits/s output)
+FRAME 3 (I):  0 seconds  (3152400 bits/s output)
+FRAME 4 (I):  0 seconds  (3234480 bits/s output)
+FRAME 5 (I):  0 seconds  (3297360 bits/s output)
+FRAME 6 (I):  0 seconds  (3343200 bits/s output)
+FRAME 7 (I):  0 seconds  (3380880 bits/s output)
+FRAME 8 (I):  0 seconds  (3404160 bits/s output)
+FRAME 9 (I):  0 seconds  (3420240 bits/s output)
+FRAME 10 (I):  0 seconds  (3437520 bits/s output)
+FRAME 11 (I):  0 seconds  (3457680 bits/s output)
+FRAME 12 (I):  0 seconds  (3445200 bits/s output)
+
+
+TIME COMPLETED:  Sat Jan 30 18:44:28 2010
+Total time:  1 seconds
+
+-------------------------
+*****I FRAME SUMMARY*****
+-------------------------
+  Blocks:    25012     (1421915 bits)     (   56 bpb)
+  Frames:       13     (1423280 bits)     (109483 bpf)     (99.9% of total)
+  Compression:  107:1     (   0.2223 bpp)
+  Seconds:          0     (  20.0000 fps)  (  9850880 pps)  (    38480 mps)
+---------------------------------------------
+Total Compression:  107:1     (   0.2224 bpp)
+Total Frames Per Second:  13.000000 (25012 mps)
+CPU Time:  20.000001 fps     (38480 mps)
+Total Output Bit Rate (30 fps):  3286560 bits/sec
+MPEG file created in :  movie.mpeg
+
+
+======FRAMES READ:  13
+scitools.easyviz backend is gnuplot
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0000.ppm tmp_0000.eps
+tmp_0000.eps transformed via gs to tmp_0000.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0001.ppm tmp_0001.eps
+tmp_0001.eps transformed via gs to tmp_0001.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0002.ppm tmp_0002.eps
+tmp_0002.eps transformed via gs to tmp_0002.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0003.ppm tmp_0003.eps
+tmp_0003.eps transformed via gs to tmp_0003.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0004.ppm tmp_0004.eps
+tmp_0004.eps transformed via gs to tmp_0004.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0005.ppm tmp_0005.eps
+tmp_0005.eps transformed via gs to tmp_0005.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0006.ppm tmp_0006.eps
+tmp_0006.eps transformed via gs to tmp_0006.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0007.ppm tmp_0007.eps
+tmp_0007.eps transformed via gs to tmp_0007.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0008.ppm tmp_0008.eps
+tmp_0008.eps transformed via gs to tmp_0008.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0009.ppm tmp_0009.eps
+tmp_0009.eps transformed via gs to tmp_0009.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0010.ppm tmp_0010.eps
+tmp_0010.eps transformed via gs to tmp_0010.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0011.ppm tmp_0011.eps
+tmp_0011.eps transformed via gs to tmp_0011.ppm (1503 Kb)
+gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm  -sOutputFile=tmp_0012.ppm tmp_0012.eps
+tmp_0012.eps transformed via gs to tmp_0012.ppm (1503 Kb)
+ps2mpeg made the following ppm files:
+tmp_0007.ppm
+tmp_0008.ppm
+tmp_0009.ppm
+tmp_0000.ppm
+tmp_0003.ppm
+tmp_0005.ppm
+tmp_0011.ppm
+tmp_0001.ppm
+tmp_0010.ppm
+tmp_0012.ppm
+tmp_0002.ppm
+tmp_0004.ppm
+tmp_0006.ppm
+mpeg movie in output file movie.mpeg
 
 #
 # lines can generally be in any order
@@ -114,36 +208,91 @@ BQSCALE		25
 
 # this must be ORIGINAL or DECODED
 REFERENCE_FRAME	ORIGINAL
-56 2009    .tmp.profile
-
-         120056 function calls in 1.852 CPU seconds
+         70037 function calls in 0.805 CPU seconds
 
  internal time
 
 lineno(function)
-0(stat)
 26(isfile)
 7(f1)
 38(isdir)
 40(S_ISDIR)
 12(f2)
 24(S_IFMT)
-0(execfile('cpu.py'))
-0(setprofile)
-0(execfile)
-2(<module>)
-0(range)
-0(profiler)
 1(<module>)
+2(<module>)
+0(profiler)
 
 
->>> import sys, os
->>> sys.prefix
-'/home/hpl/sysdir/Linux'
->>> sys.argv
-['/home/hpl/vc/scitools/bin/scitools', 'file2interactive', 'tmp.2']
->>> os.pardir
-'..'
->>> os.curdir
-'.'
+
+test of subst in the following file:
+# some comment
+def f(x):
+    return 2
+
+compute_formula1(x, y, z)
+if not first:
+    compute_formula2(a, b)
+compute_(.+?)\( replaced by calculate_\g<1>( in tmp1.py
+after substitution:
+# some comment
+def f(x):
+    return 2
+
+calculate_formula1(x, y, z)
+if not first:
+    calculate_formula2(a, b)
+
+test of rename:
+files:
+tmp_bergen_set27242.dat
+tmp_oslo_set7992.dat
+tmp_stavanger_set509.dat
+tmp_trondheim_set10837.dat
+rename: change name from (e.g.) tmp_oslo_set143 set_143_oslo.dat
+tmp_bergen_set27242.dat renamed to set_27242_bergen.dat
+tmp_oslo_set7992.dat renamed to set_7992_oslo.dat
+tmp_stavanger_set509.dat renamed to set_509_stavanger.dat
+tmp_trondheim_set10837.dat renamed to set_10837_trondheim.dat
+new names:
+set_10837_trondheim.dat
+set_27242_bergen.dat
+set_509_stavanger.dat
+set_7992_oslo.dat
+copies of old files:
+tmp_0000.eps
+tmp_0001.eps
+tmp_0002.eps
+tmp_0003.eps
+tmp_0004.eps
+tmp_0005.eps
+tmp_0006.eps
+tmp_0007.eps
+tmp_0008.eps
+tmp_0009.eps
+tmp_0010.eps
+tmp_0011.eps
+tmp_0012.eps
+tmp_bergen_set27242.dat.old~~
+tmp_.mpeg_encode-input
+tmp_oslo_set7992.dat.old~~
+tmp_stavanger_set509.dat.old~~
+tmp_trondheim_set10837.dat.old~~
+set_10837_trondheim.dat renamed to set_10837_trondheim.data
+set_27242_bergen.dat renamed to set_27242_bergen.data
+set_509_stavanger.dat renamed to set_509_stavanger.data
+set_7992_oslo.dat renamed to set_7992_oslo.data
+set_10837_trondheim.data
+set_27242_bergen.data
+set_509_stavanger.data
+set_7992_oslo.data
+
+test of file2interactive:
+>>> import os
+>>> origdir = os.getcwd()
+>>> os.chdir(os.pardir)
+>>> os.getcwd()
+'/home/hpl/vc/scitools'
+>>> origdir
+'/home/hpl/vc/scitools/test'
 >>> 

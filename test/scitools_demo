@@ -16,9 +16,15 @@ if not first:
     compute_formula2(a, b)
 EOF
 
+echo
+echo 'test of subst in the following file:'
+cat tmp1.py
 scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' tmp1.py
+echo 'after substitution:'
+cat tmp1.py
 
-# rename:
+echo
+echo "test of rename:"
 names="oslo trondheim bergen stavanger"
 for i in $names; do
     touch tmp_${i}_set${RANDOM}.dat
@@ -35,7 +41,8 @@ scitools rename dat data set*.dat
 /bin/ls -1 set_*.data
 rm -f set_*.dat* tmp_*.dat*
 
-# file2interactive:
+echo
+echo "test of file2interactive:"
 
 # first make a file with statements:
 cat > tmp2.py <<EOF

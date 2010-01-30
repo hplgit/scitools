@@ -222,13 +222,15 @@ tmp_trondheim_set15358.dat.old~~
 """    
 
 def rename(from_regex, to_regex, filenames, backup=True):
-    # could compile reg.expressions for efficiency
+    from_regex_c = re.compile(from_regex)
+    to_regex_c = re.compile(to_regex)
     for filename in filenames:
-        newname = re.sub(from_regex, to_regex, filename)
-        if backup:
-            shutil.copy(filename, filename + '.old~~')
-        print '%s renamed to %s' % (filename, newname)
-        os.rename(filename, newname)
+        if from_regex_c.search(filename):
+            newname = from_regex_c.sub(to_regex_c, filename)
+            if backup:
+                shutil.copy(filename, filename + '.old~~')
+            print '%s renamed to %s' % (filename, newname)
+            os.rename(filename, newname)
 
 def main_rename():
     if len(sys.argv) < 4:
