@@ -1232,6 +1232,9 @@ class DoNothing(object):
     Handy class for making other objects inactive.
     (DoNothing is a generic dispatcher, accepting anyting and
     doing nothing.)
+
+    Whatever we do, we always get a DoNothing object, with which
+    we can do whatever we want to, but nothing will happen.
     
     For example, say a plot function returns a plot object that
     is used widely in a code to create windows with visualizations
@@ -1248,9 +1251,6 @@ class DoNothing(object):
     trying properties but no action (DoNothing object)
     >>> type(q)
     <class 'scitools.misc.DoNothing'>
-
-    Whatever we do, we always get a DoNothing object, with which we can
-    do whater we want to, but nothing will ever happen.
     """
     def __init__(self, *args, **kwargs):
         pass
@@ -1261,7 +1261,7 @@ class DoNothing(object):
     def __str__(self):
         return repr(self)
     def __getattribute__(self, name):
-        print 'trying %s but no action (DoNothing object)' % name
+        print 'ignoring action "%s" (DoNothing object)' % name
         return DoNothing()
     def __iter__(self):
         return self

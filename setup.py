@@ -37,8 +37,10 @@ except:  # cannot accept any error here
 config_file = os.path.join('lib', 'scitools', 'scitools.cfg')
 if '--easyviz_backend' in sys.argv:
     try:
+        i = sys.argv.index('--easyviz_backend')
         default_easyviz_backend = \
-            sys.argv[sys.argv.index('--easyviz_backend') + 1]
+            sys.argv[i+1]
+        del sys.argv[i:i+2]
     except IndexError:
         print '--easyviz_backend must be followed by a name like '\
             '\ngnuplot, matplotlib, etc.'
