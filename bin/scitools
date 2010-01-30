@@ -223,7 +223,6 @@ tmp_trondheim_set15358.dat.old~~
 
 def rename(from_regex, to_regex, filenames, backup=True):
     from_regex_c = re.compile(from_regex)
-    to_regex_c = re.compile(to_regex)
     for filename in filenames:
         if from_regex_c.search(filename):
             newname = from_regex_c.sub(to_regex, filename)
