@@ -390,7 +390,9 @@ class MatplotlibBackend(BaseClass):
         marker = self._markers[item.getp('linemarker')]
         color = item.getp('linecolor')
         style = item.getp('linetype')
-        width = float(item.getp('linewidth'))
+        width = item.getp('linewidth')
+        if width:
+            width = float(width)
         return marker, color, style, width
 
     def _fix_latex(self, legend):
