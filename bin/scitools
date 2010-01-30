@@ -1,6 +1,12 @@
 #!/usr/bin/env python
-legal_programs = 'subst', 'regression', 'profiler', 'ps2mpeg', 'floatdiff', \
-                 'file2interactive'
+legal_programs = ['subst', 
+                  'rename',
+                  'regression', 
+                  'profiler', 
+                  'ps2mpeg', 
+                  'floatdiff',
+                  'file2interactive'
+]
 
 __doc__ = \
 """
