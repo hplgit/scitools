@@ -11,6 +11,15 @@ offers only basic control of plots: curves, linestyles, legends,
 title, axis extent and names.  More fine-tuning of plots can be done
 by adding backend-specific commands.
 
+Easyviz was made so that one can postpone the choice of a particular
+visualization package (and its intricate syntax) when you quickly need
+to visualize curves or 2D/3D fields on your Python program. As Python
+is gaining popularity at universities, students are often forced to
+continuously switch between Matlab and Python, which is
+straightforward for array computing, but (previously) annoying for
+plotting. Easyviz was therefore also made to ease the switch
+between Python and Matlab.
+
 If you encounter problems with using Easyviz, please visit the 
 *Troubleshooting* chapter and the *Installation* chapter at the
 end of the documentation.
@@ -101,9 +110,9 @@ rapid prototyping of plots. This makes the Easyviz code easy to read
 and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
 must grab the backend object and use the backend-specific syntax to
-fine-tune the plot. The idea is that you can get away with Easyviz
-and a plotting package-independent script "95 percent" of the time - only now
-and then there will be demand for package-dependent code for
+fine-tune the plot. The idea is that you can get away with Easyviz and
+a plotting package-independent script "95 percent" of the time - only
+now and then there will be demand for package-dependent code for
 fine-tuning and customization of figures.
 
 These three principles and the Easyviz implementation make simple things
