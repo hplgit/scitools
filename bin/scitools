@@ -226,7 +226,7 @@ def rename(from_regex, to_regex, filenames, backup=True):
     to_regex_c = re.compile(to_regex)
     for filename in filenames:
         if from_regex_c.search(filename):
-            newname = from_regex_c.sub(to_regex_c, filename)
+            newname = from_regex_c.sub(to_regex, filename)
             if backup:
                 shutil.copy(filename, filename + '.old~~')
             print '%s renamed to %s' % (filename, newname)
