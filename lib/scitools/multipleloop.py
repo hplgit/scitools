@@ -123,7 +123,7 @@ all pairs: 6
 >>> pprint.pprint(experiments.prm_values)
 [('A', [1, 2, 5]), ('B', ['hello', 'world'])]
 
-Here is another example with more experiments:
+Here is another example with more experiments::
 >>> p = {'b': '1 & 0 & 0.5', 'func': 'y & siny', 'w': '[1:1.3,0.1]'}
 >>> prm_values = [(name, input2values(p[name])) for name in p]
 >>> import pprint
@@ -736,8 +736,10 @@ class MultipleLoop:
       experiments.combine()  # find all combinations of all parameters
       for cmlargs, parameters, varied_parameters in experiments:
           <run experiment: some program + cmlargs>
-          <extract results and save>
-
+          <extract response, varied_parameters holds the values of
+           the parameters that were varied in this experiment (the
+           independent variables mapping onto the response)
+      
     Attributes (m is some MultipleLoop object):
     
       - m.names        names of all parameters
@@ -748,6 +750,134 @@ class MultipleLoop:
                        (-name value), one for each experiment
       - m.all          list of all experiments
       - m.prm_values   list of (name, valuelist) tuples
+
+    Example::
+    >>> p = {'b': '1 & 0 & 0.5', 'func': 'y & siny', 'w': '[1:1.3,0.1]'}
+    >>> experiments = MultipleLoop(option_prefix='-')
+    >>> for name in p:
+    ...     experiments.register_parameter(name, p[name])
+    ... 
+    >>> experiments.combine()
+    >>> 
+    >>> # remove all experiments corresponding to a condition:
+    >>> nremoved = experiments.remove('b == 1')
+    >>> 
+    >>> # look at the attributes of this instance:
+    >>> pprint.pprint(experiments.all)
+    [[0, 1, 'y'],
+     [0.5, 1, 'y'],
+     [0, 1.1000000000000001, 'y'],
+     [0.5, 1.1000000000000001, 'y'],
+     [0, 1.2000000000000002, 'y'],
+     [0.5, 1.2000000000000002, 'y'],
+     [0, 1, 'siny'],
+     [0.5, 1, 'siny'],
+     [0, 1.1000000000000001, 'siny'],
+     [0.5, 1.1000000000000001, 'siny'],
+     [0, 1.2000000000000002, 'siny'],
+     [0.5, 1.2000000000000002, 'siny']]
+
+    >>> # explore the response of varied parameters:
+    >>> # function = []  # list of (response, (param1, param2, ...))
+    >>> # the (param1, param2, ...) list equals the varied parameter values
+    >>> # in each experiment (varied_parameters in the loop below)
+    >>> 
+    >>> for cmlargs, parameters, varied_parameters in experiments:
+    ...     args = ', '.join(['%s=%s' % (name,value) for name, value in zip(experiments.names, parameters)])
+    ...     print
+    ...     print 'can call some function:'
+    ...     print 'response = myfunc(%s)' % args
+    ...     print 'or run some program with options:'
+    ...     print 'prompt> myprog ', cmlargs
+    ...     print 'and extract a response from the program output'
+    ...     print 'function.append((response, varied_parameters))'
+    ... 
+
+    can call some function:
+    response = myfunc(b=0, w=1, func=y)
+    or run some program with options:
+    prompt> myprog  -b False -w True -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1, func=y)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w True -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0, w=1.1, func=y)
+    or run some program with options:
+    prompt> myprog  -b False -w 1.1000000000000001 -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1.1, func=y)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0, w=1.2, func=y)
+    or run some program with options:
+    prompt> myprog  -b False -w 1.2000000000000002 -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1.2, func=y)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w 1.2000000000000002 -func 'y'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0, w=1, func=siny)
+    or run some program with options:
+    prompt> myprog  -b False -w True -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1, func=siny)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w True -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0, w=1.1, func=siny)
+    or run some program with options:
+    prompt> myprog  -b False -w 1.1000000000000001 -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1.1, func=siny)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0, w=1.2, func=siny)
+    or run some program with options:
+    prompt> myprog  -b False -w 1.2000000000000002 -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+    can call some function:
+    response = myfunc(b=0.5, w=1.2, func=siny)
+    or run some program with options:
+    prompt> myprog  -b 0.5 -w 1.2000000000000002 -func 'siny'
+    and extract a response from the program output
+    function.append((response, varied_parameters))
+
+
     """
     def __init__(self, option_prefix='--'):
         """

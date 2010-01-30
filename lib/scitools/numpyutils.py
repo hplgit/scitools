@@ -162,7 +162,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     these functions uses slices to generate the meshgrids rather than
     one-dimensional coordinate arrays such as in Matlab. With slices, the
     user does not have the option to generate meshgrid with, e.g.,
-    irregular spacings, like 
+    irregular spacings, like::
     >>> x = array([-1,-0.5,1,4,5], float)
     >>> y = array([0,-2,-5], float)
     >>> xv, yv = meshgrid(x, y, sparse=False)
@@ -203,7 +203,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
     It is not entirely true that matrix indexing is not supported by the
     `meshgrid` function in NumPy because we can just switch the order of
-    the first two input and output arguments:
+    the first two input and output arguments::
     >>> yv, xv = numpy.meshgrid(y, x)
     >>> # same as:
     >>> xv, yv = meshgrid(x, y, indexing='ij')
@@ -479,22 +479,15 @@ def orth(A):
     (Plain copy from scipy.linalg.orth - this one here applies numpy.svd
     and avoids the need for having scipy installed.)
     
-    Construct an orthonormal basis for the range of A using SVD
+    Construct an orthonormal basis for the range of A using SVD.
 
-    Parameters
-    ----------
-    A : array, shape (M, N)
-
-    Returns
-    -------
-    Q : array, shape (M, K)
+    @param A: array, shape (M, N)
+    @return:
+        Q : array, shape (M, K)
         Orthonormal basis for the range of A.
         K = effective rank of A, as determined by automatic cutoff
 
-    See also
-    --------
-    svd : Singular value decomposition of a matrix
-
+    see also svd (singular value decomposition of a matrix in scipy.linalg)
     """
     u,s,vh = svd(A)
     M,N = A.shape

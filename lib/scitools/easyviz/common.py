@@ -38,8 +38,9 @@ def docadd(comment, *lists, **kwargs):
     indent = kwargs.get('indent', 4)
     indent = ' '*indent
     lines = s.split('\n')
-    for i in range(len(lines)):
-        lines[i] = indent + lines[i]
+    for i in range(2,len(lines)):  # skip first 2 lines (heading)
+        if lines[i].strip() != '':
+            lines[i] = indent + '- ' + lines[i]  # add - for list syntax in some markup languages
     s = '\n'.join(lines)
     return s
 
@@ -122,9 +123,7 @@ class PlotProperties(object):
                  '-.':'dashdot',
                  '--':'dashed',
                  }
-    __doc__ += '\nColors: %s\nMarkers: %s\nLinestyles: %s\nSizes: %s' \
-               '\nStyles:\n%s' % (_colors, _markers, _linestyles,
-                                  _sizes, pprint.pformat(_styledoc))
+    __doc__ += 'Valid symbols::\n      - Colors: %s\n      - Markers: %s\n      - Linestyles: %s\n      - Sizes: %s\n      - Styles:\n%s' % (_colors, _markers, _linestyles, _sizes, pprint.pformat(_styledoc)[1:-1])
 
     _local_prop = {
         'description': '',

@@ -3,13 +3,21 @@
 
 %s
 """
-__id__ = '$Id$'
     
 import os, sys, operator, math
 
 
 # to copied into this file by preprocess.py:
 """
+Note:
+This module stems from the days when there were three (almost) competing
+Numerical Python implementations around and people wanted to be able
+to switch between these implementations in their Python programs.
+Nowadays, numpy is the dominating module, and the use of _numpyload and
+numpytools is no longer particularly fruitful. For backward compatibility
+of scitools, the two modules still exist.
+
+
 Unified interface to Numeric, numarray, and numpy
 =================================================
 
@@ -193,8 +201,8 @@ if basic_NumPy is None:
 if basic_NumPy is None:  basic_NumPy = 'numpy' # final default choice
 
 if basic_NumPy not in ('Numeric', 'numarray', 'numpy'):
-    raise ImportError, 'cannot decide which Numerical Python '\
-          'implementation to use (ended up with "%s")' % basic_NumPy
+    raise ImportError('cannot decide which Numerical Python '\
+          'implementation to use (ended up with "%s")' % basic_NumPy)
 
 #print 'from', basic_NumPy, 'import *'
 
@@ -248,9 +256,9 @@ if basic_NumPy == 'numpy':
         LinearAlgebra.eigenvectors = linalg.eig
 
     except ImportError, e:
-        raise ImportError, '%s\nnumpy import failed!\n'\
+        raise ImportError('%s\nnumpy import failed!\n'\
               'see doc of %s module for how to choose Numeric instead' % \
-              (e, __name__)
+              (e, __name__))
 
 
     def array_output_precision(no_of_decimals):
@@ -268,7 +276,7 @@ if basic_NumPy == 'numpy':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)        
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -281,7 +289,7 @@ if basic_NumPy == 'numpy':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = ndarray
 
@@ -295,17 +303,17 @@ if basic_NumPy == 'numarray':
         # RNG is not supported, make an object that gives an error message:
         class __Dummy:
             def __getattr__(self, name):
-                raise ImportError, 'You have chosen the numarray package, '\
-                'but it does not have the functionality of the RNG module'
+                raise ImportError('You have chosen the numarray package, '\
+                'but it does not have the functionality of the RNG module')
         RNG = __Dummy()
         del _Numeric_name, _numarray_name, _dummy1, __Dummy, _NumPy_modules
         
         from numarray import *
 
     except ImportError, e:
-        raise ImportError, '%s\nnumarray import failed!\n'\
+        raise ImportError('%s\nnumarray import failed!\n'\
         'see doc of %s module for how to choose Numeric instead' % \
-        (e, __name__)
+        (e, __name__))
 
     def array_output_precision(no_of_decimals):
         """Set no of decimals in printout of arrays."""
@@ -322,7 +330,7 @@ if basic_NumPy == 'numarray':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)        
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -335,7 +343,7 @@ if basic_NumPy == 'numarray':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = NumArray
 
@@ -396,9 +404,9 @@ if basic_NumPy == 'Numeric':
         del _problems
         
     except ImportError, e:
-        raise ImportError, '%s\nNumeric import failed!\n'\
+        raise ImportError('%s\nNumeric import failed!\n'\
         'see doc of %s module for how to choose numarray instead' % \
-        (e, __name__)
+        (e, __name__))
 
 
     # fix of matrixmultiply bug in Numeric (according to Fernando Perez,
@@ -426,7 +434,7 @@ if basic_NumPy == 'Numeric':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmax of %s not supported' % type(a)
+                raise TypeError('arrmax of %s not supported' % type(a))
 
     def arrmin(a):
         """Compute the minimum of all the entries in a."""
@@ -440,7 +448,7 @@ if basic_NumPy == 'Numeric':
             elif operator.isNumberType(a):
                 return a
             else:
-                raise TypeError, 'arrmin of %s not supported' % type(a)
+                raise TypeError('arrmin of %s not supported' % type(a))
 
     NumPyArray = ArrayType
 
@@ -565,14 +573,20 @@ The following extensions to Numerical Python are also defined:
            as asarray(a), but a warning or exception is issued if
            the array a is copied
 
+ - meshgrid:
+           extended version of numpy.meshgrid to 1D, 2D and 3D grids,
+           with sparse or dense coordinate arrays and matrix or grid
+           indexing
+           
  - ndgrid:
-           extend one-dimensional coordinate arrays to multi-dimensional
-           arrays over grids
+           same as calling meshgrid with indexing='ij' (matrix indexing)
            
  - float_eq:
            operator == for float operands with tolerance,
            float_eq(a,b,tol) means abs(a-b) < tol
            works for both scalar and array arguments
+           (similar functions for other operations exists:
+           float_le, float_lt, float_ge, float_gt, float_ne)
 
  - cut_noise:
            set all small (noise) elements of an array to zero
@@ -627,99 +641,80 @@ if __name__.find('numpyutils') != -1:
 # modules (Numeric, numpy, numarray)
 
 import operator
+from FloatComparison import float_eq, float_ne, float_lt, float_le, \
+     float_gt, float_ge
 
-def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
+def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
     """
-    Make 1D/2D/3D coordinate arrays for vectorized evaluations of
-    1D/2D/3D scalar/vector fields over 1D/2D/3D grids, given
-    one-dimensional coordinate arrays x, y, and/or, z.
+    Extension of numpy.meshgrid to 1D, 2D and 3D problems, and also
+    support of both "matrix" and "grid" numbering.
+    
+    This extended version makes 1D/2D/3D coordinate arrays for
+    vectorized evaluations of 1D/2D/3D scalar/vector fields over
+    1D/2D/3D grids, given one-dimensional coordinate arrays x, y,
+    and/or, z.
 
     >>> x=linspace(0,1,3)        # coordinates along x axis
     >>> y=linspace(0,1,2)        # coordinates along y axis
     >>> xv, yv = meshgrid(x,y)   # extend x and y for a 2D xy grid
     >>> xv
-    array([[ 0. ,  0.5,  1. ]]
+    array([[ 0. ,  0.5,  1. ],
+           [ 0. ,  0.5,  1. ]])
     >>> yv
-    array([[ 0.],
-           [ 1.]])
-    >>> z=5
-    >>> xv, yv, zc = meshgrid(x,y,z)  # 2D slice of a 3D grid, with z=const
+    array([[ 0.,  0.,  0.],
+           [ 1.,  1.,  1.]])
+    >>> xv, yv = meshgrid(x,y, sparse=True)  # make sparse output arrays
     >>> xv
-    array([[ 0. ,  0.5,  1. ]]
+    array([[ 0. ,  0.5,  1. ]])
     >>> yv
     array([[ 0.],
            [ 1.]])
+
+    >>> # 2D slice of a 3D grid, with z=const:
+    >>> z=5
+    >>> xv, yv, zc = meshgrid(x,y,z)   
+    >>> xv
+    array([[ 0. ,  0.5,  1. ],
+           [ 0. ,  0.5,  1. ]])
+    >>> yv
+    array([[ 0.,  0.,  0.],
+           [ 1.,  1.,  1.]])
     >>> zc
     5
 
-    >>> meshgrid(2,y,x)  # 2D slice of a 3D grid, with x=const
-    (2, array([[ 0.,  1.]]), array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]))
-    >>> meshgrid(0,1,5)  # just a 3D point
+    >>> # 2D slice of a 3D grid, with x=const:
+    >>> meshgrid(2,y,x)  
+    (2, array([[ 0.,  1.],
+           [ 0.,  1.],
+           [ 0.,  1.]]), array([[ 0. ,  0. ],
+           [ 0.5,  0.5],
+           [ 1. ,  1. ]]))
+    >>> meshgrid(0,1,5, sparse=True)  # just a 3D point
     (0, 1, 5)
-    >>> meshgrid(3)
-    3
     >>> meshgrid(y)      # 1D grid; y is just returned
     array([ 0.,  1.])
-    >>> meshgrid(x,y,sparse=False)  # store the full 2D matrix
-    (array([[ 0. ,  0.5,  1. ],
-       [ 0. ,  0.5,  1. ]]), array([[ 0.,  0.,  0.],
-       [ 1.,  1.,  1.]]))
-    >>> meshgrid(x,y,indexing='ij')  # change to matrix indexing
-    (array([[ 0. ],
-           [ 0.5],
-           [ 1. ]]), array([[ 0.,  1.]]))
-    >>> meshgrid(x,y,sparse=False,indexing='ij')
+    >>> meshgrid(x,y, indexing='ij')  # change to matrix indexing
     (array([[ 0. ,  0. ],
            [ 0.5,  0.5],
            [ 1. ,  1. ]]), array([[ 0.,  1.],
            [ 0.,  1.],
            [ 0.,  1.]]))
 
-
     Why does SciTools has its own meshgrid function when NumPy has three
     similar functions, `mgrid`, `ogrid`, and `meshgrid`?
     The `meshgrid` function in NumPy is limited to two dimensions only, while
-    the SciTools version can also work with 3D grids. In addition,
+    the SciTools version can also work with 3D and 1D grids. In addition,
     the NumPy version of `meshgrid` has no option for generating sparse
     grids to conserve memory, like we have in SciTools by specifying the
     `sparse` argument:
-    !bc
-    >>> xv, yv = meshgrid(linspace(-2,2,5), linspace(-1,1,3), sparse=True)
-    >>> xv
-    array([[-2., -1.,  0.,  1.,  2.]])
-    >>> yv
-    array([[-1.],
-           [ 0.],
-           [ 1.]])
-    >>>
-    !ec
-    Actually, this is the default behavior for the `meshgrid` function in
-    SciTools. In NumPy, however, we will in this case get a full 2D grid:
-    !bc
-    >>> xv, yv = numpy.meshgrid(linspace(-2,2,5), linspace(-1,1,3))
-    >>> xv
-    array([[-2., -1.,  0.,  1.,  2.],
-           [-2., -1.,  0.,  1.,  2.],
-           [-2., -1.,  0.,  1.,  2.]])
-    >>> yv
-    array([[-1., -1., -1., -1., -1.],
-           [ 0.,  0.,  0.,  0.,  0.],
-           [ 1.,  1.,  1.,  1.,  1.]])
-    >>> 
-    !ec
-    This is the same result we get by setting `sparse=False` in `meshgrid`
-    in SciTools.
 
     The NumPy functions `mgrid` and `ogrid` does provide support for,
     respectively, full and sparse n-dimensional meshgrids, however,
     these functions uses slices to generate the meshgrids rather than
     one-dimensional coordinate arrays such as in Matlab. With slices, the
     user does not have the option to generate meshgrid with, e.g.,
-    irregular spacings, like 
-    !bc
+    irregular spacings, like::
     >>> x = array([-1,-0.5,1,4,5], float)
     >>> y = array([0,-2,-5], float)
     >>> xv, yv = meshgrid(x, y, sparse=False)
@@ -732,7 +727,6 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
            [-2., -2., -2., -2., -2.],
            [-5., -5., -5., -5., -5.]])
     >>> 
-    !ec
 
     In addition to the reasons mentioned above, the meshgrid function in
     NumPy supports only Cartesian indexing, i.e., x and y, not matrix
@@ -741,8 +735,8 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     indexing conventions through the `indexing` keyword argument. Giving
     the string `'ij'` returns a meshgrid with matrix indexing, while
     `'xy'` returns a meshgrid with Cartesian indexing. The difference is
-    illustrated by the following code snippet:
-    !bc
+    illustrated by the following code snippet::
+
     nx = 10
     ny = 15
 
@@ -758,18 +752,13 @@ def meshgrid(x=None, y=None, z=None, sparse=True, indexing='xy',
     for i in range(nx):
         for j in range(ny):
             # treat xv[j,i], yv[j,i]
-    !ec
 
     It is not entirely true that matrix indexing is not supported by the
     `meshgrid` function in NumPy because we can just switch the order of
-    the first two input and output arguments:
-    !bc
-    yv, xv = numpy.meshgrid(y, x)
-    !ec
-    is the same as
-    !bc
-    xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
-    !ec
+    the first two input and output arguments::
+    >>> yv, xv = numpy.meshgrid(y, x)
+    >>> # same as:
+    >>> xv, yv = meshgrid(x, y, indexing='ij')
     However, we think it is clearer to have the logical "x, y"
     sequence on the left-hand side and instead adjust a keyword argument.
     """
@@ -914,29 +903,6 @@ def ndgrid(*args,**kwargs):
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
 
-
-def float_eq(a, b, rtol=1.0e-14, atol=1.0e-14):
-    """
-    Approximate test a==b for float variables.
-    Returns true if abs(a-b) < atol + rtol*abs(b).
-    atol comes into play when abs(b) is large.
-    When a and b are NumPy arrays, NumPy's allclose function is called
-    (but float_eq's default tolerances are much stricter than those of
-    allclose).
-    """
-    if isinstance(a, float):
-        return math.fabs(a-b) < atol + rtol*math.fabs(b)
-    elif isinstance(a, complex):
-        return float_eq(a.real, b.real, rtol, atol) and \
-               float_eq(a.imag, b.imag, rtol, atol)
-    else: # assume NumPy array
-        try:
-            return allclose(a, b, rtol, atol)
-        except:
-            raise TypeError, 'Illegal types: a is %s and b is %s' % \
-                  (type(a), type(b))
-    
-
 def length(a):
     """Return the length of the largest dimension of array a."""
     return max(a.shape)
@@ -1065,22 +1031,15 @@ def orth(A):
     (Plain copy from scipy.linalg.orth - this one here applies numpy.svd
     and avoids the need for having scipy installed.)
     
-    Construct an orthonormal basis for the range of A using SVD
+    Construct an orthonormal basis for the range of A using SVD.
 
-    Parameters
-    ----------
-    A : array, shape (M, N)
-
-    Returns
-    -------
-    Q : array, shape (M, K)
+    @param A: array, shape (M, N)
+    @return:
+        Q : array, shape (M, K)
         Orthonormal basis for the range of A.
         K = effective rank of A, as determined by automatic cutoff
 
-    See also
-    --------
-    svd : Singular value decomposition of a matrix
-
+    see also svd (singular value decomposition of a matrix in scipy.linalg)
     """
     u,s,vh = svd(A)
     M,N = A.shape
@@ -1246,7 +1205,7 @@ try:
 except:
     class NumPy2BltVector:
         def __init__(self, array):
-            raise ImportError, "Python is not compiled with BLT"
+            raise ImportError("Python is not working properly with BLT")
 
 try:
     from scitools.StringFunction import StringFunction
@@ -1509,7 +1468,7 @@ def wrap2callable(f, **kwargs):
     elif operator.isCallable(f):
         return f
     else:
-        raise TypeError, 'f of type %s is not callable' % type(f)
+        raise TypeError('f of type %s is not callable' % type(f))
 
 
 # problem: setitem in ArrayGen does not support multiple indices
@@ -1705,7 +1664,7 @@ def factorial(n, method='reduce'):
     scipy                     |   131.18
     """
     if not isinstance(n, (int, long, float)):
-        raise TypeError, 'factorial(n): n must be integer not %s' % type(n)
+        raise TypeError('factorial(n): n must be integer not %s' % type(n))
     n = long(n)
 
     if n == 0 or n == 1:
@@ -1744,7 +1703,7 @@ def factorial(n, method='reduce'):
             return reduce(operator.mul, xrange(2, n+1))
             # or return factorial(n)
     else:
-        raise ValueError, 'factorial: method="%s" is not supported' % method
+        raise ValueError('factorial: method="%s" is not supported' % method)
 
 
 def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
@@ -1764,7 +1723,7 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
         if message == 'warning':
             print 'Warning: %s' % msg
         elif message == 'exception':
-            raise TypeError, msg
+            raise TypeError(msg)
     return a_new
 
 
@@ -1894,32 +1853,32 @@ def arr(shape=None, element_type=float,
     if data is not None:
 
         if not operator.isSequenceType(data):
-            raise TypeError, 'arr: data argument is not a sequence type'
+            raise TypeError('arr: data argument is not a sequence type')
         
         if isinstance(shape, (list,tuple)):
             # check that shape and data are compatible:
             if reduce(operator.mul, shape) != size(data):
-                raise ValueError, \
-                      'arr: shape=%s is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
+                raise ValueError(
+                    'arr: shape=%s is not compatible with %d '\
+                    'elements in the provided data' % (shape, size(data)))
         elif isinstance(shape, int):
             if shape != size(data):
-                raise ValueError, \
-                      'arr: shape=%d is not compatible with %d '\
-                      'elements in the provided data' % (shape, size(data))
+                raise ValueError(
+                    'arr: shape=%d is not compatible with %d '\
+                    'elements in the provided data' % (shape, size(data)))
         elif shape is None:
             if isinstance(data, (list,tuple)) and copy == False:
                 # cannot share data (data is list/tuple)
                 copy = True
             return array(data, dtype=element_type, copy=copy, order=order)
         else:
-            raise TypeError, \
-                  'shape is %s, must be list/tuple or int' % type(shape)
+            raise TypeError(
+                'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
         if not isinstance(file_, (basestring, file, StringIO)):
-            raise TypeError, \
-                  'file_ argument must be a string (filename) or '\
-                  'open file object, not %s' % type(file_)
+            raise TypeError(
+                'file_ argument must be a string (filename) or '\
+                'open file object, not %s' % type(file_))
 
         if isinstance(file_, basestring):
             file_ = open(file_, 'r')
@@ -1932,8 +1891,8 @@ def arr(shape=None, element_type=float,
         file_.seek(0)
         # we assume that array data in file has element_type=float:
         if not (element_type == float or element_type == 'd'):
-            raise ValueError, 'element_type must be float_/"%s", not "%s"' % \
-                  ('d', element_type)
+            raise ValueError('element_type must be float_/"%s", not "%s"' % \
+                             ('d', element_type))
         
         d = array([float(word) for word in file_.read().split()])
         if isinstance(file_, basestring):
@@ -1943,27 +1902,27 @@ def arr(shape=None, element_type=float,
             suggested_shape = (int(len(d)/ncolumns), ncolumns)
             total_size = suggested_shape[0]*suggested_shape[1]
             if total_size != len(d):
-                raise ValueError, \
-                'found %d array entries in file "%s", but first line\n'\
-                'contains %d elements - no shape is compatible with\n'\
-                'these values' % (len(d), file, ncolumns)
+                raise ValueError(
+                    'found %d array entries in file "%s", but first line\n'\
+                    'contains %d elements - no shape is compatible with\n'\
+                    'these values' % (len(d), file, ncolumns))
             d.shape = suggested_shape
         if shape is not None:
             if shape != d.shape:
-                raise ValueError, \
-                'shape=%s is not compatible with shape %s found in "%s"' % \
-                (shape, d.shape, file)
+                raise ValueError(
+                    'shape=%s is not compatible with shape %s found in "%s"' % \
+                    (shape, d.shape, file))
         return d
 
     elif interval is not None and shape is not None:
         if not isinstance(shape, int):
-            raise TypeError, 'For array values in an interval, '\
-                  'shape must be an integer'
+            raise TypeError('For array values in an interval, '\
+                            'shape must be an integer')
         if not isinstance(interval, (list,tuple)):
-            raise TypeError, 'interval must be list or tuple, not %s' % \
-                  type(interval)
+            raise TypeError('interval must be list or tuple, not %s' % \
+                            type(interval))
         if len(interval) != 2:
-            raise ValueError, 'interval must be a 2-tuple (or list)'
+            raise ValueError('interval must be a 2-tuple (or list)')
 
         try:
             return linspace(interval[0], interval[1], shape)
@@ -1975,11 +1934,10 @@ def arr(shape=None, element_type=float,
         # no data, no file, just make zeros
 
         if not isinstance(shape, (tuple, int, list)):
-            raise TypeError, \
-           'arr: shape (1st arg) must be tuple or int'
+            raise TypeError('arr: shape (1st arg) must be tuple or int')
         if shape is None:
-            raise ValueError, \
-            'arr: either shape, data, or from_function must be specified'
+            raise ValueError(
+                'arr: either shape, data, or from_function must be specified')
 
         try:
             return zeros(shape, dtype=element_type, order=order)
@@ -1987,8 +1945,8 @@ def arr(shape=None, element_type=float,
             # print more information (size of data):
             print e, 'of size %s' % shape
     
-
 def _test():
+    _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:
     a = array(range(27))
     a.shape = (3,3,3)
@@ -2019,9 +1977,6 @@ def _test():
 if __name__ == '__main__':
     from numpy import *
     _test()
-
-    
-    
 
 #---- build doc string from _numpyload/util doc strings ----
 
@@ -2127,26 +2082,26 @@ if __name__ == '__main__':
             x = Numeric.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of  Numeric and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of  Numeric and %s"\
+                    %N.basic_NumPy)
             import numarray
             x = numarray.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
 
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of numarray and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of numarray and %s"\
+                    %N.basic_NumPy)
 
             import numpy
             x = numpy.arange(10)
             X, Y, Z = N.meshgrid(x, y, z, sparse=False)
             #assert N.rank(X) == 3
             if not  N.rank(X) == 3:
-                raise AssertionError, \
-                      "Meshgrid failed with arraytype mix of numpy and %s"\
-                      %N.basic_NumPy
+                raise AssertionError(
+                    "Meshgrid failed with arraytype mix of numpy and %s"\
+                    %N.basic_NumPy)
             
         def testMeshGrid_DenseFromNodenseMeshgridOutput(self):
             # sparse fails for dense output when input has singleton dimensions

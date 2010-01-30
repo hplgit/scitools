@@ -595,16 +595,16 @@ class InputPrmGUI(InputPrm):
                  widget_type='entry', values=None, parent=None,
                  help=None, unit=None, cmlarg=None):
         """
-        default           default value
-        str2type          function from string to type
-        name              name of parameter
-        widget_type       entry, slider, option, checkbutton
-        values            (min,max) interval or options
-        parent            parent widget
-        help              description of parameter
-        unit              physical unit (dimension)
-        cmlarg            command-line argument for sending
-                          this prm to an external program
+        @param default:           default value
+        @param str2type:          function from string to type
+        @param name:              name of parameter
+        @param widget_type:       entry, slider, option, checkbutton
+        @param values:            (min,max) interval or options
+        @param parent:            parent widget
+        @param help:              description of parameter
+        @param unit:              physical unit (dimension)
+        @param cmlarg:            command-line argument for sending
+                                  this prm to an external program
         """
         if str2type is None: 
             str2type = scitools.misc.str2obj
@@ -918,10 +918,10 @@ class Parameters:
     """
     def __init__(self, interface='plain', form=None, prm_dict={}):
         """
-        interface         'plain', 'CGI', or 'GUI'
-        form              cgi.FieldStorage() object
-        prm_dict          dictionary with (name,value) pairs
-                          (will be added using the add method)
+        @param interface: 'plain', 'CGI', or 'GUI'
+        @param form: cgi.FieldStorage() object
+        @param prm_dict: dictionary with (name,value) pairs
+        (will be added using the add method)
         """
         
         self.dict = {}  # holds InputPrm/GUI/CGI objects
@@ -1322,20 +1322,20 @@ class AutoSimVizGUI:
                           placement='right',
                           ):
         """
-        parent            parent (master) widget
-        no_of_plotframes  no of graph areas
-        placement         placement of the plot area
-                          ('right' or 'bottom')
+        @param parent: parent (master) widget
+        @param no_of_plotframes: no of graph areas
+        @param placement: placement of the plot area ('right' or 'bottom')
 
-        Example:
-        Create three plot areas to the right in the window.
-        self.plot1, self.plot2, self.plot3 = \
-            self.someGUI.make_curveplotGUI(parent, 3, 'right')
-        self.plot1 etc. holds Pmw.Blt.Graph widgets.
+        Example on creating
+        three plot areas to the right in the window::
 
-        Create a single plot area:
-        self.plot1 = self.someGUI.make_curveplotGUI(parent,
-                                                    1, 'bottom')
+          self.plot1, self.plot2, self.plot3 = \
+              self.someGUI.make_curveplotGUI(parent, 3, 'right')
+          self.plot1 etc. holds Pmw.Blt.Graph widgets.
+
+        Create a single plot area::
+          self.plot1 = self.someGUI.make_curveplotGUI(parent,
+                                                      1, 'bottom')
         """
         if placement == 'right':
             if self.pane:
@@ -1625,26 +1625,23 @@ class FuncSpec:
         """
         Arguments:
 
-        representation          class Drawing, UserFunction, or
+        @param representation:  class Drawing, UserFunction, or
                                 StringFormula
-        name                    name of function
-        parameters=None         parameters in the function, either
+        @param name:            name of function
+        @param parameters:      parameters in the function, either
                                 dict or Parameters instance
-        independent_variables=[] list/tuple of strings with the
+        @param independent_variables: list/tuple of strings with the
                                 names of the indep. variables.
-        formula=None            textual doc of function formula
-        image=None              filename of GIF image (LaTeX)
-        function_object=None    callable object for evaluating the
-                                function
-        vector=0                0: scalar function
-                               >0: no of vector comp.
-        description=None        more verbose description than formula
-        xcoor=None              array of coordinates for drawing
-        scrolled_frame=False    scrollbars in the notebook page, False
+        @param formula:         textual doc of function formula
+        @param image:           filename of GIF image (LaTeX)
+        @param function_object: callable object for evaluating the function
+        @param vector:          0: scalar function, >0: no of vector comp.
+        @param description:     more verbose description than formula
+        @param xcoor:           array of coordinates for drawing
+        @param scrolled_frame:  scrollbars in the notebook page, False
                                 or dict: {'width': 300, 'height':200}
 
-        Examples:
-        see test_FunctionSelector in TkGUI.py.
+        Examples: see test_FunctionSelector in TkGUI.py.
         """
         self.name = name
         self.representation = representation

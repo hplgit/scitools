@@ -704,7 +704,8 @@ FORCE_ENCODE_LAST_FRAME
 
 
 def movie(input_files, **kwargs):
-    """Make a movie from a series of image files.
+    """
+    Make a movie from a series of image files.
 
     This function makes it very easy to create a movie file from a
     series of image files. Several different encoding tools can be
@@ -720,7 +721,7 @@ def movie(input_files, **kwargs):
     format 04d in this case, ensures that the files are listed in correct
     numeric order when using a wildcard notation like image_*.eps.
     We want to make a movie out of these files, where each file constitutes
-    a frame in the movie. This task can be accomplished by the simple call
+    a frame in the movie. This task can be accomplished by the simple call::
 
         movie('image_*.eps')
 
@@ -730,7 +731,7 @@ def movie(input_files, **kwargs):
     the current working directory.
 
     Note: We strongly recommend to always clean up previously generated
-    files for the frames in movies:
+    files for the frames in movies::
 
         for f in glob.glob('image_*.eps'):
             os.remove(f)
@@ -739,7 +740,7 @@ def movie(input_files, **kwargs):
 
     One can easily specify the name of the movie file and explicitly
     specify the encoder. For example, an animated GIF movie can be
-    created by
+    created by::
 
         movie('image_*.eps', encoder='convert',
               output_file='../wave2D.gif')
@@ -749,7 +750,7 @@ def movie(input_files, **kwargs):
     named 'wave2D.gif' and placed in the parent directory.
     
     If we instead want to create an MPEG movie by using the MEncoder
-    tool, we can do this with the following command:
+    tool, we can do this with the following command::
 
         movie('image_*.eps', encoder='mencoder',
               output_file='/home/johannr/wave2D.mpeg',
@@ -769,220 +770,221 @@ def movie(input_files, **kwargs):
     Below follows a more detailed description of the various arguments that
     are available in this function.
 
-    Required arguments:
+    Required arguments
+    ------------------
 
-    input_files -- Specifies the image files which will be used to make the
-                   movie. The argument must be given either as a string,
-                   e.g., 'image_*.png' or a list/tuple of strings, e.g.,
-                   glob.glob('image_*.png').
+    input_files: Specifies the image files which will be used to make the
+                 movie. The argument must be given either as a string,
+                 e.g., 'image_*.png' or a list/tuple of strings, e.g.,
+                 glob.glob('image_*.png').
 
-                   Notes:
+     Notes:
                    
-                   - When using the FFmpeg or the Mpeg2enc tools, the image
-                     files should be given (if possible) as a string on the
-                     format '{1}%{2}d{3}', where the name components are as
-                     follows:
+      - When using the FFmpeg or the Mpeg2enc tools, the image
+        files should be given (if possible) as a string on the
+        format '{1}%{2}d{3}', where the name components are as
+        follows:
                      
-                       {1} filename prefix (e.g. image_)
-                       {2} counting placeholder (like in C, printf, e.g. 04)
-                       {3} file extension (e.g. .png or .jpg)
+          - {1} filename prefix (e.g. image_)
+          - {2} counting placeholder (like in C, printf, e.g. 04)
+          - {3} file extension (e.g. .png or .jpg)
 
-                     An example of a correct description of the input files
-                     is 'image_%04d.png'. If the input files are not given on
-                     the correct format, there will automatically be made
-                     copies of these files which will then be renamed to the
-                     required filename format.
+         Eexample of a correct description of the input files
+         is image_%04d.png. If the input files are not given on
+         the correct format, there will automatically be made
+         copies of these files which will then be renamed to the
+         required filename format.
                      
-                   - MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
-                     .png image files. So, if the input files are on another
-                     format, there will automatically be made copies which
-                     in turn will be converted to the correct format.
+      - MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
+        .png image files. So, if the input files are on another
+        format, there will automatically be made copies which
+        in turn will be converted to the correct format.
     
-    Optional arguments:
+    Optional arguments
+    ------------------
 
-    output_file -- Sets the name of the output movie. If not set, a default
-                   name like movie.avi, movie.mpeg, or movie.gif (depending
-                   on the output format) will be given.
+    output_file: Sets the name of the output movie. If not set, a default
+    name like movie.avi, movie.mpeg, or movie.gif (depending
+    on the output format) will be given.
 
-                   Note: When using the convert tool to combine the images,
-                   the extension of the file name is used to determine the
-                   file format of the final movie. For example, if a name like
-                   movie.gif is given, the resulting movie will become an
-                   animated gif file. Other supported movie formats are MPEG
-                   (.mpg, .mpeg, or .m2v) and MNG (Multiple-image Network
-                   Graphics).
+    Note: When using the convert tool to combine the images,
+    the extension of the file name is used to determine the
+    file format of the final movie. For example, if a name like
+    movie.gif is given, the resulting movie will become an
+    animated gif file. Other supported movie formats are MPEG
+    (.mpg, .mpeg, or .m2v) and MNG (Multiple-image Network
+    Graphics).
 
-    overwrite_output -- If True, the file given in the output_file argument
-                   above will be overwritten without warning (if it already
-                   exists). The default is True.
+    overwrite_output: If True, the file given in the output_file argument
+    above will be overwritten without warning (if it already
+    exists). The default is True.
     
-    encoder     -- Sets the encoder tool to be used. Currently the following
-                   encoders are supported: 'mencoder', 'ffmpeg',
-                   'mpeg_encode', 'ppmtompeg' (from the Netpbm package),
-                   'mpeg2enc' (from the MJPEGTools package), and 'convert'
-                   (from the ImageMagick package).
+    encoder: Sets the encoder tool to be used. Currently the following
+    encoders are supported: 'mencoder', 'ffmpeg',
+    'mpeg_encode', 'ppmtompeg' (from the Netpbm package),
+    'mpeg2enc' (from the MJPEGTools package), and 'convert'
+    (from the ImageMagick package).
 
-                   Note: ppmtompeg and mpeg_encode is the same tool.
+    Note: ppmtompeg and mpeg_encode is the same tool.
       
-    vbitrate    -- Sets the bit rate of the movie. The default is 800 kbps
-                   when using the FFmpeg and MEncoder encoders. For
-                   mpeg_encode, ppmtompeg, and mpeg2enc, this option is by
-                   default not specified. This option has no effect on the
-                   convert tool from ImageMagick.
+    vbitrate: Sets the bit rate of the movie. The default is 800 kbps
+    when using the FFmpeg and MEncoder encoders. For
+    mpeg_encode, ppmtompeg, and mpeg2enc, this option is by
+    default not specified. This option has no effect on the
+    convert tool from ImageMagick.
 
-    vbuffer     -- Sets the video buffer size. The default is to use the 
-                   current encoding tools default video buffer size. In some
-                   cases it might be necessary to push this up to 500K or
-                   more.
+    vbuffer: Sets the video buffer size. The default is to use the 
+    current encoding tools default video buffer size. In some
+    cases it might be necessary to push this up to 500K or
+    more.
        
-    fps         -- Sets the number of frames per second for the final movie.
-                   The default is 25 fps.
+    fps: Sets the number of frames per second for the final movie.
+    The default is 25 fps.
 
-                   Notes:
+    Notes:
 
-                   - The mpeg_encode, ppmtompeg, and mpeg2enc tools only
-                     supports the following frame rates: 23.976, 24, 25,
-                     29.97, 30, 50, 59.94, and 60 fps.
+     - The mpeg_encode, ppmtompeg, and mpeg2enc tools only
+       supports the following frame rates: 23.976, 24, 25,
+       29.97, 30, 50, 59.94, and 60 fps.
 
-                   - Not all video codecs have support for arbitrary frame
-                     rates (e.g., 'mpeg1video' and 'mpeg2video').
+     - Not all video codecs have support for arbitrary frame
+       rates (e.g., 'mpeg1video' and 'mpeg2video').
 
-    vcodec      -- Sets the video codec to be used. Some of the possible codecs
-                   are:
+    vcodec: Sets the video codec to be used. Some of the possible codecs
+    are:
 
-                   'mjpeg'      - Motion JPEG
-                   'ljpeg'      - Lossless JPEG
-                   'h263'       - H.263
-                   'h263p'      - H.263+
-                   'mpeg4'      - MPEG-4 (DivX 4/5)
-                   'msmpeg4'    - DivX 3
-                   'msmpeg4v2'  - DivX 3
-                   'msmpeg4v2'  - MS MPEG4v2
-                   'wmv1'       - Windows Media Video, version 1 (AKA WMV7)
-                   'wmv2'       - Windows Media Video, version 2 (AKA WMV8)
-                   'rv10'       - an old RealVideo codec
-                   'mpeg1video' - MPEG-1 video
-                   'mpeg2video' - MPEG-2 video
-                   'huffyuv'    - HuffYUV
-                   'ffvhuff'    - nonstandard 20% smaller HuffYUV using YV12
-                   'asv1'       - ASUS Video v1
-                   'asv2'       - ASUS Video v2
-                   'ffv1'       - FFmpeg's lossless video codec
+      - 'mjpeg'      - Motion JPEG
+      - 'ljpeg'      - Lossless JPEG
+      - 'h263'       - H.263
+      - 'h263p'      - H.263+
+      - 'mpeg4'      - MPEG-4 (DivX 4/5)
+      - 'msmpeg4'    - DivX 3
+      - 'msmpeg4v2'  - DivX 3
+      - 'msmpeg4v2'  - MS MPEG4v2
+      - 'wmv1'       - Windows Media Video, version 1 (AKA WMV7)
+      - 'wmv2'       - Windows Media Video, version 2 (AKA WMV8)
+      - 'rv10'       - an old RealVideo codec
+      - 'mpeg1video' - MPEG-1 video
+      - 'mpeg2video' - MPEG-2 video
+      - 'huffyuv'    - HuffYUV
+      - 'ffvhuff'    - nonstandard 20% smaller HuffYUV using YV12
+      - 'asv1'       - ASUS Video v1
+      - 'asv2'       - ASUS Video v2
+      - 'ffv1'       - FFmpeg's lossless video codec
 
-                   The default codec is 'mpeg4' for mencoder/ffmpeg and
-                   'mpeg1video' for mpeg2enc.
+    The default codec is 'mpeg4' for mencoder/ffmpeg and
+    'mpeg1video' for mpeg2enc.
 
-                   Notes:
+    Notes:
                    
-                   - Run 'ffmpeg -formats' for a longer list of available
-                     codecs.
+      - Run 'ffmpeg -formats' for a longer list of available
+        codecs.
 
-                   - The mencoder tool can also use the 'xvid' codec.
+      - The mencoder tool can also use the 'xvid' codec.
 
-                   - Only 'mpeg1video' and 'mpeg2video' are available when
-                     using the mpeg2enc tool. 
+      - Only 'mpeg1video' and 'mpeg2video' are available when
+        using the mpeg2enc tool. 
 
-                   - This option has no effect when using mpeg_encode,
-                     ppmtompeg, or convert as the encoding tool.
+      - This option has no effect when using mpeg_encode,
+        ppmtompeg, or convert as the encoding tool.
 
-    qscale      -- The quantization scale value (qscale) give a trade-off
-                   between quality and compression. A lower value means better
-                   quality but larger files. Larger values gives better
-                   compression, but worse quality. The qscale value must be an
-                   integer between 1 and 31. The default is to not set the
-                   qscale option.
+    qscale: The quantization scale value (qscale) give a trade-off
+    between quality and compression. A lower value means better
+    quality but larger files. Larger values gives better
+    compression, but worse quality. The qscale value must be an
+    integer between 1 and 31. The default is to not set the
+    qscale option.
 
-                   Note: When using mpeg_encode or ppmtompeg it is possible
-                   to have different qscale values for I, P, and B frames
-                   (see the iqscale, pqscale, and bqscale options below).
+    Note: When using mpeg_encode or ppmtompeg it is possible
+    to have different qscale values for I, P, and B frames
+    (see the iqscale, pqscale, and bqscale options below).
 
-    qmin        -- Sets the minimum quantization scale value. Must be given as
-                   an integer between 1 and 31. The default is 2.
+    qmin: Sets the minimum quantization scale value. Must be given as
+    an integer between 1 and 31. The default is 2.
 
-    qmax        -- Sets the maximum quantization scale value. Must be given as
-                   an integer between 1 and 31. The default is 31.
+    qmax: Sets the maximum quantization scale value. Must be given as
+    an integer between 1 and 31. The default is 31.
 
-    iqscale     -- Sets the quantization scale value (see qscale) for I
-                   frames. This option only affects mpeg_encode and ppmtompeg.
-                   The default is to use the same value as in qscale. If
-                   qscale is not given, then 8 is the default value for
-                   iqscale.
+    iqscale: Sets the quantization scale value (see qscale) for I
+    frames. This option only affects mpeg_encode and ppmtompeg.
+    The default is to use the same value as in qscale. If
+    qscale is not given, then 8 is the default value for
+    iqscale.
                    
-    pqscale     -- Same as iqscale, but for P frames. If qscale is not given,
-                   then 10 is the default value for pqscale.
+    pqscale: Same as iqscale, but for P frames. If qscale is not given,
+    then 10 is the default value for pqscale.
     
-    bqscale     -- Same as iqscale, but for B frames. If qscale is not given,
-                   then 25 is the default value for bqscale.
+    bqscale: Same as iqscale, but for B frames. If qscale is not given,
+    then 25 is the default value for bqscale.
 
-    pattern     -- Sets the pattern (sequence) of I, P, and B frames. The
-                   default pattern is 'I' which gives good quality (but
-                   worse compression). Another standard sequence is
-                   'IBBPBBPBBPBBPBB'. This option has only an effect when
-                   using mpeg_encode or ppmtompeg as the encoding tool.
+    pattern: Sets the pattern (sequence) of I, P, and B frames. The
+    default pattern is 'I' which gives good quality (but
+    worse compression). Another standard sequence is
+    'IBBPBBPBBPBBPBB'. This option has only an effect when
+    using mpeg_encode or ppmtompeg as the encoding tool.
        
-    size        -- Sets the size of the final movie. The size must be given
-                   as a tuple/list (e.g. (640,480)) or as a string. The
-                   format of the string must be 'wxh' (e.g. '320x240'), but
-                   the following abbreviations are also recognized:
+    size: Sets the size of the final movie. The size must be given
+    as a tuple/list (e.g. (640,480)) or as a string. The
+    format of the string must be 'wxh' (e.g. '320x240'), but
+    the following abbreviations are also recognized:
 
-                   'sqcif' - 128x96
-                   'qcif'  - 176x144
-                   'cif'   - 352x288
-                   '4cif'  - 704x576
+      - 'sqcif' - 128x96
+      - 'qcif'  - 176x144
+      - 'cif'   - 352x288
+      - '4cif'  - 704x576
 
-                   The default is to use the same size as the input images.
+    The default is to use the same size as the input images.
 
-    aspect      -- Sets the aspect ratio of the movie (e.g. 4/3 or 16/9).
+    aspect: Sets the aspect ratio of the movie (e.g. 4/3 or 16/9).
 
-                   Notes:
+    Notes:
                    
-                   - mpeg_encode and ppmtompeg only supports the following
-                     aspect ratios: 1.0, 0.6735, 0.7031, 0.7615,0.8055,
-                     0.8437, 0.8935, 0.9157, 0.9815, 1.0255, 1.0695, 1.0950,
-                     1.1575, and 1.2015.
+      - mpeg_encode and ppmtompeg only supports the following
+        aspect ratios: 1.0, 0.6735, 0.7031, 0.7615,0.8055,
+        0.8437, 0.8935, 0.9157, 0.9815, 1.0255, 1.0695, 1.0950,
+        1.1575, and 1.2015.
 
-                   - mpeg2enc only supports the following aspect ratios: 1.0,
-                     1.33, 1.77, and 2.21.
+      - mpeg2enc only supports the following aspect ratios: 1.0,
+        1.33, 1.77, and 2.21.
 
-    preferred_package -- Sets whether to prefer the Netpbm package or the
-                  ImageMagick package if both of them are installed. Must be
-                  given as a string, i.e, either 'imagemagick' (default) or
-                  'netpbm'.
+    preferred_package: Sets whether to prefer the Netpbm package or the
+    ImageMagick package if both of them are installed. Must be
+    given as a string, i.e, either 'imagemagick' (default) or
+    'netpbm'.
 
-                  Notes:
+    Notes:
 
-                  - If only one of the packages is installed, then that
-                    package will be used.
+      - If only one of the packages is installed, then that
+        package will be used.
 
-                  - If none of the packages are installed, then some
-                    operations might stop in lack of needed programs.
+      - If none of the packages are installed, then some
+        operations might stop in lack of needed programs.
 
-    gop_size    -- Sets the number of frames in a group of pictures (GOP).
-                   The default is to use the chosen encoding tools default
-                   value.
+    gop_size: Sets the number of frames in a group of pictures (GOP).
+    The default is to use the chosen encoding tools default
+    value.
        
-    quiet       -- If True, then the operations will run quietly and only
-                   complain on errors. The default is False.
+    quiet: If True, then the operations will run quietly and only
+    complain on errors. The default is False.
 
-    cleanup     -- If True (default), all temporary files that are created
-                   during the execution of the movie command will be deleted.
+    cleanup: If True (default), all temporary files that are created
+    during the execution of the movie command will be deleted.
 
-    force_conversion -- Forces conversion of images. This is a hack that can
-                   be used if the encoding tool has problems reading the input
-                   image files. If this is set to True, the images will be
-                   converted even if they are in a format recognized by the
-                   encoding tool. The default is False.
+    force_conversion: Forces conversion of images. This is a hack that can
+    be used if the encoding tool has problems reading the input
+    image files. If this is set to True, the images will be
+    converted even if they are in a format recognized by the
+    encoding tool. The default is False.
 
     Known issues:
 
-    * JPEG images created by the Vtk backend does not seem to work with
-    the MEncoder and FFmpeg tools. This can be fixed by setting the
-    force_conversion argument to True. This will force conversion of the
-    JPEG files to PNG files which in turn should successfully create the
-    movie.
+      - JPEG images created by the Vtk backend does not seem to work with
+        the MEncoder and FFmpeg tools. This can be fixed by setting the
+        force_conversion argument to True. This will force conversion of the
+        JPEG files to PNG files which in turn should successfully create the
+        movie.
 
-    * Aspect ratio in mpeg_encode does not seem to work.
-
+      - Aspect ratio in mpeg_encode does not seem to work.
     """
     me = MovieEncoder(input_files, **kwargs)
     me.encode()

@@ -14,7 +14,7 @@ dimensions (2D) we can create elevated surface plots, contour plots,
 and pseudocolor plots, while in three dimensions (3D) we can create
 isosurface plots, volumetric slice plots, and contour slice plots.
 
-======= Elevated Surface Plots =======
+===== Elevated Surface Plots =====
 
 To create elevated surface plots we can use either the `surf` or the
 `mesh` command. Both commands have the same syntax, but the `mesh`
@@ -96,7 +96,7 @@ Figure ref{fig:surf_ex2} displays the result.
 FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend).
 
 
-======= Contour Plots =======
+===== Contour Plots =====
 
 A contour plot is another useful technique for visualizing scalar
 fields. The primary examples on contour plots from everyday life is
@@ -207,7 +207,7 @@ FIGURE:[figs/meshc_ex1.eps] Wireframe mesh with contours at the bottom (Gnuplot 
 FIGURE:[figs/surfc_ex1.eps] Surface plot with contours (Gnuplot backend).
 
 
-======= Pseudocolor Plots =======
+===== Pseudocolor Plots =====
 
 Another way of visualizing a 2D scalar field in Easyviz is the
 `pcolor` command. This command creates a pseudocolor plot, which is a
@@ -226,7 +226,7 @@ VTK backend supports all of them.
 FIGURE:[figs/pcolor_ex1.eps] Pseudocolor plot (Gnuplot backend).
 
 
-======= Isosurface Plots =======
+===== Isosurface Plots =====
 
 For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
 lines or isolines for 2D scalar fields. An isosurface connects points in
@@ -276,7 +276,7 @@ Figure ref{fig:isosurface2} shows the resulting plot.
 FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend).
 
 
-======= Volumetric Slice Plot =======
+===== Volumetric Slice Plot =====
 
 Another way of visualizing scalar volume data is by using the `slice_`
 command (since the name `slice` is already taken by a built-in
@@ -377,7 +377,7 @@ In Easyviz, a vector field can be visualized either by a quiver
 stream ribbons, and stream tubes. Below we will look closer at each of
 these visualization techniques.
 
-======= Quiver Plots =======
+===== Quiver Plots =====
 
 The `quiver` and `quiver3` commands draw arrows to illustrate vector
 values (length and direction) at discrete points.  As the names
@@ -459,7 +459,7 @@ ref{fig:quiver3_ex1}.
 FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend).
 
 
-======= Stream Plots =======
+===== Stream Plots =====
 
 Stream plots constitute an alternative to arrow plots for visualizing
 vector fields.  The stream plot commands currently available in

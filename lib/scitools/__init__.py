@@ -6,39 +6,39 @@ Matplotlib, VTK, etc.
 
 The SciTools package contains a lot of modules:
 
-  * easyviz: package for unified Matlab-like plotting syntax
-  * basics: imports from numpy, scipy, scitools.numpytools
-  * std: imports of basics and easyviz
-  * misc: many non-numerical convenience functions
-  * numpytools: many numerical convenience functions
-  * StringFunction: turns string formulas into callable functions
-  * configdata: user-friendly access to Python config files
-  * filetable: read/write tabular data in files into/from arrays
-  * debug: useful functions for debugging
-  * pprint2: improvement of pprint for formatting control of floats
-  * multipleloop: makes a loop from all combinations of a set of parameters
-  * EfficiencyTable: nice table report from efficiency experiments
-  * globaldata: holds all global data in the scitools package
-  * sound: tools for easy sound generation and manipulation
-  * aplotter: curve plotting in pure ASCII
-  * Lumpy: visualization of the data structures in a Python program
+  - easyviz: package for unified Matlab-like plotting syntax
+  - basics: imports from numpy, scipy, scitools.numpytools
+  - std: imports of basics and easyviz
+  - misc: many non-numerical convenience functions
+  - numpytools: many numerical convenience functions
+  - StringFunction: turns string formulas into callable functions
+  - configdata: user-friendly access to Python config files
+  - filetable: read/write tabular data in files into/from arrays
+  - debug: useful functions for debugging
+  - pprint2: improvement of pprint for formatting control of floats
+  - multipleloop: makes a loop from all combinations of a set of parameters
+  - EfficiencyTable: nice table report from efficiency experiments
+  - globaldata: holds all global data in the scitools package
+  - sound: tools for easy sound generation and manipulation
+  - aplotter: curve plotting in pure ASCII
+  - Lumpy: visualization of the data structures in a Python program
 
 Some modules and classes are closely related to and explained in the
 text in the book "Python Scripting for Computational Science", by
 H. P. Langtangen, 3rd edition, 2nd printing, Springer, 2009:
 
-  * NumPyDB: a simple database for holding NumPy arrays
-  * Regression: module for performing regression tests (also with floats)
-  * CanvasCoord: transformations between canvas and physical coordinates
-  * DrawFunction: enables users to draw a function (in Pmw.Blt plotting widget)
-  * FunctionSelector: Tk/Pmw-based widgets for selecting functions
-  * FuncDependenceViz: visualization of how functions vary with parameters
-  * ParameterInterface: a simplified GUI generator for simulation programs
-  * PrmDictBase: module for holding parameters in simulation programs
+  - NumPyDB: a simple database for holding NumPy arrays
+  - Regression: module for performing regression tests (also with floats)
+  - CanvasCoord: transformations between canvas and physical coordinates
+  - DrawFunction: enables users to draw a function (in Pmw.Blt plotting widget)
+  - FunctionSelector: Tk/Pmw-based widgets for selecting functions
+  - FuncDependenceViz: visualization of how functions vary with parameters
+  - ParameterInterface: a simplified GUI generator for simulation programs
+  - PrmDictBase: module for holding parameters in simulation programs
 
 Some preliminary modules include
-  * BoxGrid: a structured grid in 1D, 2D, or 2D
-  * BoxField: a scalar or vector field over a BoxGrid
+  - BoxGrid: a structured grid in 1D, 2D, or 2D
+  - BoxField: a scalar or vector field over a BoxGrid
 
 See the different modules for more detailed information.
 
