@@ -10,5 +10,5 @@ for i in range(m.shape[0]):
 title('Plot of the rows of a matrix object')
 plot([1,3,5],[4,4,4],'b-')
 hardcopy('tmp5.eps')
-raw_input('Press Return key to quit: : ')
+raw_input('Press Return key to quit: ')
 

@@ -19,3 +19,4 @@ data = {'method1': {'optimized': 0.2, 'standard': 1},
 figure()
 bar(data)
 
+raw_input("Press Return key to quit: ")
