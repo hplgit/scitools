@@ -652,6 +652,16 @@ class MatplotlibBackend(BaseClass):
         if filled:
             contour_cmd = self._g.contourf
         kwargs = {'cmap': colormap, 'alpha': opacity}
+        
+        # get line specifiactions:
+        marker, color, style, width = self._get_linespecs(item)
+        if color:
+            kwargs['colors'] = color
+            kwargs['cmap'] = None
+
+        if width:
+            kwargs['linewidths'] = width
+
         if legend:
             kwargs['label'] = legend
         cs = contour_cmd(x,y,z,clevels,**kwargs)
