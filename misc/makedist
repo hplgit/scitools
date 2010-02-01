@@ -44,8 +44,10 @@ python setup.py bdist_wininst
 
 # Upload files to googlecode
 echo '--- Uploading files to googlecode'
-googlecode_upload.py --project=scitools build/scitools-$VERSION.tar.gz
-googlecode_upload.py --project=scitools dist/SciTools-$VERSION.win32.exe
+googlecode_upload.py -s "SciTools $VERSION - Source version" -p scitools \
+  build/scitools-$VERSION.tar.gz
+googlecode_upload.py -s "SciTools $VERSION - Windows Installer" -p scitools \
+  dist/SciTools-$VERSION.win32.exe
 
 # Edit web pages
 echo '--- Edit web pages'
