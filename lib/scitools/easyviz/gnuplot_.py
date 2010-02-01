@@ -935,6 +935,8 @@ class GnuplotBackend(BaseClass):
             # draw velocity vectors as arrows with components (u,v,w) at
             # points (x,y,z):
             data = None  # no support for vectors in 3D space in Gnuplot
+            msg = "3D vector fields not implemented in %s backend" % backend
+            raise NotImplementedError(msg)
         else:
             # draw velocity vectors as arrows with components (u,v) at
             # points (x,y):
