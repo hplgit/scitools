@@ -474,7 +474,7 @@ class MatplotlibBackend(BaseClass):
         # get data:
         x = squeeze(item.getp('xdata'))
         y = squeeze(item.getp('ydata'))
-        z = squeeze(item.getp('zdata'))
+        z = item.getp('zdata')
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
