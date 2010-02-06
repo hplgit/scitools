@@ -30,8 +30,13 @@ try:
     import matplotlib
     default_easyviz_backend = 'matplotlib'
 except:  # cannot accept any error here
-    print 'after except!!!!!!!!!!!!!!!!'
-    default_easyviz_backend = 'gnuplot'
+    try:
+        import Gnuplot
+        default_easyviz_backend = 'gnuplot'
+    except:
+        # Neither Gnuplot nor Matplotlib is installed. Matplotlib is now set
+        # as default backend for Easyviz.
+        default_easyviz_backend = 'matplotlib'
 
 # modify config file so that it sets the wanted backend for easyviz
 config_file = os.path.join('lib', 'scitools', 'scitools.cfg')

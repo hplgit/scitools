@@ -1,15 +1,25 @@
 Version 0.7:
 
 * The most significant change for existing users is that Matplotlib is
-  now the default plotting engine. Installing SciTools with Gnuplot as
-  plotting engine must now be done by the command
+  now the default plotting engine if you install SciTools manually
+  via setup.py and if you have Matplotlib installed. Using Gnuplot (or
+  another backend) as the default backend is achieved by the command
 
 	python setup.py install --easyviz_backend gnuplot
 
-  In general, Matplotlib is smoother to install than Gnuplot. However,
-  some existing programs using Gnuplot's 2D scalar and vector field
-  capabilities will now fail because Matplotlib does not have this
-  functionality. 
+  Existing users may want to still use Gnuplot as the default backend,
+  especially if they have many programs with visualization of 2D
+  scalar and vector fields (utilizing the surf and mesh commands). 
+  Easyviz does not yet support Matplotlib's recent functionality
+  for elevated, colored surfaces in 3D.
+
+  Binaries for Debian/Ubuntu still use Gnuplot as the default
+  plotting engine since we face problems building SciTools with
+  Matplotlib on some versions of Ubuntu.
+
+  The particular plotting engine to be used can be controlled in
+  several ways (config file, command-line option, explicit import),
+  see the Easyviz tutorial.
 
 * Numerous bugfixes have been performed. Some documentation and code
   have been cleaned up. More examples are included.
