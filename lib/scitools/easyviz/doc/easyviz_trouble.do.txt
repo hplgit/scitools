@@ -1,4 +1,4 @@
-=== The Plot Window Disappears Quickly ===
+=== The Plot Window Disappears Immediately ===
 
 Depending on the backend used for plotting with Easyviz, the plot
 window may be killed when the program terminates. Adding a statement
@@ -7,6 +7,16 @@ that makes the program halt provides a remedy:
 raw_input('Press Return key to quit: ')
 !ec
 The plot window will now stay on the screen until hitting the Enter/Return key.
+
+=== I Get Strange Errors Saying Something About LaTeX ===
+
+You probably run Easyviz with Matplotlib as backend, and you do not
+have a working LaTeX installation. Matplotlib applies LaTeX for
+improved rendering of legends, titles, and numbers.  The fix is to
+turn off the use of LaTeX, which is done by the `text.usetex`
+parameter in the `matplotlib` section of the configuration file.
+Set this parameter to `false`. See 
+
 
 
 === Old Programs with 2D Scalar/Vector Field Plotting Do Not Work ===
