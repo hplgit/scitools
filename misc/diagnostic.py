@@ -3,7 +3,7 @@
 # Simple diagnostic tool for scitools.easyviz
 
 import os, sys
-import time
+import time, glob
 import platform
 import pprint
 import signal
@@ -49,7 +49,7 @@ def test_scitools():
 
 def test_numpy():
     import numpy
-    numpy.test()
+    #numpy.test()
 
 def test_numeric():
     import Numeric
@@ -65,7 +65,7 @@ def test_scipy():
     import scipy
     print "SciPy is installed in", os.path.dirname(scipy.__file__)
     print "SciPy version", scipy.version.version
-    scipy.test()
+    #scipy.test()
 
 def test_blt():
     import Pmw
@@ -188,8 +188,9 @@ def test_matplotlib():
 
     pylab.title("Hello Matplotlib!")
 
-    #pylab.draw()
-    wait()
+    pylab.draw()
+    #pylab.show()  # requires manual quit of plot window
+    time.sleep(0.5)
 
 def test_mlabwrap():
     try:
@@ -492,7 +493,28 @@ def test_easyviz():
 def test_dx():
     raise NotImplementedError('Tests for dx not implemented')
 
+def test_latex():
+    latexfile = 'tmp___latex'
+    f = open(latexfile + '.tex', 'w')
+    f.write(r"""
+\documentclass{article}
+\begin{document}
+\[ \sin(x) = \sqrt{1 - \cos^2(x)} \]
+\end{document}
+""")
+    f.close()
+    status, outout, errout = get_status_output_errors('latex ' + latexfile)
+    for filename in glob.glob(latexfile + '.*'):
+        os.remove(filename)
+    print 'status:', status, isinstance(status, int)
+    if status != 0:
+        raise Exception('status=%d, latex does not work: ' % status + outout)
+          
 def run():
+    if not os.path.isfile('diagnostic.py'):
+        print 'diagonstic.py must be run from the directory where it is located!'
+        sys.exit(1)
+
     diag_fname = 'scitools_diagnostic.log'
     diag_file = open(diag_fname, 'w')
 
@@ -505,7 +527,7 @@ def run():
 
     backends = ['blt', 'dx', 'gnuplot', 'grace', 'matplotlib',
                  'mlabwrap', 'pyx', 'veusz', 'visit', 'vtk']
-    all_tests = ['scitools', 'numpy', 'numeric', 'numarray', 'scipy'] + backends
+    all_tests = ['scitools', 'numpy', 'scipy', 'latex'] + backends
                  
     for test in all_tests:
         message("\n" + "-"*30 + test + "-"*30 + "\n", diag_file, False)
