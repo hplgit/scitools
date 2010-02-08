@@ -1,3 +1,17 @@
+=== Can I Perform a Diagnostic Test of Easyviz? ===
+
+Yes. It is wise to perform a diagnostic test before reporting any error
+or trouble to the SciTools maintainers. Find the source folder of SciTools
+and go to the `misc` subfolder. Run
+!bc dnsi
+python diagonstic.py
+!ec
+On the screen, you can see what you have of working software that Easyviz
+may use. You do not need to see "ok" after each test, but at least
+one plotting program must be properly installed. Include the detailed
+diagonstics in the `scitools_diagnostic.log` file as attachment in any
+mail to the SciTools developers.
+
 === The Plot Window Disappears Immediately ===
 
 Depending on the backend used for plotting with Easyviz, the plot
@@ -14,16 +28,28 @@ You probably run Easyviz with Matplotlib as backend, and you do not
 have a working LaTeX installation. Matplotlib applies LaTeX for
 improved rendering of legends, titles, and numbers.  The fix is to
 turn off the use of LaTeX, which is done by the `text.usetex`
-parameter in the `matplotlib` section of the configuration file.
-Set this parameter to `false`. See 
+parameter in the `matplotlib` section of the configuration file.  Set
+this parameter to `false`. See the subsection "Setting Parameters in
+the Configuration File" in the section "Advanced Easyviz Topics" in
+the Easyviz tutorial. The tutorial can be reached from the code.google.com
+site or by running pydoc scitools.easyviz. If you use Matplotlib as
+default plotting engine, we recommend to have a `.scitools.cfg`
+configuration file in your home folder and that use control the use
+of Matplotlib parameters in this file.
+
+Another fix of LaTeX-related problems is to switch to another backend
+than Matplotlib.
 
 
 
 === Old Programs with 2D Scalar/Vector Field Plotting Do Not Work ===
 
 SciTools version 0.7 changed the default backend for plotting to
-Matplotlib instead of Gnuplot. Some functionality in Gnuplot, especially
-regarding 2D vector/scalar fields, is not yet present in Matplotlib.
+Matplotlib instead of Gnuplot (provided you have Matplotlib and you
+run `setup.py` to install SciTools - binaries for Debian still has
+Gnuplot as the plotting engine). Some functionality in Gnuplot, especially
+regarding 2D vector/scalar fields, is not yet present in Matplotlib
+and/or supported by the Easyviz interface to Matplotlib.
 You then need to explicitly run the script with Gnuplot as plottin
 engine:
 !bc
@@ -34,8 +60,9 @@ or you must import gnuplot explicitly in the program:
 from scitools.std import *
 from scitools.easyviz.gnuplot_ import *
 !ec
-or you can edit the *installed* `scitools.cfg` file ("backend" keyword
-in the "easyviz" section), or maybe the simplest solution is to reinstall
+or you can edit the installed `scitools.cfg` file ("backend" keyword
+in the "easyviz" section), or your local version `.scitools.cfg` in
+your home folder, or maybe the simplest solution is to reinstall
 SciTools with Gnuplot as plotting engine:
 !bc
 python setup.py install --easyviz_backend gnuplot

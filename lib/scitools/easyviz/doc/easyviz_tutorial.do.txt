@@ -675,12 +675,12 @@ parameter. For example, setting the `backend` parameter in the
 !bc dnsi
 --SCITOOLS_easyviz_backend gnuplot
 !ec
-Here is an example where we use Matplotlib as backend, turn off
+Here is an example where we use Matplotlib as backend, turn on
 the use of LaTeX in Matplotlib, and avoid the potentially slow import
 of SciPy:
 !bc dnsi
 python myprogram.py --SCITOOLS_easyviz_backend matplotlib \ 
-    --SCITOOLS_matplotlib_text.usetex false --SCITOOLS_scipy_load no
+    --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 !ec
 
 
