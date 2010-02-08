@@ -44,6 +44,7 @@ if backend == 'matplotlib':
     # Add shadow to legend box:
     l.shadow = True
     g.draw()
+
 elif backend == 'gnuplot':
     # Remove tick labels:
     g('set xtics ("" 0, "" 0.5, "" 1, "" 1.5, "" 2, "" 2.5, "" 3)')
@@ -55,6 +56,7 @@ elif backend == 'gnuplot':
     # Make the axes frame nice and thick:
     g('set border 1+2+4+8+16 linetype -1 linewidth 2')
     g.replot()
+
 elif backend == 'veusz':
     # Remove tick labels:
     g.Set('/page1/graph1/x/TickLabels/hide', True)
@@ -73,15 +75,18 @@ elif backend == 'veusz':
     # session to a native Veusz file (.vsz) and open the file in Veusz:
     #save('tmp1.vsz')
     #os.system('veusz tmp1.vsz')
+
 elif backend == 'grace':
     # In Grace we can do the changes interactively in the GUI.
     pass
+
 elif backend == 'matlab':
     # Remove tick labels:
     g.set_(g.gca(), 'XTickLabel', [], 'YTickLabel', [], nout=0)
     # Change legend location:
     h = g.findobj('Tag', 'legend', nout=1)  # find the legend handle
     g.set_(h, 'Location', 'North', nout=0)
+
 elif backend == 'matlab2':
     s = get_script()
     # Remove tick labels:
@@ -92,10 +97,12 @@ elif backend == 'matlab2':
     save('tmp1.m')
     # We can now open this file in Matlab (if Matlab is available):
     #os.system('matlab -r tmp1')
+
 elif backend == 'pyx':
     # There is currently no way to change properties in the PyX backend
-    # afterwards. It is only possible to add new stuff.
+    # after having made the plot.
     pass
+
 elif backend == 'blt':
     pass
 

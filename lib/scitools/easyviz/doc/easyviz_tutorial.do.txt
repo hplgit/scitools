@@ -722,6 +722,11 @@ features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
+The file `grab_backend_demo.py` in the `examples` folder of the
+SciTools source code contains a much more comprehensive example on
+fine-tuning a plot using backend-specific commands. That file shows
+how this can be done in almost all the supported backends.
+
 __Working with Axis and Figure Objects.__
 Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
