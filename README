@@ -3,9 +3,10 @@ Contents
     1. Introduction
     2. Dependencies
     3. Installation
-    4. License
-    5. Credits
-    6. Contact
+    4. Configuration file
+    5. License
+    6. Credits
+    7. Contact
 
 -------------------------------------------------------------------------------
 1. Introduction
@@ -109,7 +110,26 @@ There are several different ways of installing SciTools:
    official installation directories on your system. 
 
 -------------------------------------------------------------------------------
-4. License
+4. Configuration File
+
+The behavior of many parts of SciTools and in particular the
+subpackage Easyviz (for plotting) can be controlled in a configuration
+file.  Please read the subsection "Setting Parameters in the
+Configuration File" under the section "Advanced Easyviz Topics" in the
+Easyviz tutorial (pydoc scitools.easyviz will show the tutorial). In
+particular, if you use Matplotlib as the default plotting engine, you
+may want to turn on the use of LaTeX for rendering legends, titles,
+and numbers.  By default, LaTeX is turned off when SciTools is
+installed. It is easy to change this by locating the scitools.cfg file
+in the folder where the SciTools package is installed and edit the
+line with text.usetex in the [matplotlib] section of this file. A
+better solution is to copy the system scitools.cfg file to
+.scitools.cfg in your home folder and edit that file. You can also
+change the GUI used by Matplotlib. Users who do not apply Matplotlib
+for plotting will seldom need to edit the configuration file.
+
+-------------------------------------------------------------------------------
+5. License
 
 SciTools is licensed under the new BSD license, see the LICENSE file.
 
@@ -117,7 +137,7 @@ Lumpy.py and Gui.py are licensed under GPL, however, permission is
 granted by Allen Downey to include these under a BSD license.
 
 -------------------------------------------------------------------------------
-5. Credits
+6. Credits
 
 SciTools was initially mainly developed by Hans Petter Langtangen
 <hpl@simula.no> for his book "Python Scripting for Computational
@@ -142,7 +162,7 @@ Ilmar Wilbers <ilmarw@simula.no>
 Arve Knudsen <arvenk@simula.no>
 
 -------------------------------------------------------------------------------
-6. Contact
+7. Contact
 
 Comments, suggestions, bug fixes should be sent to
 
