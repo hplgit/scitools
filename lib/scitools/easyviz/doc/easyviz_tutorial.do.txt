@@ -713,9 +713,18 @@ if backend == 'gnuplot':
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
     g.refresh()
     g.hardcopy('tmp2.eps')  # make new hardcopy
+
+    g.reset()               # new plot
+    data = Gnuplot.Data(t, t**3*exp(-t), with_='points 3 3',
+                        title='t**3*exp(-t)')
+    func = Gnuplot.Func('t**4*exp(-t)', title='t**4*exp(-t)')
+    g('set tics border font "Courier,14"')
+    g.plot(func, data)
 !ec
-We refer to the Gnuplot manual for the features of this package and
-the syntax of the commands. The idea is that you can quickly generate
+For the available features and the syntax of commands, we refer to
+the Gnuplot manual and the \emp{demo.py} program in Python interface to
+Gnuplot.
+The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
