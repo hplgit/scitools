@@ -37,6 +37,11 @@ def test_if_module_exists(modulename, msg='',
                 sys.exit(1)
             else:
                 return False
+    except Exception, e:
+        if msg:
+            print message
+            print 'Got an exception while trying to import %s:\n' % modulename, e
+
 
 def func_to_method(func, class_, method_name=None):
     """

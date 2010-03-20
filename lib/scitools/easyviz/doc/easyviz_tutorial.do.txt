@@ -608,7 +608,8 @@ backends = available_backends()
 print 'Available backends:', backends
 !ec
 There will be quite some output explaining the missing backends and
-what must be installed to use these backends.
+what must be installed to use these backends. Be prepared for exceptions
+and error messages too.
 
 
 __Importing Just Easyviz.__

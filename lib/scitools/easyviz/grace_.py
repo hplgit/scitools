@@ -2,9 +2,9 @@
 This backend is based on the 2D graphics package Grace (available at
 http://plasma-gate.weizmann.ac.il/Grace). The connection with Python is
 handled by the grace_np.py module written by Michael Haggerty. This module
-is for instance available in the pygrace module by Mike McKerns (see
+is available in the pygrace module by Mike McKerns (see
 http://www.its.caltech.edu/~mmckerns/software.html). Only curve plotting is
-currently available, however, histograms and pie charts might be added in
+currently available. However, histograms and pie charts might be added in
 the future. The Grace backend can be used by
 
   python somefile.py --SCITOOLS_easyviz_backend grace
@@ -26,7 +26,7 @@ or if just easyviz is needed
 REQUIREMENTS:
 
 Grace
-grace_np.py
+pygrace
 
 Known issues:
 
@@ -65,12 +65,10 @@ from common import *
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists 
 
-if test_if_module_exists('grace_np', msg='You need to install the grace_np.py package.', abort=False):
-    import grace_up
-elif test_if_module_exists('pygrace', msg='You need to install the pygrace package.', abort=False):
+if test_if_module_exists('pygrace', msg='You need to install the pygrace package.', abort=False):
     from pygrace import grace_np
 else:
-    raise ImportError('Cannot import pygrace or grace_np')
+    raise ImportError('Cannot import grace_np from pygrace')
 
 
 class GraceBackend(BaseClass):
