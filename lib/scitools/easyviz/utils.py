@@ -14,7 +14,6 @@ def available_backends():
     print '\nChecking if you have all the Easyviz backends...'
     for b in backends:
         module = 'scitools.easyviz.' + b[:-3]
-        print 'Testing', module
         try:
             test_if_module_exists(module, abort=False, raise_exception=True, msg='')
             available.append(module[17:])
