@@ -24,7 +24,7 @@ def test_if_module_exists(modulename, msg='',
                   (modulename, msg)
         if raise_exception:
             if msg:
-                print message
+                print msg
                 #print 'The problem arose in ', 
                 debug.trace(frameno=-3)
             raise ImportError(message)
