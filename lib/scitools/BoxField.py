@@ -224,7 +224,7 @@ def _rank12rankd_mesh(a, shape):
 def dolfin_mesh2UniformBoxGrid(dolfin_mesh, division):
     """
     Turn a regular, structured DOLFIN finite element mesh into
-    a UniformBoxGrid object. (Mostly for ease of plotting with scitools.)
+    a UniformBoxGrid object. (Application: plotting with scitools.)
     Standard DOLFIN numbering numbers the nodes along the x[0] axis,
     then x[1] axis, and so on.
     """
@@ -259,11 +259,30 @@ def dolfin_mesh2BoxGrid(dolfin_mesh, division):
 def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
                              division, uniform_mesh=True):
     """
-    Turn a DOLFIN finite element field over a structured mesh into
+    Turn a DOLFIN P1 finite element field over a structured mesh into
     a BoxField object. (Mostly for ease of plotting with scitools.)
     Standard DOLFIN numbering numbers the nodes along the x[0] axis,
     then x[1] axis, and so on.
+
+    If the DOLFIN function employs elements of degree > 1, one should
+    project or interpolate the field onto a field with elements of
+    degree=1.
     """
+    if u.ufl_element().degree() != 1:
+        raise TypeError("""\
+The dolfin_function2BoxField function works with degree=1 elements
+only. The DOLFIN function (dolfin_function) has finite elements of type
+%s
+i.e., the degree=%d != 1. Project or interpolate this function 
+onto a space of P1 elements, i.e.,
+
+V2 = FunctionSpace(mesh, 'CG', 1)
+u2 = project(u, V2)
+# or
+u2 = interpolate(u, V2)
+
+""" % (str(u.ufl_element()), u.ufl_element().degree()))
+
     nodal_values = dolfin_function.vector().array().copy()
 
     if uniform_mesh:
