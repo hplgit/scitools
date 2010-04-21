@@ -143,3 +143,118 @@ movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
 
+=== I Cannot Find Out How My Plot Can Be Created ===
+
+Note that Easyviz only support the most basic types of plots:
+
+  * y=f(x) curves
+  * bar plots
+  * contour plots of 2D scalar fields
+  * elevated 3D surfaces of 2D scalar fields
+  * 3D isosurfaces of 3D scalar fields
+  * arrows reflecting 2D/3D vector fields
+  * streamlines, streamtubes, and streamribbon for 3D vector fields.
+
+For such standard plots you can use Easyviz, otherwise you have to
+use a plotting package like Matplotlib, Gnuplot, or VTK directly
+from your Python program.
+
+The following Matlab-like commands (functions) are available (but not
+supported by all backends):
+
+  * 'autumn',
+  * 'axes',
+  * 'axis',
+  * 'bone',
+  * 'box',
+  * 'brighten',
+  * 'camdolly',
+  * 'camlight',
+  * 'camlookat',
+  * 'campos',
+  * 'camproj',
+  * 'camroll',
+  * 'camtarget',
+  * 'camup',
+  * 'camva',
+  * 'camzoom',
+  * 'caxis',
+  * 'cla',
+  * 'clabel',
+  * 'clf',
+  * 'close',
+  * 'closefig',
+  * 'closefigs',
+  * 'colorbar',
+  * 'colorcube',
+  * 'colormap',
+  * 'coneplot',
+  * 'contour',
+  * 'contour3',
+  * 'contourf',
+  * 'contourslice',
+  * 'cool',
+  * 'copper',
+  * 'daspect',
+  * 'figure',
+  * 'fill',
+  * 'fill3',
+  * 'flag',
+  * 'gca',
+  * 'gcf',
+  * 'get',
+  * 'gray',
+  * 'grid',
+  * 'hardcopy',
+  * 'hidden',
+  * 'hold',
+  * 'hot',
+  * 'hsv',
+  * 'ishold',
+  * 'isocaps',
+  * 'isosurface',
+  * 'jet',
+  * 'legend',
+  * 'light',
+  * 'lines',
+  * 'loglog',
+  * 'material',
+  * 'mesh',
+  * 'meshc',
+  * 'openfig',
+  * 'pcolor',
+  * 'pink',
+  * 'plot',
+  * 'plot3',
+  * 'prism',
+  * 'quiver',
+  * 'quiver3',
+  * 'reducevolum',
+  * 'savefig',
+  * 'semilogx',
+  * 'semilogy',
+  * 'set',
+  * 'shading',
+  * 'show',
+  * 'slice_',
+  * 'spring',
+  * 'streamline',
+  * 'streamribbon',
+  * 'streamslice',
+  * 'streamtube',
+  * 'subplot',
+  * 'subvolume',
+  * 'summer',
+  * 'surf',
+  * 'surfc',
+  * 'surfl',
+  * 'title',
+  * 'vga',
+  * 'view',
+  * 'white',
+  * 'winter',
+  * 'xlabel',
+  * 'ylabel',
+  * 'zlabel'
+
+
