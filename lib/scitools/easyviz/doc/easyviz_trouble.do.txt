@@ -143,6 +143,18 @@ movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
 
+
+=== Where Can I Find Easyviz Documentation? ===
+
+There is a verbose Easyviz documentation that mainly focuses on an
+introduction to Easyviz (what you read now is a part of that
+documentation).
+
+Another useful source of information is the many examples that come
+with the SciTools/Easyviz source code. The examples are located in
+the `examples` subfolder of the source.
+
+
 === I Cannot Find Out How My Plot Can Be Created ===
 
 Note that Easyviz only support the most basic types of plots:
