@@ -1,0 +1,6 @@
+
+std
+==============
+
+.. automodule:: std
+   :members:

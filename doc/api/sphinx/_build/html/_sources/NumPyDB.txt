@@ -1,0 +1,6 @@
+
+NumPyDB
+==============
+
+.. automodule:: NumPyDB
+   :members:

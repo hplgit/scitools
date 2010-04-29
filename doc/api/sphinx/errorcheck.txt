@@ -1,0 +1,6 @@
+
+errorcheck
+==============
+
+.. automodule:: errorcheck
+   :members:

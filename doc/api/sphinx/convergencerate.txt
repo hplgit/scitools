@@ -1,0 +1,6 @@
+
+convergencerate
+===============
+
+.. automodule:: convergencerate
+   :members:

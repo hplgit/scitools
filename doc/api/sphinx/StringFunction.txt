@@ -1,0 +1,6 @@
+
+StringFunction
+==============
+
+.. automodule:: StringFunction
+   :members:

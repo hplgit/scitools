@@ -1,0 +1,6 @@
+
+basics
+==============
+
+.. automodule:: basics
+   :members:

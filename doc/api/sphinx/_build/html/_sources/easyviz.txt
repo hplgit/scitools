@@ -1,0 +1,6 @@
+
+easyviz
+==============
+
+.. automodule:: easyviz
+   :members:

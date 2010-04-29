@@ -1,0 +1,6 @@
+
+numpytools
+==============
+
+.. automodule:: numpytools
+   :members:

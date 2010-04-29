@@ -1,0 +1,6 @@
+
+filetable
+==============
+
+.. automodule:: filetable
+   :members:

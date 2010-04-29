@@ -1,0 +1,6 @@
+
+sound
+==============
+
+.. automodule:: sound
+   :members:

@@ -1,0 +1,6 @@
+
+globaldata
+==============
+
+.. automodule:: globaldata
+   :members:

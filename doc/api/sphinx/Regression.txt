@@ -1,0 +1,6 @@
+
+Regression
+==============
+
+.. automodule:: Regression
+   :members:

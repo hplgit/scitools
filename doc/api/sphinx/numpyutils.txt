@@ -1,0 +1,6 @@
+
+numpyutils
+==============
+
+.. automodule:: numpyutils
+   :members:
