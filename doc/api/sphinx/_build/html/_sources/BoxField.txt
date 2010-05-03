@@ -1,6 +1,0 @@
-
-BoxField
-==============
-
-.. automodule:: BoxField
-   :members:

@@ -1,6 +1,0 @@
-
-multipleloop
-==============
-
-.. automodule:: multipleloop
-   :members:

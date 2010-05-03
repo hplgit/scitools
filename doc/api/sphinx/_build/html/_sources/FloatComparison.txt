@@ -1,6 +1,0 @@
-
-FloatComparison
-==============
-
-.. automodule:: FloatComparison
-   :members:

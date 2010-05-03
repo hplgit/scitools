@@ -1,6 +1,0 @@
-
-PrmDictBase
-==============
-
-.. automodule:: PrmDictBase
-   :members:

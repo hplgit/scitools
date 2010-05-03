@@ -1,6 +1,0 @@
-
-configdata
-==============
-
-.. automodule:: configdata
-   :members:

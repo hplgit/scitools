@@ -1,6 +1,0 @@
-
-NumPyDB
-==============
-
-.. automodule:: NumPyDB
-   :members:

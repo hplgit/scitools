@@ -1,6 +1,0 @@
-
-pprint2
-==============
-
-.. automodule:: pprint2
-   :members:

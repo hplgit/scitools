@@ -1,6 +1,0 @@
-
-modulecheck
-==============
-
-.. automodule:: modulecheck
-   :members:

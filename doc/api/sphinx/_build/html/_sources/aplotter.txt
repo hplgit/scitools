@@ -1,6 +1,0 @@
-
-aplotter
-==============
-
-.. automodule:: aplotter
-   :members:

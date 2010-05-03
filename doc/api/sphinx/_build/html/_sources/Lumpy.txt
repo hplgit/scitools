@@ -1,7 +1,0 @@
-
-Lumpy
-==============
-
-
-.. automodule:: Lumpy
-   :members:

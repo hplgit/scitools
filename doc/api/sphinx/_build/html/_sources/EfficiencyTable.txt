@@ -1,6 +1,0 @@
-
-EfficiencyTable
-===============
-
-.. automodule:: EfficiencyTable
-   :members:

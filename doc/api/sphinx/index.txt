@@ -1,5 +1,5 @@
 .. SciTools documentation master file, created by
-   sphinx-quickstart on Thu Apr 29 18:21:24 2010.
+   sphinx-quickstart on Mon May  3 07:20:09 2010.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -11,31 +11,32 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   BoxField
-   BoxGrid
-   EfficiencyTable
-   FloatComparison
-   Lumpy
-   NumPyDB
-   aplotter
-   basics
-   configdata
-   convergencerate
-   debug
-   easyviz
-   errorcheck
-   filetable
-   globaldata
-   modulecheck
-   multipleloop
-   numpytools
-   numpyutils
-   pprint2
-   PrmDictBase
-   Regression
-   sound
-   std
-   StringFunction
+
+    BoxField
+    BoxGrid
+    EfficiencyTable
+    FloatComparison
+    Lumpy
+    NumPyDB
+    aplotter
+    basics
+    configdata
+    convergencerate
+    debug
+    easyviz
+    errorcheck
+    filetable
+    globaldata
+    modulecheck
+    multipleloop
+    numpytools
+    numpyutils
+    pprint2
+    PrmDictBase
+    Regression
+    sound
+    std
+    StringFunction
 
 Indices and tables
 ==================

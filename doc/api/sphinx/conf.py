@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # SciTools documentation build configuration file, created by
-# sphinx-quickstart on Thu Apr 29 18:41:37 2010.
+# sphinx-quickstart on Mon May  3 07:20:09 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -16,14 +16,13 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.join(os.path.abspath('.'), os.pardir, os.pardir, os.pardir, 'lib', 'scitools'))
 
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.pngmath']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -35,7 +34,7 @@ source_suffix = '.txt'
 #source_encoding = 'utf-8'
 
 # The master toctree document.
-master_doc = 'tmp'
+master_doc = 'index'
 
 # General information about the project.
 project = u'SciTools'
@@ -173,7 +172,7 @@ htmlhelp_basename = 'SciToolsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('tmp', 'SciTools.tex', u'SciTools Documentation',
+  ('index', 'SciTools.tex', u'SciTools Documentation',
    u'H. P. Langtangen, J. Ring, ++', 'manual'),
 ]
 

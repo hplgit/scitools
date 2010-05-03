@@ -1,6 +1,0 @@
-
-BoxGrid
-==============
-
-.. automodule:: BoxGrid
-   :members:
