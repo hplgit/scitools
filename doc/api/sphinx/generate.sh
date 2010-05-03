@@ -26,7 +26,9 @@ EOF
 
 scitools subst '\#sys\.path\.append.+' "sys.path.append(os.path.join(os.path.abspath('.'), os.pardir, os.pardir, os.pardir, 'lib', 'scitools'))" conf.py
 
-scitools subst ':maxdepth: 2' ":maxdepth: 2\n\n\n   BoxField\n   BoxGrid\n   EfficiencyTable\n   FloatComparison\n   Lumpy\n   NumPyDB\n   aplotter\n   basics\n   configdata\n   convergencerate\n   debug\n   easyviz\n   errorcheck\n   filetable\n   globaldata\n   modulecheck\n   multipleloop\n   numpytools\n   numpyutils\n   pprint2\n   PrmDictBase\n   Regression\n   sound\n   std\n   StringFunction" index.txt
+scitools subst ':maxdepth: 2' ":maxdepth: 1\n\n   scitools\n   BoxField\n   BoxGrid\n   EfficiencyTable\n   FloatComparison\n   Lumpy\n   NumPyDB\n   PrmDictBase\n   Regression\n   StringFunction\n   TkGUI\n   aplotter\n   basics\n   configdata\n   convergencerate\n   debug\n   errorcheck\n   filetable\n   globaldata\n   misc\n   modulecheck\n   multipleloop\n   numpytools\n   numpyutils\n   pprint2\n   redirect_io\n   sound\n   std\n   easyviz\n   blt_\n   common\n   dx_\n   gnuplot_\n   grace_\n   matlab2_\n   matlab_\n   matplotlib_\n   misc\n   movie\n   pyx_\n   template_\n   utils\n   veusz_\n   visit_\n   vtk_\n   vtk_new_\n " index.txt
+
+#scitools subst ':maxdepth: 2' ":maxdepth: 2\n\n   scitools\n   BoxField\n   BoxGrid\n   EfficiencyTable\n   FloatComparison\n   Lumpy\n   NumPyDB\n   PrmDictBase\n   Regression\n   StringFunction\n   TkGUI\n   aplotter\n   basics\n   configdata\n   convergencerate\n   debug\n   errorcheck\n   filetable\n   globaldata\n   misc\n   modulecheck\n   multipleloop\n   numpytools\n   numpyutils\n   pprint2\n   redirect_io\n   sound\n   std\n   easyviz\n   blt_\n   common\n   dx_\n   gnuplot_\n   grace_\n   matlab2_\n   matlab_\n   matplotlib_\n   misc\n   movie\n   pyx_\n   template_\n   utils\n   veusz_\n   visit_\n   vtk_\n   vtk_new_" index.txt
 
 make html
 
