@@ -24,8 +24,10 @@ treated next, before we show how 2D and 3D vector fields can be handled.
 
 # #include "easyviz_tutorial.do.txt"
 
-
 # #include "easyviz_2D3D.do.txt"
+
+# #include "easyviz_bars.do.txt"
+
 
 ======= Backends =======
 

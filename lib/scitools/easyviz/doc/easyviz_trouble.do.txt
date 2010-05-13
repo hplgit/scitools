@@ -22,6 +22,12 @@ raw_input('Press Return key to quit: ')
 !ec
 The plot window will now stay on the screen until hitting the Enter/Return key.
 
+Another remedy can be to add a `show()` call at the end of the plotting:
+!bc cod
+show()
+!ec
+# test on Windows!
+
 === I Get Strange Errors Saying Something About LaTeX ===
 
 You probably run Easyviz with Matplotlib as backend, and you do not
@@ -104,15 +110,30 @@ __Matplotlib.__
 The following code tests if you have installed Matplotlib correctly:
 !bc
 import matplotlib.pyplot as plt
-import numpy
-x = numpy.linspace(0, 2*numpy.pi, 101)
-y = numpy.sin(x)
+import numpy as np
+x = np.linspace(0, 2*np.pi, 101)
+y = np.sin(x)
 plt.plot(x, y)
 plt.show()
-raw_input('Press Enter: ')  # wait, otherwise the plot window disappears
 !ec
 In case of problems, go to the Matplotlib source directory, remove the
 `build` subdirectory, and try a new install with `python setup.py install`.
+
+
+=== Trouble with Gnuplot and Threads ===
+
+When using the Gnuplot backend, the following error may be encountered:
+!bc
+thread.error: can't start new thread
+!ec
+A remedy is to create fewer plots, and for animations, update the plot
+window less frequently. For example,
+!bc
+for i in range(number_of_frames_in_animation):
+    <prepare data>
+    if i % == 100:     # plot every 100 frames
+        <make plot>
+!ec
 
 === Trouble with Movie Making ===
 
