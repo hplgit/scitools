@@ -542,7 +542,8 @@ class VtkBackend(BaseClass):
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(no_points)
         if vectors:
-            item.scale_vectors()
+            if hasattr(item, 'scale_vectors'):
+                item.scale_vectors()
             x = ravel(x)
             y = ravel(y)
             u = asarray(item.getp('udata'))
@@ -837,7 +838,9 @@ class VtkBackend(BaseClass):
         n = item.getp('numberofstreams')
         sx = ravel(item.getp('startx'))
         sy = ravel(item.getp('starty'))
-        sz = ravel(item.getp('startz'))
+        sz = None
+        if item.getp('startz') is not None:
+            sz = ravel(item.getp('startz'))
         dar = self._axis.getp('daspect')
         for i in range(n):
             integ = vtk.vtkRungeKutta2() # or 4?
@@ -851,7 +854,12 @@ class VtkBackend(BaseClass):
             #stream.SetMaximumPropagationTime(200)
             stream.SpeedScalarsOn()
             #stream.VorticityOn()
-            stream.SetStartPosition(sx[i]/dar[0], sy[i]/dar[1], sz[i]/dar[2])
+            if sz is None:
+                stream.SetStartPosition(sx[i]/dar[0], sy[i]/dar[1], 0)
+            else:
+                stream.SetStartPosition(sx[i]/dar[0],
+                                        sy[i]/dar[1],
+                                        sz[i]/dar[2])
             stream.SetIntegrator(integ)
             stream.Update()
             data = self._cut_data(stream)

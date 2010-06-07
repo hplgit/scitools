@@ -846,7 +846,7 @@ class Streams(PlotProperties):
 
     def _parseargs(self, *args):
         # TODO: do more error checking and add support for indexing='ij'.
-        z, w, option = [None]*3
+        z, w, sz, option = [None]*4
         #kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
         if nargs >= 9 and nargs <= 10:
@@ -865,7 +865,7 @@ class Streams(PlotProperties):
             else: # streamline(X,Y,U,V,startx,starty)
                 x = u;  y = v
                 #u, v = [asarray(a) for a in args[2:4]]
-                u, v, sx, sy = [asarray(a) for a in args[2:6]]
+                u, v, sx, sy = [asarray(a) for a in args[2:6]]                
         elif nargs >= 4 and nargs <= 5: # streamline(U,V,startx,starty)
             u, v = [asarray(a) for a in args[:2]]
             try:
@@ -927,7 +927,8 @@ class Streams(PlotProperties):
     def _set_data(self, x, y, z, u, v, w, sx, sy, sz):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
-        self._set_lim(z, 'zlim')
+        if z is not None:
+            self._set_lim(z, 'zlim')
         self._prop['xdata'] = x
         self._prop['ydata'] = y
         self._prop['zdata'] = z
