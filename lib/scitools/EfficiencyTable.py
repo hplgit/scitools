@@ -68,13 +68,17 @@ class EfficiencyTable:
         return e
 
     def set_normalization_time(self, t):
-        """Set the CPU time by which all other CPU times will be divided."""
+        """
+        Set the CPU time by which all other CPU times will be divided.
+        By default, this is the maximum CPU time encountered in the data.
+        """
         self._normalization_time = t
         
     def _reference_CPU_time(self, experiment_idx=0):
         if self._normalization_time is not None:
             # try first to see if there is an experiment with the
-            # given normalization time:
+            # given normalization time, and if so, use the corresponding
+            # description, otherwise use a dummy description:
             for description in self.experiments:
                 if abs(self.experiments[description][experiment_idx] - \
                        self._normalization_time) < 1.0E-10:

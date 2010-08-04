@@ -8,8 +8,8 @@ numpytools is no longer particularly fruitful. For backward compatibility
 of scitools, the two modules still exist.
 
 
-Unified interface to Numeric, numarray, and numpy
-=================================================
+Unified array computing interface
+=================================
 
 Numeric, numarray, and numpy can be viewed as three different
 implementations of Numerical Python functionality.  The present module

@@ -38,30 +38,27 @@ floating-point numbers can be written with a specificed format
 (float_format) and not by their repr string (which explicitly
 displays round-off errors).
 
-Classes
--------
+Classes:
 
-PrettyPrinter()
+  - PrettyPrinter():
     Handle pretty-printing operations onto a stream using a configured
     set of formatting parameters.
 
-Functions
----------
+Functions:
 
-pformat()
+  - pformat():
     Format a Python object into a pretty-printed representation.
 
-pprint()
+  - pprint():
     Pretty-print a Python object to a stream [default is sys.stdout].
 
-saferepr()
+  - saferepr():
     Generate a 'standard' repr()-like value, but protect against recursive
     data structures.
 
-Global data
------------
+Global data:
 
-float_format
+  - float_format:
     String containing the printf format for formatting float objects.
 
 """

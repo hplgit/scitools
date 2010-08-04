@@ -1,59 +1,60 @@
 #!/usr/bin/env python
     
 """
-Regression module:
+Regression module for automating regression tests.
 
-    Module for automating regression tests.
+    ================   =================================================
+          Class                          Description
+    ================   =================================================
+    TestRun            utilities for easy set up of regression tests
+    TestRunNumerics    extensions of TestRun for numerical computing
+    Verify             search for test scripts, run them, compare
+                       new results with reference results
+    VerifyDiffpack     tailored Verify for Diffpack (incl. compilation)
+    FloatDiff          visual diff between files with real numbers
+    ================   =================================================
 
-    class TestRun         -  utilities for easy set up of regression tests
-    class TestRunNumerics -  extensions of TestRun for numerical computing
-    class Verify          -  search for test scripts, run them, compare
-                             new results with reference results
-    class VerifyDiffpack  -  tailored Verify for Diffpack (incl. compilation)
-    class FloatDiff       -  visual diff between files with real numbers
-
-Usage:
+Usage
+-----
 
 Let us start with a very simple Python script, circle.py, for which we
-would like to create a regression test.
+would like to create a regression test::
 
-#!/usr/bin/env python
-'''Numerical integration of circular motion.'''
-import math, sys, os
+  #!/usr/bin/env python
+  '''Numerical integration of circular motion.'''
+  import math, sys, os
 
-R=1; w=2*math.pi;  # global constants
-def advance(x, y, dt, t):
-    '''advance (x,y) point one time step dt with Forward Euler,
-       the equations describe circular motion of a body:
-       dx/dt = -w*R*cos(2pi*w*t), dy/dt = w*R*sin(2pi*w*t)
-    '''
-    x = x - dt*w*R*math.sin(w*t);  y = y + dt*w*R*math.cos(w*t)
-    return (x,y)
+  R=1; w=2*math.pi;  # global constants
+  def advance(x, y, dt, t):
+      '''advance (x,y) point one time step dt with Forward Euler,
+         the equations describe circular motion of a body:
+         dx/dt = -w*R*cos(2pi*w*t), dy/dt = w*R*sin(2pi*w*t)
+      '''
+      x = x - dt*w*R*math.sin(w*t);  y = y + dt*w*R*math.cos(w*t)
+      return (x,y)
 
-# integrate from 0 to tstop
-try:
-    tstop = float(sys.argv[1]); dt = float(sys.argv[2])
-except:
-    print 'Usage: %s tstop dt' % sys.argv[0]; sys.exit(1)
+  # integrate from 0 to tstop
+  try:
+      tstop = float(sys.argv[1]); dt = float(sys.argv[2])
+  except:
+      print 'Usage: %s tstop dt' % sys.argv[0]; sys.exit(1)
 
-# make output format compatible with the plotpairs.py script:
-xmax = R*1.8; xmin = -xmax; ymin = xmin; ymax = xmax
-print xmin, xmax, ymin, ymax
-n = int(tstop/dt) + 1;
-x = R; y = 0
-for i in range(n):
-    t = i*dt
-    x, y = advance(x, y, dt, t)
-    print x, y
-print 'end'
-
----
+  # make output format compatible with the plotpairs.py script:
+  xmax = R*1.8; xmin = -xmax; ymin = xmin; ymax = xmax
+  print xmin, xmax, ymin, ymax
+  n = int(tstop/dt) + 1;
+  x = R; y = 0
+  for i in range(n):
+      t = i*dt
+      x, y = advance(x, y, dt, t)
+      print x, y
+  print 'end'
 
 This script takes two input parameters from the command line:
 the stop time for the simulation, and the time step.
-The output is a series of numbers.
+The output is a series of numbers. We may run the script as::
 
-unix> python circle.py 3 0.1 > result
+  unix> python circle.py 3 0.1 > result
 
 Let us assume that we are sure that the produced results in this
 case are correct. A regression test then means that we can
@@ -62,36 +63,37 @@ the new results with archived correct results.
 
 The procedure for using the Regression module in this examples
 goes as follows.
-1. Create a name of the test, say "circle".
-2. Create circle.verify for running the test and saving
-desired results in a file circle.v.
-3. If we believe the results are correct, copy circle.v to
-circle.r. This circle.r file represents the archived correct
-results.
 
-Later, we may run
+  1. Create a name of the test, say "circle".
+  2. Create circle.verify for running the test and saving
+     desired results in a file circle.v.
+  3. If we believe the results are correct, copy circle.v to
+     circle.r. This circle.r file represents the archived correct
+     results.
 
-unix> regression.py verify circle
+Later, we may run::
+
+  unix> regression.py verify circle
 
 to rerun the test and investigate differences between circle.v
 (new results) and circle.r (archived correct results).
 A whole directory tree can be examined for tests (.verify files)
-by a similar command:
+by a similar command::
 
-unix> regression.py verify root-of-tree
+  unix> regression.py verify root-of-tree
 
 Sometimes the new results are correct, but there are significant
 differences between old and new results, because of, e.g., a change
 in output formatting. New results can in this case be updated to
-archive status by
+archive status by::
 
-unix> regression.py update root-of-tree
+  unix> regression.py update root-of-tree
 
 For the circle.py script, a typical circle.verify script takes
-the following trivial form if we write it in bash:
+the following trivial form if we write it in bash::
 
-#!/bin/sh
-./circle.py 3 0.1 > circle.v  
+  #!/bin/sh
+  ./circle.py 3 0.1 > circle.v  
 
 The Regression module has tools for running programs, automatically
 measuring CPU time, selecting lines from a file to put in the .v
@@ -99,35 +101,35 @@ file, ignoring round-off errors in numerical results, etc.
 A more sophisticated test, which also accounts for numerical precision
 in the output, goes as follows (to understand the various statements
 you will need to consult Appendix B.4 in the textbook "Python Scripting
-for Computational Science", by H. P. Langtangen).
+for Computational Science", by H. P. Langtangen)::
 
-#!/usr/bin/env python
-import os, sys
-from Regression import TestRunNumerics, defaultfilter
-test = TestRunNumerics('circle2.v')
-test.run('circle.py', options='1 0.21')
-# truncate numerical expressions in the output:
-test.approx(defaultfilter)
+  #!/usr/bin/env python
+  import os, sys
+  from Regression import TestRunNumerics, defaultfilter
+  test = TestRunNumerics('circle2.v')
+  test.run('circle.py', options='1 0.21')
+  # truncate numerical expressions in the output:
+  test.approx(defaultfilter)
+  # generate circle2.vd file in correct format:
+  fd = open('circle2.vd', 'w')
+  fd.write('## exact data\n')
+  # grab the output from circle.py, throw away the
+  # first and last line, and merge the numbers into
+  # one column:
+  cmd = 'circle.py 1 0.21'
+  output = os.popen(cmd)
+  res = output.readlines()
+  output.close()
+  numbers = []
+  for line in res[1:-1]: # skip first and last line
+      for r in line.split():
+          numbers.append(r)
+  # dump length of numbers and its contents:
+  fd.write('%d\n' % len(numbers))
+  for r in numbers: fd.write(r + '\n')
+  fd.close()
 
-# generate circle2.vd file in correct format:
-fd = open('circle2.vd', 'w')
-fd.write('## exact data\n')
-# grab the output from circle.py, throw away the
-# first and last line, and merge the numbers into
-# one column:
-cmd = 'circle.py 1 0.21'
-output = os.popen(cmd)
-res = output.readlines()
-output.close()
-numbers = []
-for line in res[1:-1]: # skip first and last line
-    for r in line.split():
-        numbers.append(r)
-# dump length of numbers and its contents:
-fd.write('%d\n' % len(numbers))
-for r in numbers: fd.write(r + '\n')
-fd.close()
-
+This sample script can be adapted to a wide range of cases.
 """
 
 import os, time, sys, string, re

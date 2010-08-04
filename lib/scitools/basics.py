@@ -1,6 +1,5 @@
 """
-Import modules and definitions for the scitools library
-=======================================================
+Import modules and definitions for the scitools library.
 
 Import of Numerical Python
 --------------------------

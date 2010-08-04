@@ -11,7 +11,7 @@ class FloatComparison:
     performed approximately with a prescribed tolerance.
 
     For example, a==b is true if abs(a-b) < atol + rtol*abs(b).
-    The atol parameter comes into play when abs(b) is large.
+    The atol parameter comes into play when |a| and |b| are large.
 
     If the desired test is |a-b| < eps, set atol=eps and rtol=0.
     If a relative test is wanted, |(a-b)/b| < eps, set atol=0
@@ -29,11 +29,13 @@ class FloatComparison:
 
     Class FloatComparison can be used directly, or the convenience
     names float_eq, float_ne, float_lt, float_le, float_gt and float_ge
-    for the various operators can be used instead.
+    for the various operators can be used instead. For example,
+    float_eq is a FloatComparison object for the equality operator.
     
     Here is an interactive example::
 
-    >>> from FloatComparison import *
+    >>> from FloatComparison import FloatComparison, float_eq, \
+             float_ne, float_lt, float_le, float_gt, float_ge
     >>> float_eq.get_absolute_tolerance()   # default
     1e-14
     >>> float_eq.get_relative_tolerance()   # default

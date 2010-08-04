@@ -7,7 +7,7 @@
 import os, sys, operator, math
 
 
-# to copied into this file by preprocess.py:
+# copied into this file by preprocess.py:
 #  #include "_numpyload.py"
 #  #include "numpyutils.py"
 

@@ -1,8 +1,7 @@
 """
+
 Functionality of this module that extends Numerical Python
 ==========================================================
-
-The following extensions to Numerical Python are also defined:
 
  - solve_tridiag_linear_system:
            returns the solution of a tridiagonal linear system
@@ -155,7 +154,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     the SciTools version can also work with 3D and 1D grids. In addition,
     the NumPy version of `meshgrid` has no option for generating sparse
     grids to conserve memory, like we have in SciTools by specifying the
-    `sparse` argument:
+    `sparse` argument.
 
     The NumPy functions `mgrid` and `ogrid` does provide support for,
     respectively, full and sparse n-dimensional meshgrids, however,
@@ -163,18 +162,21 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     one-dimensional coordinate arrays such as in Matlab. With slices, the
     user does not have the option to generate meshgrid with, e.g.,
     irregular spacings, like::
+
     >>> x = array([-1,-0.5,1,4,5], float)
     >>> y = array([0,-2,-5], float)
     >>> xv, yv = meshgrid(x, y, sparse=False)
-    >>> xv 
-    array([[-1. , -0.5,  1. ,  4. ,  5. ],
-           [-1. , -0.5,  1. ,  4. ,  5. ],
+
+    >>> xv
+    array([[-1. , -0.5,  1. ,  4. ,  5. ], 
+           [-1. , -0.5,  1. ,  4. ,  5. ], 
            [-1. , -0.5,  1. ,  4. ,  5. ]])
+
     >>> yv
-    array([[ 0.,  0.,  0.,  0.,  0.],
-           [-2., -2., -2., -2., -2.],
+    array([[ 0.,  0.,  0.,  0.,  0.], 
+           [-2., -2., -2., -2., -2.], 
            [-5., -5., -5., -5., -5.]])
-    >>> 
+
 
     In addition to the reasons mentioned above, the meshgrid function in
     NumPy supports only Cartesian indexing, i.e., x and y, not matrix
@@ -185,28 +187,30 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     `'xy'` returns a meshgrid with Cartesian indexing. The difference is
     illustrated by the following code snippet::
 
-    nx = 10
-    ny = 15
+      nx = 10
+      ny = 15
 
-    x = linspace(-2,2,nx)
-    y = linspace(-2,2,ny)
+      x = linspace(-2,2,nx)
+      y = linspace(-2,2,ny)
 
-    xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
-    for i in range(nx):
-        for j in range(ny):
-            # treat xv[i,j], yv[i,j]
+      xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
+      for i in range(nx):
+          for j in range(ny):
+              # treat xv[i,j], yv[i,j]
 
-    xv, yv = meshgrid(x, y, sparse=False, indexing='xy')
-    for i in range(nx):
-        for j in range(ny):
-            # treat xv[j,i], yv[j,i]
+      xv, yv = meshgrid(x, y, sparse=False, indexing='xy')
+      for i in range(nx):
+          for j in range(ny):
+              # treat xv[j,i], yv[j,i]
 
     It is not entirely true that matrix indexing is not supported by the
     `meshgrid` function in NumPy because we can just switch the order of
     the first two input and output arguments::
+
     >>> yv, xv = numpy.meshgrid(y, x)
     >>> # same as:
     >>> xv, yv = meshgrid(x, y, indexing='ij')
+
     However, we think it is clearer to have the logical "x, y"
     sequence on the left-hand side and instead adjust a keyword argument.
     """
@@ -345,8 +349,8 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
 def ndgrid(*args,**kwargs):
     """
-    Same as calling meshgrid with indexing='ij' (see meshgrid for
-    documentation).
+    Same as calling ``meshgrid`` with *indexing* = ``'ij'`` (see
+    ``meshgrid`` for documentation).
     """
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
@@ -543,18 +547,18 @@ def norm_L2(u):
 
 def norm_l1(u):
     """
-    l1 norm of a multi-dimensional array u viewed as a vector
-    (norm=sum(abs(u.ravel()))).
+    l1 norm of a multi-dimensional array u viewed as a vector:
+    ``linalg.norm(u.ravel(),1)``.
     """
     #return sum(abs(u.ravel()))
     return linalg.norm(u.ravel(),1)
 
 def norm_L1(u):
     """
-    L1 norm of a multi-dimensional array u viewed as a vector
-    (norm=sum(abs(u.ravel()))).
+    L1 norm of a multi-dimensional array u viewed as a vector:
+    ``norm_l1(u)/float(u.size)``.
 
-    If u holds function values and the norm of u is supposed to
+    If *u* holds function values and the norm of u is supposed to
     approximate an integral (L1 norm) of the function, this (and
     not norm_l1) is the right norm function to use.
     """
@@ -599,11 +603,11 @@ def factorize_tridiag_matrix(A):
     """
     Perform the factorization step only in solving a tridiagonal
     linear system. See the function solve_tridiag_linear_system
-    for how the matrix A is stored.
-    Two arrays, c and d, are returned, and these represent,
-    together with superdiagonal A[:-1,2], the factorized form of
-    A. To solve a system with solve_tridiag_factored_system,
-    A, c, and d must be passed as arguments.
+    for how the matrix *A* is stored.
+    Two arrays, *c* and *d*, are returned, and these represent,
+    together with superdiagonal *A[:-1,2]*, the factorized form of
+    *A*. To solve a system with ``solve_tridiag_factored_system``,
+    *A*, *c*, and *d* must be passed as arguments.
     """
     n = len(b)
     # scratch arrays:
@@ -622,7 +626,7 @@ def factorize_tridiag_matrix(A):
 def solve_tridiag_factored_system(b, A, c, d):
     """
     The backsubsitution part of solving a tridiagonal linear system.
-    The right-hand side is b, while A, c, and d represent the
+    The right-hand side is b, while *A*, *c*, and *d* represent the
     factored matrix (see the factorize_tridiag_matrix function).
     The solution x to A*x=b is returned.
     """
@@ -831,8 +835,7 @@ def wrap2callable(f, **kwargs):
     Traceback (most recent call last):
     ...
     NameError: name 'a' is not defined
-    >>> f4 = wrap2callable('a+b*t', independent_variable='t', \
-                           a=1, b=2)
+    >>> f4 = wrap2callable('a+b*t', independent_variable='t', a=1, b=2)
     >>> f4(0.5)
     2.0
 
@@ -858,8 +861,7 @@ def wrap2callable(f, **kwargs):
     >>> f8(0.5)
     2.0
     >>> # 3D functions:
-    >>> f9 = wrap2callable('1+2*x+3*y+4*z', \
-                           independent_variables=('x','y','z'))
+    >>> f9 = wrap2callable('1+2*x+3*y+4*z', independent_variables=('x','y','z'))
     >>> f9(0.5,1/3.,0.25)
     4.0
     >>> # discrete 3D data:
@@ -925,19 +927,20 @@ def wrap2callable(f, **kwargs):
 def NumPy_array_iterator(a, **kwargs):
     """
     Iterate over all elements in a NumPy array a.
-    Return values: generator function and the code of this function.
-    The numpy.ndenumerate iterator performs the same iteration over
-    an array, but NumPy_array_iterator has some additional features
+    Two return values: a generator function and the code of this function.
+    The ``numpy.ndenumerate`` iterator performs the same iteration over
+    an array, but ``NumPy_array_iterator`` has some additional features
     (especially handy for coding finite difference stencils, see next
     paragraph).
 
     The keyword arguments specify offsets in the start and stop value
-    of the index in each dimension. Legal values are
-    offset0_start, offset0_stop, offset1_start, offset1_stop, etc.
-    Also offset_start and offset_stop are legal keyword arguments,
-    these imply the same offset value for all dimensions.
+    of the index in each dimension. Legal argument names are
+    ``offset0_start``, ``offset0_stop``, ``offset1_start``,
+    ``offset1_stop``, etc.  Also ``offset_start`` and ``offset_stop``
+    are legal keyword arguments, these imply the same offset value for
+    all dimensions.
 
-    Another keyword argument is no_value, which can be True or False.
+    Another keyword argument is ``no_value``, which can be True or False.
     If the value is True, the iterator returns the indices as a tuple,
     otherwise (default) the iterator returns a two-tuple consisting of
     the value of the array and the corresponding indices (as a tuple).
@@ -946,12 +949,14 @@ def NumPy_array_iterator(a, **kwargs):
     
     >>> q = linspace(1, 2*3*4, 2*3*4);  q.shape = (2,3,4)
     >>> it, code = NumPy_array_iterator(q)
+
     >>> print code  # generator function with 3 nested loops:
     def nested_loops(a):
         for i0 in xrange(0, a.shape[0]-0):
             for i1 in xrange(0, a.shape[1]-0):
                 for i2 in xrange(0, a.shape[2]-0):
                     yield a[i0, i1, i2], (i0, i1, i2)
+
     >>> type(it)
     <type 'function'>
     >>> for value, index in it(q):
@@ -987,11 +992,13 @@ def NumPy_array_iterator(a, **kwargs):
 
     >>> q = linspace(1, 1*3, 3);  q.shape = (1,3)
     >>> it, code = NumPy_array_iterator(q, no_value=True)
+
     >>> print code
     def nested_loops(a):
         for i0 in xrange(0, a.shape[0]-0):
             for i1 in xrange(0, a.shape[1]-0):
                 yield i0, i1
+
     >>> for i,j in it(q):
     ...   print i,j
     0 0
@@ -1002,12 +1009,14 @@ def NumPy_array_iterator(a, **kwargs):
     Now let us try some offsets::
 
     >>> it, code = NumPy_array_iterator(q, offset1_stop=1, offset_start=1)
+
     >>> print code
     def nested_loops(a):
         for i0 in xrange(1, a.shape[0]-0):
             for i1 in xrange(1, a.shape[1]-1):
                 for i2 in xrange(1, a.shape[2]-0):
                     yield a[i0, i1, i2], (i0, i1, i2)
+
     >>> # note: the offsets appear in the xrange arguments
     >>> for value, index in it(q):
     ...     print 'a%s = %g' % (index, value)
@@ -1015,6 +1024,7 @@ def NumPy_array_iterator(a, **kwargs):
     a(1, 1, 1) = 18
     a(1, 1, 2) = 19
     a(1, 1, 3) = 20
+
     """
     # build the code of the generator function in a text string
     # (since the number of nested loops needed to iterate over all
@@ -1104,12 +1114,18 @@ def factorial(n, method='reduce'):
     (see source code for the methods).
 
     Here is an efficiency comparison of the methods (computing 80!):
-    reduce                    |     1.00
-    lambda list comprehension |     1.70
-    lambda functional         |     3.08
-    plain recursive           |     5.83
-    lambda recursive          |    21.73
-    scipy                     |   131.18
+
+    ==========================   =====================
+            Method                Normalized CPU time
+    ==========================   =====================
+    reduce                             1.00
+    lambda list comprehension          1.70
+    lambda functional                  3.08
+    plain recursive                    5.83
+    lambda recursive                  21.73
+    scipy                            131.18
+    ==========================   =====================
+
     """
     if not isinstance(n, (int, long, float)):
         raise TypeError('factorial(n): n must be integer not %s' % type(n))
@@ -1218,19 +1234,14 @@ def arr(shape=None, element_type=float,
     Compact and flexible interface for creating NumPy arrays,
     including several consistency and error checks.
 
-    @param shape:        length of each dimension
-    @type  shape:        tuple or int
-    @param data:         list, tuple, or NumPy array with data elements
-    @param copy:         copy data if true, share data if false
-    @type  copy:         boolean
-    @param element_type: float, int, int16, float64, bool, etc.
-    @param interval:     make elements from a to b (shape gives no of elms)
-    @type  interval:     tuple or list
-    @param file_:        filename or file object containing array data
-    @type  file_:        string
-    @param order:        'Fortran' or 'C' storage
-    @type  order:        string
-    @return:             created Numerical Python array
+     - *shape*: length of each dimension, tuple or int
+     - *data*: list, tuple, or NumPy array with data elements
+     - *copy*: copy data if true, share data if false, boolean
+     - *element_type*: float, int, int16, float64, bool, etc.
+     - *interval*: make elements from a to b (shape gives no of elms), tuple or list
+     - *file_*: filename or file object containing array data, string
+     - *order*: 'Fortran' or 'C' storage, string
+     - return value: created Numerical Python array
 
     The array can be created in four ways:
     

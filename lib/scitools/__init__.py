@@ -2,15 +2,15 @@
 SciTools is a Python package containing lots of useful tools for
 scientific computing in Python. The package is built on top of other
 widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
-Matplotlib, VTK, etc.
+Matplotlib, VTK, and others.
 
 The SciTools package contains a lot of modules:
 
   - easyviz: package for unified Matlab-like plotting syntax
-  - basics: imports from numpy, scipy, scitools.numpytools
+  - basics: imports from numpy, scipy, scitools.numpyutils
   - std: imports of basics and easyviz
   - misc: many non-numerical convenience functions
-  - numpytools: many numerical convenience functions
+  - numpyutils: many numerical convenience functions
   - StringFunction: turns string formulas into callable functions
   - configdata: user-friendly access to Python config files
   - filetable: read/write tabular data in files into/from arrays
@@ -42,15 +42,24 @@ Some preliminary modules include
 
 See the different modules for more detailed information.
 
-The standard SciTools import statement reads::
+The most convenient SciTools import statement reads::
 
   from scitools.std import *
 
 This statement imports from numpy, scipy (if available),
-scitools.numpytools (many numerical convenince functions), and all
+scitools.numpyutils (many numerical convenince functions), and all
 Easyviz plotting capabilities. (See the documentation of
 scitools.std for a precise list of imports implied by the
 above statement.)
+
+Many programmers prefer to avoid the "star import" above, which
+has the disadvantage of filling up the global namespace with
+a large number of names. The key import statement is then::
+
+  import scitools.std as st
+
+All functions and modules must then be prefixed by ``st``:
+``st.float_eq``, ``st.StringFunction``, ``st.plot``, etc.
 """
 
 __version__ = '0.7'

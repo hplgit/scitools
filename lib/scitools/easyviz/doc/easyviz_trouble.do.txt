@@ -164,6 +164,25 @@ movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
 
+=== I Get Thread Errors with Gnuplot ===
+
+When plotting inside a loop, e.g.,
+!bc
+for i in some_values:
+    ...
+    plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+         xlabel='t', ylabel='Xt', title='My Title')
+!ec
+Gnuplot may lead to thread errors. A remedy is to do some plotting
+outside the loop and then only update the data inside the loop:
+!bc
+plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+     xlabel='t', ylabel='Xt', title='My Title')
+for i in some_values:
+    ...
+    plot(t, X0)
+!ec
+
 
 === Where Can I Find Easyviz Documentation? ===
 

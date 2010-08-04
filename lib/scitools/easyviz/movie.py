@@ -770,8 +770,7 @@ def movie(input_files, **kwargs):
     Below follows a more detailed description of the various arguments that
     are available in this function.
 
-    Required arguments
-    ------------------
+    Required arguments:
 
     input_files: Specifies the image files which will be used to make the
                  movie. The argument must be given either as a string,
@@ -800,8 +799,7 @@ def movie(input_files, **kwargs):
         format, there will automatically be made copies which
         in turn will be converted to the correct format.
     
-    Optional arguments
-    ------------------
+    Optional arguments:
 
     output_file: Sets the name of the output movie. If not set, a default
     name like movie.avi, movie.mpeg, or movie.gif (depending

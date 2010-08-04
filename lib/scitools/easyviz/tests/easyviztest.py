@@ -1,7 +1,7 @@
 import unittest
 import time
 
-from scitools.numpytools import *
+from scitools.numpyutils import *
 from scitools.easyviz import *
 
 import random

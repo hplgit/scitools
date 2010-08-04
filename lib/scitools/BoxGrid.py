@@ -17,28 +17,25 @@ class UniformBoxGrid(object):
     """
     Simple uniform grid on an interval, rectangle, box, or hypercube.
 
-    Accessible attributes (after initialization):
-    
-    @ivar nsd          : no of spatial dimensions in the grid
-    @ivar min_coor     : array of minimum coordinates
-    @ivar max_coor     : array of maximum coordinates
-    @ivar division     : array of cell divisions in the 
-    @ivar delta        : array of grid spacings
-    @ivar dirnames     : names of the space directions ('x', 'y', etc.)
-    
-    @ivar shape        : (nx+1, ny+1, ...); dimension of array over grid
-    @ivar coor         : list of coordinates; coor[i]  holds coordinates
-                         in direction i (X,Y,Z); the k-th coordinate in
-                         direction 0 can be accessed as
-                         self.coor[0][k]
-                         self.coor[X][k]
-                         self.coor[self.dirnames['x']][k]
-                         Note that X, Y, Z are predefined constants 0, 1, 2
-                   
-    @ivar coorv        : expanded version of coor for vectorized expressions
-                         (in 2D, self.coorv[0] = self.coor[0][:,newaxis,newaxis])
-    @ivar tolerance    : small geometric tolerance based on grid coordinates
-    @ivar npoints      : total number of grid points
+    =============      ====================================================
+      Attributes                           Description
+    =============      ====================================================
+    nsd                no of spatial dimensions in the grid
+    min_coor           array of minimum coordinates
+    max_coor           array of maximum coordinates
+    division           array of cell divisions in the 
+    delta              array of grid spacings
+    dirnames           names of the space directions ('x', 'y', etc.)
+    shape              (nx+1, ny+1, ...); dimension of array over grid
+    coor               list of coordinates; self.coor[Y][j] is the
+                       the j-th coordinate in direction Y (=1)
+                       X, Y, Z are predefined constants 0, 1, 2
+    coorv              expanded version of coor for vectorized expressions
+                       (in 2D, self.coorv[0] = self.coor[0][:,newaxis])
+    tolerance          small geometric tolerance based on grid coordinates
+    npoints            total number of grid points
+    =============      ====================================================
+
     """
     def __init__(self,
                  min=(0,0),                  # minimum coordinates

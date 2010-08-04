@@ -40,7 +40,8 @@ def test_if_module_exists(modulename, msg='',
     except Exception, e:
         if msg:
             print message
-            print 'Got an exception while trying to import %s:\n' % modulename, e
+            print 'Got an exception while trying to import %s:\n' % \
+                modulename, e
 
 
 def func_to_method(func, class_, method_name=None):
@@ -59,16 +60,17 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
     Actually, the commands.getstatusoutput function is used on Unix
     systems, and the output from the system command is fetched.
 
-    @param command: operating system command to be executed.
-    @param verbose: False: no output, True: print command prior
-    to execution.
-    @param failure_handling: one of 'exit', 'warning', 'exception',
-    or 'silent'.
-    In case of failure, the output from the command is always displayed.
-    @param fake: if True, the command is printed but not run (for testing).
-    @return: the same as commands.getstatusoutput, i.e.,
-    a boolean failure variable and the output from the command
-    as a string object.
+    ================  ========================================================
+    command           operating system command to be executed
+    verbose           False: no output, True: print command prior to execution
+    failure_handling  one of 'exit', 'warning', 'exception', or 'silent'
+                      (in case of failure, the output from the command is 
+                      always displayed)
+    fake              if True, the command is printed but not run (for testing)
+    return value      the same as commands.getstatusoutput, i.e., a boolean 
+                      failure variable and the output from the command as a 
+                      string object
+    ================  ========================================================
     """
     if verbose:
         print 'Running operating system command\n   %s' % command
@@ -117,12 +119,14 @@ def read_cml(option, default=None, argv=sys.argv):
     will return a Python object (with the right type) corresponding to
     the value of the object (see the str2obj function).
 
-    @param option: command-line option.
-    @type  option: string.
-    @param default: default value associated with this option.
-    @param argv: list that is scanned for command-line arguments.
-    @return: the item in argv after the option, or default is option
-    is not found.
+    ================  ========================================================
+    option            command-line option (str)
+    default           default value associated with the option
+    argv              list that is scanned for command-line arguments
+    return value      the item in argv after the option, or default if option
+                      is not found
+    ================  ========================================================
+
 
     See the read_cml_func function for reading function expressions
     or function/instance names on the command line and returning
@@ -451,6 +455,70 @@ def sorted_os_path_walk(root, func, arg):
             sorted_os_path_walk(name, func, arg) # recurse into directory
 
 
+def subst(patterns, replacements, filenames,
+          pattern_matching_modifiers=0):
+    """
+    Replace a set of patterns by a set of replacement strings (regular
+    expressions) in a series of files.
+    The function essentially performs::
+
+      for filename in filenames:
+          file_string = open(filename, 'r').read()
+          for pattern, replacement in zip(patterns, replacements):
+              file_string = re.sub(pattern, replacement, file_string)
+
+    A copy of the original file is taken, with extension `.old~`.
+
+    ==========================  ======================================
+    patterns                    string or list of strings (regex)
+    replacements                string or list of strings (regex)
+    filenames                   string or list of strings
+    pattern_matching_modifiers  re.DOTALL, re.MULTILINE, etc., same
+                                syntax as for re.compile
+    ==========================  ======================================
+    """
+    # if some arguments are strings, convert them to lists:
+    if isinstance(patterns, basestring):
+        patterns = [patterns]
+    if isinstance(replacements, basestring):
+        replacements = [replacements]
+    if isinstance(filenames, basestring):
+        filenames = [filenames]
+
+    # pre-compile patterns:
+    cpatterns = [re.compile(pattern, pattern_matching_modifiers) \
+                 for pattern in patterns]
+    modified_files = {}
+    for filename in filenames:
+        if not os.path.isfile(filename):
+            raise IOError('%s is not a file!' % filename)
+        shutil.copy2(filename, filename + '.old~')  # back up file
+        f = open(filename, 'r');
+        filestr = f.read()
+        f.close()
+
+        for pattern, cpattern, replacement in \
+            zip(patterns, cpatterns, replacements):
+            if cpattern.search(filestr):
+                filestr = cpattern.sub(replacement, filestr)
+                f = open(filename, 'w')
+                f.write(filestr)
+                f.close()
+
+                if pattern not in modified_files:
+                    modified_files[pattern] = [filename]
+                else:
+                    modified_files[pattern].append(filename)
+        # make a readable return string:
+        messages = []
+        for pattern in sorted(modified_files):
+            replacement = replacements[patterns.index(pattern)]
+            messages.append('%s replaced by %s in %s' % \
+                            (pattern, replacement, 
+                             ', '.join(modified_files[pattern])))
+    return ', '.join(messages)
+
+
 # class Command has now been replaced by the standard functools.partial
 # function in Python v2.5 and later:
 
@@ -459,7 +527,7 @@ class Command:
     Alternative to lambda functions.
 
     This class should with Python version 2.5 and later be replaced
-    by the "partial" class in the standard module functools.
+    by functools.partial.
     However, you cannot simply do a::
 
       Command = functools.partial

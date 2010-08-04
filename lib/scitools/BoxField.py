@@ -38,41 +38,47 @@ class BoxField(Field):
     """
     Field over a BoxGrid or UniformBoxGrid grid.
 
-    @ivar grid : reference to the underlying grid instance.
-    @ivar values: array holding field values at the grid points.
+    =============      =============================================
+      Attributes                       Description
+    =============      =============================================
+    grid               reference to the underlying grid instance
+    values             array holding field values at the grid points
+    =============      =============================================
+
     """
     def __init__(self, grid, name, vector=0, **kwargs):
         """
         Initialize scalar or vector field over a BoxGrid/UniformBoxGrid.
 
-        @param grid: grid instance.
-        @param name: name of the field.
-        @param vector: scalar field if 0, otherwise the no of vector
-        components (spatial dimensions of vector field).
-        @param kwargs:
-          values: optional array with field values
-          other arguments just stored as metadata in the field (see class Field)
-
-        The BoxGrid object has the following two key attributes:
-
-        @ivar grid    : a UniformBoxGrid or BoxGrid instance
-        @ivar values  : an array of values, indexed as [i,j], [i,j,k] etc.
+        =============      ===============================================
+          Arguments                          Description
+        =============      ===============================================
+        *grid*             grid instance
+        *name*             name of the field
+        *vector*           scalar field if 0, otherwise the no of vector
+                           components (spatial dimensions of vector field)
+        *values*           (*kwargs*) optional array with field values
+        =============      ===============================================
 
         Here is an example::
+
         >>> g = UniformBoxGrid(min=[0,0], max=[1.,1.], division=[3, 4])
+
         >>> print g
         domain=[0,1]x[0,1]  indices=[0:3]x[0:4]
+
         >>> u = BoxField(g, 'u')
         >>> u.values = u.grid.vectorized_eval(lambda x,y: x + y)
+
         >>> i = 1; j = 2
         >>> print 'u(%g, %g)=%g' % (g.coor[X][i], g.coor[Y][j], u.values[i,j])
         u(0.333333, 0.5)=0.833333
-        >>>
+
         >>> # visualize:
         >>> from scitools.std import surf
         >>> surf(u.grid.coorv[X], u.grid.coorv[Y], u.values)
 
-        Note that u.grid.coorv is a list of coordinate arrays that are
+        ``u.grid.coorv`` is a list of coordinate arrays that are
         suitable for Matlab-style visualization of 2D scalar fields.
         Also note how one can access the coordinates and u value at
         a point (i,j) in the grid.
