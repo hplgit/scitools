@@ -6,6 +6,7 @@ seed(12)  # fix to ensure same results each time this program is run
 
 # simple example:
 data = rand(4,3)
+print data
 bar(data)
 title('Bars from a matrix: 4 groups of 3 bars each')
 # alternative:
@@ -34,10 +35,12 @@ figure()
 data = {'method1': {'thing1': 3, 'thing2': 2, 'thing3': 4},
         'method2': {'thing1': 4, 'thing2': 4.5, 'thing3': 2},
         'method3': {'thing1': 1, 'thing2': 4, 'thing3': 2},}
-bar(data, rotated_barticks=True,
+bar(data, 
+    rotated_barticks=True,
     hardcopy='bar1a.eps', color=True,
     ylabel='response',
-    ymin=0, ymax=5, title='Bars from nested dictionary')
+    axis=[-1, len(data), 0, 5],
+    title='Bars from nested dictionary')
 
 # red bars with borders turned off:
 figure()

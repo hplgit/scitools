@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 """
-Build the scitools++ directory.
+Build the scitools++ directory, consisting of scitools and several
+useful associated packages such as Doconce, IPython, Epydoc, Preprocess, etc.
 
-scitools++ contains all of SciTools PLUS some other useful
-Python packages like Doconce, IPython, Epydoc, Preprocess, etc.
+NumPy is required and not a part of scitools++.
 
-NumPy is requires and not a part of scitools++.
-
-Method: plain copy of installed packages and scripts (lib and bin files).
+Method: plain copy of already installed packages and scripts 
+(lib and bin files).
 """
 
 MODULES = (
@@ -18,6 +17,7 @@ MODULES = (
     'Scientific',
     'epydoc',
     'preprocess',
+    'matplotlib',
     )
 
 SCRIPTS = (
@@ -25,19 +25,14 @@ SCRIPTS = (
     'epydoc',
     'epydocgui',
     'preprocess',
-    'insertdocstr',
+    'doconce_insertdocstr',
     'doconce2format',
     'diff.pl',
     'diff.py',
-    'file2interactive.py',
-    'floatdiff.py',
     'gnuplot.bat',
     '_gnuplot.py',
     'locate_pdb.py',
     'pdb',
-    'ps2mpeg.py',
-    'regression.py',
-    'subst.py',
     'timer.py',
     )
 
@@ -71,7 +66,7 @@ libdir = join(newdir, 'lib')
 bindir = join(newdir, 'bin')
 scitools_dir = join(libdir, 'scitools')
 py_package_src = join(os.environ['SYSDIR'],'src','python','tools')
-st_src = join('lib', 'scitools')  # source code for scitools package
+st_src = join(os.pardir, 'lib', 'scitools')  # source code for scitools package
 
 # start with a fresh scitools directory and move last scitools++ to
 # a "copy" directory:
@@ -125,7 +120,7 @@ def copy_installed_scripts():
     for script in scripts:
         system("cp `which %s` %s" % (script, bindir))
 
-    # fix headers:
+    # fix headers (replace user-specific install path):
     for f in scripts:
         system(r'subst.py "#!.+" "#!/usr/bin/env python" %s' % \
                   join(bindir, f))

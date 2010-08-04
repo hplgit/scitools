@@ -118,41 +118,12 @@ def wildcard_notation(files):
 def usage_subst():
     print 'Usage: scitools subst [-s -m -x --restore] pattern '\
           'replacement file1 file2 file3 ...'
+    print '--restore brings back the backup files'
+    print '-s is the re.DOTALL or re.S modifier'
+    print '-m is the re.MULTILINE or re.M modifier'
+    print '-x is the re.VERBODE or re.X modifier'
 
-def subst(pattern, replacement, files,
-          pattern_matching_modifiers=None):
-    """
-    for file in files:
-        replace pattern by replacement in file
-        (a copy of the original file is taken, with extension .old~)
-
-    files can be list of filenames, or a string (name of a single file)
-    pattern_matching_modifiers: re.DOTALL, re.MULTILINE, etc.
-    """
-    if isinstance(files, str):
-        files = [files]  # convert single filename to list
-    return_str = ''
-    for file in files:
-        if not os.path.isfile(file):
-            print '%s is not a file!' % file;  continue
-        shutil.copy2(file, file+'.old~')  # back up file
-        f = open(file, 'r');
-        filestr = f.read()
-        f.close()
-        if pattern_matching_modifiers is not None:
-            cp = re.compile(pattern, pattern_matching_modifiers)
-        else:
-            cp = re.compile(pattern)
-        if cp.search(filestr):  # any occurence of pattern?
-            filestr = cp.sub(replacement, filestr)
-            f = open(file, 'w')
-            f.write(filestr)
-            f.close()
-            if not return_str:  # initialize return_str:
-                return_str = pattern + ' replaced by ' + \
-                             replacement + ' in'
-            return_str += ' ' + file
-    return return_str
+from scitools.misc import subst
 
 def main_subst():
     if len(sys.argv) < 4:
@@ -162,17 +133,17 @@ def main_subst():
     from getopt import getopt
     optlist, args = getopt(sys.argv[2:], 'smx', 'restore')
     restore = False
-    pmm = None  # pattern matching modifiers (re.compile flags)
+    pmm = 0  # pattern matching modifiers (re.compile flags)
     for opt, value in optlist:
         if opt in ('-s',):
-            if pmm is None:  pmm = re.DOTALL
-            else:            pmm = pmm|re.DOTALL
+            if not pmm:  pmm = re.DOTALL
+            else:        pmm = pmm|re.DOTALL
         if opt in ('-m',):
-            if pmm is None:  pmm = re.MULTILINE
-            else:            pmm = pmm|re.MULTILINE
+            if not pmm:  pmm = re.MULTILINE
+            else:        pmm = pmm|re.MULTILINE
         if opt in ('-x',):
-            if pmm is None:  pmm = re.VERBOSE
-            else:            pmm = pmm|re.VERBOSE
+            if not pmm:  pmm = re.VERBOSE
+            else:        pmm = pmm|re.VERBOSE
         if opt in ('--restore',):
             restore = True
 

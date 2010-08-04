@@ -1,6 +1,12 @@
 #!/bin/sh
 
-rm -rf _build/ _static/ _templates/ conf.py index.txt
+this_dir=`pwd`
+# make easyviz doc with reST format:
+cd ../../../lib/scitools
+doconce_insertdocstr rst .
+cd $this_dir
+
+rm -rf _build/ _static/ _templates/ conf.py index.txt *.old~
 
 sphinx-quickstart <<EOF
 .
@@ -28,9 +34,12 @@ scitools subst '\#sys\.path\.append.+' "sys.path.append(os.path.join(os.path.abs
 
 scitools subst ':maxdepth: 2' ":maxdepth: 1\n\n   scitools\n   BoxField\n   BoxGrid\n   EfficiencyTable\n   FloatComparison\n   Lumpy\n   NumPyDB\n   PrmDictBase\n   Regression\n   StringFunction\n   TkGUI\n   aplotter\n   basics\n   configdata\n   convergencerate\n   debug\n   errorcheck\n   filetable\n   globaldata\n   misc\n   modulecheck\n   multipleloop\n   numpytools\n   numpyutils\n   pprint2\n   redirect_io\n   sound\n   std\n   easyviz\n   blt_\n   common\n   dx_\n   gnuplot_\n   grace_\n   matlab2_\n   matlab_\n   matplotlib_\n   misc\n   movie\n   pyx_\n   template_\n   utils\n   veusz_\n   visit_\n   vtk_\n   vtk_new_\n " index.txt
 
-#scitools subst ':maxdepth: 2' ":maxdepth: 2\n\n   scitools\n   BoxField\n   BoxGrid\n   EfficiencyTable\n   FloatComparison\n   Lumpy\n   NumPyDB\n   PrmDictBase\n   Regression\n   StringFunction\n   TkGUI\n   aplotter\n   basics\n   configdata\n   convergencerate\n   debug\n   errorcheck\n   filetable\n   globaldata\n   misc\n   modulecheck\n   multipleloop\n   numpytools\n   numpyutils\n   pprint2\n   redirect_io\n   sound\n   std\n   easyviz\n   blt_\n   common\n   dx_\n   gnuplot_\n   grace_\n   matlab2_\n   matlab_\n   matplotlib_\n   misc\n   movie\n   pyx_\n   template_\n   utils\n   veusz_\n   visit_\n   vtk_\n   vtk_new_" index.txt
-
 make html
+
+# run easyviz doc with plain again (for pydoc):
+cd ../../../lib/scitools
+doconce_insertdocstr plain .
+cd $this_dir
 
 ls _build/html
 

@@ -20,8 +20,10 @@ max_f = f(m, m, s_stop)
 counter = 0
 for s in s_values:
     y = f(x, m, s)
-    plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
+    plot(x, y, 'r',
+         axis=[x[0], x[-1], -0.1, max_f],
          xlabel='x', ylabel='f', legend='s=%4.2f' % s,
+         show=True,
          hardcopy='tmp_%04d.png' % counter)
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
