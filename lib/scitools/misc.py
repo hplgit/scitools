@@ -488,11 +488,12 @@ def subst(patterns, replacements, filenames,
     # pre-compile patterns:
     cpatterns = [re.compile(pattern, pattern_matching_modifiers) \
                  for pattern in patterns]
-    modified_files = {}
+    modified_files = dict([(p,[]) for p in patterns])  # init
+    messages = []   # for return info
+
     for filename in filenames:
         if not os.path.isfile(filename):
             raise IOError('%s is not a file!' % filename)
-        shutil.copy2(filename, filename + '.old~')  # back up file
         f = open(filename, 'r');
         filestr = f.read()
         f.close()
@@ -501,16 +502,13 @@ def subst(patterns, replacements, filenames,
             zip(patterns, cpatterns, replacements):
             if cpattern.search(filestr):
                 filestr = cpattern.sub(replacement, filestr)
+                shutil.copy2(filename, filename + '.old~') # backup
                 f = open(filename, 'w')
                 f.write(filestr)
                 f.close()
+                modified_files[pattern].append(filename)
 
-                if pattern not in modified_files:
-                    modified_files[pattern] = [filename]
-                else:
-                    modified_files[pattern].append(filename)
-        # make a readable return string:
-        messages = []
+        # make a readable return string with substitution info:
         for pattern in sorted(modified_files):
             replacement = replacements[patterns.index(pattern)]
             messages.append('%s replaced by %s in %s' % \
