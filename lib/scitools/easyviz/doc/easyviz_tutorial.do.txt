@@ -474,7 +474,7 @@ will give a wrong sequence of frames in the movie. For instance,
 Note that the names of plot files specified when making hardopies must
 be consistent with the specification of names in the call to `movie`.
 Typically, one applies a Unix wildcard notation in the call to
-`movie`, say `plotfile*.eps`, where the asterix will match any set of
+`movie`, say `plotfile*.eps`, where the asterisk will match any set of
 characters. When specifying hardcopies, we must then use a filename
 that is consistent with `plotfile*.eps`, that is, the filename must
 start with `plotfile` and end with `.eps`, but in between
