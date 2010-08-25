@@ -55,10 +55,6 @@ Functionality of this module that extends Numerical Python
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
 
- - factorial:
-           compute the factorial n! by various methods (iterative,
-           recursive, reduce, functional, scipy, etc)
-
  - seq
            seq(a,b,s, [type]) computes numbers from a up to and
            including b in steps of s and (default) type float_
@@ -915,7 +911,7 @@ def wrap2callable(f, **kwargs):
         return WrapNo2Callable(f)
     elif isinstance(f, (list,tuple)):
         return WrapDiscreteData2Callable(f)
-    elif operator.isCallable(f):
+    elif callable(f):
         return f
     else:
         raise TypeError('f of type %s is not callable' % type(f))
@@ -1109,9 +1105,14 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
 
 def factorial(n, method='reduce'):
     """
-    Compute the factorial n! using long integers.
-    Different implementations are available
-    (see source code for the methods).
+    Compute the factorial n! using long integers (and pure Python code).
+    Different implementations are available (see source code for 
+    implementation details).
+
+    Note: The math module in Python 2.6 features a factorial
+    function, making the present function redundant (except that
+    the various pure Python implementations can be of interest
+    for comparison).
 
     Here is an efficiency comparison of the methods (computing 80!):
 

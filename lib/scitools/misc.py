@@ -488,7 +488,7 @@ def subst(patterns, replacements, filenames,
     # pre-compile patterns:
     cpatterns = [re.compile(pattern, pattern_matching_modifiers) \
                  for pattern in patterns]
-    modified_files = dict([(p,[]) for p in patterns])  # init
+    modified_files = {p: [] for p in patterns}  # init
     messages = []   # for return info
 
     for filename in filenames:
@@ -1338,19 +1338,86 @@ class DoNothing(object):
         return self
     def next(self):
         raise StopIteration()
-        
+    
+
+def fix_latex_command_regex(pattern, application='match'):
+    """
+    Given a pattern for a regular expression match or substitution,
+    the function checks for problematic patterns commonly
+    encountered when working with LaTeX texts, namely commands
+    starting with a backslash. 
+
+    For a pattern to be matched or substituted, and extra backslash is
+    always needed (either a special regex construction like \w leads
+    to wrong match, or \c leads to wrong substitution since \ just
+    escapes c so only the c is replaced, leaving an undesired
+    backslash). For the replacement pattern in a substitutions, specified
+    by the application='replacement' argument, a backslash
+    before any of the characters abfgnrtv must be preceeded by an
+    additional backslash.
+
+    The application variable equals 'match' if pattern is used for
+    a match and 'replacement' if pattern defines a replacement
+    regex in a re.sub command.
+
+    Caveats: let pattern just contain LaTeX commands, not combination
+    of commands and other regular expressions (\s, \d, etc.) as the
+    latter will end up with an extra undesired backslash.
+
+    Here are examples on failures::
+
+    >>> re.sub(r'\begin\{equation\}', r'\[', r'\begin{equation}')
+    '\\begin{equation}'
+    >>> # match of mbox, not \mbox, and wrong output:
+    >>> re.sub(r'\mbox\{(.+?)\}', r'\fbox{\g<1>}', r'\mbox{not}')
+    '\\\x0cbox{not}'
+
+    Here are examples on using this function:
+
+    >>> from scitools.misc import fix_latex_command_regex as fix
+    >>> pattern = fix(r'\begin\{equation\}', application='match')
+    >>> re.sub(pattern, r'\[', r'\begin{equation}')
+    '\\['
+    >>> pattern = fix(r'\mbox\{(.+?)\}', application='match')
+    >>> replacement = fix(r'\fbox{\g<1>}', application='replacement')
+    >>> re.sub(pattern, replacement, r'\mbox{not}')
+    '\\fbox{not}'
+
+    Avoid mixing LaTeX commands and ordinary regular expression
+    commands, e.g.::
+
+    >>> pattern = fix(r'\mbox\{(\d+)\}', application='match')
+    >>> pattern
+    '\\\\mbox\\{(\\\\d+)\\}'
+    >>> re.sub(pattern, replacement, r'\mbox{987}')
+    '\\mbox{987}'  # no substitution, no match
+    """
+    import string
+    problematic_letters = string.ascii_letters if application == 'match' \
+                          else 'abfgnrtv'
+
+    for letter in problematic_letters:
+        problematic_pattern = '\\' + letter
+
+        if letter == 'g' and application == 'replacement':
+            # no extra \ for \g<...> in pattern
+            if r'\g<' in pattern:
+                continue
+
+        ok_pattern = '\\\\' + letter
+        if problematic_pattern in pattern and not ok_pattern in pattern:
+            pattern = pattern.replace(problematic_pattern, ok_pattern)
+    return pattern
+
+
+
 if __name__ == '__main__':
-    task = 'Command'
     try:
         task = sys.argv[1]
     except:
-        pass
+        task = ''
 
-    if task == 'Command':
-        c = Command(f, 2.3, 2.1, max=0, min=-1.2)
-        print 'Command.args=',c.args,'Command.kwargs=',c.kwargs
-        c()         # call f(2.3, 2.1, 0, -1.2)
-    elif task == 'debugregex':
+    if task == 'debugregex':
         r = r'<(.*?)>'
         s = '<r1>is a tag</r1> and <s1>s1</s1> is too.'
         print debugregex(r,s)
