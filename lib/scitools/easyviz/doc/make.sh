@@ -78,8 +78,12 @@ rm -rf tmp
 cp -r easyviz tmp
 cd tmp
 find . -name .svn -exec rm -rf {} \; 2> /dev/null
+# copy key files:
+echo scp easyviz_sphinx_html/tmp_easyviz.html hpl@gogmagog.simula.no:www_docs/easyviz/easyviz_sphinx_html/
+echo echo scp easyviz.html easyviz.do.txt easyviz.pdf hpl@gogmagog.simula.no:www_docs/easyviz/
 echo
 echo "cd ../../../../doc/tmp"
+echo "Full copy:"
 echo scp -r easyviz.html easyviz_sphinx_html figs easyviz.do.txt easyviz.pdf hpl@gogmagog.simula.no:www_docs/easyviz/
 echo "cd ..;  rm -rf tmp"
 
