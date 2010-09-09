@@ -57,13 +57,25 @@ cd ..
 
 cp tmp_easyviz.pdf   ../../../../doc/easyviz/easyviz.pdf
 cp tmp_easyviz.html  ../../../../doc/easyviz/easyviz.html
+cp -r figs           ../../../../doc/easyviz/  # to make HTML work
 cp tmp_easyviz.gwiki ../../../../doc/easyviz/easyviz.gwiki
 cp tmp_easyviz.txt   ../../../../doc/easyviz/easyviz.txt
-cp tmp_easyviz.do.txt  ../../../../doc/easyviz/easyviz.do.txt
+preprocess tmp_easyviz.do.txt > tmp.do.txt
+cp tmp.do.txt  ../../../../doc/easyviz/easyviz.do.txt
 #cp tmp_easyviz_sphinx.pdf ../../../../doc/easyviz/easyviz_sphinx.pdf
 cp -r sphinx-rootdir/_build/html ../../../../doc/easyviz/easyviz_sphinx_html
 
 ls ../../../../doc/easyviz/
+
+# HTML and sphinx doesn't work well at googlecode directly from the
+# svn tree, so we copy these to another location:
+cd ../../../../doc/
+cp -r easyviz tmp
+cd tmp
+find . -name .svn -exec rm -rf {} \; 2> /dev/null
+scp -r easyviz.html easyviz_sphinx_html figs easyviz.do.txt easyviz.pdf hpl@gogmagog.simula.no:www_docs/easyviz/
+echo "do a rm -rf cd ../../../../doc/tmp"
+
 
 
 
