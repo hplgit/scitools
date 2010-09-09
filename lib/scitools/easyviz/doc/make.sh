@@ -57,8 +57,13 @@ make clean
 make html
 cd ..
 
+doconce2format rst tmp_easyviz.do.txt
+scitools subst '(figs/.+?)\.eps' '\g<1>.png' tmp_easyviz.rst
+rst2html.py tmp_easyviz.rst > tmp_easyviz_rst.html
+
 cp tmp_easyviz.pdf   ../../../../doc/easyviz/easyviz.pdf
 cp tmp_easyviz.html  ../../../../doc/easyviz/easyviz.html
+cp tmp_easyviz_rst.html  ../../../../doc/easyviz/easyviz_rst.html
 cp tmp_easyviz.gwiki ../../../../doc/easyviz/easyviz.gwiki
 cp tmp_easyviz.txt   ../../../../doc/easyviz/easyviz.txt
 preprocess tmp_easyviz.do.txt > tmp.do.txt

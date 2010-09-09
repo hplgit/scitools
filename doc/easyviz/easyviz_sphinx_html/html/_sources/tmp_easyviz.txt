@@ -265,6 +265,7 @@ Figure :ref:`fig:plot1a` displays the resulting plot.
 
    A simple plot in PostScript format. 
 
+
 On some platforms, some backends may result in a plot that is shown in
 just a fraction of a second on the screen before the plot window disappears
 (using the Gnuplot backend on Windows machines or using the Matplotlib
@@ -340,6 +341,7 @@ plot looks like and how ``t^2`` is typeset in Gnuplot.
    A single curve with label, title, and axis adjusted. 
 
 
+
 Plotting Multiple Curves
 ------------------------
 
@@ -402,6 +404,7 @@ plot.
 
 
 
+
 Controlling Line Styles
 -----------------------
 
@@ -439,6 +442,7 @@ Figure :ref:`fig:plot2c`.
 
 
    Two curves in the same plot, with controlled line styles. 
+
 
 Assume now that we want to plot the blue circles at every 4 points only.
 We can grab every 4 points out of the ``t`` array by using an appropriate
@@ -484,6 +488,7 @@ the Gnuplot program one can view the effect in Figure :ref:`fig:plot2g`.
 
 
    Circles at every 4 points and extended line thickness (6) and circle size (3). 
+
 
 
 The different available line colors include 
@@ -605,6 +610,7 @@ The plot is shown in Figure :ref:`fig:plot3`.
 
    A plot with three curves.  
 
+
 *Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
@@ -693,6 +699,7 @@ formula above as a function ``f(x, m, s)``.
 
 
    Different shapes of a Gaussian function. 
+
 
 The animation is created by varying :math:`s` in a loop and for each :math:`s`
 issue a ``plot`` command. A moving curve is then visible on the screen.
@@ -1048,6 +1055,7 @@ Figure :ref:`fig:plot2i`.
 
    Illustration of a text and an arrow using Gnuplot-specific commands. 
 
+
 Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
 ``Gnuplot`` object and issue Gnuplot commands to this object
@@ -1278,6 +1286,7 @@ extensions ``xv`` and ``yv`` of ``x`` and ``y``.
 
    Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
 
+
 The ``surf`` command employs the same syntax, but results in a different
 plot (see Figure :ref:`fig:surf_ex1`):
 
@@ -1294,6 +1303,7 @@ plot (see Figure :ref:`fig:surf_ex1`):
 
 
    Result of the surf command (Gnuplot backend). 
+
 
 The ``surf`` command offers many possibilities to adjust the resulting plot:
 
@@ -1335,6 +1345,7 @@ Figure :ref:`fig:surf_ex2` displays the result.
 
 
    Result of an extended surf command (Gnuplot backend). 
+
 
 
 Contour Plots
@@ -1389,6 +1400,7 @@ Figure :ref:`fig:contour_ex1`.
 
    Result of the simplest possible contour command (Gnuplot backend). 
 
+
 The number of levels in a contour plot can be specified with an additional
 argument:
 
@@ -1407,6 +1419,7 @@ The result can be seen in Figure :ref:`fig:contour_ex2`.
 
 
    A contour plot with 15 contour levels (Gnuplot backend). 
+
 
 Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
@@ -1436,6 +1449,7 @@ being displayed in black and white.
 
    Four individually specified contour levels (Gnuplot backend). 
 
+
 The ``contourf`` command,
 
 .. code-block:: python
@@ -1455,6 +1469,7 @@ contour plots.
 
    Filled contour plot created by the contourf command (VTK backend). 
 
+
 The contour lines can be "lifted up" in 3D space, as shown in Figure
 :ref:`fig:contour3_ex1`, using the ``contour3`` command:
 
@@ -1471,6 +1486,7 @@ The contour lines can be "lifted up" in 3D space, as shown in Figure
 
 
    Example on the contour3 command for elevated contour levels (Gnuplot backend). 
+
 
 Finally, we show a simple example illustrating the ``meshc`` and ``surfc``
 commands: 
@@ -1501,12 +1517,14 @@ The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
    Wireframe mesh with contours at the bottom (Gnuplot backend). 
 
 
+
 .. _fig:surfc_ex1:
 
 .. figure:: figs/surfc_ex1.*
 
 
    Surface plot with contours (Gnuplot backend). 
+
 
 
 Pseudocolor Plots
@@ -1580,6 +1598,7 @@ isosurfaces.
 
    Isosurface plot (VTK backend). 
 
+
 Here is another example that demonstrates the ``isosurface`` command
 (again using the ``flow`` function): 
 
@@ -1649,6 +1668,7 @@ Figure :ref:`fig:slice1`.
 
    Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend). 
 
+
 .. OBS:
 .. Slicing with a Surface-object does not work for JHR so far in VTK
 
@@ -1690,6 +1710,7 @@ commands results in the plot shown in Figure :ref:`fig:contourslice1`.
 
    Contours in slice planes (VTK backend). 
 
+
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set:
 
@@ -1716,6 +1737,7 @@ in the plane :math:`z=8`. Figure :ref:`fig:contourslice3` displays the result.
 
 
    Contour slice plot of a 3D MRI data set (VTK backend). 
+
 
 
 Visualization of Vector Fields
@@ -1766,6 +1788,7 @@ turn produces the plot in Figure :ref:`fig:quiver_ex1`.
 
    Velocity vector plot (Gnuplot backend). 
 
+
 The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
 additional argument to scale the default lengths:
@@ -1815,12 +1838,14 @@ The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
 
    Combined quiver and pseudocolor plot (VTK backend). 
 
+
 .. _fig:quiver_ex3:
 
 .. figure:: figs/quiver_ex3.*
 
 
    Combined quiver and pseudocolor plot (VTK backend). 
+
 
 Visualization of 3D vector fields by arrows at grid points can be done
 with the ``quiver3`` command. At the time of this writing, only the VTK
@@ -1849,6 +1874,7 @@ and red, respectively. The resulting plot is presented in Figure
 
 
    3D quiver plot (VTK backend). 
+
 
 
 Stream Plots
@@ -1930,6 +1956,7 @@ resulting plot is presented in Figure :ref:`fig:streamline_ex1`.
 
    Stream line plot (Vtk backend). 
 
+
 The next example demonstrates the ``streamtube`` command applied to the 
 same ``wind`` data set:
 
@@ -1955,6 +1982,7 @@ tubes. The resulting plot is presented in Figure
 
    Stream tubes (Vtk backend). 
 
+
 Finally, we illustrate the ``streamribbon`` command:
 
 .. code-block:: python
@@ -1976,6 +2004,7 @@ Figure :ref:`fig:streamribbon_ex1` shows the resulting stream ribbons.
 
 
    Stream ribbons (VTK backend). 
+
 
 
 

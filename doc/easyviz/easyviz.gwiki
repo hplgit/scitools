@@ -221,24 +221,20 @@ hardcopy('tmp1.png') # produce PNG
 }}}
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG. 
-Figure ref{fig:plot1a} displays the resulting plot.
+Figure fig:plot1a displays the resulting plot.
 
 
 
 ---------------------------------------------------------------
 
-Figure: A simple plot in PostScript format. 
+Figure: A simple plot in PostScript format. (fig:plot1a)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot1a.png
 
 <wiki:comment> 
-Put the figure file figs/plot1a.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot1a.png
-http://yourproject.googlecode.com/hg/.../figs/plot1a.png
- /wiki:comment]
+Put the figure file figs/plot1a.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -294,7 +290,7 @@ Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
 programs (Gnuplot is one example). 
-See Figure ref{fig:plot1c} for what the modified
+See Figure fig:plot1c for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
 
@@ -302,18 +298,14 @@ plot looks like and how `t^2` is typeset in Gnuplot.
 
 ---------------------------------------------------------------
 
-Figure: A single curve with label, title, and axis adjusted. 
+Figure: A single curve with label, title, and axis adjusted. (fig:plot1c)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot1c.png
 
 <wiki:comment> 
-Put the figure file figs/plot1c.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot1c.png
-http://yourproject.googlecode.com/hg/.../figs/plot1c.png
- /wiki:comment]
+Put the figure file figs/plot1c.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Plotting Multiple Curves ====
@@ -359,7 +351,7 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
 }}}
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
-and so on. The visual result appears in Figure ref{fig:plot2a}.
+and so on. The visual result appears in Figure fig:plot2a.
 
 Doing a `hold('off')` makes the next `plot` command create a new
 plot.
@@ -368,18 +360,14 @@ plot.
 
 ---------------------------------------------------------------
 
-Figure: Two curves in the same plot. 
+Figure: Two curves in the same plot. (fig:plot2a)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2a.png
 
 <wiki:comment> 
-Put the figure file figs/plot2a.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot2a.png
-http://yourproject.googlecode.com/hg/.../figs/plot2a.png
- /wiki:comment]
+Put the figure file figs/plot2a.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Controlling Line Styles ====
@@ -406,24 +394,20 @@ plot(t, y2, 'bo')
 plot(t, y1, 'r-', t, y2, 'bo')
 }}}
 The effect of controlling the line styles can be seen in 
-Figure ref{fig:plot2c}.
+Figure fig:plot2c.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Two curves in the same plot, with controlled line styles. 
+Figure: Two curves in the same plot, with controlled line styles. (fig:plot2c)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2c.png
 
 <wiki:comment> 
-Put the figure file figs/plot2c.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot2c.png
-http://yourproject.googlecode.com/hg/.../figs/plot2c.png
- /wiki:comment]
+Put the figure file figs/plot2c.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -460,24 +444,20 @@ In this plot we also adjust the size of the line and the circles by
 adding an integer: `r-6` means a red line with thickness 6 and `bo5`
 means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
-the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
+the Gnuplot program one can view the effect in Figure fig:plot2g.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Circles at every 4 points and extended line thickness (6) and circle size (3). 
+Figure: Circles at every 4 points and extended line thickness (6) and circle size (3). (fig:plot2g)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2g.png
 
 <wiki:comment> 
-Put the figure file figs/plot2g.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot2g.png
-http://yourproject.googlecode.com/hg/.../figs/plot2g.png
- /wiki:comment]
+Put the figure file figs/plot2g.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -569,24 +549,20 @@ show()
 hardcopy('tmp3.eps') 
 hardcopy('tmp3.png')
 }}}
-The plot is shown in Figure ref{fig:plot3}.
+The plot is shown in Figure fig:plot3.
 
 
 
 ---------------------------------------------------------------
 
-Figure: A plot with three curves.  
+Figure: A plot with three curves.  (fig:plot3)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot3.png
 
 <wiki:comment> 
-Put the figure file figs/plot3.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot3.png
-http://yourproject.googlecode.com/hg/.../figs/plot3.png
- /wiki:comment]
+Put the figure file figs/plot3.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -650,7 +626,7 @@ individual plot files into a movie file.
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large `s` and "peak-formed" for small `s`, see Figure
-ref{fig:plot4}. The function is symmetric around `x=m` (`m=0` in the
+fig:plot4. The function is symmetric around `x=m` (`m=0` in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as `s` is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
@@ -659,18 +635,14 @@ formula above as a function `f(x, m, s)`.
 
 ---------------------------------------------------------------
 
-Figure: Different shapes of a Gaussian function. 
+Figure: Different shapes of a Gaussian function. (fig:plot4)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot4.png
 
 <wiki:comment> 
-Put the figure file figs/plot4.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot4.png
-http://yourproject.googlecode.com/hg/.../figs/plot4.png
- /wiki:comment]
+Put the figure file figs/plot4.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -964,24 +936,20 @@ that communicates with the underlying plotting program (known as
 "backend") and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
-Figure ref{fig:plot2i}.
+Figure fig:plot2i.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Illustration of a text and an arrow using Gnuplot-specific commands. 
+Figure: Illustration of a text and an arrow using Gnuplot-specific commands. (fig:plot2i)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2i.png
 
 <wiki:comment> 
-Put the figure file figs/plot2i.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/plot2i.png
-http://yourproject.googlecode.com/hg/.../figs/plot2i.png
- /wiki:comment]
+Put the figure file figs/plot2i.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1165,7 +1133,7 @@ h = mesh(xv, yv, values)
 The `mesh` command returns a reference to a new `Surface` object, here
 stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
-plot can be seen in Figure ref{fig:mesh_ex1}.
+plot can be seen in Figure fig:mesh_ex1.
 
 We remark that the computations in the previous example are vectorized.
 The corresponding scalar computations using a double loop read
@@ -1182,24 +1150,20 @@ extensions `xv` and `yv` of `x` and `y`.
 
 ---------------------------------------------------------------
 
-Figure: Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
+Figure: Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). (fig:mesh_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/mesh_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/mesh_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/mesh_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/mesh_ex1.png
- /wiki:comment]
+Put the figure file figs/mesh_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
 
 The `surf` command employs the same syntax, but results in a different
-plot (see Figure ref{fig:surf_ex1}):
+plot (see Figure fig:surf_ex1):
 {{{
 surf(xv, yv, values)
 }}}
@@ -1208,18 +1172,14 @@ surf(xv, yv, values)
 
 ---------------------------------------------------------------
 
-Figure: Result of the surf command (Gnuplot backend). 
+Figure: Result of the surf command (Gnuplot backend). (fig:surf_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/surf_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/surf_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/surf_ex1.png
- /wiki:comment]
+Put the figure file figs/surf_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1249,24 +1209,20 @@ surf(xv, yv, values,
      axis=[-6,6,-6,6,-1.5,1.5],
      view=[35,45])
 }}}
-Figure ref{fig:surf_ex2} displays the result.
+Figure fig:surf_ex2 displays the result.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Result of an extended surf command (Gnuplot backend). 
+Figure: Result of an extended surf command (Gnuplot backend). (fig:surf_ex2)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex2.png
 
 <wiki:comment> 
-Put the figure file figs/surf_ex2.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/surf_ex2.png
-http://yourproject.googlecode.com/hg/.../figs/surf_ex2.png
- /wiki:comment]
+Put the figure file figs/surf_ex2.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Contour Plots ====
@@ -1300,24 +1256,20 @@ The basic syntax follows that of `mesh` and `surf`:
 contour(xv, yv, values)
 }}}
 By default, five uniformly spaced contour level curves are drawn, see
-Figure ref{fig:contour_ex1}. 
+Figure fig:contour_ex1. 
 
 
 
 ---------------------------------------------------------------
 
-Figure: Result of the simplest possible contour command (Gnuplot backend). 
+Figure: Result of the simplest possible contour command (Gnuplot backend). (fig:contour_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/contour_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contour_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/contour_ex1.png
- /wiki:comment]
+Put the figure file figs/contour_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1328,24 +1280,20 @@ argument:
 n = 15   # number of desired contour levels
 contour(xv, yv, values, n)
 }}}
-The result can be seen in Figure ref{fig:contour_ex2}. 
+The result can be seen in Figure fig:contour_ex2. 
 
 
 
 ---------------------------------------------------------------
 
-Figure: A contour plot with 15 contour levels (Gnuplot backend). 
+Figure: A contour plot with 15 contour levels (Gnuplot backend). (fig:contour_ex2)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex2.png
 
 <wiki:comment> 
-Put the figure file figs/contour_ex2.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contour_ex2.png
-http://yourproject.googlecode.com/hg/.../figs/contour_ex2.png
- /wiki:comment]
+Put the figure file figs/contour_ex2.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1359,7 +1307,7 @@ contour(xv, yv, values, levels, clabels='on')
 }}}
 Now, the `levels` list specify the values of the contour levels, and
 the `clabel` keyword allows labeling of the level values in the plot.
-Figure ref{fig:contour_ex3} shows the result. We remark that the
+Figure fig:contour_ex3 shows the result. We remark that the
 Gnuplot backend colors the contour lines and places the contour values
 and corresponding colors beside the plot. Figures that are reproduced
 in black and white only can then be hard to analyze. Other backends
@@ -1371,18 +1319,14 @@ being displayed in black and white.
 
 ---------------------------------------------------------------
 
-Figure: Four individually specified contour levels (Gnuplot backend). 
+Figure: Four individually specified contour levels (Gnuplot backend). (fig:contour_ex3)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex3.png
 
 <wiki:comment> 
-Put the figure file figs/contour_ex3.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contour_ex3.png
-http://yourproject.googlecode.com/hg/.../figs/contour_ex3.png
- /wiki:comment]
+Put the figure file figs/contour_ex3.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1391,7 +1335,7 @@ The `contourf` command,
 {{{
 contourf(xv, yv, values)
 }}}
-gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
+gives a filled contour plot as shown in Figure fig:contourf_ex1.
 Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
 
@@ -1399,24 +1343,20 @@ contour plots.
 
 ---------------------------------------------------------------
 
-Figure: Filled contour plot created by the contourf command (VTK backend). 
+Figure: Filled contour plot created by the contourf command (VTK backend). (fig:contourf_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourf_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/contourf_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contourf_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/contourf_ex1.png
- /wiki:comment]
+Put the figure file figs/contourf_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
-ref{fig:contour3_ex1}, using the `contour3` command:
+fig:contour3_ex1, using the `contour3` command:
 {{{
 contour3(xv, yv, values, 15)
 }}}
@@ -1425,18 +1365,14 @@ contour3(xv, yv, values, 15)
 
 ---------------------------------------------------------------
 
-Figure: Example on the contour3 command for elevated contour levels (Gnuplot backend). 
+Figure: Example on the contour3 command for elevated contour levels (Gnuplot backend). (fig:contour3_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour3_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/contour3_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contour3_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/contour3_ex1.png
- /wiki:comment]
+Put the figure file figs/contour3_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1455,25 +1391,21 @@ surfc(xv, yv, values,
       grid='off',
       view=(30,40))
 }}}
-The resulting plots are displayed in Figures ref{fig:meshc_ex1} and
-ref{fig:surfc_ex1}.
+The resulting plots are displayed in Figures fig:meshc_ex1 and
+fig:surfc_ex1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Wireframe mesh with contours at the bottom (Gnuplot backend). 
+Figure: Wireframe mesh with contours at the bottom (Gnuplot backend). (fig:meshc_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/meshc_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/meshc_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/meshc_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/meshc_ex1.png
- /wiki:comment]
+Put the figure file figs/meshc_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1482,18 +1414,14 @@ http://yourproject.googlecode.com/hg/.../figs/meshc_ex1.png
 
 ---------------------------------------------------------------
 
-Figure: Surface plot with contours (Gnuplot backend). 
+Figure: Surface plot with contours (Gnuplot backend). (fig:surfc_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surfc_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/surfc_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/surfc_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/surfc_ex1.png
- /wiki:comment]
+Put the figure file figs/surfc_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Pseudocolor Plots ====
@@ -1521,13 +1449,9 @@ Figure: Pseudocolor plot (Gnuplot backend).
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/pcolor_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/pcolor_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/pcolor_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/pcolor_ex1.png
- /wiki:comment]
+Put the figure file figs/pcolor_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Isosurface Plots ====
@@ -1557,7 +1481,7 @@ create an isosurface with the isovalue `-3`. The isosurface is then
 set a bit transparent (`opacity=0.5`) before we specify the shading
 model and the view point. We also set the data aspect ratio to be
 equal in all directions with the `daspect` command.  The resulting
-plot is shown in Figure ref{fig:isosurface1}. We remark that the
+plot is shown in Figure fig:isosurface1. We remark that the
 Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
@@ -1565,18 +1489,14 @@ isosurfaces.
 
 ---------------------------------------------------------------
 
-Figure: Isosurface plot (VTK backend). 
+Figure: Isosurface plot (VTK backend). (fig:isosurface1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface1.png
 
 <wiki:comment> 
-Put the figure file figs/isosurface1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/isosurface1.png
-http://yourproject.googlecode.com/hg/.../figs/isosurface1.png
- /wiki:comment]
+Put the figure file figs/isosurface1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1593,24 +1513,20 @@ view([-65,20])
 axis('tight')
 show()
 }}}
-Figure ref{fig:isosurface2} shows the resulting plot.
+Figure fig:isosurface2 shows the resulting plot.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Another isosurface plot (VTK backend). labelref{fig:isosurface2}
+Figure: Another isosurface plot (VTK backend). labelfig:isosurface2
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface2.png
 
 <wiki:comment> 
-Put the figure file figs/isosurface2.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/isosurface2.png
-http://yourproject.googlecode.com/hg/.../figs/isosurface2.png
- /wiki:comment]
+Put the figure file figs/isosurface2.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Volumetric Slice Plot ====
@@ -1643,24 +1559,20 @@ three space directions or a surface plane (currently not working). In
 this example we have created 6 slice planes: Three at the `x` axis (at
 `x=-1.2`, `x=0.8`, and `x=2`), one at the `y` axis (at `y=2`), and two
 at the `z` axis (at `z=-2` and `z=0.0`). The result is presented in
-Figure ref{fig:slice1}.
+Figure fig:slice1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Slice plot where the `x` axis is sliced at -1.2, 0.8, and 2, the `y` axis is sliced at 2, and the `z` axis is sliced at -2 and 0.0 (VTK backend). 
+Figure: Slice plot where the `x` axis is sliced at -1.2, 0.8, and 2, the `y` axis is sliced at 2, and the `z` axis is sliced at -2 and 0.0 (VTK backend). (fig:slice1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/slice1.png
 
 <wiki:comment> 
-Put the figure file figs/slice1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/slice1.png
-http://yourproject.googlecode.com/hg/.../figs/slice1.png
- /wiki:comment]
+Put the figure file figs/slice1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1693,24 +1605,20 @@ list) , and one contour plot in the plane `z=0`. The last argument to
 `contourslice` is optional, it can be either an integer specifying the
 number of contour lines (the default is five) or, as in the current
 example, a list specifying the level curves. Running the set of
-commands results in the plot shown in Figure ref{fig:contourslice1}.
+commands results in the plot shown in Figure fig:contourslice1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Contours in slice planes (VTK backend). 
+Figure: Contours in slice planes (VTK backend). (fig:contourslice1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice1.png
 
 <wiki:comment> 
-Put the figure file figs/contourslice1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contourslice1.png
-http://yourproject.googlecode.com/hg/.../figs/contourslice1.png
- /wiki:comment]
+Put the figure file figs/contourslice1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1729,24 +1637,20 @@ contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
 The MRI data set is loaded from the file `mri_matlab_v6.mat` with the
 aid from the `loadmat` function available in the `io` module in the
 SciPy package. We then create a 2D contour slice plot with one slice
-in the plane `z=8`. Figure ref{fig:contourslice3} displays the result.
+in the plane `z=8`. Figure fig:contourslice3 displays the result.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Contour slice plot of a 3D MRI data set (VTK backend). 
+Figure: Contour slice plot of a 3D MRI data set (VTK backend). (fig:contourslice3)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice3.png
 
 <wiki:comment> 
-Put the figure file figs/contourslice3.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/contourslice3.png
-http://yourproject.googlecode.com/hg/.../figs/contourslice3.png
- /wiki:comment]
+Put the figure file figs/contourslice3.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1784,24 +1688,20 @@ The `gradient` function computes the gradient using finite difference
 approximations.  The result is a vector field with components `uv` and
 `vv` in the `x` and `y` directions, respectively.  The grid points and
 the vector components are passed as arguments to `quiver`, which in
-turn produces the plot in Figure ref{fig:quiver_ex1}.
+turn produces the plot in Figure fig:quiver_ex1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Velocity vector plot (Gnuplot backend). 
+Figure: Velocity vector plot (Gnuplot backend). (fig:quiver_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/quiver_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/quiver_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/quiver_ex1.png
- /wiki:comment]
+Put the figure file figs/quiver_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1838,25 +1738,21 @@ contour(xv, yv, values, 15)
 hold('on')
 quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
 }}}
-The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
-ref{fig:quiver_ex3}. 
+The resulting plots can be seen in Figure fig:quiver_ex2 and
+fig:quiver_ex3. 
 
 
 
 ---------------------------------------------------------------
 
-Figure: Combined quiver and pseudocolor plot (VTK backend). 
+Figure: Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex2)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex2.png
 
 <wiki:comment> 
-Put the figure file figs/quiver_ex2.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/quiver_ex2.png
-http://yourproject.googlecode.com/hg/.../figs/quiver_ex2.png
- /wiki:comment]
+Put the figure file figs/quiver_ex2.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1864,18 +1760,14 @@ http://yourproject.googlecode.com/hg/.../figs/quiver_ex2.png
 
 ---------------------------------------------------------------
 
-Figure: Combined quiver and pseudocolor plot (VTK backend). 
+Figure: Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex3)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex3.png
 
 <wiki:comment> 
-Put the figure file figs/quiver_ex3.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/quiver_ex3.png
-http://yourproject.googlecode.com/hg/.../figs/quiver_ex3.png
- /wiki:comment]
+Put the figure file figs/quiver_ex3.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -1895,24 +1787,20 @@ quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
 The strings `'filled'` and `'r'` are optional and makes the arrows
 become filled 
 and red, respectively. The resulting plot is presented in Figure 
-ref{fig:quiver3_ex1}. 
+fig:quiver3_ex1. 
 
 
 
 ---------------------------------------------------------------
 
-Figure: 3D quiver plot (VTK backend). 
+Figure: 3D quiver plot (VTK backend). (fig:quiver3_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver3_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/quiver3_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/quiver3_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/quiver3_ex1.png
- /wiki:comment]
+Put the figure file figs/quiver3_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Stream Plots ====
@@ -1977,24 +1865,20 @@ for calling the `streamline` command. The first six arguments to the
 `streamline` command are the grid coordinates `(x,y,z)` and the 3D
 vector data `(u,v,w)`, while the next three arguments are the starting
 points which we defined with the `ndgrid` command above. The
-resulting plot is presented in Figure ref{fig:streamline_ex1}.
+resulting plot is presented in Figure fig:streamline_ex1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Stream line plot (Vtk backend). 
+Figure: Stream line plot (Vtk backend). (fig:streamline_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamline_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/streamline_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/streamline_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/streamline_ex1.png
- /wiki:comment]
+Put the figure file figs/streamline_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -2011,24 +1895,20 @@ streamtube(x, y, z, u, v, w, sx, sy, sz,
 The arrays `sx`, `sy`, and `sz` are the same as in the previous
 example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
-ref{fig:streamtube_ex1}.
+fig:streamtube_ex1.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Stream tubes (Vtk backend). 
+Figure: Stream tubes (Vtk backend). (fig:streamtube_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamtube_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/streamtube_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/streamtube_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/streamtube_ex1.png
- /wiki:comment]
+Put the figure file figs/streamtube_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
@@ -2042,24 +1922,20 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
              axis='tight',
              shading='interp')
 }}}
-Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
+Figure fig:streamribbon_ex1 shows the resulting stream ribbons.
 
 
 
 ---------------------------------------------------------------
 
-Figure: Stream ribbons (VTK backend). 
+Figure: Stream ribbons (VTK backend). (fig:streamribbon_ex1)
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamribbon_ex1.png
 
 <wiki:comment> 
-Put the figure file figs/streamribbon_ex1.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/streamribbon_ex1.png
-http://yourproject.googlecode.com/hg/.../figs/streamribbon_ex1.png
- /wiki:comment]
+Put the figure file figs/streamribbon_ex1.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 ==== Bar Charts ====
@@ -2090,13 +1966,9 @@ Figure: A simple bar chart illustrating the popularity of common programming lan
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/pyranking.png
 
 <wiki:comment> 
-Put the figure file figs/pyranking.png on the web and write the
-URL above or below the Figure: ... line. Then remove these comments.
-
-Typical URLs for figures stored along with the code at googlecode.com:
-[http://yourproject.googlecode.com/svn/.../figs/pyranking.png
-http://yourproject.googlecode.com/hg/.../figs/pyranking.png
- /wiki:comment]
+Put the figure file figs/pyranking.png on the web (e.g., as part of the
+googlecode repository) and substitute the line above with the URL.
+</wiki:comment>
 ---------------------------------------------------------------
 
 
