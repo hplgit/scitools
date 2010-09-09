@@ -41,9 +41,9 @@ The present documentation is available in a number of formats:
 
   * `PDF <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf>`_
 
-  * `Plain HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html>`_
+  * `Plain HTML <http://www.simula.no/~hpl/easyviz/easyviz.html>`_
 
-  * `Sphinx HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html>`_
+  * `Sphinx HTML <http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html>`_
 
   * `Plain text <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt>`_
 
@@ -54,6 +54,16 @@ The present documentation is available in a number of formats:
 The documentation is written in the `Doconce <http://code.google.com/p/doconce>`_
 format and can be translated into a number of different formats (reST,
 Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
+
+
+.. URLs to files with HTML code does not work well with googlecode and svn:
+
+.. * `PDF <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf>`_
+.. * `Plain HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html>`_
+.. * `Sphinx HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html>`_
+.. * `Plain text <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt>`_
+.. * `Wiki <http://code.google.com/p/scitools/wiki/EasyvizDocumentation>`_
+.. * `Doconce source <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt>`_
 
 
 Guiding Principles
@@ -245,13 +255,15 @@ command produces files with images in various formats:
 
 The filename extension determines the format: ``.ps`` or
 ``.eps`` for PostScript, and ``.png`` for PNG. 
-Figure ref{fig:plot1a} displays the resulting plot.
+Figure :ref:`fig:plot1a` displays the resulting plot.
 
+
+.. _fig:plot1a:
 
 .. figure:: figs/plot1a.*
 
 
-   A simple plot in PostScript format.
+   A simple plot in PostScript format. 
 
 On some platforms, some backends may result in a plot that is shown in
 just a fraction of a second on the screen before the plot window disappears
@@ -315,15 +327,17 @@ Note that we in the curve legend write ``t`` square as ``t^2`` (LaTeX style)
 rather than ``t**2`` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
 programs (Gnuplot is one example). 
-See Figure ref{fig:plot1c} for what the modified
+See Figure :ref:`fig:plot1c` for what the modified
 plot looks like and how ``t^2`` is typeset in Gnuplot.
 
 
 
+.. _fig:plot1c:
+
 .. figure:: figs/plot1c.*
 
 
-   A single curve with label, title, and axis adjusted.
+   A single curve with label, title, and axis adjusted. 
 
 
 Plotting Multiple Curves
@@ -373,16 +387,18 @@ different approaches:
 
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
-and so on. The visual result appears in Figure ref{fig:plot2a}.
+and so on. The visual result appears in Figure :ref:`fig:plot2a`.
 
 Doing a ``hold('off')`` makes the next ``plot`` command create a new
 plot.
 
 
+.. _fig:plot2a:
+
 .. figure:: figs/plot2a.*
 
 
-   Two curves in the same plot.
+   Two curves in the same plot. 
 
 
 
@@ -414,13 +430,15 @@ argument after the :math:`x` and :math:`y` coordinate arrays of the curve:
 
 
 The effect of controlling the line styles can be seen in 
-Figure ref{fig:plot2c}.
+Figure :ref:`fig:plot2c`.
 
+
+.. _fig:plot2c:
 
 .. figure:: figs/plot2c.*
 
 
-   Two curves in the same plot, with controlled line styles.
+   Two curves in the same plot, with controlled line styles. 
 
 Assume now that we want to plot the blue circles at every 4 points only.
 We can grab every 4 points out of the ``t`` array by using an appropriate
@@ -457,13 +475,15 @@ In this plot we also adjust the size of the line and the circles by
 adding an integer: ``r-6`` means a red line with thickness 6 and ``bo5``
 means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
-the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
+the Gnuplot program one can view the effect in Figure :ref:`fig:plot2g`.
 
+
+.. _fig:plot2g:
 
 .. figure:: figs/plot2g.*
 
 
-   Circles at every 4 points and extended line thickness (6) and circle size (3).
+   Circles at every 4 points and extended line thickness (6) and circle size (3). 
 
 
 The different available line colors include 
@@ -575,13 +595,15 @@ the :math:`f_2(t)` curve:
         hardcopy('tmp3.png')
 
 
-The plot is shown in Figure ref{fig:plot3}.
+The plot is shown in Figure :ref:`fig:plot3`.
 
+
+.. _fig:plot3:
 
 .. figure:: figs/plot3.*
 
 
-   A plot with three curves.
+   A plot with three curves.  
 
 *Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
@@ -659,16 +681,18 @@ individual plot files into a movie file.
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large :math:`s` and "peak-formed" for small :math:`s`, see Figure
-ref{fig:plot4}. The function is symmetric around :math:`x=m` (:math:`m=0` in the
+:ref:`fig:plot4`. The function is symmetric around :math:`x=m` (:math:`m=0` in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as :math:`s` is decreased. In Python we implement the
 formula above as a function ``f(x, m, s)``.
 
 
+.. _fig:plot4:
+
 .. figure:: figs/plot4.*
 
 
-   Different shapes of a Gaussian function.
+   Different shapes of a Gaussian function. 
 
 The animation is created by varying :math:`s` in a loop and for each :math:`s`
 issue a ``plot`` command. A moving curve is then visible on the screen.
@@ -1014,13 +1038,15 @@ that communicates with the underlying plotting program (known as
 "backend") and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
-Figure ref{fig:plot2i}.
+Figure :ref:`fig:plot2i`.
 
+
+.. _fig:plot2i:
 
 .. figure:: figs/plot2i.*
 
 
-   Illustration of a text and an arrow using Gnuplot-specific commands.
+   Illustration of a text and an arrow using Gnuplot-specific commands. 
 
 Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
@@ -1228,7 +1254,7 @@ the ``plot`` command for curves:
 The ``mesh`` command returns a reference to a new ``Surface`` object, here
 stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
-plot can be seen in Figure ref{fig:mesh_ex1}.
+plot can be seen in Figure :ref:`fig:mesh_ex1`.
 
 We remark that the computations in the previous example are vectorized.
 The corresponding scalar computations using a double loop read
@@ -1245,14 +1271,15 @@ However, for the ``mesh`` command to work, we need the vectorized
 extensions ``xv`` and ``yv`` of ``x`` and ``y``.
 
 
+.. _fig:mesh_ex1:
+
 .. figure:: figs/mesh_ex1.*
 
 
-   Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
-
+   Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
 
 The ``surf`` command employs the same syntax, but results in a different
-plot (see Figure ref{fig:surf_ex1}):
+plot (see Figure :ref:`fig:surf_ex1`):
 
 .. code-block:: python
 
@@ -1261,11 +1288,12 @@ plot (see Figure ref{fig:surf_ex1}):
 
 
 
+.. _fig:surf_ex1:
+
 .. figure:: figs/surf_ex1.*
 
 
-   Result of the surf command (Gnuplot backend).
-
+   Result of the surf command (Gnuplot backend). 
 
 The ``surf`` command offers many possibilities to adjust the resulting plot:
 
@@ -1298,14 +1326,15 @@ statement (just as Easyviz offers for the ``plot`` command):
              view=[35,45])
 
 
-Figure ref{fig:surf_ex2} displays the result.
+Figure :ref:`fig:surf_ex2` displays the result.
 
+
+.. _fig:surf_ex2:
 
 .. figure:: figs/surf_ex2.*
 
 
-   Result of an extended surf command (Gnuplot backend).
-
+   Result of an extended surf command (Gnuplot backend). 
 
 
 Contour Plots
@@ -1350,14 +1379,15 @@ The basic syntax follows that of ``mesh`` and ``surf``:
 
 
 By default, five uniformly spaced contour level curves are drawn, see
-Figure ref{fig:contour_ex1}. 
+Figure :ref:`fig:contour_ex1`. 
 
+
+.. _fig:contour_ex1:
 
 .. figure:: figs/contour_ex1.*
 
 
-   Result of the simplest possible contour command (Gnuplot backend).
-
+   Result of the simplest possible contour command (Gnuplot backend). 
 
 The number of levels in a contour plot can be specified with an additional
 argument:
@@ -1368,14 +1398,15 @@ argument:
         contour(xv, yv, values, n)
 
 
-The result can be seen in Figure ref{fig:contour_ex2}. 
+The result can be seen in Figure :ref:`fig:contour_ex2`. 
 
+
+.. _fig:contour_ex2:
 
 .. figure:: figs/contour_ex2.*
 
 
-   A contour plot with 15 contour levels (Gnuplot backend).
-
+   A contour plot with 15 contour levels (Gnuplot backend). 
 
 Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
@@ -1389,7 +1420,7 @@ contour levels to be drawn can easily be specified as a list:
 
 Now, the ``levels`` list specify the values of the contour levels, and
 the ``clabel`` keyword allows labeling of the level values in the plot.
-Figure ref{fig:contour_ex3} shows the result. We remark that the
+Figure :ref:`fig:contour_ex3` shows the result. We remark that the
 Gnuplot backend colors the contour lines and places the contour values
 and corresponding colors beside the plot. Figures that are reproduced
 in black and white only can then be hard to analyze. Other backends
@@ -1398,11 +1429,12 @@ corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.
 
 
+.. _fig:contour_ex3:
+
 .. figure:: figs/contour_ex3.*
 
 
-   Four individually specified contour levels (Gnuplot backend).
-
+   Four individually specified contour levels (Gnuplot backend). 
 
 The ``contourf`` command,
 
@@ -1411,19 +1443,20 @@ The ``contourf`` command,
         contourf(xv, yv, values)
 
 
-gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
+gives a filled contour plot as shown in Figure :ref:`fig:contourf_ex1`.
 Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
 
 
+.. _fig:contourf_ex1:
+
 .. figure:: figs/contourf_ex1.*
 
 
-   Filled contour plot created by the contourf command (VTK backend).
-
+   Filled contour plot created by the contourf command (VTK backend). 
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
-ref{fig:contour3_ex1}, using the ``contour3`` command:
+:ref:`fig:contour3_ex1`, using the ``contour3`` command:
 
 .. code-block:: python
 
@@ -1432,11 +1465,12 @@ ref{fig:contour3_ex1}, using the ``contour3`` command:
 
 
 
+.. _fig:contour3_ex1:
+
 .. figure:: figs/contour3_ex1.*
 
 
-   Example on the contour3 command for elevated contour levels (Gnuplot backend).
-
+   Example on the contour3 command for elevated contour levels (Gnuplot backend). 
 
 Finally, we show a simple example illustrating the ``meshc`` and ``surfc``
 commands: 
@@ -1455,22 +1489,24 @@ commands:
               view=(30,40))
 
 
-The resulting plots are displayed in Figures ref{fig:meshc_ex1} and
-ref{fig:surfc_ex1}.
+The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
+:ref:`fig:surfc_ex1`.
 
+
+.. _fig:meshc_ex1:
 
 .. figure:: figs/meshc_ex1.*
 
 
-   Wireframe mesh with contours at the bottom (Gnuplot backend).
+   Wireframe mesh with contours at the bottom (Gnuplot backend). 
 
 
+.. _fig:surfc_ex1:
 
 .. figure:: figs/surfc_ex1.*
 
 
-   Surface plot with contours (Gnuplot backend).
-
+   Surface plot with contours (Gnuplot backend). 
 
 
 Pseudocolor Plots
@@ -1532,16 +1568,17 @@ create an isosurface with the isovalue :math:`-3`. The isosurface is then
 set a bit transparent (``opacity=0.5``) before we specify the shading
 model and the view point. We also set the data aspect ratio to be
 equal in all directions with the ``daspect`` command.  The resulting
-plot is shown in Figure ref{fig:isosurface1}. We remark that the
+plot is shown in Figure :ref:`fig:isosurface1`. We remark that the
 Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
 
+.. _fig:isosurface1:
+
 .. figure:: figs/isosurface1.*
 
 
-   Isosurface plot (VTK backend).
-
+   Isosurface plot (VTK backend). 
 
 Here is another example that demonstrates the ``isosurface`` command
 (again using the ``flow`` function): 
@@ -1558,13 +1595,13 @@ Here is another example that demonstrates the ``isosurface`` command
         show()
 
 
-Figure ref{fig:isosurface2} shows the resulting plot.
+Figure :ref:`fig:isosurface2` shows the resulting plot.
 
 
 .. figure:: figs/isosurface2.*
 
 
-   Another isosurface plot (VTK backend).
+   Another isosurface plot (VTK backend). label:ref:`fig:isosurface2`
 
 
 
@@ -1602,18 +1639,18 @@ three space directions or a surface plane (currently not working). In
 this example we have created 6 slice planes: Three at the :math:`x` axis (at
 :math:`x=-1.2`, :math:`x=0.8`, and :math:`x=2`), one at the :math:`y` axis (at :math:`y=2`), and two
 at the :math:`z` axis (at :math:`z=-2` and :math:`z=0.0`). The result is presented in
-Figure ref{fig:slice1}.
+Figure :ref:`fig:slice1`.
 
+
+.. _fig:slice1:
 
 .. figure:: figs/slice1.*
 
 
-   Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend).
-
+   Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend). 
 
 .. OBS:
-.. Slicing med et Surface-object har jeg forel\o pig ikke f\aa tt til
-.. {\aa} virke i VTK.
+.. Slicing with a Surface-object does not work for JHR so far in VTK
 
 *Contours in Slice Planes.* With the ``contourslice`` command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example 
@@ -1643,14 +1680,15 @@ list) , and one contour plot in the plane :math:`z=0`. The last argument to
 ``contourslice`` is optional, it can be either an integer specifying the
 number of contour lines (the default is five) or, as in the current
 example, a list specifying the level curves. Running the set of
-commands results in the plot shown in Figure ref{fig:contourslice1}.
+commands results in the plot shown in Figure :ref:`fig:contourslice1`.
 
+
+.. _fig:contourslice1:
 
 .. figure:: figs/contourslice1.*
 
 
-   Contours in slice planes (VTK backend).
-
+   Contours in slice planes (VTK backend). 
 
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set:
@@ -1669,14 +1707,15 @@ three-dimensional MRI data set:
 The MRI data set is loaded from the file ``mri_matlab_v6.mat`` with the
 aid from the ``loadmat`` function available in the ``io`` module in the
 SciPy package. We then create a 2D contour slice plot with one slice
-in the plane :math:`z=8`. Figure ref{fig:contourslice3} displays the result.
+in the plane :math:`z=8`. Figure :ref:`fig:contourslice3` displays the result.
 
+
+.. _fig:contourslice3:
 
 .. figure:: figs/contourslice3.*
 
 
-   Contour slice plot of a 3D MRI data set (VTK backend).
-
+   Contour slice plot of a 3D MRI data set (VTK backend). 
 
 
 Visualization of Vector Fields
@@ -1717,14 +1756,15 @@ The ``gradient`` function computes the gradient using finite difference
 approximations.  The result is a vector field with components ``uv`` and
 ``vv`` in the :math:`x` and :math:`y` directions, respectively.  The grid points and
 the vector components are passed as arguments to ``quiver``, which in
-turn produces the plot in Figure ref{fig:quiver_ex1}.
+turn produces the plot in Figure :ref:`fig:quiver_ex1`.
 
+
+.. _fig:quiver_ex1:
 
 .. figure:: figs/quiver_ex1.*
 
 
-   Velocity vector plot (Gnuplot backend).
-
+   Velocity vector plot (Gnuplot backend). 
 
 The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
@@ -1764,21 +1804,23 @@ associated gradient field:
         quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
 
 
-The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
-ref{fig:quiver_ex3}. 
+The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
+:ref:`fig:quiver_ex3`. 
 
+
+.. _fig:quiver_ex2:
 
 .. figure:: figs/quiver_ex2.*
 
 
-   Combined quiver and pseudocolor plot (VTK backend).
+   Combined quiver and pseudocolor plot (VTK backend). 
 
+.. _fig:quiver_ex3:
 
 .. figure:: figs/quiver_ex3.*
 
 
-   Combined quiver and pseudocolor plot (VTK backend).
-
+   Combined quiver and pseudocolor plot (VTK backend). 
 
 Visualization of 3D vector fields by arrows at grid points can be done
 with the ``quiver3`` command. At the time of this writing, only the VTK
@@ -1798,14 +1840,15 @@ backend supports 3D quiver plots. A simple example of plotting the
 The strings ``'filled'`` and ``'r'`` are optional and makes the arrows
 become filled 
 and red, respectively. The resulting plot is presented in Figure 
-ref{fig:quiver3_ex1}. 
+:ref:`fig:quiver3_ex1`. 
 
+
+.. _fig:quiver3_ex1:
 
 .. figure:: figs/quiver3_ex1.*
 
 
-   3D quiver plot (VTK backend).
-
+   3D quiver plot (VTK backend). 
 
 
 Stream Plots
@@ -1877,14 +1920,15 @@ for calling the ``streamline`` command. The first six arguments to the
 ``streamline`` command are the grid coordinates ``(x,y,z)`` and the 3D
 vector data ``(u,v,w)``, while the next three arguments are the starting
 points which we defined with the ``ndgrid`` command above. The
-resulting plot is presented in Figure ref{fig:streamline_ex1}.
+resulting plot is presented in Figure :ref:`fig:streamline_ex1`.
 
+
+.. _fig:streamline_ex1:
 
 .. figure:: figs/streamline_ex1.*
 
 
-   Stream line plot (Vtk backend).
-
+   Stream line plot (Vtk backend). 
 
 The next example demonstrates the ``streamtube`` command applied to the 
 same ``wind`` data set:
@@ -1901,14 +1945,15 @@ same ``wind`` data set:
 The arrays ``sx``, ``sy``, and ``sz`` are the same as in the previous
 example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
-ref{fig:streamtube_ex1}.
+:ref:`fig:streamtube_ex1`.
 
+
+.. _fig:streamtube_ex1:
 
 .. figure:: figs/streamtube_ex1.*
 
 
-   Stream tubes (Vtk backend).
-
+   Stream tubes (Vtk backend). 
 
 Finally, we illustrate the ``streamribbon`` command:
 
@@ -1922,14 +1967,15 @@ Finally, we illustrate the ``streamribbon`` command:
                      shading='interp')
 
 
-Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
+Figure :ref:`fig:streamribbon_ex1` shows the resulting stream ribbons.
 
+
+.. _fig:streamribbon_ex1:
 
 .. figure:: figs/streamribbon_ex1.*
 
 
-   Stream ribbons (VTK backend).
-
+   Stream ribbons (VTK backend). 
 
 
 

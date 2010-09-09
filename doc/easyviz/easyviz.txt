@@ -37,9 +37,9 @@ The present documentation is available in a number of formats:
 
   * PDF (https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf)
 
-  * Plain HTML (https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html)
+  * Plain HTML (http://www.simula.no/~hpl/easyviz/easyviz.html)
 
-  * Sphinx HTML (https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html)
+  * Sphinx HTML (http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html)
 
   * Plain text (https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt)
 
@@ -50,6 +50,9 @@ The present documentation is available in a number of formats:
 The documentation is written in the Doconce (http://code.google.com/p/doconce)
 format and can be translated into a number of different formats (reST,
 Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
+
+
+
 
 
 Guiding Principles
@@ -1106,8 +1109,7 @@ The corresponding scalar computations using a double loop read::
 However, for the mesh command to work, we need the vectorized
 extensions xv and yv of x and y.
 
-FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
-
+FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
 The surf command employs the same syntax, but results in a different
 plot (see Figure ref{fig:surf_ex1})::
 
@@ -1115,8 +1117,7 @@ plot (see Figure ref{fig:surf_ex1})::
 
 
 
-FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend).
-
+FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend). 
 The surf command offers many possibilities to adjust the resulting plot::
 
         setp(interactive=False)
@@ -1146,8 +1147,7 @@ statement (just as Easyviz offers for the plot command)::
 
 Figure ref{fig:surf_ex2} displays the result.
 
-FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend).
-
+FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend). 
 
 Contour Plots
 -------------
@@ -1191,8 +1191,7 @@ The basic syntax follows that of mesh and surf::
 By default, five uniformly spaced contour level curves are drawn, see
 Figure ref{fig:contour_ex1}. 
 
-FIGURE:[figs/contour_ex1.eps] Result of the simplest possible contour command (Gnuplot backend).
-
+FIGURE:[figs/contour_ex1.eps] Result of the simplest possible contour command (Gnuplot backend). 
 The number of levels in a contour plot can be specified with an additional
 argument::
 
@@ -1202,8 +1201,7 @@ argument::
 
 The result can be seen in Figure ref{fig:contour_ex2}. 
 
-FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend).
-
+FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend). 
 Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
 contour levels to be drawn can easily be specified as a list::
@@ -1222,8 +1220,7 @@ may draw the contour lines in black and annotate each line with the
 corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.
 
-FIGURE:[figs/contour_ex3.eps] Four individually specified contour levels (Gnuplot backend).
-
+FIGURE:[figs/contour_ex3.eps] Four individually specified contour levels (Gnuplot backend). 
 The contourf command::
 
         contourf(xv, yv, values)
@@ -1233,8 +1230,7 @@ gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
 Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
 
-FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (VTK backend).
-
+FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (VTK backend). 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
 ref{fig:contour3_ex1}, using the contour3 command::
 
@@ -1242,8 +1238,7 @@ ref{fig:contour3_ex1}, using the contour3 command::
 
 
 
-FIGURE:[figs/contour3_ex1.eps] Example on the contour3 command for elevated contour levels (Gnuplot backend).
-
+FIGURE:[figs/contour3_ex1.eps] Example on the contour3 command for elevated contour levels (Gnuplot backend). 
 Finally, we show a simple example illustrating the meshc and surfc
 commands::
 
@@ -1262,10 +1257,8 @@ commands::
 The resulting plots are displayed in Figures ref{fig:meshc_ex1} and
 ref{fig:surfc_ex1}.
 
-FIGURE:[figs/meshc_ex1.eps] Wireframe mesh with contours at the bottom (Gnuplot backend).
-
-FIGURE:[figs/surfc_ex1.eps] Surface plot with contours (Gnuplot backend).
-
+FIGURE:[figs/meshc_ex1.eps] Wireframe mesh with contours at the bottom (Gnuplot backend). 
+FIGURE:[figs/surfc_ex1.eps] Surface plot with contours (Gnuplot backend). 
 
 Pseudocolor Plots
 -----------------
@@ -1321,8 +1314,7 @@ plot is shown in Figure ref{fig:isosurface1}. We remark that the
 Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
-FIGURE:[figs/isosurface1.eps] Isosurface plot (VTK backend).
-
+FIGURE:[figs/isosurface1.eps] Isosurface plot (VTK backend). 
 Here is another example that demonstrates the isosurface command
 (again using the flow function)::
 
@@ -1338,7 +1330,7 @@ Here is another example that demonstrates the isosurface command
 
 Figure ref{fig:isosurface2} shows the resulting plot.
 
-FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend).
+FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend). labelref{fig:isosurface2}
 
 
 Volumetric Slice Plot
@@ -1375,8 +1367,7 @@ x=-1.2, x=0.8, and x=2), one at the y axis (at y=2), and two
 at the z axis (at z=-2 and z=0.0). The result is presented in
 Figure ref{fig:slice1}.
 
-FIGURE:[figs/slice1.eps] Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend).
-
+FIGURE:[figs/slice1.eps] Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend). 
 
 *Contours in Slice Planes.* With the contourslice command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example 
@@ -1406,8 +1397,7 @@ number of contour lines (the default is five) or, as in the current
 example, a list specifying the level curves. Running the set of
 commands results in the plot shown in Figure ref{fig:contourslice1}.
 
-FIGURE:[figs/contourslice1.eps] Contours in slice planes (VTK backend).
-
+FIGURE:[figs/contourslice1.eps] Contours in slice planes (VTK backend). 
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set::
 
@@ -1425,8 +1415,7 @@ aid from the loadmat function available in the io module in the
 SciPy package. We then create a 2D contour slice plot with one slice
 in the plane z=8. Figure ref{fig:contourslice3} displays the result.
 
-FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend).
-
+FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend). 
 
 Visualization of Vector Fields
 ==============================
@@ -1466,8 +1455,7 @@ vv in the x and y directions, respectively.  The grid points and
 the vector components are passed as arguments to quiver, which in
 turn produces the plot in Figure ref{fig:quiver_ex1}.
 
-FIGURE:[figs/quiver_ex1.eps] Velocity vector plot (Gnuplot backend).
-
+FIGURE:[figs/quiver_ex1.eps] Velocity vector plot (Gnuplot backend). 
 The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
 additional argument to scale the default lengths::
@@ -1505,9 +1493,7 @@ associated gradient field::
 The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
 ref{fig:quiver_ex3}. 
 
-FIGURE:[figs/quiver_ex2.eps] Combined quiver and pseudocolor plot (VTK backend).
-FIGURE:[figs/quiver_ex3.eps] Combined quiver and pseudocolor plot (VTK backend).
-
+FIGURE:[figs/quiver_ex2.eps] Combined quiver and pseudocolor plot (VTK backend). FIGURE:[figs/quiver_ex3.eps] Combined quiver and pseudocolor plot (VTK backend). 
 Visualization of 3D vector fields by arrows at grid points can be done
 with the quiver3 command. At the time of this writing, only the VTK
 backend supports 3D quiver plots. A simple example of plotting the
@@ -1526,8 +1512,7 @@ become filled
 and red, respectively. The resulting plot is presented in Figure 
 ref{fig:quiver3_ex1}. 
 
-FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend).
-
+FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend). 
 
 Stream Plots
 ------------
@@ -1596,8 +1581,7 @@ vector data (u,v,w), while the next three arguments are the starting
 points which we defined with the ndgrid command above. The
 resulting plot is presented in Figure ref{fig:streamline_ex1}.
 
-FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend).
-
+FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend). 
 The next example demonstrates the streamtube command applied to the 
 same wind data set::
 
@@ -1613,8 +1597,7 @@ example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
 ref{fig:streamtube_ex1}.
 
-FIGURE:[figs/streamtube_ex1.eps] Stream tubes (Vtk backend).
-
+FIGURE:[figs/streamtube_ex1.eps] Stream tubes (Vtk backend). 
 Finally, we illustrate the streamribbon command::
 
         streamribbon(x, y, z, u, v, w, sx, sy, sz,
@@ -1627,8 +1610,7 @@ Finally, we illustrate the streamribbon command::
 
 Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
 
-FIGURE:[figs/streamribbon_ex1.eps] Stream ribbons (VTK backend).
-
+FIGURE:[figs/streamribbon_ex1.eps] Stream ribbons (VTK backend). 
 
 
 

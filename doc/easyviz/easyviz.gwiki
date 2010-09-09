@@ -40,8 +40,8 @@ The present documentation is available in a number of formats:
 
 
   * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf PDF]
-  * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html Plain HTML]
-  * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html Sphinx HTML]
+  * [http://www.simula.no/~hpl/easyviz/easyviz.html Plain HTML]
+  * [http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html Sphinx HTML]
   * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt Plain text]
   * [http://code.google.com/p/scitools/wiki/EasyvizDocumentation Wiki]
   * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt Doconce source]
@@ -49,6 +49,16 @@ The present documentation is available in a number of formats:
 The documentation is written in the [http://code.google.com/p/doconce Doconce]
 format and can be translated into a number of different formats (reST,
 Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
+
+
+<wiki:comment> URLs to files with HTML code does not work well with googlecode and svn: </wiki:comment>
+
+<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf PDF] </wiki:comment>
+<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html Plain HTML] </wiki:comment>
+<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html Sphinx HTML] </wiki:comment>
+<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt Plain text] </wiki:comment>
+<wiki:comment> * [http://code.google.com/p/scitools/wiki/EasyvizDocumentation Wiki] </wiki:comment>
+<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt Doconce source] </wiki:comment>
 
 ==== Guiding Principles ====
 
@@ -1172,7 +1182,7 @@ extensions `xv` and `yv` of `x` and `y`.
 
 ---------------------------------------------------------------
 
-Figure: Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
+Figure: Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/mesh_ex1.png
 
@@ -1198,7 +1208,7 @@ surf(xv, yv, values)
 
 ---------------------------------------------------------------
 
-Figure: Result of the surf command (Gnuplot backend).
+Figure: Result of the surf command (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex1.png
 
@@ -1245,7 +1255,7 @@ Figure ref{fig:surf_ex2} displays the result.
 
 ---------------------------------------------------------------
 
-Figure: Result of an extended surf command (Gnuplot backend).
+Figure: Result of an extended surf command (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex2.png
 
@@ -1296,7 +1306,7 @@ Figure ref{fig:contour_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: Result of the simplest possible contour command (Gnuplot backend).
+Figure: Result of the simplest possible contour command (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex1.png
 
@@ -1324,7 +1334,7 @@ The result can be seen in Figure ref{fig:contour_ex2}.
 
 ---------------------------------------------------------------
 
-Figure: A contour plot with 15 contour levels (Gnuplot backend).
+Figure: A contour plot with 15 contour levels (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex2.png
 
@@ -1361,7 +1371,7 @@ being displayed in black and white.
 
 ---------------------------------------------------------------
 
-Figure: Four individually specified contour levels (Gnuplot backend).
+Figure: Four individually specified contour levels (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex3.png
 
@@ -1389,7 +1399,7 @@ contour plots.
 
 ---------------------------------------------------------------
 
-Figure: Filled contour plot created by the contourf command (VTK backend).
+Figure: Filled contour plot created by the contourf command (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourf_ex1.png
 
@@ -1415,7 +1425,7 @@ contour3(xv, yv, values, 15)
 
 ---------------------------------------------------------------
 
-Figure: Example on the contour3 command for elevated contour levels (Gnuplot backend).
+Figure: Example on the contour3 command for elevated contour levels (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour3_ex1.png
 
@@ -1452,7 +1462,7 @@ ref{fig:surfc_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: Wireframe mesh with contours at the bottom (Gnuplot backend).
+Figure: Wireframe mesh with contours at the bottom (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/meshc_ex1.png
 
@@ -1472,7 +1482,7 @@ http://yourproject.googlecode.com/hg/.../figs/meshc_ex1.png
 
 ---------------------------------------------------------------
 
-Figure: Surface plot with contours (Gnuplot backend).
+Figure: Surface plot with contours (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surfc_ex1.png
 
@@ -1555,7 +1565,7 @@ isosurfaces.
 
 ---------------------------------------------------------------
 
-Figure: Isosurface plot (VTK backend).
+Figure: Isosurface plot (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface1.png
 
@@ -1589,7 +1599,7 @@ Figure ref{fig:isosurface2} shows the resulting plot.
 
 ---------------------------------------------------------------
 
-Figure: Another isosurface plot (VTK backend).
+Figure: Another isosurface plot (VTK backend). labelref{fig:isosurface2}
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface2.png
 
@@ -1639,7 +1649,7 @@ Figure ref{fig:slice1}.
 
 ---------------------------------------------------------------
 
-Figure: Slice plot where the `x` axis is sliced at -1.2, 0.8, and 2, the `y` axis is sliced at 2, and the `z` axis is sliced at -2 and 0.0 (VTK backend).
+Figure: Slice plot where the `x` axis is sliced at -1.2, 0.8, and 2, the `y` axis is sliced at 2, and the `z` axis is sliced at -2 and 0.0 (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/slice1.png
 
@@ -1656,8 +1666,7 @@ http://yourproject.googlecode.com/hg/.../figs/slice1.png
 
 
 <wiki:comment> OBS: </wiki:comment>
-<wiki:comment> Slicing med et Surface-object har jeg forel\o pig ikke f\aa tt til </wiki:comment>
-<wiki:comment> {\aa} virke i VTK. </wiki:comment>
+<wiki:comment> Slicing with a Surface-object does not work for JHR so far in VTK </wiki:comment>
 
 *Contours in Slice Planes.* With the `contourslice` command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example 
@@ -1690,7 +1699,7 @@ commands results in the plot shown in Figure ref{fig:contourslice1}.
 
 ---------------------------------------------------------------
 
-Figure: Contours in slice planes (VTK backend).
+Figure: Contours in slice planes (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice1.png
 
@@ -1726,7 +1735,7 @@ in the plane `z=8`. Figure ref{fig:contourslice3} displays the result.
 
 ---------------------------------------------------------------
 
-Figure: Contour slice plot of a 3D MRI data set (VTK backend).
+Figure: Contour slice plot of a 3D MRI data set (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice3.png
 
@@ -1781,7 +1790,7 @@ turn produces the plot in Figure ref{fig:quiver_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: Velocity vector plot (Gnuplot backend).
+Figure: Velocity vector plot (Gnuplot backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex1.png
 
@@ -1836,7 +1845,7 @@ ref{fig:quiver_ex3}.
 
 ---------------------------------------------------------------
 
-Figure: Combined quiver and pseudocolor plot (VTK backend).
+Figure: Combined quiver and pseudocolor plot (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex2.png
 
@@ -1855,7 +1864,7 @@ http://yourproject.googlecode.com/hg/.../figs/quiver_ex2.png
 
 ---------------------------------------------------------------
 
-Figure: Combined quiver and pseudocolor plot (VTK backend).
+Figure: Combined quiver and pseudocolor plot (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex3.png
 
@@ -1892,7 +1901,7 @@ ref{fig:quiver3_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: 3D quiver plot (VTK backend).
+Figure: 3D quiver plot (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver3_ex1.png
 
@@ -1974,7 +1983,7 @@ resulting plot is presented in Figure ref{fig:streamline_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: Stream line plot (Vtk backend).
+Figure: Stream line plot (Vtk backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamline_ex1.png
 
@@ -2008,7 +2017,7 @@ ref{fig:streamtube_ex1}.
 
 ---------------------------------------------------------------
 
-Figure: Stream tubes (Vtk backend).
+Figure: Stream tubes (Vtk backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamtube_ex1.png
 
@@ -2039,7 +2048,7 @@ Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
 
 ---------------------------------------------------------------
 
-Figure: Stream ribbons (VTK backend).
+Figure: Stream ribbons (VTK backend). 
 
 https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamribbon_ex1.png
 

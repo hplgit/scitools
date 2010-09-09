@@ -49,8 +49,8 @@ The present documentation is available in a number of formats:
 
 <UL>
   <LI> <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf">PDF</A>
-  <LI> <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html">Plain HTML</A>
-  <LI> <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</A>
+  <LI> <A HREF="http://www.simula.no/~hpl/easyviz/easyviz.html">Plain HTML</A>
+  <LI> <A HREF="http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html">Sphinx HTML</A>
   <LI> <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt">Plain text</A>
   <LI> <A HREF="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</A>
   <LI> <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt">Doconce source</A>
@@ -59,6 +59,19 @@ The present documentation is available in a number of formats:
 The documentation is written in the <A HREF="http://code.google.com/p/doconce">Doconce</A>
 format and can be translated into a number of different formats (reST,
 Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
+
+<P>
+
+<P>
+<!-- URLs to files with HTML code does not work well with googlecode and svn: -->
+
+<P>
+<!-- * <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf">PDF</A> -->
+<!-- * <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html">Plain HTML</A> -->
+<!-- * <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</A> -->
+<!-- * <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt">Plain text</A> -->
+<!-- * <A HREF="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</A> -->
+<!-- * <A HREF="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt">Doconce source</A> -->
 
 <P>
 
@@ -1238,7 +1251,7 @@ However, for the <TT>mesh</TT> command to work, we need the vectorized
 extensions <TT>xv</TT> and <TT>yv</TT> of <TT>x</TT> and <TT>y</TT>.
 
 <P>
-<IMG SRC="figs/mesh_ex1.png" ALIGN="center" > Result of the mesh command for plotting a 2D scalar field (Gnuplot backend).
+<IMG SRC="figs/mesh_ex1.png" ALIGN="center" > Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). <A NAME="fig:mesh_ex1"></A>
 
 <P>
 The <TT>surf</TT> command employs the same syntax, but results in a different
@@ -1250,7 +1263,7 @@ surf(xv, yv, values)
 <! -- END VERBATIM BLOCK -->
 
 <P>
-<IMG SRC="figs/surf_ex1.png" ALIGN="center" > Result of the surf command (Gnuplot backend).
+<IMG SRC="figs/surf_ex1.png" ALIGN="center" > Result of the surf command (Gnuplot backend). <A NAME="fig:surf_ex1"></A>
 
 <P>
 The <TT>surf</TT> command offers many possibilities to adjust the resulting plot:
@@ -1285,7 +1298,7 @@ surf(xv, yv, values,
 Figure <A HREF="#fig:surf_ex2">fig:surf_ex2</a> displays the result.
 
 <P>
-<IMG SRC="figs/surf_ex2.png" ALIGN="center" > Result of an extended surf command (Gnuplot backend).
+<IMG SRC="figs/surf_ex2.png" ALIGN="center" > Result of an extended surf command (Gnuplot backend). <A NAME="fig:surf_ex2"></A>
 
 <P>
 
@@ -1334,7 +1347,7 @@ By default, five uniformly spaced contour level curves are drawn, see
 Figure <A HREF="#fig:contour_ex1">fig:contour_ex1</a>. 
 
 <P>
-<IMG SRC="figs/contour_ex1.png" ALIGN="center" > Result of the simplest possible contour command (Gnuplot backend).
+<IMG SRC="figs/contour_ex1.png" ALIGN="center" > Result of the simplest possible contour command (Gnuplot backend). <A NAME="fig:contour_ex1"></A>
 
 <P>
 The number of levels in a contour plot can be specified with an additional
@@ -1348,7 +1361,7 @@ contour(xv, yv, values, n)
 The result can be seen in Figure <A HREF="#fig:contour_ex2">fig:contour_ex2</a>. 
 
 <P>
-<IMG SRC="figs/contour_ex2.png" ALIGN="center" > A contour plot with 15 contour levels (Gnuplot backend).
+<IMG SRC="figs/contour_ex2.png" ALIGN="center" > A contour plot with 15 contour levels (Gnuplot backend). <A NAME="fig:contour_ex2"></A>
 
 <P>
 Sometimes one wants contour levels that are not equidistant or not
@@ -1371,7 +1384,7 @@ corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.
 
 <P>
-<IMG SRC="figs/contour_ex3.png" ALIGN="center" > Four individually specified contour levels (Gnuplot backend).
+<IMG SRC="figs/contour_ex3.png" ALIGN="center" > Four individually specified contour levels (Gnuplot backend). <A NAME="fig:contour_ex3"></A>
 
 <P>
 The <TT>contourf</TT> command,
@@ -1385,7 +1398,7 @@ Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
 
 <P>
-<IMG SRC="figs/contourf_ex1.png" ALIGN="center" > Filled contour plot created by the contourf command (VTK backend).
+<IMG SRC="figs/contourf_ex1.png" ALIGN="center" > Filled contour plot created by the contourf command (VTK backend). <A NAME="fig:contourf_ex1"></A>
 
 <P>
 The contour lines can be "lifted up" in 3D space, as shown in Figure
@@ -1397,7 +1410,7 @@ contour3(xv, yv, values, 15)
 <! -- END VERBATIM BLOCK -->
 
 <P>
-<IMG SRC="figs/contour3_ex1.png" ALIGN="center" > Example on the contour3 command for elevated contour levels (Gnuplot backend).
+<IMG SRC="figs/contour3_ex1.png" ALIGN="center" > Example on the contour3 command for elevated contour levels (Gnuplot backend). <A NAME="fig:contour3_ex1"></A>
 
 <P>
 Finally, we show a simple example illustrating the <TT>meshc</TT> and <TT>surfc</TT>
@@ -1420,10 +1433,10 @@ The resulting plots are displayed in Figures <A HREF="#fig:meshc_ex1">fig:meshc_
 <A HREF="#fig:surfc_ex1">fig:surfc_ex1</a>.
 
 <P>
-<IMG SRC="figs/meshc_ex1.png" ALIGN="center" > Wireframe mesh with contours at the bottom (Gnuplot backend).
+<IMG SRC="figs/meshc_ex1.png" ALIGN="center" > Wireframe mesh with contours at the bottom (Gnuplot backend). <A NAME="fig:meshc_ex1"></A>
 
 <P>
-<IMG SRC="figs/surfc_ex1.png" ALIGN="center" > Surface plot with contours (Gnuplot backend).
+<IMG SRC="figs/surfc_ex1.png" ALIGN="center" > Surface plot with contours (Gnuplot backend). <A NAME="fig:surfc_ex1"></A>
 
 <P>
 
@@ -1486,7 +1499,7 @@ Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
 <P>
-<IMG SRC="figs/isosurface1.png" ALIGN="center" > Isosurface plot (VTK backend).
+<IMG SRC="figs/isosurface1.png" ALIGN="center" > Isosurface plot (VTK backend). <A NAME="fig:isosurface1"></A>
 
 <P>
 Here is another example that demonstrates the <TT>isosurface</TT> command
@@ -1506,7 +1519,7 @@ show()
 Figure <A HREF="#fig:isosurface2">fig:isosurface2</a> shows the resulting plot.
 
 <P>
-<IMG SRC="figs/isosurface2.png" ALIGN="center" > Another isosurface plot (VTK backend).
+<IMG SRC="figs/isosurface2.png" ALIGN="center" > Another isosurface plot (VTK backend). label<A HREF="#fig:isosurface2">fig:isosurface2</a>
 
 <P>
 
@@ -1546,12 +1559,11 @@ at the z axis (at z=-2 and z=0.0). The result is presented in
 Figure <A HREF="#fig:slice1">fig:slice1</a>.
 
 <P>
-<IMG SRC="figs/slice1.png" ALIGN="center" > Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend).
+<IMG SRC="figs/slice1.png" ALIGN="center" > Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend). <A NAME="fig:slice1"></A>
 
 <P>
 <!-- OBS: -->
-<!-- Slicing med et Surface-object har jeg forel\o pig ikke f\aa tt til -->
-<!-- {\aa} virke i VTK. -->
+<!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
 
 <P>
 <B>Contours in Slice Planes.</B> <P>
@@ -1585,7 +1597,7 @@ example, a list specifying the level curves. Running the set of
 commands results in the plot shown in Figure <A HREF="#fig:contourslice1">fig:contourslice1</a>.
 
 <P>
-<IMG SRC="figs/contourslice1.png" ALIGN="center" > Contours in slice planes (VTK backend).
+<IMG SRC="figs/contourslice1.png" ALIGN="center" > Contours in slice planes (VTK backend). <A NAME="fig:contourslice1"></A>
 
 <P>
 Here is another example where we draw contour slices from a
@@ -1607,7 +1619,7 @@ SciPy package. We then create a 2D contour slice plot with one slice
 in the plane z=8. Figure <A HREF="#fig:contourslice3">fig:contourslice3</a> displays the result.
 
 <P>
-<IMG SRC="figs/contourslice3.png" ALIGN="center" > Contour slice plot of a 3D MRI data set (VTK backend).
+<IMG SRC="figs/contourslice3.png" ALIGN="center" > Contour slice plot of a 3D MRI data set (VTK backend). <A NAME="fig:contourslice3"></A>
 
 <P>
 
@@ -1652,7 +1664,7 @@ the vector components are passed as arguments to <TT>quiver</TT>, which in
 turn produces the plot in Figure <A HREF="#fig:quiver_ex1">fig:quiver_ex1</a>.
 
 <P>
-<IMG SRC="figs/quiver_ex1.png" ALIGN="center" > Velocity vector plot (Gnuplot backend).
+<IMG SRC="figs/quiver_ex1.png" ALIGN="center" > Velocity vector plot (Gnuplot backend). <A NAME="fig:quiver_ex1"></A>
 
 <P>
 The arrows in a quiver plot are automatically scaled to fit within the
@@ -1696,8 +1708,8 @@ The resulting plots can be seen in Figure <A HREF="#fig:quiver_ex2">fig:quiver_e
 <A HREF="#fig:quiver_ex3">fig:quiver_ex3</a>. 
 
 <P>
-<IMG SRC="figs/quiver_ex2.png" ALIGN="center" > Combined quiver and pseudocolor plot (VTK backend).
-<IMG SRC="figs/quiver_ex3.png" ALIGN="center" > Combined quiver and pseudocolor plot (VTK backend).
+<IMG SRC="figs/quiver_ex2.png" ALIGN="center" > Combined quiver and pseudocolor plot (VTK backend). <A NAME="fig:quiver_ex2"></A>
+<IMG SRC="figs/quiver_ex3.png" ALIGN="center" > Combined quiver and pseudocolor plot (VTK backend). <A NAME="fig:quiver_ex3"></A>
 
 <P>
 Visualization of 3D vector fields by arrows at grid points can be done
@@ -1720,7 +1732,7 @@ and red, respectively. The resulting plot is presented in Figure
 <A HREF="#fig:quiver3_ex1">fig:quiver3_ex1</a>. 
 
 <P>
-<IMG SRC="figs/quiver3_ex1.png" ALIGN="center" > 3D quiver plot (VTK backend).
+<IMG SRC="figs/quiver3_ex1.png" ALIGN="center" > 3D quiver plot (VTK backend). <A NAME="fig:quiver3_ex1"></A>
 
 <P>
 
@@ -1796,7 +1808,7 @@ points which we defined with the <TT>ndgrid</TT> command above. The
 resulting plot is presented in Figure <A HREF="#fig:streamline_ex1">fig:streamline_ex1</a>.
 
 <P>
-<IMG SRC="figs/streamline_ex1.png" ALIGN="center" > Stream line plot (Vtk backend).
+<IMG SRC="figs/streamline_ex1.png" ALIGN="center" > Stream line plot (Vtk backend). <A NAME="fig:streamline_ex1"></A>
 
 <P>
 The next example demonstrates the <TT>streamtube</TT> command applied to the 
@@ -1816,7 +1828,7 @@ tubes. The resulting plot is presented in Figure
 <A HREF="#fig:streamtube_ex1">fig:streamtube_ex1</a>.
 
 <P>
-<IMG SRC="figs/streamtube_ex1.png" ALIGN="center" > Stream tubes (Vtk backend).
+<IMG SRC="figs/streamtube_ex1.png" ALIGN="center" > Stream tubes (Vtk backend). <A NAME="fig:streamtube_ex1"></A>
 
 <P>
 Finally, we illustrate the <TT>streamribbon</TT> command:
@@ -1833,7 +1845,7 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
 Figure <A HREF="#fig:streamribbon_ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.
 
 <P>
-<IMG SRC="figs/streamribbon_ex1.png" ALIGN="center" > Stream ribbons (VTK backend).
+<IMG SRC="figs/streamribbon_ex1.png" ALIGN="center" > Stream ribbons (VTK backend). <A NAME="fig:streamribbon_ex1"></A>
 
 <P>
 
