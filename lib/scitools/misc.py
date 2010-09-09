@@ -508,13 +508,15 @@ def subst(patterns, replacements, filenames,
                 f.close()
                 modified_files[pattern].append(filename)
 
-        # make a readable return string with substitution info:
-        for pattern in sorted(modified_files):
+    # make a readable return string with substitution info:
+    for pattern in sorted(modified_files):
+        if modified_files[pattern]:
             replacement = replacements[patterns.index(pattern)]
             messages.append('%s replaced by %s in %s' % \
-                            (pattern, replacement, 
-                             ', '.join(modified_files[pattern])))
-    return ', '.join(messages)
+                                (pattern, replacement, 
+                                 ', '.join(modified_files[pattern])))
+
+    return ', '.join(messages) if messages else 'no substitutions'
 
 
 # class Command has now been replaced by the standard functools.partial

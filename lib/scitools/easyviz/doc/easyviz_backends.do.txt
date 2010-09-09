@@ -58,14 +58,14 @@ widget for curve plotting. This widget is based on the BLT package
 The BLT backend offers currenlty only basic plotting functionality.
 
 
-__Veusz__. From http://home.gna.org/veusz<Veusz homepage>: Veusz is a
+__Veusz.__ From http://home.gna.org/veusz<Veusz homepage>: Veusz is a
 GUI scientific plotting and graphing package. It is designed to
 produce publication-ready Postscript or PDF output. SVG, EMF and
 bitmap formats export are also supported. Veusz has a comprehensive
 GUI and produces really high-quality plots.
 
 
-__VTK__. VTK (Visualization ToolKit) is a package primarily aimed at
+__VTK.__ VTK (Visualization ToolKit) is a package primarily aimed at
 visualizing 2D and 3D scalar and vector fields by a range of techniques.
 VTK is used to achieve 2D and 3D visualizations of the same type as 
 Matlab offers. However, VTK can do much more (although the Easyviz 

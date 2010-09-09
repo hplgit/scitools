@@ -1,9 +1,9 @@
-=== Can I Perform a Diagnostic Test of Easyviz? ===
+===== Can I Perform a Diagnostic Test of Easyviz? =====
 
 Yes. It is wise to perform a diagnostic test before reporting any error
 or trouble to the SciTools maintainers. Find the source folder of SciTools
 and go to the `misc` subfolder. Run
-!bc dnsi
+!bc dsni
 python diagonstic.py
 !ec
 On the screen, you can see what you have of working software that Easyviz
@@ -12,7 +12,7 @@ one plotting program must be properly installed. Include the detailed
 diagonstics in the `scitools_diagnostic.log` file as attachment in any
 mail to the SciTools developers.
 
-=== The Plot Window Disappears Immediately ===
+===== The Plot Window Disappears Immediately =====
 
 Depending on the backend used for plotting with Easyviz, the plot
 window may be killed when the program terminates. Adding a statement
@@ -28,7 +28,7 @@ show()
 !ec
 # test on Windows!
 
-=== I Get Strange Errors Saying Something About LaTeX ===
+===== I Get Strange Errors Saying Something About LaTeX =====
 
 You probably run Easyviz with Matplotlib as backend, and you do not
 have a working LaTeX installation. Matplotlib applies LaTeX for
@@ -48,7 +48,7 @@ than Matplotlib.
 
 
 
-=== Old Programs with 2D Scalar/Vector Field Plotting Do Not Work ===
+===== Old Programs with 2D Scalar/Vector Field Plotting Do Not Work =====
 
 SciTools version 0.7 changed the default backend for plotting to
 Matplotlib instead of Gnuplot (provided you have Matplotlib and you
@@ -75,7 +75,7 @@ python setup.py install --easyviz_backend gnuplot
 !ec
 
 
-=== Can I Easily Turn Off All Plotting? ===
+===== Can I Easily Turn Off All Plotting? =====
 
 Yes, this is very convenient when debugging other (non-plotting) parts
 of a program. Just write
@@ -85,14 +85,15 @@ turn_off_plotting(globals())
 !ec
 
 
-=== Check Your Backends! ===
+===== Check Your Backends! =====
 
 When you encounter a problem with Easyviz plotting, make sure that the
 backend works correctly on its own (there may, e.g., be installation
 problems with the backend - Easyviz just calls the backend to do the
 plotting). 
 
-__Gnuplot.__
+=== Gnuplot ===
+
 For the Gnuplot backend you can try the following commands in a
 terminal window:
 !bc rpy
@@ -106,7 +107,8 @@ to the Gnuplot executable is not registered in the `PATH` environment
 variable. See the section *Installing Gnuplot* if you need help with 
 installing the Gnuplot program and its Python interface.
 
-__Matplotlib.__
+=== Matplotlib ===
+
 The following code tests if you have installed Matplotlib correctly:
 !bc
 import matplotlib.pyplot as plt
@@ -120,7 +122,7 @@ In case of problems, go to the Matplotlib source directory, remove the
 `build` subdirectory, and try a new install with `python setup.py install`.
 
 
-=== Trouble with Gnuplot and Threads ===
+===== Trouble with Gnuplot and Threads =====
 
 When using the Gnuplot backend, the following error may be encountered:
 !bc
@@ -135,7 +137,7 @@ for i in range(number_of_frames_in_animation):
         <make plot>
 !ec
 
-=== Trouble with Movie Making ===
+===== Trouble with Movie Making =====
 
 The call to `movie` demands that you have video encoders installed.
 The legal encoders are `mencoder`, `ffmpeg`, `mpeg_encode`, `ppmtompeg`,
@@ -164,7 +166,7 @@ movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
 
-=== I Get Thread Errors with Gnuplot ===
+===== I Get Thread Errors with Gnuplot =====
 
 When plotting inside a loop, e.g.,
 !bc
@@ -184,7 +186,7 @@ for i in some_values:
 !ec
 
 
-=== Where Can I Find Easyviz Documentation? ===
+===== Where Can I Find Easyviz Documentation? =====
 
 There is a verbose Easyviz documentation that mainly focuses on an
 introduction to Easyviz (what you read now is a part of that
@@ -195,7 +197,7 @@ with the SciTools/Easyviz source code. The examples are located in
 the `examples` subfolder of the source.
 
 
-=== I Cannot Find Out How My Plot Can Be Created ===
+===== I Cannot Find Out How My Plot Can Be Created =====
 
 Note that Easyviz only support the most basic types of plots:
 
@@ -214,99 +216,99 @@ from your Python program.
 The following Matlab-like commands (functions) are available (but not
 supported by all backends):
 
-  * 'autumn',
-  * 'axes',
-  * 'axis',
-  * 'bone',
-  * 'box',
-  * 'brighten',
-  * 'camdolly',
-  * 'camlight',
-  * 'camlookat',
-  * 'campos',
-  * 'camproj',
-  * 'camroll',
-  * 'camtarget',
-  * 'camup',
-  * 'camva',
-  * 'camzoom',
-  * 'caxis',
-  * 'cla',
-  * 'clabel',
-  * 'clf',
-  * 'close',
-  * 'closefig',
-  * 'closefigs',
-  * 'colorbar',
-  * 'colorcube',
-  * 'colormap',
-  * 'coneplot',
-  * 'contour',
-  * 'contour3',
-  * 'contourf',
-  * 'contourslice',
-  * 'cool',
-  * 'copper',
-  * 'daspect',
-  * 'figure',
-  * 'fill',
-  * 'fill3',
-  * 'flag',
-  * 'gca',
-  * 'gcf',
-  * 'get',
-  * 'gray',
-  * 'grid',
-  * 'hardcopy',
-  * 'hidden',
-  * 'hold',
-  * 'hot',
-  * 'hsv',
-  * 'ishold',
-  * 'isocaps',
-  * 'isosurface',
-  * 'jet',
-  * 'legend',
-  * 'light',
-  * 'lines',
-  * 'loglog',
-  * 'material',
-  * 'mesh',
-  * 'meshc',
-  * 'openfig',
-  * 'pcolor',
-  * 'pink',
-  * 'plot',
-  * 'plot3',
-  * 'prism',
-  * 'quiver',
-  * 'quiver3',
-  * 'reducevolum',
-  * 'savefig',
-  * 'semilogx',
-  * 'semilogy',
-  * 'set',
-  * 'shading',
-  * 'show',
-  * 'slice_',
-  * 'spring',
-  * 'streamline',
-  * 'streamribbon',
-  * 'streamslice',
-  * 'streamtube',
-  * 'subplot',
-  * 'subvolume',
-  * 'summer',
-  * 'surf',
-  * 'surfc',
-  * 'surfl',
-  * 'title',
-  * 'vga',
-  * 'view',
-  * 'white',
-  * 'winter',
-  * 'xlabel',
-  * 'ylabel',
-  * 'zlabel'
+  * autumn,
+  * axes,
+  * axis,
+  * bone,
+  * box,
+  * brighten,
+  * camdolly,
+  * camlight,
+  * camlookat,
+  * campos,
+  * camproj,
+  * camroll,
+  * camtarget,
+  * camup,
+  * camva,
+  * camzoom,
+  * caxis,
+  * cla,
+  * clabel,
+  * clf,
+  * close,
+  * closefig,
+  * closefigs,
+  * colorbar,
+  * colorcube,
+  * colormap,
+  * coneplot,
+  * contour,
+  * contour3,
+  * contourf,
+  * contourslice,
+  * cool,
+  * copper,
+  * daspect,
+  * figure,
+  * fill,
+  * fill3,
+  * flag,
+  * gca,
+  * gcf,
+  * get,
+  * gray,
+  * grid,
+  * hardcopy,
+  * hidden,
+  * hold,
+  * hot,
+  * hsv,
+  * ishold,
+  * isocaps,
+  * isosurface,
+  * jet,
+  * legend,
+  * light,
+  * lines,
+  * loglog,
+  * material,
+  * mesh,
+  * meshc,
+  * openfig,
+  * pcolor,
+  * pink,
+  * plot,
+  * plot3,
+  * prism,
+  * quiver,
+  * quiver3,
+  * reducevolum,
+  * savefig,
+  * semilogx,
+  * semilogy,
+  * set,
+  * shading,
+  * show,
+  * slice_,
+  * spring,
+  * streamline,
+  * streamribbon,
+  * streamslice,
+  * streamtube,
+  * subplot,
+  * subvolume,
+  * summer,
+  * surf,
+  * surfc,
+  * surfl,
+  * title,
+  * vga,
+  * view,
+  * white,
+  * winter,
+  * xlabel,
+  * ylabel,
+  * zlabel
 
 

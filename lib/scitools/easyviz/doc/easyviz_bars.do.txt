@@ -17,7 +17,7 @@ bar(ratings, 'r',
 The bar chart illustrates the data in the `ratings` list. These data
 correspond to the names in `languages`.
 
-FIGURE:[figs/pyrankings.eps] A simple bar chart illustrating the popularity of common programming languages.
+FIGURE:[figs/pyranking.eps] A simple bar chart illustrating the popularity of common programming languages.
 
 One may display groups of bars. The data can then be put in a matrix,
 where rows (1st index) correspond to the groups the columns to the

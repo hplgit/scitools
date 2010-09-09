@@ -27,16 +27,18 @@ H. P. Langtangen, J. Ring, ++
 0.7
 .txt
 index
-y
-n
-n
-n
 n
 y
 n
 n
+n
+n
 y
 n
+n
+y
+y
+y
 
 (note that we use .txt files, include autodoc and pngmath)
 
