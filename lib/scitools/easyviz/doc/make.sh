@@ -10,8 +10,8 @@ doconce2format plain tmp_easyviz.do.txt
 doconce2format LaTeX tmp_easyviz.do.txt
 ptex2tex tmp_easyviz
 scitools subst slice_ 'slice\_' tmp_easyviz.tex   # _ fix
-latex tmp_easyviz
-latex tmp_easyviz
+latex -shell-escape tmp_easyviz
+latex -shell-escape tmp_easyviz
 dvipdf tmp_easyviz.dvi
 
 # note: Unknown target name "slice" will always be reported by rst
