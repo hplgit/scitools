@@ -30,26 +30,16 @@ end of the documentation.
 
 The present documentation is available in a number of formats:
 
-  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf<PDF>
-  * http://www.simula.no/~hpl/easyviz/easyviz.html<Plain HTML>
-  * http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html<Sphinx HTML>
-  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt<Plain text>
+  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf<PDF>
+  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html<Plain HTML>
+  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html<Sphinx HTML>
+  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt<Plain text>
   * http://code.google.com/p/scitools/wiki/EasyvizDocumentation<Wiki>
-  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt<Doconce source>
+  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt<Doconce source>
 
 The documentation is written in the http://code.google.com/p/doconce<Doconce>
 format and can be translated into a number of different formats (reST,
 Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
-
-
-# URLs to files with HTML code does not work well with googlecode and svn:
-
-#  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf<PDF>
-#  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html<Plain HTML>
-#  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html<Sphinx HTML>
-#  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt<Plain text>
-#  * http://code.google.com/p/scitools/wiki/EasyvizDocumentation<Wiki>
-#  * https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt<Doconce source>
 
 
 ===== Guiding Principles =====
