@@ -93,21 +93,17 @@ class FloatComparison:
         a==b is true if abs(a-b) < atol + rtol*abs(b).
         atol comes into play when abs(b) is large.
         """
-        if operation == '==':
-            self.operation = self.eq
-        elif operation == '!=':
-            self.operation = self.ne
-        elif operation == '<':
-            self.operation = self.lt
-        elif operation == '<=':
-            self.operation = self.le
-        elif operation == '>':
-            self.operation = self.gt
-        elif operation == '>=':
-            self.operation = self.ge
+        comparisons = {'==': self.eq,
+                       '!=': self.ne,
+                       '<' : self.lt,
+                       '<=': self.le,
+                       '>' : self.gt,
+                       '>=': self.ge}
+        if operation in comparisons:
+            self.operation = comparisons[operation]
         else:
             raise ValueError('Wrong operation "%s"' % operation)
-        self.comparison_op = operation  # nice to have for printouts/tests
+        self.comparison_op = operation  # nice to store for printouts/tests
             
         self.rtol, self.atol = rtol, atol
 
@@ -129,9 +125,11 @@ class FloatComparison:
         elif isinstance(a, complex):
             return self.eq(a.real, b.real, rtol, atol) and \
                    self.eq(a.imag, b.imag, rtol, atol)
-        else: # assume NumPy array
+        else: # assume NumPy array, tuple or list
             try:
-                return numpy.allclose(a, b, rtol, atol)
+                return numpy.allclose(numpy.asarray(a), 
+                                      numpy.asarray(b),
+                                      b, rtol, atol)
                 #r = numpy.abs(a-b) < atol + rtol*numpy.abs(b)
                 #return r.all()
             except Exception, e:
