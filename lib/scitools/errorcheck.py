@@ -60,11 +60,13 @@ def get_argname_in_call(call_name, arg_no):
     This can easily lead to errors, e.g., 'myfunc(a, (list,tuple), b)'
     will lead to the arguments 'a', '(list', 'tuple)', and 'b'.
     'b' is not obtained as argument 3.
-    
-    @param call_name: name of the function in the call.
-    @param arg_no: argument number to extract (1, 2, ...).
-    @return: name of the argument and a string ("where") describing
-    the original call's filename, line number and function.
+
+    =========  ======================================================    
+    call_name  name of the function in the call
+    arg_no     argument number to extract (1, 2, ...).
+    return     name of the argument and a string ("where") describing
+               the original call's filename, line number and function.
+    =========  ======================================================    
     """
     
     stack = inspect.stack()
@@ -99,8 +101,10 @@ def right_length(a, length):
     """
     Check that len(a) == length.
 
-    @param a: any variable for which len(a) is meaningful.
-    @param length: the expected length of a (integer).
+    =========  ======================================================    
+    a          any variable for which len(a) is meaningful
+    length     the expected length of a (integer).
+    =========  ======================================================    
     """
     if len(a) != length:
         a_name, where = get_argname_in_call('right_length', 1)
@@ -114,8 +118,10 @@ def right_size1(a, shape):
     """
     Check that a has correct shape.
 
-    @param a: NumPy array.
-    @param shape: the expected shape of a. @type shape: int or tuple
+    =========  ======================================================    
+    a          NumPy array
+    shape      the expected shape of a (int or tuple)
+    =========  ======================================================    
     """
     if not hasattr(a, 'shape'):
         raise TypeError('%s is %s and not a NumPy array' % \
@@ -133,8 +139,7 @@ def right_size1(a, shape):
 def right_size2(a1, a2):
     """
     Check that a1 and a2 have equal shapes.
-
-    @param a1,a2: NumPy arrays.
+    a1 and a2 are NumPy arrays.
     """
     if hasattr(a1, 'shape') and hasattr(a2, 'shape'):
         pass # ok, a1 and a2 are NumPy arrays
@@ -218,29 +223,38 @@ def get_type(a):
             tp = "classobj (i.e. a class object)"
     return tp
 
+global message
+message = ''
 
-def right_type(a, expected_types):
+def right_type(a, expected_types, raise_exception=True):
     """
-    Check that variable a is of the type(s) specified by expected_types.
+    Check that variable a is of the type(s) specified by expected_types,
+    which is a list/tuple of built-in types (class names), user-defined
+    class names, or one of the functions callable or numpy.iterable.
 
-    @param a: variable to be checked.
-    @type  a: any
-    @param expected_types: class name(s) of the expected type(s).
-    @type  expected_types: class name or list/tuple of class names
-    @return: None. The function raises a TypeError exception if a
-    is not of right type.
+    return: True if the type is right. Otherwise, raise a TypeError exception
+    if raise_exception is True. If this value is False,
+    return False and place a message string explaining what is wrong
+    in the module variable errorcheck.message.
     """
     if not isinstance(expected_types, (list,tuple)):
         expected_types = [expected_types]  # wrap in list if just single type
     t = get_type(a)
     if 'a class object' in t:
-        a_is_class = True
+        a_is_class_def = True
     else:
-        a_is_class = False
+        a_is_class_def = False
+
+    import numpy
     match = False
     for tp in expected_types:
-        if a_is_class:
+        if tp is callable or tp is numpy.iterable:
+            if tp(a):
+                match = True
+                break
+        if a_is_class_def:
             # a is a class object
+            #print 'a is class definition'
             if type(a) == types.ClassType:
                 try:
                     if issubclass(a, tp):
@@ -250,6 +264,7 @@ def right_type(a, expected_types):
                     pass
         else:
             try:
+                #print 'testing isinstance(a, %s)' % str(tp)
                 if isinstance(a, tp):
                     match = True
                     break
@@ -257,13 +272,18 @@ def right_type(a, expected_types):
                 if isinstance(a, type(tp)):
                     match = True
                     break
-    if not match:
-        a_name, where = get_argname_in_call('right_type', 1)
-        raise TypeError('%s\n%s is of type %s, while we expected %s' % \
-                        (where, a_name, t,
-                         ' or '.join([str(e) for e in expected_types])))
-    else:
+    if match:
         return True
+    else:
+        a_name, where = get_argname_in_call('right_type', 1)
+        msg = '%s\n%s is of type %s, while we expected %s' % \
+              (where, a_name, t, ' or '.join([str(e) for e in expected_types]))
+        if raise_exception:
+            raise TypeError(msg)
+        else:
+            global message
+            message = msg
+            return False
         
 
 def wrong_type(a, comment=''):
@@ -271,10 +291,8 @@ def wrong_type(a, comment=''):
     Raise a TypeError exception expressing the type of variable a
     and that this type is wrong.
 
-    @param a: any variable. @type a: any
-    @param comment: optional comment to be added to the exception string.
-    @type  comment: string
-    @return: None, the function raises an exception.
+    a is any variable of any type, and comment is a text that can be
+    appended to the exception string.
     """
     tp = get_type(a)
     a_name, where = get_argname_in_call('wrong_type', 1)
@@ -287,8 +305,28 @@ try:
 except ImportError:
     pass
 if not _SAFECODE:
-    # define (efficient) empty check functions:
+    # define (efficient) empty check functions that overrides the
+    # comprehensive and expensive functions above:
     for func in __all__:
         efficient_version = 'def %s(*args): return True' % func
         exec efficient_version
 
+def _test():
+    def myfunc(a, b, c):
+        return a + b + c
+
+    A = 1.1
+    B = [1,2,3]
+    class myclass:
+        pass
+
+    C = myclass()
+    print right_type(myfunc, [callable, float, int])
+    print right_type(A, [float, int])
+    print right_type(C, [myclass])
+    print right_type(myclass, [myclass])
+    print right_type(B, tuple, raise_exception=False)
+    print message
+
+if __name__ == '__main__':
+    _test()
