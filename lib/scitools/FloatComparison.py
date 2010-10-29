@@ -12,6 +12,9 @@ class FloatComparison:
 
     For example, a==b is true if abs(a-b) < atol + rtol*abs(b).
     The atol parameter comes into play when |a| and |b| are large.
+    (It would be mathematically more appealing to have
+    rtol*max(abs(a), abs(b)), but float_eq is used with a is
+    close to b so the max function is not necessary.)
 
     If the desired test is |a-b| < eps, set atol=eps and rtol=0.
     If a relative test is wanted, |(a-b)/b| < eps, set atol=0
@@ -83,6 +86,11 @@ class FloatComparison:
     The __call__ method calls eq, ne, lt, le, gt, or ge, depending on
     the first argument to the constructor.
     """
+    # rtol and atol are static attributes so that changing
+    # tolerances in e.g. the float_eq object also changes
+    # the tolerances in all other comparison objects (float_lt, etc.).
+    rtol = 1E-14
+    atol = 1E-14
 
     def __init__(self, operation='==', rtol=1E-14, atol=1E-14):
         """
@@ -105,7 +113,7 @@ class FloatComparison:
             raise ValueError('Wrong operation "%s"' % operation)
         self.comparison_op = operation  # nice to store for printouts/tests
             
-        self.rtol, self.atol = rtol, atol
+        FloatComparison.rtol, FloatComparison.atol = rtol, atol
 
     def __call__(self, a, b, rtol=None, atol=None):
         """
@@ -118,9 +126,9 @@ class FloatComparison:
     
     def eq(self, a, b, rtol=None, atol=None):
         """Tests a == b with tolerance."""
-        if rtol is None: rtol = self.rtol
-        if atol is None: atol = self.atol
-        if isinstance(a, float):
+        if rtol is None: rtol = FloatComparison.rtol
+        if atol is None: atol = FloatComparison.atol
+        if isinstance(a, (float, int, long)):
             return math.fabs(a-b) < atol + rtol*math.fabs(b)
         elif isinstance(a, complex):
             return self.eq(a.real, b.real, rtol, atol) and \
@@ -129,7 +137,7 @@ class FloatComparison:
             try:
                 return numpy.allclose(numpy.asarray(a), 
                                       numpy.asarray(b),
-                                      b, rtol, atol)
+                                      rtol, atol)
                 #r = numpy.abs(a-b) < atol + rtol*numpy.abs(b)
                 #return r.all()
             except Exception, e:
@@ -141,22 +149,22 @@ class FloatComparison:
         return not self.eq(a, b, rtol, atol)
     
     def set_absolute_tolerance(self, atol):
-        self.atol = atol
+        FloatComparison.atol = atol
         
     def set_relative_tolerance(self, rtol):
-        self.rtol = rtol
+        FloatComparison.rtol = rtol
             
     def get_absolute_tolerance(self):
-        return self.atol
+        return FloatComparison.atol
         
     def get_relative_tolerance(self):
-        return self.rtol
+        return FloatComparison.rtol
             
     def lt(self, a, b, rtol=None, atol=None):
         """Tests a < b with tolerance."""
-        if rtol is None: rtol = self.rtol
-        if atol is None: atol = self.atol
-        if isinstance(a, float):
+        if rtol is None: rtol = FloatComparison.rtol
+        if atol is None: atol = FloatComparison.atol
+        if isinstance(a, (float, int, long)):
             return operator.lt(a, b + atol + rtol*math.fabs(b))
         elif isinstance(a, complex):
             return self.lt(a.real, b.real, op, rtol, atol) and \
@@ -175,9 +183,9 @@ class FloatComparison:
 
     def gt(self, a, b, rtol=None, atol=None):
         """Tests a > b with tolerance."""
-        if rtol is None: rtol = self.rtol
-        if atol is None: atol = self.atol
-        if isinstance(a, float):
+        if rtol is None: rtol = FloatComparison.rtol
+        if atol is None: atol = FloatComparison.atol
+        if isinstance(a, (float, int, long)):
             return operator.gt(a, b - atol - rtol*math.fabs(b))
         elif isinstance(a, complex):
             return self.gt(a.real, b.real, op, rtol, atol) and \
@@ -198,16 +206,16 @@ class FloatComparison:
         """Return pretty print of operator, incl. tolerances."""
         if self.comparison_op == '==':
             s = 'a == b, computed as abs(a-b) < %g + %g*abs(b)' % \
-                (self.atol, self.rtol)
+                (FloatComparison.atol, FloatComparison.rtol)
         elif self.comparison_op == '!=':
             s = 'a != b, computed as abs(a-b) > %g + %g*abs(b)' % \
-                (self.atol, self.rtol)
+                (FloatComparison.atol, FloatComparison.rtol)
         elif '>' in self.comparison_op:
             s = 'a %s b, computed as a > b - %g - %g*abs(b)' % \
-                (self.comparison_op, self.atol, self.rtol)
+                (self.comparison_op, FloatComparison.atol, FloatComparison.rtol)
         elif '<' in self.comparison_op:
             s = 'a %s b, computed as a < b + %g + %g*abs(b)' % \
-                (self.comparison_op, self.atol, self.rtol)
+                (self.comparison_op, FloatComparison.atol, FloatComparison.rtol)
         return s
 
 # define convenience functions for quicker use of class FloatComparison:
