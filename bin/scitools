@@ -190,6 +190,9 @@ tmp_bergen_set15060.dat.old~~
 tmp_oslo_set31897.dat.old~~
 tmp_stavanger_set21864.dat.old~~
 tmp_trondheim_set15358.dat.old~~
+
+Supply the command-line argument --no-backup to avoid backing up files
+(might increase speed when renaming large files).
 """    
 
 def rename(from_regex, to_regex, filenames, backup=True):
@@ -208,9 +211,14 @@ def main_rename():
         print doc_rename
         sys.exit(1)
 
+    if '--no-backup' in sys.argv:
+        backup = False
+        sys.argv.remove('--no-backup')
+    else:
+        backup = True
     from_regex, to_regex = sys.argv[2], sys.argv[3]
     files = wildcard_notation(sys.argv[4:])
-    rename(from_regex, to_regex, files)
+    rename(from_regex, to_regex, files, backup)
 
 
 def usage_file2interactive():
