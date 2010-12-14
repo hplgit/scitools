@@ -1,0 +1,46 @@
+#TITLE: Easyviz Documentation
+#AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
+#AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
+#DATE: Aug 08, 2008
+
+======= Easyviz =======
+
+# #include "easyviz_intro.do.txt"
+
+======= Tutorial =======
+
+This tutorial starts with plotting a single curve with a simple
+`plot(x,y)` command. Then we add a legend, axis labels, a title, etc.
+Thereafter we show how multiple curves are plotted together. We also
+explain how line styles and axis range can be controlled. The
+next section deals with animations and making movie files. More advanced
+topics such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects close the curve
+plotting part of the tutorial.
+
+Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.
+
+
+# #include "easyviz_tutorial.do.txt"
+
+# #include "easyviz_2D3D.do.txt"
+
+# #include "easyviz_bars.do.txt"
+
+
+======= Backends =======
+
+# #include "easyviz_backends.do.txt"
+
+======= Design =======
+
+# #include "easyviz_design.do.txt"
+
+======= Installation =======
+
+# #include "easyviz_install.do.txt"
+
+======= Troubleshooting =======
+
+# #include "easyviz_trouble.do.txt"
