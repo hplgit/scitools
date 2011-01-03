@@ -20,9 +20,14 @@ for i in xrange(len(t)):
     y[i] = f(t[i])
 
 plot(t, y)
+show()  # optional
 !ec
 The first line imports all of SciTools and Easyviz that can be handy
-to have when doing scientific computations. In this program we
+to have when doing scientific computations. This includes everything
+from `numpy` (from `numpy import *`), 
+all Easyviz plotting commands, some modules (`sys`, `math`), and
+all of SciPy (`from scipy import *`) if SciPy is installed.
+In the program above, we first
 pre-allocate the `y` array and fill it with values, element by
 element, in a Python loop. Alternatively, we may operate
 on the whole `t` array at once, which yields faster and shorter code:
@@ -36,6 +41,7 @@ def f(t):
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
+show()                    # optional
 !ec
 The `f` function can also be skipped, if desired, so that we can write
 directly
@@ -52,7 +58,9 @@ hardcopy('tmp1.png') # produce PNG
 !ec
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG. 
-Figure ref{fig:plot1a} displays the resulting plot.
+Figure ref{fig:plot1a} displays the resulting plot. With `show(False)`
+we can suppress the plot from being shown at the screen, which is
+useful when create a large number of figure files in programs.
 
 FIGURE:[figs/plot1a.eps] A simple plot in PostScript format. label{fig:plot1a}
 
@@ -71,7 +79,7 @@ hits the Return key.
 
 ===== Decorating the Plot =====
 
-The $x$ and $y$ axis in curve plots should have labels, here $t$ and
+The $x$ and $y$ axes in curve plots should have labels, here $t$ and
 $y$, respectively. Also, the curve should be identified with a label,
 or legend as it is often called.  A title above the plot is also
 common.  In addition, we may want to control the extent of the axes (although
@@ -104,17 +112,17 @@ plot(t, y,
 
 With `show=False` one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-one generates a large number of plots in a loop.
+one generates a large number of separate figures in the program.
 
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Gnuplot is one example). 
+programs (Matplotlib and Gnuplot are two examples). 
 See Figure ref{fig:plot1c} for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
 
-FIGURE:[figs/plot1c.eps] A single curve with label, title, and axis adjusted. label{fig:plot1c}
+FIGURE:[figs/plot1c.eps] A single curve with label, title, and axes adjusted. label{fig:plot1c}
 
 
 ===== Plotting Multiple Curves =====
@@ -405,7 +413,7 @@ Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
 couple of issues with setting up the `plot` command for animations.
 
-The underlying plotting program will normally adjust the axis to the
+The underlying plotting program will normally adjust the $y$ axis to the
 maximum and minimum values of the curve if we do not specify the axis
 ranges explicitly. For an animation such automatic axis adjustment is
 misleading - the axis ranges must be fixed to avoid a jumping
@@ -633,6 +641,33 @@ from numpy import *
 Alternatively, one can edit the SciTools configuration file as
 explained below in the section "Setting Parameters in the
 Configuration File".
+
+Many discourage the use of "star import" as shown above. For example,
+the standard import of Numerical Python in all of its documentation is
+!bc
+import numpy as np
+!ec
+A similar import for SciTools and Easyviz is
+!bc
+import scitools.std as st
+import numpy as np
+!ec
+Although `np` functions are important into the namespace of `st` in
+this case, we recommend to distinguish the packages when using a prefix.
+A typical plotting example will then read
+!bc
+x = np.linspace(0, 3, 51)
+y = x**2*np.exp(-x)
+st.plot(x, y, 'r-', title="Plot")
+!ec
+
+The corresponding syntax for the
+minimalistic import of `scitools.easyviz` and `numpy` reads
+!bc
+import scitools.easyviz as ev
+import numpy as np
+!ec
+
 
 __Setting Parameters in the Configuration File.__
 Easyviz is a subpackage of SciTools, and the the SciTools

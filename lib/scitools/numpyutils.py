@@ -1081,7 +1081,7 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
     """
     import sys
     if 'numpy' in sys.modules:
-        y0, bin_edges = histogram(samples, bins=nbins, normed=True, new=True)
+        y0, bin_edges = histogram(samples, bins=nbins, normed=True)
     h = bin_edges[1] - bin_edges[0]  # bin width
     if piecewise_constant:
         x = zeros(2*len(bin_edges), type(bin_edges[0]))

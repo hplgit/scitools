@@ -109,8 +109,8 @@ def read_cml(option, default=None, argv=sys.argv):
     Search for option (e.g. '-p', '--plotfile') among the command-line
     arguments and return the associated value (the proceeding argument).
     If the option is not found, the default argument is returned
-    as a string (since everything we search for on the command line
-    will be strings).
+    as str(default) (to have a unified behavior in that everything returned
+    from read_cml is a string).
 
     The call::
     
