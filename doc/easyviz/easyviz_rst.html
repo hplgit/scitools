@@ -313,6 +313,8 @@ ul.auto-toc {
 <div class="document">
 
 
+<!-- Automatically generated reST file from Doconce source
+(http://code.google.com/p/doconce/) -->
 <!-- TITLE: Easyviz Documentation -->
 <!-- AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo -->
 <!-- AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo -->
@@ -348,24 +350,19 @@ end of the documentation.</p>
 <p>The present documentation is available in a number of formats:</p>
 <blockquote>
 <ul class="simple">
-<li><a class="reference external" href="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf">PDF</a></li>
-<li><a class="reference external" href="http://www.simula.no/~hpl/easyviz/easyviz.html">Plain HTML</a></li>
-<li><a class="reference external" href="http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html">Sphinx HTML</a></li>
-<li><a class="reference external" href="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt">Plain text</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf">PDF</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html">Plain HTML</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt">Plain text</a></li>
 <li><a class="reference external" href="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</a></li>
-<li><a class="reference external" href="https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt">Doconce source</a></li>
+<li>&quot;Doconce source&quot;: <a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt">https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt</a>&quot;</li>
 </ul>
 </blockquote>
-<p>The documentation is written in the <a class="reference external" href="http://code.google.com/p/doconce">Doconce</a>
-format and can be translated into a number of different formats (reST,
-Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).</p>
-<!-- URLs to files with HTML code does not work well with googlecode and svn: -->
-<!-- * `PDF <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf>`_ -->
-<!-- * `Plain HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html>`_ -->
-<!-- * `Sphinx HTML <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html>`_ -->
-<!-- * `Plain text <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt>`_ -->
-<!-- * `Wiki <http://code.google.com/p/scitools/wiki/EasyvizDocumentation>`_ -->
-<!-- * `Doconce source <https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt>`_ -->
+<p>The documentation is written in the
+<a class="reference external" href="http://code.google.com/p/doconce">Doconce</a>
+format and can be translated into a
+number of different formats (reST, Sphinx, LaTeX, HTML, XML,
+OpenOffice, RTF, Word, and plain untagged ASCII).</p>
 </div>
 <div class="section" id="guiding-principles">
 <h2>Guiding Principles</h2>
@@ -397,8 +394,8 @@ xlabel('t')
 ylabel('y')
 show()
 
-hardcopy('tmp0.ps')  # this one can be included in LaTeX
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.eps')  # this one can be included in LaTeX
+hardcopy('tmp0.png')  # this one can be included in HTML
 </pre>
 <p>Easyviz also allows these additional function calls to be executed
 as a part of the <tt class="docutils literal">plot</tt> call:</p>
@@ -408,10 +405,10 @@ plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      title='Simple Plot Demo',
      axis=(0, 3, -0.05, 0.6),
      xlabel='t', ylabel='y',
-     hardcopy='tmp1.ps',
+     hardcopy='tmp1.eps',
      show=True)
 
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.png')
 </pre>
 <p>A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands:</p>
@@ -464,12 +461,47 @@ commands - and jump to complicated fine-tuning only when strictly needed.</p>
 <tt class="docutils literal">plot(x,y)</tt> command. Then we add a legend, axis labels, a title, etc.
 Thereafter we show how multiple curves are plotted together. We also
 explain how line styles and axis range can be controlled. The
-next section deals with animations and making movie files. More advanced
-topics such as fine tuning of plots (using plotting package-specific
-commands) and working with Axis and Figure objects close the curve
+next topic deals with animations and making movie files. More advanced
+subjects, such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects, close the curve
 plotting part of the tutorial.</p>
 <p>Various methods for visualization of scalar fields in 2D and 3D are
 treated next, before we show how 2D and 3D vector fields can be handled.</p>
+<div class="section" id="a-note-on-import-statements">
+<h2>A Note on Import Statements</h2>
+<p>The recommended standard import of <tt class="docutils literal">numpy</tt>
+and <tt class="docutils literal">matplotlib</tt> in programs reads:</p>
+<pre class="literal-block">
+import numpy as np
+import matplotlib.pyplot as plt
+</pre>
+<p>This import ensures that all functionality from different packages are
+prefixed by a short form of the package name. This convention has,
+from a computer science perspective, many advantages as one sees
+clearly where functionality comes from.  However, convincing
+scientists with extensive Matlab, Fortran, or C++ experience to switch
+to Python can be hard when mathematical formulas are full of <tt class="docutils literal">np.</tt>
+prefixes and all plotting commands are decorated with an &quot;extra&quot;
+<tt class="docutils literal">plt.</tt> The developers of Easyviz think it is a major point to have
+Python code as close to Matlab and standard mathematical syntax as
+possible.  Therefore, examples in this manual employ the &quot;star
+import&quot;:</p>
+<pre class="literal-block">
+from scitools.std import *
+</pre>
+<p>This statement imports the Easyviz plotting commands and also performs
+<tt class="docutils literal">from numpy import *</tt>. Hence, mathematical functions like <tt class="docutils literal">sin</tt> and
+<tt class="docutils literal">log</tt> are available and work for arrays, as in Matlab, and the plotting
+commands are the same as those in Matlab. This type of import statement
+is similar to the popular:</p>
+<pre class="literal-block">
+from matplotlib.pylab import *
+</pre>
+<p>among Matplotlib users (although not promoted by Matplotlib developers).
+The primary additional feature of the
+<tt class="docutils literal">scitools.std</tt> import is the possibility to choose among many different
+backends for plotting, where Matplotlib is one of the options.</p>
+</div>
 <div class="section" id="plotting-a-single-curve">
 <h2>Plotting a Single Curve</h2>
 <p>Let us plot the curve y = t**2*exp(-t**2) for
@@ -490,9 +522,14 @@ for i in xrange(len(t)):
     y[i] = f(t[i])
 
 plot(t, y)
+show()  # optional
 </pre>
 <p>The first line imports all of SciTools and Easyviz that can be handy
-to have when doing scientific computations. In this program we
+to have when doing scientific computations. This includes everything
+from <tt class="docutils literal">numpy</tt> (from <tt class="docutils literal">numpy import *</tt>),
+all Easyviz plotting commands, some modules (<tt class="docutils literal">sys</tt>, <tt class="docutils literal">math</tt>), and
+all of SciPy (<tt class="docutils literal">from scipy import *</tt>) if SciPy is installed.
+In the program above, we first
 pre-allocate the <tt class="docutils literal">y</tt> array and fill it with values, element by
 element, in a Python loop. Alternatively, we may operate
 on the whole <tt class="docutils literal">t</tt> array at once, which yields faster and shorter code:</p>
@@ -505,6 +542,7 @@ def f(t):
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
+show()                    # optional
 </pre>
 <p>The <tt class="docutils literal">f</tt> function can also be skipped, if desired, so that we can write
 directly:</p>
@@ -520,7 +558,9 @@ hardcopy('tmp1.png') # produce PNG
 </pre>
 <p>The filename extension determines the format: <tt class="docutils literal">.ps</tt> or
 <tt class="docutils literal">.eps</tt> for PostScript, and <tt class="docutils literal">.png</tt> for PNG.
-Figure <a class="reference internal" href="#fig-plot1a">fig:plot1a</a> displays the resulting plot.</p>
+Figure <a class="reference internal" href="#fig-plot1a">fig:plot1a</a> displays the resulting plot. With <tt class="docutils literal">show(False)</tt>
+we can suppress the plot from being shown at the screen, which is
+useful when create a large number of figure files in programs.</p>
 <div class="figure" id="fig-plot1a">
 <img alt="figs/plot1a.png" src="figs/plot1a.png" />
 <p class="caption">A simple plot in PostScript format. (fig:plot1a)</p>
@@ -539,7 +579,7 @@ hits the Return key.</p>
 </div>
 <div class="section" id="decorating-the-plot">
 <h2>Decorating the Plot</h2>
-<p>The x and y axis in curve plots should have labels, here t and
+<p>The x and y axes in curve plots should have labels, here t and
 y, respectively. Also, the curve should be identified with a label,
 or legend as it is often called.  A title above the plot is also
 common.  In addition, we may want to control the extent of the axes (although
@@ -569,16 +609,16 @@ plot(t, y,
 </pre>
 <p>With <tt class="docutils literal">show=False</tt> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-one generates a large number of plots in a loop.</p>
+one generates a large number of separate figures in the program.</p>
 <p>Note that we in the curve legend write <tt class="docutils literal">t</tt> square as <tt class="docutils literal">t^2</tt> (LaTeX style)
 rather than <tt class="docutils literal"><span class="pre">t**2</span></tt> (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Gnuplot is one example).
+programs (Matplotlib and Gnuplot are two examples).
 See Figure <a class="reference internal" href="#fig-plot1c">fig:plot1c</a> for what the modified
 plot looks like and how <tt class="docutils literal">t^2</tt> is typeset in Gnuplot.</p>
 <div class="figure" id="fig-plot1c">
 <img alt="figs/plot1c.png" src="figs/plot1c.png" />
-<p class="caption">A single curve with label, title, and axis adjusted. (fig:plot1c)</p>
+<p class="caption">A single curve with label, title, and axes adjusted. (fig:plot1c)</p>
 </div>
 </div>
 <div class="section" id="plotting-multiple-curves">
@@ -863,7 +903,7 @@ suitable tool, which is reached through the <tt class="docutils literal">movie</
 Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
 couple of issues with setting up the <tt class="docutils literal">plot</tt> command for animations.</p>
-<p>The underlying plotting program will normally adjust the axis to the
+<p>The underlying plotting program will normally adjust the y axis to the
 maximum and minimum values of the curve if we do not specify the axis
 ranges explicitly. For an animation such automatic axis adjustment is
 misleading - the axis ranges must be fixed to avoid a jumping
@@ -1066,6 +1106,30 @@ from numpy import *
 <p>Alternatively, one can edit the SciTools configuration file as
 explained below in the section &quot;Setting Parameters in the
 Configuration File&quot;.</p>
+<p>Many discourage the use of &quot;star import&quot; as shown above. For example,
+the standard import of Numerical Python in all of its documentation is:</p>
+<pre class="literal-block">
+import numpy as np
+</pre>
+<p>A similar import for SciTools and Easyviz is:</p>
+<pre class="literal-block">
+import scitools.std as st
+import numpy as np
+</pre>
+<p>Although <tt class="docutils literal">np</tt> functions are important into the namespace of <tt class="docutils literal">st</tt> in
+this case, we recommend to distinguish the packages when using a prefix.
+A typical plotting example will then read:</p>
+<pre class="literal-block">
+x = np.linspace(0, 3, 51)
+y = x**2*np.exp(-x)
+st.plot(x, y, 'r-', title=&quot;Plot&quot;)
+</pre>
+<p>The corresponding syntax for the
+minimalistic import of <tt class="docutils literal">scitools.easyviz</tt> and <tt class="docutils literal">numpy</tt> reads:</p>
+<pre class="literal-block">
+import scitools.easyviz as ev
+import numpy as np
+</pre>
 <p><em>Setting Parameters in the Configuration File.</em> Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called <tt class="docutils literal">scitools.cfg</tt> has several sections
 (<tt class="docutils literal">[easyviz]</tt>, <tt class="docutils literal">[gnuplot]</tt>, and <tt class="docutils literal">[matplotlib]</tt>) where parameters
@@ -1538,10 +1602,10 @@ view([-65,20])
 axis('tight')
 show()
 </pre>
-<p>Figure <a href="#id1"><span class="problematic" id="id2">`fig:isosurface2`_</span></a> shows the resulting plot.</p>
-<div class="figure">
+<p>Figure <a class="reference internal" href="#fig-isosurface2">fig:isosurface2</a> shows the resulting plot.</p>
+<div class="figure" id="fig-isosurface2">
 <img alt="figs/isosurface2.png" src="figs/isosurface2.png" />
-<p class="caption">Another isosurface plot (VTK backend). label`fig:isosurface2`_</p>
+<p class="caption">Another isosurface plot (VTK backend). (fig:isosurface2)</p>
 </div>
 </div>
 <div class="section" id="volumetric-slice-plot">
@@ -2011,7 +2075,17 @@ xlim([-2,2])
 <div class="section" id="installation">
 <h1>Installation</h1>
 <p>Easyviz comes with the SciTools package, so to install Easyviz, you
-just go to the <tt class="docutils literal">scitools</tt> folder and run:</p>
+must install SciTools, which is available from
+<a class="reference external" href="http://code.google.com/p/scitools">Google code</a>.</p>
+<p>If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is an example), you get SciTools and all its
+dependencies with one Unix command:</p>
+<pre class="literal-block">
+Unix&gt; sudo apt-get install python-scitools
+</pre>
+<p>(SciTools is in standard Debian.)</p>
+<p>Otherwise, you download the tarball with the SciTools software, pack it out,
+go the <tt class="docutils literal">scitools</tt> folder, and run the standard command:</p>
 <pre class="literal-block">
 Unix/DOS&gt; python setup.py install
 </pre>
@@ -2019,9 +2093,10 @@ Unix/DOS&gt; python setup.py install
 imported in several ways (see the paragraph heading
 &quot;Importing Just Easyviz&quot; in the Tutorial).</p>
 <p>Easyviz will not work unless you have one or more plotting programs
-correctly installed. Below, we have collected some information on installing
-various programs. This information is in a very preliminary and incomplete
-stage.</p>
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an <tt class="docutils literal"><span class="pre">apt-get</span>
+install <span class="pre">python-scitools</span></tt> all necessary plotting programs are
+automatically installed for you.)</p>
 <p>Please check your plotting program independently of Easyviz, as
 described in the <em>Check Your Backends!</em> section of the <em>Troubleshooting</em>
 chapter, if you encounter strange errors during Easyviz plotting.</p>
@@ -2038,6 +2113,9 @@ run:</p>
 <pre class="literal-block">
 apt-get install gnuplot gnuplot-x11 python-gnuplot
 </pre>
+<p>but running these commands are not necessary since on Debian/Ubuntu you
+will install <tt class="docutils literal"><span class="pre">python-scitools</span></tt> which effectively installs all the
+software that SciTools depend on.</p>
 </div>
 <div class="section" id="windows">
 <h2>Windows</h2>
@@ -2091,6 +2169,7 @@ cd scitools
 python setup.py bdist_wininst
 dist\SciTools-0.4.win32.exe
 </pre>
+<p>(The SciTools version number differs.)</p>
 </div>
 <div class="section" id="installing-matplotlib">
 <h2>Installing Matplotlib</h2>
@@ -2099,11 +2178,6 @@ dist\SciTools-0.4.win32.exe
 python setup.py install
 </pre>
 <p>in the root directory of the Matplotlib code.</p>
-<p><em>Debian/Ubuntu.</em> Prebuilt versions are available for Debian/Ubuntu:
-run:</p>
-<pre class="literal-block">
-apt-get install python-matplotlib dvipng
-</pre>
 <p><em>Windows.</em> You can download prebuilt binaries from the Matplotlib home page.</p>
 </div>
 </div>
@@ -2390,7 +2464,7 @@ supported by all backends):</p>
 <li>set,</li>
 <li>shading,</li>
 <li>show,</li>
-<li><a href="#id3"><span class="problematic" id="id4">slice_</span></a>,</li>
+<li><a href="#id1"><span class="problematic" id="id2">slice_</span></a>,</li>
 <li>spring,</li>
 <li>streamline,</li>
 <li>streamribbon,</li>
@@ -2417,10 +2491,7 @@ supported by all backends):</p>
 <div class="system-messages section">
 <h1>Docutils System Messages</h1>
 <div class="system-message" id="id1">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 1501); <em><a href="#id2">backlink</a></em></p>
-Unknown target name: &quot;fig:isosurface2&quot;.</div>
-<div class="system-message" id="id3">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2639); <em><a href="#id4">backlink</a></em></p>
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2723); <em><a href="#id2">backlink</a></em></p>
 Unknown target name: &quot;slice&quot;.</div>
 </div>
 </div>

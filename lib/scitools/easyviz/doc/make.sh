@@ -18,7 +18,7 @@ dvipdf tmp_easyviz.dvi
 # conversion because we write slice_ in the list of Matlab-like commands...
 
 doconce2format gwiki tmp_easyviz.do.txt
-doconce_gwiki_figsubst.py tmp_easyviz.gwiki https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc
+doconce_gwiki_figsubst.py tmp_easyviz.gwiki https://scitools.googlecode.com/hg/doc/easyviz
 
 doconce2format sphinx tmp_easyviz.do.txt
 rm -rf sphinx-rootdir
@@ -49,9 +49,8 @@ EOF
 mv tmp_easyviz.rst sphinx-rootdir
 # index-sphinx is a ready-made version of index.rst:
 cp index-sphinx sphinx-rootdir/index.rst
-cp -r figs tmp-figs
-find tmp-figs -name .svn -exec rm -rf {} \; 2> /dev/null
-cp -r tmp-figs sphinx-rootdir/figs  # important for finding the figures...
+cp -r figs sphinx-rootdir/figs   # important for finding the figures...
+rm -f sphinx-rootdir/figs/*.*ps  # save some diskspace
 cd sphinx-rootdir
 make clean
 make html
@@ -69,23 +68,16 @@ cp tmp_easyviz.txt   ../../../../doc/easyviz/easyviz.txt
 preprocess tmp_easyviz.do.txt > tmp.do.txt
 cp tmp.do.txt  ../../../../doc/easyviz/easyviz.do.txt
 #cp tmp_easyviz_sphinx.pdf ../../../../doc/easyviz/easyviz_sphinx.pdf
+# must remove old dirs, otherwise new files won't overwrite
+rm -rf ../../../../doc/easyviz/easyviz_sphinx_html
+rm -rf ../../../../doc/easyviz/figs
+rm -rf ../../../../doc/easyviz/easyviz_sphinx_html/figs
 cp -r sphinx-rootdir/_build/html ../../../../doc/easyviz/easyviz_sphinx_html
-cp -r figs tmp-figs
-find tmp-figs -name .svn -exec rm -rf {} \; 2> /dev/null
-cp -r tmp-figs       ../../../../doc/easyviz/figs  # to make HTML work
+cp -r figs ../../../../doc/easyviz/figs  # to make HTML work
+cp -r figs ../../../../doc/easyviz/easyviz_sphinx_html/figs  # to make Sphinx work
+rm -f ../../../../doc/easyviz/figs/*.*ps ../../../../doc/easyviz/easyviz_sphinx_html/figs/*.*ps  # save some diskspace
 
 ls ../../../../doc/easyviz/
-
-# HTML and sphinx doesn't work well at googlecode directly from the
-# svn tree, so we copy these to another location:
-cd ../../../../doc/
-rm -rf tmp
-cp -r easyviz tmp
-cd tmp
-find . -name .svn -exec rm -rf {} \; 2> /dev/null
-echo
-echo "cd ../../../../doc/"
-echo "rm -rf tmp"
 
 
 

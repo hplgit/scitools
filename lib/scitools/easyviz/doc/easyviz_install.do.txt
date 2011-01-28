@@ -1,5 +1,17 @@
 Easyviz comes with the SciTools package, so to install Easyviz, you
-just go to the `scitools` folder and run
+must install SciTools, which is available from
+"Google code": "http://code.google.com/p/scitools".
+
+If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is an example), you get SciTools and all its
+dependencies with one Unix command:
+!bc
+Unix> sudo apt-get install python-scitools
+!ec
+(SciTools is in standard Debian.)
+
+Otherwise, you download the tarball with the SciTools software, pack it out,
+go the `scitools` folder, and run the standard command
 !bc
 Unix/DOS> python setup.py install
 !ec
@@ -8,9 +20,10 @@ imported in several ways (see the paragraph heading
 "Importing Just Easyviz" in the Tutorial).
 
 Easyviz will not work unless you have one or more plotting programs
-correctly installed. Below, we have collected some information on installing
-various programs. This information is in a very preliminary and incomplete
-stage.
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an `apt-get
+install python-scitools` all necessary plotting programs are
+automatically installed for you.)
 
 Please check your plotting program independently of Easyviz, as
 described in the *Check Your Backends!* section of the *Troubleshooting*
@@ -31,6 +44,9 @@ run
 !bc
 apt-get install gnuplot gnuplot-x11 python-gnuplot
 !ec
+but running these commands are not necessary since on Debian/Ubuntu you
+will install `python-scitools` which effectively installs all the
+software that SciTools depend on.
 
 ===== Windows =====
 
@@ -94,7 +110,7 @@ cd scitools
 python setup.py bdist_wininst
 dist\SciTools-0.4.win32.exe
 !ec
-
+(The SciTools version number differs.)
 
 ===== Installing Matplotlib =====
 
@@ -103,13 +119,6 @@ This is normally just a matter of
 python setup.py install
 !ec
 in the root directory of the Matplotlib code.
-
-__Debian/Ubuntu.__
-Prebuilt versions are available for Debian/Ubuntu:
-run
-!bc
-apt-get install python-matplotlib dvipng
-!ec
 
 __Windows.__
 You can download prebuilt binaries from the Matplotlib home page.

@@ -39,35 +39,28 @@ end of the documentation.
 The present documentation is available in a number of formats:
 
 
-  * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf PDF]
-  * [http://www.simula.no/~hpl/easyviz/easyviz.html Plain HTML]
-  * [http://www.simula.no/~hpl/easyviz/easyviz_sphinx_html/html/index.html Sphinx HTML]
-  * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt Plain text]
+  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf PDF]
+  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html Plain HTML]
+  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html Sphinx HTML]
+  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt Plain text]
   * [http://code.google.com/p/scitools/wiki/EasyvizDocumentation Wiki]
-  * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt Doconce source]
+  * "Doconce source": https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
-The documentation is written in the [http://code.google.com/p/doconce Doconce]
-format and can be translated into a number of different formats (reST,
-Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
-
-
-<wiki:comment> URLs to files with HTML code does not work well with googlecode and svn: </wiki:comment>
-
-<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.pdf PDF] </wiki:comment>
-<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.html Plain HTML] </wiki:comment>
-<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz_sphinx_html/index.html Sphinx HTML] </wiki:comment>
-<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.txt Plain text] </wiki:comment>
-<wiki:comment> * [http://code.google.com/p/scitools/wiki/EasyvizDocumentation Wiki] </wiki:comment>
-<wiki:comment> * [https://scitools.googlecode.com/svn/trunk/doc/easyviz/easyviz.do.txt Doconce source] </wiki:comment>
+The documentation is written in the 
+[http://code.google.com/p/doconce Doconce] 
+format and can be translated into a
+number of different formats (reST, Sphinx, LaTeX, HTML, XML,
+OpenOffice, RTF, Word, and plain untagged ASCII).
 
 ==== Guiding Principles ====
 
 *First principle.* Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple
+
 {{{
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = t**2*exp(-t**2)
-plot(t, y)
+plot(t, y) 
 }}}
 plots the data in (the NumPy array) `t` versus the data in (the NumPy
 array) `y`. If you need legends, control of the axis, as well as
@@ -90,8 +83,8 @@ xlabel('t')
 ylabel('y')
 show()
 
-hardcopy('tmp0.ps')  # this one can be included in LaTeX
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.eps')  # this one can be included in LaTeX
+hardcopy('tmp0.png')  # this one can be included in HTML
 }}}
 Easyviz also allows these additional function calls to be executed
 as a part of the `plot` call:
@@ -101,10 +94,10 @@ plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      title='Simple Plot Demo',
      axis=(0, 3, -0.05, 0.6),
      xlabel='t', ylabel='y',
-     hardcopy='tmp1.ps',
+     hardcopy='tmp1.eps',
      show=True)
 
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.png')
 }}}
 A scalar function `f(x,y)` may be visualized
 as an elevated surface with colors using these commands:
@@ -162,13 +155,48 @@ This tutorial starts with plotting a single curve with a simple
 `plot(x,y)` command. Then we add a legend, axis labels, a title, etc.
 Thereafter we show how multiple curves are plotted together. We also
 explain how line styles and axis range can be controlled. The
-next section deals with animations and making movie files. More advanced
-topics such as fine tuning of plots (using plotting package-specific
-commands) and working with Axis and Figure objects close the curve
+next topic deals with animations and making movie files. More advanced
+subjects, such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects, close the curve
 plotting part of the tutorial.
 
 Various methods for visualization of scalar fields in 2D and 3D are
 treated next, before we show how 2D and 3D vector fields can be handled.
+
+==== A Note on Import Statements ====
+
+The recommended standard import of `numpy`
+and `matplotlib` in programs reads:
+{{{
+import numpy as np
+import matplotlib.pyplot as plt
+}}}
+This import ensures that all functionality from different packages are
+prefixed by a short form of the package name. This convention has,
+from a computer science perspective, many advantages as one sees
+clearly where functionality comes from.  However, convincing
+scientists with extensive Matlab, Fortran, or C++ experience to switch
+to Python can be hard when mathematical formulas are full of `np.`
+prefixes and all plotting commands are decorated with an "extra"
+`plt.` The developers of Easyviz think it is a major point to have
+Python code as close to Matlab and standard mathematical syntax as
+possible.  Therefore, examples in this manual employ the "star
+import":
+{{{
+from scitools.std import *
+}}}
+This statement imports the Easyviz plotting commands and also performs
+`from numpy import *`. Hence, mathematical functions like `sin` and
+`log` are available and work for arrays, as in Matlab, and the plotting
+commands are the same as those in Matlab. This type of import statement
+is similar to the popular
+{{{
+from matplotlib.pylab import *
+}}}
+among Matplotlib users (although not promoted by Matplotlib developers). 
+The primary additional feature of the
+`scitools.std` import is the possibility to choose among many different
+backends for plotting, where Matplotlib is one of the options.
 
 ==== Plotting a Single Curve ====
 
@@ -178,6 +206,7 @@ coordinates for `t`, say 51 values (50 intervals). Then we compute the
 corresponding `y` values at these points, before we call the
 `plot(t,y)` command to make the curve plot.  Here is the complete
 program:
+
 {{{
 from scitools.std import *
 
@@ -190,12 +219,18 @@ for i in xrange(len(t)):
     y[i] = f(t[i])
 
 plot(t, y)
+show()  # optional
 }}}
 The first line imports all of SciTools and Easyviz that can be handy
-to have when doing scientific computations. In this program we
+to have when doing scientific computations. This includes everything
+from `numpy` (from `numpy import *`), 
+all Easyviz plotting commands, some modules (`sys`, `math`), and
+all of SciPy (`from scipy import *`) if SciPy is installed.
+In the program above, we first
 pre-allocate the `y` array and fill it with values, element by
 element, in a Python loop. Alternatively, we may operate
 on the whole `t` array at once, which yields faster and shorter code:
+
 {{{
 from scitools.std import *
 
@@ -205,6 +240,7 @@ def f(t):
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
+show()                    # optional
 }}}
 The `f` function can also be skipped, if desired, so that we can write
 directly
@@ -221,7 +257,9 @@ hardcopy('tmp1.png') # produce PNG
 }}}
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG. 
-Figure fig:plot1a displays the resulting plot.
+Figure fig:plot1a displays the resulting plot. With `show(False)`
+we can suppress the plot from being shown at the screen, which is
+useful when create a large number of figure files in programs.
 
 
 
@@ -229,12 +267,9 @@ Figure fig:plot1a displays the resulting plot.
 
 Figure: A simple plot in PostScript format. (fig:plot1a)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot1a.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot1a.png
 
-<wiki:comment> 
-Put the figure file figs/plot1a.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -253,13 +288,14 @@ hits the Return key.
 
 ==== Decorating the Plot ====
 
-The `x` and `y` axis in curve plots should have labels, here `t` and
+The `x` and `y` axes in curve plots should have labels, here `t` and
 `y`, respectively. Also, the curve should be identified with a label,
 or legend as it is often called.  A title above the plot is also
 common.  In addition, we may want to control the extent of the axes (although
 most plotting programs will automatically adjust the axes to the range of the
 data).
 All such things are easily added after the `plot` command:
+
 {{{
 xlabel('t')
 ylabel('y')
@@ -271,6 +307,7 @@ This syntax is inspired by Matlab to make the switch between
 Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" `plot` command where
 all the plot properties can be set at once:
+
 {{{
 plot(t, y,
      xlabel='t',
@@ -284,12 +321,12 @@ plot(t, y,
 
 With `show=False` one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-one generates a large number of plots in a loop.
+one generates a large number of separate figures in the program.
 
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Gnuplot is one example). 
+programs (Matplotlib and Gnuplot are two examples). 
 See Figure fig:plot1c for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
@@ -298,14 +335,11 @@ plot looks like and how `t^2` is typeset in Gnuplot.
 
 ---------------------------------------------------------------
 
-Figure: A single curve with label, title, and axis adjusted. (fig:plot1c)
+Figure: A single curve with label, title, and axes adjusted. (fig:plot1c)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot1c.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot1c.png
 
-<wiki:comment> 
-Put the figure file figs/plot1c.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Plotting Multiple Curves ====
@@ -319,6 +353,7 @@ each other, two separate plots will be made. To make the second
 issue a `hold('on')` command. Alternatively, we can provide all
 data in a single `plot` command. A complete program illustrates the
 different approaches:
+
 {{{
 from scitools.std import *   # for curve plotting
 
@@ -362,12 +397,9 @@ plot.
 
 Figure: Two curves in the same plot. (fig:plot2a)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2a.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2a.png
 
-<wiki:comment> 
-Put the figure file figs/plot2a.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Controlling Line Styles ====
@@ -385,6 +417,7 @@ the color and a symbol from the keyboard for the line type. For
 example, `r-` represents a red (`r`) line (`-`), while `bo` means blue
 (`b`) circles (`o`). The line style specification is added as an
 argument after the `x` and `y` coordinate arrays of the curve:
+
 {{{
 plot(t, y1, 'r-')
 hold('on')
@@ -402,12 +435,9 @@ Figure fig:plot2c.
 
 Figure: Two curves in the same plot, with controlled line styles. (fig:plot2c)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2c.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2c.png
 
-<wiki:comment> 
-Put the figure file figs/plot2c.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -418,6 +448,7 @@ slice: `t2 = t[::4]`. Note that the first colon means the range from the
 first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
+
 {{{
 from scitools.std import *
 
@@ -452,12 +483,9 @@ the Gnuplot program one can view the effect in Figure fig:plot2g.
 
 Figure: Circles at every 4 points and extended line thickness (6) and circle size (3). (fig:plot2g)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2g.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2g.png
 
-<wiki:comment> 
-Put the figure file figs/plot2g.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -516,6 +544,7 @@ which means a black solid line with black crosses at the data points.
 *Another Example.* Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
 the `f_2(t)` curve:
+
 {{{
 from scitools.std import *
 
@@ -557,12 +586,9 @@ The plot is shown in Figure fig:plot3.
 
 Figure: A plot with three curves.  (fig:plot3)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot3.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot3.png
 
-<wiki:comment> 
-Put the figure file figs/plot3.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -571,6 +597,7 @@ googlecode repository) and substitute the line above with the URL.
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
+
 {{{
 t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
@@ -637,12 +664,9 @@ formula above as a function `f(x, m, s)`.
 
 Figure: Different shapes of a Gaussian function. (fig:plot4)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot4.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot4.png
 
-<wiki:comment> 
-Put the figure file figs/plot4.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -657,7 +681,7 @@ Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
 couple of issues with setting up the `plot` command for animations.
 
-The underlying plotting program will normally adjust the axis to the
+The underlying plotting program will normally adjust the `y` axis to the
 maximum and minimum values of the curve if we do not specify the axis
 ranges explicitly. For an animation such automatic axis adjustment is
 misleading - the axis ranges must be fixed to avoid a jumping
@@ -673,6 +697,7 @@ limit the `x` coordinates to `[m-3s,m+3s]`.
 Now we are ready to take a look at the complete code
 for animating how the Gaussian function evolves as the `s` parameter
 is decreased from 2 to 0.2:
+
 {{{
 from scitools.std import *
 import time
@@ -877,6 +902,33 @@ Alternatively, one can edit the SciTools configuration file as
 explained below in the section "Setting Parameters in the
 Configuration File".
 
+Many discourage the use of "star import" as shown above. For example,
+the standard import of Numerical Python in all of its documentation is
+{{{
+import numpy as np
+}}}
+A similar import for SciTools and Easyviz is
+{{{
+import scitools.std as st
+import numpy as np
+}}}
+Although `np` functions are important into the namespace of `st` in
+this case, we recommend to distinguish the packages when using a prefix.
+A typical plotting example will then read
+{{{
+x = np.linspace(0, 3, 51)
+y = x**2*np.exp(-x)
+st.plot(x, y, 'r-', title="Plot")
+}}}
+
+The corresponding syntax for the
+minimalistic import of `scitools.easyviz` and `numpy` reads
+{{{
+import scitools.easyviz as ev
+import numpy as np
+}}}
+
+
 *Setting Parameters in the Configuration File.* Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called `scitools.cfg` has several sections
 (`[easyviz]`, `[gnuplot]`, and `[matplotlib]`) where parameters
@@ -944,12 +996,9 @@ Figure fig:plot2i.
 
 Figure: Illustration of a text and an arrow using Gnuplot-specific commands. (fig:plot2i)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/plot2i.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2i.png
 
-<wiki:comment> 
-Put the figure file figs/plot2i.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -960,6 +1009,7 @@ but Gnuplot does. If we use Gnuplot as backend, we may grab the
 directly. Here is an example of the typical recipe, written after the
 core of the plot is made in the ordinary (plotting
 program-independent) way:
+
 {{{
 g = get_backend()
 if backend == 'gnuplot':
@@ -1003,6 +1053,7 @@ labels, ranges, and the title using an Axis object instead of
 providing the information in separate commands or as part of a `plot`
 command. The `gca` (get current axis) command returns an `Axis`
 object, whose `set` method can be used to set axis properties:
+
 {{{
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
@@ -1152,12 +1203,9 @@ extensions `xv` and `yv` of `x` and `y`.
 
 Figure: Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). (fig:mesh_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/mesh_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/mesh_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/mesh_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1174,12 +1222,9 @@ surf(xv, yv, values)
 
 Figure: Result of the surf command (Gnuplot backend). (fig:surf_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/surf_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/surf_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1217,12 +1262,9 @@ Figure fig:surf_ex2 displays the result.
 
 Figure: Result of an extended surf command (Gnuplot backend). (fig:surf_ex2)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surf_ex2.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/surf_ex2.png
 
-<wiki:comment> 
-Put the figure file figs/surf_ex2.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Contour Plots ====
@@ -1264,12 +1306,9 @@ Figure fig:contour_ex1.
 
 Figure: Result of the simplest possible contour command (Gnuplot backend). (fig:contour_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contour_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/contour_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1288,12 +1327,9 @@ The result can be seen in Figure fig:contour_ex2.
 
 Figure: A contour plot with 15 contour levels (Gnuplot backend). (fig:contour_ex2)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex2.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contour_ex2.png
 
-<wiki:comment> 
-Put the figure file figs/contour_ex2.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1321,12 +1357,9 @@ being displayed in black and white.
 
 Figure: Four individually specified contour levels (Gnuplot backend). (fig:contour_ex3)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour_ex3.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contour_ex3.png
 
-<wiki:comment> 
-Put the figure file figs/contour_ex3.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1345,12 +1378,9 @@ contour plots.
 
 Figure: Filled contour plot created by the contourf command (VTK backend). (fig:contourf_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourf_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contourf_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/contourf_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1367,12 +1397,9 @@ contour3(xv, yv, values, 15)
 
 Figure: Example on the contour3 command for elevated contour levels (Gnuplot backend). (fig:contour3_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contour3_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contour3_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/contour3_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1400,12 +1427,9 @@ fig:surfc_ex1.
 
 Figure: Wireframe mesh with contours at the bottom (Gnuplot backend). (fig:meshc_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/meshc_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/meshc_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/meshc_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1416,12 +1440,9 @@ googlecode repository) and substitute the line above with the URL.
 
 Figure: Surface plot with contours (Gnuplot backend). (fig:surfc_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/surfc_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/surfc_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/surfc_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Pseudocolor Plots ====
@@ -1446,12 +1467,9 @@ VTK backend supports all of them.
 
 Figure: Pseudocolor plot (Gnuplot backend).
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/pcolor_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/pcolor_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/pcolor_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Isosurface Plots ====
@@ -1491,12 +1509,9 @@ isosurfaces.
 
 Figure: Isosurface plot (VTK backend). (fig:isosurface1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/isosurface1.png
 
-<wiki:comment> 
-Put the figure file figs/isosurface1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1519,14 +1534,11 @@ Figure fig:isosurface2 shows the resulting plot.
 
 ---------------------------------------------------------------
 
-Figure: Another isosurface plot (VTK backend). labelfig:isosurface2
+Figure: Another isosurface plot (VTK backend). (fig:isosurface2)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/isosurface2.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/isosurface2.png
 
-<wiki:comment> 
-Put the figure file figs/isosurface2.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Volumetric Slice Plot ====
@@ -1567,12 +1579,9 @@ Figure fig:slice1.
 
 Figure: Slice plot where the `x` axis is sliced at -1.2, 0.8, and 2, the `y` axis is sliced at 2, and the `z` axis is sliced at -2 and 0.0 (VTK backend). (fig:slice1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/slice1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/slice1.png
 
-<wiki:comment> 
-Put the figure file figs/slice1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1613,12 +1622,9 @@ commands results in the plot shown in Figure fig:contourslice1.
 
 Figure: Contours in slice planes (VTK backend). (fig:contourslice1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contourslice1.png
 
-<wiki:comment> 
-Put the figure file figs/contourslice1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1645,12 +1651,9 @@ in the plane `z=8`. Figure fig:contourslice3 displays the result.
 
 Figure: Contour slice plot of a 3D MRI data set (VTK backend). (fig:contourslice3)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/contourslice3.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/contourslice3.png
 
-<wiki:comment> 
-Put the figure file figs/contourslice3.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1696,12 +1699,9 @@ turn produces the plot in Figure fig:quiver_ex1.
 
 Figure: Velocity vector plot (Gnuplot backend). (fig:quiver_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/quiver_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/quiver_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1736,7 +1736,7 @@ quiver(xv, yv, uv, vv, 'filled', 'k', axis=[-6,6,-6,6])
 figure(2)
 contour(xv, yv, values, 15) 
 hold('on')
-quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
+quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
 }}}
 The resulting plots can be seen in Figure fig:quiver_ex2 and
 fig:quiver_ex3. 
@@ -1747,12 +1747,9 @@ fig:quiver_ex3.
 
 Figure: Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex2)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex2.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/quiver_ex2.png
 
-<wiki:comment> 
-Put the figure file figs/quiver_ex2.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1762,12 +1759,9 @@ googlecode repository) and substitute the line above with the URL.
 
 Figure: Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex3)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver_ex3.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/quiver_ex3.png
 
-<wiki:comment> 
-Put the figure file figs/quiver_ex3.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1795,12 +1789,9 @@ fig:quiver3_ex1.
 
 Figure: 3D quiver plot (VTK backend). (fig:quiver3_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/quiver3_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/quiver3_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/quiver3_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Stream Plots ====
@@ -1873,12 +1864,9 @@ resulting plot is presented in Figure fig:streamline_ex1.
 
 Figure: Stream line plot (Vtk backend). (fig:streamline_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamline_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/streamline_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/streamline_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1903,12 +1891,9 @@ fig:streamtube_ex1.
 
 Figure: Stream tubes (Vtk backend). (fig:streamtube_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamtube_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/streamtube_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/streamtube_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -1930,12 +1915,9 @@ Figure fig:streamribbon_ex1 shows the resulting stream ribbons.
 
 Figure: Stream ribbons (VTK backend). (fig:streamribbon_ex1)
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/streamribbon_ex1.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/streamribbon_ex1.png
 
-<wiki:comment> 
-Put the figure file figs/streamribbon_ex1.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 ==== Bar Charts ====
@@ -1963,12 +1945,9 @@ correspond to the names in `languages`.
 
 Figure: A simple bar chart illustrating the popularity of common programming languages.
 
-https://scitools.googlecode.com/svn/trunk/lib/scitools/easyviz/doc/figs/pyranking.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/pyranking.png
 
-<wiki:comment> 
-Put the figure file figs/pyranking.png on the web (e.g., as part of the
-googlecode repository) and substitute the line above with the URL.
-</wiki:comment>
+
 ---------------------------------------------------------------
 
 
@@ -2165,7 +2144,19 @@ xlim([-2,2])
 == Installation ==
 
 Easyviz comes with the SciTools package, so to install Easyviz, you
-just go to the `scitools` folder and run
+must install SciTools, which is available from
+[http://code.google.com/p/scitools Google code].
+
+If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is an example), you get SciTools and all its
+dependencies with one Unix command:
+{{{
+Unix> sudo apt-get install python-scitools
+}}}
+(SciTools is in standard Debian.)
+
+Otherwise, you download the tarball with the SciTools software, pack it out,
+go the `scitools` folder, and run the standard command
 {{{
 Unix/DOS> python setup.py install
 }}}
@@ -2174,9 +2165,10 @@ imported in several ways (see the paragraph heading
 "Importing Just Easyviz" in the Tutorial).
 
 Easyviz will not work unless you have one or more plotting programs
-correctly installed. Below, we have collected some information on installing
-various programs. This information is in a very preliminary and incomplete
-stage.
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an `apt-get
+install python-scitools` all necessary plotting programs are
+automatically installed for you.)
 
 Please check your plotting program independently of Easyviz, as
 described in the *Check Your Backends!* section of the *Troubleshooting*
@@ -2195,6 +2187,9 @@ run
 {{{
 apt-get install gnuplot gnuplot-x11 python-gnuplot
 }}}
+but running these commands are not necessary since on Debian/Ubuntu you
+will install `python-scitools` which effectively installs all the
+software that SciTools depend on.
 
 ==== Windows ====
 
@@ -2255,6 +2250,7 @@ cd scitools
 python setup.py bdist_wininst
 dist\SciTools-0.4.win32.exe
 }}}
+(The SciTools version number differs.)
 
 ==== Installing Matplotlib ====
 
@@ -2263,12 +2259,6 @@ This is normally just a matter of
 python setup.py install
 }}}
 in the root directory of the Matplotlib code.
-
-*Debian/Ubuntu.* Prebuilt versions are available for Debian/Ubuntu:
-run
-{{{
-apt-get install python-matplotlib dvipng
-}}}
 
 *Windows.* You can download prebuilt binaries from the Matplotlib home page.
 

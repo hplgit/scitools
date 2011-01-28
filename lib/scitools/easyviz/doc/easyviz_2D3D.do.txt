@@ -273,7 +273,7 @@ show()
 !ec
 Figure ref{fig:isosurface2} shows the resulting plot.
 
-FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend). labelref{fig:isosurface2}
+FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend). label{fig:isosurface2}
 
 
 ===== Volumetric Slice Plot =====

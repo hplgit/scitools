@@ -30,16 +30,18 @@ end of the documentation.
 
 The present documentation is available in a number of formats:
 
-  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf<PDF>
-  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html<Plain HTML>
-  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html<Sphinx HTML>
-  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt<Plain text>
-  * http://code.google.com/p/scitools/wiki/EasyvizDocumentation<Wiki>
-  * https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt<Doconce source>
+  * "PDF": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf"
+  * "Plain HTML": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html"
+  * "Sphinx HTML": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html"
+  * "Plain text": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt"
+  * "Wiki": "http://code.google.com/p/scitools/wiki/EasyvizDocumentation"
+  * "Doconce source": https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
-The documentation is written in the http://code.google.com/p/doconce<Doconce>
-format and can be translated into a number of different formats (reST,
-Sphinx, LaTeX, HTML, XML, OpenOffice, RTF, Word, and plain untagged ASCII).
+The documentation is written in the 
+"Doconce": "http://code.google.com/p/doconce" 
+format and can be translated into a
+number of different formats (reST, Sphinx, LaTeX, HTML, XML,
+OpenOffice, RTF, Word, and plain untagged ASCII).
 
 
 ===== Guiding Principles =====
@@ -73,8 +75,8 @@ xlabel('t')
 ylabel('y')
 show()
 
-hardcopy('tmp0.ps')  # this one can be included in LaTeX
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.eps')  # this one can be included in LaTeX
+hardcopy('tmp0.png')  # this one can be included in HTML
 !ec
 Easyviz also allows these additional function calls to be executed
 as a part of the `plot` call:
@@ -84,10 +86,10 @@ plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      title='Simple Plot Demo',
      axis=(0, 3, -0.05, 0.6),
      xlabel='t', ylabel='y',
-     hardcopy='tmp1.ps',
+     hardcopy='tmp1.eps',
      show=True)
 
-hardcopy('tmp0.png') # this one can be included in HTML
+hardcopy('tmp0.png')
 !ec
 A scalar function $f(x,y)$ may be visualized
 as an elevated surface with colors using these commands:
