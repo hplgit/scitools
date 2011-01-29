@@ -40,7 +40,8 @@ import matplotlib.colors
 _update_from_config_file(matplotlib.rcParams, section='matplotlib')
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
-import pylab
+#import pylab
+import matplotlib.pyplot as pylab
 import re
 
 

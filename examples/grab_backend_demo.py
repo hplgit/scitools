@@ -28,9 +28,9 @@ print "Let us now tune the plot by grabbing the backend."
 raw_input('Press Return key to continue:')
 
 # Grab the backend and fine tune the plot:
-g = get_backend()
 if backend == 'matplotlib':
-    ax = g.gca()
+    pyplot = get_backend()
+    ax = pyplot.gca()
     # Remove tick labels:
     ax.set_xticklabels([])
     ax.set_yticklabels([])
@@ -43,9 +43,10 @@ if backend == 'matplotlib':
     l._loc = 9  # upper center (is there a better way to set location?)
     # Add shadow to legend box:
     l.shadow = True
-    g.draw()
+    pyplot.draw()
 
 elif backend == 'gnuplot':
+    g = get_backend()
     # Remove tick labels:
     g('set xtics ("" 0, "" 0.5, "" 1, "" 1.5, "" 2, "" 2.5, "" 3)')
     g('set ytics ("" 0, "" 5, "" 10, "" 15, "" 20)')
@@ -57,7 +58,8 @@ elif backend == 'gnuplot':
     g('set border 1+2+4+8+16 linetype -1 linewidth 2')
     g.replot()
 
-elif backend == 'veusz':
+elif backend == 'veusz': 
+    g = get_backend()
     # Remove tick labels:
     g.Set('/page1/graph1/x/TickLabels/hide', True)
     g.Set('/page1/graph1/y/TickLabels/hide', True)
@@ -81,6 +83,7 @@ elif backend == 'grace':
     pass
 
 elif backend == 'matlab':
+    g = get_backend()
     # Remove tick labels:
     g.set_(g.gca(), 'XTickLabel', [], 'YTickLabel', [], nout=0)
     # Change legend location:
@@ -88,6 +91,7 @@ elif backend == 'matlab':
     g.set_(h, 'Location', 'North', nout=0)
 
 elif backend == 'matlab2':
+    g = get_backend()
     s = get_script()
     # Remove tick labels:
     s += "set(gca, 'XTickLabel', [], 'YTickLabel', [])\n"
@@ -123,6 +127,6 @@ if backend == 'gnuplot':
     g.hardcopy(filename='grab_backend1.eps', terminal='postscript', mode='eps')
     g.hardcopy(filename='grab_backend1.png', terminal='png')
 else:
-    hardcopy('grab_backend1.eps', replot=False)
+    savefig('grab_backend1.eps', replot=False)
     if not backend == 'pyx':
-        hardcopy('grab_backend1.png', replot=False)
+        savefig('grab_backend1.png', replot=False)
