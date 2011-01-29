@@ -556,7 +556,8 @@ command produces files with images in various formats:</p>
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 </pre>
-<p>The filename extension determines the format: <tt class="docutils literal">.ps</tt> or
+<p>An alternative name for <tt class="docutils literal">hardcopy</tt> is <tt class="docutils literal">savefig</tt>.
+The filename extension determines the format: <tt class="docutils literal">.ps</tt> or
 <tt class="docutils literal">.eps</tt> for PostScript, and <tt class="docutils literal">.png</tt> for PNG.
 Figure <a class="reference internal" href="#fig-plot1a">fig:plot1a</a> displays the resulting plot. With <tt class="docutils literal">show(False)</tt>
 we can suppress the plot from being shown at the screen, which is
@@ -609,7 +610,8 @@ plot(t, y,
 </pre>
 <p>With <tt class="docutils literal">show=False</tt> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-one generates a large number of separate figures in the program.</p>
+one generates a large number of separate figures in the program.
+The keyword <tt class="docutils literal">hardcopy</tt> can be replaced by <tt class="docutils literal">savefig</tt> if desired.</p>
 <p>Note that we in the curve legend write <tt class="docutils literal">t</tt> square as <tt class="docutils literal">t^2</tt> (LaTeX style)
 rather than <tt class="docutils literal"><span class="pre">t**2</span></tt> (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
@@ -654,7 +656,7 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-hardcopy('tmp2.eps')
+hardcopy('tmp2.eps')  # or savefig('tmp2.eps')
 
 # alternative:
 plot(t, y1, t, y2, xlabel='t', ylabel='y',
@@ -671,6 +673,28 @@ plot.</p>
 <img alt="figs/plot2a.png" src="figs/plot2a.png" />
 <p class="caption">Two curves in the same plot. (fig:plot2a)</p>
 </div>
+</div>
+<div class="section" id="making-multiple-figures">
+<h2>Making Multiple Figures</h2>
+<p>The <tt class="docutils literal">hold</tt> command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The <tt class="docutils literal">figure()</tt> command
+creates a new figure:</p>
+<pre class="literal-block">
+x = linspace(-2, 2, 81)
+y1 = sin(pi*x)*exp(-0.5*x**2)
+plot(x, y1)
+
+figure()  # separate plot window
+y2 = sin(pi*x/2)*exp(-0.5*x**2)
+plot(x, y2)
+
+figure()  # yet another plot window
+y3 = sin(pi*x/4)*exp(-0.5*x**2)
+plot(x, y3)
+</pre>
+<p>More information in the <tt class="docutils literal">figure</tt> command is found later on under the
+heading <em>Working with Axis and Figure Objects</em>.</p>
 </div>
 <div class="section" id="controlling-line-styles">
 <h2>Controlling Line Styles</h2>
@@ -823,8 +847,8 @@ axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
 show()
-hardcopy('tmp3.eps')
-hardcopy('tmp3.png')
+savefig('tmp3.eps')   # or hardcopy
+savefig('tmp3.png')   # or hardcopy
 </pre>
 <p>The plot is shown in Figure <a class="reference internal" href="#fig-plot3">fig:plot3</a>.</p>
 <div class="figure" id="fig-plot3">
@@ -1057,7 +1081,9 @@ set the backend. Second, we tell how to speed up the
 the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab <tt class="docutils literal">Figure</tt>
 and <tt class="docutils literal">Axis</tt> objects that Easyviz produces &quot;behind the curtain&quot;.</p>
-<p><em>Controlling the Backend.</em> The Easyviz backend can either be set in a configuration file (see
+<div class="section" id="controlling-the-backend">
+<h3>Controlling the Backend</h3>
+<p>The Easyviz backend can either be set in a configuration file (see
 &quot;Setting Parameters in the Configuration File&quot; below), by
 importing a special backend in the program, or by adding a
 command-line option:</p>
@@ -1087,7 +1113,10 @@ print 'Available backends:', backends
 <p>There will be quite some output explaining the missing backends and
 what must be installed to use these backends. Be prepared for exceptions
 and error messages too.</p>
-<p><em>Importing Just Easyviz.</em> The <tt class="docutils literal">from scitools.std import *</tt> statement imports many modules and packages:</p>
+</div>
+<div class="section" id="importing-just-easyviz">
+<span id="easyviz-imports"></span><h3>Importing Just Easyviz</h3>
+<p>The <tt class="docutils literal">from scitools.std import *</tt> statement imports many modules and packages:</p>
 <pre class="literal-block">
 from numpy import *
 from scitools.numpyutils import *  # some convenience functions
@@ -1130,7 +1159,10 @@ minimalistic import of <tt class="docutils literal">scitools.easyviz</tt> and <t
 import scitools.easyviz as ev
 import numpy as np
 </pre>
-<p><em>Setting Parameters in the Configuration File.</em> Easyviz is a subpackage of SciTools, and the the SciTools
+</div>
+<div class="section" id="setting-parameters-in-the-configuration-file">
+<h3>Setting Parameters in the Configuration File</h3>
+<p>Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called <tt class="docutils literal">scitools.cfg</tt> has several sections
 (<tt class="docutils literal">[easyviz]</tt>, <tt class="docutils literal">[gnuplot]</tt>, and <tt class="docutils literal">[matplotlib]</tt>) where parameters
 controlling the behavior of plotting can be set. For example, the
@@ -1176,7 +1208,10 @@ of SciPy:</p>
 python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 </pre>
-<p><em>Working with the Plotting Program Directly.</em> Easyviz supports just the most common plotting commands, typically the
+</div>
+<div class="section" id="working-with-the-plotting-program-directly">
+<h3>Working with the Plotting Program Directly</h3>
+<p>Easyviz supports just the most common plotting commands, typically the
 commands you use &quot;95 percent&quot; of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
@@ -1197,8 +1232,8 @@ directly. Here is an example of the typical recipe, written after the
 core of the plot is made in the ordinary (plotting
 program-independent) way:</p>
 <pre class="literal-block">
-g = get_backend()
 if backend == 'gnuplot':
+    g = get_backend()
     # g is a Gnuplot object, work with Gnuplot commands directly:
     g('set label &quot;global maximum&quot; at 0.1,0.5 font &quot;Times,18&quot;')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
@@ -1214,18 +1249,26 @@ if backend == 'gnuplot':
 </pre>
 <p>For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the emp{demo.py} program in Python interface to
-Gnuplot.
-The idea advocated here is that you can quickly generate
+Gnuplot.</p>
+<p>Here is an example with Matplotlib:</p>
+<pre class="literal-block">
+if backend == 'matplotlib':
+    pyplot = get_backend()
+    # work with standard matplotlib.pyplot functions
+</pre>
+<p>The files <tt class="docutils literal"><span class="pre">grab_backend*.py</span></tt> in the <tt class="docutils literal">examples</tt> folder of the SciTools
+source code contain many examples on how to do backend-specific operations,
+especially with Matplotlib.</p>
+<p>The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.</p>
-<p>The file <tt class="docutils literal">grab_backend_demo.py</tt> in the <tt class="docutils literal">examples</tt> folder of the
-SciTools source code contains a much more comprehensive example on
-fine-tuning a plot using backend-specific commands. That file shows
-how this can be done in almost all the supported backends.</p>
-<p><em>Working with Axis and Figure Objects.</em> Easyviz supports the concept of Axis objects, as in Matlab.
+</div>
+<div class="section" id="working-with-axis-and-figure-objects">
+<h3>Working with Axis and Figure Objects</h3>
+<p>Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axes in one figure, each axis representing a subplot.
@@ -1314,6 +1357,18 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).</p>
+</div>
+<div class="section" id="turning-off-all-plotting">
+<h3>Turning Off All Plotting</h3>
+<p>Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by:</p>
+<pre class="literal-block">
+turn_off_plotting(globals())
+</pre>
+<p>All the plot functions now &quot;do nothing&quot; (actually they are <tt class="docutils literal">DoNothing</tt>
+objects from <tt class="docutils literal">scitools.misc</tt>).</p>
+</div>
 </div>
 </div>
 <div class="section" id="visualization-of-scalar-fields">
@@ -2491,7 +2546,7 @@ supported by all backends):</p>
 <div class="system-messages section">
 <h1>Docutils System Messages</h1>
 <div class="system-message" id="id1">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2723); <em><a href="#id2">backlink</a></em></p>
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2787); <em><a href="#id2">backlink</a></em></p>
 Unknown target name: &quot;slice&quot;.</div>
 </div>
 </div>

@@ -254,6 +254,7 @@ command produces files with images in various formats:
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 !ec
+An alternative name for `hardcopy` is `savefig`.
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG. 
 Figure ref{fig:plot1a} displays the resulting plot. With `show(False)`
@@ -311,6 +312,7 @@ plot(t, y,
 With `show=False` one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
+The keyword `hardcopy` can be replaced by `savefig` if desired.
 
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
@@ -357,7 +359,7 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-hardcopy('tmp2.eps')
+hardcopy('tmp2.eps')  # or savefig('tmp2.eps')
 
 # alternative:
 plot(t, y1, t, y2, xlabel='t', ylabel='y',
@@ -374,6 +376,28 @@ plot.
 
 FIGURE:[figs/plot2a.eps] Two curves in the same plot. label{fig:plot2a}
 
+
+===== Making Multiple Figures =====
+
+The `hold` command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The `figure()` command
+creates a new figure:
+!bc cod
+x = linspace(-2, 2, 81)
+y1 = sin(pi*x)*exp(-0.5*x**2)
+plot(x, y1)
+
+figure()  # separate plot window
+y2 = sin(pi*x/2)*exp(-0.5*x**2)
+plot(x, y2)
+
+figure()  # yet another plot window
+y3 = sin(pi*x/4)*exp(-0.5*x**2)
+plot(x, y3)
+!ec
+More information in the `figure` command is found later on under the
+heading *Working with Axis and Figure Objects*.
 
 
 ===== Controlling Line Styles =====
@@ -524,8 +548,8 @@ axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
 show()
-hardcopy('tmp3.eps') 
-hardcopy('tmp3.png')
+savefig('tmp3.eps')   # or hardcopy
+savefig('tmp3.png')   # or hardcopy
 !ec
 The plot is shown in Figure ref{fig:plot3}.
 
@@ -783,7 +807,8 @@ the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab `Figure`
 and `Axis` objects that Easyviz produces "behind the curtain".
 
-__Controlling the Backend.__
+=== Controlling the Backend ===
+
 The Easyviz backend can either be set in a configuration file (see 
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
@@ -818,8 +843,9 @@ what must be installed to use these backends. Be prepared for exceptions
 and error messages too.
 
 
-__Importing Just Easyviz.__
+=== Importing Just Easyviz ===
 label{easyviz:imports}
+
 The `from scitools.std import *` statement imports many modules and packages:
 !bc cod
 from numpy import *    
@@ -867,7 +893,8 @@ import numpy as np
 !ec
 
 
-__Setting Parameters in the Configuration File.__
+=== Setting Parameters in the Configuration File ===
+
 Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called `scitools.cfg` has several sections
 (`[easyviz]`, `[gnuplot]`, and `[matplotlib]`) where parameters
@@ -918,7 +945,8 @@ python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
 !ec
 
 
-__Working with the Plotting Program Directly.__
+=== Working with the Plotting Program Directly ===
+
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
@@ -940,8 +968,8 @@ core of the plot is made in the ordinary (plotting
 program-independent) way:
 
 !bc cod
-g = get_backend()
 if backend == 'gnuplot':
+    g = get_backend()
     # g is a Gnuplot object, work with Gnuplot commands directly:
     g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
@@ -958,6 +986,17 @@ if backend == 'gnuplot':
 For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the \emp{demo.py} program in Python interface to
 Gnuplot.
+
+Here is an example with Matplotlib:
+!bc cod
+if backend == 'matplotlib':
+    pyplot = get_backend()
+    # work with standard matplotlib.pyplot functions
+!ec
+The files `grab_backend*.py` in the `examples` folder of the SciTools
+source code contain many examples on how to do backend-specific operations,
+especially with Matplotlib.
+
 The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
@@ -965,12 +1004,9 @@ features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
-The file `grab_backend_demo.py` in the `examples` folder of the
-SciTools source code contains a much more comprehensive example on
-fine-tuning a plot using backend-specific commands. That file shows
-how this can be done in almost all the supported backends.
 
-__Working with Axis and Figure Objects.__
+=== Working with Axis and Figure Objects ===
+
 Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
@@ -1066,6 +1102,17 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
+
+=== Turning Off All Plotting ===
+
+Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by 
+!bc cod
+turn_off_plotting(globals())
+!ec
+All the plot functions now "do nothing" (actually they are `DoNothing`
+objects from `scitools.misc`).
 
 ======= Visualization of Scalar Fields =======
 

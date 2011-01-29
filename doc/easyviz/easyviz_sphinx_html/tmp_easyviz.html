@@ -281,7 +281,8 @@ command produces files with images in various formats:</p>
 <span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp1.png&#39;</span><span class="p">)</span> <span class="c"># produce PNG</span>
 </pre></div>
 </div>
-<p>The filename extension determines the format: <tt class="docutils literal"><span class="pre">.ps</span></tt> or
+<p>An alternative name for <tt class="docutils literal"><span class="pre">hardcopy</span></tt> is <tt class="docutils literal"><span class="pre">savefig</span></tt>.
+The filename extension determines the format: <tt class="docutils literal"><span class="pre">.ps</span></tt> or
 <tt class="docutils literal"><span class="pre">.eps</span></tt> for PostScript, and <tt class="docutils literal"><span class="pre">.png</span></tt> for PNG.
 Figure <a class="reference internal" href="#fig-plot1a"><em>A simple plot in PostScript format.</em></a> displays the resulting plot. With <tt class="docutils literal"><span class="pre">show(False)</span></tt>
 we can suppress the plot from being shown at the screen, which is
@@ -334,7 +335,8 @@ all the plot properties can be set at once:</p>
 </div>
 <p>With <tt class="docutils literal"><span class="pre">show=False</span></tt> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
-one generates a large number of separate figures in the program.</p>
+one generates a large number of separate figures in the program.
+The keyword <tt class="docutils literal"><span class="pre">hardcopy</span></tt> can be replaced by <tt class="docutils literal"><span class="pre">savefig</span></tt> if desired.</p>
 <p>Note that we in the curve legend write <tt class="docutils literal"><span class="pre">t</span></tt> square as <tt class="docutils literal"><span class="pre">t^2</span></tt> (LaTeX style)
 rather than <tt class="docutils literal"><span class="pre">t**2</span></tt> (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
@@ -378,7 +380,7 @@ different approaches:</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">legend</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span> <span class="s">&#39;t^4*exp(-t^2)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Plotting two curves in the same plot&#39;</span><span class="p">)</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>
+<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>  <span class="c"># or savefig(&#39;tmp2.eps&#39;)</span>
 
 <span class="c"># alternative:</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">,</span>
@@ -396,6 +398,28 @@ plot.</p>
 <img alt="_images/plot2a.png" src="_images/plot2a.png" />
 <p class="caption">Two curves in the same plot.</p>
 </div>
+</div>
+<div class="section" id="making-multiple-figures">
+<h2>Making Multiple Figures<a class="headerlink" href="#making-multiple-figures" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">hold</span></tt> command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The <tt class="docutils literal"><span class="pre">figure()</span></tt> command
+creates a new figure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">81</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="p">()</span>  <span class="c"># separate plot window</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="p">()</span>  <span class="c"># yet another plot window</span>
+<span class="n">y3</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>More information in the <tt class="docutils literal"><span class="pre">figure</span></tt> command is found later on under the
+heading <em>Working with Axis and Figure Objects</em>.</p>
 </div>
 <div class="section" id="controlling-line-styles">
 <h2>Controlling Line Styles<a class="headerlink" href="#controlling-line-styles" title="Permalink to this headline">¶</a></h2>
@@ -547,8 +571,8 @@ the <img class="math" src="_images/math/df9cc80af3d9483c1c014d7f3138d07bf1e775d7
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">show</span><span class="p">()</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp3.eps&#39;</span><span class="p">)</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp3.png&#39;</span><span class="p">)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp3.eps&#39;</span><span class="p">)</span>   <span class="c"># or hardcopy</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp3.png&#39;</span><span class="p">)</span>   <span class="c"># or hardcopy</span>
 </pre></div>
 </div>
 <p>The plot is shown in Figure <a class="reference internal" href="#fig-plot3"><em>A plot with three curves.</em></a>.</p>
@@ -780,7 +804,9 @@ set the backend. Second, we tell how to speed up the
 the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab <tt class="docutils literal"><span class="pre">Figure</span></tt>
 and <tt class="docutils literal"><span class="pre">Axis</span></tt> objects that Easyviz produces &#8220;behind the curtain&#8221;.</p>
-<p><em>Controlling the Backend.</em> The Easyviz backend can either be set in a configuration file (see
+<div class="section" id="controlling-the-backend">
+<h3>Controlling the Backend<a class="headerlink" href="#controlling-the-backend" title="Permalink to this headline">¶</a></h3>
+<p>The Easyviz backend can either be set in a configuration file (see
 &#8220;Setting Parameters in the Configuration File&#8221; below), by
 importing a special backend in the program, or by adding a
 command-line option</p>
@@ -809,7 +835,10 @@ available backends on your computer system:</p>
 <p>There will be quite some output explaining the missing backends and
 what must be installed to use these backends. Be prepared for exceptions
 and error messages too.</p>
-<p><em>Importing Just Easyviz.</em> The <tt class="docutils literal"><span class="pre">from</span> <span class="pre">scitools.std</span> <span class="pre">import</span> <span class="pre">*</span></tt> statement imports many modules and packages:</p>
+</div>
+<div class="section" id="importing-just-easyviz">
+<span id="easyviz-imports"></span><h3>Importing Just Easyviz<a class="headerlink" href="#importing-just-easyviz" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">from</span> <span class="pre">scitools.std</span> <span class="pre">import</span> <span class="pre">*</span></tt> statement imports many modules and packages:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">scitools.numpyutils</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c"># some convenience functions</span>
 <span class="kn">from</span> <span class="nn">numpy.lib.scimath</span> <span class="kn">import</span> <span class="o">*</span>
@@ -852,7 +881,10 @@ minimalistic import of <tt class="docutils literal"><span class="pre">scitools.e
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
-<p><em>Setting Parameters in the Configuration File.</em> Easyviz is a subpackage of SciTools, and the the SciTools
+</div>
+<div class="section" id="setting-parameters-in-the-configuration-file">
+<h3>Setting Parameters in the Configuration File<a class="headerlink" href="#setting-parameters-in-the-configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called <tt class="docutils literal"><span class="pre">scitools.cfg</span></tt> has several sections
 (<tt class="docutils literal"><span class="pre">[easyviz]</span></tt>, <tt class="docutils literal"><span class="pre">[gnuplot]</span></tt>, and <tt class="docutils literal"><span class="pre">[matplotlib]</span></tt>) where parameters
 controlling the behavior of plotting can be set. For example, the
@@ -895,7 +927,10 @@ of SciPy:</p>
 <div class="highlight-py"><pre>python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no</pre>
 </div>
-<p><em>Working with the Plotting Program Directly.</em> Easyviz supports just the most common plotting commands, typically the
+</div>
+<div class="section" id="working-with-the-plotting-program-directly">
+<h3>Working with the Plotting Program Directly<a class="headerlink" href="#working-with-the-plotting-program-directly" title="Permalink to this headline">¶</a></h3>
+<p>Easyviz supports just the most common plotting commands, typically the
 commands you use &#8220;95 percent&#8221; of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
@@ -915,8 +950,8 @@ but Gnuplot does. If we use Gnuplot as backend, we may grab the
 directly. Here is an example of the typical recipe, written after the
 core of the plot is made in the ordinary (plotting
 program-independent) way:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">g</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
-<span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;gnuplot&#39;</span><span class="p">:</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;gnuplot&#39;</span><span class="p">:</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
     <span class="c"># g is a Gnuplot object, work with Gnuplot commands directly:</span>
     <span class="n">g</span><span class="p">(</span><span class="s">&#39;set label &quot;global maximum&quot; at 0.1,0.5 font &quot;Times,18&quot;&#39;</span><span class="p">)</span>
     <span class="n">g</span><span class="p">(</span><span class="s">&#39;set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2&#39;</span><span class="p">)</span>
@@ -933,18 +968,26 @@ program-independent) way:</p>
 </div>
 <p>For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the emp{demo.py} program in Python interface to
-Gnuplot.
-The idea advocated here is that you can quickly generate
+Gnuplot.</p>
+<p>Here is an example with Matplotlib:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;matplotlib&#39;</span><span class="p">:</span>
+    <span class="n">pyplot</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
+    <span class="c"># work with standard matplotlib.pyplot functions</span>
+</pre></div>
+</div>
+<p>The files <tt class="docutils literal"><span class="pre">grab_backend*.py</span></tt> in the <tt class="docutils literal"><span class="pre">examples</span></tt> folder of the SciTools
+source code contain many examples on how to do backend-specific operations,
+especially with Matplotlib.</p>
+<p>The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.</p>
-<p>The file <tt class="docutils literal"><span class="pre">grab_backend_demo.py</span></tt> in the <tt class="docutils literal"><span class="pre">examples</span></tt> folder of the
-SciTools source code contains a much more comprehensive example on
-fine-tuning a plot using backend-specific commands. That file shows
-how this can be done in almost all the supported backends.</p>
-<p><em>Working with Axis and Figure Objects.</em> Easyviz supports the concept of Axis objects, as in Matlab.
+</div>
+<div class="section" id="working-with-axis-and-figure-objects">
+<h3>Working with Axis and Figure Objects<a class="headerlink" href="#working-with-axis-and-figure-objects" title="Permalink to this headline">¶</a></h3>
+<p>Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axes in one figure, each axis representing a subplot.
@@ -1033,6 +1076,18 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).</p>
+</div>
+<div class="section" id="turning-off-all-plotting">
+<h3>Turning Off All Plotting<a class="headerlink" href="#turning-off-all-plotting" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">turn_off_plotting</span><span class="p">(</span><span class="nb">globals</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>All the plot functions now &#8220;do nothing&#8221; (actually they are <tt class="docutils literal"><span class="pre">DoNothing</span></tt>
+objects from <tt class="docutils literal"><span class="pre">scitools.misc</span></tt>).</p>
+</div>
 </div>
 </div>
 <div class="section" id="visualization-of-scalar-fields">
@@ -2204,10 +2259,19 @@ supported by all backends):</p>
 <li><a class="reference internal" href="#plotting-a-single-curve">Plotting a Single Curve</a></li>
 <li><a class="reference internal" href="#decorating-the-plot">Decorating the Plot</a></li>
 <li><a class="reference internal" href="#plotting-multiple-curves">Plotting Multiple Curves</a></li>
+<li><a class="reference internal" href="#making-multiple-figures">Making Multiple Figures</a></li>
 <li><a class="reference internal" href="#controlling-line-styles">Controlling Line Styles</a></li>
 <li><a class="reference internal" href="#interactive-plotting-sessions">Interactive Plotting Sessions</a></li>
 <li><a class="reference internal" href="#making-animations">Making Animations</a></li>
-<li><a class="reference internal" href="#advanced-easyviz-topics">Advanced Easyviz Topics</a></li>
+<li><a class="reference internal" href="#advanced-easyviz-topics">Advanced Easyviz Topics</a><ul>
+<li><a class="reference internal" href="#controlling-the-backend">Controlling the Backend</a></li>
+<li><a class="reference internal" href="#importing-just-easyviz">Importing Just Easyviz</a></li>
+<li><a class="reference internal" href="#setting-parameters-in-the-configuration-file">Setting Parameters in the Configuration File</a></li>
+<li><a class="reference internal" href="#working-with-the-plotting-program-directly">Working with the Plotting Program Directly</a></li>
+<li><a class="reference internal" href="#working-with-axis-and-figure-objects">Working with Axis and Figure Objects</a></li>
+<li><a class="reference internal" href="#turning-off-all-plotting">Turning Off All Plotting</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#visualization-of-scalar-fields">Visualization of Scalar Fields</a><ul>

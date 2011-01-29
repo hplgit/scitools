@@ -1061,9 +1061,12 @@ Here is an example with Matplotlib::
 
 
         if backend == 'matplotlib':
-            pylab = get_backend()
-            # work with standard pylab functions
+            pyplot = get_backend()
+            # work with standard matplotlib.pyplot functions
 
+The files grab_backend*.py in the examples folder of the SciTools
+source code contain many examples on how to do backend-specific operations,
+especially with Matplotlib.
 
 The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
@@ -1072,10 +1075,6 @@ features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
-The file grab_backend_demo.py in the examples folder of the
-SciTools source code contains a much more comprehensive example on
-fine-tuning a plot using backend-specific commands. That file shows
-how this can be done in almost all the supported backends.
 
 Working with Axis and Figure Objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -314,6 +314,7 @@ hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
 </PRE></BLOCKQUOTE>
 <! -- END VERBATIM BLOCK -->
+An alternative name for <TT>hardcopy</TT> is <TT>savefig</TT>.
 The filename extension determines the format: <TT>.ps</TT> or
 <TT>.eps</TT> for PostScript, and <TT>.png</TT> for PNG. 
 Figure <A HREF="#fig:plot1a">fig:plot1a</a> displays the resulting plot. With <TT>show(False)</TT>
@@ -384,6 +385,7 @@ plot(t, y,
 With <TT>show=False</TT> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
+The keyword <TT>hardcopy</TT> can be replaced by <TT>savefig</TT> if desired.
 
 <P>
 Note that we in the curve legend write <TT>t</TT> square as <TT>t^2</TT> (LaTeX style)
@@ -437,7 +439,7 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-hardcopy('tmp2.eps')
+hardcopy('tmp2.eps')  # or savefig('tmp2.eps')
 
 # alternative:
 plot(t, y1, t, y2, xlabel='t', ylabel='y',
@@ -458,6 +460,31 @@ plot.
 <IMG SRC="figs/plot2a.png" ALIGN="bottom" > Two curves in the same plot. <A NAME="fig:plot2a"></A>
 
 <P>
+
+<P>
+<H3>Making Multiple Figures</H3>
+<P>
+The <TT>hold</TT> command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The <TT>figure()</TT> command
+creates a new figure:
+<!-- BEGIN VERBATIM BLOCK   cod-->
+<BLOCKQUOTE><PRE>
+x = linspace(-2, 2, 81)
+y1 = sin(pi*x)*exp(-0.5*x**2)
+plot(x, y1)
+
+figure()  # separate plot window
+y2 = sin(pi*x/2)*exp(-0.5*x**2)
+plot(x, y2)
+
+figure()  # yet another plot window
+y3 = sin(pi*x/4)*exp(-0.5*x**2)
+plot(x, y3)
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
+More information in the <TT>figure</TT> command is found later on under the
+heading <EM>Working with Axis and Figure Objects</EM>.
 
 <P>
 
@@ -637,8 +664,8 @@ axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
 show()
-hardcopy('tmp3.eps') 
-hardcopy('tmp3.png')
+savefig('tmp3.eps')   # or hardcopy
+savefig('tmp3.png')   # or hardcopy
 </PRE></BLOCKQUOTE>
 <! -- END VERBATIM BLOCK -->
 The plot is shown in Figure <A HREF="#fig:plot3">fig:plot3</a>.
@@ -947,7 +974,9 @@ advanced features. Fourth, we explain how the user can grab <TT>Figure</TT>
 and <TT>Axis</TT> objects that Easyviz produces "behind the curtain".
 
 <P>
-<B>Controlling the Backend.</B> The Easyviz backend can either be set in a configuration file (see 
+<H4>Controlling the Backend</H4>
+<P>
+The Easyviz backend can either be set in a configuration file (see 
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
 command-line option
@@ -991,7 +1020,10 @@ and error messages too.
 <P>
 
 <P>
-<B>Importing Just Easyviz.</B> <A NAME="easyviz:imports"></A>
+<H4>Importing Just Easyviz <A NAME="easyviz:imports"></A></H4>
+<P>
+
+<P>
 The <TT>from scitools.std import *</TT> statement imports many modules and packages:
 <!-- BEGIN VERBATIM BLOCK   cod-->
 <BLOCKQUOTE><PRE>
@@ -1055,7 +1087,9 @@ import numpy as np
 <P>
 
 <P>
-<B>Setting Parameters in the Configuration File.</B> Easyviz is a subpackage of SciTools, and the the SciTools
+<H4>Setting Parameters in the Configuration File</H4>
+<P>
+Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called <TT>scitools.cfg</TT> has several sections
 (<TT>[easyviz]</TT>, <TT>[gnuplot]</TT>, and <TT>[matplotlib]</TT>) where parameters
 controlling the behavior of plotting can be set. For example, the
@@ -1119,7 +1153,9 @@ python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
 <P>
 
 <P>
-<B>Working with the Plotting Program Directly.</B> Easyviz supports just the most common plotting commands, typically the
+<H4>Working with the Plotting Program Directly</H4>
+<P>
+Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
 different advanced features.  When Easyviz does not have a command
@@ -1144,8 +1180,8 @@ program-independent) way:
 <P>
 <!-- BEGIN VERBATIM BLOCK   cod-->
 <BLOCKQUOTE><PRE>
-g = get_backend()
 if backend == 'gnuplot':
+    g = get_backend()
     # g is a Gnuplot object, work with Gnuplot commands directly:
     g('set label "global maximum" at 0.1,0.5 font "Times,18"')
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
@@ -1163,6 +1199,21 @@ if backend == 'gnuplot':
 For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the \emp{demo.py} program in Python interface to
 Gnuplot.
+
+<P>
+Here is an example with Matplotlib:
+<!-- BEGIN VERBATIM BLOCK   cod-->
+<BLOCKQUOTE><PRE>
+if backend == 'matplotlib':
+    pyplot = get_backend()
+    # work with standard matplotlib.pyplot functions
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
+The files <TT>grab_backend*.py</TT> in the <TT>examples</TT> folder of the SciTools
+source code contain many examples on how to do backend-specific operations,
+especially with Matplotlib.
+
+<P>
 The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
@@ -1171,13 +1222,11 @@ above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
 
 <P>
-The file <TT>grab_backend_demo.py</TT> in the <TT>examples</TT> folder of the
-SciTools source code contains a much more comprehensive example on
-fine-tuning a plot using backend-specific commands. That file shows
-how this can be done in almost all the supported backends.
 
 <P>
-<B>Working with Axis and Figure Objects.</B> Easyviz supports the concept of Axis objects, as in Matlab.
+<H4>Working with Axis and Figure Objects</H4>
+<P>
+Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
 One may have several axes in one figure, each axis representing a subplot.
@@ -1292,6 +1341,20 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
+
+<P>
+<H4>Turning Off All Plotting</H4>
+<P>
+Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by 
+<!-- BEGIN VERBATIM BLOCK   cod-->
+<BLOCKQUOTE><PRE>
+turn_off_plotting(globals())
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
+All the plot functions now "do nothing" (actually they are <TT>DoNothing</TT>
+objects from <TT>scitools.misc</TT>).
 
 <P>
 <H1>Visualization of Scalar Fields</H1>
