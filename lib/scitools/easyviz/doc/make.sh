@@ -1,7 +1,15 @@
 #!/bin/bash -x
+# Create Easyviz documentation.
 # clean:
 rm -rf tmp_*
 
+# Make .p.py -> .py files and make sure most recent documentation of
+# Easyviz is in the __init__.py file:
+cd ../..
+python _update.py
+cd easyviz/doc
+
+# Prepare Doconce files and filter them to various formats:
 cp easyviz.do.txt tmp_easyviz.do.txt
 
 doconce2format HTML tmp_easyviz.do.txt

@@ -177,6 +177,28 @@ plot.
 FIGURE:[figs/plot2a.eps] Two curves in the same plot. label{fig:plot2a}
 
 
+===== Making Multiple Figures =====
+
+The `hold` command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The `figure()` command
+creates a new figure:
+!bc cod
+x = linspace(-2, 2, 81)
+y1 = sin(pi*x)*exp(-0.5*x**2)
+plot(x, y1)
+
+figure()  # separate plot window
+y2 = sin(pi*x/2)*exp(-0.5*x**2)
+plot(x, y2)
+
+figure()  # yet another plot window
+y3 = sin(pi*x/4)*exp(-0.5*x**2)
+plot(x, y3)
+!ec
+More information in the `figure` command is found later on under the
+heading *Working with Axis and Figure Objects*.
+
 
 ===== Controlling Line Styles =====
 
@@ -585,7 +607,8 @@ the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab `Figure`
 and `Axis` objects that Easyviz produces "behind the curtain".
 
-__Controlling the Backend.__
+=== Controlling the Backend ===
+
 The Easyviz backend can either be set in a configuration file (see 
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
@@ -620,8 +643,9 @@ what must be installed to use these backends. Be prepared for exceptions
 and error messages too.
 
 
-__Importing Just Easyviz.__
+=== Importing Just Easyviz ===
 label{easyviz:imports}
+
 The `from scitools.std import *` statement imports many modules and packages:
 !bc cod
 from numpy import *    
@@ -669,7 +693,8 @@ import numpy as np
 !ec
 
 
-__Setting Parameters in the Configuration File.__
+=== Setting Parameters in the Configuration File ===
+
 Easyviz is a subpackage of SciTools, and the the SciTools
 configuration file, called `scitools.cfg` has several sections
 (`[easyviz]`, `[gnuplot]`, and `[matplotlib]`) where parameters
@@ -720,7 +745,8 @@ python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
 !ec
 
 
-__Working with the Plotting Program Directly.__
+=== Working with the Plotting Program Directly ===
+
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
@@ -772,7 +798,8 @@ SciTools source code contains a much more comprehensive example on
 fine-tuning a plot using backend-specific commands. That file shows
 how this can be done in almost all the supported backends.
 
-__Working with Axis and Figure Objects.__
+=== Working with Axis and Figure Objects ===
+
 Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
 associated coordinate system. A figure is the complete physical plot.
@@ -868,3 +895,14 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
+
+=== Turning Off All Plotting ===
+
+Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by 
+!bc cod
+turn_off_plotting(globals())
+!ec
+All the plot functions now "do nothing" (actually they are `DoNothing`
+objects from `scitools.misc`).

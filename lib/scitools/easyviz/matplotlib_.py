@@ -920,7 +920,6 @@ class MatplotlibBackend(BaseClass):
              fontname=Axis._local_prop['fontname'],
              fontsize=Axis._local_prop['fontsize']):
         """Write text at position (x,y) in a curveplot."""
-        # probably:
         self._g.text(x, y, text, family=fontname, size=fontsize)
         
 
