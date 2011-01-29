@@ -1194,7 +1194,7 @@ program-independent) way:
             g.plot(func, data)
 
 For the available features and the syntax of commands, we refer to
-the Gnuplot manual and the \emp{demo.py} program in Python interface to
+the Gnuplot manual and the ``demo.py`` program in Python interface to
 Gnuplot.
 
 Here is an example with Matplotlib:

@@ -1,3 +1,3 @@
 #!/bin/sh
-rm -rf *~ tmp* *.dst.txt figs/*.png sphinx-rootdir
+rm -rf *~ tmp* *.dst.txt sphinx-rootdir
 
