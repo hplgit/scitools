@@ -270,6 +270,7 @@ command produces files with images in various formats::
         hardcopy('tmp1.eps') # produce PostScript
         hardcopy('tmp1.png') # produce PNG
 
+An alternative name for hardcopy is savefig.
 The filename extension determines the format: .ps or
 .eps for PostScript, and .png for PNG. 
 Figure ref{fig:plot1a} displays the resulting plot. With show(False)
@@ -329,6 +330,7 @@ all the plot properties can be set at once::
 With show=False one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
+The keyword hardcopy can be replaced by savefig if desired.
 
 Note that we in the curve legend write t square as t^2 (LaTeX style)
 rather than t**2 (program style). Whichever form you choose is up to
@@ -376,7 +378,7 @@ different approaches::
         ylabel('y')
         legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
         title('Plotting two curves in the same plot')
-        hardcopy('tmp2.eps')
+        hardcopy('tmp2.eps')  # or savefig('tmp2.eps')
         
         # alternative:
         plot(t, y1, t, y2, xlabel='t', ylabel='y',
@@ -591,8 +593,8 @@ the f_2(t) curve::
         xlabel('t')
         ylabel('y')
         show()
-        hardcopy('tmp3.eps') 
-        hardcopy('tmp3.png')
+        savefig('tmp3.eps')   # or hardcopy
+        savefig('tmp3.png')   # or hardcopy
 
 The plot is shown in Figure ref{fig:plot3}.
 
@@ -1036,8 +1038,8 @@ core of the plot is made in the ordinary (plotting
 program-independent) way::
 
 
-        g = get_backend()
         if backend == 'gnuplot':
+            g = get_backend()
             # g is a Gnuplot object, work with Gnuplot commands directly:
             g('set label "global maximum" at 0.1,0.5 font "Times,18"')
             g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
@@ -1054,6 +1056,15 @@ program-independent) way::
 For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the \emp{demo.py} program in Python interface to
 Gnuplot.
+
+Here is an example with Matplotlib::
+
+
+        if backend == 'matplotlib':
+            pylab = get_backend()
+            # work with standard pylab functions
+
+
 The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
@@ -2592,6 +2603,10 @@ _import_list.append("from scitools.globaldata import backend, VERBOSE")
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
+# Note: this import is always performed, also before any
+# specialized import a la from scitools.easyviz.matplotlib_ import *
+# For quicker import of special backends, use command-line or config
+# file specification of the backend
 cmd = 'from %s_ import *' % backend
 exec(cmd)
 _t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
@@ -2616,10 +2631,3 @@ __doc__ += '\nImport statements in this module:\n' + '\n'.join(_import_list)
 
 # add plot doc string to package doc string:
 #__doc__ += plot.__doc__
-
-def get_backend():
-    """Return the current backend object (used for direct access
-    to the underlying plotting package when there is need for
-    advanced plotting beyond the plain easyplot functionality).
-    """
-    return plt._g

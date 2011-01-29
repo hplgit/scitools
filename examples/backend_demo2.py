@@ -10,14 +10,15 @@ Grab matplolib backend to prepare and tweak easyviz plots
 
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no>'
 
-from scitools.std import *
+from scitools.easyviz.matplotlib_ import *
+import numpy as np
 
 def _pylab_thick_frame(lines=10,  width=5, size=8, labelsize=20):
     """Prepare matplotlib backend with parameters for a nice thick frame
-    @param lines: width of plot lines
-    @param width: width of frame line (and tick marks)
-    @param size: length of tick marks
-    @param labelsize: size of ticklables
+    lines: width of plot lines
+    width: width of frame line (and tick marks)
+    size: length of tick marks
+    labelsize: size of ticklables
 
     Developers notice:
      We use the markeredgewidth to set the width of the tick marks.
@@ -25,7 +26,7 @@ def _pylab_thick_frame(lines=10,  width=5, size=8, labelsize=20):
      It appears that this is the only way to set the width of tickmarks.
      The markeredgewidth applies to the black line surrounding a marker,
      making it appear circular and black if it's set to high. """
-    plt._g.rcParams.update({
+    pylab.rcParams.update({
         'lines.linewidth': lines ,         # Plotline width
         'ytick.labelsize': labelsize,
         'ytick.major.pad': size,
@@ -45,9 +46,6 @@ def _pylab_major_minor(axis='y',
                        major_tick_interval=1, minor_tick_interval=.2):
     """Use both major and minor ticks on given axis.
     Must be applied as a postprocess after the easyviz plot"""
-    if backend != 'matplotlib':
-        return
-    pylab = get_backend()
     # Use both major and minor ticks
     from matplotlib.ticker import MultipleLocator, FormatStrFormatter
     majorLocator = MultipleLocator(major_tick_interval)
@@ -64,15 +62,18 @@ def _pylab_major_minor(axis='y',
     pylab.draw()
 
 def main():
-    x = linspace(0, 5, 101)
-    y = sin(2*pi*x)
+    x = np.linspace(0, 5, 101)
+    y = np.sin(2*np.pi*x)
     plot(y, '-o', x=x, log='x', xmin=.04, xmax=1, ymin=-1.1, ymax=1.1)
     
 if __name__ == '__main__':
     main()
     hardcopy('normal_frame.png')
 
-    if backend == 'matplotlib':
+    if backend != 'matplotlib':
+        print 'Cannot demonstrate matplotlib specialities when backend (%s) is not matplotlib!' % (backend)
+    else:
+        pylab = get_backend()
 
         # Setup parameters for thicker frame and tickmarks 
         _pylab_thick_frame()
@@ -84,21 +85,21 @@ if __name__ == '__main__':
         _pylab_major_minor(axis='y')
 
         # Title using latex and specific fontsize 
-        plt._g.title(r'y=sin(2\pi x)', fontsize=20) 
+        pylab.title(r'y=sin(2\pi x)', fontsize=20) 
 
         # Place text at given location in plot (position by data coordinates)
-        plt._g.text(.05, -.8, 'Check out the nice thick frame',
-                    {'size':20}, horizontalalignment='left',)
+        pylab.text(.05, -.8, 'Check out the nice thick frame',
+                   {'size':20}, horizontalalignment='left',)
         
         # Use backend hardcopy since normal hardcopy would reset text and title
-        plt._g.savefig('thick_frame.png')  
+        pylab.savefig('thick_frame.png')  
 
         # Load a font set from matplotlib (check matplotlib's fonts_demo)
         from matplotlib.font_manager import fontManager, FontProperties
-        plt._g.text(1, 1, 'Added some text using x-small font',
-                    fontproperties=FontProperties(size='x-small'),
-                    horizontalalignment='right',
-                    transform=pylab.gca().transAxes)  # figure coordinates
+        pylab.text(1, 1, 'Added some text using x-small font',
+                   fontproperties=FontProperties(size='x-small'),
+                   horizontalalignment='right',
+                   transform=pylab.gca().transAxes)  # figure coordinates
             
     raw_input('Press Return key to quit: ')
     

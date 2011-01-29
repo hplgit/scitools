@@ -13,6 +13,10 @@ _import_list.append("from scitools.globaldata import backend, VERBOSE")
 
 _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 
+# Note: this import is always performed, also before any
+# specialized import a la from scitools.easyviz.matplotlib_ import *
+# For quicker import of special backends, use command-line or config
+# file specification of the backend
 cmd = 'from %s_ import *' % backend
 exec(cmd)
 _t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
@@ -37,10 +41,3 @@ __doc__ += '\nImport statements in this module:\n' + '\n'.join(_import_list)
 
 # add plot doc string to package doc string:
 #__doc__ += plot.__doc__
-
-def get_backend():
-    """Return the current backend object (used for direct access
-    to the underlying plotting package when there is need for
-    advanced plotting beyond the plain easyplot functionality).
-    """
-    return plt._g

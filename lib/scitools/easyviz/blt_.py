@@ -893,3 +893,4 @@ class BltBackend(BaseClass):
     
 plt = BltBackend()   # create backend instance
 use(plt, globals())  # export public namespace of plt to globals()
+backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

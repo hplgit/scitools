@@ -1828,25 +1828,26 @@ class BaseClass(object):
     
 
     """
-    _matlab_like_cmds = ['autumn', 'axes', 'axis', 'bone', 'box', 'brighten',
-                         'camdolly', 'camlight', 'camlookat', 'campos',
-                         'camproj', 'camroll', 'camtarget', 'camup', 'camva',
-                         'camzoom', 'caxis', 'cla', 'clabel', 'clf', 'close',
-                         'closefig', 'closefigs', 'coneplot', 'colorbar',
-                         'colorcube', 'colormap', 'contour', 'contour3',
-                         'contourf', 'contourslice', 'cool', 'copper',
-                         'daspect', 'figure', 'fill', 'fill3', 'flag', 'gca',
-                         'gcf', 'get', 'gray', 'grid', 'hardcopy', 'hidden',
-                         'hold', 'hot', 'hsv', 'ishold', 'isocaps',
-                         'isosurface', 'jet', 'legend', 'light', 'lines',
-                         'loglog', 'material', 'mesh', 'meshc', 'openfig',
-                         'savefig', 'pcolor', 'pink', 'plot', 'plot3', 'prism',
-                         'quiver', 'quiver3', 'reducevolum', 'semilogx',
-                         'semilogy', 'set', 'shading', 'show', 'slice_',
-                         'spring', 'streamline', 'streamribbon', 'streamslice',
-                         'streamtube', 'subplot', 'subvolume', 'summer',
-                         'surf', 'surfc', 'surfl', 'title', 'vga', 'view',
-                         'white', 'winter', 'xlabel', 'ylabel', 'zlabel']
+    _matlab_like_cmds = [
+        'autumn', 'axes', 'axis', 'bone', 'box', 'brighten',
+        'camdolly', 'camlight', 'camlookat', 'campos',
+        'camproj', 'camroll', 'camtarget', 'camup', 'camva',
+        'camzoom', 'caxis', 'cla', 'clabel', 'clf', 'close',
+        'closefig', 'closefigs', 'coneplot', 'colorbar',
+        'colorcube', 'colormap', 'contour', 'contour3',
+        'contourf', 'contourslice', 'cool', 'copper',
+        'daspect', 'figure', 'fill', 'fill3', 'flag', 'gca',
+        'gcf', 'get', 'gray', 'grid', 'hardcopy', 'hidden',
+        'hold', 'hot', 'hsv', 'ishold', 'isocaps',
+        'isosurface', 'jet', 'legend', 'light', 'lines',
+        'loglog', 'material', 'mesh', 'meshc', 'openfig',
+        'savefig', 'pcolor', 'pink', 'plot', 'plot3', 'prism',
+        'quiver', 'quiver3', 'reducevolum', 'semilogx',
+        'semilogy', 'set', 'shading', 'show', 'slice_',
+        'spring', 'streamline', 'streamribbon', 'streamslice',
+        'streamtube', 'savefig', 'subplot', 'subvolume',
+        'summer', 'surf', 'surfc', 'surfl', 'title', 'vga', 'view',
+        'white', 'winter', 'xlabel', 'ylabel', 'zlabel']
     __doc__ += docadd('List of "Matlab-like" interface functions (for ' + \
                       'the user)', _matlab_like_cmds)
     
@@ -1904,6 +1905,9 @@ class BaseClass(object):
                 if hasattr(obj, 'setp'):
                     obj.setp(**kwargs)
 
+        if 'savefig' in kwargs:  # synonym: hardcopy
+            kwargs['hardcopy'] = kwargs['savefig']
+            
         for key in kwargs:
             value = kwargs[key]
             if key in self._attrs:  # legal key?
@@ -5258,7 +5262,11 @@ def use(plt, namespace=globals(), neutralize=False):
     for item in dir(plt_orig.__class__):
         if not '__' in item:  
             plt_dict[item] = eval('plt.'+item)
-    namespace.update(plt_dict)  # Add to global namespace 
+    namespace.update(plt_dict)  # Add to global namespace
+    namespace['savefig'] = namespace['hardcopy']   # synonym
+    def get_backend():
+        return plt._g
+    namespace['get_backend'] = get_backend # desired global func
 
     # If this module is imported
     try:

@@ -25,6 +25,7 @@ cat tmp1.py
 
 echo
 echo "test of rename:"
+RANDOM=1  # set seed of random generator in Bash
 names="oslo trondheim bergen stavanger"
 for i in $names; do
     touch tmp_${i}_set${RANDOM}.dat

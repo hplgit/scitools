@@ -24,7 +24,6 @@ REQUIREMENTS:
 Matplotlib
 
 """
-
 from __future__ import division
 
 from common import *
@@ -1060,3 +1059,5 @@ use(plt, globals())        # export public namespace of plt to globals()
 # We should close all figure windows on program exit:
 import atexit
 atexit.register(close, 'all')
+
+backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

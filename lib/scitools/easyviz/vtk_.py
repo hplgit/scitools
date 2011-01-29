@@ -1488,7 +1488,5 @@ class VtkBackend(BaseClass):
     
 plt = VtkBackend() # Create backend instance
 use(plt, globals()) # Export public namespace of plt to globals()
-
-def get_backend():
-    return plt._g
+backend = os.path.splitext(os.path.basename(__file__))[0][:-1]
 
