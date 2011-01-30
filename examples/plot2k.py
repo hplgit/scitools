@@ -26,12 +26,12 @@ raw_input('Press Return to continue: ')
 figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
+savefig('tmp2_1.eps')
 show()
-hardcopy('tmp2_1.eps')
 
 figure(2)  # go to second figure
 title('Another curve')
-hardcopy('tmp2_2.eps')
+savefig('tmp2_2.eps')
 show()
 
 figure()  # new, third figure
@@ -41,7 +41,7 @@ plot(t, y1, xlabel='t', ylabel='y')
 subplot(2, 1, 2)
 plot(t, y2, xlabel='t', ylabel='y')
 title('A figure with two plots')
+#savefig('tmp2_3.eps')  # illegal in multiplot mode
 show()
-#hardcopy('tmp2_3.eps')  # illegal in multiplot mode
 
 raw_input('Press Return key to quit: ')

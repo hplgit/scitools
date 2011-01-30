@@ -37,7 +37,7 @@ data = {'method1': {'thing1': 3, 'thing2': 2, 'thing3': 4},
         'method3': {'thing1': 1, 'thing2': 4, 'thing3': 2},}
 bar(data, 
     rotated_barticks=True,
-    hardcopy='bar1a.eps', color=True,
+    hardcopy='tmp_bar1a.eps', color=True,
     ylabel='response',
     axis=[-1, len(data), 0, 5],
     title='Bars from nested dictionary')

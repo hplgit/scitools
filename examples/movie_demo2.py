@@ -39,7 +39,7 @@ while t <= tstop:
     frame_counter += 1
     plot(x, y, 'r-', x, y2, 'b-', xtop, ytop, 'y--',
          axis=[0, 15, -0.1, 1.1])
-    hardcopy(filename, color=True, renderer='painters')
+    savefig(filename, color=True, renderer='painters') # or hardcopy
     print 't=%s' % t
     t += dt
     if backend == 'matlab':
@@ -47,10 +47,10 @@ while t <= tstop:
     elif backend == 'gnuplot':
         time.sleep(0.1)
 
-# First we create an animated gif file using convert as the encoding tool:
+# First we create an animated gif file using convert as the encoding tool
 movie('tmp_*.png', encoder='convert', output_file='movie.gif')
 
-# Now we create an mpeg file using the mpeg_encode tool:
+# Now we create an mpeg file using the mpeg_encode tool
 files = glob.glob('tmp_*.png')
 files.sort()  # this might not be necessary
 movie(files, encoder='mpeg_encode', output_file='movie.mpeg')

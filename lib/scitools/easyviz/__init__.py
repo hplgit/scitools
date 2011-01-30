@@ -270,7 +270,12 @@ command produces files with images in various formats::
         hardcopy('tmp1.eps') # produce PostScript
         hardcopy('tmp1.png') # produce PNG
 
-An alternative name for hardcopy is savefig.
+An alternative name for hardcopy is savefig::
+
+
+        savefig('tmp1.eps') # produce PostScript
+        savefig('tmp1.png') # produce PNG
+
 The filename extension determines the format: .ps or
 .eps for PostScript, and .png for PNG. 
 Figure ref{fig:plot1a} displays the resulting plot. With show(False)
@@ -323,14 +328,14 @@ all the plot properties can be set at once::
              legend='t^2*exp(-t^2)',
              axis=[0, 3, -0.05, 0.6],
              title='My First Easyviz Demo',
-             hardcopy='tmp1.eps',
+             savefig='tmp1.eps',  # or hardcopy='tmp1.eps'
              show=True)
 
 
 With show=False one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
-The keyword hardcopy can be replaced by savefig if desired.
+The keyword savefig can be replaced by hardcopy if desired.
 
 Note that we in the curve legend write t square as t^2 (LaTeX style)
 rather than t**2 (program style). Whichever form you choose is up to
@@ -369,7 +374,7 @@ different approaches::
         y1 = f1(t)
         y2 = f2(t)
         
-        # Matlab-style syntax:
+        # Matlab-style syntax
         plot(t, y1)
         hold('on')
         plot(t, y2)
@@ -378,22 +383,28 @@ different approaches::
         ylabel('y')
         legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
         title('Plotting two curves in the same plot')
-        hardcopy('tmp2.eps')  # or savefig('tmp2.eps')
+        savefig('tmp2.eps')  # or hardcopy('tmp2.eps')
         
-        # alternative:
+        # Alternative "Pythonic" style
         plot(t, y1, t, y2, xlabel='t', ylabel='y',
              legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
              title='Plotting two curves in the same plot',
-             hardcopy='tmp2.eps')
+             savefig='tmp2.eps')
 
 The sequence of the multiple legends is such that the first legend 
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure ref{fig:plot2a}.
 
 Doing a hold('off') makes the next plot command create a new
-plot.
+plot in the same window. This new plot just erases the previous curves.
 
 FIGURE:[figs/plot2a.eps] Two curves in the same plot. {fig:plot2a}
+
+With the keyword argrument grid=True to plot we can add a
+grid, which is frequently used when plotting curves (see
+Figure ref{fig:plot2f}).
+
+FIGURE:[figs/plot2f.eps] Curves with a grid. {fig:plot2f}
 
 
 Making Multiple Figures
@@ -576,7 +587,7 @@ the f_2(t) curve::
         y1 = f1(t)
         y2 = f2(t)
         
-        # pick out each 4 points and add random noise:
+        # Pick out each 4 points and add random noise
         t3 = t[::4]      # slice, stride 4
         random.seed(11)  # fix random sequence
         noise = random.normal(loc=0, scale=0.02, size=len(t3))
@@ -715,8 +726,8 @@ is decreased from 2 to 0.2::
         # f is max for x=m; smaller s gives larger max value
         max_f = f(m, m, s_stop)
         
-        # show the movie on the screen
-        # and make hardcopies of frames simultaneously:
+        # Show the movie on the screen
+        # and make hardcopies of frames simultaneously
         counter = 0
         for s in s_values:
             y = f(x, m, s)
@@ -726,7 +737,7 @@ is decreased from 2 to 0.2::
             counter += 1
             #time.sleep(0.2)  # can insert a pause to control movie speed
         
-        # make movie file the simplest possible way:
+        # Make movie file the simplest possible way
         movie('tmp*.png')
 
 
@@ -774,14 +785,14 @@ and later delete the subfolder. Here is a suitable code segment::
 
 
         import shutil, os
-        subdir = 'temp'  # subfolder for plot files
+        subdir = 'temp'            # name of subfolder for plot files
         if os.path.isdir(subdir):  # does the subfolder already exist?
             shutil.rmtree(subdir)  # delete the whole folder
-        os.mkdir(subdir) # make new subfolder
-        os.chdir(subdir) # move to subfolder
-        # do all the plotting
-        # make movie
-        os.chdir(os.pardir)  # optional: move up to parent folder
+        os.mkdir(subdir)           # make new subfolder
+        os.chdir(subdir)           # move to subfolder
+        # ...perform all the plotting...
+        # ...make movie...
+        os.chdir(os.pardir)        # optional: move up to parent folder
 
 
 *Movie Formats.* Having a set of (e.g.) tmp*.png files, one can simply generate a movie by
@@ -1062,7 +1073,7 @@ Here is an example with Matplotlib::
 
         if backend == 'matplotlib':
             pyplot = get_backend()
-            # work with standard matplotlib.pyplot functions
+            # Work with standard matplotlib.pyplot functions
 
 The files grab_backend*.py in the examples folder of the SciTools
 source code contain many examples on how to do backend-specific operations,
@@ -1095,7 +1106,7 @@ object, whose set method can be used to set axis properties::
 
         plot(t, y1, 'r-', t, y2, 'bo',
              legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-             hardcopy='tmp2.eps')
+             savefig='tmp2.eps')
         
         ax = gca()   # get current Axis object
         ax.setp(xlabel='t', ylabel='y',
@@ -1129,14 +1140,14 @@ version of the plot::
         title('One curve')
         legend('t^2*exp(-t^2)')
         show()
-        hardcopy('tmp2_1.eps')
+        savefig('tmp2_1.eps')
 
 We can also adjust figure 2::
 
 
         figure(2)  # go to second figure
         title('Another curve')
-        hardcopy('tmp2_2.eps')
+        savefig('tmp2_2.eps')
         show()
 
 The current Figure object is reached by gcf (get current figure),
@@ -1159,14 +1170,14 @@ Here is the code for this third figure::
 
 
         figure()  # new, third figure
-        # plot y1 and y2 as two axis in the same figure:
+        # Plot y1 and y2 as two axis in the same figure
         subplot(2, 1, 1)
         plot(t, y1, xlabel='t', ylabel='y')
         subplot(2, 1, 2)
         plot(t, y2, xlabel='t', ylabel='y')
         title('A figure with two plots')
         show()
-        hardcopy('tmp2_3.eps')
+        savefig('tmp2_3.eps')
 
 
 If we need to place an axis at an arbitrary position in the figure, we
@@ -1567,7 +1578,7 @@ three-dimensional MRI data set::
         D = mri['D']
         image_num = 8
         
-        # Displaying a 2D Contour Slice:
+        # Displaying a 2D Contour Slice
         contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
 
 The MRI data set is loaded from the file mri_matlab_v6.mat with the
@@ -1641,7 +1652,7 @@ associated gradient field::
         values = sin(sqrt(xv**2 + yv**2))
         pcolor(xv, yv, values, shading='interp')
         
-        # create a coarser grid for the gradient field:
+        # Create a coarser grid for the gradient field
         xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21))
         values = sin(sqrt(xv**2 + yv**2))
         uv, vv = gradient(values)
@@ -1703,7 +1714,7 @@ the wind data set and then draw some stream lines from it::
 
         import scipy.io  # needed to load binary .mat-files
         
-        # load the wind data set and create variables:
+        # Load the wind data set and create variables
         wind = scipy.io.loadmat('wind.mat')
         x = wind['x']
         y = wind['y']
@@ -1712,11 +1723,11 @@ the wind data set and then draw some stream lines from it::
         v = wind['v']
         w = wind['w']
         
-        # create starting points for the stream lines:
+        # Create starting points for the stream lines
         sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5), 
                             sparse=False)
           
-        # draw stream lines:
+        # Draw stream lines
         streamline(x, y, z, u, v, w, sx, sy, sz,
                    view=3, axis=[60,140,10,60,-5,20])
 
@@ -2337,7 +2348,7 @@ a quick remedy. The switch is done with the encoder keyword argument
 to movie, e.g.::
 
 
-        # make animated GIF movie in the file tmpmovie.gif:
+        # Make animated GIF movie in the file tmpmovie.gif
         movie('tmp_*.png', encoder='convert', fps=2,
               output_file='tmpmovie.gif')
 

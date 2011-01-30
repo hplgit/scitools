@@ -57,7 +57,7 @@ if __name__ == '__main__':
         # Set alpha on patches
         _pyplot_patch_alpha(0.3)
         # Don't use normal hardcopy after an update in backend
-        pyplot.savefig('transparent_fill.png') 
+        pyplot.savefig('tmp_transparent_fill.png') 
 
     raw_input('Press Return key to quit: ')
     

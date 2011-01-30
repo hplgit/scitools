@@ -20,8 +20,8 @@ title('Simple Plot Demo')
 axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
+savefig('tmp0.eps')  # this one can be included in latex
+savefig('tmp0.png')  # this one can be included in HTML
 show()
 
-hardcopy('tmp0.eps')  # this one can be included in latex
-hardcopy('tmp0.png') # this one can be included in HTML
 raw_input('Press Return key to quit: ')

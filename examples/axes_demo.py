@@ -34,13 +34,13 @@ if pos is not None:
     ax = axes(viewport=pos)  # create a new axis at the given position
     plot(ax, x, y2, 'b--')   # draw a curve in the new axis
 
-hardcopy('axes1a.eps')
+hardcopy('tmp_axes1a.eps')
 if not backend == 'pyx':
-    hardcopy('axes1a.png')
+    hardcopy('tmp_axes1a.png')
 
 if backend == 'matlab2':
-    save('test_axes.m')
+    save('tmp_test_axes.m')
 elif backend == 'veusz':
-    save('test_axes.vsz')
+    save('tmp_test_axes.vsz')
 
 raw_input('Press Return key to quit:')

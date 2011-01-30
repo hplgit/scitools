@@ -352,7 +352,7 @@ mri = scipy.io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
 image_num = 8
 
-# Displaying a 2D Contour Slice:
+# Displaying a 2D Contour Slice
 contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
 !ec
 The MRI data set is loaded from the file `mri_matlab_v6.mat` with the
@@ -421,7 +421,7 @@ xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
 values = sin(sqrt(xv**2 + yv**2))
 pcolor(xv, yv, values, shading='interp')
 
-# create a coarser grid for the gradient field:
+# Create a coarser grid for the gradient field
 xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21))
 values = sin(sqrt(xv**2 + yv**2))
 uv, vv = gradient(values)
@@ -480,7 +480,7 @@ the `wind` data set and then draw some stream lines from it:
 !bc
 import scipy.io  # needed to load binary .mat-files
 
-# load the wind data set and create variables:
+# Load the wind data set and create variables
 wind = scipy.io.loadmat('wind.mat')
 x = wind['x']
 y = wind['y']
@@ -489,11 +489,11 @@ u = wind['u']
 v = wind['v']
 w = wind['w']
 
-# create starting points for the stream lines:
+# Create starting points for the stream lines
 sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5), 
                     sparse=False)
   
-# draw stream lines:
+# Draw stream lines
 streamline(x, y, z, u, v, w, sx, sy, sz,
            view=3, axis=[60,140,10,60,-5,20])
 !ec

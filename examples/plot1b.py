@@ -12,5 +12,5 @@ ylabel('y')
 legend('t^2*exp(-t^2)')
 axis([0, 3, -0.05, 0.6])   # t in [0,3], y in [-0.05,0.6]
 title('My First Easyviz Demo')
-hardcopy('tmp1.eps')        # save figure to file (PostScript)
+savefig('tmp1.eps')        # save figure to file (PostScript)
 raw_input('Press Return key to quit: ')

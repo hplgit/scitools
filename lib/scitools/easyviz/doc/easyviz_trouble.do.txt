@@ -161,7 +161,7 @@ finding out what can be wrong. Just switching to a different encoder can be
 a quick remedy. The switch is done with the `encoder` keyword argument
 to `movie`, e.g.,
 !bc
-# make animated GIF movie in the file tmpmovie.gif:
+# Make animated GIF movie in the file tmpmovie.gif
 movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec

@@ -10,7 +10,7 @@ t = linspace(0, 3, 51)
 y1 = f1(t)
 y2 = f2(t)
 
-# Matlab-style syntax:
+# Matlab-style syntax
 plot(t, y1, 'r-')
 hold('on')
 plot(t, y2, 'bo')
@@ -20,5 +20,5 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-hardcopy('tmp2.eps')
+savefig('tmp2.eps')
 raw_input('Press Return key to quit: ')

@@ -124,8 +124,8 @@ if backend == 'gnuplot':
     # Unfortunately, setting replot to False does not currently work in the
     # Gnuplot backend. So, in this case we must use the hardcopy command from
     # the Gnuplot.py module:
-    g.hardcopy(filename='grab_backend1.eps', terminal='postscript', mode='eps')
-    g.hardcopy(filename='grab_backend1.png', terminal='png')
+    g.hardcopy(filename='tmp_grab_backend1.eps', terminal='postscript', mode='eps')
+    g.hardcopy(filename='tmp_grab_backend1.png', terminal='png')
 else:
     savefig('grab_backend1.eps', replot=False)
     if not backend == 'pyx':

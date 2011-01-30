@@ -281,8 +281,12 @@ command produces files with images in various formats:</p>
 <span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp1.png&#39;</span><span class="p">)</span> <span class="c"># produce PNG</span>
 </pre></div>
 </div>
-<p>An alternative name for <tt class="docutils literal"><span class="pre">hardcopy</span></tt> is <tt class="docutils literal"><span class="pre">savefig</span></tt>.
-The filename extension determines the format: <tt class="docutils literal"><span class="pre">.ps</span></tt> or
+<p>An alternative name for <tt class="docutils literal"><span class="pre">hardcopy</span></tt> is <tt class="docutils literal"><span class="pre">savefig</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp1.eps&#39;</span><span class="p">)</span> <span class="c"># produce PostScript</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp1.png&#39;</span><span class="p">)</span> <span class="c"># produce PNG</span>
+</pre></div>
+</div>
+<p>The filename extension determines the format: <tt class="docutils literal"><span class="pre">.ps</span></tt> or
 <tt class="docutils literal"><span class="pre">.eps</span></tt> for PostScript, and <tt class="docutils literal"><span class="pre">.png</span></tt> for PNG.
 Figure <a class="reference internal" href="#fig-plot1a"><em>A simple plot in PostScript format.</em></a> displays the resulting plot. With <tt class="docutils literal"><span class="pre">show(False)</span></tt>
 we can suppress the plot from being shown at the screen, which is
@@ -329,14 +333,14 @@ all the plot properties can be set at once:</p>
      <span class="n">legend</span><span class="o">=</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span>
      <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span>
      <span class="n">title</span><span class="o">=</span><span class="s">&#39;My First Easyviz Demo&#39;</span><span class="p">,</span>
-     <span class="n">hardcopy</span><span class="o">=</span><span class="s">&#39;tmp1.eps&#39;</span><span class="p">,</span>
+     <span class="n">savefig</span><span class="o">=</span><span class="s">&#39;tmp1.eps&#39;</span><span class="p">,</span>  <span class="c"># or hardcopy=&#39;tmp1.eps&#39;</span>
      <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>With <tt class="docutils literal"><span class="pre">show=False</span></tt> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
-The keyword <tt class="docutils literal"><span class="pre">hardcopy</span></tt> can be replaced by <tt class="docutils literal"><span class="pre">savefig</span></tt> if desired.</p>
+The keyword <tt class="docutils literal"><span class="pre">savefig</span></tt> can be replaced by <tt class="docutils literal"><span class="pre">hardcopy</span></tt> if desired.</p>
 <p>Note that we in the curve legend write <tt class="docutils literal"><span class="pre">t</span></tt> square as <tt class="docutils literal"><span class="pre">t^2</span></tt> (LaTeX style)
 rather than <tt class="docutils literal"><span class="pre">t**2</span></tt> (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
@@ -371,7 +375,7 @@ different approaches:</p>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
-<span class="c"># Matlab-style syntax:</span>
+<span class="c"># Matlab-style syntax</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
 <span class="n">hold</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
@@ -380,23 +384,30 @@ different approaches:</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">legend</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span> <span class="s">&#39;t^4*exp(-t^2)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Plotting two curves in the same plot&#39;</span><span class="p">)</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>  <span class="c"># or savefig(&#39;tmp2.eps&#39;)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>  <span class="c"># or hardcopy(&#39;tmp2.eps&#39;)</span>
 
-<span class="c"># alternative:</span>
+<span class="c"># Alternative &quot;Pythonic&quot; style</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">,</span>
      <span class="n">legend</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span> <span class="s">&#39;t^4*exp(-t^2)&#39;</span><span class="p">),</span>
      <span class="n">title</span><span class="o">=</span><span class="s">&#39;Plotting two curves in the same plot&#39;</span><span class="p">,</span>
-     <span class="n">hardcopy</span><span class="o">=</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>
+     <span class="n">savefig</span><span class="o">=</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure <a class="reference internal" href="#fig-plot2a"><em>Two curves in the same plot.</em></a>.</p>
 <p>Doing a <tt class="docutils literal"><span class="pre">hold('off')</span></tt> makes the next <tt class="docutils literal"><span class="pre">plot</span></tt> command create a new
-plot.</p>
+plot in the same window. This new plot just erases the previous curves.</p>
 <div class="figure" id="fig-plot2a">
 <img alt="_images/plot2a.png" src="_images/plot2a.png" />
 <p class="caption">Two curves in the same plot.</p>
+</div>
+<p>With the keyword argrument <tt class="docutils literal"><span class="pre">grid=True</span></tt> to <tt class="docutils literal"><span class="pre">plot</span></tt> we can add a
+grid, which is frequently used when plotting curves (see
+Figure <a class="reference internal" href="#fig-plot2f"><em>Curves with a grid.</em></a>).</p>
+<div class="figure" id="fig-plot2f">
+<img alt="_images/plot2f.png" src="_images/plot2f.png" />
+<p class="caption">Curves with a grid.</p>
 </div>
 </div>
 <div class="section" id="making-multiple-figures">
@@ -554,7 +565,7 @@ the <img class="math" src="_images/math/df9cc80af3d9483c1c014d7f3138d07bf1e775d7
 <span class="n">y1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
-<span class="c"># pick out each 4 points and add random noise:</span>
+<span class="c"># Pick out each 4 points and add random noise</span>
 <span class="n">t3</span> <span class="o">=</span> <span class="n">t</span><span class="p">[::</span><span class="mi">4</span><span class="p">]</span>      <span class="c"># slice, stride 4</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>  <span class="c"># fix random sequence</span>
 <span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">t3</span><span class="p">))</span>
@@ -680,8 +691,8 @@ is decreased from 2 to 0.2:</p>
 <span class="c"># f is max for x=m; smaller s gives larger max value</span>
 <span class="n">max_f</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s_stop</span><span class="p">)</span>
 
-<span class="c"># show the movie on the screen</span>
-<span class="c"># and make hardcopies of frames simultaneously:</span>
+<span class="c"># Show the movie on the screen</span>
+<span class="c"># and make hardcopies of frames simultaneously</span>
 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">s_values</span><span class="p">:</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
@@ -691,7 +702,7 @@ is decreased from 2 to 0.2:</p>
     <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="c">#time.sleep(0.2)  # can insert a pause to control movie speed</span>
 
-<span class="c"># make movie file the simplest possible way:</span>
+<span class="c"># Make movie file the simplest possible way</span>
 <span class="n">movie</span><span class="p">(</span><span class="s">&#39;tmp*.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -733,14 +744,14 @@ of the form <tt class="docutils literal"><span class="pre">tmp*.png</span></tt>:
 above. Alternatively, one may store all plotfiles in a subfolder
 and later delete the subfolder. Here is a suitable code segment:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">shutil</span><span class="o">,</span> <span class="nn">os</span>
-<span class="n">subdir</span> <span class="o">=</span> <span class="s">&#39;temp&#39;</span>  <span class="c"># subfolder for plot files</span>
+<span class="n">subdir</span> <span class="o">=</span> <span class="s">&#39;temp&#39;</span>            <span class="c"># name of subfolder for plot files</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">):</span>  <span class="c"># does the subfolder already exist?</span>
     <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span>  <span class="c"># delete the whole folder</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span> <span class="c"># make new subfolder</span>
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span> <span class="c"># move to subfolder</span>
-<span class="c"># do all the plotting</span>
-<span class="c"># make movie</span>
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>  <span class="c"># optional: move up to parent folder</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span>           <span class="c"># make new subfolder</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span>           <span class="c"># move to subfolder</span>
+<span class="c"># ...perform all the plotting...</span>
+<span class="c"># ...make movie...</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>        <span class="c"># optional: move up to parent folder</span>
 </pre></div>
 </div>
 <p><em>Movie Formats.</em> Having a set of (e.g.) <tt class="docutils literal"><span class="pre">tmp*.png</span></tt> files, one can simply generate a movie by
@@ -972,7 +983,7 @@ Gnuplot.</p>
 <p>Here is an example with Matplotlib:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;matplotlib&#39;</span><span class="p">:</span>
     <span class="n">pyplot</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
-    <span class="c"># work with standard matplotlib.pyplot functions</span>
+    <span class="c"># Work with standard matplotlib.pyplot functions</span>
 </pre></div>
 </div>
 <p>The files <tt class="docutils literal"><span class="pre">grab_backend*.py</span></tt> in the <tt class="docutils literal"><span class="pre">examples</span></tt> folder of the SciTools
@@ -1000,7 +1011,7 @@ command. The <tt class="docutils literal"><span class="pre">gca</span></tt> (get
 object, whose <tt class="docutils literal"><span class="pre">set</span></tt> method can be used to set axis properties:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="s">&#39;bo&#39;</span><span class="p">,</span>
      <span class="n">legend</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span> <span class="s">&#39;t^4*exp(-t^2)&#39;</span><span class="p">),</span>
-     <span class="n">hardcopy</span><span class="o">=</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>
+     <span class="n">savefig</span><span class="o">=</span><span class="s">&#39;tmp2.eps&#39;</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gca</span><span class="p">()</span>   <span class="c"># get current Axis object</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">,</span>
@@ -1030,13 +1041,13 @@ version of the plot:</p>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;One curve&#39;</span><span class="p">)</span>
 <span class="n">legend</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">)</span>
 <span class="n">show</span><span class="p">()</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2_1.eps&#39;</span><span class="p">)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp2_1.eps&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can also adjust figure 2:</p>
 <div class="highlight-py"><div class="highlight"><pre><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c"># go to second figure</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Another curve&#39;</span><span class="p">)</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2_2.eps&#39;</span><span class="p">)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp2_2.eps&#39;</span><span class="p">)</span>
 <span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1056,14 +1067,14 @@ In the present case <tt class="docutils literal"><span class="pre">subplot(2,1,1
 the first set of axis in a &#8220;table&#8221; with two rows and one column.
 Here is the code for this third figure:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figure</span><span class="p">()</span>  <span class="c"># new, third figure</span>
-<span class="c"># plot y1 and y2 as two axis in the same figure:</span>
+<span class="c"># Plot y1 and y2 as two axis in the same figure</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;A figure with two plots&#39;</span><span class="p">)</span>
 <span class="n">show</span><span class="p">()</span>
-<span class="n">hardcopy</span><span class="p">(</span><span class="s">&#39;tmp2_3.eps&#39;</span><span class="p">)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s">&#39;tmp2_3.eps&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If we need to place an axis at an arbitrary position in the figure, we
@@ -1454,7 +1465,7 @@ three-dimensional MRI data set:</p>
 <span class="n">D</span> <span class="o">=</span> <span class="n">mri</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span>
 <span class="n">image_num</span> <span class="o">=</span> <span class="mi">8</span>
 
-<span class="c"># Displaying a 2D Contour Slice:</span>
+<span class="c"># Displaying a 2D Contour Slice</span>
 <span class="n">contourslice</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="n">image_num</span><span class="p">,</span> <span class="n">daspect</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">indexing</span><span class="o">=</span><span class="s">&#39;xy&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1523,7 +1534,7 @@ associated gradient field:</p>
 <span class="n">values</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xv</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">yv</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">pcolor</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="s">&#39;interp&#39;</span><span class="p">)</span>
 
-<span class="c"># create a coarser grid for the gradient field:</span>
+<span class="c"># Create a coarser grid for the gradient field</span>
 <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">21</span><span class="p">),</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">21</span><span class="p">))</span>
 <span class="n">values</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xv</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">yv</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">uv</span><span class="p">,</span> <span class="n">vv</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
@@ -1586,7 +1597,7 @@ the different stream plot commands. The following commands will load
 the <tt class="docutils literal"><span class="pre">wind</span></tt> data set and then draw some stream lines from it:</p>
 <div class="highlight-py"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scipy.io</span>  <span class="c"># needed to load binary .mat-files</span>
 
-<span class="c"># load the wind data set and create variables:</span>
+<span class="c"># Load the wind data set and create variables</span>
 <span class="n">wind</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s">&#39;wind.mat&#39;</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span>
@@ -1595,11 +1606,11 @@ the <tt class="docutils literal"><span class="pre">wind</span></tt> data set and
 <span class="n">v</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">]</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;w&#39;</span><span class="p">]</span>
 
-<span class="c"># create starting points for the stream lines:</span>
+<span class="c"># Create starting points for the stream lines</span>
 <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">([</span><span class="mi">80</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">seq</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">seq</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span>
                     <span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-<span class="c"># draw stream lines:</span>
+<span class="c"># Draw stream lines</span>
 <span class="n">streamline</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span>
            <span class="n">view</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">140</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
 </pre></div>
@@ -2087,7 +2098,7 @@ the movie. You can manually copy this command and run it again to start
 finding out what can be wrong. Just switching to a different encoder can be
 a quick remedy. The switch is done with the <tt class="docutils literal"><span class="pre">encoder</span></tt> keyword argument
 to <tt class="docutils literal"><span class="pre">movie</span></tt>, e.g.,</p>
-<div class="highlight-py"><div class="highlight"><pre><span class="c"># make animated GIF movie in the file tmpmovie.gif:</span>
+<div class="highlight-py"><div class="highlight"><pre><span class="c"># Make animated GIF movie in the file tmpmovie.gif</span>
 <span class="n">movie</span><span class="p">(</span><span class="s">&#39;tmp_*.png&#39;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="s">&#39;convert&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
       <span class="n">output_file</span><span class="o">=</span><span class="s">&#39;tmpmovie.gif&#39;</span><span class="p">)</span>
 </pre></div>

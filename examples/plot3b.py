@@ -11,7 +11,7 @@ t = linspace(0, 3, 51)
 y1 = f1(t)
 y2 = f2(t)
 
-# pick out each 4 points and add random noise:
+# Pick out each 4 points and add random noise
 t3 = t[::4]      # slice, stride 4
 random.seed(11)  # fix random sequence
 noise = random.normal(loc=0, scale=0.02, size=len(t3))
@@ -27,8 +27,8 @@ title('Simple Plot Demo')
 axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
+savefig('tmp3.eps') 
+savefig('tmp3.png')
 show()
-hardcopy('tmp3.eps') 
-hardcopy('tmp3.png')
 
 raw_input('Press Return key to quit: ')
