@@ -1341,12 +1341,19 @@ class Axis(object):
     _modes = "auto manual tight fill".split()
     _ranges = "xmin xmax ymin ymax zmin zmax".split()
     _shadings = "flat interp faceted".split()
+    _legend_locs = {'upper right': 1, 'upper left': 2,
+                    'lower left': 3,  'lower right': 4,
+                    'center left': 6, 'center right': 7,
+                    'lower center': 8, 'upper center': 9,
+                    'best': 0, 'right': 5, 'center': 10}
     
     __doc__ += docadd('Legal values for direction keyword', _directions)
     __doc__ += docadd('Legal values for method keyword', _methods)
     __doc__ += docadd('Legal values for mode keyword', _modes)
     __doc__ += docadd('Legal values for range keyword', _ranges)
     __doc__ += docadd('Legal values for shading keyword', _shadings)
+    __doc__ += docadd('Legal values for legend locations',
+                      list(_legend_locs.keys()))
     
     def __init__(self, *args, **kwargs):
         self._prop = {}
@@ -1528,6 +1535,11 @@ class Axis(object):
             pth = kwargs['pth']
             _check_type(pth, 'pth', int)
             self._prop['pth'] = pth
+
+        if 'legend_loc' in kwargs:
+            self._prop['legend_loc'] = kwargs['legend_loc']
+        if 'legend_fancybox' in kwargs:
+            self._prop['legend_fancybox'] = kwargs['legend_fancybox']
 
         # set properties for camera and colorbar:
         self._prop['camera'].setp(**kwargs)
@@ -2690,16 +2702,20 @@ class BaseClass(object):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         
-    def legend(self, *args): 
+    def legend(self, *args, **kwargs): 
         """Add legend(s) to the current plot.
 
         Calling::
 
-            legend(string1,string2,string3,...)
+            legend(string1, string2, string3,...)
+
+        or
+            legend([string1, string2, string3,...])
 
         adds legends to the current plot using the given strings as labels.
-        Note that the number of strings must match the number of items in
-        the current axis (i.e., getp(gca(), 'numberofitems')).
+        Note that the number of strings should match the number of items in
+        the current axis (i.e., getp(gca(), 'numberofitems')), but a
+        less legends than curve items are allowed.xo
 
         Calling::
 
@@ -2713,8 +2729,47 @@ class BaseClass(object):
             legend(ax, ...)
 
         affects the Axis object ax instead of the current axis.
+
+        The keyword arguments (**kwargs) are ignored, but makes it
+        possible to seemlessly switch between easyviz and matplotlib.
         """
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            # unpack the list/tuple to individual arguments
+            args = [e for e in args[0]]
+            
         ax, args, nargs = self._check_args(*args)
+
+        for key in kwargs:
+            if key == 'loc':
+                value = kwargs[key]
+                if isinstance(value, int):
+                    if 0 <= value <= 10:
+                        for loc in Axis._legend_locs:
+                            if Axis._legend_locs[loc] == value:
+                                value = loc
+                                break
+                    else:
+                        raise ValueError(
+                            'legend: wrong value of loc=%s, '
+                            'should be between 0 and 10' % value)
+                elif isinstance(value, str):
+                    if not value in Axis._legend_locs:
+                        raise ValueError(
+                            'legend: wrong value of loc=%s, '
+                            'should be\n%s' % \
+                        (value, str([v for v in Axis._legend_locs])[1:-1]))
+                else:
+                    raise ValueError('legend: wrong value of loc=%s' % value)
+                
+                ax.setp(legend_loc=value)
+                            
+            elif key == 'fancybox':
+                value = kwargs[key]
+                if not value in (True, False, None):
+                    raise ValueError('legend: wrong value of fancybox=%s' % value)
+                ax.setp(legend_fancybox=value)
+            else:
+                print 'legend: ignoring keyword argument "%s"' % key
 
         items = ax.getp('plotitems')
         if len(items) == 0:
@@ -2722,7 +2777,7 @@ class BaseClass(object):
             return
         if nargs > 1:
             # Consistency check of len(args) and number of items in axis
-            if len(items) == nargs:
+            if len(items) >= nargs:
                 # Iterate over items and set legend
                 for i in range(nargs):
                     items[i].setp(legend=str(args[i]))
@@ -3047,6 +3102,12 @@ class BaseClass(object):
             elif isinstance(legends,str): # only one legend
                 ax.getp('plotitems')[-1].setp(legend=legends)
             del kwargs['legend']
+
+        if 'legend_loc' in kwargs:
+            # No test on validity as in legend method...
+            ax.setp(legend_loc=kwargs['legend_loc'])
+        if 'legend_fancybox' in kwargs:
+            ax.setp(legend_fancybox=kwargs['legend_fancybox'])
 
         if not ax.getp('hold') and not 'box' in kwargs:
             kwargs['box'] = True

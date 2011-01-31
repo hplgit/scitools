@@ -898,7 +898,16 @@ class MatplotlibBackend(BaseClass):
                     self._g.hold(True)
 
             if legends:
-                self._g.legend()
+                try:
+                    loc = ax.getp('legend_loc')
+                except KeyError:
+                    loc = 'best'
+                try:
+                    fancybox = ax.getp('legend_fancybox')
+                except KeyError:
+                    fancybox = True
+                self._g.legend(loc=loc, fancybox=fancybox)
+
             self._set_axis_props(ax)
                     
         # set back the interactive state in pylab:

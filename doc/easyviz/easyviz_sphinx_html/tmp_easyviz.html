@@ -409,6 +409,37 @@ Figure <a class="reference internal" href="#fig-plot2f"><em>Curves with a grid.<
 <img alt="_images/plot2f.png" src="_images/plot2f.png" />
 <p class="caption">Curves with a grid.</p>
 </div>
+<p>The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the <tt class="docutils literal"><span class="pre">loc</span></tt> keyword to the <tt class="docutils literal"><span class="pre">legend</span></tt> function, e.g.,</p>
+<div class="highlight-py"><div class="highlight"><pre><span class="n">legend</span><span class="p">(</span><span class="s">&#39;t^2*exp(-t^2)&#39;</span><span class="p">,</span> <span class="s">&#39;t^4*exp(-t^2)&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The most popular values are upper right, upper left, lower left,
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument <tt class="docutils literal"><span class="pre">fancybox</span></tt> draws a box around
+the legends if <tt class="xref docutils literal"><span class="pre">True</span></tt>, otherwise no box is drawn. The corresponding
+keywords for the <tt class="docutils literal"><span class="pre">plot</span></tt> function are <tt class="docutils literal"><span class="pre">legend_loc</span></tt> and <tt class="docutils literal"><span class="pre">legend_fancybox</span></tt>:</p>
+<div class="highlight-py"><pre>plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     legend_loc=`upper left`, legend_fancybox=True,
+     axis=[0, 4, -0.1, 0.8],
+     title='Plotting two curves in the same plot',
+     savefig='tmp2.eps')</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">loc</span></tt> and <tt class="docutils literal"><span class="pre">fancybox</span></tt> specifications work (at present)
+with Gnuplot and Matplotlib only.</p>
+<div class="figure">
+<img alt="_images/plot2l.png" src="_images/plot2l.png" style="width: 400px;" />
+<p class="caption">A figure with legends placed to the upper left with a box frame.</p>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">legend</span></tt> function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib&#8217;s keywords to
+<tt class="docutils literal"><span class="pre">plot</span></tt>, like <tt class="docutils literal"><span class="pre">label</span></tt> and <tt class="docutils literal"><span class="pre">linewidth</span></tt>, are not recognized so not all
+syntax is interchangable).</p>
 </div>
 <div class="section" id="making-multiple-figures">
 <h2>Making Multiple Figures<a class="headerlink" href="#making-multiple-figures" title="Permalink to this headline">¶</a></h2>

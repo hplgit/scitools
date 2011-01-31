@@ -657,11 +657,13 @@ class GnuplotBackend(BaseClass):
             kwargs = {'title': item.getp('legend'),
                       'with': withstring,
                       'using': '1:($2)'}
+            
             data = Gnuplot.Data(arrayconverter(x),
                                 arrayconverter(y), 
                                 **kwargs)
         return data
 
+        
     def _add_filled_line(self, item):
         """Add a 2D or 3D filled curve."""
         if DEBUG:
@@ -1121,6 +1123,8 @@ class GnuplotBackend(BaseClass):
                 size = 1/ncolumns, 1/nrows
                 self._g('set origin %s,%s' % (origin[0], origin[1]))
                 self._g('set size %s,%s' % (size[0], size[1]))
+            loc = self._loc_syntax(ax)
+            self._g('set key ' + loc)
             plotitems = ax.getp('plotitems')
             plotitems.sort(self._cmpPlotProperties)
             for item in plotitems:
@@ -1196,6 +1200,40 @@ class GnuplotBackend(BaseClass):
                 print "\nDumping plot data to screen\n"
                 debug(self)
             pass
+
+    def _loc_syntax(self, ax):
+        """
+        Change from (Matplotlib-inspired) syntax of loc
+        specification of legends to Gnuplot "key" syntax.
+        """
+        try:
+            loc = ax.getp('legend_loc')
+        except KeyError:
+            loc = 'best'
+
+        mpl2gp = {
+            'upper right': 'right top',
+            'upper left': 'left top',
+            'lower left': 'left bottom',
+            'lower right': 'right bottom',
+            'center left': 'left center',
+            'center right': 'right center',
+            'lower center': 'center bottom',
+            'upper center': 'center top',
+            'best': 'right top', # default
+            'right': 'right top',
+            'center': 'center center'}
+        loc = mpl2gp[loc]
+        
+        try:
+            fancybox = ax.getp('legend_fancybox')
+        except KeyError:
+            fancybox = False
+
+        if fancybox:
+            loc = loc + ' box'
+        return loc
+        
 
     def cleanup(self):
         """Clean up data."""

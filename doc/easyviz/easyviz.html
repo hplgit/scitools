@@ -474,6 +474,47 @@ Figure <A HREF="#fig:plot2f">fig:plot2f</a>).
 <IMG SRC="figs/plot2f.png" ALIGN="bottom" > Curves with a grid. <A NAME="fig:plot2f"></A>
 
 <P>
+The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the <TT>loc</TT> keyword to the <TT>legend</TT> function, e.g.,
+<!-- BEGIN VERBATIM BLOCK  -->
+<BLOCKQUOTE><PRE>
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
+The most popular values are upper right, upper left, lower left, 
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument <TT>fancybox</TT> draws a box around
+the legends if <TT>True</TT>, otherwise no box is drawn. The corresponding
+keywords for the <TT>plot</TT> function are <TT>legend_loc</TT> and <TT>legend_fancybox</TT>:
+<!-- BEGIN VERBATIM BLOCK  -->
+<BLOCKQUOTE><PRE>
+plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     legend_loc=`upper left`, legend_fancybox=True,
+     axis=[0, 4, -0.1, 0.8],
+     title='Plotting two curves in the same plot',
+     savefig='tmp2.eps')
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
+The <TT>loc</TT> and <TT>fancybox</TT> specifications work (at present)
+with Gnuplot and Matplotlib only.
+
+<P>
+
+<P>
+<IMG SRC="figs/plot2l.png" ALIGN="bottom"  width=400> A figure with legends placed to the upper left with a box frame.
+
+<P>
+The <TT>legend</TT> function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib's keywords to 
+<TT>plot</TT>, like <TT>label</TT> and <TT>linewidth</TT>, are not recognized so not all
+syntax is interchangable).
+
+<P>
 
 <P>
 <H3>Making Multiple Figures</H3>

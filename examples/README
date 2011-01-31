@@ -13,6 +13,7 @@ plot2g.py:  as plot2f.py, but with 1/4 of the circles in the second curve.
 plot2i.py:  as plot2f.py, but with label and arrow set with Gnuplot commands.
 plot2j.py:  as plot2e.py, but working with an Axis object.
 plot2k.py:  as other plot2*.py files, but with subplots and multiple figures.
+plot2l.py:  as plot2e.py, but with legend location and legend fancybox.
 plot4.py:   three Gaussian bell functions (for illustrating movie_demo1 frames).
 movie_demo1.py:  primary animation example.
 movie_demo2.py:  another animation example.

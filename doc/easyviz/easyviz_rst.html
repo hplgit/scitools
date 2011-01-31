@@ -684,6 +684,38 @@ Figure <a class="reference internal" href="#fig-plot2f">fig:plot2f</a>).</p>
 <img alt="figs/plot2f.png" src="figs/plot2f.png" />
 <p class="caption">Curves with a grid. (fig:plot2f)</p>
 </div>
+<p>The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the <tt class="docutils literal">loc</tt> keyword to the <tt class="docutils literal">legend</tt> function, e.g.:</p>
+<pre class="literal-block">
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
+</pre>
+<p>The most popular values are upper right, upper left, lower left,
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument <tt class="docutils literal">fancybox</tt> draws a box around
+the legends if <tt class="docutils literal">True</tt>, otherwise no box is drawn. The corresponding
+keywords for the <tt class="docutils literal">plot</tt> function are <tt class="docutils literal">legend_loc</tt> and <tt class="docutils literal">legend_fancybox</tt>:</p>
+<pre class="literal-block">
+plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     legend_loc=`upper left`, legend_fancybox=True,
+     axis=[0, 4, -0.1, 0.8],
+     title='Plotting two curves in the same plot',
+     savefig='tmp2.eps')
+</pre>
+<p>The <tt class="docutils literal">loc</tt> and <tt class="docutils literal">fancybox</tt> specifications work (at present)
+with Gnuplot and Matplotlib only.</p>
+<div class="figure">
+<img alt="figs/plot2l.png" src="figs/plot2l.png" style="width: 400px;" />
+<p class="caption">A figure with legends placed to the upper left with a box frame.</p>
+</div>
+<p>The <tt class="docutils literal">legend</tt> function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib's keywords to
+<tt class="docutils literal">plot</tt>, like <tt class="docutils literal">label</tt> and <tt class="docutils literal">linewidth</tt>, are not recognized so not all
+syntax is interchangable).</p>
 </div>
 <div class="section" id="making-multiple-figures">
 <h2>Making Multiple Figures</h2>
@@ -2557,7 +2589,7 @@ supported by all backends):</p>
 <div class="system-messages section">
 <h1>Docutils System Messages</h1>
 <div class="system-message" id="id1">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2805); <em><a href="#id2">backlink</a></em></p>
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2845); <em><a href="#id2">backlink</a></em></p>
 Unknown target name: &quot;slice&quot;.</div>
 </div>
 </div>

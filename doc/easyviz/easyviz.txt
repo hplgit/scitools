@@ -405,6 +405,41 @@ Figure ref{fig:plot2f}).
 
 FIGURE:[figs/plot2f.eps] Curves with a grid. {fig:plot2f}
 
+The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the loc keyword to the legend function, e.g.::
+
+
+        legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
+
+The most popular values are upper right, upper left, lower left, 
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument fancybox draws a box around
+the legends if True, otherwise no box is drawn. The corresponding
+keywords for the plot function are legend_loc and legend_fancybox::
+
+
+        plot(t, y1, t, y2, xlabel='t', ylabel='y',
+             legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+             legend_loc=`upper left`, legend_fancybox=True,
+             axis=[0, 4, -0.1, 0.8],
+             title='Plotting two curves in the same plot',
+             savefig='tmp2.eps')
+
+The loc and fancybox specifications work (at present)
+with Gnuplot and Matplotlib only.
+
+
+FIGURE: [figs/plot2l.eps, width=400] A figure with legends placed to the upper left with a box frame.
+
+The legend function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib's keywords to 
+plot, like label and linewidth, are not recognized so not all
+syntax is interchangable).
+
 
 Making Multiple Figures
 -----------------------
