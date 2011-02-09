@@ -83,7 +83,6 @@ try:
         sys.modules['scitools.FuncDependenceViz'] = TkGUI
         sys.modules['scitools.FunctionSelector'] = TkGUI
         sys.modules['scitools.ParameterInterface'] = TkGUI
-        del TkGUI
     except ImportError:
         pass  # Pmw and other graphics might be missing - this is not crucial
 
