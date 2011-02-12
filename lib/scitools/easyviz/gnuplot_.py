@@ -1187,7 +1187,7 @@ class GnuplotBackend(BaseClass):
             # Gnuplot may give thread error for many plot items,
             # let it wait a bit when there are many curves in a plot
             if len(plotitems) > 6:
-                time.sleep(0.2)
+                time.sleep(0.3)
                 
         if sys.platform == 'win32':
             # Since os.mkfifo is not available on the Windows platform, we
@@ -1326,7 +1326,7 @@ class GnuplotBackend(BaseClass):
                     kwargs['mode'] = 'eps'
                 else:
                     self._g('set term postscript %s %s' % \
-                            (orientation,colortype))
+                            (orientation, colortype))
                     kwargs['mode'] = orientation
             elif terminal == 'png':
                 self._g('set term png')
@@ -1384,7 +1384,7 @@ class GnuplotBackend(BaseClass):
         orientation = kwargs.get('orientation', None)
         solid = kwargs.get('solid', False)
         fontname = kwargs.get('fontname', 'Helvetica')
-        fontsize = kwargs.get('fontsize', 14)
+        fontsize = kwargs.get('fontsize', 20)
         
         keyw = {'filename': filename, 'terminal': terminal}
         if terminal == 'postscript':
@@ -1407,6 +1407,7 @@ class GnuplotBackend(BaseClass):
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(solid and 'solid' or 'dashed')
+            setterm.append(' dashlength 3 linewidth 1.2 ')
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
         elif terminal == 'png':
