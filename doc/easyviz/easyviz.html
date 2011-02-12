@@ -1011,8 +1011,71 @@ for example, the
 <TT>myplayer</TT>, <TT>vlc</TT>, or <TT>totem</TT> programs.
 
 <P>
+<H3>Moving Plot Window</H3>
+<P>
+When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+<TT>MovingPlotWindow</TT> was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With <TT>mode</TT> set as <TT>continuous movement</TT>,
+the plot window moves with the curves continuously.
+With <TT>mode</TT> set as <TT>continuous drawing</TT>, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With <TT>mode</TT> set as <TT>jumps</TT> the curves are plotted directly
+in the window and shown for a specified period of time (the <TT>pause</TT>
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The <TT>jumps</TT> mode is
+well suited for quickly browsing a time series. The <TT>continuous
+drawing</TT> mode is aimed at studing the "tip" of the time series
+as they are computed, and <TT>continuous movement</TT> is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.
 
 <P>
+Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate.
+
+<P>
+<!-- BEGIN VERBATIM BLOCK  -->
+<BLOCKQUOTE><PRE>
+def _demo(I, k, dt, T, mode='continuous movement'):
+    """
+    Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+    method with time steps dt, from t=0 to t=T.
+    """
+    if dt > 2./k:
+        print 'Unstable scheme'
+    N = int(round(T/float(dt)))
+    u = zeros(N+1)
+    t = linspace(0, T, N+1)
+
+    umin = -1.2*I
+    umax = -umin
+    period = 2*pi/k  # period of the oscillations
+    plot_manager = MovingPlotWindow(8*period, dt, yaxis=[umin, umax],
+                                    mode=mode)
+    u[0] = I
+    u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+    for n in range(1,N):
+        u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+
+        if plot_manager.plot(n):
+            s = plot_manager.first_index_in_plot
+            plot(t[s:n+2], u[s:n+2], 'r-',
+                 t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                 axis=plot_manager.axis(),
+                 title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \
+                 % (t[n+1], mode))
+        plot_manager.update(n)
+
+
+</PRE></BLOCKQUOTE>
+<! -- END VERBATIM BLOCK -->
 
 <P>
 
@@ -2562,6 +2625,18 @@ show()
 </PRE></BLOCKQUOTE>
 <! -- END VERBATIM BLOCK -->
 <!-- test on Windows! -->
+
+<P>
+<H3>I Get Thread Errors While Plotting</H3>
+<P>
+With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do <TT>import time</TT> and insert
+a <TT>time.sleep(0.2)</TT> (pause the program for 0.2 sec) between each call
+to the <TT>plot</TT> command. 
+
+<P>
+Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.
 
 <P>
 <H3>I Get Strange Errors Saying Something About LaTeX</H3>

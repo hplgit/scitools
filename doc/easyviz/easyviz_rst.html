@@ -568,7 +568,7 @@ we can suppress the plot from being shown at the screen, which is
 useful when create a large number of figure files in programs.</p>
 <div class="figure" id="fig-plot1a">
 <img alt="figs/plot1a.png" src="figs/plot1a.png" />
-<p class="caption">A simple plot in PostScript format. (fig:plot1a)</p>
+<p class="caption">A simple plot in PostScript format  (fig:plot1a)</p>
 </div>
 <p>On some platforms, some backends may result in a plot that is shown in
 just a fraction of a second on the screen before the plot window disappears
@@ -624,7 +624,7 @@ See Figure <a class="reference internal" href="#fig-plot1c">fig:plot1c</a> for w
 plot looks like and how <tt class="docutils literal">t^2</tt> is typeset in Gnuplot.</p>
 <div class="figure" id="fig-plot1c">
 <img alt="figs/plot1c.png" src="figs/plot1c.png" />
-<p class="caption">A single curve with label, title, and axes adjusted. (fig:plot1c)</p>
+<p class="caption">A single curve with  label, title, and axes adjusted.   (fig:plot1c)</p>
 </div>
 </div>
 <div class="section" id="plotting-multiple-curves">
@@ -675,14 +675,14 @@ and so on. The visual result appears in Figure <a class="reference internal" hre
 plot in the same window. This new plot just erases the previous curves.</p>
 <div class="figure" id="fig-plot2a">
 <img alt="figs/plot2a.png" src="figs/plot2a.png" />
-<p class="caption">Two curves in the same plot. (fig:plot2a)</p>
+<p class="caption">Two curves in the same plot  (fig:plot2a)</p>
 </div>
 <p>With the keyword argrument <tt class="docutils literal">grid=True</tt> to <tt class="docutils literal">plot</tt> we can add a
 grid, which is frequently used when plotting curves (see
 Figure <a class="reference internal" href="#fig-plot2f">fig:plot2f</a>).</p>
 <div class="figure" id="fig-plot2f">
 <img alt="figs/plot2f.png" src="figs/plot2f.png" />
-<p class="caption">Curves with a grid. (fig:plot2f)</p>
+<p class="caption">Curves with a grid  (fig:plot2f)</p>
 </div>
 <p>The default location of the legends is dependent on the backend
 (some have a fixed location, like Gnuplot, and some try to find
@@ -708,7 +708,7 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
 with Gnuplot and Matplotlib only.</p>
 <div class="figure">
 <img alt="figs/plot2l.png" src="figs/plot2l.png" style="width: 400px;" />
-<p class="caption">A figure with legends placed to the upper left with a box frame.</p>
+<p class="caption">A figure with legends placed to the upper left with a box frame</p>
 </div>
 <p>The <tt class="docutils literal">legend</tt> function also accepts a list of legends instead of
 the legends as separate positional arguments. This allows an overlapping
@@ -766,7 +766,7 @@ plot(t, y1, 'r-', t, y2, 'bo')
 Figure <a class="reference internal" href="#fig-plot2c">fig:plot2c</a>.</p>
 <div class="figure" id="fig-plot2c">
 <img alt="figs/plot2c.png" src="figs/plot2c.png" />
-<p class="caption">Two curves in the same plot, with controlled line styles. (fig:plot2c)</p>
+<p class="caption">Two curves in the same plot, with controlled line styles  (fig:plot2c)</p>
 </div>
 <p>Assume now that we want to plot the blue circles at every 4 points only.
 We can grab every 4 points out of the <tt class="docutils literal">t</tt> array by using an appropriate
@@ -802,7 +802,7 @@ and symbol size depends on the underlying plotting program. For
 the Gnuplot program one can view the effect in Figure <a class="reference internal" href="#fig-plot2g">fig:plot2g</a>.</p>
 <div class="figure" id="fig-plot2g">
 <img alt="figs/plot2g.png" src="figs/plot2g.png" />
-<p class="caption">Circles at every 4 points and extended line thickness (6) and circle size (3). (fig:plot2g)</p>
+<p class="caption">Circles at every 4 points and extended line thickness (6) and circle size (3)  (fig:plot2g)</p>
 </div>
 <dl class="docutils">
 <dt>The different available line colors include</dt>
@@ -896,7 +896,7 @@ savefig('tmp3.png')   # or hardcopy
 <p>The plot is shown in Figure <a class="reference internal" href="#fig-plot3">fig:plot3</a>.</p>
 <div class="figure" id="fig-plot3">
 <img alt="figs/plot3.png" src="figs/plot3.png" />
-<p class="caption">A plot with three curves.  (fig:plot3)</p>
+<p class="caption">A plot with three curves  (fig:plot3)</p>
 </div>
 <p><em>Minimalistic Typing.</em> When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
@@ -959,7 +959,7 @@ function evolves as s is decreased. In Python we implement the
 formula above as a function <tt class="docutils literal">f(x, m, s)</tt>.</p>
 <div class="figure" id="fig-plot4">
 <img alt="figs/plot4.png" src="figs/plot4.png" />
-<p class="caption">Different shapes of a Gaussian function. (fig:plot4)</p>
+<p class="caption">Different shapes of a Gaussian function  (fig:plot4)</p>
 </div>
 <p>The animation is created by varying s in a loop and for each s
 issue a <tt class="docutils literal">plot</tt> command. A moving curve is then visible on the screen.
@@ -1114,6 +1114,64 @@ show the file in a web page with the HTML command
 for example, the
 <tt class="docutils literal">myplayer</tt>, <tt class="docutils literal">vlc</tt>, or <tt class="docutils literal">totem</tt> programs.</p>
 </div>
+<div class="section" id="moving-plot-window">
+<h2>Moving Plot Window</h2>
+<p>When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+<tt class="docutils literal">MovingPlotWindow</tt> was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">continuous movement</tt>,
+the plot window moves with the curves continuously.
+With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">continuous drawing</tt>, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">jumps</tt> the curves are plotted directly
+in the window and shown for a specified period of time (the <tt class="docutils literal">pause</tt>
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The <tt class="docutils literal">jumps</tt> mode is
+well suited for quickly browsing a time series. The <tt class="docutils literal">continuous
+drawing</tt> mode is aimed at studing the &quot;tip&quot; of the time series
+as they are computed, and <tt class="docutils literal">continuous movement</tt> is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.</p>
+<p>Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate:</p>
+<pre class="literal-block">
+def _demo(I, k, dt, T, mode='continuous movement'):
+    &quot;&quot;&quot;
+    Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+    method with time steps dt, from t=0 to t=T.
+    &quot;&quot;&quot;
+    if dt &gt; 2./k:
+        print 'Unstable scheme'
+    N = int(round(T/float(dt)))
+    u = zeros(N+1)
+    t = linspace(0, T, N+1)
+
+    umin = -1.2*I
+    umax = -umin
+    period = 2*pi/k  # period of the oscillations
+    plot_manager = MovingPlotWindow(8*period, dt, yaxis=[umin, umax],
+                                    mode=mode)
+    u[0] = I
+    u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+    for n in range(1,N):
+        u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+
+        if plot_manager.plot(n):
+            s = plot_manager.first_index_in_plot
+            plot(t[s:n+2], u[s:n+2], 'r-',
+                 t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                 axis=plot_manager.axis(),
+                 title=&quot;Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)&quot; \
+                 % (t[n+1], mode))
+        plot_manager.update(n)
+</pre>
+</div>
 <div class="section" id="advanced-easyviz-topics">
 <h2>Advanced Easyviz Topics</h2>
 <p>The information in the previous sections aims at being sufficient for
@@ -1266,7 +1324,7 @@ with an example where we add a text and an arrow in the plot, see
 Figure <a class="reference internal" href="#fig-plot2i">fig:plot2i</a>.</p>
 <div class="figure" id="fig-plot2i">
 <img alt="figs/plot2i.png" src="figs/plot2i.png" />
-<p class="caption">Illustration of a text and an arrow using Gnuplot-specific commands. (fig:plot2i)</p>
+<p class="caption">Illustration of a text and an arrow using Gnuplot-specific commands  (fig:plot2i)</p>
 </div>
 <p>Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
@@ -1468,7 +1526,7 @@ for i in xrange(x.size):
 extensions <tt class="docutils literal">xv</tt> and <tt class="docutils literal">yv</tt> of <tt class="docutils literal">x</tt> and <tt class="docutils literal">y</tt>.</p>
 <div class="figure" id="fig-mesh-ex1">
 <img alt="figs/mesh_ex1.png" src="figs/mesh_ex1.png" />
-<p class="caption">Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). (fig:mesh_ex1)</p>
+<p class="caption">Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)  (fig:mesh_ex1)</p>
 </div>
 <p>The <tt class="docutils literal">surf</tt> command employs the same syntax, but results in a different
 plot (see Figure <a class="reference internal" href="#fig-surf-ex1">fig:surf_ex1</a>):</p>
@@ -1477,7 +1535,7 @@ surf(xv, yv, values)
 </pre>
 <div class="figure" id="fig-surf-ex1">
 <img alt="figs/surf_ex1.png" src="figs/surf_ex1.png" />
-<p class="caption">Result of the surf command (Gnuplot backend). (fig:surf_ex1)</p>
+<p class="caption">Result of the surf command (Gnuplot backend)  (fig:surf_ex1)</p>
 </div>
 <p>The <tt class="docutils literal">surf</tt> command offers many possibilities to adjust the resulting plot:</p>
 <pre class="literal-block">
@@ -1507,7 +1565,7 @@ surf(xv, yv, values,
 <p>Figure <a class="reference internal" href="#fig-surf-ex2">fig:surf_ex2</a> displays the result.</p>
 <div class="figure" id="fig-surf-ex2">
 <img alt="figs/surf_ex2.png" src="figs/surf_ex2.png" />
-<p class="caption">Result of an extended surf command (Gnuplot backend). (fig:surf_ex2)</p>
+<p class="caption">Result of an extended surf command (Gnuplot backend)  (fig:surf_ex2)</p>
 </div>
 </div>
 <div class="section" id="contour-plots">
@@ -1556,7 +1614,7 @@ contour(xv, yv, values)
 Figure <a class="reference internal" href="#fig-contour-ex1">fig:contour_ex1</a>.</p>
 <div class="figure" id="fig-contour-ex1">
 <img alt="figs/contour_ex1.png" src="figs/contour_ex1.png" />
-<p class="caption">Result of the simplest possible contour command (Gnuplot backend). (fig:contour_ex1)</p>
+<p class="caption">Result of the simplest possible contour command (Gnuplot backend)  (fig:contour_ex1)</p>
 </div>
 <p>The number of levels in a contour plot can be specified with an additional
 argument:</p>
@@ -1567,7 +1625,7 @@ contour(xv, yv, values, n)
 <p>The result can be seen in Figure <a class="reference internal" href="#fig-contour-ex2">fig:contour_ex2</a>.</p>
 <div class="figure" id="fig-contour-ex2">
 <img alt="figs/contour_ex2.png" src="figs/contour_ex2.png" />
-<p class="caption">A contour plot with 15 contour levels (Gnuplot backend). (fig:contour_ex2)</p>
+<p class="caption">A contour plot with 15 contour levels (Gnuplot backend)  (fig:contour_ex2)</p>
 </div>
 <p>Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
@@ -1587,7 +1645,7 @@ corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.</p>
 <div class="figure" id="fig-contour-ex3">
 <img alt="figs/contour_ex3.png" src="figs/contour_ex3.png" />
-<p class="caption">Four individually specified contour levels (Gnuplot backend). (fig:contour_ex3)</p>
+<p class="caption">Four individually specified contour levels (Gnuplot backend)  (fig:contour_ex3)</p>
 </div>
 <p>The <tt class="docutils literal">contourf</tt> command:</p>
 <pre class="literal-block">
@@ -1598,7 +1656,7 @@ Only the Matplotlib and VTK backends currently supports filled
 contour plots.</p>
 <div class="figure" id="fig-contourf-ex1">
 <img alt="figs/contourf_ex1.png" src="figs/contourf_ex1.png" />
-<p class="caption">Filled contour plot created by the contourf command (VTK backend). (fig:contourf_ex1)</p>
+<p class="caption">Filled contour plot created by the contourf command (VTK backend)  (fig:contourf_ex1)</p>
 </div>
 <p>The contour lines can be &quot;lifted up&quot; in 3D space, as shown in Figure
 <a class="reference internal" href="#fig-contour3-ex1">fig:contour3_ex1</a>, using the <tt class="docutils literal">contour3</tt> command:</p>
@@ -1607,7 +1665,7 @@ contour3(xv, yv, values, 15)
 </pre>
 <div class="figure" id="fig-contour3-ex1">
 <img alt="figs/contour3_ex1.png" src="figs/contour3_ex1.png" />
-<p class="caption">Example on the contour3 command for elevated contour levels (Gnuplot backend). (fig:contour3_ex1)</p>
+<p class="caption">Example on the contour3 command for elevated contour levels (Gnuplot backend)  (fig:contour3_ex1)</p>
 </div>
 <p>Finally, we show a simple example illustrating the <tt class="docutils literal">meshc</tt> and <tt class="docutils literal">surfc</tt>
 commands:</p>
@@ -1627,11 +1685,11 @@ surfc(xv, yv, values,
 <a class="reference internal" href="#fig-surfc-ex1">fig:surfc_ex1</a>.</p>
 <div class="figure" id="fig-meshc-ex1">
 <img alt="figs/meshc_ex1.png" src="figs/meshc_ex1.png" />
-<p class="caption">Wireframe mesh with contours at the bottom (Gnuplot backend). (fig:meshc_ex1)</p>
+<p class="caption">Wireframe mesh with contours at the bottom (Gnuplot backend)  (fig:meshc_ex1)</p>
 </div>
 <div class="figure" id="fig-surfc-ex1">
 <img alt="figs/surfc_ex1.png" src="figs/surfc_ex1.png" />
-<p class="caption">Surface plot with contours (Gnuplot backend). (fig:surfc_ex1)</p>
+<p class="caption">Surface plot with contours (Gnuplot backend)  (fig:surfc_ex1)</p>
 </div>
 </div>
 <div class="section" id="pseudocolor-plots">
@@ -1651,7 +1709,7 @@ Matplotlib backends support <tt class="docutils literal">'faceted'</tt> and <tt 
 VTK backend supports all of them.</p>
 <div class="figure">
 <img alt="figs/pcolor_ex1.png" src="figs/pcolor_ex1.png" />
-<p class="caption">Pseudocolor plot (Gnuplot backend).</p>
+<p class="caption">Pseudocolor plot (Gnuplot backend)</p>
 </div>
 </div>
 <div class="section" id="isosurface-plots">
@@ -1686,7 +1744,7 @@ Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.</p>
 <div class="figure" id="fig-isosurface1">
 <img alt="figs/isosurface1.png" src="figs/isosurface1.png" />
-<p class="caption">Isosurface plot (VTK backend). (fig:isosurface1)</p>
+<p class="caption">Isosurface plot (VTK backend)  (fig:isosurface1)</p>
 </div>
 <p>Here is another example that demonstrates the <tt class="docutils literal">isosurface</tt> command
 (again using the <tt class="docutils literal">flow</tt> function):</p>
@@ -1703,7 +1761,7 @@ show()
 <p>Figure <a class="reference internal" href="#fig-isosurface2">fig:isosurface2</a> shows the resulting plot.</p>
 <div class="figure" id="fig-isosurface2">
 <img alt="figs/isosurface2.png" src="figs/isosurface2.png" />
-<p class="caption">Another isosurface plot (VTK backend). (fig:isosurface2)</p>
+<p class="caption">Another isosurface plot (VTK backend)  (fig:isosurface2)</p>
 </div>
 </div>
 <div class="section" id="volumetric-slice-plot">
@@ -1739,7 +1797,7 @@ at the z axis (at z=-2 and z=0.0). The result is presented in
 Figure <a class="reference internal" href="#fig-slice1">fig:slice1</a>.</p>
 <div class="figure" id="fig-slice1">
 <img alt="figs/slice1.png" src="figs/slice1.png" />
-<p class="caption">Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend). (fig:slice1)</p>
+<p class="caption">Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend)  (fig:slice1)</p>
 </div>
 <!-- OBS: -->
 <!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
@@ -1771,7 +1829,7 @@ example, a list specifying the level curves. Running the set of
 commands results in the plot shown in Figure <a class="reference internal" href="#fig-contourslice1">fig:contourslice1</a>.</p>
 <div class="figure" id="fig-contourslice1">
 <img alt="figs/contourslice1.png" src="figs/contourslice1.png" />
-<p class="caption">Contours in slice planes (VTK backend). (fig:contourslice1)</p>
+<p class="caption">Contours in slice planes (VTK backend)  (fig:contourslice1)</p>
 </div>
 <p>Here is another example where we draw contour slices from a
 three-dimensional MRI data set:</p>
@@ -1790,7 +1848,7 @@ SciPy package. We then create a 2D contour slice plot with one slice
 in the plane z=8. Figure <a class="reference internal" href="#fig-contourslice3">fig:contourslice3</a> displays the result.</p>
 <div class="figure" id="fig-contourslice3">
 <img alt="figs/contourslice3.png" src="figs/contourslice3.png" />
-<p class="caption">Contour slice plot of a 3D MRI data set (VTK backend). (fig:contourslice3)</p>
+<p class="caption">Contour slice plot of a 3D MRI data set (VTK backend)  (fig:contourslice3)</p>
 </div>
 </div>
 </div>
@@ -1828,7 +1886,7 @@ the vector components are passed as arguments to <tt class="docutils literal">qu
 turn produces the plot in Figure <a class="reference internal" href="#fig-quiver-ex1">fig:quiver_ex1</a>.</p>
 <div class="figure" id="fig-quiver-ex1">
 <img alt="figs/quiver_ex1.png" src="figs/quiver_ex1.png" />
-<p class="caption">Velocity vector plot (Gnuplot backend). (fig:quiver_ex1)</p>
+<p class="caption">Velocity vector plot (Gnuplot backend)  (fig:quiver_ex1)</p>
 </div>
 <p>The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
@@ -1865,11 +1923,11 @@ quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
 <a class="reference internal" href="#fig-quiver-ex3">fig:quiver_ex3</a>.</p>
 <div class="figure" id="fig-quiver-ex2">
 <img alt="figs/quiver_ex2.png" src="figs/quiver_ex2.png" />
-<p class="caption">Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex2)</p>
+<p class="caption">Combined quiver and pseudocolor plot (VTK backend)  (fig:quiver_ex2)</p>
 </div>
 <div class="figure" id="fig-quiver-ex3">
 <img alt="figs/quiver_ex3.png" src="figs/quiver_ex3.png" />
-<p class="caption">Combined quiver and pseudocolor plot (VTK backend). (fig:quiver_ex3)</p>
+<p class="caption">Combined quiver and pseudocolor plot (VTK backend)  (fig:quiver_ex3)</p>
 </div>
 <p>Visualization of 3D vector fields by arrows at grid points can be done
 with the <tt class="docutils literal">quiver3</tt> command. At the time of this writing, only the VTK
@@ -1889,7 +1947,7 @@ and red, respectively. The resulting plot is presented in Figure
 <a class="reference internal" href="#fig-quiver3-ex1">fig:quiver3_ex1</a>.</p>
 <div class="figure" id="fig-quiver3-ex1">
 <img alt="figs/quiver3_ex1.png" src="figs/quiver3_ex1.png" />
-<p class="caption">3D quiver plot (VTK backend). (fig:quiver3_ex1)</p>
+<p class="caption">3D quiver plot (VTK backend)  (fig:quiver3_ex1)</p>
 </div>
 </div>
 <div class="section" id="stream-plots">
@@ -1955,7 +2013,7 @@ points which we defined with the <tt class="docutils literal">ndgrid</tt> comman
 resulting plot is presented in Figure <a class="reference internal" href="#fig-streamline-ex1">fig:streamline_ex1</a>.</p>
 <div class="figure" id="fig-streamline-ex1">
 <img alt="figs/streamline_ex1.png" src="figs/streamline_ex1.png" />
-<p class="caption">Stream line plot (Vtk backend). (fig:streamline_ex1)</p>
+<p class="caption">Stream line plot (Vtk backend)  (fig:streamline_ex1)</p>
 </div>
 <p>The next example demonstrates the <tt class="docutils literal">streamtube</tt> command applied to the
 same <tt class="docutils literal">wind</tt> data set:</p>
@@ -1972,7 +2030,7 @@ tubes. The resulting plot is presented in Figure
 <a class="reference internal" href="#fig-streamtube-ex1">fig:streamtube_ex1</a>.</p>
 <div class="figure" id="fig-streamtube-ex1">
 <img alt="figs/streamtube_ex1.png" src="figs/streamtube_ex1.png" />
-<p class="caption">Stream tubes (Vtk backend). (fig:streamtube_ex1)</p>
+<p class="caption">Stream tubes (Vtk backend)  (fig:streamtube_ex1)</p>
 </div>
 <p>Finally, we illustrate the <tt class="docutils literal">streamribbon</tt> command:</p>
 <pre class="literal-block">
@@ -1986,7 +2044,7 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
 <p>Figure <a class="reference internal" href="#fig-streamribbon-ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.</p>
 <div class="figure" id="fig-streamribbon-ex1">
 <img alt="figs/streamribbon_ex1.png" src="figs/streamribbon_ex1.png" />
-<p class="caption">Stream ribbons (VTK backend). (fig:streamribbon_ex1)</p>
+<p class="caption">Stream ribbons (VTK backend)  (fig:streamribbon_ex1)</p>
 </div>
 </div>
 <div class="section" id="bar-charts">
@@ -2009,7 +2067,7 @@ bar(ratings, 'r',
 correspond to the names in <tt class="docutils literal">languages</tt>.</p>
 <div class="figure">
 <img alt="figs/pyranking.png" src="figs/pyranking.png" />
-<p class="caption">A simple bar chart illustrating the popularity of common programming languages.</p>
+<p class="caption">A simple bar chart illustrating the popularity of common programming languages</p>
 </div>
 <p>One may display groups of bars. The data can then be put in a matrix,
 where rows (1st index) correspond to the groups the columns to the
@@ -2310,6 +2368,15 @@ show()
 </pre>
 <!-- test on Windows! -->
 </div>
+<div class="section" id="i-get-thread-errors-while-plotting">
+<h2>I Get Thread Errors While Plotting</h2>
+<p>With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do <tt class="docutils literal">import time</tt> and insert
+a <tt class="docutils literal">time.sleep(0.2)</tt> (pause the program for 0.2 sec) between each call
+to the <tt class="docutils literal">plot</tt> command.</p>
+<p>Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.</p>
+</div>
 <div class="section" id="i-get-strange-errors-saying-something-about-latex">
 <h2>I Get Strange Errors Saying Something About LaTeX</h2>
 <p>You probably run Easyviz with Matplotlib as backend, and you do not
@@ -2589,7 +2656,7 @@ supported by all backends):</p>
 <div class="system-messages section">
 <h1>Docutils System Messages</h1>
 <div class="system-message" id="id1">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2845); <em><a href="#id2">backlink</a></em></p>
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2917); <em><a href="#id2">backlink</a></em></p>
 Unknown target name: &quot;slice&quot;.</div>
 </div>
 </div>

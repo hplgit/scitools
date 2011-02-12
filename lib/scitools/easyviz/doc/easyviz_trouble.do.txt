@@ -28,6 +28,16 @@ show()
 !ec
 # test on Windows!
 
+===== I Get Thread Errors While Plotting =====
+
+With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do `import time` and insert
+a `time.sleep(0.2)` (pause the program for 0.2 sec) between each call
+to the `plot` command. 
+
+Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.
+
 ===== I Get Strange Errors Saying Something About LaTeX =====
 
 You probably run Easyviz with Matplotlib as backend, and you do not

@@ -313,7 +313,7 @@ useful when create a large number of figure files in programs.
 .. figure:: figs/plot1a.png
 
 
-   A simple plot in PostScript format. 
+   A simple plot in PostScript format  
 
 
 On some platforms, some backends may result in a plot that is shown in
@@ -388,7 +388,7 @@ plot looks like and how ``t^2`` is typeset in Gnuplot.
 .. figure:: figs/plot1c.png
 
 
-   A single curve with label, title, and axes adjusted. 
+   A single curve with  label, title, and axes adjusted.   
 
 
 
@@ -450,7 +450,7 @@ plot in the same window. This new plot just erases the previous curves.
 .. figure:: figs/plot2a.png
 
 
-   Two curves in the same plot. 
+   Two curves in the same plot  
 
 
 With the keyword argrument ``grid=True`` to ``plot`` we can add a
@@ -463,7 +463,7 @@ Figure :ref:`fig:plot2f`).
 .. figure:: figs/plot2f.png
 
 
-   Curves with a grid. 
+   Curves with a grid  
 
 
 The default location of the legends is dependent on the backend
@@ -500,7 +500,7 @@ with Gnuplot and Matplotlib only.
 .. figure:: figs/plot2l.png
    :width: 400
 
-   A figure with legends placed to the upper left with a box frame.
+   A figure with legends placed to the upper left with a box frame
 
 
 The ``legend`` function also accepts a list of legends instead of
@@ -573,7 +573,7 @@ Figure :ref:`fig:plot2c`.
 .. figure:: figs/plot2c.png
 
 
-   Two curves in the same plot, with controlled line styles. 
+   Two curves in the same plot, with controlled line styles  
 
 
 Assume now that we want to plot the blue circles at every 4 points only.
@@ -619,7 +619,7 @@ the Gnuplot program one can view the effect in Figure :ref:`fig:plot2g`.
 .. figure:: figs/plot2g.png
 
 
-   Circles at every 4 points and extended line thickness (6) and circle size (3). 
+   Circles at every 4 points and extended line thickness (6) and circle size (3)  
 
 
 
@@ -740,7 +740,7 @@ The plot is shown in Figure :ref:`fig:plot3`.
 .. figure:: figs/plot3.png
 
 
-   A plot with three curves.  
+   A plot with three curves  
 
 
 *Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
@@ -830,7 +830,7 @@ formula above as a function ``f(x, m, s)``.
 .. figure:: figs/plot4.png
 
 
-   Different shapes of a Gaussian function. 
+   Different shapes of a Gaussian function  
 
 
 The animation is created by varying :math:`s` in a loop and for each :math:`s`
@@ -1013,6 +1013,69 @@ show the file in a web page with the HTML command
 for example, the
 ``myplayer``, ``vlc``, or ``totem`` programs.
 
+Moving Plot Window
+------------------
+
+When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+``MovingPlotWindow`` was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With ``mode`` set as ``continuous movement``,
+the plot window moves with the curves continuously.
+With ``mode`` set as ``continuous drawing``, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With ``mode`` set as ``jumps`` the curves are plotted directly
+in the window and shown for a specified period of time (the ``pause``
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The ``jumps`` mode is
+well suited for quickly browsing a time series. The ``continuous
+drawing`` mode is aimed at studing the "tip" of the time series
+as they are computed, and ``continuous movement`` is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.
+
+Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate.
+
+
+.. code-block:: python
+
+        def _demo(I, k, dt, T, mode='continuous movement'):
+            """
+            Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+            method with time steps dt, from t=0 to t=T.
+            """
+            if dt > 2./k:
+                print 'Unstable scheme'
+            N = int(round(T/float(dt)))
+            u = zeros(N+1)
+            t = linspace(0, T, N+1)
+        
+            umin = -1.2*I
+            umax = -umin
+            period = 2*pi/k  # period of the oscillations
+            plot_manager = MovingPlotWindow(8*period, dt, yaxis=[umin, umax],
+                                            mode=mode)
+            u[0] = I
+            u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+            for n in range(1,N):
+                u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+        
+                if plot_manager.plot(n):
+                    s = plot_manager.first_index_in_plot
+                    plot(t[s:n+2], u[s:n+2], 'r-',
+                         t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                         axis=plot_manager.axis(),
+                         title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \
+                         % (t[n+1], mode))
+                plot_manager.update(n)
+        
+        
 
 
 
@@ -1228,7 +1291,7 @@ Figure :ref:`fig:plot2i`.
 .. figure:: figs/plot2i.png
 
 
-   Illustration of a text and an arrow using Gnuplot-specific commands. 
+   Illustration of a text and an arrow using Gnuplot-specific commands  
 
 
 Easyviz does not support arrows at arbitrary places inside the plot,
@@ -1480,7 +1543,7 @@ extensions ``xv`` and ``yv`` of ``x`` and ``y``.
 .. figure:: figs/mesh_ex1.png
 
 
-   Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). 
+   Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)  
 
 
 The ``surf`` command employs the same syntax, but results in a different
@@ -1498,7 +1561,7 @@ plot (see Figure :ref:`fig:surf_ex1`):
 .. figure:: figs/surf_ex1.png
 
 
-   Result of the surf command (Gnuplot backend). 
+   Result of the surf command (Gnuplot backend)  
 
 
 The ``surf`` command offers many possibilities to adjust the resulting plot:
@@ -1540,7 +1603,7 @@ Figure :ref:`fig:surf_ex2` displays the result.
 .. figure:: figs/surf_ex2.png
 
 
-   Result of an extended surf command (Gnuplot backend). 
+   Result of an extended surf command (Gnuplot backend)  
 
 
 
@@ -1594,7 +1657,7 @@ Figure :ref:`fig:contour_ex1`.
 .. figure:: figs/contour_ex1.png
 
 
-   Result of the simplest possible contour command (Gnuplot backend). 
+   Result of the simplest possible contour command (Gnuplot backend)  
 
 
 The number of levels in a contour plot can be specified with an additional
@@ -1614,7 +1677,7 @@ The result can be seen in Figure :ref:`fig:contour_ex2`.
 .. figure:: figs/contour_ex2.png
 
 
-   A contour plot with 15 contour levels (Gnuplot backend). 
+   A contour plot with 15 contour levels (Gnuplot backend)  
 
 
 Sometimes one wants contour levels that are not equidistant or not
@@ -1643,7 +1706,7 @@ being displayed in black and white.
 .. figure:: figs/contour_ex3.png
 
 
-   Four individually specified contour levels (Gnuplot backend). 
+   Four individually specified contour levels (Gnuplot backend)  
 
 
 The ``contourf`` command,
@@ -1663,7 +1726,7 @@ contour plots.
 .. figure:: figs/contourf_ex1.png
 
 
-   Filled contour plot created by the contourf command (VTK backend). 
+   Filled contour plot created by the contourf command (VTK backend)  
 
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
@@ -1681,7 +1744,7 @@ The contour lines can be "lifted up" in 3D space, as shown in Figure
 .. figure:: figs/contour3_ex1.png
 
 
-   Example on the contour3 command for elevated contour levels (Gnuplot backend). 
+   Example on the contour3 command for elevated contour levels (Gnuplot backend)  
 
 
 Finally, we show a simple example illustrating the ``meshc`` and ``surfc``
@@ -1710,7 +1773,7 @@ The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
 .. figure:: figs/meshc_ex1.png
 
 
-   Wireframe mesh with contours at the bottom (Gnuplot backend). 
+   Wireframe mesh with contours at the bottom (Gnuplot backend)  
 
 
 
@@ -1719,7 +1782,7 @@ The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
 .. figure:: figs/surfc_ex1.png
 
 
-   Surface plot with contours (Gnuplot backend). 
+   Surface plot with contours (Gnuplot backend)  
 
 
 
@@ -1747,7 +1810,7 @@ VTK backend supports all of them.
 .. figure:: figs/pcolor_ex1.png
 
 
-   Pseudocolor plot (Gnuplot backend).
+   Pseudocolor plot (Gnuplot backend)
 
 
 
@@ -1792,7 +1855,7 @@ isosurfaces.
 .. figure:: figs/isosurface1.png
 
 
-   Isosurface plot (VTK backend). 
+   Isosurface plot (VTK backend)  
 
 
 Here is another example that demonstrates the ``isosurface`` command
@@ -1818,7 +1881,7 @@ Figure :ref:`fig:isosurface2` shows the resulting plot.
 .. figure:: figs/isosurface2.png
 
 
-   Another isosurface plot (VTK backend). 
+   Another isosurface plot (VTK backend)  
 
 
 
@@ -1864,7 +1927,7 @@ Figure :ref:`fig:slice1`.
 .. figure:: figs/slice1.png
 
 
-   Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend). 
+   Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend)  
 
 
 .. OBS:
@@ -1906,7 +1969,7 @@ commands results in the plot shown in Figure :ref:`fig:contourslice1`.
 .. figure:: figs/contourslice1.png
 
 
-   Contours in slice planes (VTK backend). 
+   Contours in slice planes (VTK backend)  
 
 
 Here is another example where we draw contour slices from a
@@ -1934,7 +1997,7 @@ in the plane :math:`z=8`. Figure :ref:`fig:contourslice3` displays the result.
 .. figure:: figs/contourslice3.png
 
 
-   Contour slice plot of a 3D MRI data set (VTK backend). 
+   Contour slice plot of a 3D MRI data set (VTK backend)  
 
 
 
@@ -1984,7 +2047,7 @@ turn produces the plot in Figure :ref:`fig:quiver_ex1`.
 .. figure:: figs/quiver_ex1.png
 
 
-   Velocity vector plot (Gnuplot backend). 
+   Velocity vector plot (Gnuplot backend)  
 
 
 The arrows in a quiver plot are automatically scaled to fit within the
@@ -2034,7 +2097,7 @@ The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
 .. figure:: figs/quiver_ex2.png
 
 
-   Combined quiver and pseudocolor plot (VTK backend). 
+   Combined quiver and pseudocolor plot (VTK backend)  
 
 
 .. _fig:quiver_ex3:
@@ -2042,7 +2105,7 @@ The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
 .. figure:: figs/quiver_ex3.png
 
 
-   Combined quiver and pseudocolor plot (VTK backend). 
+   Combined quiver and pseudocolor plot (VTK backend)  
 
 
 Visualization of 3D vector fields by arrows at grid points can be done
@@ -2071,7 +2134,7 @@ and red, respectively. The resulting plot is presented in Figure
 .. figure:: figs/quiver3_ex1.png
 
 
-   3D quiver plot (VTK backend). 
+   3D quiver plot (VTK backend)  
 
 
 
@@ -2152,7 +2215,7 @@ resulting plot is presented in Figure :ref:`fig:streamline_ex1`.
 .. figure:: figs/streamline_ex1.png
 
 
-   Stream line plot (Vtk backend). 
+   Stream line plot (Vtk backend)  
 
 
 The next example demonstrates the ``streamtube`` command applied to the 
@@ -2178,7 +2241,7 @@ tubes. The resulting plot is presented in Figure
 .. figure:: figs/streamtube_ex1.png
 
 
-   Stream tubes (Vtk backend). 
+   Stream tubes (Vtk backend)  
 
 
 Finally, we illustrate the ``streamribbon`` command:
@@ -2201,7 +2264,7 @@ Figure :ref:`fig:streamribbon_ex1` shows the resulting stream ribbons.
 .. figure:: figs/streamribbon_ex1.png
 
 
-   Stream ribbons (VTK backend). 
+   Stream ribbons (VTK backend)  
 
 
 
@@ -2240,7 +2303,7 @@ correspond to the names in ``languages``.
 .. figure:: figs/pyranking.png
 
 
-   A simple bar chart illustrating the popularity of common programming languages.
+   A simple bar chart illustrating the popularity of common programming languages
 
 
 One may display groups of bars. The data can then be put in a matrix,
@@ -2650,6 +2713,17 @@ Another remedy can be to add a ``show()`` call at the end of the plotting:
         show()
 
 .. test on Windows!
+
+I Get Thread Errors While Plotting
+----------------------------------
+
+With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do ``import time`` and insert
+a ``time.sleep(0.2)`` (pause the program for 0.2 sec) between each call
+to the ``plot`` command. 
+
+Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.
 
 I Get Strange Errors Saying Something About LaTeX
 -------------------------------------------------

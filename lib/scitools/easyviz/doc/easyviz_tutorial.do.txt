@@ -638,7 +638,40 @@ show the file in a web page with the HTML command
 for example, the
 `myplayer`, `vlc`, or `totem` programs.
 
+===== Moving Plot Window =====
 
+When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+`MovingPlotWindow` was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With `mode` set as `continuous movement`,
+the plot window moves with the curves continuously.
+With `mode` set as `continuous drawing`, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With `mode` set as `jumps` the curves are plotted directly
+in the window and shown for a specified period of time (the `pause`
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The `jumps` mode is
+well suited for quickly browsing a time series. The `continuous
+drawing` mode is aimed at studing the "tip" of the time series
+as they are computed, and `continuous movement` is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.
+
+Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate. 
+
+@@@CODE ../MovingPlotWindow.py def fromto:def _demo@if __name
+
+An appropriate import statement is
+!bc
+from scitools.easyviz.MovingPlotWindow import MovingPlotWindow
+!ec
 
 
 ===== Advanced Easyviz Topics =====

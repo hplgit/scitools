@@ -45,6 +45,7 @@ import os
 import sys
 import operator
 import string
+import time
 
 # Update Gnuplot.GnuplotOpts according to scitools.cfg
 _update_from_config_file(Gnuplot.GnuplotOpts.__dict__, section='gnuplot')
@@ -1102,7 +1103,8 @@ class GnuplotBackend(BaseClass):
         #self._g('set size 1.0, 1.0')
         #self._g('set origin 0.0, 0.0')
         self._g('unset multiplot')
-        self._g('set missing "nan"')
+        if not sys.platform == 'darwin':
+            self._g('set missing "nan"')
         
         self._set_figure_size(fig)
 
@@ -1182,6 +1184,11 @@ class GnuplotBackend(BaseClass):
                 for data in gdata[1:]:
                     self._g.replot(data)
 
+            # Gnuplot may give thread error for many plot items,
+            # let it wait a bit when there are many curves in a plot
+            if len(plotitems) > 6:
+                time.sleep(0.2)
+                
         if sys.platform == 'win32':
             # Since os.mkfifo is not available on the Windows platform, we
             # store a reference to the gnuplot data so that the temporary

@@ -1,6 +1,6 @@
-"""
+'''
 # #include "doc/easyviz.dst.txt"
-"""
+'''
 
 __author__ = "Johannes H. Ring, Hans Petter Langtangen, Rolv Erlend Bredesen"
 
