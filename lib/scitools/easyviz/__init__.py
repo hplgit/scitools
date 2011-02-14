@@ -954,6 +954,12 @@ to investigate::
         
 
 
+An appropriate import statement is::
+
+
+        from scitools.MovingPlotWindow import MovingPlotWindow
+
+
 
 Advanced Easyviz Topics
 -----------------------

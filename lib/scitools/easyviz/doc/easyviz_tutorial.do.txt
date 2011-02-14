@@ -666,11 +666,11 @@ differences and comparing this series with the exact solutions.
 For large times, there is a fequency discrepancy that one wants
 to investigate. 
 
-@@@CODE ../MovingPlotWindow.py def fromto:def _demo@if __name
+@@@CODE ../../MovingPlotWindow.py def fromto:def _demo@if __name
 
 An appropriate import statement is
 !bc
-from scitools.easyviz.MovingPlotWindow import MovingPlotWindow
+from scitools.MovingPlotWindow import MovingPlotWindow
 !ec
 
 

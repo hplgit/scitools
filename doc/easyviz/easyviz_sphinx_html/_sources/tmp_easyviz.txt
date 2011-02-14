@@ -1040,7 +1040,7 @@ a demo of the three modes.
 Below is an example of how to compute a time series by finite
 differences and comparing this series with the exact solutions.
 For large times, there is a fequency discrepancy that one wants
-to investigate.
+to investigate. 
 
 
 .. code-block:: python
@@ -1076,6 +1076,14 @@ to investigate.
                 plot_manager.update(n)
         
         
+
+
+An appropriate import statement is
+
+.. code-block:: py
+
+
+        from scitools.MovingPlotWindow import MovingPlotWindow
 
 
 
