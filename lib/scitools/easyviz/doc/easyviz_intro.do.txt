@@ -35,7 +35,7 @@ The present documentation is available in a number of formats:
   * "Sphinx HTML": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html"
   * "Plain text": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt"
   * "Wiki": "http://code.google.com/p/scitools/wiki/EasyvizDocumentation"
-  * "Doconce source": https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
+  * "Doconce source": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
 The documentation is written in the 
 "Doconce": "http://code.google.com/p/doconce" 
