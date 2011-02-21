@@ -1,0 +1,8 @@
+
+:mod:`scitools.easyviz.misc`
+=======================
+
+.. automodule:: scitools.easyviz.misc
+   :members:
+   :undoc-members:
+   :show-inheritance:

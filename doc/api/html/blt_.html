@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.blt_ &mdash; SciTools v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SciTools v0.7 documentation" href="index.html" />
+    <link rel="next" title="scitools.easyviz.common" href="common.html" />
+    <link rel="prev" title="easyviz" href="easyviz.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="scitools.easyviz.common"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="easyviz.html" title="easyviz"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.blt_">
+<h1><tt class="xref docutils literal"><span class="pre">scitools.easyviz.blt_</span></tt><a class="headerlink" href="#module-scitools.easyviz.blt_" title="Permalink to this headline">¶</a></h1>
+<p>This backend uses Blt through Pmw (Python Mega Widgets). One can use this
+backend by</p>
+<blockquote>
+python somefile.py &#8211;SCITOOLS_easyviz_backend blt</blockquote>
+<p>or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section</p>
+<blockquote>
+[easyviz]
+backend = blt</blockquote>
+<p>and then</p>
+<blockquote>
+from scitools.std import *</blockquote>
+<p>or if just easyviz is needed</p>
+<blockquote>
+from scitools.easyviz import *</blockquote>
+<p>The Pmw.Blt user&#8217;s guide is located at
+<a class="reference external" href="http://folk.uio.no/hpl/Pmw.Blt/doc/">http://folk.uio.no/hpl/Pmw.Blt/doc/</a></p>
+<p>The documentation of the module is located at
+<a class="reference external" href="http://folk.uio.no/hpl/Pmw.Blt/doc/reference.html">http://folk.uio.no/hpl/Pmw.Blt/doc/reference.html</a></p>
+<p>REQUIREMENTS:</p>
+<p>Pmw
+BLT</p>
+<p>TODO:</p>
+<ul class="simple">
+<li>add support for multiple axes (what about hardcopy then?)</li>
+</ul>
+<dl class="class">
+<dt id="scitools.easyviz.blt_.BltBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.blt_.</tt><tt class="descname">BltBackend</tt><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="scitools.easyviz.common.BaseClass" class="reference external" href="common.html#scitools.easyviz.common.BaseClass"><tt class="xref docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd>Clear the current figure.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd>Close figure window.Close figure window with number &#8216;num&#8217;.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd>Close all figure windows.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd>Create a new figure or switch between figures and return Figure object.
+num is the figure number of the new or existing figure.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions:</p>
+<blockquote>
+&#8216;.ps&#8217;   (PostScript)
+&#8216;.eps&#8217;  (Encapsulated PostScript)</blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+color       &#8211; True (colors) or False (gray-scale).
+orientation &#8211; &#8216;portrait&#8217; (default) or &#8216;landscape&#8217;.</blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.m1">
+<tt class="descname">m1</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.m1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.blt_.BltBackend.m2">
+<tt class="descname">m2</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.blt_.BltBackend.m2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions:</p>
+<blockquote>
+&#8216;.ps&#8217;   (PostScript)
+&#8216;.eps&#8217;  (Encapsulated PostScript)</blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+color       &#8211; True (colors) or False (gray-scale).
+orientation &#8211; &#8216;portrait&#8217; (default) or &#8216;landscape&#8217;.</blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="easyviz.html"
+                                  title="previous chapter"><tt class="docutils literal"><span class="pre">easyviz</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="common.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">scitools.easyviz.common</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/blt_.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="scitools.easyviz.common"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="easyviz.html" title="easyviz"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+
+:mod:`scitools.NumPyDB`
+=======================
+
+.. automodule:: scitools.NumPyDB
+   :members:
+   :undoc-members:
+   :show-inheritance:
