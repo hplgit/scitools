@@ -1,8 +1,8 @@
 
-:mod:`scitools.easyviz.misc`
-=======================
+:mod:`scitools.misc`
+====================
 
-.. automodule:: scitools.easyviz.misc
+.. automodule:: scitools.misc
    :members:
    :undoc-members:
    :show-inheritance:

@@ -124,6 +124,7 @@ all pairs: 6
 [('A', [1, 2, 5]), ('B', ['hello', 'world'])]
 
 Here is another example with more experiments::
+
 >>> p = {'b': '1 & 0 & 0.5', 'func': 'y & siny', 'w': '[1:1.3,0.1]'}
 >>> prm_values = [(name, input2values(p[name])) for name in p]
 >>> import pprint
@@ -216,84 +217,72 @@ all pairs: 9
 ...     print 'and extract a response from the program output'
 ...     print 'function.append((response, varied_parameters))'
 ... 
-
 can call some function:
 response = myfunc(b=0, w=1, func=y)
 or run some program with options:
 prompt> myprog  -b False -w True -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1, func=y)
 or run some program with options:
 prompt> myprog  -b 0.5 -w True -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0, w=1.1, func=y)
 or run some program with options:
 prompt> myprog  -b False -w 1.1000000000000001 -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1.1, func=y)
 or run some program with options:
 prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0, w=1.2, func=y)
 or run some program with options:
 prompt> myprog  -b False -w 1.2000000000000002 -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1.2, func=y)
 or run some program with options:
 prompt> myprog  -b 0.5 -w 1.2000000000000002 -func 'y'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0, w=1, func=siny)
 or run some program with options:
 prompt> myprog  -b False -w True -func 'siny'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1, func=siny)
 or run some program with options:
 prompt> myprog  -b 0.5 -w True -func 'siny'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0, w=1.1, func=siny)
 or run some program with options:
 prompt> myprog  -b False -w 1.1000000000000001 -func 'siny'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1.1, func=siny)
 or run some program with options:
 prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'siny'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0, w=1.2, func=siny)
 or run some program with options:
 prompt> myprog  -b False -w 1.2000000000000002 -func 'siny'
 and extract a response from the program output
 function.append((response, varied_parameters))
-
 can call some function:
 response = myfunc(b=0.5, w=1.2, func=siny)
 or run some program with options:
@@ -418,27 +407,22 @@ def combine(prm_values):
     Compute the combination of all parameter values in the prm_values
     (nested) list. Main function in this module.
 
-    @param prm_values: nested list of 
-        (parameter_name, list_of_parameter_values)
-        or dictionary
-        prm_values[parameter_name] = list_of_parameter_values
+    param prm_values: nested list (`parameter_name`, `list_of_parameter_values`)
+    or dictionary `prm_values[parameter_name]` = `list_of_parameter_values`.
+    return: (`all`, `names`, `varied`) where
 
-    @type prm_values: list or dict
-
-    @return: (all,names,varied) where
-
-      - all contains all combinations (experiments)
+      - `all` contains all combinations (experiments)
         all[i] is the list of individual parameter values in
         experiment no i
 
-      - names contains a list of all parameter names
+      - `names` contains a list of all parameter names
 
-      - varied holds a list of parameter names that are varied
+      - `varied` holds a list of parameter names that are varied
         (i.e. where there is more than one value of the parameter,
         the rest of the parameters have fixed values)
 
 
-    Code example::
+    Code example:
 
     >>> dx = array([1.0/2**k for k in range(2,5)])
     >>> dt = 3*dx;  dt = dt[:-1]
@@ -449,7 +433,6 @@ def combine(prm_values):
     >>> all
     [[0.75, 0.25], [0.375, 0.25], [0.75, 0.125], [0.375, 0.125],
      [0.75, 0.0625], [0.375, 0.0625]]
-
     """
     if isinstance(prm_values, dict):
         # turn dict into list [(name,values),(name,values),...]:
@@ -467,7 +450,7 @@ def combine(prm_values):
 def pairs(prm_values, n=2):
     """
     Compute parameter combinations of the parameter values in
-    prm_values (list of (name, values) pairs, where values is
+    `prm_values` (list of (name, values) pairs, where values is
     a list of values). Not all combinations are computed (as
     in function combine), but only a subset so that all pairs
     of all parameter values appear once. This gives a substantially
@@ -504,11 +487,13 @@ def options(all, names, prefix='--'):
     """
     Return a list of command-line options and their values.
 
-    @param all: all[i] holds a list of parameter values in experiment no i
-    @param names: names[i] holds name of parameter no. i
-    @param prefix: an option equals prefix + name (prefix is '--' or '-')
-    @return: cmd[i] holds -name value pairs of all parameters in
-             experiment no. i
+    =======     ===========================================================
+    all         all[i] holds a list of parameter values in experiment no i
+    names       names[i] holds name of parameter no. i
+    prefix      an option equals prefix + name (prefix is '--' or '-')
+    return      cmd[i] holds -name value pairs of all parameters in
+                experiment no. i
+    =======     ===========================================================
     """
     cmd = []
     for experiment in all:
@@ -521,10 +506,12 @@ def _varied_parameters(parameters, varied, names):
     Help function for identifying parameters that are varied (or fixed)
     in experiments. (Not used anymore in this module.)
 
-    @param names: names of parameters.
-    @param parameters: values of parameters.
-    @param varied: subset of names (the parameters that are varied elsewhere).
-    @return: a list of the indices in parameters corresponding varied.
+    ==========  ===========================================================
+    names       names of parameters.
+    parameters  values of parameters.
+    varied      subset of names (the parameters that are varied elsewhere).
+    return      a list of the indices in parameters corresponding varied.
+    ==========  ===========================================================
 
     An example may help to show the idea. Assume we have three parametes
     named 'a', 'b', and 'c'. Their values are 1, 5, and 3, i.e.,
@@ -532,7 +519,7 @@ def _varied_parameters(parameters, varied, names):
     that 'a' and 'c' are varied while 'b' is fixed. This function
     returns a list of the parameter values that correspond to varied
     parameters, i.e., [1,3] in this case, corresponding to the names
-    'a' and 'c'::
+    'a' and 'c':
 
     >>> parameters = [1,5,3]
     >>> names = ['a','b','c']
@@ -547,8 +534,10 @@ def _varied_parameters(parameters, varied, names):
 def remove(condition, all, names):
     """
     Remove experiments that fulfill a boolean condition.
-    Example:
-    all = remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1', all, names)
+    Example::
+    
+      all = remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1', all, names)
+
     (names of the parametes must be used)
     """
     import copy
@@ -657,7 +646,7 @@ for cmlargs, parameters, varied_parameters in experiments:
         print '_demo: could not run command'
     print output
 
-def doc_str_example():
+def _doc_str_example():
     p = {'A': '1 & 2 & 5', 'B': 'hello & world'}
     text1 = _demo(p, 'A', '5')
     p = {'w': '[1:1.3,0.1]', 'b': '1 & 0 & 0.5', 'func': 'y & siny'}
@@ -741,17 +730,20 @@ class MultipleLoop:
            independent variables mapping onto the response)
       
     Attributes (m is some MultipleLoop object):
-    
-      - m.names        names of all parameters
-      - m.varied       names of parameters with multiple values
-                       (the rest of the parameters have constant values
-                       throughout the experiments)
-      - m.options      list of strings of all command-line arguments
-                       (-name value), one for each experiment
-      - m.all          list of all experiments
-      - m.prm_values   list of (name, valuelist) tuples
 
-    Example::
+    =============  =================================================
+    m.names        names of all parameters
+    m.varied       names of parameters with multiple values
+                   (the rest of the parameters have constant values
+                   throughout the experiments)
+    m.options      list of strings of all command-line arguments
+                   (-name value), one for each experiment
+    m.all          list of all experiments
+    m.prm_values   list of (name, valuelist) tuples
+    =============  =================================================
+
+    Example:
+    
     >>> p = {'b': '1 & 0 & 0.5', 'func': 'y & siny', 'w': '[1:1.3,0.1]'}
     >>> experiments = MultipleLoop(option_prefix='-')
     >>> for name in p:
@@ -776,112 +768,10 @@ class MultipleLoop:
      [0.5, 1.1000000000000001, 'siny'],
      [0, 1.2000000000000002, 'siny'],
      [0.5, 1.2000000000000002, 'siny']]
-
-    >>> # explore the response of varied parameters:
-    >>> # function = []  # list of (response, (param1, param2, ...))
-    >>> # the (param1, param2, ...) list equals the varied parameter values
-    >>> # in each experiment (varied_parameters in the loop below)
-    >>> 
-    >>> for cmlargs, parameters, varied_parameters in experiments:
-    ...     args = ', '.join(['%s=%s' % (name,value) for name, value in zip(experiments.names, parameters)])
-    ...     print
-    ...     print 'can call some function:'
-    ...     print 'response = myfunc(%s)' % args
-    ...     print 'or run some program with options:'
-    ...     print 'prompt> myprog ', cmlargs
-    ...     print 'and extract a response from the program output'
-    ...     print 'function.append((response, varied_parameters))'
-    ... 
-
-    can call some function:
-    response = myfunc(b=0, w=1, func=y)
-    or run some program with options:
-    prompt> myprog  -b False -w True -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1, func=y)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w True -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0, w=1.1, func=y)
-    or run some program with options:
-    prompt> myprog  -b False -w 1.1000000000000001 -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1.1, func=y)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0, w=1.2, func=y)
-    or run some program with options:
-    prompt> myprog  -b False -w 1.2000000000000002 -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1.2, func=y)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w 1.2000000000000002 -func 'y'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0, w=1, func=siny)
-    or run some program with options:
-    prompt> myprog  -b False -w True -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1, func=siny)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w True -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0, w=1.1, func=siny)
-    or run some program with options:
-    prompt> myprog  -b False -w 1.1000000000000001 -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1.1, func=siny)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w 1.1000000000000001 -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0, w=1.2, func=siny)
-    or run some program with options:
-    prompt> myprog  -b False -w 1.2000000000000002 -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-    can call some function:
-    response = myfunc(b=0.5, w=1.2, func=siny)
-    or run some program with options:
-    prompt> myprog  -b 0.5 -w 1.2000000000000002 -func 'siny'
-    and extract a response from the program output
-    function.append((response, varied_parameters))
-
-
     """
     def __init__(self, option_prefix='--'):
         """
-        option_prefix is the prefix that will be used in command-line
+        `option_prefix` is the prefix that will be used in command-line
         options (typically '-' or '--').
         """
         self.option_prefix = option_prefix
@@ -904,8 +794,10 @@ class MultipleLoop:
     def remove(self, condition):
         """
         Remove experiments that fulfill a boolean condition.
-        Example:
-        e.remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1')
+        Example::
+        
+          e.remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1')
+
         (names of the parametes must be used)
         """
         self.combine() # compute all combinations
@@ -978,7 +870,7 @@ Fixed parameters:
             self.dump("""\n</BODY></HTML>\n""")
         
 if __name__ == '__main__':
-    print doc_str_example()
+    print _doc_str_example()
     #_test1()
     #_test2()
 

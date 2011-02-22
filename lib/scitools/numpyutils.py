@@ -5,61 +5,47 @@ Functionality of this module that extends Numerical Python
 
  - solve_tridiag_linear_system:
            returns the solution of a tridiagonal linear system
-
  - wrap2callable:
            tool for turning constants, discrete data, string
            formulas, function objects, or plain functions
            into an object that behaves as a function
-
  - NumPy_array_iterator:
            allows iterating over all array elements using
            a single, standard for loop (for value, index in iterator),
            has some additional features compared with numpy.ndenumerate
-             
  - asarray_cpwarn:
            as asarray(a), but a warning or exception is issued if
            the array a is copied
-
  - meshgrid:
            extended version of numpy.meshgrid to 1D, 2D and 3D grids,
            with sparse or dense coordinate arrays and matrix or grid
            indexing
-           
  - ndgrid:
            same as calling meshgrid with indexing='ij' (matrix indexing)
-           
  - float_eq:
            operator == for float operands with tolerance,
            float_eq(a,b,tol) means abs(a-b) < tol
            works for both scalar and array arguments
            (similar functions for other operations exists:
            float_le, float_lt, float_ge, float_gt, float_ne)
-
  - cut_noise:
            set all small (noise) elements of an array to zero
-
  - matrix_rank:
            compute the rank of a matrix
-
  - orth:
            compute an orthonormal basis from a matrix (taken from scipy.linalg
            to avoid scipy dependence)
-           
  - null:
            compute the null space of a matrix
-           
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf: 
            discrete and continuous norms for multi-dimensional arrays
            viewed as vectors
-
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
-
- - seq
+ - seq:
            seq(a,b,s, [type]) computes numbers from a up to and
            including b in steps of s and (default) type float_
            sequence = seq (for backward compatibility)
-
  - iseq:
            as seq, but integer counters are computed
            (iseq is an alternative to range where the
@@ -67,12 +53,6 @@ Functionality of this module that extends Numerical Python
            be important for direct mapping of indices between
            mathematics and Python code)
            isequence = iseq (for backward compatibility)
-
- - arr:
-           simplified/unified interface to creating various types of
-           NumPy arrays (see its doc string)
-
-
 """
 
 if __name__.find('numpyutils') != -1:

@@ -127,7 +127,6 @@ def read_cml(option, default=None, argv=sys.argv):
                       is not found
     ================  ========================================================
 
-
     See the read_cml_func function for reading function expressions
     or function/instance names on the command line and returning
     callable objects.
