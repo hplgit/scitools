@@ -1,0 +1,8 @@
+
+:mod:`scitools.numpyutils`
+==========================
+
+.. automodule:: scitools.numpyutils
+   :members:
+   :undoc-members:
+   :show-inheritance:

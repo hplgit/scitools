@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+"""
+Install scitools using python eggs tagged with revision number:
+ 1) Remove previous eggs
+ 2) Build an easy_install egg tagged with svn revision number
+ 3) Install egg
+"""
+# Should we add eggs to PyPi?
+
+import commands
+import sys
+import os
+
+cmd = 'rm -f dist/*.egg &&'\
+      'python setupegg.py  egg_info --tag-svn-revision  bdist_egg &&'\
+      'easy_install --always-unzip --prefix=%(prefix)s '\
+      'dist/SciTools*py%(pyversion)s.egg'  \
+      %{'prefix': os.environ.get('PREFIX', sys.prefix),
+        'pyversion': '.'.join(map(str, sys.version_info[:2]))
+        }
+
+for cmd_ in cmd.split('&&'):
+    if 'y' in raw_input('Execute the following command? \n%s\n[y/N]' %cmd_):
+        print ''
+        print commands.getoutput(cmd_)
+        print '\r'
+        
+        

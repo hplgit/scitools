@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.modulecheck &mdash; SciTools v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SciTools v0.7 documentation" href="index.html" />
+    <link rel="next" title="scitools.multipleloop" href="multipleloop.html" />
+    <link rel="prev" title="scitools.easyviz.misc" href="misc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="multipleloop.html" title="scitools.multipleloop"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="scitools.easyviz.misc"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.modulecheck">
+<h1><tt class="xref docutils literal"><span class="pre">scitools.modulecheck</span></tt><a class="headerlink" href="#module-scitools.modulecheck" title="Permalink to this headline">¶</a></h1>
+<p>Import a set of modules. If modules are missing,
+one can get these as a comma-separated string, or
+one can raise exceptions.</p>
+<p>See test block for demo of how this module can be used.</p>
+<dl class="function">
+<dt id="scitools.modulecheck.PmwBlt">
+<tt class="descclassname">scitools.modulecheck.</tt><tt class="descname">PmwBlt</tt><big>(</big><em>verbose=0</em><big>)</big><a class="headerlink" href="#scitools.modulecheck.PmwBlt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.modulecheck.exception">
+<tt class="descclassname">scitools.modulecheck.</tt><tt class="descname">exception</tt><big>(</big><em>msg</em>, <em>*module_names</em><big>)</big><a class="headerlink" href="#scitools.modulecheck.exception" title="Permalink to this definition">¶</a></dt>
+<dd>Raise an ImportError exception if modules
+are missing. Print the names of the missing modules.</dd></dl>
+
+<dl class="function">
+<dt id="scitools.modulecheck.message">
+<tt class="descclassname">scitools.modulecheck.</tt><tt class="descname">message</tt><big>(</big><em>module</em>, <em>critical=1</em>, <em>msg=None</em><big>)</big><a class="headerlink" href="#scitools.modulecheck.message" title="Permalink to this definition">¶</a></dt>
+<dd>Import a module and write a message if it is missing.
+critical=0 means that the module is not critical
+(programs may work without). critical=1 means that the
+module must be installed.
+msg is an optional description of the module.</dd></dl>
+
+<dl class="function">
+<dt id="scitools.modulecheck.missing">
+<tt class="descclassname">scitools.modulecheck.</tt><tt class="descname">missing</tt><big>(</big><em>*module_names</em><big>)</big><a class="headerlink" href="#scitools.modulecheck.missing" title="Permalink to this definition">¶</a></dt>
+<dd>Check if modules can be imported.
+Return a string containing the missing modules.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="misc.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">scitools.easyviz.misc</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="multipleloop.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">scitools.multipleloop</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/modulecheck.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multipleloop.html" title="scitools.multipleloop"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="scitools.easyviz.misc"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
