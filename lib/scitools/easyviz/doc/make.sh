@@ -12,10 +12,10 @@ cd easyviz/doc
 # Prepare Doconce files and filter them to various formats:
 cp easyviz.do.txt tmp_easyviz.do.txt
 
-doconce2format HTML tmp_easyviz.do.txt
-doconce2format plain tmp_easyviz.do.txt
+doconce format HTML tmp_easyviz.do.txt
+doconce format plain tmp_easyviz.do.txt
 
-doconce2format LaTeX tmp_easyviz.do.txt
+doconce format LaTeX tmp_easyviz.do.txt
 ptex2tex tmp_easyviz
 scitools subst slice_ 'slice\_' tmp_easyviz.tex   # _ fix
 latex -shell-escape tmp_easyviz
@@ -25,10 +25,10 @@ dvipdf tmp_easyviz.dvi
 # note: Unknown target name "slice" will always be reported by rst
 # conversion because we write slice_ in the list of Matlab-like commands...
 
-doconce2format gwiki tmp_easyviz.do.txt
-doconce_gwiki_figsubst.py tmp_easyviz.gwiki https://scitools.googlecode.com/hg/doc/easyviz
+doconce format gwiki tmp_easyviz.do.txt
+doconce gwiki_figsubst tmp_easyviz.gwiki https://scitools.googlecode.com/hg/doc/easyviz
 
-doconce2format sphinx tmp_easyviz.do.txt
+doconce format sphinx tmp_easyviz.do.txt
 rm -rf sphinx-rootdir
 mkdir sphinx-rootdir
 sphinx-quickstart <<EOF
@@ -64,7 +64,7 @@ make clean
 make html
 cd ..
 
-doconce2format rst tmp_easyviz.do.txt
+doconce format rst tmp_easyviz.do.txt
 scitools subst '(figs/.+?)\.eps' '\g<1>.png' tmp_easyviz.rst
 rst2html.py tmp_easyviz.rst > tmp_easyviz_rst.html
 
