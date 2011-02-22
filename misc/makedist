@@ -36,7 +36,7 @@ hg archive --type tgz dist/scitools-$VERSION.tar.gz
 
 # Create Windows installer
 rm -f dist/SciTools-$VERSION.win32.exe
-python setup.py bdist_wininst
+python setup.py bdist_wininst --plat-name win32
 
 # Upload files to googlecode
 echo '--- Uploading files to googlecode'
