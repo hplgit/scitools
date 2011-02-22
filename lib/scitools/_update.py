@@ -2,5 +2,5 @@
 # update all modules (run preprocessor etc.)
 import os
 # the insertdocstr script is part of the Doconce package
-os.system('insertdocstr plain . ')
-#os.system('insertdocstr epytext . ')
+os.system('doconce insertdocstr plain . ')
+#os.system('doconce insertdocstr epytext . ')
