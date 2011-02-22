@@ -2,7 +2,8 @@
 SciTools is a Python package containing lots of useful tools for
 scientific computing in Python. The package is built on top of other
 widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
-Matplotlib, VTK, and others.
+Matplotlib, VTK, and others. SciTools can be downloaded from
+code.google.com/p/scitools.
 
 The SciTools package contains a lot of modules:
 

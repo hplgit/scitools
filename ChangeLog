@@ -1,3 +1,58 @@
+Version 0.8:
+* The syntax of Easyviz is extended to become more equal to
+  Matplotlib (Pylab or basic Pyplot) such that one can switch between 
+  Easyviz and Matplolib just by the import statement in the top of the
+  file. 
+
+  The extended syntax consists of 1) a savefig function, which
+  is just a nickname for hardcopy, 2) the legend function can take a
+  list of curve names, 3) new keywords loc and fancybox for the legend
+  function allows steering where the legends appear in the figure and if
+  a frame is written around the box with curve names. 
+
+  One can now write scripts that employ a syntax very close to Matlab
+  where it is not necessary to make a specific choice between 
+  matplotlib.pylab or scitools.std import. (This has proved valuable
+  in courses where students are familiar with Matlab, matplotlib.pylab
+  or scitools.std).
+
+* New MovingPlotWindow.py tool for viewing (very) long time series.
+  The tool enables three different types of a moving window.
+
+* A pause (time.sleep) is inserted when plotting many curves with the
+  Gnuplot backend. This should fix the common problems with "thread error"
+  in that backend.
+	
+* Changed default settings for hardcopies made by Gnuplot so that the
+  black-and-white figures look better in professional publications.
+  Lines are not thicker, dashes are longer, and fonts are bigger.
+  These new settings make the Gnuplot backend a very good backend when
+  creating figures for scientific papers and thesis.
+	
+* Updates for newer version of Gnuplot.
+
+* The Matplotlib backend now employs pyplot instead of pylab, which means
+  that grabbing the backend by get_backend() returns matplotlib.pyplot.
+  This is more in line with the recommendation by Matplotlib developers
+  to use Pyplot and not Pylab.
+
+* Easyviz example files are updated and adjusted.
+
+* New option: scitools rename --no-backup implies no copying of old
+  file before being renamed. Useful when changing names of big files.
+
+* FloatComparison (float_eq, float_lt, etc.): made rtol and atol static
+  attributes such that all FloatComparison objects share the same tolerances.
+
+* The Grace backend in Easyviz now requires pygrace and not only grace_np.
+
+* Turned off the default use of LaTeX in the Matplotlib backend.
+
+* A lot of updates in the Easyviz documentation.
+
+* Switched to Sphinx for documentation.
+
+
 Version 0.7:
 
 * The most significant change for existing users is that Matplotlib is
