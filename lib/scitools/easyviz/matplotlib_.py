@@ -397,8 +397,11 @@ class MatplotlibBackend(BaseClass):
 
     def _fix_latex(self, legend):
         """Enclose legend in $$ if latex syntax is detected."""
-        if not matplotlib.rcParams['text.usetex']:
-            return legend
+        # We always support latex syntax either through direct
+        # use of latex (text.usetex=true) or through the native mathtext.
+        #if not matplotlib.rcParams['text.usetex']:
+        #    return legend
+
         legend = legend.strip()
         if len(legend) >= 2 and legend[0] != '$' and legend[-1] != '$':
             chars = '\\', '^', '_'
