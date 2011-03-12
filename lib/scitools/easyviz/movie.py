@@ -6,6 +6,10 @@ from scitools.misc import findprograms
 from misc import _check_type
 
 class MovieEncoder(object):
+    """
+    Class for turning a series of filenames with frames in a movie into
+    a movie file.
+    """
     _local_prop = {
         'input_files': None,         # image files
         'output_file': None,         # resulting movie
@@ -31,7 +35,7 @@ class MovieEncoder(object):
         'cleanup': True,             # clean up temporary files
         }
     _legal_encoders = 'mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc '\
-                      'convert'.split()
+                      'convert html'.split()
     _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
 
     def __init__(self, input_files, **kwargs):
@@ -53,9 +57,10 @@ class MovieEncoder(object):
                     encoder = enc
                     break
             if encoder is None:
-                raise Exception("None of the supported encoders are installed."\
-                                "Please install an encoder from this list:\n%s"\
-                                 % (', '.join(_legal_encoders)))
+                encoder = 'html'
+                #raise Exception("None of the supported encoders are installed."\
+                #             "Please install an encoder from this list:\n%s"\
+                #              % (', '.join(_legal_encoders)))
             self._prop['encoder'] = encoder
         else:
             if not encoder in self._legal_encoders:
@@ -117,7 +122,18 @@ class MovieEncoder(object):
             raise ValueError("Encoder must be one of %s, not '%s'" % \
                              (self._legal_encoders, encoder))
 
-        # get command string:
+        if encoder == 'html':
+            # Don't make movie file, just an html file that can play png files
+            outfilename = self._prop['output_file']
+            header, jscode, form, footer = \
+                html_movie(self._prop['input_files'])
+            f = open(outfilename, 'w')
+            f.write(header + jscode + form + footer)
+            f.close()
+            print "\n\nmovie in output file", outfilename
+            return
+
+        # get command string (all other encoders are run as stand-alone apps):
         exec('cmd=self._%s()' % encoder)
 
         # run command:
@@ -702,6 +718,121 @@ FORCE_ENCODE_LAST_FRAME
             size = None
         return size            
 
+def html_movie(plotfiles, interval_ms=300, width=800, height=600):
+    """ 
+    Takes a list plotfiles which should be for example of the form:
+        ['frame00.png', 'frame01.png', ... ]
+    where each string should be the name of an image file and they should be
+    in the proper order for viewing as an animation.
+
+    The result is html text strings that incorporate javascript to 
+    loop through the plots one after another.  The html text also features
+    buttons for controlling the movie.
+    The parameter iterval_ms is the time interval between loading
+    successive images and is in milliseconds.
+    The header_and_footer variable indicates whether the html text should
+    have <html> etc. at the start and end.
+
+    The width and height parameters do not seem to have any effect
+    for reasons not understood.
+
+    The following strings are returned: header, javascript code, form
+    with movie and buttons, and footer. Concatenating these strings
+    and dumping to an html file yields a kind of movie file to be
+    viewed in a browser.
+
+    This function is based on code written by R.J. LeVeque, based on 
+    a template from Alan McIntyre.
+    """
+    import os
+    ext = os.path.splitext(plotfiles[0])[-1]
+    if ext == '.png' or ext == '.jpg' or ext == '.jpeg' or ext == 'gif':
+        pass
+    else:
+        raise ValueError('Plotfiles (%s, ...) must be PNG files with '\
+                         'extension .png' % plotfiles[0])
+    header = """\
+<html>
+"""
+    jscode += """
+<head>
+<script language="Javascript">
+<!---
+var num_images = %s;
+var img_width = %d;
+var img_height = %d;
+var interval = %d;    
+var images = new Array();
+
+function preload_images()
+{
+   t = document.getElementById("progress");
+""" % (len(plotfiles), width, height, interval_ms)
+
+    i = 0
+    for fname in plotfiles[1:]:
+        i = i+1
+        jscode += """
+   t.innerHTML = "Preloading image ";
+   images[%s] = new Image(img_width, img_height);
+   images[%s].src = "%s";
+        """ % (i,i,fname)
+    jscode += """
+        t.innerHTML = "";
+}
+
+function tick()
+{
+   frame += 1;
+   if (frame > num_images)
+       frame = 1;
+
+   document.movie.src = images[frame].src;
+   tt = setTimeout("tick()", interval);
+}
+
+function startup()
+{
+   preload_images();
+   frame = 0;
+   setTimeout("tick()", interval);
+}
+
+function stopit()
+{ clearTimeout(tt); }
+
+function restart()
+{ tt = setTimeout("tick()", interval); }
+
+function slower()
+{ interval = interval/0.7; }
+
+function faster()
+{ interval = interval*0.7; }
+
+// --->
+</script>
+</head>
+"""
+    form = """
+<body>
+<form>
+&nbsp;
+<input type="button" value="Start movie" onClick="startup()">
+<input type="button" value="Pause movie" onClick="stopit()">
+<input type="button" value="Restart movie" onClick="restart()">
+&nbsp;
+<input type="button" value="Slower" onClick="slower()">
+<input type="button" value="Faster" onClick="faster()">
+</form>
+
+<p><div ID="progress"></div></p>
+<img src="%s" name="movie"/>
+</body>
+""" % plotfiles[0]
+    footer = '\n</html>\n'
+    return header, jscode, form, footer
+
 
 def movie(input_files, **kwargs):
     """
@@ -709,9 +840,9 @@ def movie(input_files, **kwargs):
 
     This function makes it very easy to create a movie file from a
     series of image files. Several different encoding tools can be
-    used, such as MEncoder, FFmpeg, mpeg_encode, ppmtompeg (Netpbm),
-    mpeg2enc (MJPEGTools), and convert (ImageMagick), to combine the
-    image files together. The encoding tool will be chosen
+    used, such as an HTML file, MEncoder, FFmpeg, mpeg_encode, 
+    ppmtompeg (Netpbm), mpeg2enc (MJPEGTools), and convert (ImageMagick), 
+    to combine the image files together. The encoding tool will be chosen
     automatically among these if more than one is installed on the
     machine in question (unless it is specified as a keyword argument
     to the movie function).
@@ -818,7 +949,7 @@ def movie(input_files, **kwargs):
     exists). The default is True.
     
     encoder: Sets the encoder tool to be used. Currently the following
-    encoders are supported: 'mencoder', 'ffmpeg',
+    encoders are supported: 'html', 'mencoder', 'ffmpeg',
     'mpeg_encode', 'ppmtompeg' (from the Netpbm package),
     'mpeg2enc' (from the MJPEGTools package), and 'convert'
     (from the ImageMagick package).
