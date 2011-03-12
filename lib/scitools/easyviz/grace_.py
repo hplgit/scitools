@@ -65,7 +65,7 @@ from common import *
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import test_if_module_exists 
 
-if test_if_module_exists('pygrace', msg='You need to install the pygrace package.', abort=False):
+if test_if_module_exists('pygrace', msg='You need to install the pygrace package from http://www.cacr.caltech.edu/~mmckerns/pygrace.html (Not PyGrace from sourceforge!) and the grace program.', abort=False):
     from pygrace import grace_np
 else:
     raise ImportError('Cannot import grace_np from pygrace')
@@ -180,7 +180,7 @@ class GraceBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         self._g('subtitle "%s"' % title)  # set title
     
     def _set_limits(self, ax):
@@ -466,6 +466,18 @@ class GraceBackend(BaseClass):
         width = item.getp('linewidth')
         return marker, color, style, width
 
+    def _fix_latex(self, legend):
+        """Remove latex syntax a la $, \, {, } etc."""
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        legend = legend.replace('\\', '')
+        return legend
+
     def _add_line(self, item, name):
         """Add a 2D or 3D curve to the scene."""
         if DEBUG:
@@ -502,7 +514,7 @@ class GraceBackend(BaseClass):
             for i in range(len(x)):
                 self._g('s%s point %s, %s' % (name, x[i], y[i]))
 
-        legend = item.getp('legend')
+        legend = self._fix_latex(item.getp('legend'))
         self._g('s%s legend "%s"' % (name,legend))
            
     def _add_surface(self, item, shading='faceted'):
@@ -768,7 +780,7 @@ class GraceBackend(BaseClass):
                         self._add_slices(item)
                     elif func == 'contourslice':
                         self._add_contourslices(item)
-                legend = item.getp('legend')
+                legend = self._fix_latex(item.getp('legend'))
                 if legend:
                     # add legend to plot
                     legends.append(legend)
@@ -805,21 +817,20 @@ class GraceBackend(BaseClass):
 
         Optional arguments:
 
-          size        -- A tuple (width,height) to set the size of the image.
-                         The default is to use the Grace default.
-                         
-          dpi         -- Dots per inch (Grace default is used as default).
-          
-          antialiase  -- Enable (True) or disable (False) font antialiasing.
-                         Default is to enable antialiasing.
-                         
-          color       -- True (colors) or False (grayscale).
-          
-          orientation -- 'portrait' or 'landscape' (default). Only available
-                         for PostScript output.
-                         
-          quality     -- Integer between 0 and 100 (default). Sets the quality
-                         in a JPEG image.
+        ==========  ======================================================
+        Argument    Description
+        ==========  ======================================================
+        size        A tuple (width,height) to set the size of the image.
+                    The default is to use the Grace default.
+        dpi         Dots per inch (Grace default is used as default).
+        antialiase  Enable (True) or disable (False) font antialiasing.
+                    Default is to enable antialiasing.
+        color       True (colors) or False (grayscale).
+        orientation 'portrait' or 'landscape' (default). Only available
+                     for PostScript output.
+        quality      Integer between 0 and 100 (default). Sets the quality
+                     in a JPEG image.
+        ==========  ======================================================
 
         """
         self.setp(**kwargs)

@@ -376,7 +376,7 @@ class VtkBackend(BaseClass):
         tprop.SetVerticalJustificationToTop()
         tprop.SetJustificationToCentered()
 	mapper = vtk.vtkTextMapper()
-        mapper.SetInput(self._axis.getp('title'))
+        mapper.SetInput(self._fix_latex(self._axis.getp('title')))
         mapper.SetTextProperty(tprop)
 	actor = vtk.vtkActor2D()
         actor.SetMapper(mapper)
@@ -1042,8 +1042,20 @@ class VtkBackend(BaseClass):
 
             self._axis._vtk_apd.Update()
 
+    def _fix_latex(self, legend):
+        """Remove latex syntax a la $, \, {, } etc."""
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        legend = legend.replace('\\', '')
+        return legend
+
     def _add_legend(self, item, polydata):
-        legend = item.getp('legend')
+        legend = self._fix_latex(item.getp('legend'))
         if legend:
             ax = self._axis
             n = ax._vtk_nolegends

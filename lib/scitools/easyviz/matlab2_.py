@@ -174,7 +174,7 @@ class Matlab2Backend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         self._script += "title('%s'),...\n" % title
     
     def _set_limits(self, ax):
@@ -998,7 +998,7 @@ class Matlab2Backend(BaseClass):
                             self._add_slices(item)
                         elif func == 'contourslice':
                             self._add_contourslices(item)
-                    legend = item.getp('legend')
+                    legend = self._fix_latex(item.getp('legend'))
                     if legend:
                         # add legend to plot
                         legends.append(legend)

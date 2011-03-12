@@ -111,7 +111,7 @@ class MatlabBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         if title:
             self._g.title(title)
     
@@ -814,6 +814,18 @@ class MatlabBackend(BaseClass):
         #self._g.set_(h, 'Visible', 'off', nout=0)
         return fig
 
+    def _fix_latex(self, legend):
+        """Remove latex syntax a la $, \, {, } etc."""
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        legend = legend.replace('\\', '')
+        return legend
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
@@ -869,7 +881,7 @@ class MatlabBackend(BaseClass):
                             self._add_slices(item)
                         elif func == 'contourslice':
                             self._add_contourslices(item)
-                    legend = item.getp('legend')
+                    legend = self._fix_latex(item.getp('legend'))
                     if legend:
                         # add legend to plot
                         legends.append(legend)

@@ -207,6 +207,12 @@ with the SciTools/Easyviz source code. The examples are located in
 the `examples` subfolder of the source.
 
 
+===== Grace Gives Error Messages When Calling Savefig/Hardcopy =====
+
+Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.
+
 ===== I Cannot Find Out How My Plot Can Be Created =====
 
 Note that Easyviz only support the most basic types of plots:

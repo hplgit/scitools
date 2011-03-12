@@ -184,7 +184,7 @@ class VeuszBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         if title:
             # set title
             label = self._g.Add('label')
@@ -473,6 +473,63 @@ class VeuszBackend(BaseClass):
         width = item.getp('linewidth')
         return marker, color, style, width
 
+    def _fix_latex(self, legend):
+        """
+        Veusz understands a limited set of LaTeX-like formatting for
+        text. There are some differences (for example,"10^23" puts the
+        2 and 3 into superscript), but it is fairly similar. You should
+        also leave out the dollar signs. Veusz supports superscripts ("^"),
+        subscripts ("_"), brackets for grouping attributes are "{" and "}".
+
+        Supported LaTeX symbols include: \AA, \Alpha, \Beta, \Chi, \Delta,
+        \Epsilon, \Eta, \Gamma, \Iota, \Kappa, \Lambda, \Mu, \Nu, \Omega,
+        \Omicron, \Phi, \Pi, \Psi, \Rho, \Sigma, \Tau, \Theta, \Upsilon, \Xi,
+        \Zeta, \alpha, \approx, \ast, \asymp, \beta, \bowtie, \bullet, \cap,
+        \chi, \circ, \cup, \dagger, \dashv, \ddagger, \deg, \delta, \diamond,
+        \divide, \doteq, \downarrow, \epsilon, \equiv, \eta, \gamma, \ge, \gg,
+        \in, \infty, \int, \iota, \kappa, \lambda, \le, \leftarrow, \lhd, \ll,
+        \models, \mp, \mu, \neq, \ni, \nu, \odot, \omega, \omicron, \ominus,
+        \oplus, \oslash, \otimes, \parallel, \perp, \phi, \pi, \pm, \prec,
+        \preceq, \propto, \psi, \rhd, \rho, \rightarrow, \sigma, \sim, \simeq,
+        \sqrt, \sqsubset, \sqsubseteq, \sqsupset, \sqsupseteq, \star, \stigma,
+        \subset, \subseteq, \succ, \succeq, \supset, \supseteq, \tau, \theta,
+        \times, \umid, \unlhd, \unrhd, \uparrow, \uplus, \upsilon, \vdash,
+        \vee, \wedge, xi, \zeta. Please request additional characters if they
+        are required (and exist in the unicode character set). Special symbols
+        can be included directly from a character map.
+
+        Other LaTeX commands are supported. "\\" breaks a line.
+        This can be used for simple tables. For example "{a\\b} {c\\d}"
+        shows "a c" over "b d". The command "\frac{a}{b}" shows a
+        vertical fraction a/b.
+        """
+        legend = legend.strip()
+        if '^' in legend:
+            print '''\
+...warning regarding veusz syntax:
+   use {} around the arguments in power expressions with ^ (hat)
+'''
+        # General fix of latex syntax (more readable)
+        #legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        #legend = legend.replace('\\', '')
+        # fix sin, cos, exp, ln, log, etc:
+        def _fix_func(func, newfunc, legend):
+            if ('\\'+func) in  legend:
+                legend = legend.replace('\\'+func, newfunc)
+            return legend
+        funcs = 'sin', 'cos', 'tan', 'exp', 'ln', 'log', \
+                'sinh', 'cosh', 'tanh'
+        for func in funcs:
+            legend = _fix_func(func, func, legend)
+        funcs = [('atan', 'arctan'), ('asin', 'arcsin'), 
+                 ('acos', 'arccos'),]
+        for func, newfunc in funcs:
+            legend = _fix_func(func, newfunc, legend)
+
+        return legend
+
     def _add_line(self, item, name):
         """Add a 2D or 3D curve to the scene."""
         if DEBUG:
@@ -513,7 +570,7 @@ class VeuszBackend(BaseClass):
             self._g.Set('%s/xData' % xy, 'x%s' % name)
             self._g.Set('%s/yData' % xy, 'y%s' % name)
 
-        legend = item.getp('legend')
+        legend = self._fix_latex(item.getp('legend'))
         if legend:
             self._g.Set('%s/key' % xy, legend)
 
@@ -547,7 +604,7 @@ class VeuszBackend(BaseClass):
             cmap = 'spectrum'
         self._g.Set('%s/colorMap' % img, cmap)
         
-        legend = item.getp('legend')
+        legend = self._fix_latex(item.getp('legend'))
         if legend:
             self._g.Set('%s/key' % img, legend)
 
@@ -611,7 +668,7 @@ class VeuszBackend(BaseClass):
         self._g.SetData2D('values%s' % name, z)
         self._g.Set('%s/data' % cntr, 'values%s' % name)
 
-        legend = item.getp('legend')
+        legend = self._fix_latex(item.getp('legend'))
         if legend:
             self._g.Set('%s/key' % cntr, legend)
     
@@ -749,7 +806,7 @@ class VeuszBackend(BaseClass):
             name = 'Fig ' + str(self.getp('curfig'))
             fig._g = veusz.embed.Embedded(name)
             fig._g.EnableToolbar(enable=True)
-            fig._g.window.hide()
+            #fig._g.window.hide()
             
         self._g = fig._g  # link for faster access
         return fig
@@ -822,7 +879,7 @@ class VeuszBackend(BaseClass):
                         self._add_slices(item)
                     elif func == 'contourslice':
                         self._add_contourslices(item)
-                legend = item.getp('legend')
+                legend = self._fix_latex(item.getp('legend'))
                 if legend:
                     # add legend to plot
                     legends = True
@@ -840,9 +897,10 @@ class VeuszBackend(BaseClass):
             if DEBUG:
                 print "\nDumping plot data to screen\n"
                 debug(self)
-            self._g.window.showNormal()
+            #self._g.window.showNormal()
         else:
-            self._g.window.hide()
+            #self._g.window.hide()
+            pass
 
     def hardcopy(self, filename, **kwargs):
         """

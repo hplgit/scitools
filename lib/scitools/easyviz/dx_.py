@@ -274,7 +274,7 @@ class DXBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         self._g('title = "%s";' % title)
         self._g('caption = Caption(title,[0.5,0.98],font="fixed");')
         self._g('collected = Append(collected,caption);')
@@ -1146,6 +1146,18 @@ end
             
         self._g = fig._g  # link for faster access
         return fig
+
+    def _fix_latex(self, legend):
+        """Remove latex syntax a la $, \, {, } etc."""
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        legend = legend.replace('\\', '')
+        return legend
         
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
@@ -1209,7 +1221,7 @@ end
                                          shading=ax.getp('shading'))
                     elif func == 'contourslice':
                         self._add_contourslices(item)
-                legend = item.getp('legend')
+                legend = self._fix_latex(item.getp('legend'))
                 if legend:
                     # add legend to plot
                     pass

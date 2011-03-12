@@ -246,6 +246,8 @@ class GnuplotBackend(BaseClass):
             'WestOutside': ('vertical',.01,.21,.03,.6)
             }
 
+        self._doing_PS = False  # indicator for PostScript hardcopy
+        
         if DEBUG:
             print "Setting backend standard variables"
             for disp in 'self._markers self._colors self._line_styles'.split():
@@ -303,7 +305,7 @@ class GnuplotBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         if title:
             self._g('set title "%s"' % title)
         else:
@@ -587,6 +589,46 @@ class GnuplotBackend(BaseClass):
             self._g('unset ytics')
             self._g('unset ztics')
 
+    def _fix_latex(self, legend):
+        """
+        Translate latex syntax in title and legend to enhanced
+        PostScript symbols (enable greek letters, super- and subscripts,
+        etc.).
+        """
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        # Translate greek letters if PostScript output
+        if self._doing_PS:
+            ps2greek = dict(
+                A='Alpha', N='Nu', a='alpha',	n='nu', B='Beta', O='Omicron',
+                b='beta', o='omicron', C='Chi', P='Pi', c='chi',	p='pi',
+                D='Delta', Q='Theta', d='delta', q='theta', E='Epsilon',
+                R='Rho', e='epsilon', r='rho', F='Phi', S='Sigma', f='phi',
+                s='sigma', G='Gamma', T='Tau', g='gamma', t='tau',
+                H='Eta', U='Upsilon', h='eta', u='upsilon',
+                I='iota', W='Omega', i='iota', w='omega',
+                K='Kappa', X='Xi', k='kappa', l='lambda', x='xi',
+                L='Lambda', Y='Psi', y='psi',
+                M='Mu', Z='Zeta', m='mu', z='zeta')
+            greek2ps = {}
+            for char in ps2greek:
+                greek2ps[ps2greek[char]] = char
+
+            for greek_letter in greek2ps:
+                glb = '\\' + greek_letter
+                if glb in legend:
+                    legend = legend.replace(glb, '{/Symbol %s}' %
+                                            greek2ps[greek_letter])
+            legend = legend.replace('*', '')
+
+        legend = legend.replace('\\', '')
+        return legend
+    
     def _get_linespecs(self, item):
         """
         Return the line marker, line color, line style, and
@@ -645,7 +687,7 @@ class GnuplotBackend(BaseClass):
         withstring = self._get_withstring(marker, color, style, width)
         if z is not None:
             # zdata is given, add a 3D curve:
-            kwargs = {'title': item.getp('legend'),
+            kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring,
                       'using': '1:2:($3)'}
             data = Gnuplot.Data(arrayconverter(x),
@@ -655,7 +697,7 @@ class GnuplotBackend(BaseClass):
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
-            kwargs = {'title': item.getp('legend'),
+            kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring,
                       'using': '1:($2)'}
             
@@ -692,14 +734,14 @@ class GnuplotBackend(BaseClass):
         
         if z is not None:
             # zdata is given, add a 3D curve:
-            kwargs = {'title': item.getp('legend'),
+            kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': 'filledcurve',
                       'using': '1:2:($3)'}
             data = [Gnuplot.Data(x, y, z, **kwargs)]
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
-            kwargs1 = {'title': item.getp('legend'),
+            kwargs1 = {'title': self._fix_latex(item.getp('legend')),
                        'with': 'filledcurve %s' % facecolor,
                        'using': '1:($2)'}
             kwargs2 = {'with': withstring, 'using': '1:($2)'}
@@ -769,14 +811,14 @@ class GnuplotBackend(BaseClass):
             else:
                 c = facecolor
             kwargs = {'with': 'boxes %s' % c}
-            legend = item.getp('legend')
+            legend = self._fix_latex(item.getp('legend'))
             if legend:
-                legend = eval(item.getp('legend'))[j]
+                legend = eval(self._fix_latex(item.getp('legend')))[j]
             kwargs['title'] = legend
-            #print "|%s|" % item.getp('legend')
+            #print "|%s|" % self._fix_latex(item.getp('legend'))
             # does not work:
             #kwargs = {'with': 'boxes %s' % c,
-            #          'title': item.getp('legend'),}
+            #          'title': self._fix_latex(item.getp('legend')),}
             data.append(Gnuplot.Data(x_, y_, **kwargs))
         return data
 
@@ -834,7 +876,7 @@ class GnuplotBackend(BaseClass):
         else:
             if rank(x) == 2 and rank(y) == 2:
                 x = x[:,0];  y = y[0,:]
-        kwargs = {'title': item.getp('legend'),
+        kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'with': withstring,
                   'binary': 0}
         data = Gnuplot.GridData(arrayconverter(z),
@@ -899,7 +941,7 @@ class GnuplotBackend(BaseClass):
         else:
             if rank(x) == 2 and rank(y) == 2:
                 x = x[:,0];  y = y[0,:]
-        kwargs = {'title': item.getp('legend'),
+        kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'binary': 0,
                   'with': 'l palette'}
         data = Gnuplot.GridData(arrayconverter(z),
@@ -959,7 +1001,8 @@ class GnuplotBackend(BaseClass):
                         y = y[:,newaxis]*ones(shape(u))
                     else:
                         y = y[newaxis,:]*ones(shape(u))
-            kwargs = {'title': item.getp('legend'), 'with': withstring}
+            kwargs = {'title': self._fix_latex(item.getp('legend')),
+                      'with': withstring}
             data = Gnuplot.Data(arrayconverter(ravel(x)),
                                 arrayconverter(ravel(y)),
                                 arrayconverter(ravel(u)),
@@ -1166,7 +1209,7 @@ class GnuplotBackend(BaseClass):
                         self._add_slices(item)
                     elif func == 'contourslice':
                         self._add_contourslices(item)
-                legend = item.getp('legend')
+                legend = self._fix_latex(item.getp('legend'))
                 if legend:
                     # add legend to plot
                     pass
@@ -1257,6 +1300,102 @@ class GnuplotBackend(BaseClass):
         self._g(s)
         self._g.refresh()
         
+    def hardcopy(self, filename, **kwargs):
+        """
+        Currently supported extensions in Gnuplot backend:
+
+          '.ps'  (PostScript)
+          '.eps' (Encapsualted PostScript)
+          '.png' (Portable Network Graphics)
+
+        Optional arguments for PostScript output:
+
+        ===========    =====================================================
+        Argument         Description
+        ===========    =====================================================
+        color          If True, create a plot with colors. If False
+                       (default),  create a plot in black and white.
+        enhanced       If True (default), enable enhanced text mode features
+                       like subscripts, superscripts, and mixed fonts. 
+        orientation    Set orientation to 'portrait' or 'landscape'. Default
+                       is to leave this unchanged. This option has no effect
+                       on EPS output.
+        solid          If True, force lines to become solid (i.e., not
+                       dashed). Default is False.
+        fontname       Set the font to be used for titles, labels, etc.
+                       Must be a valid PostScript font or an oblique version
+                       of the Symbol font (called "Symbol-Oblique") which is
+                       useful for mathematics. Default font is "Helvetica".
+        fontsize       Set the size of the font in PostScript points.
+                       Default is 14.
+        ===========    =====================================================
+        """
+        if DEBUG:
+            print "Hardcopy to %s" % filename
+
+        ext2term = {'.ps': 'postscript',
+                    '.eps': 'postscript',
+                    '.png': 'png'}
+        basename, ext = os.path.splitext(filename)
+        if not ext:
+            # no extension given, assume .ps:
+            ext = '.ps'
+            filename += ext
+        elif ext not in ext2term:
+            raise ValueError("hardcopy: extension must be %s, not '%s'" % \
+                             (ext2term.keys(), ext))
+        terminal = ext2term.get(ext, 'postscript')
+        
+        self.setp(**kwargs)
+        color = self.getp('color')
+        enhanced = kwargs.get('enhanced', True)
+        orientation = kwargs.get('orientation', None)
+        solid = kwargs.get('solid', False)
+        fontname = kwargs.get('fontname', 'Helvetica')
+        fontsize = kwargs.get('fontsize', 20)
+        
+        keyw = {'filename': filename, 'terminal': terminal}
+        if terminal == 'postscript':
+            keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid, 
+                       'fontname': fontname, 'fontsize': fontsize})
+            if orientation in ['landscape', 'portrait']:
+                keyw['mode'] = orientation
+            if ext == '.eps':
+                keyw['mode'] = 'eps'
+                        
+        # Create a new Gnuplot instance only for now
+        self._g = Gnuplot.Gnuplot()
+        setterm = ['set', 'terminal', terminal]
+        if terminal == 'postscript':
+            if ext == '.eps':
+                setterm.append('eps')
+            else:
+                if orientation in ['landscape', 'portrait']:
+                    setterm.append(orientation)
+            setterm.append(enhanced and 'enhanced' or 'noenhanced')
+            setterm.append(color and 'color' or 'monochrome')
+            setterm.append(solid and 'solid' or 'dashed')
+            setterm.append(' dashlength 3 linewidth 1.2 ')
+            setterm.append('"%s"' % fontname)
+            setterm.append('%s' % fontsize)
+            self._doing_PS = True
+        elif terminal == 'png':
+            pass
+        self._g(' '.join(setterm))
+        self._g('set output "%s"' % filename)
+        self._replot()
+        if len(self.gcf().getp('axes')) == 1:
+            # Need to call hardcopy in Gnuplot.py to avoid ending up with
+            # a PostScript file with multiple pages:
+            self._g.hardcopy(**keyw)
+        self._g('quit')
+        self._g = self.gcf()._g  # set self._g to the correct instance again
+        self._doing_PS = False
+        
+        if self.getp('interactive') and self.getp('show'):
+            self._replot()
+
+
     def hardcopy_old(self, filename, **kwargs):
         """
         Currently supported extensions in Gnuplot backend:
@@ -1334,95 +1473,6 @@ class GnuplotBackend(BaseClass):
             self._g.hardcopy(**kwargs)
             self._g('quit')
             self._g = self.gcf()._g # set _g to the correct instance again
-
-    def hardcopy(self, filename, **kwargs):
-        """
-        Currently supported extensions in Gnuplot backend:
-
-          '.ps'  (PostScript)
-          '.eps' (Encapsualted PostScript)
-          '.png' (Portable Network Graphics)
-
-        Optional arguments for PostScript output:
-
-          color       -- If True, create a plot with colors. If False
-                         (default),  create a plot in black and white.
-          enhanced    -- If True (default), enable enhanced text mode features
-                         like subscripts, superscripts, and mixed fonts. 
-          orientation -- Set orientation to 'portrait' or 'landscape'. Default
-                         is to leave this unchanged. This option has no effect
-                         on EPS output.
-          solid       -- If True, force lines to become solid (i.e., not
-                         dashed). Default is False.
-          fontname    -- Set the font to be used for titles, labels, etc.
-                         Must be a valid PostScript font or an oblique version
-                         of the Symbol font (called "Symbol-Oblique") which is
-                         useful for mathematics. Default font is "Helvetica".
-          fontsize    -- Set the size of the font in PostScript points.
-                         Default is 14.
-        """
-        if DEBUG:
-            print "Hardcopy to %s" % filename
-
-        ext2term = {'.ps': 'postscript',
-                    '.eps': 'postscript',
-                    '.png': 'png'}
-        basename, ext = os.path.splitext(filename)
-        if not ext:
-            # no extension given, assume .ps:
-            ext = '.ps'
-            filename += ext
-        elif ext not in ext2term:
-            raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2term.keys(), ext))
-        terminal = ext2term.get(ext, 'postscript')
-        
-        self.setp(**kwargs)
-        color = self.getp('color')
-        enhanced = kwargs.get('enhanced', True)
-        orientation = kwargs.get('orientation', None)
-        solid = kwargs.get('solid', False)
-        fontname = kwargs.get('fontname', 'Helvetica')
-        fontsize = kwargs.get('fontsize', 20)
-        
-        keyw = {'filename': filename, 'terminal': terminal}
-        if terminal == 'postscript':
-            keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid, 
-                       'fontname': fontname, 'fontsize': fontsize})
-            if orientation in ['landscape', 'portrait']:
-                keyw['mode'] = orientation
-            if ext == '.eps':
-                keyw['mode'] = 'eps'
-                        
-        # Create a new Gnuplot instance only for now
-        self._g = Gnuplot.Gnuplot()
-        setterm = ['set', 'terminal', terminal]
-        if terminal == 'postscript':
-            if ext == '.eps':
-                setterm.append('eps')
-            else:
-                if orientation in ['landscape', 'portrait']:
-                    setterm.append(orientation)
-            setterm.append(enhanced and 'enhanced' or 'noenhanced')
-            setterm.append(color and 'color' or 'monochrome')
-            setterm.append(solid and 'solid' or 'dashed')
-            setterm.append(' dashlength 3 linewidth 1.2 ')
-            setterm.append('"%s"' % fontname)
-            setterm.append('%s' % fontsize)
-        elif terminal == 'png':
-            pass
-        self._g(' '.join(setterm))
-        self._g('set output "%s"' % filename)
-        self._replot()
-        if len(self.gcf().getp('axes')) == 1:
-            # Need to call hardcopy in Gnuplot.py to avoid ending up with
-            # a PostScript file with multiple pages:
-            self._g.hardcopy(**keyw)
-        self._g('quit')
-        self._g = self.gcf()._g  # set self._g to the correct instance again
-        
-        if self.getp('interactive') and self.getp('show'):
-            self._replot()
 
     # reimplement methods like clf, closefig, closefigs
     def clf(self):

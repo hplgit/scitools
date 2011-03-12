@@ -276,7 +276,7 @@ class VTKBackend(BaseClass):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
-        title = ax.getp('title')
+        title = self._fix_latex(ax.getp('title'))
         if title:
             tprop = vtk.vtkTextProperty()
             tprop.BoldOff()
@@ -1410,6 +1410,18 @@ for (int k=0; k<nz; k++) {
 
         ax._apd = vtk.vtkAppendPolyData()
 
+    def _fix_latex(self, legend):
+        """Remove latex syntax a la $, \, {, } etc."""
+        legend = legend.strip()
+        # General fix of latex syntax (more readable)
+        legend = legend.replace('**', '^')  
+        #legend = legend.replace('*', '')
+        legend = legend.replace('$', '')
+        legend = legend.replace('{', '')
+        legend = legend.replace('}', '')
+        legend = legend.replace('\\', '')
+        return legend
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
@@ -1453,7 +1465,7 @@ for (int k=0; k<nz; k++) {
                         self._add_slices(item)
                     elif func == 'contourslice':
                         self._add_contourslices(item)
-                legend = item.getp('legend')
+                legend = self._fix_latex(item.getp('legend'))
                 if legend:
                     # add legend to plot
                     pass

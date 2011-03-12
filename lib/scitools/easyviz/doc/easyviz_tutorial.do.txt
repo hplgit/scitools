@@ -420,6 +420,18 @@ __More Examples.__ The examples in this tutorial, as well as
 additional examples, can be found in the `examples` directory in the
 root directory of the SciTools source code tree.
 
+===== Math Syntax in Legends and Titles =====
+
+Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.
+
 ===== Interactive Plotting Sessions =====
 
 All the Easyviz commands can of course be issued in an interactive

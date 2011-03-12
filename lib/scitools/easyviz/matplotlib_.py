@@ -403,7 +403,16 @@ class MatplotlibBackend(BaseClass):
         #    return legend
 
         legend = legend.strip()
+        print '**** matplotlib legend:', legend
         if len(legend) >= 2 and legend[0] != '$' and legend[-1] != '$':
+            # else: assume correct latex syntax, otherwise fix
+            print '....fix'
+            if '**' in legend:
+                legend = legend.replace('**', '^')
+            if '*' in legend:
+                #legend = legend.replace('*', '\\cdot')
+                legend = legend.replace('*', ' ')
+
             chars = '\\', '^', '_'
             latex = False
             for c in chars:
@@ -415,9 +424,13 @@ class MatplotlibBackend(BaseClass):
                 legend = '$' + legend + '$'
 
                 # enclose words in \hbox{}'es:
-                word = r'(\s?[A-Za-z][a-z]*[ :;,$] ?)'
-                if re.search(word, legend):
-                    legend = re.sub(word, r'\hbox{\g<1>}', legend)
+                # (not successful enough)
+                #word = r'(\s?[^\\][A-Za-z][a-z]*[ :;,$)] ?)'
+                #word = r'(\s?[A-Za-z][a-z]*[ :;,$)])'
+                #word = r'(\w[ :;,$)])'
+                #word = r'(\b[A-Za-z][a-z]*[ :;,$)]\b)'
+                #if re.search(word, legend):
+                #    legend = re.sub(word, r'\hbox{\g<1>}', legend)
                 # remove internal $ chars:
                 legend = legend.replace('$', '')
                 legend = '$' + legend + '$'
@@ -435,12 +448,8 @@ class MatplotlibBackend(BaseClass):
                          ('acos', 'arccos'),]
                 for func, newfunc in funcs:
                     legend = _fix_func(func, newfunc, legend)
-                if '**' in legend:
-                    legend = legend.replace('**', '^')
-                if '*' in legend:
-                    #legend = legend.replace('*', '\\cdot')
-                    legend = legend.replace('*', ' ')
                 #print 'latex fix:', legend
+        print 'return:', legend
         return legend
 
     def _add_line(self, item):
