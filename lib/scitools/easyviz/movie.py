@@ -66,7 +66,7 @@ class MovieEncoder(object):
             if not encoder in self._legal_encoders:
                 raise ValueError("encoder must be %s, not '%s'" % \
                                  (self._legal_encoders, encoder))
-            if not findprograms(encoder):
+            if encoder != 'html' and not findprograms(encoder):
                 raise Exception("The selected encoder (%s) is not installed" \
                                 % encoder)
 
@@ -124,9 +124,15 @@ class MovieEncoder(object):
 
         if encoder == 'html':
             # Don't make movie file, just an html file that can play png files
-            outfilename = self._prop['output_file']
+            #import pprint; pprint.pprint(self._prop)
+            outfilename = os.path.splitext(self._prop['output_file'])[0] + '.html'
+            files = glob.glob(self._prop['input_files'])
+            files.sort()
+            print '\nMaking HTML code for displaing', ', '.join(files)
+            fps = self._prop['fps']
+            interval_ms = 1000.0/fps
             header, jscode, form, footer = \
-                html_movie(self._prop['input_files'])
+                html_movie(files, interval_ms)
             f = open(outfilename, 'w')
             f.write(header + jscode + form + footer)
             f.close()
@@ -754,7 +760,7 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600):
     header = """\
 <html>
 """
-    jscode += """
+    jscode = """
 <head>
 <script language="Javascript">
 <!---
