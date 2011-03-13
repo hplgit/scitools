@@ -1375,7 +1375,8 @@ class GnuplotBackend(BaseClass):
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(solid and 'solid' or 'dashed')
-            setterm.append(' dashlength 3 linewidth 1.2 ')
+            #setterm.append(' dashlength 3 linewidth 3 ')
+            setterm.append(' dashlength 3 linewidth 4 ')
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
             self._doing_PS = True
