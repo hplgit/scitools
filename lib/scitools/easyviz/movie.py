@@ -34,8 +34,8 @@ class MovieEncoder(object):
         'force_conversion': False,   # force conversion (to png) if True
         'cleanup': True,             # clean up temporary files
         }
-    _legal_encoders = 'mencoder ffmpeg mpeg_encode ppmtompeg mpeg2enc '\
-                      'convert html'.split()
+    _legal_encoders = 'convert mencoder ffmpeg mpeg_encode ppmtompeg '\
+                      'mpeg2enc html'.split()
     _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
 
     def __init__(self, input_files, **kwargs):
@@ -46,31 +46,29 @@ class MovieEncoder(object):
             if key in self._prop:
                 self._prop[key] = kwargs[key]
 
-        # provide some space before print statements:
-        print '\n\n\n'
+        print '\n\n' # provide some space before print statements
 
-        # determine which encoder to be used:
+        # Determine which encoder to be used
         encoder = self._prop['encoder']
         if encoder is None:
+            # No encoder given, find the first installed among the legal ones
             for enc in self._legal_encoders:
                 if findprograms(enc):
                     encoder = enc
                     break
             if encoder is None:
+                # No encoder is installed, fall back on html
                 encoder = 'html'
-                #raise Exception("None of the supported encoders are installed."\
-                #             "Please install an encoder from this list:\n%s"\
-                #              % (', '.join(_legal_encoders)))
             self._prop['encoder'] = encoder
         else:
             if not encoder in self._legal_encoders:
-                raise ValueError("encoder must be %s, not '%s'" % \
+                raise ValueError("encoder must be %s, not '%s'" %
                                  (self._legal_encoders, encoder))
             if encoder != 'html' and not findprograms(encoder):
-                raise Exception("The selected encoder (%s) is not installed" \
-                                % encoder)
+                raise Exception("The selected encoder (%s) is not installed" %
+                                encoder)
 
-        # determine the file type of the input files:
+        # Determine the file type of the input files
         if isinstance(input_files, (tuple,list)):
             file_ = input_files[0]
         elif isinstance(input_files, str):
@@ -80,9 +78,9 @@ class MovieEncoder(object):
                              "list/tuple of strings or a string, not '%s'" % \
                              type(input_files))
 
-        # check that the input files do exist:
+        # Check that the input files do exist
         if isinstance(input_files, str):
-            # are input_files on ffmpeg/mpeg2enc format or Unix wildcard format?
+            # Are input_files on ffmpeg/mpeg2enc format or Unix wildcard format?
             ffmpeg_format = r'(.+)%\d+d(\..+)'
             m = re.search(ffmpeg_format, input_files, re.DOTALL)
             if m:
@@ -93,7 +91,7 @@ class MovieEncoder(object):
             if not all_input_files:
                 print 'No files of the form %s exist.' % input_files
             else:
-                print 'Found %d files of the format %s.' % \
+                print 'Found %d files of the format %s.' %
                       (len(all_input_files), input_files)
         else:  # list of specific filenames
             all_input_files = input_files
@@ -116,16 +114,10 @@ class MovieEncoder(object):
         
     def encode(self):
         """Encode a series of images to a movie."""
-        # check that the selected encoder is legal:
         encoder = self._prop['encoder']
-        if not encoder in self._legal_encoders:
-            raise ValueError("Encoder must be one of %s, not '%s'" % \
-                             (self._legal_encoders, encoder))
 
         if encoder == 'html':
             # Don't make movie file, just an html file that can play png files
-            #import pprint; pprint.pprint(self._prop)
-            outfilename = os.path.splitext(self._prop['output_file'])[0] + '.html'
             files = glob.glob(self._prop['input_files'])
             files.sort()
             print '\nMaking HTML code for displaing', ', '.join(files)
@@ -133,16 +125,23 @@ class MovieEncoder(object):
             interval_ms = 1000.0/fps
             header, jscode, form, footer = \
                 html_movie(files, interval_ms)
-            f = open(outfilename, 'w')
+
+            outf = self._prop['outout_file']
+            if outf is None:
+                outf = 'movie.html'
+            else:
+                # Ensure .html extension
+                outf = os.path.splitext(outf)[0] + '.html'
+            f = open(outf, 'w')
             f.write(header + jscode + form + footer)
             f.close()
             print "\n\nmovie in output file", outfilename
             return
 
-        # get command string (all other encoders are run as stand-alone apps):
+        # Get command string (all other encoders are run as stand-alone apps)
         exec('cmd=self._%s()' % encoder)
 
-        # run command:
+        # Run command
         if not self._prop['quiet']:
             print "\nscitools.easyviz.movie function runs the command: \n\n%s\n" % cmd
         failure = os.system(cmd)
@@ -152,7 +151,7 @@ class MovieEncoder(object):
         elif not self._prop['quiet']:
             print "\n\nmovie in output file", self._prop['output_file']
             
-        # clean up temporary files:
+        # Clean up temporary files
         if self._prop['cleanup'] and hasattr(self, '_tmp_files'): 
             for tmp_file in self._tmp_files:
                 os.remove(tmp_file)
@@ -862,10 +861,11 @@ def movie(input_files, **kwargs):
 
         movie('image_*.eps')
 
-    The result is a movie file with a default name such as
-    `movie.avi`, `movie.mpeg`, or `movie.gif` (depending on the
-    encoding tool chosen by the movie function). The file resides in
-    the current working directory.
+    The result is a movie file with a default name such as `movie.html`,
+    `movie.avi`, `movie.mpeg`, or `movie.gif`, depending on the
+    encoding tool chosen by the movie function. The file resides in
+    the current working directory. The movie function checks a list of
+    encoders and chooses the first it finds installed on the computer.
 
     Note: We strongly recommend to always clean up previously generated
     files for the frames in movies::
@@ -885,9 +885,17 @@ def movie(input_files, **kwargs):
     The encoder here is the convert program from the ImageMagick suite
     of image manipulation tools. The resulting movie file will be
     named 'wave2D.gif' and placed in the parent directory.
+
+    Another convenient encoder is simply to make an HTML file that can
+    play a series of image files::
+
+        movie('image_*.png', encoder='html',
+              output_file='../wave2D.html')
+
+    Just load the output file into a web browser and play the movie.
     
-    If we instead want to create an MPEG movie by using the MEncoder
-    tool, we can do this with the following command::
+    If you want to create an MPEG movie by using the MEncoder
+    tool, you can do this with the following command::
 
         movie('image_*.eps', encoder='mencoder',
               output_file='/home/johannr/wave2D.mpeg',
