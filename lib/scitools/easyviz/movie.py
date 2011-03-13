@@ -65,8 +65,8 @@ class MovieEncoder(object):
                 raise ValueError("encoder must be %s, not '%s'" %
                                  (self._legal_encoders, encoder))
             if encoder != 'html' and not findprograms(encoder):
-                raise Exception("The selected encoder (%s) is not installed" %
-                                encoder)
+                raise Exception("The selected encoder (%s) is not installed" \
+                                % encoder)
 
         # Determine the file type of the input files
         if isinstance(input_files, (tuple,list)):
@@ -91,8 +91,8 @@ class MovieEncoder(object):
             if not all_input_files:
                 print 'No files of the form %s exist.' % input_files
             else:
-                print 'Found %d files of the format %s.' %
-                      (len(all_input_files), input_files)
+                print 'Found %d files of the format %s.' % \
+                (len(all_input_files), input_files)
         else:  # list of specific filenames
             all_input_files = input_files
         error_encountered = False
