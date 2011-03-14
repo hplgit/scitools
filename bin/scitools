@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-legal_programs = ['subst', 
+legal_programs = ['subst',
+                  'replace',
                   'rename',
                   'regression', 
                   'profiler', 
@@ -39,6 +40,14 @@ subst:
   Script for subsituting a phrase by another in a set of files.
   Accepts regular expressions. Treated in [1].
 
+replace:
+  Script for subsituting a phrase by another in a set of files.
+  Does not use regular expressions, just plain text (well suited
+  for substituting text with much use of backslashes, curly braces,
+  and other special characters in regular expressions (e.g.,
+  LaTeX text).
+  
+
 
 Examples:
 
@@ -50,6 +59,10 @@ scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' code*.py
 Options -s, -m and -x can be issued to turn on pattern matching
 modifies (regular expression flags): re.S/re.DOTALL, re.m/re.MULTILINE
 and re.X/re.VERBOSE, respectively.
+
+Alternatively, using replace, but without regex groups:
+
+scitools replace "compute_X("  "calculate_X"
 
 
 2. Rename files with names like 
@@ -114,7 +127,30 @@ def wildcard_notation(files):
         files = reduce(operator.add, filelist)  # flatten
     return files
 
+def usage_replace():
+    print 'Usage: scitools replace from-text to-text file1 file2 ...'
 
+def main_replace():
+    if len(sys.argv) < 4:
+        usage_subst()
+        sys.exit(1)
+
+    from_text = sys.argv[2]
+    to_text = sys.argv[3]
+    files = sys.argv[4:]
+    for filename in files:
+        f = open(filename, 'r')
+        text = f.read()
+        f.close()
+        if from_text in text:
+            backup_filename = filename + '.old~~'
+            shutil.copy(filename, backup_filename)
+            print 'substituting %s by %s in' % (from_text, to_text), filename
+            text = text.replace(from_text, to_text)
+            f = open(filename, 'w')
+            f.write(text)
+            f.close()
+    
 def usage_subst():
     print 'Usage: scitools subst [-s -m -x --restore] pattern '\
           'replacement file1 file2 file3 ...'
@@ -622,6 +658,8 @@ if __name__ == '__main__':
 
     if program == 'subst':
         main_subst()
+    elif program == 'replace':
+        main_replace()
     elif program == 'rename':
         main_rename()
     elif program == 'file2interactive':
