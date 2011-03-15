@@ -1,0 +1,8 @@
+
+:mod:`scitools.PrmDictBase`
+===========================
+
+.. automodule:: scitools.PrmDictBase
+   :members:
+   :undoc-members:
+   :show-inheritance:

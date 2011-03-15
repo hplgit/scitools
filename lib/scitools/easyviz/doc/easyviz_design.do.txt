@@ -1,0 +1,92 @@
+===== Main Objects =====
+
+All code that is common to all backends is gathered together in a file
+called `common.py`. For each backend there is a separate file where
+the backend dependent code is stored. For example, code that are
+specific for the Gnuplot backend, are stored in a file called
+`gnuplot_.py` and code specific for the VTK backend are stored in
+`vtk_.py` (note the final underscore in the stem of the filename - all
+backend files have this underscore). 
+
+Each backend is a subclass of class `BaseClass`. The `BaseClass` code
+is found in `common.py` and contains all common code for the backends.
+Basically, a backend class extends `BaseClass` with
+rendering capabilities and backend-specific functionality. 
+
+The most important method that needs to be implemented in the backend
+is the `_replot` method, which updates the backend and the plot after a
+change in the data. Another important method for the backend class is
+the `hardcopy` method, which stores an image of the data in the current
+figure to a file.
+
+Inspired by Matlab, the Easyviz interface is organized around figures and
+axes. A figure contains an arbitrary number of axes, and the axes can
+be placed in arbitrary positions in the figure window. Each figure appears
+in a separate window on the screen. The current figure is accessed by
+the `gcf()` call. Similarly, the current axes are accessed by calling
+`gca()`.
+
+It is
+natural to have one class for figures and one for axes. Class `Figure`
+contains a dictionary with one (default) or more `Axis` objects in
+addition to several properties such as figure width and height. Class `Axis`
+has another dictionary with the plot data as well as lots of
+parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
+For example, when adding an
+elevated surface to the current figure, this surface will be
+appended to a list in the current `Axis` object. 
+Optionally one can add the surface to another `Axis`
+object by specifying the `Axis` instance as an argument. 
+
+
+All the objects that are to be plotted in a figure such as curves,
+surfaces, vectors, and so on, are stored in repsectively classes.  An
+elevated surface, for instance, is represented as an instance of class
+`Surface`.  All such classes are subclasses of
+`PlotProperties`. Besides being the base class of all objects that can
+be plotted in a figure
+(`Line`, 
+`Surface`, 
+`Contours`, 
+`VelocityVectors`, 
+`Streams`, 
+`Volume`), 
+class `PlotProperties` also stores various properties that are common
+to all objects in a figure. Examples include line properties, material
+properties, storage arrays for x and y values for `Line` objects,
+and x, y, and z values for 3D objects such as `Volume`.
+
+The classes mentioned above, i.e., `BaseClass` with subclasses, class
+`PlotProperties` with subclasses, as well as class `Figure` and class
+`Axis` constitute the most important classes in the Easyviz interface.
+Other less important classes are `Camera`, `Light`, `Colorbar`, and
+`MaterialProperties`.
+
+All the classes in `common.py` follows a convention where class parameters
+are set by a `setp` method and read by a `getp` method. For
+example, we can set the limits on the $x$ axis by using the `setp`
+method in a `Axis` instance:
+!bc
+ax = gca()                  # get current axis
+ax.setp(xmin=-2, xmax=2)
+!ec
+To extract the values of these limits we can write
+!bc
+xmin = ax.getp('xmin')
+xmax = ax.getp('xmax')
+!ec
+Normal use will seldom involve `setp` and `getp` functions, since most
+users will apply the Matlab-inspired interface and set, e.g., the
+limits by
+!bc
+xlim([-2,2])
+!ec
+
+
+
+
+
+
+
+
+

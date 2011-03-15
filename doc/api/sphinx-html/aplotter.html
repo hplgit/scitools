@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.aplotter &mdash; SciTools v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SciTools v0.7 documentation" href="index.html" />
+    <link rel="next" title="scitools.basics" href="basics.html" />
+    <link rel="prev" title="scitools.TkGUI" href="TkGUI.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="scitools.basics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="TkGUI.html" title="scitools.TkGUI"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.aplotter">
+<h1><tt class="xref docutils literal"><span class="pre">scitools.aplotter</span></tt><a class="headerlink" href="#module-scitools.aplotter" title="Permalink to this headline">¶</a></h1>
+<p>aplotter is a Python module for drawing graphs in pure ASCII format.
+This allows graphs to be included in doc strings (Python programs)
+or as illustrations in programs in any computer language.</p>
+<p>The module offers a function</p>
+<dl class="docutils">
+<dt>plot(x, y, draw_axis=True, plot_slope=True, plot_labels=False, dot=&#8217;*&#8217;,</dt>
+<dd>min_x=None, max_x=None, min_y=None, max_y=None,
+output=sys.stdout)</dd>
+</dl>
+<p>where x and y are sequences of x and y data for a curve.
+Axes are automatically calculated from the x and y data if not
+min_x, max_x, min_y or max_y are given.</p>
+<p>Multiple curves in the plot is not supported.</p>
+<p>Here are examples on various plot commands:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.aplotter</span> <span class="kn">import</span> <span class="n">plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">81</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                       -+1                                      </span>
+<span class="go">                                     // |\                                     </span>
+<span class="go">                                    /   |  \                                    </span>
+<span class="go">                                   /    |   \                                   </span>
+<span class="go">                                  /     |   \                                   </span>
+<span class="go">                                  /     |    \                                  </span>
+<span class="go">                                 /      |     \                                 </span>
+<span class="go">                                /       |      \                                </span>
+<span class="go">                               /        |      \                                </span>
+<span class="go">   -------\                    /        |       \                    -------*   </span>
+<span class="go">---+-------\-----------------/---------+--------\-----------------//-------+---</span>
+<span class="go">   -2        \                /         |        \                /       +2    </span>
+<span class="go">              \              /         |         \             //              </span>
+<span class="go">                \            /          |         \            /                </span>
+<span class="go">                 \         /           |          \         //                 </span>
+<span class="go">                   \       /            |           \       /                   </span>
+<span class="go">                    \    //             |            \-    //                   </span>
+<span class="go">                     ----               -0.63          ---/                     </span>
+<span class="go">                                        |                                       </span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">draw_axes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+-+1</blockquote>
+<p>//  </p>
+</blockquote>
+<p>/      </p>
+</blockquote>
+<p>/        </p>
+</blockquote>
+<p>/                                           
+/          </p>
+</blockquote>
+<p>/            </p>
+</blockquote>
+<p>/              </p>
+</blockquote>
+<p>/               </p>
+</blockquote>
+<p>&#8212;&#8212;-                   /                                   &#8212;&#8212;-*   
++                       /                                  //       +   
+-2                       /                                 /       +2</p>
+<blockquote>
+<dl class="docutils">
+<dt>             /                               //              </dt>
+<dd><dl class="first last docutils">
+<dt>           /                               /                </dt>
+<dd><dl class="first last docutils">
+<dt>        /                              //                 </dt>
+<dd><dl class="first last docutils">
+<dt>      /                              /                   </dt>
+<dd><dl class="first last docutils">
+<dt>   //                          -    //                   </dt>
+<dd>&#8212;-               -0.63          &#8212;/</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</blockquote>
+</blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># plot symbols (the dot argument) at data points:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">plot_slope</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                       *+1                                      </span>
+<span class="go">                                     ** |**                                     </span>
+<span class="go">                                    *   |  *                                    </span>
+<span class="go">                                   *    |   *                                   </span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                  *     |    *                                  </span>
+<span class="go">                                 *      |     *                                 </span>
+<span class="go">                                *       |      *                                </span>
+<span class="go">                                        |                                       </span>
+<span class="go">   ********                    *        |       *                    ********   </span>
+<span class="go">---+-------**-----------------*---------+--------*-----------------**-------+---</span>
+<span class="go">   -2        *                          |                         *       +2    </span>
+<span class="go">              **              *         |         *             **              </span>
+<span class="go">                *            *          |         *            *                </span>
+<span class="go">                 **         *           |          *         **                 </span>
+<span class="go">                   *       *            |           *       *                   </span>
+<span class="go">                    *    **             |            **    **                   </span>
+<span class="go">                     ****               -0.63          ****                     </span>
+<span class="go">                                        |                                       </span>
+<span class="gp">&gt;&gt;&gt; </span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># drop axis labels:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">plot_labels</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                       -\                                       </span>
+<span class="go">                                     // |\                                     </span>
+<span class="go">                                    /   |  \                                    </span>
+<span class="go">                                   /    |   \                                   </span>
+<span class="go">                                  /     |   \                                   </span>
+<span class="go">                                  /     |    \                                  </span>
+<span class="go">                                 /      |     \                                 </span>
+<span class="go">                                /       |      \                                </span>
+<span class="go">                               /        |      \                                </span>
+<span class="go">   -------\                    /        |       \                    -------*   </span>
+<span class="go">-----------\-----------------/---------+--------\-----------------//-----------</span>
+<span class="go">             \                /         |        \                /             </span>
+<span class="go">              \              /         |         \             //              </span>
+<span class="go">                \            /          |         \            /                </span>
+<span class="go">                 \         /           |          \         //                 </span>
+<span class="go">                   \       /            |           \       /                   </span>
+<span class="go">                    \    //             |            \-    //                   </span>
+<span class="go">                     ----               |              ---/                     </span>
+<span class="go">                                        |                                       </span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">plot_slope</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                       o+1                                      </span>
+<span class="go">                                     oo |oo                                     </span>
+<span class="go">                                    o   |  o                                    </span>
+<span class="go">                                   o    |   o                                   </span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                  o     |    o                                  </span>
+<span class="go">                                 o      |     o                                 </span>
+<span class="go">                                o       |      o                                </span>
+<span class="go">                                        |                                       </span>
+<span class="go">   oooooooo                    o        |       o                    oooooooo   </span>
+<span class="go">---+-------oo-----------------o---------+--------o-----------------oo-------+---</span>
+<span class="go">   -2        o                          |                         o       +2    </span>
+<span class="go">              oo              o         |         o             oo              </span>
+<span class="go">                o            o          |         o            o                </span>
+<span class="go">                 oo         o           |          o         oo                 </span>
+<span class="go">                   o       o            |           o       o                   </span>
+<span class="go">                    o    oo             |            oo    oo                   </span>
+<span class="go">                     oooo               -0.63          oooo                     </span>
+<span class="go">                                        |                                       </span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># store plot in a string:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">p</span>
+<span class="go">                                        |                                       </span>
+<span class="go">                                       -+1                                      </span>
+<span class="go">                                     // |\                                     </span>
+<span class="go">                                    /   |  \                                    </span>
+<span class="go">                                   /    |   \                                   </span>
+<span class="go">                                  /     |   \                                   </span>
+<span class="go">                                  /     |    \                                  </span>
+<span class="go">                                 /      |     \                                 </span>
+<span class="go">                                /       |      \                                </span>
+<span class="go">                               /        |      \                                </span>
+<span class="go">   -------\                    /        |       \                    -------*   </span>
+<span class="go">---+-------\-----------------/---------+--------\-----------------//-------+---</span>
+<span class="go">   -2        \                /         |        \                /       +2    </span>
+<span class="go">              \              /         |         \             //              </span>
+<span class="go">                \            /          |         \            /                </span>
+<span class="go">                 \         /           |          \         //                 </span>
+<span class="go">                   \       /            |           \       /                   </span>
+<span class="go">                    \    //             |            \-    //                   </span>
+<span class="go">                     ----               -0.63          ---/                     </span>
+<span class="go">                                        |                                       </span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="scitools.aplotter.Plotter">
+<em class="property">class </em><tt class="descclassname">scitools.aplotter.</tt><tt class="descname">Plotter</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref docutils literal"><span class="pre">object</span></tt></p>
+<dl class="class">
+<dt id="scitools.aplotter.Plotter.PlotData">
+<em class="property">class </em><tt class="descname">PlotData</tt><big>(</big><em>x_size</em>, <em>y_size</em>, <em>min_x</em>, <em>max_x</em>, <em>min_y</em>, <em>max_y</em>, <em>x_mod</em>, <em>y_mod</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.PlotData" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <tt class="xref docutils literal"><span class="pre">object</span></tt></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.draw_axes">
+<tt class="descclassname">Plotter.</tt><tt class="descname">draw_axes</tt><big>(</big><em>output_buffer</em>, <em>plot_data</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.draw_axes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.aplotter.Plotter.get_coord">
+<em class="property">static </em><tt class="descclassname">Plotter.</tt><tt class="descname">get_coord</tt><big>(</big><em>val</em>, <em>min</em>, <em>step</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.get_coord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.aplotter.Plotter.get_symbol_by_slope">
+<em class="property">static </em><tt class="descclassname">Plotter.</tt><tt class="descname">get_symbol_by_slope</tt><big>(</big><em>slope</em>, <em>default_symbol</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.get_symbol_by_slope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.plot_data">
+<tt class="descclassname">Plotter.</tt><tt class="descname">plot_data</tt><big>(</big><em>xy_seq</em>, <em>output_buffer</em>, <em>plot_data</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.plot_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.plot_double">
+<tt class="descclassname">Plotter.</tt><tt class="descname">plot_double</tt><big>(</big><em>x_seq</em>, <em>y_seq</em>, <em>min_x=None</em>, <em>max_x=None</em>, <em>min_y=None</em>, <em>max_y=None</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.plot_double" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.plot_labels">
+<tt class="descclassname">Plotter.</tt><tt class="descname">plot_labels</tt><big>(</big><em>output_buffer</em>, <em>plot_data</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.plot_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.plot_line">
+<tt class="descclassname">Plotter.</tt><tt class="descname">plot_line</tt><big>(</big><em>start</em>, <em>end</em>, <em>output_buffer</em>, <em>plot_data</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.plot_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.aplotter.Plotter.plot_single">
+<tt class="descclassname">Plotter.</tt><tt class="descname">plot_single</tt><big>(</big><em>seq</em>, <em>min_x=None</em>, <em>max_x=None</em>, <em>min_y=None</em>, <em>max_y=None</em><big>)</big><a class="headerlink" href="#scitools.aplotter.Plotter.plot_single" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.aplotter.plot">
+<tt class="descclassname">scitools.aplotter.</tt><tt class="descname">plot</tt><big>(</big><em>*args</em>, <em>**flags</em><big>)</big><a class="headerlink" href="#scitools.aplotter.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="TkGUI.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.TkGUI</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="basics.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">scitools.basics</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/aplotter.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="scitools.basics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="TkGUI.html" title="scitools.TkGUI"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
