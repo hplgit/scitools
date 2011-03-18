@@ -408,6 +408,99 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
     return value
 
 
+def function_UI(function_names, globals_, argv):
+    """
+    User interface for calling a collection of functions from the
+    command line by writing the function name and its arguments.
+    function_names is a list of possible functions (names) to
+    be called. globals_ is the globals() dictionary from the
+    calling code, and argv is sys.argv from the calling code.
+
+    This function autogenerates a user interface to a module.
+    Suppose a module has a set of functions::
+
+      test_mymethod1(M, q, a, b)
+      test_method2a(a1, a2, a3=0, doc=None)
+      test_method2b()
+
+    The following code automatically creates a user interface
+    and executes calls to the functions above::
+
+      from scitools.misc import function_UI
+      function_names = [fname for fname in dir() if fname.startswith('test_')]
+      function_UI(function_names, globals(), sys.argv)
+
+    On the command line the user can now type::
+
+      programname --help
+
+    and automatically get a help string for each function, consisting
+    of the function name, all its positional arguments and all its
+    keyword arguments.
+
+    Alternatively, writing just the function name::
+
+      programname functionname
+
+    prints a usage string if this function requires arguments, otherwise
+    the function is just called.
+
+    Finally, when arguments are supplied::
+
+      programname functionname arg1 arg2 arg3 ...
+
+    the function is called with the given arguments. Safe and easy use
+    is ensured by always giving keyword arguments::
+
+      programname functionname arg1=value1 arg2=value2 arg3=value3 ...
+
+    """
+    usage, doc = _function_args_doc(function_names, globals_)
+
+    def all_usage():
+        for fname in sorted(usage):
+            print fname, ' '.join(usage[fname])
+            
+    # call: function-name arg1 arg2 ...
+    if len(argv) < 2:
+        all_usage()
+        sys.exit(1)
+
+    if len(argv) == 2 and argv[1] in function_names and usage[argv[1]]:
+        fname = argv[1]
+        print 'Usage:', fname, ' '.join(usage[fname])
+        if doc[fname]:
+            print '\nDocstring:\n', doc[fname]
+        sys.exit(1)
+
+    cmd = '%s(%s)' % (argv[1], ', '.join(argv[2:]))
+    #if len(argv[2:]) == len(usage[fname]):
+        # Correct no arguments (eh, can leave out keyword args...)
+    eval(cmd, globals_)
+
+
+def _function_args_doc(function_names, globals_):
+    """
+    Create documentation of a list of functions (function_names).
+    Return: usage dict (usage[funcname] = list of arguments, incl.
+    default values), doc dict (doc[funcname] = docstring (or None)).
+    Called by function_UI.
+    """
+    import inspect
+    usage = {}
+    doc = {}
+    for f in function_names:
+        args = inspect.getargspec(eval(f, globals_))
+        if args.defaults is None:
+            usage[f] = args.args
+        else:
+            usage[f] = args.args[:-len(args.defaults)] + \
+                     ['%s=%s' % (a, d) for a, d in \
+                      zip(args.args[-len(args.defaults):], args.defaults)]
+        doc[f] = inspect.getdoc(eval(f, globals_))
+    return usage, doc
+
+
 def before(string, character):   
     """Return part of string before character."""
     for i in range(len(string)):
