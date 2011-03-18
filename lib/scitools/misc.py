@@ -473,6 +473,9 @@ def function_UI(function_names, globals_, argv):
             print '\nDocstring:\n', doc[fname]
         sys.exit(1)
 
+    if len(argv) == 2 and argv[1].endswith('help'):
+        all_usage()
+
     cmd = '%s(%s)' % (argv[1], ', '.join(argv[2:]))
     #if len(argv[2:]) == len(usage[fname]):
         # Correct no arguments (eh, can leave out keyword args...)
