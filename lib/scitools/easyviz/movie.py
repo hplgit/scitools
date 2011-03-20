@@ -118,21 +118,23 @@ class MovieEncoder(object):
 
         if encoder == 'html':
             # Don't make movie file, just an html file that can play png files
-            files = glob.glob(self._prop['input_files'])
-            files.sort()
+            files = self._prop['input_files']
+            if isinstance(files, str):
+                files = glob.glob(files)
+                files.sort()
             print '\nMaking HTML code for displaing', ', '.join(files)
             fps = self._prop['fps']
             interval_ms = 1000.0/fps
             outf = self._prop['output_file']
-            casename = os.path.splitext(outf)[0]
-            header, jscode, form, footer = \
-                html_movie(files, interval_ms, casename=casename)
-
             if outf is None:
                 outf = 'movie.html'
             else:
                 # Ensure .html extension
                 outf = os.path.splitext(outf)[0] + '.html'
+            casename = os.path.splitext(outf)[0]
+            header, jscode, form, footer = \
+                html_movie(files, interval_ms, casename=casename)
+
             f = open(outf, 'w')
             f.write(header + jscode + form + footer)
             f.close()
@@ -781,24 +783,24 @@ function preload_images_%(casename)s()
 """ % vars()
 
     i = 0
-    for fname in plotfiles[1:]:
-        i = i+1
+    for fname in plotfiles:
         jscode += """
    t.innerHTML = "Preloading image ";
    images_%(casename)s[%(i)s] = new Image(img_width, img_height);
    images_%(casename)s[%(i)s].src = "%(fname)s";
         """ % vars()
+        i = i+1
     jscode += """
-        t.innerHTML = "";
+   t.innerHTML = "";
 }
 
 function tick_%(casename)s()
 {
-   frame_%(casename)s += 1;
-   if (frame_%(casename)s > num_images_%(casename)s)
-       frame_%(casename)s = 1;
+   if (frame_%(casename)s > num_images_%(casename)s - 1)
+       frame_%(casename)s = 0;
 
    document.movie.src = images_%(casename)s[frame_%(casename)s].src;
+   frame_%(casename)s += 1;
    tt = setTimeout("tick_%(casename)s()", interval);
 }
 
@@ -837,7 +839,7 @@ function faster()
 </form>
 
 <p><div ID="progress"></div></p>
-<img src="%(plotfile0)s" name="movie"/>
+<img src="%(plotfile0)s" name="movie" border=2/>
 """ % vars()
     footer = '\n</body>\n</html>\n'
     return header, jscode, form, footer

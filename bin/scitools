@@ -6,7 +6,8 @@ legal_programs = ['subst',
                   'profiler', 
                   'ps2mpeg', 
                   'floatdiff',
-                  'file2interactive'
+                  'file2interactive',
+                  'movie',
 ]
 
 __doc__ = \
@@ -47,6 +48,10 @@ replace:
   and other special characters in regular expressions (e.g.,
   LaTeX text).
   
+movie:
+  Script for creating a movie file from a sequence of image
+  files (frames). By default an HTML file for displaying the
+  image (PNG) files are made.
 
 
 Examples:
@@ -127,6 +132,51 @@ def wildcard_notation(files):
         files = reduce(operator.add, filelist)  # flatten
     return files
 
+def usage_movie():
+    print """Usage: scitools movie "output_file='mymovie.html'" fps=4 file*.png"""
+
+def main_movie():
+    if len(sys.argv) < 3:
+        print usage_movie()
+        sys.exit(1)
+        
+    # Search for arguments to movie function
+    legal_kwargs = ['output_file', 'overwrite_output',
+                    'quiet', 'cleanup', 'force_conversion',
+                    'input_file', 'encoder', 'vbitrate',
+                    'vbuffer', 'fps', 'vcodec', 'qscale',
+                    'qmin', 'qmax', 'iqscale',
+                    'pqscale', 'bqscale', 'pattern', 'size',
+                    'aspect', 'preferred_package', 'gop_size']
+    kw_string_args = ['output_file', 'encoder', 'pattern',
+                      'preferred_package', 'vcodec', 'vbuffer',]
+    kwargs = []
+    kws = []
+    for i, arg in enumerate(sys.argv[2:]):
+        if '=' in arg:
+            kw = arg.split('=')[0].strip()
+            if kw in legal_kwargs:
+                # Special cases:
+                if kw in kw_string_args:
+                    arg = kw + '=' + repr(arg.split('=')[1])
+                kwargs.append(arg)
+                kws.append(kw)
+            else:
+                print '%s: unknown argument to movie'
+        else:
+            break
+
+    if not 'encoder' in kws:
+        kwargs.append('encoder="html"')  # default
+    files = sys.argv[i+2:]
+    print kwargs
+    print files
+    import scitools.easyviz
+    call = 'scitools.easyviz.movie(input_files=%s, %s)' % \
+           (str(files), ', '.join(kwargs))
+    print call
+    eval(call)
+    
 def usage_replace():
     print 'Usage: scitools replace from-text to-text file1 file2 ...'
 
@@ -672,6 +722,8 @@ if __name__ == '__main__':
         main_regression()
     elif program == 'floatdiff':
         main_floatdiff()
+    elif program == 'movie':
+        main_movie()
     elif program == 'help' or program == '--help' or program == '-h':
         for p in legal_programs:
             exec('usage_%s()' % p)
