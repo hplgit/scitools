@@ -1,0 +1,72 @@
+As we have mentioned earlier, Easyviz is just a unified interface to
+other plotting packages, which we refer to as backends. We have
+currently implemented backends for Gnuplot, Grace, OpenDX, Matlab,
+Matplotlib, Pmw.Blt, Veusz, VisIt, and VTK. Some are more early in
+developement than others, like the backends for OpenDx and VisIt.
+
+Because of limitations in many of the plotting packages, not all
+features in Easyviz are supported by each of the backends.  Gnuplot
+has (at the time of this writing) no support for visualization of 3D
+vector fields, so this is of course not available in the Gnuplot
+backend either.
+ 
+Some supported visualization programs are commented on below.
+
+__Gnuplot.__ Gnuplot is a command-driven interactive or scripted
+plotting utility that works on a wide variety of platforms. Gnuplot
+supports many types of plots in both 2D and 3D, including curve plots,
+contour plots, vector plots, and surface plots.  3D scalar and vector
+fields are not supported. To access Gnuplot from Python and send NumPy
+arrays to Gnuplot, we use the Python module `Gnuplot`.
+
+
+__Matlab.__ Many view Matlab as the de facto standard for making curves
+and plots of 2D scalar/vector fields.
+
+
+__Matplotlib.__ Matplotlib is now quickly gaining wide popularity in
+the scientific Python community and has established itself as the de
+facto standard for curve plotting and 2D contour and (recently) surface
+plotting. The interface to Matplotlib is Matlab-insipired, and
+different backends are used to create the plots: Gtk, Tk, WxWidgets
+and many more.  (Since Easyviz and Matplotlib haver very similar
+Matlab-style syntax, Easyviz is just a thin layer on top of Matplotlib
+to enable Matplotlib to be used with the Easyviz unified syntax.)
+Matplotlib is now a comprehensive package with lots of tuning
+possibilities that Easyviz does not support - but one can fetch the
+underlying Matplotlib from Easyviz and call all the functionality of
+Matplotlib directly.
+
+
+__Grace.__ Grace is a highly interactive curve plotting program on the
+Unix/X11 platform which has been popular for many years. It does not
+support 2D or 3D scalar or vector fields. However, it has a lot of
+functionality for computing with curves and adjusting/fine-tuning
+plots interactively.
+
+
+__PyX.__ PyX is a Python package for the creation of PostScript and
+PDF files. It combines an abstraction of the PostScript drawing model
+with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
+publication-ready quality are built out of these primitives.
+
+
+__Pmw.Blt.Graph.__ Pmw (Python Mega Widgets) extends the Tkinter
+package with more sophisticated widgets, included an interactive
+widget for curve plotting. This widget is based on the BLT package
+(an extension of Tk written in C).
+The BLT backend offers currenlty only basic plotting functionality.
+
+
+__Veusz.__ From http://home.gna.org/veusz<Veusz homepage>: Veusz is a
+GUI scientific plotting and graphing package. It is designed to
+produce publication-ready Postscript or PDF output. SVG, EMF and
+bitmap formats export are also supported. Veusz has a comprehensive
+GUI and produces really high-quality plots.
+
+
+__VTK.__ VTK (Visualization ToolKit) is a package primarily aimed at
+visualizing 2D and 3D scalar and vector fields by a range of techniques.
+VTK is used to achieve 2D and 3D visualizations of the same type as 
+Matlab offers. However, VTK can do much more (although the Easyviz 
+commands are restricted to what is typically offered by Matlab).

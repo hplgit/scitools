@@ -1,0 +1,8 @@
+
+:mod:`scitools.sound`
+=====================
+
+.. automodule:: scitools.sound
+   :members:
+   :undoc-members:
+   :show-inheritance:
