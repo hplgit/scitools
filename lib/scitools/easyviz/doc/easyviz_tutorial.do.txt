@@ -902,7 +902,10 @@ if backend == 'gnuplot':
 !ec
 For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the `demo.py` program in Python interface to
-Gnuplot.
+Gnuplot. Note that one must call `g.hardcopy` to save the figure
+to file. A call to `savefig` or `hardcopy` remakes the plot, but
+without the special calls `g('...')` so the label and arrow are
+left out of the hardcopy in the example above.
 
 Here is an example with Matplotlib:
 !bc cod
@@ -911,8 +914,12 @@ if backend == 'matplotlib':
     # Work with standard matplotlib.pyplot functions
 !ec
 The files `grab_backend*.py` in the `examples` folder of the SciTools
-source code contain many examples on how to do backend-specific operations,
-especially with Matplotlib.
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the `pyplot` object, one must apply `pyplot.savefig` to
+correctly save the plot (a plain `savefig` or `hardcopy` remakes the
+plot without the features inserted by the `pyplot` object).
+
 
 The idea advocated here is that you can quickly generate
 plots with Easyviz using standard commands that are independent of
