@@ -15,6 +15,7 @@ plot2j.py:  as plot2e.py, but working with an Axis object.
 plot2k.py:  as other plot2*.py files, but with subplots and multiple figures.
 plot2l.py:  as plot2e.py, but with legend location and legend fancybox.
 plot2m.py:  as plot2b.py, but with latex syntax in legends and title.
+plot2n.py:  as plot2b.py, but with a text in the plot.
 plot4.py:   three Gaussian bell functions (for illustrating movie_demo1 frames).
 movie_demo1.py:  primary animation example.
 movie_demo2.py:  another animation example.
