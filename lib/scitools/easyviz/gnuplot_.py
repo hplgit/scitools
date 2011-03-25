@@ -247,6 +247,7 @@ class GnuplotBackend(BaseClass):
             }
 
         self._doing_PS = False  # indicator for PostScript hardcopy
+        self._texts = {}  # storage of text calls (dict for set)
         
         if DEBUG:
             print "Setting backend standard variables"
@@ -1243,6 +1244,11 @@ class GnuplotBackend(BaseClass):
                 self._gdata = []
             self._gdata.append(gdata)
 
+        # Display texts (adds texts to latest axes, implying that this
+        # does not work well with subplots):
+        for args in self._texts:
+            self.text(*args)
+            
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -1299,6 +1305,7 @@ class GnuplotBackend(BaseClass):
             (text, x, y, fontname, fontsize)
         self._g(s)
         self._g.refresh()
+        self._texts[(x, y, text, fontname, fontsize)] = None
         
     def hardcopy(self, filename, **kwargs):
         """

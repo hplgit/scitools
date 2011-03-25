@@ -28,7 +28,7 @@ if backend == 'gnuplot':
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
     g('save "tmp.gnu"')  # save all settings for later tuning
     g.refresh()
-    g.hardcopy('tmp2.eps')  # make new hardcopy
+    g.hardcopy('tmp2.eps')  # make new hardcopy (do not use savefig/hardcopy)
 
 fig = gcf(); print fig.dump()
 

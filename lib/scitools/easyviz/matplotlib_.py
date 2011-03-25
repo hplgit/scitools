@@ -85,6 +85,8 @@ class MatplotlibBackend(BaseClass):
             'WestOutside': None,
             }
 
+        self._texts = {}  # store calls to text (for repot)
+        
         if DEBUG:
             print "Setting backend standard variables"
             for disp in 'self._markers'.split():
@@ -403,7 +405,6 @@ class MatplotlibBackend(BaseClass):
         #    return legend
 
         legend = legend.strip()
-        print '**** matplotlib legend:', legend
         if len(legend) >= 2 and legend[0] != '$' and legend[-1] != '$':
             # else: assume correct latex syntax, otherwise fix
             print '....fix'
@@ -449,7 +450,6 @@ class MatplotlibBackend(BaseClass):
                 for func, newfunc in funcs:
                     legend = _fix_func(func, newfunc, legend)
                 #print 'latex fix:', legend
-        print 'return:', legend
         return legend
 
     def _add_line(self, item):
@@ -843,7 +843,7 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Doing replot in backend"
 
-        # turn off interactive in pylab temporarily:
+        # turn off interactive in pyplot temporarily:
         old_pylab_interactive_state = self._g.isinteractive()
         self._g.ioff()
         
@@ -865,8 +865,8 @@ class MatplotlibBackend(BaseClass):
                 continue
             if nrows != 1 or ncolumns != 1:
                 # create axes in tiled position
-                # this is subplot(nrows,ncolumns,axnr)
-                self._g.subplot(nrows,ncolumns,axnr)
+                # this is subplot(nrows, ncolumns, axnr)
+                self._g.subplot(nrows, ncolumns, axnr)
             else:
                 rect = ax.getp('viewport')
                 if isinstance(rect, (list,tuple)) and len(rect) == 4 and \
@@ -921,7 +921,12 @@ class MatplotlibBackend(BaseClass):
                 self._g.legend(loc=loc, fancybox=fancybox)
 
             self._set_axis_props(ax)
-                    
+
+        # Display texts
+        for args in self._texts:
+            self.text(args[0], args[1], args[2],
+                      fontname=args[3], fontsize=args[4])
+            
         # set back the interactive state in pylab:
         if old_pylab_interactive_state:
             self._g.ion()
@@ -942,6 +947,7 @@ class MatplotlibBackend(BaseClass):
              fontsize=Axis._local_prop['fontsize']):
         """Write text at position (x,y) in a curveplot."""
         self._g.text(x, y, text, family=fontname, size=fontsize)
+        self._texts[(x, y, text, fontname, fontsize)] = None
         
 
     def hardcopy(self, filename, **kwargs):
