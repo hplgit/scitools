@@ -33,6 +33,7 @@ from scitools.misc import test_if_module_exists
 from misc import _update_from_config_file
 
 test_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
+
 import matplotlib
 import matplotlib.colors
 # Override values from the matplotlib configuration file with values
@@ -84,8 +85,6 @@ class MatplotlibBackend(BaseClass):
             'EastOutside': None,
             'WestOutside': None,
             }
-
-        self._texts = {}  # store calls to text (for repot)
         
         if DEBUG:
             print "Setting backend standard variables"
@@ -269,6 +268,10 @@ class MatplotlibBackend(BaseClass):
         """Turn grid lines on or off."""
         if DEBUG:
             print "Setting grid"
+        if self._mpl3D:
+            # Do not call self._g.grid for 3D surf plots
+                return
+
         if ax.getp('grid'):
             # turn grid lines on
             self._g.grid(b=True)
@@ -291,6 +294,10 @@ class MatplotlibBackend(BaseClass):
         """Add a colorbar to the axis."""
         if DEBUG:
             print "Setting colorbar"
+        if self._mpl3D:
+            # Do not call self._g.grid for 3D surf plots
+                return
+
         cbar = ax.getp('colorbar')
         if cbar.getp('visible'):
             # turn on colorbar
@@ -316,7 +323,10 @@ class MatplotlibBackend(BaseClass):
             if cmin is None or cmax is None:
                 cmin, cmax = [0,1]
             # set color axis scaling according to cmin and cmax
-            self._g.clim(cmin,cmax)
+            if self._mplsurf is not None:
+                pass # cannot handle 3D surf
+            else:
+                self._g.clim(cmin,cmax)
         else:
             # use autoranging for color axis scale
             pass
@@ -578,7 +588,8 @@ class MatplotlibBackend(BaseClass):
         else:
             self._g.xticks(range(len(x)), barticks)
 
-    def _add_surface(self, item, shading='faceted', colormap=None):
+    def _add_surface(self, item, shading='faceted', colormap=None,
+                     showcolorbar=False, zmin=None, zmax=None):
         if DEBUG:
             print "Adding a surface"
         x = squeeze(item.getp('xdata'))  # grid component in x-direction
@@ -618,14 +629,26 @@ class MatplotlibBackend(BaseClass):
             # use keyword argument shading to set the color shading mode
             function = item.getp('function')
             if function == 'pcolor':
-                ax = fig.gca(projection='3d')
                 h = self._g.pcolor(x, y, z, shading=shading,
                                    cmap=colormap, alpha=opacity)
             else:
+                # This is really a hack to use 3D surfaces in matplotlib...
+                from mpl_toolkits.mplot3d import Axes3D
                 fig = self._g.gcf()
                 ax = fig.gca(projection='3d')
-                h = ax.plot_surface(x, y, z, shading=shading,
-                                    cmap=colormap, )
+                if self._mplsurf is not None:
+                    ax.collections.remove(self._mplsurf)
+                self._mplsurf = ax.plot_surface(x, y, z, rstride=1, cstride=1,
+                                                linewidth=0, cmap=colormap,
+                                                antialiased=False)
+                if showcolorbar and not self._mpl3D:
+                    # Show colorbar only for the first plot in an animation
+                    fig.colorbar(self._mplsurf, shrink=1.0, aspect=15,
+                                 orientation='vertical',)
+                if zmin is not None and zmax is not None:
+                    ax.set_zlim3d(zmin, zmax)
+                self._mpl3D = True
+                # Problem: cannot fix color scale (or?)
                 
             if legend:
                 h.set_label(legend)
@@ -848,6 +871,9 @@ class MatplotlibBackend(BaseClass):
             fig._g = pylab
             
         self._g = fig._g # link for faster access
+        self._mpl3D = False
+        self._mplsurf = None
+        self._texts = {}  # store calls to text (for replot)
         return fignum
         
     def _replot(self):
@@ -868,7 +894,8 @@ class MatplotlibBackend(BaseClass):
         self._g.figure(self.getp('curfig'))
 
         # reset the plotting package instance in fig._g now if needed
-        self._g.clf()
+        if not self._mpl3D:
+            self._g.clf()
         
         self._set_figure_size(fig)
         
@@ -899,8 +926,11 @@ class MatplotlibBackend(BaseClass):
                     self._add_bar_graph(item, shading=ax.getp('shading'))
                 elif isinstance(item, Surface):
                     self._add_surface(item,
-                                      shading=ax.getp('shading'),
-                                      colormap=ax.getp('colormap'))
+                      shading=ax.getp('shading'),
+                      colormap=ax.getp('colormap'),
+                      showcolorbar=ax.getp('colorbar').getp('visible'),
+                      zmin=ax.getp('zmin'),
+                      zmax=ax.getp('zmax'))
                 elif isinstance(item, Contours):
                     self._add_contours(item, colormap=ax.getp('colormap'))
                 elif isinstance(item, VelocityVectors):

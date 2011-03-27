@@ -247,7 +247,6 @@ class GnuplotBackend(BaseClass):
             }
 
         self._doing_PS = False  # indicator for PostScript hardcopy
-        self._texts = {}  # storage of text calls (dict for set)
         
         if DEBUG:
             print "Setting backend standard variables"
@@ -1133,6 +1132,7 @@ class GnuplotBackend(BaseClass):
             fig._g = Gnuplot.Gnuplot()
             
         self._g = fig._g  # link for faster access
+        self._texts = {}  # storage of text calls (dict for set)
         return fig
 
     def _replot(self):
