@@ -182,7 +182,7 @@ def usage_replace():
 
 def main_replace():
     if len(sys.argv) < 4:
-        usage_subst()
+        usage_replace()
         sys.exit(1)
 
     from_text = sys.argv[2]

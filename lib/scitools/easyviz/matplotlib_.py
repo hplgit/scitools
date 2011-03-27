@@ -608,12 +608,25 @@ class MatplotlibBackend(BaseClass):
 
         if item.getp('wireframe'):
             # wireframe mesh (as produced by mesh or meshc)
-            print "No support for mesh/meshc in Matplotlib."
+            fig = self._g.gcf()
+            ax = fig.gca(projection='3d')
+            h = ax.plot_wireframe(x, y, z)
+            if legend:
+                h.set_label(legend)
         else:
             # colored surface (as produced by surf, surfc, or pcolor)
             # use keyword argument shading to set the color shading mode
-            h = self._g.pcolor(x, y, z, shading=shading,
-                               cmap=colormap, alpha=opacity)
+            function = item.getp('function')
+            if function == 'pcolor':
+                ax = fig.gca(projection='3d')
+                h = self._g.pcolor(x, y, z, shading=shading,
+                                   cmap=colormap, alpha=opacity)
+            else:
+                fig = self._g.gcf()
+                ax = fig.gca(projection='3d')
+                h = ax.plot_surface(x, y, z, shading=shading,
+                                    cmap=colormap, )
+                
             if legend:
                 h.set_label(legend)
 
