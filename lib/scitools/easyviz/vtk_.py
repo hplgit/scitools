@@ -90,7 +90,7 @@ class VtkBackend(BaseClass):
             self._master = Tkinter.Tk()
             self._master.withdraw()
         fig._root = Tkinter.Toplevel(self._master)
-        fig._root.title("EasyViz Data Visualizer - Figure %d" % \
+        fig._root.title("Easyviz VTK Data Visualizer - Figure %d" % \
                         self._attrs['curfig'])
         # if the window is closed, we should delete the current figure and
         # create a new one.

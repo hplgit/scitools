@@ -168,7 +168,7 @@ def main_movie():
 
     if not 'encoder' in kws:
         kwargs.append('encoder="html"')  # default
-    files = sys.argv[i+2:]
+    files = wildcard_notation(sys.argv[i+2:])
     print kwargs
     print files
     import scitools.easyviz
@@ -187,7 +187,7 @@ def main_replace():
 
     from_text = sys.argv[2]
     to_text = sys.argv[3]
-    files = sys.argv[4:]
+    files = wildcard_notation(sys.argv[4:])
     for filename in files:
         f = open(filename, 'r')
         text = f.read()
@@ -195,7 +195,7 @@ def main_replace():
         if from_text in text:
             backup_filename = filename + '.old~~'
             shutil.copy(filename, backup_filename)
-            print 'substituting %s by %s in' % (from_text, to_text), filename
+            print 'replacing %s by %s in' % (from_text, to_text), filename
             text = text.replace(from_text, to_text)
             f = open(filename, 'w')
             f.write(text)
