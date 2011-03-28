@@ -1435,6 +1435,85 @@ class DoNothing(object):
     def next(self):
         raise StopIteration()
     
+class Recorder:
+    """
+    This class is a wrapper of a module or instance which will
+    record all actions done with the module/instance.
+
+    >>> from scitools.misc import Recorder
+    >>> from scitools.std import plt, plot, linspace
+    >>> x = linspace(-1,1,10)
+    >>> y1 = x**2
+    >>> y2 = x**3
+    >>> plt._g = Recorder(plt._g)  # make the plot object record itself
+    >>> plot(x, y1, 'r-',
+    ...      x, y2, 'b-',
+    ...      title='A test')
+    [<scitools.easyviz.common.Line object at 0x1749c50>, <scitools.easyviz.common.Line object at 0x1749bd0>]
+    >>> # look at what we have done with the plt._g object
+    >>> plt._g.replay()
+    reset()
+    __call__('unset multiplot',)
+    __call__('set datafile missing "nan"',)
+    __call__('set key right top',)
+    __call__('set title "A test"',)
+    __call__('unset logscale x',)
+    __call__('unset logscale y',)
+    __call__('set autoscale',)
+    __call__('set xrange[*:*]',)
+    __call__('set yrange[*:*]',)
+    __call__('set zrange[*:*]',)
+    __call__('set size noratio',)
+    __call__('set size nosquare',)
+    __call__('set yrange [] noreverse',)
+    __call__('set hidden3d',)
+    __call__('unset colorbox',)
+    __call__('set cbrange [*:*]',)
+    __call__('set palette model RGB defined (0 "blue", 3 "cyan", 4 "green", 5 "yellow", 8 "red", 10 "black")',)
+    __call__('unset view',)
+    __call__('set view map',)
+    __call__('set xtics',)
+    __call__('set ytics',)
+    __call__('set ztics',)
+    __call__('set border 1+2+4+8+16 linetype -1 linewidth .4',)
+    __call__('unset xlabel',)
+    __call__('unset ylabel',)
+    __call__('unset zlabel',)
+    __call__('set border 4095 linetype -1 linewidth .4',)
+    __call__('unset grid',)
+    plot(<Gnuplot.PlotItems._FIFOFileItem instance at 0x174d998>,)
+    replot(<Gnuplot.PlotItems._FIFOFileItem instance at 0x174db90>,)
+    
+    """
+    def __init__(self, obj):
+        self.obj = obj
+        self.recorder = []
+
+    def __getattr__(self, name):
+        return _RecordHelper(self.obj, name, self.recorder)
+
+    def replay(self):
+        for name, args, kwargs in self.recorder:
+            s = name + '('
+            if args:
+                s += str(args)[1:-1]
+            if kwargs:
+                s += ', ' + ', '.join(['%s=%s' % (key, kwargs[key]) for key in kwargs])
+            s += ')'
+            print s
+        
+class _RecordHelper:
+    def __init__(self, obj, name, recorder):
+        self.obj, self.name, self.recorder = obj, name, recorder
+
+    def __call__(self, *args, **kwargs):
+        self.recorder.append((self.name, args, kwargs))
+        if hasattr(self.obj, self.name):
+            return getattr(self.obj, self.name)(*args, **kwargs)
+        else:
+            raise AttributeError('%s has no attribute %s', (self.obj, name))
+
+        
 
 def fix_latex_command_regex(pattern, application='match'):
     """
