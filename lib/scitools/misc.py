@@ -408,7 +408,7 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
     return value
 
 
-def function_UI(function_names, globals_, argv):
+def function_UI(function_names, globals_, argv, verbose=True):
     """
     User interface for calling a collection of functions from the
     command line by writing the function name and its arguments.
@@ -480,6 +480,8 @@ def function_UI(function_names, globals_, argv):
     cmd = '%s(%s)' % (argv[1], ', '.join(argv[2:]))
     #if len(argv[2:]) == len(usage[fname]):
         # Correct no arguments (eh, can leave out keyword args...)
+    if verbose:
+        print 'Calling', cmd
     eval(cmd, globals_)
 
 

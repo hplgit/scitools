@@ -11,10 +11,9 @@ Contents
 -------------------------------------------------------------------------------
 1. Introduction
 
-SciTools is a Python package containing lots of useful tools for
-scientific computing in Python. The package is built on top of other
-widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
-etc. 
+SciTools is a Python package containing many useful tools for scientific 
+computing in Python. The package is built on top of other widely used 
+packages such as NumPy, SciPy, ScientificPython, Gnuplot, etc.
 
 -------------------------------------------------------------------------------
 2. Dependencies
