@@ -408,13 +408,14 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
     return value
 
 
-def function_UI(function_names, globals_, argv, verbose=True):
+def function_UI(functions, argv, verbose=True):
     """
     User interface for calling a collection of functions from the
     command line by writing the function name and its arguments.
-    function_names is a list of possible functions (names) to
-    be called. globals_ is the globals() dictionary from the
-    calling code, and argv is sys.argv from the calling code.
+    functions is a list of possible functions to be called. argv is
+    sys.argv from the calling code.
+    function_UI returns a command to be evaluated (function call)
+    in the calling code.
 
     This function autogenerates a user interface to a module.
     Suppose a module has a set of functions::
@@ -428,7 +429,7 @@ def function_UI(function_names, globals_, argv, verbose=True):
 
       from scitools.misc import function_UI
       function_names = [fname for fname in dir() if fname.startswith('test_')]
-      function_UI(function_names, globals(), sys.argv)
+      function_UI(function_names, sys.argv)
 
     On the command line the user can now type::
 
@@ -455,7 +456,7 @@ def function_UI(function_names, globals_, argv, verbose=True):
       programname functionname arg1=value1 arg2=value2 arg3=value3 ...
 
     """
-    usage, doc = _function_args_doc(function_names, globals_)
+    usage, doc = _function_args_doc(functions)
 
     def all_usage():
         for fname in sorted(usage):
@@ -466,6 +467,7 @@ def function_UI(function_names, globals_, argv, verbose=True):
         all_usage()
         sys.exit(1)
 
+    function_names = [f.__name__ for f in functions]
     if len(argv) == 2 and argv[1] in function_names and usage[argv[1]]:
         fname = argv[1]
         print 'Usage:', fname, ' '.join(usage[fname])
@@ -482,12 +484,12 @@ def function_UI(function_names, globals_, argv, verbose=True):
         # Correct no arguments (eh, can leave out keyword args...)
     if verbose:
         print 'Calling', cmd
-    eval(cmd, globals_)
+    return cmd
 
 
-def _function_args_doc(function_names, globals_):
+def _function_args_doc(functions):
     """
-    Create documentation of a list of functions (function_names).
+    Create documentation of a list of functions.
     Return: usage dict (usage[funcname] = list of arguments, incl.
     default values), doc dict (doc[funcname] = docstring (or None)).
     Called by function_UI.
@@ -495,15 +497,17 @@ def _function_args_doc(function_names, globals_):
     import inspect
     usage = {}
     doc = {}
-    for f in function_names:
-        args = inspect.getargspec(eval(f, globals_))
+    for f in functions:
+        args = inspect.getargspec(f)
         if args.defaults is None:
+            # Only positional arguments
             usage[f] = args.args
         else:
-            usage[f] = args.args[:-len(args.defaults)] + \
+            # Keyword arguments too, build complete list
+            usage[f.__name__] = args.args[:-len(args.defaults)] + \
                      ['%s=%s' % (a, d) for a, d in \
                       zip(args.args[-len(args.defaults):], args.defaults)]
-        doc[f] = inspect.getdoc(eval(f, globals_))
+        doc[f.__name__] = inspect.getdoc(f)
     return usage, doc
 
 
