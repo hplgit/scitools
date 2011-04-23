@@ -466,7 +466,8 @@ def main_profiler():
     except ImportError:
         raise ImportError('module pstats was not found - must be installed')
     p = pstats.Stats(resfile)
-    p.sort_stats('cumulative')
+    #p.sort_stats('cumulative')
+    p.sort_stats('time')
     p.print_stats(30)
     os.remove('.tmp.profile')
 
