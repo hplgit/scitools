@@ -426,39 +426,48 @@ def main_file2interactive():
 
 
 def usage_profiler():
-    print "Usage: scitools profiler scriptfile options"
+    print "Usage: scitools profiler program [program options]"
     
 def main_profiler():
     try:
-        script = sys.argv[2]
+        program = sys.argv[2]
     except:
         usage_profiler()
         sys.exit(1)
     resfile = '.tmp.profile'
     # add the directory of the script to sys.path in case the script
     # employs local modules from that directory:
-    sys.path.insert(0, os.path.dirname(script))
-    # hide script name from sys.argv:
-    del sys.argv[0]
-    del sys.argv[1]  # "profiler"
-
-    # The hotshot or profile module will be used, depending on
+    sys.path.insert(0, os.path.dirname(program))
+    program_options = ' '.join(["%s" % arg for arg in sys.argv[3:]])
+    # The cProfile or profile module will be used, depending on
     # the value of the environment variable PYPROFILE
-    # (default is hotshot, the fastest of them)
-    profiler_module = os.environ.get('PYPROFILE', 'hotshot')
+    # (default is cProfile, the fastest of them)
+    profiler_module = os.environ.get('PYPROFILE', 'cProfile')
 
-    if profiler_module == 'profile':  # old
-        import profile, pstats
-        profile.run('execfile(' + `script` + ')', resfile)
-        # recall `s` is the same as repr(s)
-        p = pstats.Stats(resfile)
-    elif profiler_module == 'hotshot':  # new
-        import hotshot, hotshot.stats
-        prof = hotshot.Profile(resfile)
-        prof.run('execfile(' + `script` + ')')
-        p = hotshot.stats.load(resfile)
+    if profiler_module == 'profile':
+        try:
+            import profile
+        except ImportError:
+            raise ImportError('module profile was not found - must be installed')
+    elif profiler_module == 'cProfile':
+        try:
+            import cProfile
+        except ImportError:
+            raise ImportError('module cProfile was not found - must be installed')
+    cmd = 'python -m %(profiler_module)s -o %(resfile)s %(program)s %(program_options)s' % vars()
+    print 'Running\n  ', cmd
+    failure = os.system(cmd)
+    if failure:
+        print 'Could not run\n', cmd
+        sys.exit(1)
 
-    p.strip_dirs().sort_stats('time').print_stats(40)
+    try:
+        import pstats
+    except ImportError:
+        raise ImportError('module pstats was not found - must be installed')
+    p = pstats.Stats(resfile)
+    p.sort_stats('cumulative')
+    p.print_stats(30)
     os.remove('.tmp.profile')
 
 
