@@ -1,0 +1,8 @@
+
+:mod:`scitools.easyviz.vtk_new_`
+================================
+
+.. automodule:: scitools.easyviz.vtk_new_
+   :members:
+   :undoc-members:
+   :show-inheritance:

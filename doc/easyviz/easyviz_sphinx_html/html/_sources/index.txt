@@ -1,0 +1,23 @@
+.. Easyviz Documentation documentation master file, created by
+   sphinx-quickstart on Fri Jul 30 10:50:17 2010.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Easyviz Documentation!
+=================================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   tmp_easyviz
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

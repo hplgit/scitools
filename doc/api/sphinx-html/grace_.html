@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.grace_ &mdash; SciTools v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SciTools v0.7 documentation" href="index.html" />
+    <link rel="next" title="scitools.easyviz.matlab2_" href="matlab2_.html" />
+    <link rel="prev" title="scitools.easyviz.gnuplot_" href="gnuplot_.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="matlab2_.html" title="scitools.easyviz.matlab2_"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gnuplot_.html" title="scitools.easyviz.gnuplot_"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.grace_">
+<h1><tt class="xref docutils literal"><span class="pre">scitools.easyviz.grace_</span></tt><a class="headerlink" href="#module-scitools.easyviz.grace_" title="Permalink to this headline">¶</a></h1>
+<p>This backend is based on the 2D graphics package Grace (available at
+<a class="reference external" href="http://plasma-gate.weizmann.ac.il/Grace">http://plasma-gate.weizmann.ac.il/Grace</a>). The connection with Python is
+handled by the grace_np.py module written by Michael Haggerty. This module
+is available in the pygrace module by Mike McKerns (see
+<a class="reference external" href="http://www.its.caltech.edu/~mmckerns/software.html">http://www.its.caltech.edu/~mmckerns/software.html</a>). Only curve plotting is
+currently available. However, histograms and pie charts might be added in
+the future. The Grace backend can be used by</p>
+<blockquote>
+python somefile.py &#8211;SCITOOLS_easyviz_backend grace</blockquote>
+<p>or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section</p>
+<blockquote>
+[easyviz]
+backend = grace</blockquote>
+<p>and then</p>
+<blockquote>
+from scitools.std import *</blockquote>
+<p>or if just easyviz is needed</p>
+<blockquote>
+from scitools.easyviz import *</blockquote>
+<p>REQUIREMENTS:</p>
+<p>Grace
+pygrace</p>
+<p>Known issues:</p>
+<ul>
+<li><p class="first">To be able to store a copy of a plot with the hardcopy command, one must
+disable safe mode with the -nosafe option when running Grace. One can do
+this by adding the following line to GraceProcess.__init__ in grace_np.py
+(e.g. at line 130):</p>
+<blockquote>
+<p>cmd = cmd + (&#8216;-nosafe&#8217;,)</p>
+</blockquote>
+</li>
+<li><p class="first">PDF output does not seem to work (at least on my configuration).</p>
+</li>
+</ul>
+<p>Tip:</p>
+<ul>
+<li><p class="first">One way to create axes at arbitrary positions is to use the axes command
+together with the viewport optional argument. In the Grace backend this
+argument should be given as the list [xmin,ymin,xmax,ymax] where (xmin,ymin)
+is the lower-left corner and (xmax,ymax) is the upper-right corner. An 
+example is provided next.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">seq</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="s">&#39;ro:2&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="mi">8</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">),</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="s">&#39;mx&#39;</span><span class="p">)</span>
+<span class="go">[&lt;scitools.easyviz.common.Line object at 0xb15645ac&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="s">&#39;r+&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;subplot(2,2,4)&#39;</span><span class="p">)</span>
+<span class="go">[&lt;scitools.easyviz.common.Line object at 0xb31596ac&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">(</span><span class="n">viewport</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="s">&#39;bd--&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="s">&#39;)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="class">
+<dt id="scitools.easyviz.grace_.GraceBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.grace_.</tt><tt class="descname">GraceBackend</tt><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="scitools.easyviz.common.BaseClass" class="reference external" href="common.html#scitools.easyviz.common.BaseClass"><tt class="xref docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd>Clear the current figure.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>num=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd>Close figure window.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd>Close all figure windows.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd>Create a new figure or switch between figures and return Figure object.
+num is the figure number of the new or existing figure.</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions in the Grace backend:</p>
+<blockquote>
+&#8216;.ps&#8217;  (PostScript)
+&#8216;.eps&#8217; (Encapsualted PostScript)
+&#8216;.pdf&#8217; (Portable Document Format)
+&#8216;.agr&#8217; (Grace file format)
+&#8216;.jpg&#8217; (Joint Photographic Experts Group)
+&#8216;.png&#8217; (Portable Network Graphics)
+&#8216;.pnm&#8217; (Portable Any Map)
+&#8216;.svg&#8217; (Scalable Vector Graphics)
+&#8216;.gmf&#8217; (Graphics Meta File)
+&#8216;.mif&#8217; (Maker Interchange Format)</blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+<dl class="docutils">
+<dt>size        &#8211; A tuple (width,height) to set the size of the image.</dt>
+<dd>The default is to use the Grace default.</dd>
+</dl>
+<p>dpi         &#8211; Dots per inch (Grace default is used as default).</p>
+<dl class="docutils">
+<dt>antialiase  &#8211; Enable (True) or disable (False) font antialiasing.</dt>
+<dd>Default is to enable antialiasing.</dd>
+</dl>
+<p>color       &#8211; True (colors) or False (grayscale).</p>
+<dl class="docutils">
+<dt>orientation &#8211; &#8216;portrait&#8217; or &#8216;landscape&#8217; (default). Only available</dt>
+<dd>for PostScript output.</dd>
+<dt>quality     &#8211; Integer between 0 and 100 (default). Sets the quality</dt>
+<dd>in a JPEG image.</dd>
+</dl>
+</blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.m1">
+<tt class="descname">m1</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.m1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.grace_.GraceBackend.m2">
+<tt class="descname">m2</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.grace_.GraceBackend.m2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions in the Grace backend:</p>
+<blockquote>
+&#8216;.ps&#8217;  (PostScript)
+&#8216;.eps&#8217; (Encapsualted PostScript)
+&#8216;.pdf&#8217; (Portable Document Format)
+&#8216;.agr&#8217; (Grace file format)
+&#8216;.jpg&#8217; (Joint Photographic Experts Group)
+&#8216;.png&#8217; (Portable Network Graphics)
+&#8216;.pnm&#8217; (Portable Any Map)
+&#8216;.svg&#8217; (Scalable Vector Graphics)
+&#8216;.gmf&#8217; (Graphics Meta File)
+&#8216;.mif&#8217; (Maker Interchange Format)</blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+<dl class="docutils">
+<dt>size        &#8211; A tuple (width,height) to set the size of the image.</dt>
+<dd>The default is to use the Grace default.</dd>
+</dl>
+<p>dpi         &#8211; Dots per inch (Grace default is used as default).</p>
+<dl class="docutils">
+<dt>antialiase  &#8211; Enable (True) or disable (False) font antialiasing.</dt>
+<dd>Default is to enable antialiasing.</dd>
+</dl>
+<p>color       &#8211; True (colors) or False (grayscale).</p>
+<dl class="docutils">
+<dt>orientation &#8211; &#8216;portrait&#8217; or &#8216;landscape&#8217; (default). Only available</dt>
+<dd>for PostScript output.</dd>
+<dt>quality     &#8211; Integer between 0 and 100 (default). Sets the quality</dt>
+<dd>in a JPEG image.</dd>
+</dl>
+</blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="gnuplot_.html"
+                                  title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.easyviz.gnuplot_</span></tt></a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="matlab2_.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">scitools.easyviz.matlab2_</span></tt></a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/grace_.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matlab2_.html" title="scitools.easyviz.matlab2_"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gnuplot_.html" title="scitools.easyviz.gnuplot_"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
