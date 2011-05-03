@@ -1,77 +1,51 @@
-#!/usr/bin/env python
-
-"""
-Shows several ways of how one can create a movie file from a series of
-images by using the movie function in scitools.easyviz.
-"""
-
 from scitools.std import *
-import os, time, glob
-
-x = seq(0, 15, 0.1)
+# Clean up tmp_*.eps files:
+import glob, os
+for name in glob.glob('tmp_*.png'):
+    os.remove(name)
+# Clean up movie files
+for name in glob.glob('tmpmovie*.*'):
+    os.remove(name)
 
 def f(x, t):
-    return exp(-0.1*t)*exp(-(x-t)**2)
+    return exp(-(x-3*t)**2)*sin(3*pi*(x-t))
 
-def f2(x, t):
-    return exp(-(x-t)**2)
+xmax = 6
+x = linspace(-xmax, xmax, 1001)
 
-dt = 0.1    # time step
-tstop = 15  # end time
 
-# Make hardcopies of the frames in the animation:
-# (first clean up old tmp_*.png files!)
-for file in glob.glob('tmp_*.png'):
-    os.remove(file)
-
-t = 0
-dt = 0.25
-xtop = []; ytop = []
-frame_counter = 0
-files = []
-while t <= tstop:
+t_values = linspace(-1, 1, 61)
+counter = 1
+for t in t_values:
     y = f(x, t)
-    y2 = f2(x, t)
-    xtop.append(t)  # top point corresponds to x=t
-    ytop.append(f(t,t))
-    filename = 'tmp_%04d.png' % frame_counter
-    files.append(filename)
-    frame_counter += 1
-    plot(x, y, 'r-', x, y2, 'b-', xtop, ytop, 'y--',
-         axis=[0, 15, -0.1, 1.1])
-    savefig(filename, color=True, renderer='painters') # or hardcopy
-    print 't=%s' % t
-    t += dt
-    if backend == 'matlab':
-        close()
-    elif backend == 'gnuplot':
-        time.sleep(0.1)
+    plot(x, y, hardcopy='tmp_%04d.png' % counter)
+    counter += 1
 
-# First we create an animated gif file using convert as the encoding tool
-movie('tmp_*.png', encoder='convert', output_file='movie.gif')
+# Make movie file the simplest possible way
+movie('tmp_*.png')
+import glob, os
+print 'generated the file', glob.glob('movie.*')[0]
+#os.remove(glob.glob('movie.*')[0])
 
-# Now we create an mpeg file using the mpeg_encode tool
-files = glob.glob('tmp_*.png')
-files.sort()  # this might not be necessary
-movie(files, encoder='mpeg_encode', output_file='movie.mpeg')
+# Make animated GIF movie in the file tmpmovie.gif
+movie('tmp_*.png', encoder='convert', fps=2,
+      output_file='tmpmovie.gif')
 
-# This last example shows how to create an mpeg4 file using MEncoder
-# (note that we specify the filenames as tmp_%04d.png to avoid
-# making copies of all the frames, see the doc string in the
-# movie function):
-movie('tmp_%04d.png',
-      encoder='mencoder',
-      vcodec='mpeg4',
-      vbitrate=2400,
-      qscale=1,
-      output_file='movie.avi',
-      fps=10)
+# Show movie (os.system runs an operating system command)
+os.system('animate tmpmovie.gif &')
 
-print """
+# Other formats
+movie('tmp_*.png', encoder='html', fps=3,
+      output_file='tmpmovie.html')  # play in HTML file
 
-Try to watch movie.avi, movie.mpeg and movie.gif:
+movie('tmp_*.png', encoder='ppmtompeg', fps=24,
+      output_file='tmpmovie1.mpeg') # requires netpbm package
 
-Unix> vlc movie.avi
-Unix> vlc movie.mpeg
-Unix> animate movie.gif
-"""
+movie('tmp_*.png', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie1b.mpeg') # requires ffmpeg package
+
+movie('tmp_*.png', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie1.avi') # requires ffmpeg package
+
+movie('tmp_*.png', encoder='ffmpeg',
+      output_file='tmpmovie1c.mpeg', vodec='mpeg2video')
