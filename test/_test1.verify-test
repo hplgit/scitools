@@ -1,0 +1,20 @@
+#!/bin/sh
+python _movie1.py
+
+cp tmp.dat test1.r
+cp tmp.dat test1.v
+# make a little change in output:
+scitools subst 46 35 test1.v
+
+# for floatdiff:
+cat > test1.vd << EOF
+## field 1
+151
+EOF
+cat > test1.rd << EOF
+## field 1
+151
+EOF
+cat test1.v >> test1.vd
+cat test1.r >> test1.rd
+

@@ -1,0 +1,8 @@
+
+:mod:`scitools.modulecheck`
+===========================
+
+.. automodule:: scitools.modulecheck
+   :members:
+   :undoc-members:
+   :show-inheritance:

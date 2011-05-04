@@ -1,0 +1,8 @@
+
+:mod:`scitools.aplotter`
+========================
+
+.. automodule:: scitools.aplotter
+   :members:
+   :undoc-members:
+   :show-inheritance:
