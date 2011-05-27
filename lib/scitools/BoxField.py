@@ -274,7 +274,7 @@ def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
     project or interpolate the field onto a field with elements of
     degree=1.
     """
-    if u.ufl_element().degree() != 1:
+    if dolfin_function.ufl_element().degree() != 1:
         raise TypeError("""\
 The dolfin_function2BoxField function works with degree=1 elements
 only. The DOLFIN function (dolfin_function) has finite elements of type
@@ -287,7 +287,7 @@ u2 = project(u, V2)
 # or
 u2 = interpolate(u, V2)
 
-""" % (str(u.ufl_element()), u.ufl_element().degree()))
+""" % (str(dolfin_function.ufl_element()), dolfin_function.ufl_element().degree()))
 
     nodal_values = dolfin_function.vector().array().copy()
 
