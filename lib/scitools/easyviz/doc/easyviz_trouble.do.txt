@@ -132,6 +132,22 @@ In case of problems, go to the Matplotlib source directory, remove the
 `build` subdirectory, and try a new install with `python setup.py install`.
 
 
+===== How Can I Change the Type of Gnuplot Window? =====
+
+The configuration file (`.scitools.cfg` in your home directory or a
+local directory, copied from `scitools.cfg` in the SciTools source
+code distribution) has an item for controlling the type of *terminal*
+used by Gnuplot:
+!bc
+[gnuplot]
+...
+default_term               = <str> wxt
+!ec
+Here, the `wxt` terminal, based on wxWidgets, is chosen. Other
+choices are `x11` on systems supporting X11 graphics, or `aqua` on
+Mac. The `wxt` value is an allround choice since wxWidgets work, in theory,
+on all platforms.
+
 ===== Trouble with Gnuplot and Threads =====
 
 When using the Gnuplot backend, the following error may be encountered:
