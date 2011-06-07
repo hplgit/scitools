@@ -17,6 +17,7 @@
    multipleloop
    numpytools
    numpyutils
+   ODE
    pprint2
    PrmDictBase
    Regression

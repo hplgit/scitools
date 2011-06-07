@@ -18,6 +18,7 @@ Contents:
    FloatComparison
    Lumpy
    NumPyDB
+   ODE
    PrmDictBase
    Regression
    StringFunction
