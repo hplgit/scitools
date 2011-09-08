@@ -5,7 +5,7 @@ Module for managing parameters.
 import re, os, sys
 
 def message(m):
-    if os.environ.get('DEBUG', '1') == '1':
+    if os.environ.get('DEBUG', '0') == '1':
         print m
     
 

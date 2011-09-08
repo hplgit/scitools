@@ -64,7 +64,7 @@ class MovieEncoder(object):
             if not encoder in self._legal_encoders:
                 raise ValueError("encoder must be %s, not '%s'" %
                                  (self._legal_encoders, encoder))
-            if encoder != 'html' and not findprograms(encoder):
+            if not encoder.startswith('html') and not findprograms(encoder):
                 raise Exception("The selected encoder (%s) is not installed" \
                                 % encoder)
 

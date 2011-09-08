@@ -772,8 +772,9 @@ class InputPrmGUI(InputPrm):
                 print msg, '\nvalue with unit, but no registered unit!'
                 sys.exit(1)
             # else: ok, go on with self._scan and interpret
-            
-        return self.str2type(self._scan(gui))
+
+        r = self._scan(gui)
+        return r
         
     def set(self, value):
         self._v.set(self.str2type(self._scan(value)))

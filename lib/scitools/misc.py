@@ -155,9 +155,7 @@ def str2bool(s):
     >>> str2bool('yes')
     True
     """
-    if isinstance(s, (bool, int)):
-        return bool(s)
-    elif isinstance(s, str):
+    if isinstance(s, str):
         true_values = ('on', 'true', 'yes')
         false_values = ('off', 'false', 'no')
         s2 = s.lower()  # make case insensitive comparison
