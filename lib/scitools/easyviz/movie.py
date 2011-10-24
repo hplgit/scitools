@@ -755,7 +755,6 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600,
     a template from Alan McIntyre.
     """
     import os
-    import os
     if not isinstance(plotfiles, (tuple,list)):
         raise TypeError('html_movie: plotfiles=%s of wrong type %s' %
                         (str(plotfiles), type(plotfiles)))

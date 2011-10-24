@@ -93,6 +93,7 @@ has_scipy = False   # indicates for all application scripts if one has scipy
 if _globaldata._load_scipy:
     try:
         from numpyutils import *   # loads numpy too
+        from math import factorial # override
         _import_list.append("from numpy import *")
         _import_list.append("from numpyutils import *")
         from scipy import *        # overrides some numpy functions

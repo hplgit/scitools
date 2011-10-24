@@ -1422,23 +1422,39 @@ class DoNothing(object):
     trying properties but no action (DoNothing object)
     >>> type(q)
     <class 'scitools.misc.DoNothing'>
+
+    One can turn the messages 'trying ... but no action' off by
+    giving the argument silent=True to the constructor:
+
+    >>> plot = DoNothing('Plotting turned off', silent=True)
+    >>> viz = plot(u, wireframe=True, title='My plot')
+    >>> viz.update(T)
+    >>> q = viz.properties()
     """
     def __init__(self, *args, **kwargs):
-        pass
+        self.silent = kwargs.get('silent', False)
+
     def __call__(self, *args, **kwargs):
         return DoNothing()
+
     def __repr__(self):
         return ''
+
     def __str__(self):
         return repr(self)
+
     def __getattribute__(self, name):
-        print 'ignoring action "%s" (DoNothing object)' % name
+        if name != 'silent' and not self.silent:
+            print 'ignoring action "%s" (DoNothing object)' % name
         return DoNothing()
+
     def __iter__(self):
         return self
+
     def next(self):
         raise StopIteration()
     
+
 class Recorder:
     """
     This class is a wrapper of a module or instance which will
