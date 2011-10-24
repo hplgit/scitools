@@ -169,12 +169,10 @@ def main_movie():
     if not 'encoder' in kws:
         kwargs.append('encoder="html"')  # default
     files = wildcard_notation(sys.argv[i+2:])
-    print kwargs
-    print files
     import scitools.easyviz
     call = 'scitools.easyviz.movie(input_files=%s, %s)' % \
            (str(files), ', '.join(kwargs))
-    print call
+    #print call
     eval(call)
     
 def usage_replace():
