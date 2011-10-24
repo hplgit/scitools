@@ -133,7 +133,7 @@ def wildcard_notation(files):
     return files
 
 def usage_movie():
-    print """Usage: scitools movie "output_file='mymovie.html'" fps=4 file*.png"""
+    print """Usage: scitools movie output_file=mymovie.html fps=4 file*.png"""
 
 def main_movie():
     if len(sys.argv) < 3:
