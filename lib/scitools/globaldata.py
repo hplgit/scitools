@@ -1,5 +1,5 @@
 """
-Holds global data %s  
+Holds global data %s
 in the scitools package, loaded from a configuration file.
 (This module also demonstrate how to work with global parameters
 accross a package in Python.)
@@ -10,6 +10,8 @@ The default configuration file looks like this:
 
 __all__ = ['SAFECODE', 'VERBOSE', 'DEBUG', 'OPTIMIZATION', 'backend']
 __doc__ = __doc__ % ', '.join(__all__)
+
+# Add the configuration file to the doc string of this module
 import os
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
@@ -19,11 +21,10 @@ if hasattr(__name__, 'VERBOSE'):  # test if we have global data present...
         print 'global data import: no need to initialize data'
 else:
     # initialize global data from file - this is only done once
-    
+
     from configdata import config_parser_frontend
-    _config_data, _files = \
-        config_parser_frontend('scitools',
-               default_file_location=os.path.dirname(__file__))
+    _config_data, _files = config_parser_frontend(
+        'scitools', default_file_location=os.path.dirname(__file__))
     # None implies the directory where configdata.py resides
 
     # make SciTools global variables:

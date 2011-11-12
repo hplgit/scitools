@@ -18,7 +18,7 @@ Import of Numerical Python
 
       1. from numpy import *
          (configuration file: numpytools = no)
-    
+
       2. from numpytools import *
          which allows the user to transparently use Numeric, numarray,
          and numpy
@@ -51,7 +51,7 @@ Definition of variables
 All these variables are contained in basics.py.
 
 
-Debug functions 
+Debug functions
 ---------------
 
 The following functions are imported from the debug module:
@@ -64,21 +64,22 @@ The following functions are imported from the debug module:
 
 These debug functions require the DEBUG variable to be different from 0.
 
-    
+
 Default configuration file
 --------------------------
 """
-# avoid integer division (for safety - applies only to this file):
-from __future__ import division  # must appear in each application file too
-
-_import_list = []  # list of import statements actually done by this module
+# Collect all import statements done by this module
+_import_list = []
+# Measure CPU time for various import statements
 _import_times = 'scitools import times: '
-import time as _time   # measure how much time various imports take
+import time as _time
 _t0 = _time.clock()
 
 import os
+# Add the configuration file as part of the doc string
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
+# Load configuration file through import of the globaldata module
 from globaldata import *   # read-only import of global variables
 _import_list.append("from globaldata import *")
 import globaldata as _globaldata

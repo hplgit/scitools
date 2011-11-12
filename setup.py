@@ -12,7 +12,7 @@ import os, sys, socket, re, glob, platform
 scripts = [os.path.join("bin", "scitools"), os.path.join("bin", "pyreport")]
 
 if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
-    # In the Windows command prompt we can't execute Python scripts 
+    # In the Windows command prompt we can't execute Python scripts
     # without a .py extension. A solution is to create batch files
     # that runs the different scripts.
     batch_files = []
@@ -76,7 +76,7 @@ else:
 sys.path.insert(0, os.path.join('lib')); import scitools
 
 setup(
-    version = str(scitools.version), 
+    version = str(scitools.version),
     author = ', '.join(scitools.author),
     author_email = "<hpl@simula.no>",
     description = scitools.__doc__,
@@ -85,7 +85,7 @@ setup(
     url = "http://scitools.googlecode.com",
     package_dir = {'': 'lib'},
     packages = ["scitools",
-                os.path.join("scitools", "easyviz"), 
+                os.path.join("scitools", "easyviz"),
 		],
     package_data = {'': ['scitools.cfg']},
     scripts = scripts,

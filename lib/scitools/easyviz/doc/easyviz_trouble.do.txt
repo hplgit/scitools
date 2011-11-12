@@ -33,7 +33,7 @@ show()
 With the Gnuplot backend, thread errors from Python may occur if you
 plot many curves. The remedy is to do `import time` and insert
 a `time.sleep(0.2)` (pause the program for 0.2 sec) between each call
-to the `plot` command. 
+to the `plot` command.
 
 Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
 plotting many curves with the Gnuplot backend.
@@ -55,7 +55,6 @@ of Matplotlib parameters in this file.
 
 Another fix of LaTeX-related problems is to switch to another backend
 than Matplotlib.
-
 
 
 ===== Old Programs with 2D Scalar/Vector Field Plotting Do Not Work =====
@@ -85,22 +84,12 @@ python setup.py install --easyviz_backend gnuplot
 !ec
 
 
-===== Can I Easily Turn Off All Plotting? =====
-
-Yes, this is very convenient when debugging other (non-plotting) parts
-of a program. Just write
-!bc
-from scitools.std import *
-turn_off_plotting(globals())
-!ec
-
-
 ===== Check Your Backends! =====
 
 When you encounter a problem with Easyviz plotting, make sure that the
 backend works correctly on its own (there may, e.g., be installation
 problems with the backend - Easyviz just calls the backend to do the
-plotting). 
+plotting).
 
 === Gnuplot ===
 
@@ -114,7 +103,7 @@ This should result in a plot of the sine function on the screen.
 If this command does not work, Easyviz will not work with the Gnuplot
 backend. A common problem is that Gnuplot is installed, but the path
 to the Gnuplot executable is not registered in the `PATH` environment
-variable. See the section *Installing Gnuplot* if you need help with 
+variable. See the section *Installing Gnuplot* if you need help with
 installing the Gnuplot program and its Python interface.
 
 === Matplotlib ===
@@ -130,6 +119,16 @@ plt.show()
 !ec
 In case of problems, go to the Matplotlib source directory, remove the
 `build` subdirectory, and try a new install with `python setup.py install`.
+
+
+===== Can I Easily Turn Off All Plotting? =====
+
+Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write
+!bc
+from scitools.std import *
+turn_off_plotting(globals())
+!ec
 
 
 ===== How Can I Change the Type of Gnuplot Window? =====
@@ -148,6 +147,25 @@ choices are `x11` on systems supporting X11 graphics, or `aqua` on
 Mac. The `wxt` value is an allround choice since wxWidgets work, in theory,
 on all platforms.
 
+===== How Can The Aspect Ratio of The Axes Be Controlled? =====
+
+By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, say having a certain ratio of the physical extent of the
+axis.
+
+In the `gnuplot` and `matplotlib`
+backends, we set `daspectration=manual` and
+`daspect=[r,1,1]`, where `r` is the ratio of the x and y axis
+(`r` equal to `1` gives a square plot area). For example,
+!bc cod
+plot(x, y, 'r-',
+     axis=[0, 1, 0, 1],
+     daspect=[1,1,1],
+     daspectratio='manual')
+!ec
+
 ===== Trouble with Gnuplot and Threads =====
 
 When using the Gnuplot backend, the following error may be encountered:
@@ -156,7 +174,7 @@ thread.error: can't start new thread
 !ec
 A remedy is to create fewer plots, and for animations, update the plot
 window less frequently. For example,
-!bc
+!bc cod
 for i in range(number_of_frames_in_animation):
     <prepare data>
     if i % == 100:     # plot every 100 frames
@@ -198,13 +216,13 @@ When plotting inside a loop, e.g.,
 !bc
 for i in some_values:
     ...
-    plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+    plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
          xlabel='t', ylabel='Xt', title='My Title')
 !ec
 Gnuplot may lead to thread errors. A remedy is to do some plotting
 outside the loop and then only update the data inside the loop:
 !bc
-plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
      xlabel='t', ylabel='Xt', title='My Title')
 for i in some_values:
     ...

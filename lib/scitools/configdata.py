@@ -1,10 +1,110 @@
 """
-Load a configuration file and return key variables.
-This module provides an extended syntax of configuration
-files and functions for more convenient use of
-configuration files.
+The Python module ConfigParser supports configuration files with the
+usual Windows .INI file syntax. The present configdata module extends
+the syntax of configuration files and provides a more easy-to-use
+interface to such files. Variables can also be defined on the
+command-line and through environment variables in addition to the
+configuration file.
+
 """
 __author__ = 'Hans Petter Langtangen <hpl@simula.no>'
+
+_configfile_description = """\
+User-friendly reading of configuration files with an extended
+Windows .INI syntax.
+
+The configuration file has sections in square brackets
+(e.g., [modes]) and option=value assignments in each section.
+The extended syntax offers type specification of the options.
+After the = sign the type appears in <> brackets followed by
+the value, e.g.::
+
+  [my section]
+  my first option = <bool> off   # can be on, off, yes, no, 1, 0
+  my second option = <float> 3.2
+  my third option = <eval> [1, 4, 'tmp.ps']  # a list as option value
+  my fourth option = MyClass     # no type specification here
+  my fifth option = <eval> StringFunction('sin(x)*cos(x)')
+
+The type must be bool, int, float, str, or eval.
+As an example, the 'my second option' value will be a Python
+float object with the value 3.2 (without this type facility,
+the value would be the string "3.2"). In case of eval,
+the value is processed as eval(value) such that values can become
+lists, dictionaries, or other user-defined objects. In the latter
+case, the globals_ keyword must be set explicitly so that this
+function has access to the user's classes (eval(value, globals_)).
+For example, 'my fifth option' will evaluate to StringFunction
+object, but this requires supply of globals_ with the user's
+imported modules (from StringFunction and math).
+
+There is also a syntax for marking options to be read-only, i.e.,
+these options are meant to be set in configuration files and
+not changed later in the program. Preceeding the type specification
+by an r or R indicates the read-only property, e.g.::
+
+  my first option = r<bool> off
+
+Options set in the configuration file can be overridden by
+associated environment variables whose names are on the form::
+
+  prefix_section_option
+
+For example, an option 'DEBUG' in section 'globals' can have
+an associated environment variable MYPACK_globals_DEBUG,
+if the prefix is MYPACK. The prefix is set in a special section
+called 'modes' (see below).
+
+Options can also be overridden by command-line arguments. The
+command-line options have the same names as the associated
+environment variable names, but additionally prefixed by a double
+hyphen, e.g. --MYPACK_globals_DEBUG.
+The 'command line arguments' option in the 'modes' section
+must have a true value for this functionality to be active.
+
+Here is an example of the 'modes' section::
+
+  [modes]
+  envir prefix = MATHPACK
+  command line arguments = yes
+
+If section or option names contain space(s), the corresponding
+environment variable name and command-line option have the space(s)
+replaced by underscore(s), e.g.::
+
+  MATHPACK_my_section_my_first_option
+  --MATHPACK_my_section_my_first_option
+
+Such command-line options and values are removed from sys.argv after
+being read.
+
+A convenient feature of configuration files is that variable interpolation
+is possible(see the documentation of ConfigParser in the Python
+Library Reference). Here is an example::
+
+  [DEFAULT]
+  path = /my/home/dir/
+
+  [storage]
+  datapath = %(path)s/data
+  input = %(path)s/%(datapath)s/input
+
+One can also provide variables for being used in variable interpolation
+throught the default_dict4intpl argument to this function.
+
+A configuration file is searched for and read in as follows
+(in the listed order):
+
+  1. basename.cfg in the default_file_location directory,
+  2. basename.cfg files for each directory in other_locations list,
+  4. .basename.cfg in the user's home directory,
+  3. .basename.cfg in the directory where the main script is running.
+
+This priority implies that the a config file in the current working
+directory will override any user or any other system settings.
+"""
+__doc__ += _configfile_description
+
 
 import os, sys
 
@@ -22,7 +122,7 @@ def tobool(value):
     falses = "0", "no",  "No",  "NO",  "false", "False", "off", 0
     value = value.lower() # case-insensitive check
 
-    if value in trues:   
+    if value in trues:
         value = True
     elif value in falses:
         value = False
@@ -43,8 +143,8 @@ def _option_interpolation_error(files, section, option, value,
                      'specifications in options that are to be '\
                      'substituted in other options: %s' % \
                      (files, section, option, r, str2type, value))
-    
-def load_config_file(name, 
+
+def load_config_file(name,
                      default_file_location=None,
                      extension='.cfg',
                      other_locations=[],
@@ -94,7 +194,7 @@ def load_config_file(name,
     if default_file_location is None:
         # try the directory where this module resides:
         default_file_location = os.path.dirname(__file__)
-        
+
     default_config_file = os.path.join(default_file_location,
                                        '%s%s' % (name, extension))
     read_files = []
@@ -103,7 +203,7 @@ def load_config_file(name,
         read_files.append(default_config_file)
     #else:
     #    print 'No data in', default_config_file
-    dirs = other_locations 
+    dirs = other_locations
     candidate_files = [os.path.join(loc, '.%s%s' % (name, extension)) \
                        for loc in dirs] + \
                        [os.path.expanduser('~/.%s%s' % (name, extension))] + \
@@ -114,136 +214,52 @@ def load_config_file(name,
     return config, read_files
 
 
-def config_parser_frontend(basename, 
+def config_parser_frontend(basename,
                            default_file_location,
                            extension='.cfg',
                            other_locations=[],
                            default_dict4intpl={},
                            globals_=None):
     """
-    User-friendly reading of configuration files with an extended
-    Windows .INI syntax.
+    =======================  =============================================
+    Parameter                  Description
+    =======================  =============================================
+    basename                 name stem of config file, e.g., "mytools"
+                             (then "mytools.cfg" is the complete name
+                             of the config file if extension is ".cfg").
+    extension                extension of config file (basename.extension
+                             is the complete name)
+    default_file_location    name of directory containing a file
+                             basename.extension with default values
+                             (to be read before other configuration files).
+    other_locations          list of directories with basename.extension
+                             files
+    default_dict4intp        dictionary with variable names and values
+                             for use in variable interpolation in the
+                             configuration file
+    globals_                 dictionary of global names that are used when
+                             running eval on option values. If None, the
+                             global names in this module are used
+    return                   a dictionary with [section][option] keys and
+                             a values of the form of a three-element list
+                             holding the option value, the string to right
+                             type conversion function (callable), and a bool
+                             indicator if the value is read-only.
+                             The other returned object is a list of filenames
+                             of the configuration files that were loaded
+    =======================  =============================================
 
-    The configuration file has sections in square brackets
-    (e.g., [modes]) and option=value assignments in each section.
-    The extended syntax offers type specification of the options.
-    After the = sign the type appears in <> brackets followed by
-    the value, e.g.::
-
-      [my section]
-      my first option = <bool> off   # can be on, off, yes, no, 1, 0
-      my second option = <float> 3.2
-      my third option = <eval> [1, 4, 'tmp.ps']  # a list as option value
-      my fourth option = MyClass     # no type specification here
-      my fifth option = <eval> StringFunction('sin(x)*cos(x)')
-
-    The type must be bool, int, float, str, or eval.
-    As an example, the 'my second option' value will be a Python
-    float object with the value 3.2 (without this type facility,
-    the value would be the string "3.2"). In case of eval,
-    the value is processed as eval(value) such that values can become
-    lists, dictionaries, or other user-defined objects. In the latter
-    case, the globals_ keyword must be set explicitly so that this
-    function has access to the user's classes (eval(value, globals_)).
-    For example, 'my fifth option' will evaluate to StringFunction
-    object, but this requires supply of globals_ with the user's
-    imported modules (from StringFunction and math).
-
-    There is also a syntax for marking options to be read-only, i.e.,
-    these options are meant to be set in configuration files and
-    not changed later in the program. Preceeding the type specification
-    by an r or R indicates the read-only property, e.g.::
-
-      my first option = r<bool> off
-
-    Options set in the configuration file can be overridden by
-    associated environment variables whose names are on the form::
-
-      prefix_section_option
-
-    For example, an option 'DEBUG' in section 'globals' can have
-    an associated environment variable MYPACK_globals_DEBUG,
-    if the prefix is MYPACK. The prefix is set in a special section
-    called 'modes' (see below).
-
-    Options can also be overridden by command-line arguments. The
-    command-line options have the same names as the associated
-    environment variable names, but additionally prefixed by a double
-    hyphen, e.g. --MYPACK_globals_DEBUG.
-    The 'command line arguments' option in the 'modes' section
-    must have a true value for this functionality to be active.
-
-    Here is an example of the 'modes' section::
-
-      [modes]
-      envir prefix = MATHPACK
-      command line arguments = yes
-
-    If section or option names contain space(s), the corresponding
-    environment variable name and command-line option have the space(s)
-    replaced by underscore(s), e.g.::
-    
-      MATHPACK_my_section_my_first_option
-      --MATHPACK_my_section_my_first_option
-
-    Such command-line options and values are removed from sys.argv after
-    being read.
-
-    A convenient feature of configuration files is that variable interpolation
-    is possible(see the documentation of ConfigParser in the Python
-    Library Reference). Here is an example::
-
-      [DEFAULT]
-      path = /my/home/dir/
-
-      [storage]
-      datapath = %(path)s/data
-      input = %(path)s/%(datapath)s/input
-
-    One can also provide variables for being used in variable interpolation
-    throught the default_dict4intpl argument to this function.
-      
-    A configuration file is searched for and read in as follows
-    (in the listed order):
-
-      1. basename.cfg in the default_file_location directory,
-      2. basename.cfg files for each directory in other_locations list,
-      4. .basename.cfg in the user's home directory,
-      3. .basename.cfg in the directory where the main script is running.
-
-    This priority implies that the a config file in the current working
-    directory will override any user or any other system settings.
-
-    @param basename: name stem of config file, e.g., "mytools" (then
-    "mytools.cfg" is the complete name of the config file if extension
-    is ".cfg").
-    @param extension: extension of config file (basename.extension is the
-    complete name).
-    @param default_file_location: name of directory containing a
-    file basename.extension with default values (to be read before other
-    configuration files). If None, the directory where this module
-    (configdata) resides will be tried. A typical value for a system
-    configuration file is os.path.dirname(__file__) (i.e., the same
-    directory as the calling module in the package).
-    @param other_locations: list of directories with basename.extension files.
-    @param default_dict4intpl: dictionary with variable names and values
-    for use in variable interpolation in the configuration file.
-    @param globals_: dictionary of global names that are used when
-    running eval on option values. If None, the global names in this
-    module are used.
-    @return: a dictionary with [section][option] keys and a values of
-    the form of a three-element list holding the option value, the
-    string to right type conversion function (callable), and a bool
-    indicator if the value is read-only.
-    The other returned object is a list of filenames of the configuration
-    files that were loaded.
+Regarding default_file_location, a None value indicates the directory
+where this module (configdata) resides will be tried. A typical value
+for a system configuration file is ``os.path.dirname(__file__)`` (i.e.,
+the same directory as the calling module in the package).
     """
     if globals_ is None:
         globals_ = globals()
-        
+
     # load configuration file:
     config, files = \
-            load_config_file(basename, 
+            load_config_file(basename,
                              default_file_location=default_file_location,
                              extension=extension,
                              other_locations=other_locations,
@@ -322,10 +338,10 @@ def config_parser_frontend(basename,
 
             # override file value by environment variable or
             # command-line argument?
-            
+
             envir_var_name = envir_prefix + '_' + section + '_' + option
             envir_var_name = envir_var_name.replace(' ', '_')
-            
+
             if envir_prefix:
                 # override by environment variable:
                 if envir_var_name in os.environ:
@@ -345,11 +361,14 @@ def config_parser_frontend(basename,
 %s command-line option must be followed by a value!
 """ % cml_option
                         sys.exit(1)
-                        
+
                     data[section][option][VALUE] = \
                            data[section][option][STR2TYPE](v)
 
     return data, files
+
+config_parser_frontend.__doc__ = _configfile_description
+
 
 def dict2xml(data, syntax='gnosis',
              section_name='section', option_name='option'):
@@ -396,7 +415,7 @@ def dict2xml(data, syntax='gnosis',
                 (current_indent, get_type(value), read_only, value)
         s += '</data dictionary>\n'
         return s
-        
+
 def values_only(data):
     """
     Strip the three-tuple (value, str2type, readonly) in the dictionary
@@ -418,7 +437,7 @@ def _test():
 envir prefix = MyProject
 
 ; Enable reading from command line through --MyProject_section_option
-command line arguments = on  
+command line arguments = on
 
 [global directories]
 projects = r<str> projects
