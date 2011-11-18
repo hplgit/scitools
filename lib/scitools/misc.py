@@ -25,13 +25,13 @@ def test_if_module_exists(modulename, msg='',
         if raise_exception:
             if msg:
                 print msg
-                #print 'The problem arose in ', 
+                #print 'The problem arose in ',
                 debug.trace(frameno=-3)
             raise ImportError(message)
         else:
             if msg:
                 print '\n', message
-                #print 'The problem arose in ', 
+                #print 'The problem arose in ',
                 debug.trace(frameno=-3)
             if abort:
                 sys.exit(1)
@@ -52,8 +52,8 @@ def func_to_method(func, class_, method_name=None):
     Borrowed from recipe 5.12 in the Python Cookbook.
     """
     setattr(class_, method_name or func.__name__, func)
-    
-    
+
+
 def system(command, verbose=True, failure_handling='exit', fake=False):
     """
     User-friendly wrapping of the os.system/os.popen commands.
@@ -65,11 +65,11 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
     command           operating system command to be executed
     verbose           False: no output, True: print command prior to execution
     failure_handling  one of 'exit', 'warning', 'exception', or 'silent'
-                      (in case of failure, the output from the command is 
+                      (in case of failure, the output from the command is
                       always displayed)
     fake              if True, the command is printed but not run (for testing)
-    return value      the same as commands.getstatusoutput, i.e., a boolean 
-                      failure variable and the output from the command as a 
+    return value      the same as commands.getstatusoutput, i.e., a boolean
+                      failure variable and the output from the command as a
                       string object
     ================  ========================================================
     """
@@ -85,7 +85,7 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
     else:
         # Unix/Linux/Mac:
         failure, output = commands.getstatusoutput(command)
-    
+
     if failure:
         msg = 'Failure when running operating system command'\
               '\n  %s\nOutput:\n%s' % (command, output)
@@ -114,7 +114,7 @@ def read_cml(option, default=None, argv=sys.argv):
     from read_cml is a string).
 
     The call::
-    
+
        str2obj(read_cml(option, default=...))
 
     will return a Python object (with the right type) corresponding to
@@ -143,13 +143,13 @@ def read_cml(option, default=None, argv=sys.argv):
                          'no value after %s option' % option)
 
 
-    
+
 def str2bool(s):
     """
     Turn a string s, holding some boolean value
     ('on', 'off', 'True', 'False', 'yes', 'no' - case insensitive)
     into boolean variable. s can also be a boolean. Example:
-    
+
     >>> str2bool('OFF')
     False
     >>> str2bool('yes')
@@ -169,7 +169,7 @@ def str2bool(s):
     else:
         raise TypeError('%s %s cannot be converted to bool' % \
                         (s, type(s)))
-    
+
 
 def str2obj(s, globals_=None, locals_=None, debug=False):
     """
@@ -183,7 +183,7 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
     >>> s = str2obj('(1,8)')
     >>> print s, type(s)
     (1, 8) <type 'tuple'>
-    
+
     Method: eval(s) can normally do the job, but if s is meant to
     be turned into a string object, eval works only if s has explicit
     quotes:
@@ -221,7 +221,7 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
     "ON" -> True <type 'bool'>
     "no" -> False <type 'bool'>
     >>>
-    
+
     If the name of a user defined function, class or instance is
     sent to str2obj, the calling code must also send locals() and
     globals() dictionaries as extra arguments. Otherwise, str2obj
@@ -229,7 +229,7 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
     object (user-defined types are unknown inside str2obj unless
     the calling code's globals and locals are provided).
     Here is an example:
-    
+
     >>> def myf(x):
     ...     return 1+x
     ...
@@ -263,7 +263,7 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
         globals_ = globals()
     if locals_ is None:
         locals_ = locals()
-    
+
     try:
         b = str2bool(s)
         return b
@@ -287,7 +287,7 @@ def str2type(value):
     """
     Return a function that can take a string and convert it to
     a Python object of the same type as value.
-    
+
     This function is useful when turning input from GUIs or the
     command line into Python objects. Given a default value for the
     input (with the right object type), str2type will return the right
@@ -309,7 +309,7 @@ def str2type(value):
     be done by the function returned from str2type.
 
     Examples:
-    
+
     >>> f = str2type((1,4,3))
     >>> f.__name__
     'tuple'
@@ -337,7 +337,7 @@ def str2type(value):
     else:
         # the type of value is probably defined in some unknown module
         return str
-    
+
 
 def interpret_as_callable_or_StringFunction(s, iv, globals_=None):
     """
@@ -373,21 +373,19 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
     """
     Locate --option on the command line (sys.argv) and find
     the corresponding value (next sys.argv element).
-    This value is supposed to specify a function.
-    If --option is not found, the default_func (a given callable)
-    argument is returned.
+    This value is supposed to specify a Python function, an
+    instance with a __call__ method, or a string that can be
+    turned into a scitools.StringFunction.StringFunction
+    function with iv as the name of the independent variable.
+    If --option is not found, the argument default_func,
+    a given callable or string, is returned (if string, iv
+    reflects the name of the independent variable in the
+    string).
 
-    The found value is interpreted as either the name of a callable
-    (function or instance) or a string formula.  In both cases, a
-    callable (user-define function, user-defined instance, or
-    StringFunction object) is returned. For StringFunctions the iv
-    argument specifies the name(s) of the independent variable(s).
-    Parameters to StringFunction objects are not supported.  The
-    globals_ argument are used for eval(callable_name) or when
-    creating the  StringFunction object.
+    The globals_ argument is just passed on to the
+    StringFunction object if the value of the option is string.
 
-    Note that this function always returns a callable object,
-    supposed to be a user-defined function.
+    This function always returns a callable object.
     """
     if globals_ is None:
         globals_ = globals()
@@ -402,7 +400,8 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
         value = interpret_as_callable_or_StringFunction\
                 (value, iv, globals=globals_)
     else:
-        value = default_func
+        value = interpret_as_callable_or_StringFunction\
+                (default_func, iv, globals=globals_)
     return value
 
 
@@ -459,7 +458,7 @@ def function_UI(functions, argv, verbose=True):
     def all_usage():
         for fname in sorted(usage):
             print fname, ' '.join(usage[fname])
-            
+
     # call: function-name arg1 arg2 ...
     if len(argv) < 2:
         all_usage()
@@ -509,7 +508,7 @@ def _function_args_doc(functions):
     return usage, doc
 
 
-def before(string, character):   
+def before(string, character):
     """Return part of string before character."""
     for i in range(len(string)):
         if c == character:
@@ -535,7 +534,7 @@ def remove_multiple_items(somelist):
             helphash[item] = 1
     return new
 
-    
+
 def find(func, rootdir, arg=None):
     """
     Traverse the directory tree rootdir and call func for each file.
@@ -631,7 +630,7 @@ def subst(patterns, replacements, filenames,
         if modified_files[pattern]:
             replacement = replacements[patterns.index(pattern)]
             messages.append('%s replaced by %s in %s' % \
-                                (pattern, replacement, 
+                                (pattern, replacement,
                                  ', '.join(modified_files[pattern])))
 
     return ', '.join(messages) if messages else 'no substitutions'
@@ -734,7 +733,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
     A single program can also be given as first argument. In that
     case, findprograms returns True or False according to whether
     the program is found or not.
-    
+
     Example on usage::
 
       if findprograms('plotmtv'):
@@ -771,7 +770,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
             raise TypeError('platform %s/%s not supported' % \
                             (sys.platform, os.name))
         return False # otherwise
-        
+
     path = os.environ['PATH']  # /usr/bin:/usr/local/bin:/usr/X11/bin
     paths = re.split(os.pathsep, path)
     fullpaths = {}
@@ -808,7 +807,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
                     if program_exists(fullpath):
                         fullpaths[program] = fullpath
                         break
-        
+
     if write_message:
         missing = False
         for program in fullpaths.keys():
@@ -821,7 +820,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
                 missing = True
         if missing:
             return None
-        
+
     return fullpaths
 
 
@@ -891,7 +890,7 @@ def preprocess_all_files(rootdir, options=''):
     # first check that the user has the preprocess script:
     if not findprograms('preprocess'):
         raise SystemError('The preprocess program could not be found')
-    
+
     def treat_a_dir(fileinfo, d, files):
         warning = """\
 #############################################################################
@@ -921,7 +920,7 @@ def preprocess_all_files(rootdir, options=''):
                     _lines.insert(0, _warning)
                 _str = '\n'.join(_lines)
                 _f = open(outpath, 'w'); _f.write(_str); _f.close()
-                
+
     info = []
     os.path.walk(rootdir, treat_a_dir, info)
     return info
@@ -959,7 +958,7 @@ def pow_eff(a,b, powfunc=math.pow):
             else:
                 return powfunc(a, b)
 
-    
+
 def lines2paragraphs(lines):
     """
     Return a list of paragraphs from a list of lines
@@ -978,7 +977,7 @@ def lines2paragraphs(lines):
                 p.append(''.join(lines[firstline:currentline+1]))
                 #print 'paragraph from line',firstline,'to',currentline
             # new paragraph starts from the next line:
-            firstline = currentline+1  
+            firstline = currentline+1
         currentline += 1
     return p
 
@@ -1018,7 +1017,7 @@ def wrap(infile, outfile, linewidth=70):
     fi.close()
     fo.close()
 
-            
+
 def fontscheme1(root):
     """Alternative font scheme for Tkinter-based widgets."""
     default_font  = ('Helvetica', 13, 'normal')
@@ -1177,7 +1176,7 @@ def hardware_info():
     tools that comes with Python or are easily available from the system.
 
     ---------------------------------------------------------------------------
-    
+
     Extract hardware information using Python's platform module
     and (if available) files such as /proc/cpuinfo.
 
@@ -1193,7 +1192,7 @@ def hardware_info():
 
     """
     result = {}
-    
+
     # infofile on Linux machines:
     infofile = '/proc/cpuinfo'
     cpuinfo = {}
@@ -1214,7 +1213,7 @@ def hardware_info():
                 cpuinfo['vendor ID'] = value
         f.close()
     result['cpuinfo'] = cpuinfo
-    
+
     # check out platform module:
     import platform
     result['uname'] = platform.uname()
@@ -1280,7 +1279,7 @@ def flatten(nested_data):
     """
     it = iter(nested_data)
     for e in it:
-        # note: strings are bad because, when iterated they return 
+        # note: strings are bad because, when iterated they return
         # strings, leading to an infinite loop
         if isiterable(e) and not isinstance(e, basestring):
             # recurse into iterators
@@ -1342,15 +1341,15 @@ def cmldict(argv, cmlargs=None, validity=0):
     while arg_counter < len(argv):
         option = argv[arg_counter]
         if option[0] == '-':  option = option[1:]  # remove 1st hyphen
-        else: 
+        else:
             # not an option, proceed with next sys.argv entry
-            arg_counter += 1; continue  
+            arg_counter += 1; continue
         if option[0] == '-':  option = option[1:]  # remove 2nd hyphen
-        
-        if not validity or option in cmlargs: 
+
+        if not validity or option in cmlargs:
             # next argv entry is the value:
             arg_counter += 1
-            value = argv[arg_counter] 
+            value = argv[arg_counter]
             cmlargs[option] = value
         elif validity:
             raise ValueError("The option %s is not registered" % option)
@@ -1368,7 +1367,7 @@ def _cmldict_demo():
     b = p['b']
     # and so on (should have validity=1 to ensure that the
     # option keys are defined)
-    
+
     # take action:
     for option in p.keys():
         if option == "m":
@@ -1406,7 +1405,7 @@ class DoNothing(object):
 
     Whatever we do, we always get a DoNothing object, with which
     we can do whatever we want to, but nothing will happen.
-    
+
     For example, say a plot function returns a plot object that
     is used widely in a code to create windows with visualizations
     on the screen, and you want to turn off all these visualizations:
@@ -1453,7 +1452,7 @@ class DoNothing(object):
 
     def next(self):
         raise StopIteration()
-    
+
 
 class Recorder:
     """
@@ -1503,7 +1502,7 @@ class Recorder:
     __call__('unset grid',)
     plot(<Gnuplot.PlotItems._FIFOFileItem instance at 0x174d998>,)
     replot(<Gnuplot.PlotItems._FIFOFileItem instance at 0x174db90>,)
-    
+
     """
     def __init__(self, obj):
         self.obj = obj
@@ -1521,7 +1520,7 @@ class Recorder:
                 s += ', ' + ', '.join(['%s=%s' % (key, kwargs[key]) for key in kwargs])
             s += ')'
             print s
-        
+
 class _RecordHelper:
     def __init__(self, obj, name, recorder):
         self.obj, self.name, self.recorder = obj, name, recorder
@@ -1533,14 +1532,14 @@ class _RecordHelper:
         else:
             raise AttributeError('%s has no attribute %s', (self.obj, name))
 
-        
+
 
 def fix_latex_command_regex(pattern, application='match'):
     """
     Given a pattern for a regular expression match or substitution,
     the function checks for problematic patterns commonly
     encountered when working with LaTeX texts, namely commands
-    starting with a backslash. 
+    starting with a backslash.
 
     For a pattern to be matched or substituted, and extra backslash is
     always needed (either a special regex construction like \w leads
