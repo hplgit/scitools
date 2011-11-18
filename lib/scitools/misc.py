@@ -339,56 +339,139 @@ def str2type(value):
         return str
 
 
-def interpret_as_callable_or_StringFunction(s, iv, globals_=None):
+def interpret_as_callable_or_StringFunction(
+    s, iv, globals_, **named_parameters):
     """
-    Return a callable object if s is the name of such an
-    object, otherwise turn s to a StringFunction with
-    iv as the name of the independent variable.
-    Used by the read_cml function. The globals_ variable is set
-    equal to the module's globals() by default (None).
+    Return a callable object if ``s`` is the name of such an
+    object, otherwise turn ``s`` to a ``StringFunction`` object with
+    ``iv`` as the name of the independent variable.
+    The ``named_parameters`` dictionary holds parameters in
+    string expressions.
+    Used by the ``read_cml`` function.
+
     """
-    if globals_ is None:
-        globals_ = globals()
-    try:
-        evaled_s = eval(s, globals_)
-        if callable(evaled_s):
-            return evaled_s
+    if isinstance(globals_, dict):
+        if s in globals_:  # user's name space of variables
+            obj = eval(s, globals_)
+            if callable(obj):
+                return obj
+            else:
+                raise ValueError('name "%s" is defined, but not callable: %s' % s)
         else:
-            raise ValueError(
-                'string "%s" could be evaluated, but is not callable' % s)
-    except NameError, e:
-        try:
-            if isinstance(iv, str):  # single indep. variable?
-                iv = [iv]
-            func = StringFunction(s, independent_variables=iv,
-                                  globals=globals_)
-        except Exception, e:
-            raise ValueError(
-                '%s\n"%s" must be a function name, instance creation, \
-                or string formula!' % (e, s))
+            # No defined name, must be a string or a lambda function
+            if callable(s):
+                return s
+            else:
+                s_is_string = True
+
+    elif globals_ is None:
+        # No defined name, must be a string or a lambda function
+        if callable(s):
+            return s
+        else:
+            s_is_string = True
+    else:
+        raise ValueError('globals_ must dict or None')
+
+    if s_is_string:
+        # Assume that s is a string expression
+        if isinstance(iv, str):  # single indep. variable?
+            iv = [iv]
+        func = StringFunction(s, independent_variables=iv,
+                              globals=globals_, **named_parameters)
         return func
+    else:
+        # Should never come here
+        raise ValueError('s is neither a string expression, nor a callable %s' % type(s))
 
 
-def read_cml_func(option, default_func, iv='t', globals_=None):
+
+def read_cml_func(option, default_func, iv='t', globals_=None,
+                  **named_parameters):
     """
-    Locate --option on the command line (sys.argv) and find
-    the corresponding value (next sys.argv element).
+    Locate ``--option`` on the command line (``sys.argv``) and find
+    the corresponding value (next ``sys.argv`` element).
     This value is supposed to specify a Python function, an
-    instance with a __call__ method, or a string that can be
-    turned into a scitools.StringFunction.StringFunction
-    function with iv as the name of the independent variable.
-    If --option is not found, the argument default_func,
-    a given callable or string, is returned (if string, iv
-    reflects the name of the independent variable in the
+    instance with a ``__call__`` method, None, or a string that can be
+    turned into a ``scitools.StringFunction.StringFunction``
+    function with ``iv`` as the name of the independent variable(s)
+    (list of strings in case of more than one independent variable).
+    If ``--option`` is not found, the argument ``default_func``,
+    a given callable or string, is returned (if string, ``iv``
+    reflects the name of the independent variable(s) in the
     string).
 
-    The globals_ argument is just passed on to the
-    StringFunction object if the value of the option is string.
+    The ``globals_`` argument is just passed on to the
+    ``StringFunction`` object if the value of the option for default
+    function is a string. Similary, the ``named_parameters`` dictionary
+    is passed on to the ``StringFunction`` object and assumed to
+    hold parameters in the string expressions (variables different
+    from the independent variable).
 
-    This function always returns a callable object.
+    This function always returns a callable object or None.
+
+    Here is an interactive session showing the use of ``read_cml_func``::
+
+    >>> from scitools.misc import read_cml_func
+    >>> import sys
+    >>> from math import sin, cos, pi
+    >>>
+    >>> # fake command-line arguments by filling in sys.argv:
+    >>> sys.argv[1:] = '--func1 myfunc --func3 sin(x)'.split()
+    >>>
+    >>> def myfunc(x):
+    ...     return 1 + x
+    ...
+    >>>
+    >>> # --func1 has myfunc as value, must pass on globals() or just
+    >>> # myfunc as name to read_cml_func
+    >>> #f = read_cml_func('--func1', '1', globals_=globals())
+    >>> f = read_cml_func('--func1', '1', globals_={'myfunc': myfunc})
+    >>> type(f)
+    <type 'function'>
+    >>> f(10)
+    11
+    >>> # --func3 is given as a string expression "sin(x)" on the command line
+    >>> f = read_cml_func('--func3', '0', iv='x')
+    >>> type(f)
+    <type 'instance'>
+    >>> repr(f)
+    "StringFunction('sin(x)', independent_variables=('x',), )"
+    >>> str(f)
+    'sin(x)'
+    >>> f(pi)
+    1.2246467991473532e-16
+    >>>
+    >>> # --func2 is not given on the command line, use the default
+    >>> # value "A*cos(w*t)", which is a string expression.
+    >>> # Pass on a globals_ dict with cos from numpy such that f works
+    >>> # with array argument for t
+    >>> import numpy
+    >>> f = read_cml_func('--func2', 'A*cos(w*t)', iv='t', A=3, w=pi, globals_={'cos': numpy.cos})
+    >>> # More general case where the string should have all numpy functions:
+    >>> #f = read_cml_func('--func2', 'A*cos(w*t)', iv='t', A=3, w=pi, globals_=dir(numpy))
+    >>> type(f)
+    <type 'instance'>
+    >>> repr(f)
+    "StringFunction('A*cos(w*t)', independent_variables=('t',), A=3, w=3.141592653589793)"
+    >>> str(f)
+    '3*cos(3.14159265359*t)'
+    >>> t = numpy.array([1, 4])
+    >>> f(t)
+    array([-3.,  3.])
+    >>>
+    >>> # No --func4 on the command line (sys.argv), implying that
+    >>> # f becomes a StringFunction with value 0
+    >>> f = read_cml_func('--func4', '0')
+    >>> type(f)
+    <type 'instance'>
+    >>> repr(f)
+    "StringFunction('0', independent_variables=('t',), )"
+    >>> str(f)
+    '0'
+    >>> f(1)
+    0
     """
-    if globals_ is None:
-        globals_ = globals()
     if option in sys.argv:
         i = sys.argv.index(option)
         try:
@@ -397,12 +480,18 @@ def read_cml_func(option, default_func, iv='t', globals_=None):
             raise IndexError(
                 'no value after option %s on the command line' \
                 % option)
-        value = interpret_as_callable_or_StringFunction\
-                (value, iv, globals=globals_)
+        return interpret_as_callable_or_StringFunction(
+            value, iv, globals_=globals_, **named_parameters)
     else:
-        value = interpret_as_callable_or_StringFunction\
-                (default_func, iv, globals=globals_)
-    return value
+        if default_func is None:
+            return None
+        else:
+            # Assume default_func is string expression or a
+            # callable function listed in the globals_ dict
+            # or just a lambda function
+            return interpret_as_callable_or_StringFunction(
+                default_func, iv, globals_=globals_, **named_parameters)
+
 
 
 def function_UI(functions, argv, verbose=True):

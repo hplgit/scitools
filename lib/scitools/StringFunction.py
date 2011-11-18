@@ -75,7 +75,7 @@ class StringFunction:
     '1+0.1*sin(1*x)*exp(-0.1*t)'
     >>> repr(f)
     "StringFunction('1+V*sin(w*x)*exp(-b*t)', independent_variables=('x', 't'), b=0.10000000000000001, w=1, V=0.10000000000000001)"
-    
+
     >>> # vector field of x and y:
     >>> f = StringFunction('[a+b*x,y]', \
                            independent_variables=('x','y'))
@@ -91,7 +91,7 @@ class StringFunction:
     >>> f = StringFunction('1/4 + 1/2*x')
     >>> f(2)
     1.25
-    
+
 
     The string parameter can, instead of a valid Python expression,
     be a function in a file (module). The string is then the
@@ -99,7 +99,7 @@ class StringFunction:
     somepackage.somemodule.function_name. This functionality is useful
     when simple string formulas cannot describe the function, e.g., when
     there are multiple if-branches inside the function expression.
-    
+
     As an example, there is a function called _test_function::
 
         def _test_function(x, c=0, a=1, b=2):
@@ -118,12 +118,12 @@ class StringFunction:
 
     (Note that in Python 2.5 the _test_function can be coded as a
     simple string expression a*(x-c)+b if x > c else -a*(x-c)+b.)
-    
+
     Giving the name of a function in a file (module) is convenient in
     user interfaces because the user can then write the name of
     the function as a standard Python module.function path. StringFunction
     turns this name, as a string, into a working module.function path.
-    
+
     Troubleshooting:
 
     1)
@@ -174,7 +174,7 @@ class StringFunction:
                 module = '.'.join(parts[:-1])
                 function = parts[-1]
                 self._function_in_module = (module, function)
-            
+
         # self._var holds the independent variables in a tuple:
         if 'independent_variable' in kwargs:  # allow "variable" and "variables"
             # note that tuple(string) gives a tuple of the characters
@@ -193,8 +193,15 @@ class StringFunction:
                 raise ValueError(
                     'independent variables=%s is invalid' % names)
             self._var = tuple(names)
+
         # user's globals() array (with relevant imported modules/functions):
-        self._globals = kwargs.get('globals', globals())
+        if 'globals' in kwargs:
+            if kwargs['globals'] is None:
+                self._globals = globals()
+            else:
+                self._globals = kwargs['globals']
+        else:
+            self._globals = globals()
 
         self._prms = kwargs.copy()
 	try:    del self._prms['independent_variable']
@@ -243,7 +250,7 @@ class StringFunction:
             # all this is done in the __init__ and then it is simpler
             # to just let self_function_in_module point to the imported
             # function
-        
+
         self._lambda = s # store lambda function code; just for convenience
 
         try:
@@ -255,7 +262,7 @@ class StringFunction:
 Making StringFunction with formula %s failed!
 Tried to build a lambda function:\n %s""" % (self._f, s)
                     raise e
-                
+
                 ## the following makes all instances have the same function :-(
                 ##StringFunction.__call__ = eval(s, self._globals)
             else:
@@ -271,8 +278,8 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
                   'set_parameters method, or provide\nglobals=globals() '\
                   'in the constructor if "%s" is a global name in the '\
                   'calling code.' % (prm, prm)
-        
-            
+
+
     def set_parameters(self, **kwargs):
         """Set keyword parameters in the function."""
         self._prms.update(kwargs)
@@ -289,7 +296,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
         """
         self._globals = globals_dict
         self._build_lambda()
-        
+
     def troubleshoot(self, *args, **kwargs):
         """
         Perform function evaluation call with lots of testing to
@@ -302,7 +309,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
 
                 print '\nThe call resulted in the exception TypeError:'
                 print e
-                
+
                 # *args contains NumPy arrays and the operations in
                 # the string formula are not compatible
 
@@ -383,8 +390,8 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
             args = tuple([1.105]*ni)
             v = self(args)
             return ni
-                
-        
+
+
     def Cpp_code(self, function_name='somefunc'):
         """
         Dump the string expression to C++.
@@ -422,7 +429,7 @@ double %(function_name)s (%(varlist)s)
 { return %(expr)s; }
 """
         return s
-            
+
     def F77_code(self, function_name='somefunc'):
         """
         Dump the string expressions as a Fortran 77 function or subroutine.
@@ -489,7 +496,7 @@ C     note: it cannot be int
       end
 """
         return s
-    
+
     def C_code(self, function_name='somefunc', inline=False):
         """
         Dump the string expressions as a C function.
@@ -504,7 +511,7 @@ C     note: it cannot be int
         # ** does not work in C, instead of doing sophisticated
         # parsing and edit, provide an error message
         self._pow_check()
-        
+
         varlist = ', '.join(['double %s' % var for var in self._var])
         s += 'double %s (%s)\n{\n' % (function_name, varlist)
         if self._prms:
@@ -517,7 +524,7 @@ C     note: it cannot be int
         # evaluate math expression:
         s += '  return ' + expr + ';\n}\n'
         return s
-            
+
     def _pow_check(self):
         """
         Raise a SyntaxError exception if the ** power operator is used
@@ -527,7 +534,7 @@ C     note: it cannot be int
             raise SyntaxError, \
                   'use pow(a,b) instead of a**b in the expression'\
                   '\n%s\n(since you demand translation to C/C++)' % self._f
-        
+
 def _doctest():
     import doctest, StringFunction
     return doctest.testmod(StringFunction)
@@ -622,7 +629,7 @@ class StringFunction_v4:
                   '(%s=...)' % (prm, prm)
         else:
             return True  # accept other errors
-        
+
     def __str__(self):
         s = self._f
         # Substitute parameter names by their numerical values.
@@ -664,7 +671,7 @@ class StringFunction_v5(StringFunction_v4):
         self._var = tuple(kwargs.get('independent_variables', 'x'))
         try:    del self._prms['independent_variables']
         except: pass
-        
+
     def __call__(self, *args):
         # add independent variables to self._prms:
         for name, value in zip(self._var, args):
@@ -680,7 +687,7 @@ class StringFunction_v5(StringFunction_v4):
         except:
             pass
         return StringFunction1.__str__(self)
-    
+
 
     def __repr__(self):
         # first remove indep. variables possibly inserted in self._prms
