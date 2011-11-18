@@ -351,21 +351,23 @@ def interpret_as_callable_or_StringFunction(
 
     """
     if isinstance(globals_, dict):
-        if s in globals_:  # user's name space of variables
-            obj = eval(s, globals_)
-            if callable(obj):
-                return obj
-            else:
-                raise ValueError('name "%s" is defined, but not callable: %s' % s)
-        else:
-            # No defined name, must be a string or a lambda function
-            if callable(s):
-                return s
-            else:
+        # First assume s is a user defined function or instance creation
+        if isinstance(s, str):
+            try:
+                obj = eval(s, globals_)
+                if callable(obj):
+                    return obj
+                else:
+                    s_is_string = True
+            except NameError:
                 s_is_string = True
+        else:
+            if callable(s):  # user function obj or lambda func obj
+                return s
 
     elif globals_ is None:
-        # No defined name, must be a string or a lambda function
+        # No global names supplied, s cannot be the string of a
+        # user function or instance
         if callable(s):
             return s
         else:
