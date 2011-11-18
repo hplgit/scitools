@@ -29,7 +29,7 @@ from __future__ import division
 from common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists 
+from scitools.misc import test_if_module_exists
 from misc import _update_from_config_file
 
 test_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
@@ -50,10 +50,10 @@ class MatplotlibBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         self.figure(self.getp('curfig'))
 
         # conversion tables for format strings:
@@ -85,7 +85,7 @@ class MatplotlibBackend(BaseClass):
             'EastOutside': None,
             'WestOutside': None,
             }
-        
+
         if DEBUG:
             print "Setting backend standard variables"
             for disp in 'self._markers'.split():
@@ -121,6 +121,9 @@ class MatplotlibBackend(BaseClass):
         xlabel = ax.getp('xlabel')
         ylabel = ax.getp('ylabel')
         zlabel = ax.getp('zlabel')
+        xlabel = self._fix_latex(xlabel)
+        ylabel = self._fix_latex(ylabel)
+        zlabel = self._fix_latex(zlabel)
         if xlabel:
             # add a text label on x-axis
             self._g.xlabel(xlabel)
@@ -130,16 +133,18 @@ class MatplotlibBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
         title = ax.getp('title')
-        title = self._fix_latex(title)
+        # The title can be a mix of math and text, leave this
+        # to the user
+        #title = self._fix_latex(title)
         if title:
             self._g.title(title)
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -213,7 +218,7 @@ class MatplotlibBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             self._g.gca().set_aspect('auto')
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -238,7 +243,7 @@ class MatplotlibBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -258,12 +263,12 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             self._g.box(on=True)
         else:
             # do not display box
             self._g.box(on=False)
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -337,7 +342,7 @@ class MatplotlibBackend(BaseClass):
             print "Setting colormap"
         cmap = ax.getp('colormap')
         # cmap is plotting package dependent
-        # the colormap is set in 
+        # the colormap is set in
 
     def _set_view(self, ax):
         """Set viewpoint specification."""
@@ -359,7 +364,7 @@ class MatplotlibBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -417,7 +422,7 @@ class MatplotlibBackend(BaseClass):
         legend = legend.strip()
         if len(legend) >= 2 and legend[0] != '$' and legend[-1] != '$':
             # else: assume correct latex syntax, otherwise fix
-            print '....fix'
+            #print '....fix', legend,
             if '**' in legend:
                 legend = legend.replace('**', '^')
             if '*' in legend:
@@ -455,11 +460,11 @@ class MatplotlibBackend(BaseClass):
                         'sinh', 'cosh', 'tanh'
                 for func in funcs:
                     legend = _fix_func(func, func, legend)
-                funcs = [('atan', 'arctan'), ('asin', 'arcsin'), 
+                funcs = [('atan', 'arctan'), ('asin', 'arcsin'),
                          ('acos', 'arccos'),]
                 for func, newfunc in funcs:
                     legend = _fix_func(func, newfunc, legend)
-                #print 'latex fix:', legend
+                #print 'after fix:', legend
         return legend
 
     def _add_line(self, item):
@@ -504,7 +509,7 @@ class MatplotlibBackend(BaseClass):
 
         if not width:
             width = 1.0
-            
+
         facecolor = item.getp('facecolor')
         if not facecolor:
             if not color:
@@ -517,10 +522,10 @@ class MatplotlibBackend(BaseClass):
         opacity = item.getp('material').getp('opacity')
         if opacity is None:
             opacity = 1.0
-            
+
         if z is not None:
             # zdata is given, add a filled 3D curve:
-            print "No support for fill3 in Matplotlib."            
+            print "No support for fill3 in Matplotlib."
         else:
             # no zdata, add a filled 2D curve:
             l = self._g.fill(x, y, fc=facecolor, ec=edgecolor,
@@ -609,7 +614,7 @@ class MatplotlibBackend(BaseClass):
         opacity = item.getp('material').getp('opacity')
         if opacity is None:
             opacity = 1.0
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -649,7 +654,7 @@ class MatplotlibBackend(BaseClass):
                     ax.set_zlim3d(zmin, zmax)
                 self._mpl3D = True
                 # Problem: cannot fix color scale (or?)
-                
+
             if legend:
                 h.set_label(legend)
 
@@ -667,15 +672,15 @@ class MatplotlibBackend(BaseClass):
 
         if colormap is None or colormap == 'default':
             colormap = self._g.cm.get_cmap('jet')
-        
+
         if shape(x) != shape(z) or shape(y) != shape(z):
             x, y = meshgrid(x, y, sparse=False,
                             indexing=item.getp('indexing'))
-        
+
         opacity = item.getp('material').getp('opacity')
         if opacity is None:
             opacity = 1.0
-        
+
         filled = item.getp('filled')  # draw filled contour plot if True
 
         cvector = item.getp('cvector')
@@ -702,7 +707,7 @@ class MatplotlibBackend(BaseClass):
         if filled:
             contour_cmd = self._g.contourf
         kwargs = {'cmap': colormap, 'alpha': opacity}
-        
+
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
         if color:
@@ -719,7 +724,7 @@ class MatplotlibBackend(BaseClass):
         if item.getp('clabels'):
             # add labels on the contour curves
             self._g.clabel(cs)
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -857,7 +862,7 @@ class MatplotlibBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        fignum = BaseClass.figure(self, *args, **kwargs) 
+        fignum = BaseClass.figure(self, *args, **kwargs)
         fig = self.gcf()
         try:
             fig._g
@@ -869,13 +874,13 @@ class MatplotlibBackend(BaseClass):
                 print "creating figure %s in backend" % name
 
             fig._g = pylab
-            
+
         self._g = fig._g # link for faster access
         self._mpl3D = False
         self._mplsurf = None
         self._texts = {}  # store calls to text (for replot)
         return fignum
-        
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
@@ -885,20 +890,20 @@ class MatplotlibBackend(BaseClass):
         # turn off interactive in pyplot temporarily:
         old_pylab_interactive_state = self._g.isinteractive()
         self._g.ioff()
-        
+
         fig = self.gcf()
         try:
             fig._g
-        except: 
+        except:
             self.figure(self.getp('curfig'))
         self._g.figure(self.getp('curfig'))
 
         # reset the plotting package instance in fig._g now if needed
         if not self._mpl3D:
             self._g.clf()
-        
+
         self._set_figure_size(fig)
-        
+
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
             if ax.getp('numberofitems') == 0:
@@ -969,7 +974,7 @@ class MatplotlibBackend(BaseClass):
         for args in self._texts:
             self.text(args[0], args[1], args[2],
                       fontname=args[3], fontsize=args[4])
-            
+
         # set back the interactive state in pylab:
         if old_pylab_interactive_state:
             self._g.ion()
@@ -991,7 +996,7 @@ class MatplotlibBackend(BaseClass):
         """Write text at position (x,y) in a curveplot."""
         self._g.text(x, y, text, family=fontname, size=fontsize)
         self._texts[(x, y, text, fontname, fontsize)] = None
-        
+
 
     def hardcopy(self, filename, **kwargs):
         """
@@ -1022,11 +1027,11 @@ class MatplotlibBackend(BaseClass):
                         edgecolor='w',
                         orientation=orientation)
 
-    def clf(self): 
+    def clf(self):
         self._g.clf()
         BaseClass.clf(self)
 
-    def closefig(self, arg=None): 
+    def closefig(self, arg=None):
         if arg is None:
             num = self.getp('curfig')  # close current figure
         elif arg in self._figs.keys():
@@ -1041,7 +1046,7 @@ class MatplotlibBackend(BaseClass):
         self._g.close(num)
         #del self._figs[num]._g
         #del self._figs[num]
-    
+
     def closefigs(self):
         for key in self._figs.keys():
             self.closefig(key)
@@ -1054,10 +1059,10 @@ class MatplotlibBackend(BaseClass):
 
     def hot(self, m=None):
         return pylab.cm.get_cmap('hot', m)
-    
+
     def gray(self, m=None):
         return pylab.cm.get_cmap('gray', m)
-    
+
     def bone(self, m=None):
         return pylab.cm.get_cmap('bone', m)
 
@@ -1066,47 +1071,47 @@ class MatplotlibBackend(BaseClass):
 
     def pink(self, m=None):
         return pylab.cm.get_cmap('pink', m)
-    
+
     def white(self, m=None):
         raise NotImplementedError('white not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def flag(self, m=None):
         return pylab.cm.get_cmap('flag', m)
-    
+
     def lines(self, m=None):
         raise NotImplementedError('lines not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def colorcube(self, m=None):
         raise NotImplementedError('colorcube not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def vga(self, m=None):
         raise NotImplementedError('vga not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def jet(self, m=None):
         return pylab.cm.get_cmap('jet', m)
-    
+
     def prism(self, m=None):
         return pylab.cm.get_cmap('prism', m)
-    
+
     def cool(self, m=None):
         return pylab.cm.get_cmap('cool', m)
-    
+
     def autumn(self, m=None):
         return pylab.cm.get_cmap('autumn', m)
-    
+
     def spring(self, m=None):
         return pylab.cm.get_cmap('spring', m)
-    
+
     def winter(self, m=None):
         return pylab.cm.get_cmap('winter', m)
-    
+
     def summer(self, m=None):
         return pylab.cm.get_cmap('summer', m)
-    
+
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:
@@ -1123,7 +1128,7 @@ class MatplotlibBackend(BaseClass):
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = MatplotlibBackend()  # create backend instance
 use(plt, globals())        # export public namespace of plt to globals()
 

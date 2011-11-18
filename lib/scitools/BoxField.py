@@ -28,7 +28,7 @@ class Field(object):
         if self.independent_variables is None:
             # copy grid.dirnames as independent variables:
             self.independent_variables = self.grid.dirnames
-            
+
         # metainformation:
         self.meta = {'description': description,}
         self.meta.update(kwargs)  # user can add more meta information
@@ -84,7 +84,7 @@ class BoxField(Field):
         a point (i,j) in the grid.
         """
         Field.__init__(self, grid, name, **kwargs)
-        
+
         if vector > 0:
             # for a vector field we add a "dimension" in values for
             # the various vector components (first index):
@@ -120,7 +120,7 @@ class BoxField(Field):
                     'values array are incompatible with grid size; '\
                     'shape is %s while required shape is %s' % \
                     (values.shape, self.required_shape))
-        
+
     def update(self):
         """Update the self.values array (if grid has been changed)."""
         if self.grid.shape != self.values.shape:
@@ -185,7 +185,7 @@ class BoxField(Field):
         return self.grid.coor[direction][slice_index[direction].start:\
                                          slice_index[direction].stop], \
                self.values[slice_index], fixed_coor, snapped
-    
+
     def gridplane(self, value, constant_coor=0, snap=True):
         """
         Return two one-dimensional coordinate arrays and
@@ -227,43 +227,62 @@ def _rank12rankd_mesh(a, shape):
                          'break it up into one-dimensional components' \
                          % a.shape)
 
-def dolfin_mesh2UniformBoxGrid(dolfin_mesh, division):
+def dolfin_mesh2UniformBoxGrid(dolfin_mesh, division=None):
     """
     Turn a regular, structured DOLFIN finite element mesh into
     a UniformBoxGrid object. (Application: plotting with scitools.)
     Standard DOLFIN numbering numbers the nodes along the x[0] axis,
     then x[1] axis, and so on.
     """
-    c = dolfin_mesh.coordinates() # numpy array
-    return UniformBoxGrid(min=c[0], max=c[-1],
+    if hasattr(dolfin_mesh, 'structured_data'):
+        coor = dolfin_mesh.structured_data
+        min_coor = [c[0]  for c in coor]
+        max_coor = [c[-1] for c in coor]
+        division = [len(c)-1 for c in coor]
+    else:
+        if division is None:
+            raise ValueError('division must be given when dolfin_mesh does not have a strutured_data attribute')
+        else:
+            coor = dolfin_mesh.coordinates() # numpy array
+            min_coor = coor[0]
+            max_coor = coor[-1]
+
+    return UniformBoxGrid(min=min_coor, max=max_coor,
                           division=division)
-    
-def dolfin_mesh2BoxGrid(dolfin_mesh, division):
+
+def dolfin_mesh2BoxGrid(dolfin_mesh, division=None):
     """
     Turn a structured DOLFIN finite element mesh into
     a BoxGrid object. (Mostly for ease of plotting with scitools.)
     Standard DOLFIN numbering numbers the nodes along the x[0] axis,
     then x[1] axis, and so on.
     """
-    c = dolfin_mesh.coordinates() # numpy array
-    shape = [n+1 for n in division]  # shape for points in each dir.
+    if hasattr(dolfin_mesh, 'structured_data'):
+        coor = dolfin_mesh.structured_data
+        retur BoxGrid(coor)
+    else:
+        if division is None:
+            raise ValueError('division must be given when dolfin_mesh does not have a strutured_data attribute')
+        else:
+            c = dolfin_mesh.coordinates() # numpy array
+            shape = [n+1 for n in division]  # shape for points in each dir.
 
-    c2 = [c[:,i] for i in range(c.shape[1])]  # split x,y,z components
-    for i in range(c.shape[1]):
-        c2[i] = _rank12rankd_mesh(c2[i], shape)
-    # extract coordinates in the different directions
-    coor = []
-    if len(c2) == 1:
-        coor = [c2[0][:]]
-    elif len(c2) == 2:
-        coor = [c2[0][:,0], c2[1][0,:]]
-    elif len(c2) == 3:
-        coor = [c2[0][:,0,0], c2[1][0,:,0], c2[2][0,0,:]]
-    return BoxGrid(coor)
+            c2 = [c[:,i] for i in range(c.shape[1])]  # split x,y,z components
+            for i in range(c.shape[1]):
+                c2[i] = _rank12rankd_mesh(c2[i], shape)
+            # extract coordinates in the different directions
+            coor = []
+            if len(c2) == 1:
+                coor = [c2[0][:]]
+            elif len(c2) == 2:
+                coor = [c2[0][:,0], c2[1][0,:]]
+            elif len(c2) == 3:
+                coor = [c2[0][:,0,0], c2[1][0,:,0], c2[2][0,0,:]]
+            return BoxGrid(coor)
 
 
 def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
-                             division, uniform_mesh=True):
+                             division=None, uniform_mesh=True):
     """
     Turn a DOLFIN P1 finite element field over a structured mesh into
     a BoxField object. (Mostly for ease of plotting with scitools.)
@@ -279,7 +298,7 @@ def dolfin_function2BoxField(dolfin_function, dolfin_mesh,
 The dolfin_function2BoxField function works with degree=1 elements
 only. The DOLFIN function (dolfin_function) has finite elements of type
 %s
-i.e., the degree=%d != 1. Project or interpolate this function 
+i.e., the degree=%d != 1. Project or interpolate this function
 onto a space of P1 elements, i.e.,
 
 V2 = FunctionSpace(mesh, 'CG', 1)
@@ -335,7 +354,7 @@ def update_from_dolfin_array(dolfin_array, box_field):
         raise ValueError('DOLFIN function has vector of size %s while the provided mesh demands %s' % (nodal_values.size, grid.shape))
     box_field.set_values(nodal_values)
     return box_field
-    
+
 def _test(g):
     print 'grid: %s' % g
 
@@ -414,6 +433,6 @@ def _test2():
     _test(g2)
     g3 = UniformBoxGrid(min=(0,0,-1), max=(1,1,1), division=(4,3,2))
     _test(g3)
-    
+
 if __name__ == '__main__':
     _test2()

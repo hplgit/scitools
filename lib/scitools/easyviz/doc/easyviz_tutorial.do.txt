@@ -22,9 +22,12 @@ for i in xrange(len(t)):
 plot(t, y)
 show()  # optional
 !ec
+If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see Chapter ref{ev:tut:install}.
+
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. This includes everything
-from `numpy` (from `numpy import *`), 
+from `numpy` (from `numpy import *`),
 all Easyviz plotting commands, some modules (`sys`, `math`), and
 all of SciPy (`from scipy import *`) if SciPy is installed.
 In the program above, we first
@@ -62,7 +65,7 @@ savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
 !ec
 The filename extension determines the format: `.ps` or
-`.eps` for PostScript, and `.png` for PNG. 
+`.eps` for PostScript, and `.png` for PNG.
 Figure ref{fig:plot1a} displays the resulting plot. With `show(False)`
 we can suppress the plot from being shown at the screen, which is
 useful when create a large number of figure files in programs.
@@ -123,7 +126,7 @@ The keyword `savefig` can be replaced by `hardcopy` if desired.
 Note that we in the curve legend write `t` square as `t^2` (LaTeX style)
 rather than `t**2` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Matplotlib and Gnuplot are two examples). 
+programs (Matplotlib and Gnuplot are two examples).
 See Figure ref{fig:plot1c} for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
@@ -173,7 +176,7 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
      title='Plotting two curves in the same plot',
      savefig='tmp2.eps')
 !ec
-The sequence of the multiple legends is such that the first legend 
+The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure ref{fig:plot2a}.
 
@@ -195,7 +198,7 @@ the location by the `loc` keyword to the `legend` function, e.g.,
 !bc
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
 !ec
-The most popular values are upper right, upper left, lower left, 
+The most popular values are upper right, upper left, lower left,
 and lower right, depending on the shape of the curves and extend
 of the axes. The keyword argument `fancybox` draws a box around
 the legends if `True`, otherwise no box is drawn. The corresponding
@@ -217,7 +220,7 @@ FIGURE: [figs/plot2l.eps, width=400] A figure with legends placed to the upper l
 The `legend` function also accepts a list of legends instead of
 the legends as separate positional arguments. This allows an overlapping
 syntax between Matplotlib and Easyviz so that the same code can apply
-either of the packages (however, Matplotlib's keywords to 
+either of the packages (however, Matplotlib's keywords to
 `plot`, like `label` and `linewidth`, are not recognized so not all
 syntax is interchangable).
 
@@ -269,7 +272,7 @@ plot(t, y2, 'bo')
 # or
 plot(t, y1, 'r-', t, y2, 'bo')
 !ec
-The effect of controlling the line styles can be seen in 
+The effect of controlling the line styles can be seen in
 Figure ref{fig:plot2c}.
 
 FIGURE:[figs/plot2c.eps] Two curves in the same plot, with controlled line styles. label{fig:plot2c}
@@ -312,7 +315,7 @@ the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
 FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3). label{fig:plot2g}
 
 
-The different available line colors include 
+The different available line colors include
   * yellow:   `'y'`
   * magenta:  `'m'`
   * cyan:     `'c'`
@@ -400,7 +403,7 @@ The plot is shown in Figure ref{fig:plot3}.
 
 FIGURE:[figs/plot3.eps] A plot with three curves.  label{fig:plot3}
 
-__Minimalistic Typing.__ 
+__Minimalistic Typing.__
 When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
@@ -471,7 +474,7 @@ plots stored in files.  Thereafter we must use a tool to combine the
 individual plot files into a movie file.
 
 __Example.__ The function
-$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$ 
+$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large $s$ and "peak-formed" for small $s$, see Figure
@@ -555,7 +558,7 @@ printf format `04d` pads the integers with zeros such that `1` becomes
 now expand (by an alphabetic sort) to a list of all files in proper
 order. Without the padding with zeros, i.e., names of the form
 `tmp1.png`, `tmp2.png`, ..., `tmp12.png`, etc., the alphabetic order
-will give a wrong sequence of frames in the movie. For instance, 
+will give a wrong sequence of frames in the movie. For instance,
 `tmp12.png` will appear before `tmp2.png`.
 
 Note that the names of plot files specified when making hardopies must
@@ -596,7 +599,7 @@ __Movie Formats.__
 Having a set of (e.g.) `tmp*.png` files, one can simply generate a movie by
 a `movie('tmp*.png')` call. The format of the movie is determined by
 which video encoders that are installed on the computer. The `movie`
-function runs through a list of encoders (`convert`, `mencoder`, 
+function runs through a list of encoders (`convert`, `mencoder`,
 `ffmpeg mpeg_encode`, `ppmtompeg`, `mpeg2enc`, `html`) and choses the
 first one which is installed. The fall back encoder `html` actually
 does not create a video file, but makes insetad an HTML file that can
@@ -611,7 +614,7 @@ and so forth.
 You can get complete control of the movie format and the name of the
 movie file by supplying the `encoder` and `output_file` arguments to
 the `movie` function. This is the recommended use. Here is an
-example on generating an animated GIF file `tmpmovie.gif` with 
+example on generating an animated GIF file `tmpmovie.gif` with
 the `convert` program from the ImageMagick software suite:
 !bc cod
 movie('tmp_*.png', encoder='convert', fps=2,
@@ -640,7 +643,7 @@ An AVI movie can be generated by the call
 movie('tmp_*.png', encoder='ffmpeg', fps=4,
       output_file='tmpmovie.avi',
 !ec
-Alternatively, we may generate an MPEG movie using 
+Alternatively, we may generate an MPEG movie using
 the `ppmtompeg` encoder from the Netpbm suite of
 image manipulation tools:
 !bc cod
@@ -649,8 +652,8 @@ movie('tmp_*.png', encoder='ppmtompeg', fps=24,
 !ec
 The `ppmtompeg` supports only a few (high) frame rates.
 
-The next sample call to `movie` uses the Mencoder tool and specifies 
-some additional arguments (video codec, video bitrate, and the 
+The next sample call to `movie` uses the Mencoder tool and specifies
+some additional arguments (video codec, video bitrate, and the
 quantization scale):
 !bc cod
 movie('tmp_*.png', encoder='mencoder', fps=24,
@@ -710,7 +713,7 @@ a demo of the three modes.
 Below is an example of how to compute a time series by finite
 differences and comparing this series with the exact solutions.
 For large times, there is a fequency discrepancy that one wants
-to investigate. 
+to investigate.
 
 @@@CODE ../../MovingPlotWindow.py def fromto:def _demo@if __name
 
@@ -725,7 +728,7 @@ from scitools.MovingPlotWindow import MovingPlotWindow
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants to
 fine-control the plot or how Easyviz behaves. First, we explain how to
-set the backend. Second, we tell how to speed up the 
+set the backend. Second, we tell how to speed up the
 `from scitools.std import *` statement.  Third, we show how to operate with
 the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab `Figure`
@@ -733,7 +736,7 @@ and `Axis` objects that Easyviz produces "behind the curtain".
 
 === Controlling the Backend ===
 
-The Easyviz backend can either be set in a configuration file (see 
+The Easyviz backend can either be set in a configuration file (see
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
 command-line option
@@ -772,7 +775,7 @@ label{easyviz:imports}
 
 The `from scitools.std import *` statement imports many modules and packages:
 !bc cod
-from numpy import *    
+from numpy import *
 from scitools.numpyutils import *  # some convenience functions
 from numpy.lib.scimath import *
 from scipy import *                # if scipy is installed
@@ -780,8 +783,8 @@ import sys, operator, math
 from scitools.StringFunction import StringFunction
 from glob import glob
 !ec
-The `scipy` import can take some time and lead to slow start-up of plot 
-scripts. A more minimalistic import for curve plotting is 
+The `scipy` import can take some time and lead to slow start-up of plot
+scripts. A more minimalistic import for curve plotting is
 !bc cod
 from scitools.easyviz import *
 from numpy import *
@@ -841,7 +844,7 @@ the current working folder, thereby affecting plots made in this
 folder, or it can be located in the user's home folder, which will
 affect all plotting sessions for the user in question. There is also a
 common SciTools config file `scitools.cfg` for the whole site, located
-in the directory where the `scitools` package is installed. It is 
+in the directory where the `scitools` package is installed. It is
 recommended to copy the `scitools.cfg`, either from installation or
 the SciTools source folder `lib/scitools`, to `.scitools.cfg`
 in your home folder. Then you can easily control the Easyviz backend
@@ -864,7 +867,7 @@ Here is an example where we use Matplotlib as backend, turn on
 the use of LaTeX in Matplotlib, and avoid the potentially slow import
 of SciPy:
 !bc dsni
-python myprogram.py --SCITOOLS_easyviz_backend matplotlib \ 
+python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 !ec
 
@@ -874,9 +877,9 @@ python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
-different advanced features.  When Easyviz does not have a command
+diverse advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program (known as
+that communicates with the underlying plotting program (the
 "backend") and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
@@ -927,8 +930,16 @@ calls via the `pyplot` object, one must apply `pyplot.savefig` to
 correctly save the plot (a plain `savefig` or `hardcopy` remakes the
 plot without the features inserted by the `pyplot` object).
 
+Here are some useful links to documentation of various plotting packages:
 
-The idea advocated here is that you can quickly generate
+ * "Matplotlib Documentation": "http://matplotlib.sourceforge.net/contents.html"
+ * "Gnuplot Documentation": "http://www.gnuplot.info/documentation.html"
+ * "Gnuplot Tips (Not So Frequently Asked Questions)": "http://t16web.lanl.gov/Kawano/gnuplot/index-e.html"
+ * "Grace User's Guide": "http://matplotlib.sourceforge.net/contents.html"
+ * "PyX Documentation": "http://pyx.sourceforge.net/documentation.html"
+ * "PyX Tutorial for Gnuplot Users": "http://alumni.cs.ucr.edu/~titus/pyxTutorial/"
+
+The idea advocated by Easyviz goes as follows. You can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
@@ -966,7 +977,7 @@ show()  # show the plot again after ax.setp actions
 The `figure()` call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command `figure(3)` sets the current figure object to figure number
-3. 
+3.
 
 Suppose we want to plot our `y1` and `y2` data in two separate windows.
 We need in this case to work with two `Figure` objects:
@@ -1023,22 +1034,73 @@ show()
 savefig('tmp2_3.eps')
 !ec
 
+Note: The Gnuplot backend will overwrite the tickmarks on the $y$ axis
+if two or more curves in the same subplot have significantly different
+variations in $y$ direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.
+
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
 !bc cod
 ax = axes(viewport=[left, bottom, width, height])
 !ec
 The four parameteres `left`, `bottom`, `width`, `height`
-are location values between 0 and 1 ((0,0) is the lower-left corner 
+are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
+
+=== Mathematics and LaTeX in Legends, Title, and Axis Labels ===
+
+Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.
+
+  * With Matplotlib we recommend to use standard LaTeX.
+  * With Gnuplot we recommend plain text when plotting on
+    the screen, and greek letters preceded with a backslash
+    when saving to file. Gnuplot suports LaTeX syntax for
+    sub- and super-scripts (underscore and hat, resp.).
+    Other types of mathematics should be expressed in plain text.
+
+The file `examples/math_text.py` tests different syntax in legends,
+axis labels, and titles. Running this script with
+`--SCITOOLS_easyviz_backend X` for different values of `X`
+(`gnuplot`, `matplotlib`, `grace`, `pyx`, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.
+
+If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:
+!bc cod
+from scitools.std import *
+...
+if backend == 'gnuplot':
+    title_screen = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+    title_eps = r'\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2'
+elif backend == 'matplotlib':
+    title_screen = title_eps = \
+          r'$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$'
+else:
+    title_screen = title_eps = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+
+plot(...)
+...
+title(title_screen)
+show()
+title(title_eps)
+savefig('myplot.eps')
+!ec
 
 === Turning Off All Plotting ===
 
 Sometimes, especially during debugging or when trying out a large-scale
 experiment, it is nice to turn off all plotting on the screen and
-all making of hardcopies. This is easily done by 
+all making of hardcopies. This is easily done by
 !bc cod
 turn_off_plotting(globals())
 !ec

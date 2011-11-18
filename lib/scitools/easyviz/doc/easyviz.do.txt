@@ -51,7 +51,7 @@ is similar to the popular
 !bc cod
 from matplotlib.pylab import *
 !ec
-among Matplotlib users (although not promoted by Matplotlib developers). 
+among Matplotlib users (although not promoted by Matplotlib developers).
 The primary additional feature of the
 `scitools.std` import is the possibility to choose among many different
 backends for plotting, where Matplotlib is one of the options.
@@ -72,6 +72,7 @@ backends for plotting, where Matplotlib is one of the options.
 # #include "easyviz_design.do.txt"
 
 ======= Installation =======
+label{ev:tut:install}
 
 # #include "easyviz_install.do.txt"
 
