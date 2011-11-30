@@ -3,12 +3,20 @@ must install SciTools, which is available from
 "Google code": "http://code.google.com/p/scitools".
 
 If you run a Linux system that allows installation from Debian
-repositories (Ubuntu is an example), you get SciTools and all its
-dependencies with one Unix command:
-!bc
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:
+!bc sys
 Unix> sudo apt-get install python-scitools
 !ec
-(SciTools is in standard Debian.)
+because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:
+!bc sys
+Unix> sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+!ec
+
 
 Otherwise, you download the tarball with the SciTools software, pack it out,
 go the `scitools` folder, and run the standard command
@@ -34,7 +42,7 @@ chapter, if you encounter strange errors during Easyviz plotting.
 ===== Linux/Unix =====
 
 __Compile from Source.__
-Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
 easily on most Unix systems. You also need the `Gnuplot` Python
 module, which can be obtained from `gnuplot-py.sourceforge.net`.
 
@@ -53,7 +61,7 @@ software that SciTools depend on.
 On Windows, one can either use Gnuplot under Cygwin or use a precompiled
 binary from sourgeforce.net.
 
-__Using the Gnuplot Cygwin package.__ 
+__Using the Gnuplot Cygwin package.__
 In this case there are two things that needs to be changed in the
 `gp_cygwin.py` file in the top-level directory of the `Gnuplot.py`
 source tree. First you need to change the `gnuplot_command` variable
