@@ -10,10 +10,10 @@ or other values of the parameters.  The value can take on multiple
 values: e.g., an integer parameter 'a' can have values -1, 1 and
 10. Similarly, a string parameter 'method' can have values 'Newton'
 and 'Bisection'. The module will generate all combination of all
-parameters and values, which in the mentioned example will be 
-(-1, 'Newton'), (1, 'Newton'), (10, 'Newton'), (-1, 'Bisection'), 
+parameters and values, which in the mentioned example will be
+(-1, 'Newton'), (1, 'Newton'), (10, 'Newton'), (-1, 'Bisection'),
 (1, 'Bisection'), and (10, 'Bisection'). Particular combination
-of values can easily be removed. 
+of values can easily be removed.
 
 The usage and implementation of the module are documented in the
 book "Python Scripting for Computational Science" (H. P. Langtangen,
@@ -24,23 +24,23 @@ Simple use of basic functionality in the module are shown below.
 See the book for explanations and more comprehensive examples.
 
 >>> from scitools.multipleloop import *
->>> 
+>>>
 >>> # parameter names and multiple values,
 >>> # using the special multipleloop syntax:
 >>> p = {'A': '1 & 2 & 5', 'B': 'hello & world'}
->>> 
+>>>
 >>> # turn multiple values syntax like 1 & 2 & 5 into list of values
->>> input2values(p['A'])  
+>>> input2values(p['A'])
 [1, 2, 5]
->>> 
+>>>
 >>> prm_values = [(name, input2values(p[name])) for name in p]
 >>> import pprint
 >>> pprint.pprint(prm_values)
 [('A', [1, 2, 5]), ('B', ['hello', 'world'])]
->>> 
+>>>
 >>> # main function:
 >>> all, names, varied = combine(prm_values)
->>> 
+>>>
 >>> # all[i] holds all parameter values in experiment no i,
 >>> # names holds the parameter names, and varied holds the
 >>> # parameter names that are actually varied (not fixed values)
@@ -55,7 +55,7 @@ See the book for explanations and more comprehensive examples.
  [1, 'world'],
  [2, 'world'],
  [5, 'world']]
->>> 
+>>>
 >>> e = 1
 >>> for experiment in all:
 ...     print 'Experiment %4d:' % e,
@@ -63,7 +63,7 @@ See the book for explanations and more comprehensive examples.
 ...         print '%s: %s' % (name, value),
 ...     print # newline
 ...     e += 1  # experiment counter
-... 
+...
 Experiment    1: A: 1 B: hello
 Experiment    2: A: 2 B: hello
 Experiment    3: A: 5 B: hello
@@ -78,14 +78,14 @@ Experiment    6: A: 5 B: world
 >>> for c in cmd:
 ...     print c
 ...     #commands.getstatusoutput(programname + ' ' + c)
-... 
+...
 -A True -B 'hello'
 -A True -B 'hello'
 -A True -B 'hello'
 -A True -B 'world'
 -A True -B 'world'
 -A True -B 'world'
->>> 
+>>>
 >>> print 'all combinations: %d' % len(all)
 all combinations: 6
 >>>
@@ -99,17 +99,17 @@ all pairs: 6
  [5, 'world'],
  [2, 'world'],
  [1, 'world']]
->>> 
+>>>
 >>> # alternative class interface:
 >>> experiments = MultipleLoop(option_prefix='-')
 >>> for name in p:
 ...     experiments.register_parameter(name, p[name])
-... 
+...
 >>> experiments.combine()  # compute all combinations
->>> 
+>>>
 >>> # remove all experiments corresponding to a condition:
 >>> nremoved = experiments.remove('A == 5')
->>> 
+>>>
 >>> # look at the attributes of this instance:
 >>> pprint.pprint(experiments.all)
 [[1, 'hello'], [2, 'hello'], [1, 'world'], [2, 'world']]
@@ -118,7 +118,7 @@ all pairs: 6
 >>> print experiments.varied
 ['A', 'B']
 >>> print experiments.options
-["-A True -B 'hello'", "-A True -B 'hello'", "-A True -B 'world'", 
+["-A True -B 'hello'", "-A True -B 'hello'", "-A True -B 'world'",
  "-A True -B 'world'"]
 >>> pprint.pprint(experiments.prm_values)
 [('A', [1, 2, 5]), ('B', ['hello', 'world'])]
@@ -132,10 +132,10 @@ Here is another example with more experiments::
 [('b', [1, 0, 0.5]),
  ('w', [1, 1.1000000000000001, 1.2000000000000002]),
  ('func', ['y', 'siny'])]
->>> 
+>>>
 >>> # main function:
 >>> all, names, varied = combine(prm_values)
->>> 
+>>>
 >>> print names
 ['b', 'w', 'func']
 >>> print varied
@@ -159,7 +159,7 @@ Here is another example with more experiments::
  [1, 1.2000000000000002, 'siny'],
  [0, 1.2000000000000002, 'siny'],
  [0.5, 1.2000000000000002, 'siny']]
->>> 
+>>>
 >>> print 'all combinations: %d' % len(all)
 all combinations: 18
 >>>
@@ -176,17 +176,17 @@ all pairs: 9
  [1, 1.1000000000000001, 'siny'],
  [0, 1.2000000000000002, 'siny'],
  [0.5, 1, 'siny']]
->>> 
+>>>
 >>> # alternative class interface:
 >>> experiments = MultipleLoop(option_prefix='-')
 >>> for name in p:
 ...     experiments.register_parameter(name, p[name])
-... 
+...
 >>> experiments.combine()
->>> 
+>>>
 >>> # remove all experiments corresponding to a condition:
 >>> nremoved = experiments.remove('b == 1')
->>> 
+>>>
 >>> # look at the attributes of this instance:
 >>> pprint.pprint(experiments.all)
 [[0, 1, 'y'],
@@ -206,7 +206,7 @@ all pairs: 9
 >>> # function = []  # list of (response, (param1, param2, ...))
 >>> # the (param1, param2, ...) list equals the varied parameter values
 >>> # in each experiment (varied_parameters in the loop below)
->>> 
+>>>
 >>> for cmlargs, parameters, varied_parameters in experiments:
 ...     args = ', '.join(['%s=%s' % (name,value) for name, value in zip(experiments.names, parameters)])
 ...     print
@@ -216,7 +216,7 @@ all pairs: 9
 ...     print 'prompt> myprog ', cmlargs
 ...     print 'and extract a response from the program output'
 ...     print 'function.append((response, varied_parameters))'
-... 
+...
 can call some function:
 response = myfunc(b=0, w=1, func=y)
 or run some program with options:
@@ -332,7 +332,7 @@ def input2values(s):
     """
     if not isinstance(s, basestring):
         return s
-    
+
     items = s.split('&')
 
     values = []
@@ -377,7 +377,7 @@ def _outer(a, b):
     Return:  outer combination 'all'.
 
     The function is to be called repeatedly::
-    
+
         all = _outer(all, p)
     """
     all = []
@@ -454,7 +454,7 @@ def pairs(prm_values, n=2):
     a list of values). Not all combinations are computed (as
     in function combine), but only a subset so that all pairs
     of all parameter values appear once. This gives a substantially
-    smaller set of combinations than when all parameter values 
+    smaller set of combinations than when all parameter values
     are combined with all others. n=2 correspond to pairs,
     n=3 to triplets, and so on.
 
@@ -535,7 +535,7 @@ def remove(condition, all, names):
     """
     Remove experiments that fulfill a boolean condition.
     Example::
-    
+
       all = remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1', all, names)
 
     (names of the parametes must be used)
@@ -551,7 +551,7 @@ def remove(condition, all, names):
         if eval(c):  # if condition
             all.remove(ex)
     return all  # modified list
-    
+
 
 def _demo(p, one_name, one_value):
     code = """
@@ -562,7 +562,7 @@ from scitools.multipleloop import *
 p = %s
 
 # turn multiple values syntax like %s into list of values
-input2values(p['%s'])  
+input2values(p['%s'])
 
 prm_values = [(name, input2values(p[name])) for name in p]
 import pprint
@@ -717,7 +717,7 @@ class MultipleLoop:
     the multipleloop module.
 
     Typical application::
-    
+
       p = {'name1': 'multiple values', 'name2': 'values', ...}
       experiments = scitools.multipleloop.MultipleLoop(option_prefix='-')
       for name in p:
@@ -728,7 +728,7 @@ class MultipleLoop:
           <extract response, varied_parameters holds the values of
            the parameters that were varied in this experiment (the
            independent variables mapping onto the response)
-      
+
     Attributes (m is some MultipleLoop object):
 
     =============  =================================================
@@ -743,17 +743,17 @@ class MultipleLoop:
     =============  =================================================
 
     Example:
-    
+
     >>> p = {'b': '1 & 0 & 0.5', 'func': 'y & siny', 'w': '[1:1.3,0.1]'}
     >>> experiments = MultipleLoop(option_prefix='-')
     >>> for name in p:
     ...     experiments.register_parameter(name, p[name])
-    ... 
+    ...
     >>> experiments.combine()
-    >>> 
+    >>>
     >>> # remove all experiments corresponding to a condition:
     >>> nremoved = experiments.remove('b == 1')
-    >>> 
+    >>>
     >>> # look at the attributes of this instance:
     >>> pprint.pprint(experiments.all)
     [[0, 1, 'y'],
@@ -795,7 +795,7 @@ class MultipleLoop:
         """
         Remove experiments that fulfill a boolean condition.
         Example::
-        
+
           e.remove('w < 1.0 and p = 1.2) or (q in (1,2,3) and f < 0.1')
 
         (names of the parametes must be used)
@@ -807,7 +807,7 @@ class MultipleLoop:
         self.options = options(self.all, self.names, prefix=self.option_prefix)
         # return no of removed experiments:
         return nex_orig-len(self.all)
-        
+
     def __iter__(self):
         if not self.combined: self.combine()
         self.counter = 0
@@ -827,7 +827,7 @@ class ReportHTML:
     def __init__(self, filename):
         self.filename = filename
         f = open(self.filename, 'w') # new file
-        f.write("""<HTML><BODY>\n""")
+        f.write("""<html><body>\n""")
         f.close()
         self._experiment_section_counter = 0
 
@@ -848,15 +848,15 @@ class ReportHTML:
         """
         self._experiment_section_counter += 1
         t = """
-<H1>Experiment no. %d</H1>
+<h1>Experiment no. %d</h1>
 Varied parameters:
-<UL>
+<ul>
 """ % self._experiment_section_counter
         for n in varied:
             i = names.index(n)
-            t += """\n<LI> %s: %s""" % (n, parameters[i])
+            t += """\n<li> %s: %s""" % (n, parameters[i])
         t += """
-</UL>
+</ul>
 Fixed parameters:
 """
         for n in names:
@@ -867,11 +867,11 @@ Fixed parameters:
         self.dump(t)
 
         def __del__(self):
-            self.dump("""\n</BODY></HTML>\n""")
-        
+            self.dump("""\n</body></html>\n""")
+
 if __name__ == '__main__':
     print _doc_str_example()
     #_test1()
     #_test2()
 
-    
+

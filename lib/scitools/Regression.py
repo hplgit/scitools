@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-    
+
 """
 Regression module for automating regression tests.
 
@@ -93,7 +93,7 @@ For the circle.py script, a typical circle.verify script takes
 the following trivial form if we write it in bash::
 
   #!/bin/sh
-  ./circle.py 3 0.1 > circle.v  
+  ./circle.py 3 0.1 > circle.v
 
 The Regression module has tools for running programs, automatically
 measuring CPU time, selecting lines from a file to put in the .v
@@ -142,7 +142,7 @@ except ImportError:
     # cannot run floatdiff tools
     _has_TkPmw = False
     pass
-    
+
 
 class TestRun:
     """
@@ -165,11 +165,11 @@ class TestRun:
 
         # use absolute path such that it is easy to write to the
         # logfile even after an os.chdir is performed
-        
+
         self.logfile  = os.path.join(os.getcwd(),logfile)
         if string.find(logfile, '.v') == -1:
             raise ValueError('error in logfile name; must contain .v suffix')
-        
+
         # remove logfile if it exists:
         if os.path.isfile(self.logfile): os.remove(self.logfile)
 
@@ -243,10 +243,10 @@ class TestRun:
             u = os.uname()
             vfile.write(' on %s %s, %s' % (u[1],u[4],u[0]))
         vfile.write('\n\n')
-        
+
     def loadfile(self, file):
         """Return a file as a list of lines for text processing."""
-        
+
         if not os.path.isfile(file):
             print 'File',file,'does not exist'; sys.exit(1)
         FILE = open(file, 'r')
@@ -265,10 +265,10 @@ class TestRun:
 
         if type(regex) == type(''):
             regex = [regex]  # assume regex is a list of regex
-            
+
         if not os.path.isfile(file):
             print 'File',file,'does not exist'; sys.exit(1)
-            
+
         FILE = open(file, 'r')
         lines = FILE.readlines()
         FILE.close()
@@ -290,10 +290,10 @@ class TestRun:
         vfile.write(text + '\n')
         vfile.write(  '--------------------------------------------------\n')
         vfile.close()
-        
+
     def silentrun(self, program, options=''):
         """Run program without storing output on logfile."""
-        
+
         if os.name == 'posix':
             # can write to /dev/null:
             failure = os.system('%s %s > /dev/null' % (program,options))
@@ -324,14 +324,14 @@ class TestRun:
 
     def append(self, file, maxlines=0):
         """Append a file or a list of files to the logfile."""
-        
+
         vfile = open(self.logfile, 'a')
 
         # We need different code depending in whether file is a string
         # (a filename) or a list of filenames(e.g. from glob.glob).
         # The types module defines the names of the built-in types
         # in Python(here we need StringType and ListType)
-        
+
         if isinstance(file, str):
             filelist = [file]  # make a list
         elif isinstance(file, list):
@@ -385,9 +385,9 @@ class TestRun:
                                 (self.scratchdir,pid)
         print 'making an animated gif sequence of psfiles:',filelist
         os_system('convert -loop 60 -delay 10 %s %s' % \
-                  (filelist,giffile_with_full_path)) 
+                  (filelist,giffile_with_full_path))
         self._insertgif (giffile_with_full_path)
-        
+
 
     def _insertgif (self, giffile_with_full_path):
         vfile = open(self.logfile, 'a')
@@ -404,7 +404,7 @@ class TestRunNumerics(TestRun):
     dump of large sets of floating-point numbers for a second-level
     regression test.
     """
-    
+
     def __init__(self, logfile, removepath='  '):
         TestRun.__init__(self, logfile, removepath)
         self.floatlogfile = logfile + 'd'
@@ -436,7 +436,7 @@ class TestRunNumerics(TestRun):
                        re.VERBOSE)
         # possible problem: 0 or 0.0 is never approximated by the
         # regex above (but 0.00E+00 is!)
-        
+
         b = c.search(line)
         index = 0   # start of substring to test for next match
         while b:
@@ -490,7 +490,7 @@ class TestRunNumerics(TestRun):
         # by line (better) and if the format is ok, append it
 
         # format specification: see test program at the end of the file
-        
+
 def defaultfilter(r):
     if abs(r) < 1.0E-14: r = 0.0  # set very small numbers to 0 exactly
     p = '%11.4e' % r
@@ -557,16 +557,16 @@ class Verify:
 
         # use font colors in the HTML file to indicated the kind of diff
         self.GREEN = 'green'; self.RED = 'red'
-        
+
         # bring files into existence and write HTML header:
         ds = open(self.diffsummary, 'w');
-        ds.write('<HTML><BODY>\n'\
-                  '<FONT COLOR=%s>%s color</FONT>: true differences<BR>\n'\
-                  '<FONT COLOR=%s>%s color</FONT>: CPU time differences '\
-                  'only\n<P>\n' % (self.RED,self.RED,self.GREEN,self.GREEN))
+        ds.write('<html><body>\n'\
+                  '<font color=%s>%s color</font>: true differences<br>\n'\
+                  '<font color=%s>%s color</font>: CPU time differences '\
+                  'only\n<p>\n' % (self.RED,self.RED,self.GREEN,self.GREEN))
         ds.close()
         ds_d = open(self.diffdetails, 'w')
-        ds_d.write('<HTML><BODY>\n')
+        ds_d.write('<html><body>\n')
         ds_d.close()
         self.testcounter = 0
 
@@ -586,10 +586,10 @@ class Verify:
 
         # write HTML footer:
         ds = open(self.diffsummary, 'a');
-        ds.write('\n</BODY></HTML>\n')
+        ds.write('\n</body></html>\n')
         ds.close()
         ds_d = open(self.diffdetails, 'a')
-        ds_d.write('\n</BODY></HTML>\n')
+        ds_d.write('\n</body></html>\n')
         ds_d.close()
 
     def _singlefile(self, dirname, task, file):
@@ -660,7 +660,7 @@ class Verify:
                               '%(vfile)s   %(ndifflines)d lines' % vars()
 
                 # no of tests so far:
-                self.testcounter = self.testcounter + 1  
+                self.testcounter = self.testcounter + 1
 
                 ds = open(self.diffsummary, 'a')
                 if ndifflines == 0:
@@ -701,7 +701,7 @@ class Verify:
                     if os.path.isfile(vfile):
                         if not os.path.isfile(rfile):
                             os.rename(vfile, rfile)
-                        else:                            
+                        else:
                             # write a shell file that can be
                             # executed from a link:
                             shfilename = os.path.join(os.getcwd(),'tmp.'+basename+'_fdiff.sh')
@@ -720,9 +720,9 @@ class Verify:
                                 diff = int(diff[0])
                                 if diff == 0:
                                     ds_d.write(' (no differences!)\n')
-                                
+
                     ds_d.close()
-                        
+
                 ds.write('<BR>\n')
                 ds.close()
         else:
@@ -747,7 +747,7 @@ class Verify:
     # the run function can be overrided in subclasses and tailored to special
     # tests where it is necessary to, e.g., compile special applications
     # prior to running the script
-    
+
     def run(self, scriptfile):
         # recall that os.chdir has been taken to the scriptfiles's dir
         path = os.path.join(os.curdir, scriptfile)
@@ -759,7 +759,7 @@ class Verify:
 
     def clean(self, dirname):
         return
-    
+
 
 class VerifyDiffpack(Verify):
     """
@@ -767,7 +767,7 @@ class VerifyDiffpack(Verify):
     clean-up of applications, and a parameter self.makemode for running
     applications in opt or nopt mode.
     """
-    
+
     def __init__(self, root='.', task='verify',
                  diffsummary = 'verify_log',
                  diffprog = None,
@@ -775,7 +775,7 @@ class VerifyDiffpack(Verify):
         self.makemode = makemode
         # run all the stuff:
         Verify.__init__(self, root, task, diffsummary, diffprog)
-        
+
     def run(self, scriptfile):
         """Run script, but compile the application first."""
         # is this a Verify directory? (recall that we have chdir'ed to dir)
@@ -796,7 +796,7 @@ class VerifyDiffpack(Verify):
             print '\n\n...run regression test ''+scriptfile+'' for VerifyDiffpack.run:'
         # call parent class' run function:
         Verify.run(self,scriptfile)
-            
+
     def clean(self, dirname):
         """Clean up files, typically executables etc."""
         # is this a Verify directory? (recall that we have chdir'ed to dir)
@@ -815,7 +815,7 @@ class FloatDiff:
     def __init__(self, master, file1, file2):
         if not _has_TkPmw:  # global variable set in top of the script
             raise ImportError('Could not import Tkinter and Pmw')
-        
+
         self.master = master
         self.top = Tkinter.Frame(master, borderwidth=5)
         self.top.pack()
@@ -844,7 +844,7 @@ class FloatDiff:
                       % (file1,file2)
                 self.GUI = 0
                 return None
-        
+
         list = []
         f1 = open(file1, 'r');  f2 = open(file2, 'r')
         while 1:
@@ -897,7 +897,7 @@ class FloatDiff:
 
         if not list or not self.GUI:
             return
-        
+
         buttonframe = Tkinter.Frame(self.top)
         buttonframe.pack(side='left')
         canvasframe = Tkinter.Frame(self.top)
@@ -922,7 +922,7 @@ class FloatDiff:
             )
         self.canvas.pack(fill='both', expand=1)
 
-        counter = 0 
+        counter = 0
         self.graphs = []
         self.textdiffs = []
         self.rdata = []
@@ -937,7 +937,7 @@ class FloatDiff:
             tag = 'tag' + str(counter)
             n = len(differences)
             if n == 0:
-                continue  # no diff, proceed with next 
+                continue  # no diff, proceed with next
 
             textdiff = Tkinter.Text(self.canvas.interior(),
                                     width=52,height=maxdiffs+3,wrap='none')
@@ -1000,7 +1000,7 @@ class FloatDiff:
             counter = counter + 1
         Tkinter.Button(buttonframe, text='QUIT',
                        command=self.master.quit).pack(side='top',pady=5)
-        
+
     def selectfield(self):
         counter = int(self.fieldlist.curselection()[0])
         self.lift(self.graphs[counter],self.textdiffs[counter])
@@ -1028,13 +1028,13 @@ class FloatDiff:
             text.insert('end', ' ', 'equal')
         for i in range(len(s2)):
             if markers[i] == 0:
-                text.insert('end', str(s2[i]), 'equal') 
+                text.insert('end', str(s2[i]), 'equal')
             else:
                 text.insert('end', str(s2[i]), 'diff')
         text.tag_configure('diff', background='cyan')
         for i in range(16-len(s2)):
             text.insert('end', ' ', 'equal')
-        
+
 
 def verify_file_template(casename, floats=False):
     s = """\
@@ -1062,14 +1062,14 @@ fd.close()
     f.close()
     print 'a template regression script is written to', vf
 
-    
+
 # tests of the current module:
 
 def _test_floatdiff():
     root = Tkinter.Tk()
     #Pmw.initialise(root, fontScheme='pmw1')
     root.title('intelligent float diff')
-    
+
     # make two files with almost equal data:
     file1 = 'tmptest.v';  file2 = 'tmptest.r'
     f1 = open(file1, 'w');  f2 = open(file2, 'w')
@@ -1152,7 +1152,7 @@ def _test_floatdiff():
     f1.close(); f2.close()
     fd = FloatDiff(root, file1, file2)
     root.mainloop()
-    
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print 'Usage: %s [template | verify | update | floatdiff] [verify/update-root]' % sys.argv[0]
