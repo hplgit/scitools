@@ -1,0 +1,8 @@
+
+:mod:`scitools.redirect_io`
+===========================
+
+.. automodule:: scitools.redirect_io
+   :members:
+   :undoc-members:
+   :show-inheritance:
