@@ -259,7 +259,7 @@ def dolfin_mesh2BoxGrid(dolfin_mesh, division=None):
     """
     if hasattr(dolfin_mesh, 'structured_data'):
         coor = dolfin_mesh.structured_data
-        retur BoxGrid(coor)
+        return BoxGrid(coor)
     else:
         if division is None:
             raise ValueError('division must be given when dolfin_mesh does not have a strutured_data attribute')
