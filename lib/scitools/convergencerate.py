@@ -5,7 +5,7 @@ based on data from a set of experiments.
 
 Recommended usage:
 Vary only discretization parameter (h in spatial problems, h/dt**q for
-some q so that h/dt**q=const, in time-dependent problems with time step dt). 
+some q so that h/dt**q=const, in time-dependent problems with time step dt).
 Use class OneDiscretizationPrm, or the function convergence_rate,
 or the analyze_filedata convenience function. Start with reading
 the convergence_rate function (too see an easily adapted example).
@@ -36,15 +36,15 @@ class OneDiscretizationPrm(object):
     Tools for fitting an error model with only one discretization
     parameter: e = C*h^2.
     """
-    
+
     def error_model(p, d):
-        """e = C*h**a"""
+        """Return e = C*h**a, where p=[C, a] and h=d[0]."""
         C, a = p
         h = d[0]
         return C*h**a
 
     def loglog_error_model(p, d):
-        """Requires log-log data."""
+        """As error_model if log-log data was used in the estimation."""
         C, a = p
         h = d[0]
         return log(C) + a*log(h)
@@ -55,12 +55,11 @@ class OneDiscretizationPrm(object):
         Linear least squares algorithm.
         Suitable for problems with only one distinct
         discretization parameter.
-
-        d  : sequence of discretization parameter values
-        e  : sequence of corresponding error values
+        *d* is the sequence of discretization parameter values, and
+        *e* is the sequence of corresponding error values.
 
         The error model the data is supposed to fit reads
-        log(e[i]) = log(C[i]) + a*log(d[i])
+        ``log(e[i]) = log(C[i]) + a*log(d[i])``.
         """
         A = transpose(array([d, zeros(len(d))+1]))
         sol = linalg.lstsq(A, e)
@@ -68,19 +67,21 @@ class OneDiscretizationPrm(object):
         C = inv_log(logC)
         return a, C
 
-    def nonlinear_fit(d, e, initial_guess):
+    def nonlinear_fit(d, e, p0):
         """
-        @param d: list of values of the (single) discretization
-              parameter in each experiment:
-              d[i] provides the values of the discretization,
-              parameter in experiement no. i.
-        @param e: list of error values; e = (e_1, e_2, ...),
-              e[i] is the error associated with the parameters
-              d[i]
+        ======== ===========================================================
+        Name     Description
+        ======== ===========================================================
+        d        list of values of the (single) discretization
+                 parameter in each experiment:
+                 d[i] provides the values of the discretization,
+                 parameter in experiement no. i.
+        e        list of error values; e = (e_1, e_2, ...),
+                 e[i] is the error associated with the parameters d[i]
 
-        @param initial_guess: the starting value for the unknown
-        parameters vector.
-        @return: a, C; a is the exponent, C is the factor in front.
+        p0       starting values for the unknown parameters vector
+        return   a, C; a is the exponent, C is the factor in front.
+        ======== ===========================================================
         """
         if len(d) != len(e):
             raise ValueError('d and e must have the same length')
@@ -92,8 +93,7 @@ class OneDiscretizationPrm(object):
         data = []
         for d_i, e_i in zip(d, e):
             data.append(((d_i,) , e_i))  # recall (a,) conversion to tuple
-        sol = leastSquaresFit(OneDiscretizationPrm.error_model,
-                              initial_guess, data)
+        sol = leastSquaresFit(OneDiscretizationPrm.error_model, p0, data)
         C = sol[0][0]
         a = sol[0][1]
         return a, C
@@ -106,7 +106,7 @@ class OneDiscretizationPrm(object):
         """
         if len(d) != len(e):
             raise ValueError('d and e must have the same length')
-        
+
         rates = []
         for i in range(1, len(d)):
             try:
@@ -165,7 +165,7 @@ class OneDiscretizationPrm(object):
                      'successive rates, last two experiments: %.1f*h^%.1f' % (log(C3), a3)),
              #axis=[log_d1[-1], log_d1[0], 1.3*log(e[-1]), 1.5*log(e[0])],
              hardcopy=filename)
-        
+
     analyze = staticmethod(analyze)
 
     error_model = staticmethod(error_model)
@@ -212,15 +212,23 @@ class ManyDiscretizationPrm(object):
     the unknown parameters to be fitted by a nonlinear
     least squares procedure.
     """
-    
+
     def error_model(p, d):
         """
-        Evaluate the theoretical error model:
-        e = error_model(p, d)
-        p    : sequence of parameters (to be estimated)
-        d    : sequence of (known) discretization parameters
-        e    : error
-        len(p) must be 2*len(d) in this model
+        Evaluate the theoretical error model (sum of C*h^r terms):
+        sum_i p[2*i]*d[i]**p[2*i+1]
+
+        ====== =======================================================
+        Name   Description
+        ====== =======================================================
+        p      sequence ofvalues of  parameters (estimated)
+        d      sequence of values of (known) discretization parameters
+        return error evaluated
+        ====== =======================================================
+
+        Note that ``len(p)`` must be ``2*len(d)`` in this model since
+        there are two parameters (constant and exponent) for each
+        discretization parameter.
         """
         if len(p) != 2*len(d):
             raise ValueError('len(p)=%d != 2*len(d)=%d' % (len(p),2*len(d)))
@@ -257,12 +265,12 @@ class ManyDiscretizationPrm(object):
                               initial_guess, data)
         # return list of fitted parameters (p in error_model)
         # (sol[1] is a measure of the quality of the fit)
-        return sol[0]  
+        return sol[0]
 
     error_model = staticmethod(error_model)
     nonlinear_fit = staticmethod(nonlinear_fit)
 
-        
+
 def _test1():
     """Single discretization parameter test."""
     import random

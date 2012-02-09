@@ -29,16 +29,17 @@ if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
 try:
     import matplotlib
     default_easyviz_backend = 'matplotlib'
-except:  # cannot accept any error here
+except ImportError:
     try:
         import Gnuplot
         default_easyviz_backend = 'gnuplot'
     except:
-        # Neither Gnuplot nor Matplotlib is installed. Matplotlib is now set
+        # Neither Gnuplot nor Matplotlib is installed. Matplotlib is still set
         # as default backend for Easyviz.
         default_easyviz_backend = 'matplotlib'
+        print 'NOTE: matplotlib is not installed on this system, but scitools.easyviz\nwill still use matplotlib as the default plotting engine!'
 
-# modify config file so that it sets the wanted backend for easyviz
+# Modify config file so that it sets the wanted backend for easyviz
 config_file = os.path.join('lib', 'scitools', 'scitools.cfg')
 if '--easyviz_backend' in sys.argv:
     try:
@@ -52,7 +53,7 @@ if '--easyviz_backend' in sys.argv:
         sys.exit(1)
 print 'default scitools.easyviz backend becomes', default_easyviz_backend
 print '(could be set by the --easyviz_backend option to setup.py)\n'
-# write new config file and change backend line
+# Write new config file and change backend line
 os.rename(config_file, config_file + '.old~~')
 infile = open(config_file + '.old~~', 'r')
 outfile = open(config_file, 'w')
@@ -72,7 +73,8 @@ if  __file__ == 'setupegg.py':
 else:
     from distutils.core import setup
 
-# make sure we import from scitools in this package, not an installed one:
+# Make sure we import from the source code in lib/scitools,
+# not an installed scitools package
 sys.path.insert(0, os.path.join('lib')); import scitools
 
 setup(
@@ -84,6 +86,8 @@ setup(
     name = "SciTools",
     url = "http://scitools.googlecode.com",
     package_dir = {'': 'lib'},
+    # Must specify package directories and not individual module files
+    # (py_modules) since package_data= only works with packages=
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"),
 		],

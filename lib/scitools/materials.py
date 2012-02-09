@@ -1,4 +1,10 @@
-# Physical properties of various materials
+"""
+This file contains physical properties of various materials,
+organized as a dictionary of dictionaries. The keys in the
+outer dict are the materials, while the keys in the inner
+dicts correspond to physical properties.
+"""
+
 materials = {
 
 "Acetone [C3H6O] (20 C)": {
@@ -64,6 +70,12 @@ materials = {
    "Elongation (%)":                        [1.0, 45.0],
    "Elastic Modulus (GPa)":                 [70.0, 79.0],
    "Yield Stress (MPa)":                    [35.0, 500.0],
+},
+"Aluminum Alloy 6082": {
+   "Density (kg/m^3)":                      2.7E+3,
+   "Thermal Expansion Coefficient (1/C)":   2.5E-5,
+   "Thermal Conductivity (W/m*K)":          200.0,
+   "Specific Heat (J/kg*C)":                900,
 },
 "Aluminum [Al]": {
    "Boiling Point (C)":                     2519.0,
@@ -514,6 +526,7 @@ materials = {
    "Elastic Modulus (GPa)":                 [190.0, 210.0],
    "Bar Velocity (m/s)":                    5200.0,
    "Yield Stress (MPa)":                    [280.0, 1600.0],
+   "Specific Heat (J/kg*C)":                900,
 },
 "Stone; Granite": {
    "Density (kg/m^3)":                      2.6E+3,

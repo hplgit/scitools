@@ -215,7 +215,7 @@ def main_subst():
         sys.exit(1)
 
     from getopt import getopt
-    optlist, args = getopt(sys.argv[2:], 'smx', 'restore')
+    optlist, args = getopt(sys.argv[2:], 'smx', ['restore'])
     restore = False
     pmm = 0  # pattern matching modifiers (re.compile flags)
     for opt, value in optlist:
