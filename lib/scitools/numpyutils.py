@@ -14,45 +14,44 @@ Functionality of this module that extends Numerical Python
            a single, standard for loop (for value, index in iterator),
            has some additional features compared with numpy.ndenumerate
  - asarray_cpwarn:
-           as asarray(a), but a warning or exception is issued if
+           as ``numpy.asarray(a)``, but a warning or exception is issued if
            the array a is copied
  - meshgrid:
-           extended version of numpy.meshgrid to 1D, 2D and 3D grids,
+           extended version of ``numpy.meshgrid`` to 1D, 2D and 3D grids,
            with sparse or dense coordinate arrays and matrix or grid
            indexing
  - ndgrid:
-           same as calling meshgrid with indexing='ij' (matrix indexing)
+           same as calling ``meshgrid`` with indexing='ij' (matrix indexing)
  - float_eq:
-           operator == for float operands with tolerance,
-           float_eq(a,b,tol) means abs(a-b) < tol
+           ``operator ==`` for float operands with tolerance,
+           ``float_eq(a,b,tol)`` means ``abs(a-b) < tol``
            works for both scalar and array arguments
            (similar functions for other operations exists:
-           float_le, float_lt, float_ge, float_gt, float_ne)
+           ``float_le``, ``float_lt``, ``float_ge``, ``float_gt``,
+           ``float_ne``)
  - cut_noise:
            set all small (noise) elements of an array to zero
  - matrix_rank:
            compute the rank of a matrix
  - orth:
-           compute an orthonormal basis from a matrix (taken from scipy.linalg
-           to avoid scipy dependence)
+           compute an orthonormal basis from a matrix (taken from
+           ``scipy.linalg`` to avoid ``scipy`` dependence)
  - null:
            compute the null space of a matrix
- - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf: 
+ - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf:
            discrete and continuous norms for multi-dimensional arrays
            viewed as vectors
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
  - seq:
-           seq(a,b,s, [type]) computes numbers from a up to and
-           including b in steps of s and (default) type float_
-           sequence = seq (for backward compatibility)
+           ``seq(a,b,s, [type])`` computes numbers from ``a`` up to and
+           including ``b`` in steps of s and (default) type ``float_``;
  - iseq:
-           as seq, but integer counters are computed
-           (iseq is an alternative to range where the
+           as ``seq``, but integer counters are computed
+           (``iseq`` is an alternative to range where the
            upper limit is included in the sequence - this can
            be important for direct mapping of indices between
-           mathematics and Python code)
-           isequence = iseq (for backward compatibility)
+           mathematics and Python code);
 """
 
 if __name__.find('numpyutils') != -1:
@@ -70,9 +69,9 @@ from FloatComparison import float_eq, float_ne, float_lt, float_le, \
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
     """
-    Extension of numpy.meshgrid to 1D, 2D and 3D problems, and also
+    Extension of ``numpy.meshgrid`` to 1D, 2D and 3D problems, and also
     support of both "matrix" and "grid" numbering.
-    
+
     This extended version makes 1D/2D/3D coordinate arrays for
     vectorized evaluations of 1D/2D/3D scalar/vector fields over
     1D/2D/3D grids, given one-dimensional coordinate arrays x, y,
@@ -96,7 +95,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
     >>> # 2D slice of a 3D grid, with z=const:
     >>> z=5
-    >>> xv, yv, zc = meshgrid(x,y,z)   
+    >>> xv, yv, zc = meshgrid(x,y,z)
     >>> xv
     array([[ 0. ,  0.5,  1. ],
            [ 0. ,  0.5,  1. ]])
@@ -107,7 +106,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     5
 
     >>> # 2D slice of a 3D grid, with x=const:
-    >>> meshgrid(2,y,x)  
+    >>> meshgrid(2,y,x)
     (2, array([[ 0.,  1.],
            [ 0.,  1.],
            [ 0.,  1.]]), array([[ 0. ,  0. ],
@@ -124,44 +123,45 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
            [ 0.,  1.],
            [ 0.,  1.]]))
 
-    Why does SciTools has its own meshgrid function when NumPy has three
-    similar functions, `mgrid`, `ogrid`, and `meshgrid`?
-    The `meshgrid` function in NumPy is limited to two dimensions only, while
-    the SciTools version can also work with 3D and 1D grids. In addition,
-    the NumPy version of `meshgrid` has no option for generating sparse
-    grids to conserve memory, like we have in SciTools by specifying the
-    `sparse` argument.
+    Why does SciTools has its own meshgrid function when numpy has
+    three similar functions, ``mgrid``, ``ogrid``, and ``meshgrid``?
+    The ``meshgrid`` function in numpy is limited to two dimensions
+    only, while the SciTools version can also work with 3D and 1D
+    grids. In addition, the numpy version of ``meshgrid`` has no
+    option for generating sparse grids to conserve memory, like we
+    have in SciTools by specifying the ``sparse`` argument.
 
-    The NumPy functions `mgrid` and `ogrid` does provide support for,
-    respectively, full and sparse n-dimensional meshgrids, however,
-    these functions uses slices to generate the meshgrids rather than
-    one-dimensional coordinate arrays such as in Matlab. With slices, the
-    user does not have the option to generate meshgrid with, e.g.,
-    irregular spacings, like::
+    Moreover, the numpy functions ``mgrid`` and ``ogrid`` does provide
+    support for, respectively, full and sparse n-dimensional
+    meshgrids, however, these functions uses slices to generate the
+    meshgrids rather than one-dimensional coordinate arrays such as in
+    Matlab. With slices, the user does not have the option to generate
+    meshgrid with, e.g., irregular spacings, like::
 
     >>> x = array([-1,-0.5,1,4,5], float)
     >>> y = array([0,-2,-5], float)
     >>> xv, yv = meshgrid(x, y, sparse=False)
 
     >>> xv
-    array([[-1. , -0.5,  1. ,  4. ,  5. ], 
-           [-1. , -0.5,  1. ,  4. ,  5. ], 
+    array([[-1. , -0.5,  1. ,  4. ,  5. ],
+           [-1. , -0.5,  1. ,  4. ,  5. ],
            [-1. , -0.5,  1. ,  4. ,  5. ]])
 
     >>> yv
-    array([[ 0.,  0.,  0.,  0.,  0.], 
-           [-2., -2., -2., -2., -2.], 
+    array([[ 0.,  0.,  0.,  0.,  0.],
+           [-2., -2., -2., -2., -2.],
            [-5., -5., -5., -5., -5.]])
 
 
-    In addition to the reasons mentioned above, the meshgrid function in
-    NumPy supports only Cartesian indexing, i.e., x and y, not matrix
-    indexing, i.e., rows and columns (`mgrid` and `ogrid` supports only
-    matrix indexing). The `meshgrid` function in SciTools supports both
-    indexing conventions through the `indexing` keyword argument. Giving
-    the string `'ij'` returns a meshgrid with matrix indexing, while
-    `'xy'` returns a meshgrid with Cartesian indexing. The difference is
-    illustrated by the following code snippet::
+    In addition to the reasons mentioned above, the ``meshgrid``
+    function in numpy supports only Cartesian indexing, i.e., x and y,
+    not matrix indexing, i.e., rows and columns (on the other hand,
+    ``mgrid`` and ``ogrid`` supports only matrix indexing). The
+    ``meshgrid`` function in SciTools supports both indexing
+    conventions through the ``indexing`` keyword argument. Giving the
+    string ``'ij'`` returns a meshgrid with matrix indexing, while
+    ``'xy'`` returns a meshgrid with Cartesian indexing. The
+    difference is illustrated by the following code snippet::
 
       nx = 10
       ny = 15
@@ -180,7 +180,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
               # treat xv[j,i], yv[j,i]
 
     It is not entirely true that matrix indexing is not supported by the
-    `meshgrid` function in NumPy because we can just switch the order of
+    ``meshgrid`` function in numpy because we can just switch the order of
     the first two input and output arguments::
 
     >>> yv, xv = numpy.meshgrid(y, x)
@@ -201,7 +201,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
         y = asarray(y)
     if not fixed(z):
         z = asarray(z)
-    
+
     def arr1D(coor):
         try:
             if len(coor.shape) == 1:
@@ -210,7 +210,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
                 return False
         except AttributeError:
             return False
-    
+
     # if two of the arguments are fixed, we have a 1D grid, and
     # the third argument can be reused as is:
 
@@ -226,7 +226,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
         if y is x: y = x.copy()
         if z is x: z = x.copy()
         if z is y: z = y.copy()
-    except AttributeError:  # x, y, or z not NumPy array
+    except AttributeError:  # x, y, or z not numpy array
         pass
 
     if memoryorder is not None:
@@ -239,7 +239,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
             indexing = 'ij'
         else:
             indexing = 'xy'
-    
+
     # If the keyword argument sparse is set to False, the full N-D matrix
     # (not only the 1-D vector) should be returned. The mult_fact variable
     # should then be updated as necessary.
@@ -261,7 +261,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
                 return x[newaxis,:]*mult_fact, y[:,newaxis]*mult_fact
             else:
                 return x[newaxis,:]*mult_fact, y[:,newaxis]*mult_fact, z
-        
+
     if arr1D(x) and fixed(y) and arr1D(z):
         if indexing == 'ij':
             if not sparse:
@@ -277,7 +277,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
                 return x[newaxis,:]*mult_fact, z[:,newaxis]*mult_fact
             else:
                 return x[newaxis,:]*mult_fact, y, z[:,newaxis]*mult_fact
-        
+
     if fixed(x) and arr1D(y) and arr1D(z):
         if indexing == 'ij':
             if not sparse:
@@ -364,7 +364,7 @@ def Gram_Schmidt1(vecs, row_wise_storage=True):
     m, n = vecs.shape
     basis = array(transpose(vecs))
     eye = identity(n).astype(float)
-    
+
     basis[:,0] /= sqrt(dot(basis[:,0], basis[:,0]))
     for i in range(1, m):
 	v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
@@ -415,7 +415,7 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
 
     m, n = A.shape
     V = zeros((m,n))
-    
+
     for j in xrange(n):
         v0 = A[:,j]
         v = v0.copy()
@@ -436,7 +436,7 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
 
     if remove_noise:
         V = cut_noise(V, tol)
-        
+
     return transpose(V) if row_wise_storage else V
 
 
@@ -447,7 +447,7 @@ def matrix_rank(A):
     """
     A = asarray(A)
     u, s, v = svd(A)
-    maxabs = norm(x)	
+    maxabs = norm(x)
     maxdim = max(A.shape)
     tol = maxabs*maxdim*1E-13
     r = s > tol
@@ -458,7 +458,7 @@ def orth(A):
     """
     (Plain copy from scipy.linalg.orth - this one here applies numpy.svd
     and avoids the need for having scipy installed.)
-    
+
     Construct an orthonormal basis for the range of A using SVD.
 
     @param A: array, shape (M, N)
@@ -491,7 +491,7 @@ def null(A, tol=1e-10, row_wise_storage=True):
         return transpose(null(transpose(A), tol))
 
     u, s, vh = linalg.svd(A)
-    s = append(s, zeros(m))[0:m] 
+    s = append(s, zeros(m))[0:m]
     null_mask = (s <= tol)
     null_space = compress(null_mask, vh, axis=0)
     null_space = conjugate(null_space)  # in case of complex values
@@ -549,7 +549,7 @@ def norm_inf(u):
 def solve_tridiag_linear_system(A, b):
     """
     Solve an n times n tridiagonal linear system of the form::
-    
+
      A[0,1]*x[0] + A[0,2]*x[1]                                        = 0
      A[1,0]*x[0] + A[1,1]*x[1] + A[1,2]*x[2]                          = 0
      ...
@@ -621,8 +621,8 @@ try:
     import Pmw
     class NumPy2BltVector(Pmw.Blt.Vector):
         """
-        Copy a NumPy array to a BLT vector:
-        # a: some NumPy array
+        Copy a numpy array to a BLT vector:
+        # a: some numpy array
         b = NumPy2BltVector(a)  # b is BLT vector
         g = Pmw.Blt.Graph(someframe)
         # send b to g for plotting
@@ -676,9 +676,9 @@ class WrapNo2Callable:
         if isinstance(args[0], (float, int, complex)):
             # scalar version:
             # (operator.isNumberType(args[0]) cannot be used as it is
-            # true also for NumPy arrays
+            # true also for numpy arrays
             return self.constant
-        else: # assume NumPy array
+        else: # assume numpy array
             if self._array_shape is None:
                 self._set_array_shape()
             else:
@@ -695,7 +695,7 @@ class WrapNo2Callable:
             r = r + a  # in-place r+= won't work
             # (handles x,y,t - the last t just adds a constant)
             # an argument sequence t, x, y  will fail (1st arg
-            # is not a NumPy array)
+            # is not a numpy array)
         self._array_shape = r.shape
 
     # The problem with this class is that, in the vectorized version,
@@ -704,7 +704,7 @@ class WrapNo2Callable:
     # the input arguments change! Sometimes, when called along boundaries
     # of grids, the shape may change so the next implementation is
     # slower and safer.
-    
+
 class WrapNo2Callable:
     """Turn a number (constant) into a callable function."""
     def __init__(self, constant):
@@ -735,7 +735,7 @@ class WrapNo2Callable:
         argument is not the first argument. That is,
         w(xv, yv, t) is fine, but w(t, xv, yv) will return 4.4,
         not the desired array!
-               
+
         """
         if isinstance(args[0], (float, int, complex)):
             # scalar version:
@@ -774,7 +774,7 @@ class WrapDiscreteData2Callable:
         self.interpolating_function = \
              InterpolatingFunction(self.data[:-1], self.data[-1])
         self.ndims = len(self.data[:-1])  # no of spatial dim.
-        
+
     def __call__(self, *args):
         # allow more arguments (typically time) after spatial pos.:
         args = args[:self.ndims]
@@ -785,9 +785,9 @@ class WrapDiscreteData2Callable:
             # args is tuple of vectors; Interpolation must work
             # with one point at a time:
             r = [self.interpolating_function(*a) for a in zip(*args)]
-            return array(r)  # wrap in NumPy array
+            return array(r)  # wrap in numpy array
 
-        
+
 def wrap2callable(f, **kwargs):
     """
     Allow constants, string formulas, discrete data points,
@@ -854,7 +854,7 @@ def wrap2callable(f, **kwargs):
 
     One can also check what the object is wrapped as and do more
     specific operations, e.g.,
-    
+
     >>> f9.__class__.__name__
     'StringFunction'
     >>> str(f9)     # look at function formula
@@ -865,19 +865,19 @@ def wrap2callable(f, **kwargs):
     (1, 2)
 
     Troubleshooting regarding string functions:
-    If you use a string formula with a NumPy array, you typically get
+    If you use a string formula with a numpy array, you typically get
     error messages like::
-        
+
        TypeError: only rank-0 arrays can be converted to Python scalars.
-    
+
     You must then make the right import (numpy is recommended)::
 
        from Numeric/numarray/numpy/scitools.numpytools import *
-       
+
     in the calling code and supply the keyword argument::
-        
+
        globals=globals()
-       
+
     to wrap2callable. See also the documentation of class StringFunction
     for more information.
     """
@@ -902,7 +902,7 @@ def wrap2callable(f, **kwargs):
 
 def NumPy_array_iterator(a, **kwargs):
     """
-    Iterate over all elements in a NumPy array a.
+    Iterate over all elements in a numpy array a.
     Two return values: a generator function and the code of this function.
     The ``numpy.ndenumerate`` iterator performs the same iteration over
     an array, but ``NumPy_array_iterator`` has some additional features
@@ -920,9 +920,9 @@ def NumPy_array_iterator(a, **kwargs):
     If the value is True, the iterator returns the indices as a tuple,
     otherwise (default) the iterator returns a two-tuple consisting of
     the value of the array and the corresponding indices (as a tuple).
-    
+
     Examples::
-    
+
     >>> q = linspace(1, 2*3*4, 2*3*4);  q.shape = (2,3,4)
     >>> it, code = NumPy_array_iterator(q)
 
@@ -980,7 +980,7 @@ def NumPy_array_iterator(a, **kwargs):
     0 0
     0 1
     0 2
-    
+
 
     Now let us try some offsets::
 
@@ -1015,7 +1015,7 @@ def NumPy_array_iterator(a, **kwargs):
             offset_code1.append(key1 + '=' + str(kwargs[key1]))
         if key2 in kwargs:
             offset_code2.append(key2 + '=' + str(kwargs[key2]))
-        
+
     for key in kwargs:
         if key == 'offset_start':
             offset_code1.extend(['offset%d_start=%d' % (d, kwargs[key]) \
@@ -1049,7 +1049,7 @@ def NumPy_array_iterator(a, **kwargs):
 
 def compute_histogram(samples, nbins=50, piecewise_constant=True):
     """
-    Given a NumPy array samples with random samples, this function
+    Given a numpy array samples with random samples, this function
     returns the (x,y) arrays in a plot-ready version of the histogram.
     If piecewise_constant is True, the (x,y) arrays gives a piecewise
     constant curve when plotted, otherwise the (x,y) arrays gives a
@@ -1081,12 +1081,12 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
         for i in range(len(x)):
             x[i] = (bin_edges[i] + bin_edges[i+1])/2.0
     return x, y
-        
+
 
 def factorial(n, method='reduce'):
     """
     Compute the factorial n! using long integers (and pure Python code).
-    Different implementations are available (see source code for 
+    Different implementations are available (see source code for
     implementation details).
 
     Note: The math module in Python 2.6 features a factorial
@@ -1207,16 +1207,16 @@ isequence = iseq  # backward compatibility
 
 
 def arr(shape=None, element_type=float,
-        interval=None, 
+        interval=None,
         data=None, copy=True,
         file_=None,
         order='C'):
     """
-    Compact and flexible interface for creating NumPy arrays,
+    Compact and flexible interface for creating numpy arrays,
     including several consistency and error checks.
 
      - *shape*: length of each dimension, tuple or int
-     - *data*: list, tuple, or NumPy array with data elements
+     - *data*: list, tuple, or numpy array with data elements
      - *copy*: copy data if true, share data if false, boolean
      - *element_type*: float, int, int16, float64, bool, etc.
      - *interval*: make elements from a to b (shape gives no of elms), tuple or list
@@ -1225,18 +1225,18 @@ def arr(shape=None, element_type=float,
      - return value: created Numerical Python array
 
     The array can be created in four ways:
-    
+
       1. as zeros (just shape specified),
 
       2. as uniformly spaced coordinates in an interval [a,b]
 
       3. as a copy of or reference to (depending on copy=True,False resp.)
-         a list, tuple, or NumPy array (provided as the data argument),
+         a list, tuple, or numpy array (provided as the data argument),
 
       4. from data in a file (for one- or two-dimensional real-valued arrays).
 
-    The function calls the underlying NumPy functions zeros, array and
-    linspace (see the NumPy manual for the functionality of these
+    The function calls the underlying numpy functions zeros, array and
+    linspace (see the numpy manual for the functionality of these
     functions).  In case of data in a file, the first line determines
     the number of columns in the array. The file format is just rows
     and columns with numbers, no decorations (square brackets, commas,
@@ -1252,7 +1252,7 @@ def arr(shape=None, element_type=float,
 
     >>> arr(3, interval=[0,2])
     array([ 0.,  1.,  2.])
-           
+
     >>> somelist=[[0,1],[5,5]]
     >>> a = arr(data=somelist)
     >>> a  # a has always float elements by default
@@ -1263,7 +1263,7 @@ def arr(shape=None, element_type=float,
     array([[0, 1],
            [5, 5]])
     >>> b = a + 1
-    
+
     >>> c = arr(data=b, copy=False)  # let c share data with b
     >>> b is c
     True
@@ -1289,12 +1289,12 @@ def arr(shape=None, element_type=float,
     """
     if data is None and file_ is None and shape is None:
         return None
-    
+
     if data is not None:
 
         if not operator.isSequenceType(data):
             raise TypeError('arr: data argument is not a sequence type')
-        
+
         if isinstance(shape, (list,tuple)):
             # check that shape and data are compatible:
             if reduce(operator.mul, shape) != size(data):
@@ -1333,7 +1333,7 @@ def arr(shape=None, element_type=float,
         if not (element_type == float or element_type == 'd'):
             raise ValueError('element_type must be float_/"%s", not "%s"' % \
                              ('d', element_type))
-        
+
         d = array([float(word) for word in file_.read().split()])
         if isinstance(file_, basestring):
             f.close()
@@ -1384,7 +1384,7 @@ def arr(shape=None, element_type=float,
         except MemoryError, e:
             # print more information (size of data):
             print e, 'of size %s' % shape
-    
+
 def _test():
     _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:

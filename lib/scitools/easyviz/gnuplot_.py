@@ -1334,7 +1334,7 @@ class GnuplotBackend(BaseClass):
                        of the Symbol font (called "Symbol-Oblique") which is
                        useful for mathematics. Default font is "Helvetica".
         fontsize       Set the size of the font in PostScript points.
-                       Default is 14.
+                       Default is 20.
         ===========    =====================================================
         """
         if DEBUG:
@@ -1382,8 +1382,8 @@ class GnuplotBackend(BaseClass):
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(solid and 'solid' or 'dashed')
-            #setterm.append(' dashlength 3 linewidth 3 ')
-            setterm.append(' dashlength 3 linewidth 4 ')
+            setterm.append(' dashlength 5 linewidth 3')  # look best
+            #setterm.append(' dashlength 5 linewidth 4')
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
             self._doing_PS = True
