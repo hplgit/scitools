@@ -67,9 +67,16 @@ doconce subst "html_theme = 'default'" "html_theme = [
 doconce subst "\#html_theme_options = \{\}" "\
 # See http://sphinx.pocoo.org/theming.html for setting options
 # This is a customization of the default theme:
-#html_theme_options = {
-#  'rightsidebar': 'true',
-#}" conf.py
+html_theme_options = {
+    'rightsidebar': 'true',
+    'sidebarbgcolor': bg,
+    'footerbgcolor': bg,
+    'relbarbgcolor': bg,
+    'headbgcolor': bg,
+}" conf.py
+# Add logo
+doconce replace "#html_logo = None" "html_logo = 'scitools_logo.jpg'" conf.py
+
 
 # Make sure we have the numpydoc module
 python -c 'import numpydoc'
