@@ -50,6 +50,16 @@ import time
 # Update Gnuplot.GnuplotOpts according to scitools.cfg
 _update_from_config_file(Gnuplot.GnuplotOpts.__dict__, section='gnuplot')
 
+def _check_terminal(term):
+    """Return True if the given terminal work with Gnuplot, otherwise False."""
+    f = open(tempfile.mktemp(suffix='.gnuplot'), 'w')
+    f.write('set term %s\n' % term)
+    f.close()
+    cmd = '%s < %s' % (Gnuplot.GnuplotOpts.gnuplot_command, f.name)
+    failure, output = system(cmd, verbose=False, failure_handling='silent')
+    os.remove(f.name)
+    return not failure
+
 def _check_terminals(terms):
     """Check if the default terminal (Gnuplot.GnuplotOpts.default_term)
     work with Gnuplot. If not, try any of the terminals given in terms.
@@ -62,13 +72,8 @@ def _check_terminals(terms):
     if len(terms) == 0 or default_term != terms[0]:
         terms = [default_term] + terms
     for term in terms:
-        test_term = open(tempfile.mktemp(suffix='.gnuplot'), 'w')
-        test_term.write('set term %s\n' % term)
-        test_term.close()
-        cmd = '%s < %s' % (Gnuplot.GnuplotOpts.gnuplot_command, test_term.name)
-        failure, output = system(cmd, verbose=False, failure_handling='silent')
-        os.remove(test_term.name)
-        if not failure:
+        term_ok = _check_terminal(term)
+        if term_ok:
             working_term = term
             break
     if working_term is not None:
@@ -1314,11 +1319,12 @@ class GnuplotBackend(BaseClass):
           '.ps'  (PostScript)
           '.eps' (Encapsualted PostScript)
           '.png' (Portable Network Graphics)
+          '.pdf' (Portable Document Format)
 
         Optional arguments for PostScript output:
 
         ===========    =====================================================
-        Argument         Description
+        Argument       Description
         ===========    =====================================================
         color          If True, create a plot with colors. If False
                        (default),  create a plot in black and white.
@@ -1326,15 +1332,15 @@ class GnuplotBackend(BaseClass):
                        like subscripts, superscripts, and mixed fonts.
         orientation    Set orientation to 'portrait' or 'landscape'. Default
                        is to leave this unchanged. This option has no effect
-                       on EPS output.
+                       on EPS or PDF output.
         solid          If True, force lines to become solid (i.e., not
                        dashed). Default is False.
         fontname       Set the font to be used for titles, labels, etc.
                        Must be a valid PostScript font or an oblique version
                        of the Symbol font (called "Symbol-Oblique") which is
                        useful for mathematics. Default font is "Helvetica".
-        fontsize       Set the size of the font in PostScript points.
-                       Default is 20.
+        fontsize       Set the size of the font in points. Default is 20 for
+                       for PostScript output and 8 for PDF output.
         ===========    =====================================================
         """
         if DEBUG:
@@ -1343,6 +1349,29 @@ class GnuplotBackend(BaseClass):
         ext2term = {'.ps': 'postscript',
                     '.eps': 'postscript',
                     '.png': 'png'}
+
+        # check if we have a PDF terminal
+        if _check_terminal('pdfcairo'):
+            ext2term['.pdf'] = 'pdfcairo'
+            # teach Gnuplot.py about the pdfcairo terminal
+            # FIXME: This might need some tweaking. Or is this even needed?
+            Gnuplot.termdefs.terminal_opts['pdfcairo'] = [
+                Gnuplot.termdefs.KeywordOrBooleanArg(
+                    options=['landscape', 'portrait', 'eps', 'default'],
+                    argname='mode',
+                    ),
+                Gnuplot.termdefs.KeywordOrBooleanArg(options=['color', 'monochrome']),
+                Gnuplot.termdefs.KeywordOrBooleanArg(options=['solid', 'dashed']),
+                Gnuplot.termdefs.KeywordOrBooleanArg(
+                    options=['defaultplex', 'simplex', 'duplex'],
+                    argname='duplexing',
+                    ),
+                Gnuplot.termdefs.StringArg(argname='fontname'),
+                Gnuplot.termdefs.BareStringArg(argname='fontsize'),
+                ]
+        elif _check_terminal('pdf'):
+            ext2term['.pdf'] = 'pdf'
+
         basename, ext = os.path.splitext(filename)
         if not ext:
             # no extension given, assume .ps:
@@ -1359,25 +1388,21 @@ class GnuplotBackend(BaseClass):
         orientation = kwargs.get('orientation', None)
         solid = kwargs.get('solid', False)
         fontname = kwargs.get('fontname', 'Helvetica')
-        fontsize = kwargs.get('fontsize', 20)
-
         keyw = {'filename': filename, 'terminal': terminal}
-        if terminal == 'postscript':
-            keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid,
-                       'fontname': fontname, 'fontsize': fontsize})
-            if orientation in ['landscape', 'portrait']:
-                keyw['mode'] = orientation
-            if ext == '.eps':
-                keyw['mode'] = 'eps'
 
         # Create a new Gnuplot instance only for now
         self._g = Gnuplot.Gnuplot()
         setterm = ['set', 'terminal', terminal]
         if terminal == 'postscript':
+            fontsize = kwargs.get('fontsize', 20)
+            keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid,
+                         'fontname': fontname, 'fontsize': fontsize})
             if ext == '.eps':
+                keyw['mode'] = 'eps'
                 setterm.append('eps')
             else:
                 if orientation in ['landscape', 'portrait']:
+                    keyw['mode'] = orientation
                     setterm.append(orientation)
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append(color and 'color' or 'monochrome')
@@ -1386,6 +1411,26 @@ class GnuplotBackend(BaseClass):
             #setterm.append(' dashlength 5 linewidth 4')
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
+            self._doing_PS = True
+        elif terminal == 'pdf':
+            fontsize = kwargs.get('fontsize', 8)
+            setterm.append(color and 'color' or 'monochrome')
+            setterm.append(enhanced and 'enhanced' or 'noenhanced')
+            setterm.append('font "%s,%s"' % (fontname, fontsize))
+            setterm.append('linewidth 4')
+            setterm.append(solid and 'solid' or 'dashed')
+            setterm.append('dl 3')  # dashlength
+            # FIXME: Should self._doing_PS be True or False in this case?
+            self._doing_PS = True
+        elif terminal == 'pdfcairo':
+            fontsize = kwargs.get('fontsize', 8)
+            setterm.append(enhanced and 'enhanced' or 'noenhanced')
+            setterm.append(color and 'color' or 'mono')
+            setterm.append(solid and 'solid' or 'dashed')
+            setterm.append('font "%s,%s"' % (fontname, fontsize))
+            setterm.append('linewidth 4')
+            setterm.append('dashlength 3')
+            # FIXME: Should self._doing_PS be True or False in this case?
             self._doing_PS = True
         elif terminal == 'png':
             pass
