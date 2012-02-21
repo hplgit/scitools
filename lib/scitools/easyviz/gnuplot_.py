@@ -815,7 +815,7 @@ class GnuplotBackend(BaseClass):
                 c = j+1
             else:
                 c = facecolor
-            kwargs = {'with': 'boxes %s' % c}
+            kwargs = {'with': 'boxes linecolor %s' % c}
             legend = self._fix_latex(item.getp('legend'))
             if legend:
                 legend = eval(self._fix_latex(item.getp('legend')))[j]
