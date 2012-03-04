@@ -501,8 +501,271 @@ def null(A, tol=1e-10, row_wise_storage=True):
         return transpose(null_space)
 
 
+class Heaviside:
+    """Standard and smoothed Heaviside function."""
+
+    def __init__(self, eps=0):
+        self.eps = eps          # smoothing parameter
+
+    def __call__(self, x):
+        if self.eps == 0:
+            r = x >= 0
+            if isinstance(x, (int,float)):
+                return int(r)
+            elif isinstance(x, ndarray):
+                return asarray(r, dtype=int)
+        else:
+            if isinstance(x, (int,float)):
+                return self._smooth_scalar(x)
+            elif isinstance(x, ndarray):
+                return self._smooth_vec(x)
+
+    def _exact_scalar(self, x):
+        return 1 if x >= 0 else 0
+
+    def _exact_bool(self, x):
+        return x >= 0  # works for scalars and arrays, but returns bool
+
+    def _exact_vec1(self, x):
+        return where(x >= 0, 1, 0)
+
+    def _exact_vec2(self, x):
+        r = zeros_like(x)
+        r[x >= 0] = 1
+        return r
+
+    def _smooth_scalar(self, x):
+        eps = self.eps
+        if x < -eps:
+            return 0
+        elif x > eps:
+            return 1
+        else:
+            return 0.5 + x/(2*eps) + 1./(2*pi)*sin(pi*x/eps)
+
+    def _smooth_vec(self, x):
+        eps = self.eps
+        r = zeros_like(x)
+        condition1 = operator.and_(x >= -eps, x <= eps)
+        xc = x[condition1]
+        r[condition1] = 0.5 + xc/(2*eps) + 1./(2*pi)*sin(pi*xc/eps)
+        r[x > eps] = 1
+        return r
+
+    def plot(self, center=0, xmin=-1, xmax=1):
+        """
+        Return arrays x, y for plotting the Heaviside function
+        H(x-`center`) on [`xmin`, `xmax`]. For the exact
+        Heaviside function,
+        ``x = [xmin, center, center, xmax]; y = [0, 0, 1, 1]``,
+        while for the smoothed version, the ``x`` array
+        is computed on basis of the `eps` parameter.
+        """
+        if self.eps == 0:
+            return [xmin, center, center, xmax], [0, 0, 1, 1]
+        else:
+            n = 200./self.eps
+            x = concatenate(
+                linspace(xmin, center-self.eps, 21),
+                linspace(center-self.eps, center+self.eps, n+1),
+                linspace(center+self.eps, xmax, 21))
+            y = self(x)
+            return x, y
+
+
+class DiracDelta:
+    """
+    Smoothed Dirac delta function:
+    $\frac{1}{2\epsilon}(1 + \cos(\pi x/\epsilon)$ when
+    $x\in [-\epsilon, \epsilon]$ and 0 elsewhere.
+    """
+    def __init__(self, eps, vectorized=False):
+        self.eps = eps
+        if self.eps == 0:
+            raise ValueError('eps=0 is not allowed in class DiracDelta.')
+
+    def __call__(self, x):
+        if isinstance(x, (float, int)):
+            return _smooth(x)
+        elif isinstance(x, ndarray):
+            return _smooth_vec(x)
+        else:
+            raise TypeError('%s x is wrong' % type(x))
+
+    def _smooth(self, x):
+        eps = self.eps
+        if x < -eps or x > eps:
+            return 0
+        else:
+            return 1./(2*eps)*(1 + cos(pi*x/eps))
+
+    def _smooth_vec(self, x):
+        eps = self.eps
+        r = zeros_like(x)
+        condition1 - operator.and_(x >= -eps, x <= eps)
+        xc = x[condition1]
+        r[condition1] = 1./(2*eps)*(1 + cos(pi*xc/eps))
+        return r
+
+    def plot(self, center=0, xmin=-1, xmax=1):
+        """
+        Return arrays x, y for plotting the DiracDelta function
+        centered in `center` on the interval [`xmin`, `xmax`].
+        """
+        n = 200./self.eps
+        x = concatenate(
+            linspace(xmin, center-self.eps, 21),
+            linspace(center-self.eps, center+self.eps, n+1),
+            linspace(center+self.eps, xmax, 21))
+        y = self(x)
+        return x, y
+
+class IndicatorFunction:
+    """
+    Indicator function $I(x; L, R)$, which is 1 in $[L, R]$, and 0
+    outside. A parameter ``eps`` can be prescribed to provide a
+    smoothed indicator function. The indicator function is
+    defined in terms of the Heaviside function (using class
+    :class:`Heaviside`): $I(x; R, L) = H(x-L)H(R-x)$.
+    """
+    def __init__(self, interval, eps=0):
+        """
+        `interval` is a 2-tuple/list defining the interval [L, R] where
+        the indicator function is 1.
+        `eps` is a smoothing parameter: ``eps=0`` gives the standard
+        discontinuous indicator function, while a value different
+        from 0 gives rapid change from 0 to 1 over an interval of
+        length 2*`eps`.
+        """
+        self.L, self.R = interval
+        self.eps = eps
+        self.Heaviside = Heaviside(eps)
+
+    def __call__(self, x):
+        if self.eps == 0:
+            # Avoid using Heaviside functions since we want 1
+            # as value for x in [L,R) (important when indicator
+            # functions are added)
+            tol = 1E-10
+            if isinstance(x, (float, int)):
+                #return 0 if x < self.L or x >= self.R else 1
+                return 0 if x < self.L or x > self.R else 1
+            elif isinstance(x, ndarray):
+                r = ones_like(x)
+                r[x < self.L] = 0
+                #r[x >= self.R] = 0
+                r[x > self.R] = 0
+                return r
+        else:
+            return self.Heaviside(x - self.L)*self.Heaviside(self.R - x)
+
+    def plot(self, xmin=-1, xmax=1):
+        """
+        Return arrays x, y for plotting IndicatorFunction
+        on [`xmin`, `xmax`]. For the exact discontinuous
+        indicator function, we typically have
+        ``x = [xmin, L, L, R, R, xmax]; y = [0, 0, 1, 1, 0, 0]``,
+        while for the smoothed version, the densities of
+        coordinates in the ``x`` array is computed on basis of the
+        `eps` parameter.
+        """
+        if xmin > self.L or xmax < self.R:
+            raise ValueError('xmin=%g > L=%g or xmax=%g < R=%g is meaningless for plot' % (xmin, self.L, xmax, self.R))
+
+        if self.eps == 0:
+            return [xmin, L, L, R, R, xmax], [0, 0, 1, 1, 0, 0]
+        else:
+            n = 200./self.eps
+            x = concatenate(
+                linspace(xmin, self.L-self.eps, 21),
+                linspace(self.L-self.eps, self.R+self.eps, n+1),
+                linspace(self.R+self.eps, xmax, 21))
+            y = self(x)
+            return x, y
+
+    def __str__(self):
+        e = 'eps=%g' % self.eps if self.eps else ''
+        return 'I(x)=1 on [%g, %g] %s' % (self.L, self.R, e)
+
+    def __repr__(self):
+        return 'IndicatorFunction([%g, %g], eps=%g)' % \
+               (self.L, self.R, self.eps)
+
+class PiecewiseConstant:
+    """
+    Representation of a piecewise constant function.
+    The discontinuities can be smoothed out.
+    Internally, the piecewise constant function is represented
+    as a sum of indicator functions (:class:`IndicatorFunction`)
+    times corresponding values.
+    """
+    def __init__(self, domain, data, eps=0):
+        self.L, self.R = domain
+        self.data = data
+        self.eps = eps
+        if self.L != self.data[0][0]:
+            raise ValueError('domain starts at %g, while data[0][0]=%g' % \
+                             (self.L, self.data[0][0]))
+        self._indicator_functions = []
+        for i in range(len(self.data)-1):
+            self._indicator_functions.append(IndicatorFunction(
+                [self.data[i][0], self.data[i+1][0]], eps=eps))
+        self._indicator_functions.append(IndicatorFunction(
+            [self.data[-1][0], self.R], eps=eps))
+        self._values = [value for L, value in self.data]
+
+    def __call__(self, x):
+        #if self.eps == 0:
+        if 0:
+            return self.value(x)
+        else:
+            return sum(value*I(x) \
+                       for I, value in \
+                       zip(self._indicator_functions, self._values))
+
+    def value(self, x):
+        """Alternative implementation to __call__."""
+        if isinstance(x, (float,int)):
+            x = array([x], float)
+        a = zeros(len(x))
+        s = 0  # interval counter
+        for i in range(len(x)):
+            if s < len(self.data)-1 and x[i] > self.data[s+1][0]:
+                s += 1
+            a[i] = self.data[s][1]
+        if len(a) == 1:
+            return a[0]
+        else:
+            return a
+
+    def plot(self):
+        if self.eps == 0:
+            x = []; y = []
+            for I, value in zip(self._indicator_functions, self._values):
+                x.append(I.L)
+                y.append(value)
+                x.append(I.R)
+                y.append(value)
+            return x, y
+        else:
+            n = 200/self.eps
+            if len(self.data) == 1:
+                return [self.L, self.R], [self._values[0], self._values[0]]
+            else:
+                x = [linspace(self.data[0][0], self.data[1][0]-self.eps, 21)]
+                # Iterate over all internal discontinuities
+                for I in self._indicator_functions[1:]:
+                    x.append(linspace(I.L-self.eps, I.L+self.eps, n+1))
+                    x.append(linspace(I.L+self.eps, I.R-self.eps, 21))
+                # Last part
+                x.append(linspace(I.R-self.eps, I.R, 3))
+                x = concatenate(x)
+                y = self(x)
+                return x, y
+
+
 # the norm_* functions also work for arrays with dimensions larger than 2,
-# in contrast to (most of) the numpy.linalg.norm function
+# in contrast to (most of) the numpy.linalg.norm functions
 
 def norm_l2(u):
     """
@@ -769,6 +1032,20 @@ class WrapDiscreteData2Callable:
     """
     def __init__(self, data):
         self.data = data  # (x,y,f) data for an f(x,y) function
+        try:
+            import Scientific
+            v = Scientific.__version__
+            target = '2.9.1'
+            if v < target:
+                raise ImportError(
+                    'ScientificPython is in (old) version %s, need %s' \
+                    % (v, target))
+        except ImportError:
+            raise ImportError(
+                'Could not import ScientificPython.\n'
+                'This package must be installed.\n'
+                'See https://sourcesup.cru.fr/projects/scientific-py/')
+
         from Scientific.Functions.Interpolation \
              import InterpolatingFunction # from ScientificPython
         self.interpolating_function = \
