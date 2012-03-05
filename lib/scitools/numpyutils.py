@@ -623,12 +623,13 @@ class DiracDelta:
 class IndicatorFunction:
     """
     Indicator function $I(x; L, R)$, which is 1 in $[L, R]$, and 0
-    outside. A parameter ``eps`` can be prescribed to provide a
-    smoothed indicator function. The indicator function is
+    outside. Two parameters ``eps_L`` and ``eps_R`` can be set
+    to provide smoothing of the left and/or right discontinuity
+    in the indicator function. The indicator function is
     defined in terms of the Heaviside function (using class
     :class:`Heaviside`): $I(x; R, L) = H(x-L)H(R-x)$.
     """
-    def __init__(self, interval, eps=0):
+    def __init__(self, interval, eps_L=0, eps_R=0):
         """
         `interval` is a 2-tuple/list defining the interval [L, R] where
         the indicator function is 1.
@@ -638,11 +639,12 @@ class IndicatorFunction:
         length 2*`eps`.
         """
         self.L, self.R = interval
-        self.eps = eps
-        self.Heaviside = Heaviside(eps)
+        self.eps_L, self.eps_R = eps_L, eps_R
+        self.Heaviside_L = Heaviside(eps_L)
+        self.Heaviside_R = Heaviside(eps_R)
 
     def __call__(self, x):
-        if self.eps == 0:
+        if self.eps_L == 0 and self.eps_R == 0:
             # Avoid using Heaviside functions since we want 1
             # as value for x in [L,R) (important when indicator
             # functions are added)
@@ -657,7 +659,7 @@ class IndicatorFunction:
                 r[x > self.R] = 0
                 return r
         else:
-            return self.Heaviside(x - self.L)*self.Heaviside(self.R - x)
+            return self.Heaviside_L(x - self.L)*self.Heaviside_R(self.R - x)
 
     def plot(self, xmin=-1, xmax=1):
         """
@@ -695,7 +697,7 @@ class PiecewiseConstant:
     """
     Representation of a piecewise constant function.
     The discontinuities can be smoothed out.
-    Internally, the piecewise constant function is represented
+    In this latter case the piecewise constant function is represented
     as a sum of indicator functions (:class:`IndicatorFunction`)
     times corresponding values.
     """
@@ -706,17 +708,29 @@ class PiecewiseConstant:
         if self.L != self.data[0][0]:
             raise ValueError('domain starts at %g, while data[0][0]=%g' % \
                              (self.L, self.data[0][0]))
+        self._boundaries = [x for x, value in data]
+        self._boundaries.append(self.R)
+        self._values = [value for x, value in data]
+        self._boundaries = array(self._boundaries, float)
+        self._values = array(self._values, float)
+
         self._indicator_functions = []
-        for i in range(len(self.data)-1):
+        # Ensure eps_L=0 at the left and eps_R=0 at the right,
+        # while both are eps at internal boundaries,
+        # i.e., the function is always discontinuous at the start and end
+        for i in range(len(self.data)):
+            if i == 0:
+                eps_L = 0; eps_R = eps  # left boundary
+            elif i == len(self.data)-1:
+                eps_R = 0; eps_L = eps  # right boundary
+            else:
+                eps_L = eps_R = eps     # internal boundary
             self._indicator_functions.append(IndicatorFunction(
-                [self.data[i][0], self.data[i+1][0]], eps=eps))
-        self._indicator_functions.append(IndicatorFunction(
-            [self.data[-1][0], self.R], eps=eps))
-        self._values = [value for L, value in self.data]
+                [self._boundaries[i], self._boundaries[i+1]],
+                 eps_L=eps_L, eps_R=eps_R))
 
     def __call__(self, x):
-        #if self.eps == 0:
-        if 0:
+        if self.eps == 0:
             return self.value(x)
         else:
             return sum(value*I(x) \
@@ -726,16 +740,10 @@ class PiecewiseConstant:
     def value(self, x):
         """Alternative implementation to __call__."""
         if isinstance(x, (float,int)):
-            x = array([x], float)
-        a = zeros(len(x))
-        s = 0  # interval counter
-        for i in range(len(x)):
-            if s < len(self.data)-1 and x[i] > self.data[s+1][0]:
-                s += 1
-            a[i] = self.data[s][1]
-        if len(a) == 1:
-            return a[0]
+            return self._values[x >= self._boundaries[:-1]][-1]
         else:
+            a = array([self._values[xi >= self._boundaries[:-1]][-1]
+                       for xi in x])
             return a
 
     def plot(self):

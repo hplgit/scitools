@@ -1255,26 +1255,8 @@ class Download(threading.Thread):
 
 def hardware_info():
     """
-    Note: This function is very simple - NumPy has a much more sophisticated
-    module for extracting hardware and CPU information:
-    numpy.distutils.cpuinfo. Here is an example on its usage::
-
-      import numpy.distutils.cpuinfo, pprint
-      pprint.pprint(numpy.distutils.cpuinfo.cpu.info)
-
-    The present hardware_info function serves more as an illustration of
-    how one can easily obtain the most basic hardware information using
-    tools that comes with Python or are easily available from the system.
-
-    ---------------------------------------------------------------------------
-
-    Extract hardware information using Python's platform module
-    and (if available) files such as /proc/cpuinfo.
-
-    Return: dictionary with keys "uname", "identifier", "python version",
-    "python build", and "cpuinfo".
-    The "identifier" entry is a string that can be
-    used in filenames (the string returned from platform.platform()).
+    Return a dictionary of various types of hardware info from
+    various modules.
 
     Recommended use::
 
@@ -1284,7 +1266,9 @@ def hardware_info():
     """
     result = {}
 
-    # infofile on Linux machines:
+    # read cpuinfo file on Linux machines
+    # (numpy.distutils.cpuinfo already does this)
+    """
     infofile = '/proc/cpuinfo'
     cpuinfo = {}
     if os.path.isfile(infofile):
@@ -1294,6 +1278,9 @@ def hardware_info():
                 name, value = [w.strip() for w in line.split(':')]
             except:
                 continue
+            if name not in ('model', 'processor', 'stepping', 'flags',):
+                cpuinfo[name] = value
+            # Override a few with better names
             if name == 'model name':
                 cpuinfo['CPU type'] = value
             elif name == 'cache size':
@@ -1303,14 +1290,35 @@ def hardware_info():
             elif name == 'vendor_id':
                 cpuinfo['vendor ID'] = value
         f.close()
-    result['cpuinfo'] = cpuinfo
+    result['file: /proc/cpuinfo'] = cpuinfo
+    """
+    import numpy.distutils.cpuinfo
+    info = numpy.distutils.cpuinfo.cpu.info.copy()
+    # Delete some of the items
+    for name in ('model', 'processor', 'stepping', 'flags',):
+        if name in info:
+            del info[name]
+    result['numpy.distutils.cpuinfo.cpu.info'] = info
 
-    # check out platform module:
+    # check out platform module from basic Python:
     import platform
-    result['uname'] = platform.uname()
-    result['python version'] = platform.python_version()
-    result['python build'] = platform.python_build()
-    result['identifier'] = platform.platform()
+    platform_info['uname'] = platform.uname()
+    platform_info['python version'] = platform.python_version()
+    platform_info['python build'] = platform.python_build()
+    platform_info['identifier'] = platform.platform()
+    result['platform module'] = platform_info
+
+    # Trent Mick's platinfo module
+    try:
+        import platinfo2  # code.google.com/p/platinfo
+        try:
+            pi = platinfo.PlatInfo()
+            result['platinfo2 module'] = pi.as_dict()
+        except:
+            pass
+    except:
+        pass
+
     return result
 
 
