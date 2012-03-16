@@ -66,13 +66,13 @@ class MaterialProperties(object):
 
     def __str__(self):
         return pprint.pformat(self._prop)
-    
+
     def setp(self, **kwargs):
         for key in self._prop.keys():
             if key in kwargs:
                 _check_type(kwargs[key], key, (int,float))
                 self._prop[key] = float(kwargs[key])
-        
+
     def getp(self, name):
         try:
             return self._prop[name]
@@ -89,7 +89,7 @@ class PlotProperties(object):
     for different kinds of plots.
 
     All properties are stored in the dictionary self._prop.
-    
+
     """
     _colors = "b g r m c y k w".split()
     _markers = "o + x * s d v ^ < > p h .".split()
@@ -97,17 +97,17 @@ class PlotProperties(object):
     _sizes = "1 2 3 4 5 6 7 8 9".split()
     _styledoc = {'y': 'yellow',
                  'm': 'magenta',
-                 'c': 'cyan',          
-                 'r': 'red',           
-                 'g': 'green',         
-                 'b': 'blue',     
-                 'w': 'white',    
+                 'c': 'cyan',
+                 'r': 'red',
+                 'g': 'green',
+                 'b': 'blue',
+                 'w': 'white',
                  'k': 'black',
 
-                 '.': 'point',       
-                 'o': 'circle',      
-                 'x': 'x-mark',       
-                 '+': 'plus',              
+                 '.': 'point',
+                 'o': 'circle',
+                 'x': 'x-mark',
+                 '+': 'plus',
                  '*': 'star',
                  's': 'square',
                  'd': 'diamond',
@@ -117,7 +117,7 @@ class PlotProperties(object):
                  '>': 'triangle (right)',
                  'p': 'pentagram',
                  'h': 'hexagram',
-                 
+
                  '-': 'solid',
                  ':': 'dotted',
                  '-.':'dashdot',
@@ -141,7 +141,7 @@ class PlotProperties(object):
         'pointsize': 1.0,
         'material': None,
         'memoryorder': 'yxz',  # FIXME: this is deprecated and will be removed
-        'indexing': 'ij',  # 'xy' is Cartesian indexing, 'ij' matrix indexing 
+        'indexing': 'ij',  # 'xy' is Cartesian indexing, 'ij' matrix indexing
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
@@ -174,7 +174,7 @@ class PlotProperties(object):
     def dump(self):
         """Dump the parameters of this object."""
         return str(self)
-    
+
     def setp(self, **kwargs):
         """
         Set plot properties.
@@ -194,7 +194,7 @@ class PlotProperties(object):
         if 'linewidth' in kwargs:
             _check_type(kwargs['linewidth'], 'linewidth', (float,int))
             self._prop['linewidth'] = float(kwargs['linewidth'])
-            
+
         if 'linecolor' in kwargs:
             color = kwargs['linecolor']
             if isinstance(color, str) and color in self._colors:
@@ -204,14 +204,14 @@ class PlotProperties(object):
             else:
                 raise ValueError("linecolor must be '%s', not '%s'" % \
                                  (self._colors, kwargs['linecolor']))
-            
+
         if 'linetype' in kwargs:
             if kwargs['linetype'] in self._linestyles:
                 self._prop['linetype'] = kwargs['linetype']
             else:
                 raise ValueError("linetype must be '%s', not '%s'" % \
                                  (self._linestyles, kwargs['linetype']))
-            
+
         if 'linemarker' in kwargs:
             if kwargs['linemarker'] in self._markers:
                 self._prop['linemarker'] = kwargs['linemarker']
@@ -261,7 +261,7 @@ class PlotProperties(object):
                   "removed in the future. Please use the 'indexing' keyword " \
                   "argument instead."
             warn(msg, DeprecationWarning)
-        
+
         if prm_name is None:
             return self._prop
         else:
@@ -290,12 +290,12 @@ class PlotProperties(object):
             pointsize = ""
             # Notice that '--' and '-.' are before '-' in the _linestyles
             # alphabet.
-            
+
             for item in self._linestyles:
                 if item in format:
                     linetype = item
                     break
-            
+
             for item in format:
                 if item in self._colors:
                     color = item
@@ -306,7 +306,7 @@ class PlotProperties(object):
                         else:
                             marker = item # same as '.'
                     else:
-                        marker = item 
+                        marker = item
                 elif item in self._sizes:
                     # this int describes pointsize or linewidth
                     self._prop['pointsize'] = item
@@ -340,7 +340,7 @@ class PlotProperties(object):
         return self._prop['xlim']+self._prop['ylim']+self._prop['zlim']
 
     def _set_lim(self, a, name, adj_step=0.03):
-        try: 
+        try:
             amin = arrmin(a)
             amax = arrmax(a)
         except ValueError:
@@ -356,7 +356,7 @@ class PlotProperties(object):
 class Line(PlotProperties):
     """
     Storage of information about lines in curve plots.
-    """    
+    """
     _local_prop = {
         'xdata': None,
         'ydata': None,
@@ -365,7 +365,7 @@ class Line(PlotProperties):
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
-    
+
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Line._local_prop)
@@ -379,7 +379,7 @@ class Line(PlotProperties):
         contents and sets the format information.
         """
         PlotProperties.setp(self, **kwargs)
-        
+
         # Here x,y values can be any SequenceType
         # The proper casting should be in the backends plotroutine
 
@@ -393,7 +393,7 @@ class Line(PlotProperties):
             if 'y' in kwargs:  # will only set y variable if z is set
                 if isinstance(kwargs['y'], basestring) \
                        and kwargs['y'] == 'auto':
-                    # now y is the indicies of z 
+                    # now y is the indicies of z
                     y = range(len(z))
                 else:
                     if not operator.isSequenceType(kwargs['y']):
@@ -403,7 +403,7 @@ class Line(PlotProperties):
             if 'x' in kwargs:  # will only set x variable if y is set
                 if isinstance(kwargs['x'], basestring) \
                        and kwargs['x'] == 'auto':
-                    # now x is the indicies of y 
+                    # now x is the indicies of y
                     x = range(len(y))
                 else:
                     if not operator.isSequenceType(kwargs['x']):
@@ -420,7 +420,7 @@ class Line(PlotProperties):
                    'not %d' % (size(x),size(x),size(z))
 
             self._set_data(x, y, z)
-            
+
         elif 'y' in kwargs:
             if not operator.isSequenceType(kwargs['y']):
                 raise TypeError("Can only plot sequence types, "\
@@ -431,7 +431,7 @@ class Line(PlotProperties):
             if 'x' in kwargs:  # will only set x variable if y is set
                 if isinstance(kwargs['x'], basestring) \
                        and kwargs['x'] == 'auto':
-                    # now x is the indicies of y 
+                    # now x is the indicies of y
                     x = range(len(y))
                 else:
                     if not operator.isSequenceType(kwargs['x']):
@@ -478,12 +478,12 @@ class Bars(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Bars._local_prop)
-        self.setp(**kwargs) 
+        self.setp(**kwargs)
         self._parseargs(*args)
 
     def setp(self, **kwargs):
         PlotProperties.setp(self, **kwargs)
-        
+
         if 'barwidth' in kwargs:
             self._prop['barwidth'] = float(kwargs['barwidth'])
 
@@ -524,7 +524,7 @@ class Bars(PlotProperties):
             x = range(len(y))
         else:
             raise TypeError("Bars._parseargs: wrong number of arguments")
-            
+
         self._set_data(x, y)
 
     def _set_data(self, x, y):
@@ -558,9 +558,9 @@ class Surface(PlotProperties):
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Surface._local_prop)
-        self.setp(**kwargs) 
+        self.setp(**kwargs)
         self._parseargs(*args)
-        
+
         if self._prop['function'] in ['meshc', 'surfc']:
             self._prop['contours'] = Contours(self._prop['xdata'],
                                               self._prop['ydata'],
@@ -569,7 +569,7 @@ class Surface(PlotProperties):
 
     def setp(self, **kwargs):
         PlotProperties.setp(self, **kwargs)
-        
+
         if 'wireframe' in kwargs:
             self._prop['wireframe'] = _toggle_state(kwargs['wireframe'])
 
@@ -582,10 +582,10 @@ class Surface(PlotProperties):
             x, y, z = _check_xyz(args[0], indexing=kwargs['indexing'])
         else:
             raise TypeError("Surface._parseargs: wrong number of arguments")
-        
+
         if nargs == 2 or nargs == 4: # mesh(...,C)
             self._prop['cdata'] = args[-1]
-            
+
         self._set_data(x, y, z)
 
     def _set_data(self, x, y, z):
@@ -620,7 +620,7 @@ class Contours(PlotProperties):
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
-    
+
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Contours._local_prop)
@@ -671,7 +671,7 @@ class Contours(PlotProperties):
                     " argument %d, not %s" % (nargs, type(tmp)))
 
         self._set_data(x, y, z)
-        
+
     def _set_data(self, x, y, z):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
@@ -687,7 +687,7 @@ class Contours(PlotProperties):
         elif self._prop['function'] == 'contourf':
             self._prop['filled'] = True
 
-    
+
 class VelocityVectors(PlotProperties):
     """
     Information about velocity vectors in a vector plot.
@@ -701,7 +701,7 @@ class VelocityVectors(PlotProperties):
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
-    
+
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(VelocityVectors._local_prop)
@@ -720,13 +720,13 @@ class VelocityVectors(PlotProperties):
 
     def _parseargs(self, *args):
         # allow both quiver(...,LineSpec,'filled') and quiver(...,'filled',LS):
-        for i in range(2): 
+        for i in range(2):
             if isinstance(args[-1], str):
                 if args[-1] == 'filled':
                     self._prop['filledarrows'] = True;  args = args[:-1]
                 else:
                     self.setformat(args[-1]);  args = args[:-1]
-                    
+
         z, w = [None]*2
         func = self._prop['function']
         kwargs = {'indexing': self._prop['indexing']}
@@ -773,7 +773,7 @@ class VelocityVectors(PlotProperties):
                 maxlen = max(length.flat)
             else:
                 maxlen = 0
-  
+
             if maxlen > 0:
                 as_ = as_*0.9/maxlen
             else:
@@ -824,7 +824,7 @@ class Streams(PlotProperties):
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
-    
+
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Streams._local_prop)
@@ -865,7 +865,7 @@ class Streams(PlotProperties):
             else: # streamline(X,Y,U,V,startx,starty)
                 x = u;  y = v
                 #u, v = [asarray(a) for a in args[2:4]]
-                u, v, sx, sy = [asarray(a) for a in args[2:6]]                
+                u, v, sx, sy = [asarray(a) for a in args[2:6]]
         elif nargs >= 4 and nargs <= 5: # streamline(U,V,startx,starty)
             u, v = [asarray(a) for a in args[:2]]
             try:
@@ -874,7 +874,7 @@ class Streams(PlotProperties):
                 raise ValueError("u must be 2D, not %dD" % rank(u))
             x, y = ndgrid(seq(nx-1), seq(ny-1))
             sx, sy = [asarray(a) for a in args[2:4]]
-        elif nargs >= 1 and nargs <= 2: # streamline(XYZ) or streamline(XY) 
+        elif nargs >= 1 and nargs <= 2: # streamline(XYZ) or streamline(XY)
             raise NotImplementedError('Streams._parseargs: not implemented')
         else:
             raise TypeError('wrong number of arguments')
@@ -964,7 +964,7 @@ class Volume(PlotProperties):
     __doc__ += docadd('Keywords for the setp method',
                       PlotProperties._local_prop.keys(),
                       _local_prop.keys())
-    
+
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
         self._prop.update(Volume._local_prop)
@@ -1013,7 +1013,7 @@ class Volume(PlotProperties):
         else:
             raise TypeError("Wrong number of arguments")
 
-        if nargs == 5 or nargs == 8: 
+        if nargs == 5 or nargs == 8:
             func = self._prop['function']
             tmparg = args[-1]
             if func == 'slice_': # slice_(...,'method')
@@ -1036,7 +1036,7 @@ class Volume(PlotProperties):
     def _parseargs_isosurface(self, *args):
         kwargs = {'indexing': self._prop['indexing']}
         nargs = len(args)
-        if nargs >= 5 and nargs <= 6: # isosurface(X,Y,Z,V,isovalue) 
+        if nargs >= 5 and nargs <= 6: # isosurface(X,Y,Z,V,isovalue)
             x, y, z, v = _check_xyzv(*args[:4], **kwargs)
             isovalue = float(args[4])
         elif nargs >= 2 and nargs <= 3: # isosurface(V,isovalue)
@@ -1053,7 +1053,7 @@ class Volume(PlotProperties):
             self._prop['cdata'] = cdata
 
         self._set_data(x, y, z, v, isovalue=isovalue)
-    
+
     def _set_data(self, x, y, z, v, slices=None, isovalue=None):
         self._set_lim(x, 'xlim')
         self._set_lim(y, 'ylim')
@@ -1081,19 +1081,19 @@ class Colorbar(object):
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
-    
+
     _locations = 'North South East West NorthOutside SouthOutside ' \
                  'EastOutside WestOutside'.split()
 
     __doc__ += docadd('Legal values for color bar location',
                       _locations)
-    
+
     def __init__(self, **kwargs):
         self._prop = {}
         self._prop.update(Colorbar._local_prop)
         self._defaults = self._prop.copy()
         self.setp(**kwargs)
-        
+
     def __str__(self):
         return pprint.pformat(self._prop)
 
@@ -1135,7 +1135,7 @@ class Light(object):
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
-    
+
     def __init__(self, **kwargs):
         self._prop = {}
         self._prop.update(Light._local_prop)
@@ -1172,7 +1172,7 @@ class Light(object):
         except:
             raise KeyError("%s.getp: no parameter with name '%s'." % \
                            (self.__class__.__name__, name))
-    
+
     def reset(self):
         self._prop = self._defaults.copy()
 
@@ -1203,7 +1203,7 @@ class Camera(object):
 
     __doc__ += docadd('Legal values for the mode keyword', _modes)
     __doc__ += docadd('Legal values for the camproj keyword', _camprojs)
-    
+
     def __init__(self, axis, **kwargs):
         self._prop = {}
         self._prop.update(Camera._local_prop)
@@ -1221,7 +1221,7 @@ class Camera(object):
             else:
                 raise ValueError("Camera.setp: cammode must be %s, not %s" % \
                                  (self._modes, kwargs['cammode']))
-        
+
         if 'view' in kwargs:
             view = kwargs['view']
             if view in (2,3):
@@ -1249,7 +1249,7 @@ class Camera(object):
             self._prop['azimuth'] = float(kwargs['azimuth'])
             if self._prop['elevation'] is None:
                 self._prop['elevation'] = 0
-            
+
         if 'elevation' in kwargs:
             _check_type(kwargs['elevation'], 'elevation', (int,float))
             self._prop['elevation'] = float(kwargs['elevation'])
@@ -1283,7 +1283,7 @@ class Camera(object):
         self._prop['camtarget'] = self._ax.getp('center')
         if self._prop['view'] == 3:
             self._prop['camup'] = (0,0,1)
-    
+
 
 class Axis(object):
     """
@@ -1346,7 +1346,7 @@ class Axis(object):
                     'center left': 6, 'center right': 7,
                     'lower center': 8, 'upper center': 9,
                     'best': 0, 'right': 5, 'center': 10}
-    
+
     __doc__ += docadd('Legal values for direction keyword', _directions)
     __doc__ += docadd('Legal values for method keyword', _methods)
     __doc__ += docadd('Legal values for mode keyword', _modes)
@@ -1354,7 +1354,7 @@ class Axis(object):
     __doc__ += docadd('Legal values for shading keyword', _shadings)
     __doc__ += docadd('Legal values for legend locations',
                       list(_legend_locs.keys()))
-    
+
     def __init__(self, *args, **kwargs):
         self._prop = {}
         self._prop.update(Axis._local_prop)
@@ -1369,7 +1369,7 @@ class Axis(object):
     def dump(self):
         """Dump the parameters of this object."""
         return str(self)
-    
+
     def setp(self, **kwargs):
         if 'mode' in kwargs:
             mode = kwargs['mode']
@@ -1382,7 +1382,7 @@ class Axis(object):
             else:
                 raise ValueError("Axis.setp: mode must be %s, not %s" % \
                                  (self._modes, mode))
-            
+
         if 'method' in kwargs:
             if kwargs['method'] in self._methods:
                 self._prop['method'] = kwargs['method']
@@ -1401,7 +1401,7 @@ class Axis(object):
             if key in kwargs:
                 self._toggle_state(key, kwargs[key])
                 del kwargs[key]
-            
+
         if 'colorbar' in kwargs:
             if isinstance(kwargs['colorbar'], Colorbar):
                 self._prop['colorbar'] = kwargs['colorbar']
@@ -1439,7 +1439,7 @@ class Axis(object):
             else:
                 raise ValueError("Axis.setp: caxismode must be %s, not %s" \
                                  (self._modes, mode))
-        
+
         if 'shading' in kwargs:
             if kwargs['shading'] in self._shadings:
                 self._prop['shading'] = kwargs['shading']
@@ -1500,7 +1500,7 @@ class Axis(object):
         for key in 'title xlabel ylabel zlabel'.split():
             if key in kwargs and isinstance(kwargs[key], str):
                 self._prop[key] = kwargs[key]
-                
+
         if 'daspect' in kwargs:
             daspect = kwargs['daspect']
             if isinstance(daspect, (int,float)):
@@ -1510,7 +1510,7 @@ class Axis(object):
             self._prop['daspect'] = [float(elm) for elm in daspect]
             self._prop['daspectmode'] = 'manual'
 
-        if 'daspectmode' in kwargs and kwargs['daspectmode'] in self._modes:
+        if 'daspectmode' in kwargs:
             self._prop['daspectmode'] = kwargs['daspectmode']
 
         if 'fgcolor' in kwargs:
@@ -1646,7 +1646,7 @@ class Axis(object):
         center[1] = (ymax + ymin) / 2.0
         center[2] = (zmax + zmin) / 2.0
         self._prop['center'] = tuple(center)
-        
+
     def _check_lim(self, l1, l2):
         """Return a tuple with the "larger" values of 'l1' and 'l2'."""
         lim = [None]*2
@@ -1704,7 +1704,7 @@ class Axis(object):
                 else:
                     daspect = (sx/scale, sy/scale, sz/scale)
                 self._prop['daspect'] = daspect
-                            
+
 
 class Figure(object):
     """Hold figure attributtes like axes, size, ...."""
@@ -1740,7 +1740,7 @@ class Figure(object):
             #s += pprint.pformat(str(self._prop['axes'][ax]))
             s += pprint.pformat(self._prop['axes'][ax]._prop)
         return s
-    
+
     def gca(self):
         """Return current axis."""
         return self._prop['axes'][self._prop['curax']]
@@ -1795,7 +1795,7 @@ class Figure(object):
             number = kwargs['number']
             _check_type(number, 'number', int)
             self._prop['number'] = number
-                   
+
     def getp(self, prm_name):
         try:
             return self._prop[prm_name]
@@ -1834,10 +1834,10 @@ class BaseClass(object):
 
     This base class saves info about plotting to instances of class Figure,
     Line, and PlotItem.
-    
+
     List of internal helper functions (for subclasses):
     ...
-    
+
 
     """
     _matlab_like_cmds = [
@@ -1862,11 +1862,11 @@ class BaseClass(object):
         'white', 'winter', 'xlabel', 'ylabel', 'zlabel']
     __doc__ += docadd('List of "Matlab-like" interface functions (for ' + \
                       'the user)', _matlab_like_cmds)
-    
+
     _local_attrs = {
         'curfig': 1,         # current figure
         'show': True,        # screenplot after each plot command
-        #'changed': False,    # sync state       
+        #'changed': False,    # sync state
         'interactive': True, # update backend after each change
         'color': False,      # hardcopy with color?
         }
@@ -1880,7 +1880,7 @@ class BaseClass(object):
                    #'changed': lambda arg: isinstance(arg, (bool)),
                    'color': lambda arg: isinstance(arg,(bool))
                    }
-    
+
     def __init__(self):
         BaseClass.init(self)
 
@@ -1890,10 +1890,10 @@ class BaseClass(object):
         self._figs = {1: Figure()}  # dictionary of figure instances
         self._attrs = {}
         self._attrs.update(BaseClass._local_attrs)
-    
+
     def __str__(self):
         return pprint.pformat(self._attrs)
-    
+
     def setp(self, *args, **kwargs):
         """
         Set object properties or attributes in this backend instance.
@@ -1919,7 +1919,7 @@ class BaseClass(object):
 
         if 'savefig' in kwargs:  # synonym: hardcopy
             kwargs['hardcopy'] = kwargs['savefig']
-            
+
         for key in kwargs:
             value = kwargs[key]
             if key in self._attrs:  # legal key?
@@ -1940,8 +1940,8 @@ class BaseClass(object):
         #set.__doc__ += docadd('Keywords for the setp method',
         #                      BaseClass._local_attrs.keys(),
         #                      SomeSubClass._local_attrs.keys())
-                    
-    def getp(self, *args): 
+
+    def getp(self, *args):
         """
         Get object properties or an attribute in this backend instance.
 
@@ -1950,7 +1950,7 @@ class BaseClass(object):
             getp('name')
 
         returns the attribute with name 'name' in this backend instance.
-        
+
         Calling::
 
             getp(obj, 'name')
@@ -1958,7 +1958,7 @@ class BaseClass(object):
         returns the property with name 'name' of the object given in obj. This
         object must have a get method (like Figure, Axis, or PlotProperties
         objects).
-        
+
         Calling::
 
             getp(obj)
@@ -1982,7 +1982,7 @@ class BaseClass(object):
                                    (self.__class__.__name__, prm_name))
         else:
             raise TypeError("getp: wrong number of arguments")
-            
+
         # subclasses should extend the doc string like this:
         #getp.__doc__ += docadd('Keywords for the getp method',
         #                       BaseClass._local_attrs.keys(),
@@ -1991,9 +1991,9 @@ class BaseClass(object):
     #def __getitem__(self, name):  self.getp(name)
 
     #def __setitem__(self, name, value):  self.setp({name:value})
-        
-        
-    def _replot(self, *args, **kwargs): 
+
+
+    def _replot(self, *args, **kwargs):
         """
         Update backend after change in data.
         This is a key routine and must be implemented in the backend.
@@ -2016,7 +2016,7 @@ class BaseClass(object):
     def _cmpPlotProperties(self, a, b):
         """Sort cmp function for PlotProperties."""
         plotorder = [Volume, Streams, Surface, Contours,
-                     VelocityVectors, Bars, Line] 
+                     VelocityVectors, Bars, Line]
         assert isinstance(a, PlotProperties)
         assert isinstance(b, PlotProperties)
         assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) ==\
@@ -2039,13 +2039,13 @@ class BaseClass(object):
             axes()
 
         returns a default Axis instance.
-        
+
         Calling::
 
             axes(ax)
 
         sets the axis in the Axis instance ax as the current axis.
-        
+
         Calling::
 
             axes(viewport=RECT)
@@ -2127,23 +2127,33 @@ class BaseClass(object):
         sets the data aspect ratio for the x, y, and z axis (e.g.,
         daspect([1,2,4]) means that one unit in x direction is equal in
         length to two units in y direction and four units in z direction).
-        Note that this is not supported by all backends.
+        For example, daspect([r,1,1]) makes the physical size of the
+        y axis in the plot r times the x axis.
+
+        The size of the axes must be explicitly in order for the
+        daspect command to work properly.
+        Note that setting the aspect ratio is not supported by all backends.
 
         Calling::
 
             daspect()
 
         returns the data aspect ratio for the current axis.
-        
+
         Calling::
 
             daspect(mode)
 
-        sets the data aspect ratio mode, where mode can be either 'auto'
+        sets the data aspect ratio mode, where mode can be 'auto', 'equal',
         or 'manual'. By specifying the mode to 'auto' (default), the data
         aspect ratio will be automatically computed so that each axis spans
-        the available space in the figure window.
-        
+        the available space in the figure window. In the 'manual' mode
+        the user sets the aspect ratio, while 'equal' means that the
+        the same units are used in both axes (for example, if the x axis
+        goes from 0 to 10 and the y axis from 0 to 1, and we want the
+        x axis ten times as long as the y axis, the manual aspect ratio
+        er 0.1, and 'equal' will automatically set the ratio to 0.1).
+
         Calling::
 
             daspect('mode')
@@ -2158,7 +2168,7 @@ class BaseClass(object):
         support setting individual aspect ratios for the x, y, and z axis
         (like the Gnuplot backend). If the backend do support individual
         aspect ratios, the aspect ratio is set to r for all three axes.
-                
+
         Calling::
 
             daspect(ax, ...)
@@ -2173,7 +2183,7 @@ class BaseClass(object):
         >>> surf(peaks(21))
         <scitools.easyviz.common.Surface object at 0xb58ff70c>
         >>> daspect([1,1,1])
-        >>> 
+        >>>
         """
         ax, args, nargs = self._check_args(*args)
 
@@ -2190,11 +2200,11 @@ class BaseClass(object):
                 ax.setp(daspect=arg)
         else:
             raise TypeError("daspect: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
-    def openfig(self, filename='figspickle.txt'): 
+    def openfig(self, filename='figspickle.txt'):
         """
         Load figures saved in a file (with the given filename).
         The format of this file is currently standard Python pickle format.
@@ -2216,10 +2226,10 @@ class BaseClass(object):
                     fail = True
         if fail:
             raise Exception("Import error. Cannot retrieve figures from filename %s ." % filename)
-          
+
         self._figs.update(filefigs)
-        
-    def savefig(self, filename='figspickle.txt'): 
+
+    def savefig(self, filename='figspickle.txt'):
         """
         Save all current figures to a file (with the given filename).
         The file has standard Python pickle format (dict of Figure
@@ -2230,7 +2240,7 @@ class BaseClass(object):
         pickle.dump(self._figs, handle)
         handle.close()
 
-    def hardcopy(self, filename, **kwargs): 
+    def hardcopy(self, filename, **kwargs):
         """
         Save a hardcopy of the current figure to file (with the given
         filename). The file format (image type) is determined from the
@@ -2243,7 +2253,7 @@ class BaseClass(object):
         raise NotImplementedError('hardcopy not implemented in class %s' % \
                                   self.__class__.__name__)
 
-    def hold(self, *args): 
+    def hold(self, *args):
         """Change the hold state of the current axis.
 
         Calling::
@@ -2283,14 +2293,14 @@ class BaseClass(object):
             print "hold state is %s" % ax.getp('hold')
         else:
             raise TypeError('hold: wrong number of arguments')
-                 
+
     def ishold(self):
         """
         Return the hold state (True if hold is on, and False if it is off).
         """
         return self.gca().getp('hold')
-        
-    def figure(self, num=None, **kwargs): 
+
+    def figure(self, num=None, **kwargs):
         """
         Create a new figure or switch between figures and return Figure object.
         num is the figure number of the new or existing figure.
@@ -2309,12 +2319,12 @@ class BaseClass(object):
             # Points to class Figure or other convenient function
             # In gnuplot backend this should instantiate a new pipe instead
             kwargs['number'] = num
-            self._figs[num] = Figure(**kwargs)             
-                                              
+            self._figs[num] = Figure(**kwargs)
+
         self._attrs['curfig'] = num
         return self._figs[num]
-    
-    def clf(self): 
+
+    def clf(self):
         """Clear the current figure."""
         #self.gcf().reset()
         del self._figs[self._attrs['curfig']]
@@ -2338,34 +2348,34 @@ class BaseClass(object):
         ax, args, nargs = self._check_args(*args)
         ax.reset()
 
-    def axis(self, *args, **kwargs): 
+    def axis(self, *args, **kwargs):
         """Choose the axis limits and appearance.
 
         Calling::
 
             axis([xmin, xmax, ymin, ymax[, zmin, zmax]])
-              
+
         sets the limits on the x-, y-, and z-axes in the current plot.
 
         Calling::
 
             axis(xmin, xmax, ymin, ymax[, zmin, zmax])
-              
+
         gives the same result as above.
 
         Calling::
 
             axis()
-              
+
         returns the limits on the x-, y-, and z-axes for the current plot.
         If the view in the current plot is a 2D view, only the limits on the
         x- and y-axis are returned.
-        
+
         Calling::
 
             axis(mode)
-        
-        sets axis scaling to mode, where mode can be 
+
+        sets axis scaling to mode, where mode can be
 
           * 'auto'   - autoscaling is used
           * 'manual' - freeze the scaling at the current limits
@@ -2375,14 +2385,14 @@ class BaseClass(object):
         Calling::
 
             axis(method)
-              
+
         sets the appearance of the current axis as specified by method.
         %s
 
         Calling::
 
             axis(direction)
-              
+
         sets the direction of the increasing values on the axes.
 
           * 'ij' - reverse y-axis
@@ -2391,7 +2401,7 @@ class BaseClass(object):
         Calling::
 
             axis('off')
-              
+
         turns off the visibility of the axis.
 
         Calling::
@@ -2403,11 +2413,11 @@ class BaseClass(object):
         Calling::
 
             axis(ax, ...)
-              
+
         affects the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
-            
+
         if nargs == 0 and len(kwargs) == 0:
             xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()
             def get_lim(amin, amax, n1, n2):
@@ -2421,9 +2431,9 @@ class BaseClass(object):
             if ax.getp('camera').getp('view') == 2:
                 return xmin, xmax, ymin, ymax
             return xmin, xmax, ymin, ymax, zmin, zmax
-     
+
         limits = Axis._ranges
-        
+
         # Allow both axis(xmin,xmax,ymin,ymax[,zmin,zmax]) and
         # axis([xmin,xmax,ymin,ymax[,zmin,zmax]])
         if nargs == 1:
@@ -2450,10 +2460,10 @@ class BaseClass(object):
             if kw in kwargs:
                 kwargs_[kw] = kwargs[kw]
         ax.setp(**kwargs_)
-     
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-      
+
     axis.__doc__ = axis.__doc__ % docadd('Legal values for method are',
                                          Axis._methods, indent=10)
 
@@ -2609,7 +2619,7 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-        
+
     def close(self, *args):
         """Close figure.
 
@@ -2648,12 +2658,12 @@ class BaseClass(object):
         else:
             raise TypeError("close: wrong number of arguments")
 
-    def closefig(self, arg): 
+    def closefig(self, arg):
         """Close figure window."""
         raise NotImplementedError('closefig not implemented in class %s' % \
                                   self.__class__.__name__)
-    
-    def closefigs(self): 
+
+    def closefigs(self):
         """Close all figure windows."""
         self._figs = {}
         self._figs[1] = Figure()
@@ -2701,8 +2711,8 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-        
-    def legend(self, *args, **kwargs): 
+
+    def legend(self, *args, **kwargs):
         """Add legend(s) to the current plot.
 
         Calling::
@@ -2736,7 +2746,7 @@ class BaseClass(object):
         if len(args) == 1 and isinstance(args[0], (list, tuple)):
             # unpack the list/tuple to individual arguments
             args = [e for e in args[0]]
-            
+
         ax, args, nargs = self._check_args(*args)
 
         for key in kwargs:
@@ -2760,9 +2770,9 @@ class BaseClass(object):
                         (value, str([v for v in Axis._legend_locs])[1:-1]))
                 else:
                     raise ValueError('legend: wrong value of loc=%s' % value)
-                
+
                 ax.setp(legend_loc=value)
-                            
+
             elif key == 'fancybox':
                 value = kwargs[key]
                 if not value in (True, False, None):
@@ -2789,7 +2799,7 @@ class BaseClass(object):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
-    def title(self, *args): 
+    def title(self, *args):
         """Add title to the current plot.
 
         Calling::
@@ -2805,16 +2815,16 @@ class BaseClass(object):
         adds a title to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
-        
+
         if nargs == 1:
             ax.setp(title=str(args[0]))
         else:
             raise TypeError("title: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-    
-    def xlabel(self, *args): 
+
+    def xlabel(self, *args):
         """Add a label to the x-axis.
 
         Calling::
@@ -2830,16 +2840,16 @@ class BaseClass(object):
         adds the label to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
-        
+
         if nargs == 1:
             ax.setp(xlabel=str(args[0]))
         else:
             raise TypeError("xlabel: wrong number of arguments")
-            
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-            
-    def ylabel(self, *args): 
+
+    def ylabel(self, *args):
         """Add a label to the y-axis.
 
         Calling::
@@ -2855,16 +2865,16 @@ class BaseClass(object):
         adds the label to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
-        
+
         if nargs == 1:
             ax.setp(ylabel=str(args[0]))
         else:
             raise TypeError("ylabel: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-            
-    def zlabel(self, *args): 
+
+    def zlabel(self, *args):
         """Add a label to the z-axis.
 
         Calling::
@@ -2880,7 +2890,7 @@ class BaseClass(object):
         adds the zlabel to the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
-        
+
         if nargs == 1:
             ax.setp(zlabel=str(args[0]))
         else:
@@ -2888,53 +2898,53 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-        
+
     # 2D Plotting
     def plot(self, *args, **kwargs):
-        """Draw line and scatter plots. 
- 
+        """Draw line and scatter plots.
+
         Calling::
 
             plot(x, y)
-            
+
         plots y against x, i.e., if x and y are vectors of length n, then
         this will plot all the points (x[i], y[i]) for 0<=i<n.
- 
+
         Calling::
 
             plot(y)
-            
+
         plots values in y on y-axis (same as plot(range(len(y)),y)).
- 
+
         Calling::
 
             plot(y, fmt)
-            
+
         plots values in y on y-axis formated like fmt (see below).
- 
+
         Calling::
 
             plot(x1,y1,fmt1, x2,y2,fmt2, ...)
-            
+
         same as hold('on') followed by multiple plot(x,y,fmt).
- 
+
         Calling::
 
             plot(x1,y1,x2,y2,...)
-            
+
         like above, but automatically chooses different colors.
-                
+
         Calling::
 
             plot(y1,y2,...,x=x)
-            
+
         uses x as the x values for all the supplied curves.
         x='auto' has the same effect as x=range(len(y1)).
 
         Calling::
 
             plot(...,log=mode)
-            
+
         uses logarithmic (base 10) scales on either the x- or y-axes (or both).
         mode can be
 
@@ -2945,17 +2955,17 @@ class BaseClass(object):
         Calling::
 
             plot(ax, ...)
-            
+
         plots into the Axis object ax instead of the current axis.
 
         The plot command returns a list a of all Line objects created.
-            
+
         The following format specifiers exist:
- 
+
             y     yellow        .     point              -     solid
             m     magenta       o     circle             :     dotted
-            c     cyan          x     x-mark             -.    dashdot 
-            r     red           +     plus               --    dashed   
+            c     cyan          x     x-mark             -.    dashdot
+            r     red           +     plus               --    dashed
             g     green         *     star
             b     blue          s     square
             w     white         d     diamond
@@ -2965,12 +2975,12 @@ class BaseClass(object):
                                 >     triangle (right)
                                 p     pentagram
                                 h     hexagram
- 
+
         Examples:
-        
+
         Draw a line from a Python list:
         >>> plot([1,2,3])
- 
+
         Draw three red crosses:
         >>> plot([1,2,3], 'rx')
 
@@ -2980,7 +2990,7 @@ class BaseClass(object):
         >>> y2 = sin(x)*sqrt(x)
         >>> plot(x, y1, 'b-', x, y2, 'ro',
         ...      legend=('x*sin(x)', 'sqrt(x)*sin(x)'))
- 
+
         Note: loglog, semilogy, and semilogx are like plot(...,log='xy'),
         plot(...,log='y'), and plot(...,log='x'), respectively.
         """
@@ -2990,11 +3000,11 @@ class BaseClass(object):
 
         if nargs == 0:
             raise TypeError("plot: not enough arguments given")
-        
+
         lines = [] # store all Line instances here
         # If first argument is a format string this will be ignored
         # If two format strings are used only the first of them will be used
-        if 'x' in kwargs: 
+        if 'x' in kwargs:
             if nargs == 1 or (nargs == 2 and isinstance(args[1], str)):
                 if nargs == 1:
                     lines.append(Line(x=kwargs['x'], y=args[0], format=''))
@@ -3013,7 +3023,7 @@ class BaseClass(object):
                             lines.append(Line(x=kwargs['x'],
                                               y=args[i],
                                               format=''))
-                            if i == nargs-2: 
+                            if i == nargs-2:
                                 lines.append(Line(x=kwargs['x'],
                                                   y=args[i+1],
                                                   format=''))
@@ -3041,7 +3051,7 @@ class BaseClass(object):
                     i+100 #return
                 else:
                     raise ValueError("plot: cannot plot a formatstring")
-                
+
             while i <= nargs-3:
                 # This item is not string --> y-value, should never be string.
                 if not isinstance(args[i], str):
@@ -3065,7 +3075,7 @@ class BaseClass(object):
                         i = i+2
                     # These last cases could be run outside the while loop
                     if i == nargs-2:
-                        # Either y and format or x and y value left   
+                        # Either y and format or x and y value left
                         if isinstance(args[i+1], str):
                             lines.append(Line(y=args[i],
                                               x='auto',
@@ -3082,7 +3092,7 @@ class BaseClass(object):
 
         # add the lines to the axes in ax:
         ax.add(lines)
-    
+
         # Set legends
         if 'legend' in kwargs:
             no_lines = len(lines) # number of lines added
@@ -3111,7 +3121,7 @@ class BaseClass(object):
 
         if not ax.getp('hold') and not 'box' in kwargs:
             kwargs['box'] = True
-            
+
         # set keyword arguments in all the added lines
         for line in lines:
             line.setp(**kwargs)
@@ -3124,7 +3134,7 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-            
+
         return lines
 
     def loglog(self, *args, **kwargs):
@@ -3164,63 +3174,63 @@ class BaseClass(object):
         logarithmic (base 10) scale is used for the y-axis.
         """
         kwargs['log'] = 'y'
-        return self.plot(*args, **kwargs)    
-            
+        return self.plot(*args, **kwargs)
+
     def plot3(self, *args, **kwargs):
         """Draw lines and points in 3D space.
- 
+
         Calling::
 
             plot3(x, y, z)
-            
+
         plots z against x and y, i.e., if x, y, and z are vectors of length n,
-        then this will plot all the points (x[i], y[i], z[i]) for 0<=i<n. 
-  
+        then this will plot all the points (x[i], y[i], z[i]) for 0<=i<n.
+
         Calling::
 
             plot3(z)
-            
+
         plots values in z on the z-axis
         (same as plot3(range(len(z)), range(len(z)), z)).
 
         Calling::
 
             plot3(z, fmt)
-            
+
         plots values in z on z-axis formated like fmt (see the plot command).
- 
+
         Calling::
 
             plot3(x1,y1,z1,fmt1,x2,y2,z2,fmt2,...)
-            
+
         same as hold('on') followed by multiple plot3(x,y,z,fmt).
- 
+
         Calling::
 
             plot3(x1,y1,z1,x2,y2,z2,...)
-            
+
         like above, but automatically chooses different colors.
-                
+
         Calling::
 
             plot3(z1,z2,...,x=x,y=y)
-            
+
         uses x as the values on the x-axis and y as the values on the y-axis
         for all the supplied curves (assuming that all have the same length).
         By setting x='auto' and y='auto' has the same effect as
         x=range(len(z1)) and y=range(len(z1)), respectively.
- 
+
         Calling::
 
             plot3(ax, ...)
-            
+
         plots into the Axis object ax instead of the current axis.
 
         The plot3 command returns a list containing all the created Line
         objects.
 
         Examples:
-        
+
         >>> t = linspace(0,10*pi,301)
         >>> plot3(sin(t), cos(t), t, title='A helix', grid='on')
         """
@@ -3232,9 +3242,9 @@ class BaseClass(object):
 
         if nargs == 0:
             raise TypeError("plot3: not enough arguments given")
-        
+
         lines = [] # all Line instances are stored here
-        
+
         # If first argument is a format string this will be ignored
         # If two format strings are used only the first of them will be used
         if 'x' in kwargs and 'y' in kwargs:
@@ -3262,7 +3272,7 @@ class BaseClass(object):
                                               y=kwargs['y'],
                                               z=args[i],
                                               format=''))
-                            if i == nargs-2: 
+                            if i == nargs-2:
                                 lines.append(Line(x=kwargs['x'],
                                                   y=kwargs['y'],
                                                   z=args[i+1],
@@ -3300,7 +3310,7 @@ class BaseClass(object):
                     i+100 #return
                 else:
                     raise ValueError("plot3: cannot plot a formatstring")
-                
+
             while i <= nargs-5:
                 if not isinstance(args[i], str): # should never be string
                     # cases:
@@ -3323,7 +3333,7 @@ class BaseClass(object):
                         lines.append(Line(x='auto', y='auto', z=args[i],
                                           format=args[i+1]))
                         i += 2
-                                              
+
                     # 2. plot3(x1,y1,z1, x2,y2,z2, ...)
                     # 3. plot3(z1,s1, z2,s2, ...)
 
@@ -3341,7 +3351,7 @@ class BaseClass(object):
                     elif i == nargs-3: # x, y, and z left
                         lines.append(Line(x=args[i], y=args[i+1], z=args[i+2],
                                           format=''))
-                    elif i == nargs-2: # only z and format string left   
+                    elif i == nargs-2: # only z and format string left
                         if isinstance(args[i+1], str):
                             lines.append(Line(x='auto', y='auto', z=args[i],
                                               format=args[i+1]))
@@ -3351,7 +3361,7 @@ class BaseClass(object):
 
         # add the lines to the axes in ax:
         ax.add(lines)
-    
+
         # Set legends
         if 'legend' in kwargs:
             no_lines = len(lines)
@@ -3374,7 +3384,7 @@ class BaseClass(object):
 
         if not ax.getp('hold') and not 'view' in kwargs:
             kwargs['view'] = 3
-            
+
         # set keyword arguments in all the added lines:
         for line in lines:
             line.setp(**kwargs)
@@ -3387,9 +3397,9 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-            
+
         return lines
-        
+
     def fill(self, *args, **kwargs):
         """Draw filled 2D polygons."""
         kwargs['description'] = 'fill: filled 2D polygons'
@@ -3418,7 +3428,7 @@ class BaseClass(object):
         will draw m bars for every name (key in data), one for each key in
         data[name], where the height indicates the value. The name is placed
         beneath each of the bar groups on the x axis.
-        
+
         Calling::
 
             bar(Y)
@@ -3432,7 +3442,7 @@ class BaseClass(object):
             bar(x,Y)
 
         is the same as above only that the values on the x axis is defined
-        by the vector x. 
+        by the vector x.
 
         Calling::
 
@@ -3474,18 +3484,18 @@ class BaseClass(object):
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
- 
+
     def quiver(self, *args, **kwargs):
         """Draw arrows from a 2D vector field.
-        
+
         Calling::
 
             quiver(X, Y, U, V)
-            
+
         displays vectors as arrows with components U and V at the grid
         defined by X and Y. The arrays U and V must both have the same shape
         and the grid components X and Y must either have the same shape as
@@ -3502,13 +3512,13 @@ class BaseClass(object):
         Calling::
 
             quiver(..., 'filled')
-            
+
         draw filled arrows.
 
         Calling::
 
             quiver(..., fmt)
-            
+
         sets the line specification as given in the format string fmt. See
         the plot command for further details on specifying the format string.
 
@@ -3554,27 +3564,27 @@ class BaseClass(object):
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
-    
+
     def contour(self, *args, **kwargs):
         """Draw a 2D contour plot.
- 
+
         Calling::
 
             contour(X, Y, Z)
-            
+
         displays a contour plot where the values in the scalar field Z are
         treated as heights above a plane. The grid components X and Y must
         either have the same shape as Z or fulfill the requirement len(X)==n
         and len(Y)==m, where m,n=shape(Z).
-        
+
         Calling::
 
             contour(Z)
-            
+
         is the same as calling contour(range(n),range(m),Z), where
         m,n=shape(Z).
 
@@ -3583,7 +3593,7 @@ class BaseClass(object):
             contour(..., n)
 
         displays a contour plot with n contour lines (default is 8 lines).
-        
+
         Calling::
 
             contour(..., v)
@@ -3593,7 +3603,7 @@ class BaseClass(object):
         Calling::
 
             contour(..., fmt)
-            
+
         uses the color and line style as given in the format string fmt to
         draw the contour lines (see the plot command for further details on
         format strings). This overrides the default behavior of using the
@@ -3602,13 +3612,13 @@ class BaseClass(object):
         Calling::
 
             contours(ax, ...)
-            
+
         plots into the Axis object ax instead of the current axis.
-          
+
         Calling::
 
             contour(...,clabels='on')
-            
+
         is the same as calling h=contour(...) followed by clabel(h,'on').
 
         Examples:
@@ -3665,9 +3675,9 @@ class BaseClass(object):
         """
         kwargs['description'] = 'contourf: 2D filled contour plot'
         return self.contour(*args, **kwargs)
-    
+
     # 3D plotting
-    
+
     def pcolor(self, *args, **kwargs):
         """Draw a 2D pseudocolor plot.
 
@@ -3676,7 +3686,7 @@ class BaseClass(object):
             pcolor(C)
 
         draw a pseudocolor plot of the 2D array C.
-        
+
         Calling::
 
             pcolor(X,Y,C)
@@ -3688,7 +3698,7 @@ class BaseClass(object):
         Calling::
 
             pcolor(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
 
         Examples:
@@ -3709,11 +3719,11 @@ class BaseClass(object):
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
-            
+
     def fill3(self):
         """Draw filled 3D polygons."""
         raise NotImplementedError("'fill3' is not implemented.")
@@ -3732,14 +3742,14 @@ class BaseClass(object):
         len(Y)==m, and len(Z)==p, where m,n,p=shape(U). The starting
         positions for the streamlines are defined in the arrays startx,
         starty, and startz.
-            
+
         Calling::
 
             streamline(U,V,W,startx,starty,startz)
-    
+
         is the same as above, except that it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).
-        
+
         Calling::
 
             streamline(X,Y,U,V,startx,starty)
@@ -3750,20 +3760,20 @@ class BaseClass(object):
         U or fulfill the requirement len(X)==n and len(Y)==m, where
         m,n=shape(u). The starting positions for the streamlines are defined
         in the arrays startx and starty.
-        
+
         Calling::
 
             streamline(U,V,startx,starty)
 
         is the same as above, except that it is assumed that
         X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).
-        
+
         Calling::
 
             streamline(..., stepsize)
 
         uses the given step size instead of the default step size of 0.1.
-        
+
         Calling::
 
             streamline(ax, ...)
@@ -3771,7 +3781,7 @@ class BaseClass(object):
         uses the Axis object ax instead of the current axis.
 
         The streamline command returns a Streams object.
-        
+
         Examples:
 
         FIXME: Add streamline example.
@@ -3799,7 +3809,7 @@ class BaseClass(object):
         is the same as calling streamlines(...), except that only 3D vector
         fields are supported by the streamtube command. The optional
         positional argument stepsize is not supported either.
-        
+
         Calling::
 
             streamtube(..., [scale, n])
@@ -3807,7 +3817,7 @@ class BaseClass(object):
         will scale the width of the tubes according to scale (default is 1),
         while the variable n sets the number of points along the
         circumference of the tube (default is 20).
-        
+
         Examples:
 
         FIXME: Add streamtube example.
@@ -3831,14 +3841,14 @@ class BaseClass(object):
             streamribbon(..., width)
 
         specifies the width of the ribbons.
-        
+
         Examples:
 
         FIXME: Add streamribbon example.
         """
         kwargs['description'] = "streamribbon: 3D stream ribbon"
         return self.streamline(*args, **kwargs)
-        
+
     def mesh(self, *args, **kwargs):
         """Draw a 3D mesh surface.
 
@@ -3852,18 +3862,18 @@ class BaseClass(object):
         where m,n=shape(Z). The color is determined by the array C which must
         have the same shape as Z. If the color array C is not given, Z is used
         as the color array (i.e., C=Z).
-        
+
         Calling::
 
             mesh(Z[, C])
-            
+
         is the same as calling mesh(range(n), range(m), Z[, C]),
         where m,n = shape(Z).
-        
+
         Calling::
 
             mesh(ax, ...)
-            
+
         plots into the Axis object ax instead of the current axis.
 
         @return: A Surface object.
@@ -3888,7 +3898,7 @@ class BaseClass(object):
         ax.setp(**kwargs)
         self.gcf().setp(**kwargs)
         self.setp(**kwargs)
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
@@ -3909,7 +3919,7 @@ class BaseClass(object):
         >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = peaks(xx, yy)
-        >>> meshc(xx, yy, zz) 
+        >>> meshc(xx, yy, zz)
 
         Draw a mesh with 20 contour lines:
         >>> meshc(xx, yy, zz, clevels=20)
@@ -3922,7 +3932,7 @@ class BaseClass(object):
         """
         kwargs['description'] = 'meshc: 3D mesh with contours at base'
         return self.mesh(*args, **kwargs)
-    
+
     def surf(self, *args, **kwargs):
         """Draw a 3D solid surface.
 
@@ -3938,7 +3948,7 @@ class BaseClass(object):
         >>> x = linspace(-2, 2, 21)
         >>> xx, yy = meshgrid(x)
         >>> zz = xx**2 + yy**2
-        >>> surf(xx, yy, zz) 
+        >>> surf(xx, yy, zz)
         """
         if not 'description' in kwargs:
             kwargs['description'] = 'surf: 3D surface'
@@ -3960,10 +3970,10 @@ class BaseClass(object):
     def surfl(self, *args, **kwargs):
         """3D shaded surface with lighting."""
         raise NotImplemetedError("'surfl' is not implemented")
-        
+
     def quiver3(self, *args, **kwargs):
         """Draw velocity vectors in 3D space.
-        
+
         Calling::
 
             quiver3(X, Y, Z, U, V, W)
@@ -3973,38 +3983,38 @@ class BaseClass(object):
         assumed to be the same, while the grid components must either have
         the same shape as U or fulfill the requirements len(X)==n, len(Y)==m,
         and len(Z)==p, where m,n,p=shape(U).
-        
+
         Calling::
 
             quiver3(Z,U,V,W)
 
         gives the same result as above, but it is assumed that
         X,Y = meshgrid(range(n),range(m)), where m,n=shape(Z).
-        
+
         Calling::
 
             quiver3(..., s)
-            
+
         scales the arrows by the scale factor given in s. The default is s=1,
         while a value of s=0 turns off automatic scaling.
-        
+
         Calling::
 
             quiver3(..., 'filled')
-            
+
         fills the arrows.
-        
+
         Calling::
 
             quiver3(..., fmt)
-            
+
         sets the specification on the arrows as given in the format string
         fmt (see the plot command for further information on format strings).
-        
+
         Calling::
 
             quiver3(ax, ...)
-            
+
         plots the vectors in the Axis object ax instead of the current axis.
 
         @return: A VelocityVectors object.
@@ -4037,7 +4047,7 @@ class BaseClass(object):
         """
         kwargs['description'] = "quiver3: 3D vector field"
         return self.quiver(*args, **kwargs)
-    
+
     def contour3(self, *args, **kwargs):
         """Draw 3D contour plot.
 
@@ -4054,11 +4064,11 @@ class BaseClass(object):
         """
         kwargs['description'] = "contour3: 3D contours at surface"
         return self.contour(*args, **kwargs)
-    
+
     # Volume plotting
     def slice_(self, *args, **kwargs):
         """Draw volumetric slice plot.
-        
+
         Calling::
 
             slice_(X,Y,Z,V,Sx,Sy,Sz)
@@ -4068,12 +4078,12 @@ class BaseClass(object):
         must either have the same shape as V or fulfill the requirement
         len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(V). The Sx,
         Sy, and Sz arrays defines the slice planes in the x, y, and z
-        direction, respectively. 
+        direction, respectively.
 
         Calling::
 
             slice_(V,Sx,Sy,Sz)
-            
+
         is the same as calling slice_(range(n),range(m),range(p),V,Sx,Sy,Sz),
         where m,n,p = shape(V).
 
@@ -4087,21 +4097,21 @@ class BaseClass(object):
         Calling::
 
             slice_(V,XI,YI,ZI)
-            
+
         is the same as calling slice_(range(n),range(m),range(p)),V,XI,YI,ZI),
         where m,n,p = shape(V).
 
         Calling::
 
             slice_(..., method)
-            
+
         sets which interpolation method to be used, where method can be either
         'linear' (default), 'cubic', or 'nearest'.
 
         Calling::
 
             slice(ax, ...)
-            
+
         plots into the Axis object ax instead of the current axis.
 
         @return: A Volume object.
@@ -4146,49 +4156,49 @@ class BaseClass(object):
         defines the grid coordinates for the volume V and they must either
         have the same shape as V or fulfill the requirement len(X)==n,
         len(Y)==m, and len(Z)==p, where m,n,p = shape(V).
-          
+
         Calling::
 
             contourslice(V,Sx,Sy,Sz)
-            
+
         is the same as above, but it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
-          
+
         Calling::
 
             contourslice(X,Y,Z,V,XI,YI,ZI)
-            
+
         will draw contour lines through the volume V along the surface given
         in the arrays XI, YI, and ZI.
-          
+
         Calling::
 
             contourslice(V,XI,YI,ZI)
-            
+
         is the same as above, but it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
-               
+
         Calling::
 
             contourslice(..., n)
-            
+
         will draw n contour lines per plane instead of the default of five
         contour lines.
-          
+
         Calling::
 
             contourslice(..., v)
-            
+
         will draw contour lines at the levels given in the array v.
-          
+
         Calling::
 
             contourslice(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
-          
+
         @return: A Volume object.
-        
+
         Example:
         >>> xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17),
         ...                       linspace(-2,2,25))
@@ -4200,7 +4210,7 @@ class BaseClass(object):
 
     def coneplot(self, *args, **kwargs):
         """Draw a 3D cone plot.
-        
+
         Calling::
 
             coneplot(X,Y,Z,U,V,W,Cx,Cy,Cz)
@@ -4211,34 +4221,34 @@ class BaseClass(object):
         shape of U, V, and W is assumed to be the same, while the grid
         components must either have the same shape as U or fulfill the
         requirement len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(U).
-        
+
         Calling::
 
             coneplot(U,V,W,Cx,Cy,Cz)
 
         is the same as above, but it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(U).
-        
+
         Calling::
 
             coneplot(..., scale)
 
         will automatically scale the cones by the factor scale (default is 1).
         To turn of automatic scaling, use a scale value of 0.
-        
+
         Calling::
 
             coneplot(..., C)
 
         uses the colors in the array C to color the cones (C must have the
         same shape as U).
-        
+
         Calling::
 
             coneplot(..., 'quiver')
 
         will plot arrows instead of cones.
-        
+
         Calling::
 
             coneplot(ax, ...)
@@ -4318,11 +4328,11 @@ class BaseClass(object):
             streamslice(ax, ...)
 
         uses the Axis object ax instead of the current axis.
-        
+
         @return: A ??? object.
-        
+
         Examples:
-        
+
         >>> import scipy
         >>> wind = scipy.io.loadmat('wind.mat')
         >>> x = wind['x']
@@ -4341,7 +4351,7 @@ class BaseClass(object):
 
     def isosurface(self, *args, **kwargs):
         """Draw isosurfaces from 3D scalar fields.
-        
+
         Calling::
 
             isosurface(X,Y,Z,V,isovalue)
@@ -4351,14 +4361,14 @@ class BaseClass(object):
         and they must either have the same shape as V or fulfill the
         requirement len(X)==n, len(Y)==m, and len(Z)==p, where
         m,n,p = shape(V).
-        
+
         Calling::
 
             isosurface(V,isovalue)
-            
+
         is the same as above, but it is assumed that
         X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).
-        
+
         Calling::
 
             isosurface(..., C)
@@ -4369,7 +4379,7 @@ class BaseClass(object):
         @return: A Volume object.
 
         Examples:
-        
+
         >>> x, y, z, v = flow()
         >>> isosurface(x, y, z, v, -3, daspect=[1,1,1])
         """
@@ -4386,7 +4396,7 @@ class BaseClass(object):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return h
-     
+
     def show(self):
         """Redraw the current figure."""
         self._replot()
@@ -4397,7 +4407,7 @@ class BaseClass(object):
         Calling::
 
             hidden(state)
-            
+
         turns hidden line removal on if state is 'on' (or True) and off if
         state is 'off' (or False). Hidden line removal is turned on by
         default.
@@ -4405,7 +4415,7 @@ class BaseClass(object):
         Calling::
 
             hidden()
-            
+
         toggles the hidden state.
 
         Note: Some backends has no support for hidden line removal (e.g.,
@@ -4419,10 +4429,10 @@ class BaseClass(object):
             ax.toggle('hidden')
         else:
             raise TypeError("hidden: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-        
+
     def view(self, *args):
         """Specify viewpoint.
 
@@ -4432,30 +4442,30 @@ class BaseClass(object):
 
         sets the viewpoint according to azimuth (horizontal rotation) and
         elevation (vertical). Both azimuth and elevation should be given in
-        degrees. 
+        degrees.
 
         Calling::
 
             view([azimuth, elevation])
 
         is the same as above.
-        
+
         Calling::
 
             view(2)
-            
+
         changes the view to the default 2D view.
-            
+
         Calling::
 
             view(3)
-            
+
         changes the view to the default 3D view.
 
         Calling::
 
             view(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
 
         Examples:
@@ -4475,10 +4485,10 @@ class BaseClass(object):
                 args = args[0];  nargs = len(args)
             elif isinstance(args[0], (int,float)) and args[0] in (2,3):
                 cam.setp(view=args[0])
-                    
+
         if nargs == 2:
             cam.setp(azimuth=args[0], elevation=args[1])
-            
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
@@ -4488,13 +4498,13 @@ class BaseClass(object):
         Calling::
 
             camdolly(dx, dy, dz)
-            
+
         moves the camera position along the direction of projection.
 
         Calling::
 
             camdolly(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
@@ -4513,23 +4523,23 @@ class BaseClass(object):
         Calling::
 
             camlookat(obj)
-            
+
         views the PlotProperties object obj.
 
         Calling::
 
             camlookat(ax)
-            
+
         views the objects in the Axis object ax.
 
         Calling::
 
             camlookat()
-            
+
         views the objects in the current axes.
         """
         ax, args, nargs = self._check_args(*args)
-            
+
         if nargs == 0:
             self.gca().getp('camera').setp(camlookat=self.gca())
         elif nargs == 1:
@@ -4559,14 +4569,14 @@ class BaseClass(object):
         Calling::
 
             camproj(projeciton)
-            
+
         sets the projection of the camera to projection, where projection can
         be either 'orthographic' (default) or 'perspective'.
 
         Calling::
 
             camproj(ax, ...)
-            
+
         sets or gets the camera projection of the Axis object ax instead of
         the current axis.
         """
@@ -4588,13 +4598,13 @@ class BaseClass(object):
         Calling::
 
             camup()
-            
+
         returns the up vector of the camera in the current axis.
 
         Calling::
 
             camup([x, y, z])
-            
+
         sets the camera up vector.
 
         Calling::
@@ -4606,7 +4616,7 @@ class BaseClass(object):
         Calling::
 
             camup(ax, ...)
-            
+
         sets or gets the up vector for the camera in the Axis object ax
         instead of the current axis.
         """
@@ -4630,13 +4640,13 @@ class BaseClass(object):
         Calling::
 
             camroll(angle)
-            
+
         rotates the camera about the direction of projection.
 
         Calling::
 
             camroll(ax, ...)
-            
+
         rotates the camera in the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
@@ -4655,19 +4665,19 @@ class BaseClass(object):
         Calling::
 
             camva()
-            
+
         returns the camera view angle of the current axis.
 
         Calling::
 
             camva(angle)
-            
+
         sets the camera view angle.
 
         Calling::
 
             camva(ax, ...)
-            
+
         sets or gets the camera view angle in the Axis object ax instead of
         the current axis.
         """
@@ -4689,14 +4699,14 @@ class BaseClass(object):
         Calling::
 
             camzoom(factor)
-            
+
         zooms the camera the specified factor. A value greater than 1 is a
         zoom-in, while a value less than 1 is a zoom-out.
 
         Calling::
 
             camzoom(ax, ...)
-            
+
         zooms the camera in the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
@@ -4721,7 +4731,7 @@ class BaseClass(object):
         Calling::
 
             campos([x,y,z])
-        
+
         sets the camera position.
 
         Calling::
@@ -4733,7 +4743,7 @@ class BaseClass(object):
         Calling::
 
             campos(ax, ...)
-            
+
         sets or gets the position of the camera in the Axis object ax instead
         of the current axis.
         """
@@ -4757,13 +4767,13 @@ class BaseClass(object):
         Calling::
 
             camtarget()
-            
+
         returns the camera target of the current axis.
 
         Calling::
 
             camtarget([x,y,z])
-            
+
         sets the target for the camera.
 
         Calling::
@@ -4775,7 +4785,7 @@ class BaseClass(object):
         Calling::
 
             camtarget(ax, ...)
-            
+
         sets or gets the camera target in the Axis object ax instead of the
         current axis..
         """
@@ -4799,45 +4809,45 @@ class BaseClass(object):
         Calling::
 
             camlight('headlight')
-            
+
         creates a light in the current axis at the position of the camera.
 
         Calling::
 
             camlight('right')
-            
+
         creates a light right and up from the camera in the current axis.
 
         Calling::
 
             camlight('left')
-            
+
         creates a light left and up from the camera.
 
         Calling::
 
             camlight()
-            
+
         is the same as camlight('right').
 
         Calling::
 
             camlight(azimuth, elevation)
-            
+
         creates a light at azimuth, elevation (both given in degrees) from
         the camera.
 
         Calling::
 
             camlight(..., style)
-            
+
         sets the style of the light, where style can be either 'local'
         (default) or 'inifinite'.
 
         Calling::
 
             camlight(l, ...)
-            
+
         places Light object l at the specified position.
 
         @return: A Light object.
@@ -4852,14 +4862,14 @@ class BaseClass(object):
         Calling:
 
             light()
-            
+
         will add a light to the current axis with default values for all
         light properties.
 
         Calling::
 
             light(prop1=value1, prop2=value2, ...)
-            
+
         adds a light with properties as given in the keyword arguments.
 
         @return: A Light object.
@@ -4869,33 +4879,33 @@ class BaseClass(object):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
         return l
-        
+
     def colormap(self, *args):
         """Specify colormap.
 
         Calling::
 
             colormap(map)
-            
+
         uses the colormap in map as the current colormap (map is dependent
         on the current backend).
 
         Calling::
 
             colormap('default')
-            
+
         sets the colormap to the default colormap, i.e., jet.
 
         Calling::
 
             map = colormap()
-            
+
         returns the current colormap.
 
         Calling::
 
             colormap(ax, ...)
-            
+
         uses the figure corresponding to the Axis object ax instead of the
         current figure.
         """
@@ -4910,7 +4920,7 @@ class BaseClass(object):
                 ax.setp(colormap=args[0]) # backend dependent
         else:
             raise TypeError("colormap: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
@@ -4920,7 +4930,7 @@ class BaseClass(object):
         Calling::
 
             caxis([cmin, cmax])
-            
+
         changes the limits for the color axis to range from cmin to cmax.
 
         Calling::
@@ -4932,25 +4942,25 @@ class BaseClass(object):
         Calling::
 
             caxis('manual')
-            
+
         freezes the limits at the current range.
-            
+
         Calling::
 
             caxis('auto')
-            
+
         uses autoranging for the color axis limits (default).
 
         Calling::
 
             cmin, cmax = caxis()
-            
+
         returns the current color axis limits.
 
         Calling::
 
             caxis(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
@@ -4982,19 +4992,19 @@ class BaseClass(object):
         Calling::
 
             colorbar()
-            
+
         displays a colorbar in the current axis.
 
         Calling::
 
             colorbar('off')
-            
+
         removes the colorbar from the current axis.
 
         Calling::
 
             colorbar(loc)
-            
+
         displays a colorbar in the current axis at the location specified by
         loc, where loc may be any of the following:
 
@@ -5010,7 +5020,7 @@ class BaseClass(object):
         Calling::
 
             colorbar(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
 
         @return: A Colorbar object.
@@ -5028,7 +5038,7 @@ class BaseClass(object):
                 cbar.setp(cblocation=args[0])
         else:
             raise TypeError("colorbar: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
@@ -5036,11 +5046,11 @@ class BaseClass(object):
 
     def shading(self, *args):
         """Control the color shading of surfaces.
-        
+
         Calling::
 
             shading(mode)
-            
+
         changes the shading mode in the current axis to the one specified by
         by mode. Valid modes are 'flat', 'interp' (interpolated or Gouraud)
         and 'faceted' (default).
@@ -5048,7 +5058,7 @@ class BaseClass(object):
         Calling::
 
             shading(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
         """
         ax, args, nargs = self._check_args(*args)
@@ -5057,10 +5067,10 @@ class BaseClass(object):
             ax.setp(shading=str(args[0]))
         else:
             raise TypeError("shading: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-       
+
     def brighten(self, *args):
         """Brighten or darken the color map."""
         raise NotImplementedError("'brighten' not implemented in class %s" % \
@@ -5089,7 +5099,7 @@ class BaseClass(object):
             obj.setp(clabels=state)
         else:
             raise TypeError("clabel: wrong number of arguments")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
@@ -5099,29 +5109,29 @@ class BaseClass(object):
         Calling::
 
             box('on')
-            
+
         displays a box at the boundaries of the current axis.
 
         Calling::
 
             box('off')
-            
+
         turns off the box.
 
         Calling::
 
             box()
-            
+
         toggles the display of a box in the current axis.
 
         Calling::
 
             box(ax, ...)
-            
+
         uses the Axis object ax instead of the current axis.
 
         Note: box(True) and box(False) is the same as box('on') and
-        box('off'), respectively.        
+        box('off'), respectively.
         """
         ax, args, nargs = self._check_args(*args)
 
@@ -5131,7 +5141,7 @@ class BaseClass(object):
             ax.setp(box=args[0])
         else:
             raise TypeError("box: wrong number of argumnts")
-        
+
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
@@ -5141,7 +5151,7 @@ class BaseClass(object):
         Calling::
 
             material([ka, kd, ks[, n[, sc]]])
-            
+
         changes the ambient/diffuse/specular strength, specular exponent,
         and specular color reflectance of objects.
 
@@ -5154,7 +5164,7 @@ class BaseClass(object):
         Calling::
 
             material(mode)
-            
+
         sets the material mode, where mode can be one of the following
         strings:
 
@@ -5205,7 +5215,7 @@ class BaseClass(object):
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()
-           
+
     # Colormap methods:
     def hsv(self, m=None):
         """Hue-saturation-value color map."""
@@ -5216,12 +5226,12 @@ class BaseClass(object):
         """Black-red-yellow-white color map."""
         raise NotImplementedError('hot not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def gray(self, m=None):
         """Linear gray-scale color map."""
         raise NotImplementedError('gray not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def bone(self, m=None):
         """Gray-scale with a tinge of blue color map."""
         raise NotImplementedError('bone not implemented in class %s' % \
@@ -5236,62 +5246,62 @@ class BaseClass(object):
         """Pastel shades of pink color map."""
         raise NotImplementedError('pink not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def white(self, m=None):
         """All white color map."""
         raise NotImplementedError('white not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def flag(self, m=None):
         """Alternating red, white, blue, and black color map."""
         raise NotImplementedError('flag not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def lines(self, m=None):
         """Color map with the line colors."""
         raise NotImplementedError('lines not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def colorcube(self, m=None):
         """Enhanced color-cube color map."""
         raise NotImplementedError('colorcube not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def vga(self, m=None):
         """Windows colormap for 16 colors."""
         raise NotImplementedError('vga not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def jet(self, m=None):
         """Variant of hsv."""
         raise NotImplementedError('jet not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def prism(self, m=None):
         """Prism color map."""
         raise NotImplementedError('prism not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def cool(self, m=None):
         """Shades of cyan and magenta color map."""
         raise NotImplementedError('cool not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def autumn(self, m=None):
         """Shades of red and yellow color map."""
         raise NotImplementedError('autumn not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def spring(self, m=None):
         """Shades of magenta and yellow color map."""
         raise NotImplementedError('spring not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def winter(self, m=None):
         """Shades of blue and green color map."""
         raise NotImplementedError('winter not implemented in class %s' % \
                                   self.__class__.__name__)
-    
+
     def summer(self, m=None):
         """Shades of green and yellow color map."""
         raise NotImplementedError('summer not implemented in class %s' % \
@@ -5319,9 +5329,9 @@ def use(plt, namespace=globals(), neutralize=False):
         plt = scitools.misc.DoNothing()
     plt_dict['plt'] = plt
     for item in plt_orig.__dict__:
-        plt_dict[item] = eval('plt.'+item)                                   
+        plt_dict[item] = eval('plt.'+item)
     for item in dir(plt_orig.__class__):
-        if not '__' in item:  
+        if not '__' in item:
             plt_dict[item] = eval('plt.'+item)
     namespace.update(plt_dict)  # Add to global namespace
     namespace['savefig'] = namespace['hardcopy']   # synonym
@@ -5348,7 +5358,7 @@ def debug(plt, level=10):
         """Indent print"""
         pref = ' '*spaces
         print pref+('\n'+pref).join((str(item)).split('\n'))
-        
+
     print "plt:"
     print plt
     if level > 0:
@@ -5379,7 +5389,7 @@ def debug(plt, level=10):
                         for i, item in enumerate(ax.getp('plotitems')):
                             print_('item number %s %s:' %(i, repr(item)), 8)
                             print_(item, 12)
-                            
+
                             if level > 3:
                                 print_("Material:", 12)
                                 print_(item.getp('material'), 16)

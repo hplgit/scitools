@@ -687,6 +687,73 @@ All hardcopies and the movies are then made in batch, which also
 might speed up the program since rendering graphics on the screen
 is avoided.
 
+===== Controlling the Aspect Ratio of Axes =====
+
+By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.
+
+In the `gnuplot` and `matplotlib`
+backends, we set `daspectmode=manual` and
+`daspect=[r,1,1]`, where `r` is the ratio of the y-axis length to
+the x-axis length
+(`r` equal to `1` gives a square plot area). For example,
+!bc cod
+plot(x, y, 'r-',
+     axis=[0, 1, 0, 1],
+     daspect=[1,1,1],
+     daspectmode='manual')
+!ec
+Note that one should always use `axis` and set axes limits explicitly
+when prescribing the aspect ratio.
+
+Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by `daspect=[0.2,1,1])`.
+Alternatively, one can apply `daspectmode='equal'` (which means
+equal physical units on the axis).
+
+Here is an example which demonstrates various aspects of setting
+the aspect ratio:
+!bc pro
+from scitools.std import *
+n = 20  # no of periods of a sine function
+r = 80  # resolution of each period
+x = linspace(0, n, r*n + 1)
+amplitude = 1 + sin(2*pi*0.05*x)
+y = amplitude*sin(2*pi*x)
+
+# x-axis goes from 0 to 20, y-axis from -2 to 2.
+
+subplot(2, 1, 1)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspectmode='equal',
+     title='daspectmode=equal',
+     )
+subplot(2, 1, 2)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[0.5,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[0.5,1,1]',
+     )
+
+figure()
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[1,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[1,1,1]',
+     )
+
+show()
+raw_input()
+!ec
+
 ===== Moving Plot Window =====
 
 When calculating long time series, it may be desirable to have a

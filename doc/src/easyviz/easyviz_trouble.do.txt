@@ -149,22 +149,8 @@ on all platforms.
 
 ===== How Can The Aspect Ratio of The Axes Be Controlled? =====
 
-By default, Gnuplot, Matplotlib and other plotting packages
-automatically calculate suitable physical sizes of the axis
-in the plotting window. However, sometimes one wants to control
-this, say having a certain ratio of the physical extent of the
-axis.
-
-In the `gnuplot` and `matplotlib`
-backends, we set `daspectration=manual` and
-`daspect=[r,1,1]`, where `r` is the ratio of the x and y axis
-(`r` equal to `1` gives a square plot area). For example,
-!bc cod
-plot(x, y, 'r-',
-     axis=[0, 1, 0, 1],
-     daspect=[1,1,1],
-     daspectratio='manual')
-!ec
+See the section "Controlling the Aspect Ratio of Axes" in the
+tutorial.
 
 ===== Trouble with Gnuplot and Threads =====
 

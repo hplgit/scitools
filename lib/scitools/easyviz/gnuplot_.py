@@ -392,6 +392,16 @@ class GnuplotBackend(BaseClass):
             # In Gnuplot we cannot set individual aspects for the different
             # axes. Therefore we use dar[0] as the aspect ratio:
             self._g('set size ratio %s' % dar[0])
+        elif ax.getp('daspectmode') == 'equal':
+            xmin = ax.getp('xmin')
+            xmax = ax.getp('xmax')
+            ymin = ax.getp('ymin')
+            ymax = ax.getp('ymax')
+            try:
+                r = (ymax-ymin)/float(xmax-xmin)
+            except TypeError:
+                raise ValueError('daspectmode="equal" requires the axes to be explicitly set')
+            self._g('set size ratio %g' % r)
         else:
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
