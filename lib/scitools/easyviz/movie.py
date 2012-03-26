@@ -199,6 +199,8 @@ class MovieEncoder(object):
         if self._prop['output_file'] is None:
             self._prop['output_file'] = 'movie.gif'
         output_file = self._prop['output_file']
+        if output_file[-4:] != '.gif':
+            output_file += '.gif'
         if os.path.isfile(output_file) and not self._prop['overwrite_output']:
             raise Exception("Output file '%s' already exist. Use" \
                             " 'overwrite_output=True' to overwrite the file." \
