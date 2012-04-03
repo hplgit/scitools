@@ -1292,8 +1292,8 @@ def hardware_info():
         f.close()
     result['file: /proc/cpuinfo'] = cpuinfo
     """
-    import numpy.distutils.cpuinfo
-    info = numpy.distutils.cpuinfo.cpu.info.copy()
+    import numpy.distutils.cpuinfo, copy
+    info = copy.deepcopy(numpy.distutils.cpuinfo.cpu.info)
     # Delete some of the items
     for name in ('model', 'processor', 'stepping', 'flags',):
         if name in info:
@@ -1302,10 +1302,11 @@ def hardware_info():
 
     # check out platform module from basic Python:
     import platform
-    platform_info['uname'] = platform.uname()
-    platform_info['python version'] = platform.python_version()
-    platform_info['python build'] = platform.python_build()
-    platform_info['identifier'] = platform.platform()
+    platform_info = {
+        'uname': platform.uname(),
+        'python version': platform.python_version(),
+        'python build': platform.python_build(),
+        'identifier': platform.platform()}
     result['platform module'] = platform_info
 
     # Trent Mick's platinfo module
