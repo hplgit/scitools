@@ -4,18 +4,18 @@
 #  Lists, dicts, and tuples containing real numbers will be printed
 #  in a prettier way with pprint2.
 
-# >>> data = [1/3., 0.2, 0.1]
-# >>> data
-# [0.33333333333333331, 0.20000000000000001, 0.10000000000000001]
-# >>> import pprint
-# >>> pprint.pprint(data)
-# [0.33333333333333331, 0.20000000000000001, 0.10000000000000001]
-# >>> import scitools.pprint2 as pprint2
-# >>> pprint2.pprint(data)
-# [0.333333, 0.2, 0.1]
-# >>> pprint2.float_format = '%10.3E'
-# >>> pprint2.pprint(data)
-# [ 3.333E-01,  2.000E-01,  1.000E-01]
+#>>> data = [1./3, 1./49*49, 84.6/423]
+#>>> data
+#[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]
+#>>> import pprint
+#>>> pprint.pprint(data)
+#[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]
+#>>> import scitools.pprint2 as pprint2
+#>>> pprint2.pprint(data)
+#[0.333333, 1, 0.2]
+#>>> pprint2.float_format = '%.12E'
+#>>> pprint2.pprint(data)
+#[3.333333333333E-01, 1.000000000000E+00, 2.000000000000E-01]
 
 #  Modifications by Hans Petter Langtangen, hpl@simula.no
 #------------------------------------------------------------------------
@@ -33,10 +33,24 @@
 """Support to pretty-print lists, tuples, & dictionaries recursively.
 
 Very simple, but useful, especially in debugging data structures.
+
 Slight extension of the original pprint module in Python such that
 floating-point numbers can be written with a specificed format
 (float_format) and not by their repr string (which explicitly
 displays round-off errors).
+
+>>> data = [1./3, 1./49*49, 84.6/423]
+>>> data
+[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]
+>>> import pprint
+>>> pprint.pprint(data)
+[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]
+>>> import scitools.pprint2 as pprint2
+>>> pprint2.pprint(data)
+[0.333333, 1, 0.2]
+>>> pprint2.float_format = '%.12E'
+>>> pprint2.pprint(data)
+[3.333333333333E-01, 1.000000000000E+00, 2.000000000000E-01]
 
 Classes:
 
