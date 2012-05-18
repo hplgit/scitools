@@ -1040,22 +1040,18 @@ class WrapDiscreteData2Callable:
     """
     def __init__(self, data):
         self.data = data  # (x,y,f) data for an f(x,y) function
-        try:
-            import Scientific
-            v = Scientific.__version__
-            target = '2.9.1'
-            if v < target:
-                raise ImportError(
-                    'ScientificPython is in (old) version %s, need %s' \
-                    % (v, target))
-        except ImportError:
-            raise ImportError(
-                'Could not import ScientificPython.\n'
-                'This package must be installed.\n'
-                'See https://sourcesup.cru.fr/projects/scientific-py/')
 
-        from Scientific.Functions.Interpolation \
-             import InterpolatingFunction # from ScientificPython
+        from scitools.misc import import_module
+        InterpolatingFunction = import_module(
+            'Scientific.Functions.Interpolation', 'InterpolatingFunction')
+        import Scientific
+        v = Scientific.__version__
+        target = '2.9.1'
+        if v < target:
+            raise ImportError(
+                'ScientificPython is in (old) version %s, need %s' \
+                % (v, target))
+
         self.interpolating_function = \
              InterpolatingFunction(self.data[:-1], self.data[-1])
         self.ndims = len(self.data[:-1])  # no of spatial dim.

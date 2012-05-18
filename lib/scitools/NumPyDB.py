@@ -74,7 +74,7 @@ class NumPyDB_text(NumPyDB):
     """Use plain ASCII string representation."""
 
     def __init__(self, database_name, mode='store'):
-        NumPyDB.__init__(self,database_name, mode)
+        NumPyDB.__init__(self, database_name, mode)
 
     # simple dump:
     def dump(self, a, identifier):
@@ -92,7 +92,7 @@ class NumPyDB_text(NumPyDB):
         fmt = 'array([' + '%s,'*(a.size-1) + '%s])\n'
         fd.write(fmt % tuple(ravel(a)))
         fd.close();  fm.close()
-    
+
 
     def load(self, identifier, bestapprox=None):
         """
@@ -107,7 +107,7 @@ class NumPyDB_text(NumPyDB):
         fd = open(self.dn, 'r')
         fd.seek(pos)
         # load the correct number of bytes; look at the next pos
-        # value in self.positions (impossible if a dictionary is 
+        # value in self.positions (impossible if a dictionary is
         # used for self.positions - we need the order of the items!)
         for j in range(len(self.positions)):
             p = self.positions[j][0]
@@ -191,7 +191,7 @@ import shelve
 
 class NumPyDB_shelve:
     """Implement the database via shelving."""
-    
+
     def __init__(self, database_name, mode='store'):
         self.filename = database_name # no suffix, only one file
         if mode == 'load':
@@ -239,7 +239,9 @@ class NumPyDB_shelve:
         a = fd[id]
         fd.close()
         return a, id
-    
+
+# np.load/dump
+# joblib.load/dump
 
 def float_dist(id1, id2):
     """
@@ -251,7 +253,7 @@ def float_dist(id1, id2):
     """
     return abs(float(id1) - float(id2))
 
-    
+
 def test_dist(id1, id2):
     """
     Return distance between identifiers id1 and id2.
@@ -284,7 +286,7 @@ def main(n, length, method, name):
         u = arange(i, length/2+i, 0.4999999)
         # (generate numbers with many digits so repr(u) has
         # a representative size (not just integers, for instance))
-        
+
         dataout.dump(u, 'time=%e' % float(i))
 
     if method == "pickle":
@@ -305,7 +307,7 @@ def main(n, length, method, name):
     w = datain.load('time=4.000000e+00')
     print "identifier='time=4.000000e+00': found"
     if len(w[0]) < 20: print w[0]
-    
+
     w = datain.load('time=5', bestapprox=test_dist)
     print "identifier='time=5' and bestapprox=test_dest found"
     if len(w[0]) < 20: print w[0]
@@ -319,7 +321,7 @@ def main(n, length, method, name):
     for filename in (name+'.dat', name+'.map', name):
         if os.path.isfile(filename):
             os.remove(filename)
-    
+
 if __name__ == '__main__':
     try:     n = int(sys.argv[1])
     except:  n = 12
