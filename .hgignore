@@ -1,0 +1,9 @@
+syntax: glob
+*~
+*.pyc
+*.exe
+*.tar.gz
+
+syntax: regexp
+^\.hg/
+^build/
