@@ -934,7 +934,7 @@ class GnuplotBackend(BaseClass):
                 self._g('set contour base')
             elif filled:
                 self._g('set contour base')
-                self._g('set style fill pattern')
+                self._g('set style fill solid')
                 self._g('set pm3d at s solid')
                 self._g('set palette maxcolors %d' % item.getp('clevels'))
             else:
