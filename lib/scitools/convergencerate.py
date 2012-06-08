@@ -14,8 +14,7 @@ the convergence_rate function (too see an easily adapted example).
 C1*h**r1 + C2*h*dt**r2, with nonlinear least squares, but sound
 fits are more challenging to obtain.)
 """
-
-from Scientific.Functions.LeastSquares import leastSquaresFit
+from scitools.misc import import_module
 from numpy import zeros, array, asarray, log10, transpose, linalg, linspace
 import sys
 from scitools.std import plot
@@ -93,6 +92,8 @@ class OneDiscretizationPrm(object):
         data = []
         for d_i, e_i in zip(d, e):
             data.append(((d_i,) , e_i))  # recall (a,) conversion to tuple
+        leastSquaresFit = import_module('Scientific.Functions.LeastSquares',
+                                        'leastSquaresFit')
         sol = leastSquaresFit(OneDiscretizationPrm.error_model, p0, data)
         C = sol[0][0]
         a = sol[0][1]
@@ -261,6 +262,8 @@ class ManyDiscretizationPrm(object):
                 data.append(((d_i,), e_i))
             else:  # d_i is tuple, list, array, NumArray, ...
                 data.append((d_i, e_i))
+        leastSquaresFit = import_module('Scientific.Functions.LeastSquares',
+                                        'leastSquaresFit')
         sol = leastSquaresFit(ManyDiscretizationPrm.error_model,
                               initial_guess, data)
         # return list of fitted parameters (p in error_model)

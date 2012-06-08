@@ -7,6 +7,32 @@ import time, sys, os, re, getopt, math, threading, shutil, commands
 from errorcheck import right_type
 from scitools.StringFunction import StringFunction
 
+def import_module(package, module=None):
+    try:
+        if module is not None:
+            stm = 'from %s import %s as m' % (package, module)
+        else:
+            stm = 'import %s as m' % (package)
+        exec(stm)
+        return m
+
+    except ImportError:
+        msg = 'Tried %s,\nbut package %s is not installed' % \
+              (stm, package.split('.')[0])
+        if package.startswith('Scientific'):
+            url = '\nDownload from https://sourcesup.cru.fr/projects/scientific-py/'
+        elif package.startswith('scipy'):
+            url = '\nDownload from http://'
+        elif package.startswith('Pmw'):
+            url = '\nDownload from http://'
+        elif package.startswith('Gnuplot'):
+            url = '\nDownload from http://'
+        else:
+            url = ''
+        msg += url
+        raise ImportError(msg)
+
+
 def test_if_module_exists(modulename, msg='',
                           raise_exception=False, abort=True):
     """

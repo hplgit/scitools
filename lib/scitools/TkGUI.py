@@ -8,10 +8,8 @@ the book "Python Scripting for Computational Science".
 #
 
 import Tkinter, os
-try:
-    import Pmw
-except ImportError:
-    raise ImportError('You need to install the Pmw module')
+from scitools.misc import import_module
+Pmw = import_module('Pmw')
 
 class DrawFunction:
     """
@@ -407,13 +405,10 @@ Utilities for holding and displaying data about input parameters.
 import re
 import scitools.modulecheck
 import scitools.misc
-
 try:
-    import Scientific.Physics.PhysicalQuantities as PQ
-except:
+    PQ = import_module('Scientific.Physics.PhysicalQuantities')
+except ImportError:
     pass
-    # tests on which modules that are missing are done
-    # in the constructor of the classes
 
 from scitools.misc import str2bool, str2obj
 
@@ -2156,7 +2151,7 @@ class FuncDependenceViz:
         import scitools.modulecheck as sm
         sm("TkGUI module:", 'Pmw', 'Tkinter', 'Gnuplot', 'numpy')
 
-        import Gnuplot
+        Gnuplot = import_module('Gnuplot')
         self.Gnuplot = Gnuplot
         self.master = master
         self.top = Tkinter.Frame(master, borderwidth=2)
