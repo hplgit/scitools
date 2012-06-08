@@ -133,10 +133,12 @@ def wildcard_notation(files):
     return files
 
 def usage_movie():
-    print """
-Usage: scitools movie output_file=mymovie.html fps=4 file*.png
-Usage: scitools movie encoder=ffmpeg output_file=mymovie.avi fps=4 file*.jpg
-Usage: scitools movie encoder=ppmtompeg output_file=mymovie.mpeg fps=4 file*.png
+    print """Usage:
+scitools movie                   output_file=mymovie.html fps=4  file*.png
+scitools movie encoder=convert   output_file=mymovie.gif  fps=4  file*.jpg
+scitools movie encoder=ffmpeg    output_file=mymovie.avi  fps=4  file*.jpg
+scitools movie encoder=ffmpeg    output_file=mymovie.mpeg fps=4  file*.jpg
+scitools movie encoder=ppmtompeg output_file=mymovie.mpeg fps=24 file*.png
 """
 
 def main_movie():
@@ -160,7 +162,7 @@ def main_movie():
         if '=' in arg:
             kw = arg.split('=')[0].strip()
             if kw in legal_kwargs:
-                # Special cases:
+                # Special case: kw='value', else arg is kw=value
                 if kw in kw_string_args:
                     arg = kw + '=' + repr(arg.split('=')[1])
                 kwargs.append(arg)
