@@ -8,6 +8,7 @@ legal_programs = ['subst',
                   'floatdiff',
                   'file2interactive',
                   'movie',
+                  'pyreport',
 ]
 
 __doc__ = \
@@ -53,6 +54,13 @@ movie:
   files (frames). By default an HTML file for displaying the
   image (PNG) files are made.
 
+pyreport:
+  Processes a Python script and pretty prints the results using
+  LateX. If the script uses show() commands (from scitools.easyviz)
+  they are caught by pyreport and the resulting graphs are inserted in
+  the output pdf. Comments lines starting with \"#!\" are interpreted
+  as rst lines and pretty printed accordingly in the pdf.
+       
 
 Examples:
 
@@ -716,6 +724,31 @@ def main_floatdiff():
         usage_floatdiff()
 
 
+def usage_pyreport():
+    print """Usage: scitools pyreport [options] pythonfile"""
+
+doc_pyreport = """
+pyreport is a program that runs a Python script and captures its
+output, compiling it to a pretty report in a pdf or an html file. It
+can display the output embedded in the code that produced it and can
+process special comments (literate comments) according to markup
+languages (rst or LaTeX) to compile a very readable document.
+
+Note: This is a modified version of Gael Varoquaux's pyreport that
+enables the use of scitools.easyviz to do the plotting. The original
+pyreport can be downloaded from http://gael-varoquaux.info/computers/pyreport/.
+"""
+
+def main_pyreport():
+    if len(sys.argv) < 3:
+        usage_pyreport()
+        print doc_pyreport
+        sys.exit(1)
+
+    sys.argv = sys.argv[1:]
+    from scitools.pyreport import pyreport
+    pyreport.commandline_call()
+
 
 if __name__ == '__main__':
     try:
@@ -743,6 +776,8 @@ if __name__ == '__main__':
         main_floatdiff()
     elif program == 'movie':
         main_movie()
+    elif program == 'pyreport':
+        main_pyreport()
     elif program == 'help' or program == '--help' or program == '-h':
         for p in legal_programs:
             exec('usage_%s()' % p)

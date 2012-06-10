@@ -94,3 +94,10 @@ On 2/15/08, johannr@simula.no <johannr@simula.no> wrote:
 > Johannes Ring
 >
 >
+
+
+lib/scitools/pyreport/*
+
+  Copyright (C) 2005-2009 Gael Varoquaux <gael.varoquaux@normalesup.org>
+
+  Distributed under the terms of the BSD License.
