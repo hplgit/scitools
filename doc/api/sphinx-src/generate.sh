@@ -16,8 +16,8 @@ n
 _
 SciTools
 H. P. Langtangen, J. Ring, ++
-0.8
-0.8
+$version
+$version
 .txt
 index
 n
@@ -87,7 +87,7 @@ if [ $? -ne 0 ]; then echo; echo "Install numpydoc: download numpy (or get the l
 # Generate HTML documentation
 make html
 
-# run easyviz doc with plain again (for pydoc):
+# equip doc with plain text format (for pydoc):
 cd ../../../lib/scitools
 doconce insertdocstr plain .
 cd $this_dir
