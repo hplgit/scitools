@@ -63,15 +63,16 @@ All functions and modules must then be prefixed by ``st``:
 ``st.float_eq``, ``st.StringFunction``, ``st.plot``, etc.
 """
 
-__version__ = '0.8.3'
+__version__ = '0.9.0'
 version = __version__
 __author__ = 'Johannes H. Ring', 'Hans Petter Langtangen', \
-             'Ilmar Wilbers', 'Rolv E. Bredesen'
+
 author = __author__
 
-__acknowledgmets__ = 'Joachim Berdal Haga', 'Mario Pernici', \
-                     'Allen B. Downey', 'Imri Goldberg', \
-                     'Fred L. Drake', 'Gael Varoquaux',
+__acknowledgments__ = 'Joachim Berdal Haga', 'Mario Pernici', \
+                      'Allen B. Downey', 'Imri Goldberg', \
+                      'Fred L. Drake', 'Gael Varoquaux', \
+                      'Rolv E. Bredesen', 'Ilmar Wilbers'
 
 try:
     # for backward compatibility:

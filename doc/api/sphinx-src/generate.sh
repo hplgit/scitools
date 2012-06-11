@@ -1,6 +1,8 @@
 #!/bin/sh
 
 this_dir=`pwd`
+version=`python -c "import scitools as st; print st.version"`
+
 # make easyviz doc with reST/Sphinx format:
 cd ../../../lib/scitools
 doconce insertdocstr sphinx .
