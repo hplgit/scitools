@@ -226,7 +226,7 @@
 
 <span class="sd">    The output from this code becomes::</span>
 
-<span class="sd">       x                         |                        c</span>
+<span class="sd">                                 |                        c</span>
 <span class="sd">                                 |         s            c</span>
 <span class="sd">                                 |                 c</span>
 <span class="sd">                                 |         c            s</span>
@@ -315,6 +315,14 @@
         <span class="k">return</span> <span class="n">c</span>
 
 <div class="viewcode-block" id="Plotter.plot"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.Plotter.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return next line in plot, given x and some y values.</span>
+
+<span class="sd">        Supported kwargs:</span>
+<span class="sd">        print_out_of_range_value: if True, print the value if it</span>
+<span class="sd">        is out of range.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">print_out_of_range_value</span> <span class="o">=</span> \
               <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;print_out_of_range_value&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
         <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39; &#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -336,6 +344,43 @@
         <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_value</span>
 
 </div></div>
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Easyviz-style plot command.</span>
+<span class="sd">    args holds x1, y1, x2, y2, ...::</span>
+
+<span class="sd">      plot(t, u1, t, u2, axis=[0, 10, -1, 1])</span>
+
+<span class="sd">    No other keyword arguments has any effect.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s">&#39;axis&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;axis&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="mf">1E+20</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="o">-</span><span class="n">ymin</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ymax</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+    <span class="n">num_curves</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="n">num_curves</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;avplotter.plot: cannot plot more than 4 curves&#39;</span><span class="p">)</span>
+
+    <span class="n">x_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">x_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;avplotter.plot: all x coordinates for all curves must have the same length (</span><span class="si">%d</span><span class="s"> vs </span><span class="si">%d</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">x_length</span><span class="p">))</span>
+
+    <span class="n">x_array</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_array</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;index </span><span class="si">%d</span><span class="s"> in x_array is illegal in args[</span><span class="si">%d</span><span class="s">] (length=</span><span class="si">%d</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">j</span><span class="p">])))</span>
+
+        <span class="k">print</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_array</span><span class="p">,</span> <span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="test_sin"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.test_sin">[docs]</a><span class="k">def</span> <span class="nf">test_sin</span><span class="p">():</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mf">0.2</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>

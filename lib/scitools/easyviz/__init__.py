@@ -8,7 +8,7 @@
 
 .. AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
 
-.. DATE: Aug 08, 2008
+.. DATE: Jun 12, 2012
 
 
 Easyviz
