@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Easyviz Documentation! &mdash; Easyviz Documentation v1.0 documentation</title>
+    <title>Welcome to Easyviz Documentation! &mdash; Easyviz Documentation 1.0 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Easyviz Documentation v1.0 documentation" href="#" />
+    <link rel="top" title="Easyviz Documentation 1.0 documentation" href="#" />
     <link rel="next" title="Easyviz" href="tmp_easyviz.html" /> 
   </head>
   <body>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="tmp_easyviz.html" title="Easyviz"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Easyviz Documentation v1.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Easyviz Documentation 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,8 +64,10 @@
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#plotting-multiple-curves">Plotting Multiple Curves</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#making-multiple-figures">Making Multiple Figures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#controlling-line-styles">Controlling Line Styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#math-syntax-in-legends-and-titles">Math Syntax in Legends and Titles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#interactive-plotting-sessions">Interactive Plotting Sessions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#making-animations">Making Animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#controlling-the-aspect-ratio-of-axes">Controlling the Aspect Ratio of Axes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#moving-plot-window">Moving Plot Window</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#advanced-easyviz-topics">Advanced Easyviz Topics</a></li>
 </ul>
@@ -99,12 +104,15 @@
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#i-get-thread-errors-while-plotting">I Get Thread Errors While Plotting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#i-get-strange-errors-saying-something-about-latex">I Get Strange Errors Saying Something About LaTeX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#old-programs-with-2d-scalar-vector-field-plotting-do-not-work">Old Programs with 2D Scalar/Vector Field Plotting Do Not Work</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#can-i-easily-turn-off-all-plotting">Can I Easily Turn Off All Plotting?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#check-your-backends">Check Your Backends!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#can-i-easily-turn-off-all-plotting">Can I Easily Turn Off All Plotting?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#how-can-i-change-the-type-of-gnuplot-window">How Can I Change the Type of Gnuplot Window?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#how-can-the-aspect-ratio-of-the-axes-be-controlled">How Can The Aspect Ratio of The Axes Be Controlled?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#trouble-with-gnuplot-and-threads">Trouble with Gnuplot and Threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#trouble-with-movie-making">Trouble with Movie Making</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#i-get-thread-errors-with-gnuplot">I Get Thread Errors with Gnuplot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#where-can-i-find-easyviz-documentation">Where Can I Find Easyviz Documentation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#grace-gives-error-messages-when-calling-savefig-hardcopy">Grace Gives Error Messages When Calling Savefig/Hardcopy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tmp_easyviz.html#i-cannot-find-out-how-my-plot-can-be-created">I Cannot Find Out How My Plot Can Be Created</a></li>
 </ul>
 </li>
@@ -145,7 +153,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -168,12 +176,12 @@
         <li class="right" >
           <a href="tmp_easyviz.html" title="Easyviz"
              >next</a> |</li>
-        <li><a href="#">Easyviz Documentation v1.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Easyviz Documentation 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, H. P. Langtangen and J. H. Ring.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
+        &copy; Copyright 2012, H. P. Langtangen and J. H. Ring.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

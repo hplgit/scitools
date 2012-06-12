@@ -5,9 +5,6 @@ rm -rf tmp_*
 
 # Make .p.py -> .py files and make sure most recent documentation of
 # Easyviz is in the __init__.py file:
-cd ../..
-python _update.py
-cd easyviz/doc
 
 # Prepare Doconce files and filter them to various formats:
 cp easyviz.do.txt tmp_easyviz.do.txt
@@ -16,7 +13,7 @@ doconce format HTML tmp_easyviz.do.txt
 doconce format plain tmp_easyviz.do.txt
 
 doconce format LaTeX tmp_easyviz.do.txt
-ptex2tex tmp_easyviz
+ptex2tex -DMINTED tmp_easyviz
 scitools subst slice_ 'slice\_' tmp_easyviz.tex   # _ fix
 latex -shell-escape tmp_easyviz
 latex -shell-escape tmp_easyviz
@@ -68,24 +65,25 @@ doconce format rst tmp_easyviz.do.txt
 scitools subst '(figs/.+?)\.eps' '\g<1>.png' tmp_easyviz.rst
 rst2html.py tmp_easyviz.rst > tmp_easyviz_rst.html
 
-cp tmp_easyviz.pdf   ../../../../doc/easyviz/easyviz.pdf
-cp tmp_easyviz.html  ../../../../doc/easyviz/easyviz.html
-cp tmp_easyviz_rst.html  ../../../../doc/easyviz/easyviz_rst.html
-cp tmp_easyviz.gwiki ../../../../doc/easyviz/easyviz.gwiki
-cp tmp_easyviz.txt   ../../../../doc/easyviz/easyviz.txt
+cp tmp_easyviz.pdf   ../../easyviz/easyviz.pdf
+cp tmp_easyviz.html  ../../easyviz/easyviz.html
+cp tmp_easyviz_rst.html  ../../easyviz/easyviz_rst.html
+cp tmp_easyviz.gwiki ../../easyviz/easyviz.gwiki
+cp tmp_easyviz.txt   ../../easyviz/easyviz.txt
 preprocess tmp_easyviz.do.txt > tmp.do.txt
-cp tmp.do.txt  ../../../../doc/easyviz/easyviz.do.txt
-#cp tmp_easyviz_sphinx.pdf ../../../../doc/easyviz/easyviz_sphinx.pdf
+cp tmp.do.txt  ../../easyviz/easyviz.do.txt
+#cp tmp_easyviz_sphinx.pdf ../../easyviz/easyviz_sphinx.pdf
 # must remove old dirs, otherwise new files won't overwrite
-rm -rf ../../../../doc/easyviz/easyviz_sphinx_html
-rm -rf ../../../../doc/easyviz/figs
-rm -rf ../../../../doc/easyviz/easyviz_sphinx_html/figs
-cp -r sphinx-rootdir/_build/html ../../../../doc/easyviz/easyviz_sphinx_html
-cp -r figs ../../../../doc/easyviz/figs  # to make HTML work
-cp -r figs ../../../../doc/easyviz/easyviz_sphinx_html/figs  # to make Sphinx work
-rm -f ../../../../doc/easyviz/figs/*.*ps ../../../../doc/easyviz/easyviz_sphinx_html/figs/*.*ps  # save some diskspace
+rm -rf ../../easyviz/easyviz_sphinx_html
+rm -rf ../../easyviz/figs
+rm -rf ../../easyviz/easyviz_sphinx_html/figs
+cp -r sphinx-rootdir/_build/html ../../easyviz/easyviz_sphinx_html
+cp -r figs ../../easyviz/figs  # to make HTML work
+cp -r figs ../../easyviz/easyviz_sphinx_html/figs  # to make Sphinx work
+rm -f ../../easyviz/figs/*.*ps ../../easyviz/easyviz_sphinx_html/figs/*.*ps  # save some diskspace
+cp tmp_easyviz.gwiki ../../../../scitools.wiki/EasyvizDocumentation.wiki
 
-ls ../../../../doc/easyviz/
+ls ../../easyviz/
 
 
 

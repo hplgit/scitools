@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- 
-Automatically generated HTML file from Doconce source 
-(http://code.google.com/p/doconce/) 
+<!--
+Automatically generated HTML file from Doconce source
+(http://code.google.com/p/doconce/)
 -->
 
-<HTML>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<META name="generator" content="Doconce: http://code.google.com/p/doconce/" />
-</HEAD>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Doconce: http://code.google.com/p/doconce/" />
+</head>
 
-<BODY BGCOLOR="white">
+<body bgcolor="white">
     <!-- TITLE: Easyviz Documentation -->
 <!-- AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo -->
 <!-- AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo -->
-<!-- DATE: Aug 08, 2008 -->
+<!-- DATE: Jun 12, 2012 -->
 
 <P>
-<H1>Easyviz</H1>
+<h2>Easyviz</h2>
 <P>
 Easyviz is a unified interface to various packages for scientific
 visualization and plotting.  The Easyviz interface is written in
@@ -45,29 +45,29 @@ switch between Python and Matlab.
 
 <P>
 If you encounter problems with using Easyviz, please visit the 
-<EM>Troubleshooting</EM> chapter and the <EM>Installation</EM> chapter at the
+<em>Troubleshooting</em> chapter and the <em>Installation</em> chapter at the
 end of the documentation.
 
 <P>
 
 <P>
-<H3>Easyviz Documentation</H3>
+<h3>Easyviz Documentation</h3>
 <P>
 The present documentation is available in a number of formats:
 
 <P>
 
-<UL>
-  <LI> <A HREF="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf">PDF</A>
-  <LI> <A HREF="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html">Plain HTML</A>
-  <LI> <A HREF="https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</A>
-  <LI> <A HREF="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt">Plain text</A>
-  <LI> <A HREF="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</A>
-  <LI> <A HREF="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt">Doconce source</A>
-</UL>
+<ul>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf">PDF</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html">Plain HTML</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt">Plain text</a>
+  <li> <a href="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt">Doconce source</a>
+</ul>
 
 The documentation is written in the 
-<A HREF="http://code.google.com/p/doconce">Doconce</A> 
+<a href="http://code.google.com/p/doconce">Doconce</a> 
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
@@ -75,25 +75,25 @@ OpenOffice, RTF, Word, and plain untagged ASCII).
 <P>
 
 <P>
-<H3>Guiding Principles</H3>
+<h3>Guiding Principles</h3>
 <P>
-<B>First principle.</B> Array data can be plotted with a minimal
+<b>First principle.</b> Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple
 
 <P>
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = t**2*exp(-t**2)
 plot(t, y) 
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-plots the data in (the NumPy array) <TT>t</TT> versus the data in (the NumPy
-array) <TT>y</TT>. If you need legends, control of the axis, as well as
+</pre>
+</blockquote>   <! -- end verbatim block -->
+plots the data in (the NumPy array) <tt>t</tt> versus the data in (the NumPy
+array) <tt>y</tt>. If you need legends, control of the axis, as well as
 additional curves, all this is obtained by the standard Matlab-style
 commands
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 y2 = t**4*exp(-t**2)
 # pick out each 4 points and add random noise:
 t3 = t[::4]
@@ -112,12 +112,12 @@ show()
 
 hardcopy('tmp0.eps')  # this one can be included in LaTeX
 hardcopy('tmp0.png')  # this one can be included in HTML
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Easyviz also allows these additional function calls to be executed
-as a part of the <TT>plot</TT> call:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+as a part of the <tt>plot</tt> call:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data'),
      title='Simple Plot Demo',
@@ -127,12 +127,12 @@ plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      show=True)
 
 hardcopy('tmp0.png')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 A scalar function f(x,y) may be visualized
 as an elevated surface with colors using these commands:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
 xv, yv = ndgrid(x, x)    # define a 2D grid with points (xv,yv)
 values = f(xv, yv)       # function values
@@ -142,11 +142,11 @@ surfc(xv, yv, values,
       clabels='on',
       hidden='on',
       show=True)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<B>Second princple.</B> Easyviz is just a unified interface to other
+<b>Second princple.</b> Easyviz is just a unified interface to other
 plotting packages that can be called from Python. Such plotting
 packages are referred to as backends. Several backends are supported:
 Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
@@ -167,7 +167,7 @@ to work with new fancy plotting packages in the future if Easyviz
 backends are written for those packages.
 
 <P>
-<B>Third principle.</B> The Easyviz interface is minimalistic, aimed at
+<b>Third principle.</b> The Easyviz interface is minimalistic, aimed at
 rapid prototyping of plots. This makes the Easyviz code easy to read
 and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
@@ -186,10 +186,10 @@ commands - and jump to complicated fine-tuning only when strictly needed.
 <P>
 
 <P>
-<H1>Tutorial</H1>
+<h2>Tutorial</h2>
 <P>
 This tutorial starts with plotting a single curve with a simple
-<TT>plot(x,y)</TT> command. Then we add a legend, axis labels, a title, etc.
+<tt>plot(x,y)</tt> command. Then we add a legend, axis labels, a title, etc.
 Thereafter we show how multiple curves are plotted together. We also
 explain how line styles and axis range can be controlled. The
 next topic deals with animations and making movie files. More advanced
@@ -202,49 +202,49 @@ Various methods for visualization of scalar fields in 2D and 3D are
 treated next, before we show how 2D and 3D vector fields can be handled.
 
 <P>
-<H3>A Note on Import Statements</H3>
+<h3>A Note on Import Statements</h3>
 <P>
-The recommended standard import of <TT>numpy</TT>
-and <TT>matplotlib</TT> in programs reads:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+The recommended standard import of <tt>numpy</tt>
+and <tt>matplotlib</tt> in programs reads:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 import numpy as np
 import matplotlib.pyplot as plt
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 This import ensures that all functionality from different packages are
 prefixed by a short form of the package name. This convention has,
 from a computer science perspective, many advantages as one sees
 clearly where functionality comes from.  However, convincing
 scientists with extensive Matlab, Fortran, or C++ experience to switch
-to Python can be hard when mathematical formulas are full of <TT>np.</TT>
+to Python can be hard when mathematical formulas are full of <tt>np.</tt>
 prefixes and all plotting commands are decorated with an "extra"
-<TT>plt.</TT> The developers of Easyviz think it is a major point to have
+<tt>plt.</tt> The developers of Easyviz think it is a major point to have
 Python code as close to Matlab and standard mathematical syntax as
 possible.  Therefore, examples in this manual employ the "star
 import":
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 from scitools.std import *
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 This statement imports the Easyviz plotting commands and also performs
-<TT>from numpy import *</TT>. Hence, mathematical functions like <TT>sin</TT> and
-<TT>log</TT> are available and work for arrays, as in Matlab, and the plotting
+<tt>from numpy import *</tt>. Hence, mathematical functions like <tt>sin</tt> and
+<tt>log</tt> are available and work for arrays, as in Matlab, and the plotting
 commands are the same as those in Matlab. This type of import statement
 is similar to the popular
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 from matplotlib.pylab import *
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-among Matplotlib users (although not promoted by Matplotlib developers). 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+among Matplotlib users (although not promoted by Matplotlib developers).
 The primary additional feature of the
-<TT>scitools.std</TT> import is the possibility to choose among many different
+<tt>scitools.std</tt> import is the possibility to choose among many different
 backends for plotting, where Matplotlib is one of the options.
 
 <P>
-<H3>Plotting a Single Curve</H3>
+<h3>Plotting a Single Curve</h3>
 <P>
 
 <P>
@@ -252,12 +252,12 @@ Let us plot the curve y = t**2*exp(-t**2) for
 t values between 0 and 3.  First we generate equally spaced
 coordinates for t, say 51 values (50 intervals). Then we compute the
 corresponding y values at these points, before we call the
-<TT>plot(t,y)</TT> command to make the curve plot.  Here is the complete
+<tt>plot(t,y)</tt> command to make the curve plot.  Here is the complete
 program:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 
 def f(t):
@@ -270,21 +270,25 @@ for i in xrange(len(t)):
 
 plot(t, y)
 show()  # optional
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The first line imports all of SciTools and Easyviz that can be handy
-to have when doing scientific computations. This includes everything
-from <TT>numpy</TT> (from <TT>numpy import *</TT>), 
-all Easyviz plotting commands, some modules (<TT>sys</TT>, <TT>math</TT>), and
-all of SciPy (<TT>from scipy import *</TT>) if SciPy is installed.
-In the program above, we first
-pre-allocate the <TT>y</TT> array and fill it with values, element by
-element, in a Python loop. Alternatively, we may operate
-on the whole <TT>t</TT> array at once, which yields faster and shorter code:
+</pre>
+</blockquote>   <! -- end verbatim block -->
+If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see the chapter <a href="#ev:tut:install">Installation</a>.
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+The first line imports all of SciTools and Easyviz that can be handy
+to have when doing scientific computations. This includes everything
+from <tt>numpy</tt> (from <tt>numpy import *</tt>),
+all Easyviz plotting commands, some modules (<tt>sys</tt>, <tt>math</tt>), and
+all of SciPy (<tt>from scipy import *</tt>) if SciPy is installed.
+In the program above, we first
+pre-allocate the <tt>y</tt> array and fill it with values, element by
+element, in a Python loop. Alternatively, we may operate
+on the whole <tt>t</tt> array at once, which yields faster and shorter code:
+
+<P>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 
 def f(t):
@@ -294,41 +298,44 @@ t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
 show()                    # optional
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>f</TT> function can also be skipped, if desired, so that we can write
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>f</tt> function can also be skipped, if desired, so that we can write
 directly
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 y = t**2*exp(-t**2)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 To include the plot in electronic documents, we need a hardcopy of the
-figure in PostScript, PNG, or another image format.  The <TT>hardcopy</TT>
+figure in PostScript, PNG, or another image format.  The <tt>hardcopy</tt>
 command produces files with images in various formats:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-An alternative name for <TT>hardcopy</TT> is <TT>savefig</TT>:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+</pre>
+</blockquote>   <! -- end verbatim block -->
+An alternative name for <tt>hardcopy</tt> is <tt>savefig</tt>:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The filename extension determines the format: <TT>.ps</TT> or
-<TT>.eps</TT> for PostScript, and <TT>.png</TT> for PNG. 
-Figure <A HREF="#fig:plot1a">fig:plot1a</a> displays the resulting plot. With <TT>show(False)</TT>
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The filename extension determines the format: <tt>.ps</tt> or
+<tt>.eps</tt> for PostScript, and <tt>.png</tt> for PNG.
+Figure <a href="#fig:plot1a">fig:plot1a</a> displays the resulting plot. With <tt>show(False)</tt>
 we can suppress the plot from being shown at the screen, which is
 useful when create a large number of figure files in programs.
 
 <P>
-<IMG SRC="figs/plot1a.png" ALIGN="bottom" > A simple plot in PostScript format. <A NAME="fig:plot1a"></A>
+<center><hr>
+<caption><i>A simple plot in PostScript format. <a name="fig:plot1a"></A></i></caption>
+<p><img src="figs/plot1a.png" align="bottom" ></p>
+</center>
 
 <P>
 On some platforms, some backends may result in a plot that is shown in
@@ -336,11 +343,11 @@ just a fraction of a second on the screen before the plot window disappears
 (using the Gnuplot backend on Windows machines or using the Matplotlib
 backend constitute two examples). To make the window stay on the screen,
 add
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 raw_input('Press the Return key to quit: ')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 at the end of the program. The plot window is killed when the program
 terminates, and this satement postpones the termination until the user
 hits the Return key.
@@ -348,7 +355,7 @@ hits the Return key.
 <P>
 
 <P>
-<H3>Decorating the Plot</H3>
+<h3>Decorating the Plot</h3>
 <P>
 The x and y axes in curve plots should have labels, here t and
 y, respectively. Also, the curve should be identified with a label,
@@ -356,26 +363,26 @@ or legend as it is often called.  A title above the plot is also
 common.  In addition, we may want to control the extent of the axes (although
 most plotting programs will automatically adjust the axes to the range of the
 data).
-All such things are easily added after the <TT>plot</TT> command:
+All such things are easily added after the <tt>plot</tt> command:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)')
 axis([0, 3, -0.05, 0.6])   # [tmin, tmax, ymin, ymax]
 title('My First Easyviz Demo')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 This syntax is inspired by Matlab to make the switch between
 Easyviz and Matlab almost trivial.
-Easyviz has also introduced a more "Pythonic" <TT>plot</TT> command where
+Easyviz has also introduced a more "Pythonic" <tt>plot</tt> command where
 all the plot properties can be set at once:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 plot(t, y,
      xlabel='t',
      ylabel='y',
@@ -384,46 +391,49 @@ plot(t, y,
      title='My First Easyviz Demo',
      savefig='tmp1.eps',  # or hardcopy='tmp1.eps'
      show=True)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-With <TT>show=False</TT> one can avoid the plot window on the screen and
+With <tt>show=False</tt> one can avoid the plot window on the screen and
 just make the hardcopy. This feature is particularly useful if
 one generates a large number of separate figures in the program.
-The keyword <TT>savefig</TT> can be replaced by <TT>hardcopy</TT> if desired.
+The keyword <tt>savefig</tt> can be replaced by <tt>hardcopy</tt> if desired.
 
 <P>
-Note that we in the curve legend write <TT>t</TT> square as <TT>t^2</TT> (LaTeX style)
-rather than <TT>t**2</TT> (program style). Whichever form you choose is up to
+Note that we in the curve legend write <tt>t</tt> square as <tt>t^2</tt> (LaTeX style)
+rather than <tt>t**2</tt> (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Matplotlib and Gnuplot are two examples). 
-See Figure <A HREF="#fig:plot1c">fig:plot1c</a> for what the modified
-plot looks like and how <TT>t^2</TT> is typeset in Gnuplot.
+programs (Matplotlib and Gnuplot are two examples).
+See Figure <a href="#fig:plot1c">fig:plot1c</a> for what the modified
+plot looks like and how <tt>t^2</tt> is typeset in Gnuplot.
 
 <P>
 
 <P>
-<IMG SRC="figs/plot1c.png" ALIGN="bottom" > A single curve with label, title, and axes adjusted. <A NAME="fig:plot1c"></A>
+<center><hr>
+<caption><i>A single curve with label, title, and axes adjusted. <a name="fig:plot1c"></A></i></caption>
+<p><img src="figs/plot1c.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Plotting Multiple Curves</H3>
+<h3>Plotting Multiple Curves</h3>
 <P>
 A common plotting task is to compare two or more curves, which
 requires multiple curves to be drawn in the same plot.
 Suppose we want to plot the two functions f_1(t)=t^2\exp(-t^2)
-and f_2(t)=t^4\exp(-t^2). If we write two <TT>plot</TT> commands after
+and f_2(t)=t^4\exp(-t^2). If we write two <tt>plot</tt> commands after
 each other, two separate plots will be made. To make the second
-<TT>plot</TT> command draw the curve in the first plot, we need to
-issue a <TT>hold('on')</TT> command. Alternatively, we can provide all
-data in a single <TT>plot</TT> command. A complete program illustrates the
+<tt>plot</tt> command draw the curve in the first plot, we need to
+issue a <tt>hold('on')</tt> command. Alternatively, we can provide all
+data in a single <tt>plot</tt> command. A complete program illustrates the
 different approaches:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *   # for curve plotting
 
 def f1(t):
@@ -452,79 +462,88 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
      savefig='tmp2.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The sequence of the multiple legends is such that the first legend 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
-and so on. The visual result appears in Figure <A HREF="#fig:plot2a">fig:plot2a</a>.
+and so on. The visual result appears in Figure <a href="#fig:plot2a">fig:plot2a</a>.
 
 <P>
-Doing a <TT>hold('off')</TT> makes the next <TT>plot</TT> command create a new
+Doing a <tt>hold('off')</tt> makes the next <tt>plot</tt> command create a new
 plot in the same window. This new plot just erases the previous curves.
 
 <P>
-<IMG SRC="figs/plot2a.png" ALIGN="bottom" > Two curves in the same plot. <A NAME="fig:plot2a"></A>
+<center><hr>
+<caption><i>Two curves in the same plot. <a name="fig:plot2a"></A></i></caption>
+<p><img src="figs/plot2a.png" align="bottom" ></p>
+</center>
 
 <P>
-With the keyword argrument <TT>grid=True</TT> to <TT>plot</TT> we can add a
+With the keyword argrument <tt>grid=True</tt> to <tt>plot</tt> we can add a
 grid, which is frequently used when plotting curves (see
-Figure <A HREF="#fig:plot2f">fig:plot2f</a>).
+Figure <a href="#fig:plot2f">fig:plot2f</a>).
 
 <P>
-<IMG SRC="figs/plot2f.png" ALIGN="bottom" > Curves with a grid. <A NAME="fig:plot2f"></A>
+<center><hr>
+<caption><i>Curves with a grid. <a name="fig:plot2f"></A></i></caption>
+<p><img src="figs/plot2f.png" align="bottom" ></p>
+</center>
 
 <P>
 The default location of the legends is dependent on the backend
 (some have a fixed location, like Gnuplot, and some try to find
 the most optimal location, like Matplotlib). One can control
-the location by the <TT>loc</TT> keyword to the <TT>legend</TT> function, e.g.,
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+the location by the <tt>loc</tt> keyword to the <tt>legend</tt> function, e.g.,
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The most popular values are upper right, upper left, lower left, 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The most popular values are upper right, upper left, lower left,
 and lower right, depending on the shape of the curves and extend
-of the axes. The keyword argument <TT>fancybox</TT> draws a box around
-the legends if <TT>True</TT>, otherwise no box is drawn. The corresponding
-keywords for the <TT>plot</TT> function are <TT>legend_loc</TT> and <TT>legend_fancybox</TT>:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+of the axes. The keyword argument <tt>fancybox</tt> draws a box around
+the legends if <tt>True</tt>, otherwise no box is drawn. The corresponding
+keywords for the <tt>plot</tt> function are <tt>legend_loc</tt> and <tt>legend_fancybox</tt>:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 plot(t, y1, t, y2, xlabel='t', ylabel='y',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      legend_loc=`upper left`, legend_fancybox=True,
      axis=[0, 4, -0.1, 0.8],
      title='Plotting two curves in the same plot',
      savefig='tmp2.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>loc</TT> and <TT>fancybox</TT> specifications work (at present)
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>loc</tt> and <tt>fancybox</tt> specifications work (at present)
 with Gnuplot and Matplotlib only.
 
 <P>
 
 <P>
-<IMG SRC="figs/plot2l.png" ALIGN="bottom"  width=400> A figure with legends placed to the upper left with a box frame.
+<center><hr>
+<caption><i>A figure with legends placed to the upper left with a box frame.</i></caption>
+<p><img src="figs/plot2l.png" align="bottom" [u'width=400']></p>
+</center>
 
 <P>
-The <TT>legend</TT> function also accepts a list of legends instead of
+The <tt>legend</tt> function also accepts a list of legends instead of
 the legends as separate positional arguments. This allows an overlapping
 syntax between Matplotlib and Easyviz so that the same code can apply
-either of the packages (however, Matplotlib's keywords to 
-<TT>plot</TT>, like <TT>label</TT> and <TT>linewidth</TT>, are not recognized so not all
+either of the packages (however, Matplotlib's keywords to
+<tt>plot</tt>, like <tt>label</tt> and <tt>linewidth</tt>, are not recognized so not all
 syntax is interchangable).
 
 <P>
 
 <P>
-<H3>Making Multiple Figures</H3>
+<h3>Making Multiple Figures</h3>
 <P>
-The <TT>hold</TT> command either adds a new curve or replaces old curve(s) by
+The <tt>hold</tt> command either adds a new curve or replaces old curve(s) by
 new ones. Often one wants to make multiple figures in a program,
-realized as multiple windows on the screen. The <TT>figure()</TT> command
+realized as multiple windows on the screen. The <tt>figure()</tt> command
 creates a new figure:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 x = linspace(-2, 2, 81)
 y1 = sin(pi*x)*exp(-0.5*x**2)
 plot(x, y1)
@@ -536,15 +555,15 @@ plot(x, y2)
 figure()  # yet another plot window
 y3 = sin(pi*x/4)*exp(-0.5*x**2)
 plot(x, y3)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-More information in the <TT>figure</TT> command is found later on under the
-heading <EM>Working with Axis and Figure Objects</EM>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+More information in the <tt>figure</tt> command is found later on under the
+heading <em>Working with Axis and Figure Objects</em>.
 
 <P>
 
 <P>
-<H3>Controlling Line Styles</H3>
+<h3>Controlling Line Styles</h3>
 <P>
 When plotting multiple curves in the same plot, the individual curves
 get distinct default line styles, depending on the program that is
@@ -552,42 +571,45 @@ used to produce the curve (and the settings for this program). It
 might well happen that you get a green and a red curve (which is bad
 for a significant portion of the male population).  Therefore,
 we often want to control the line style in detail. Say we want the first
-curve (<TT>t</TT> and <TT>y1</TT>) to be drawn as a red solid line and the second
-curve (<TT>t</TT> and <TT>y2</TT>) as blue circles at the discrete data points.  The
+curve (<tt>t</tt> and <tt>y1</tt>) to be drawn as a red solid line and the second
+curve (<tt>t</tt> and <tt>y2</tt>) as blue circles at the discrete data points.  The
 Matlab-inspired syntax for specifying line types applies a letter for
 the color and a symbol from the keyboard for the line type. For
-example, <TT>r-</TT> represents a red (<TT>r</TT>) line (<TT>-</TT>), while <TT>bo</TT> means blue
-(<TT>b</TT>) circles (<TT>o</TT>). The line style specification is added as an
+example, <tt>r-</tt> represents a red (<tt>r</tt>) line (<tt>-</tt>), while <tt>bo</tt> means blue
+(<tt>b</tt>) circles (<tt>o</tt>). The line style specification is added as an
 argument after the x and y coordinate arrays of the curve:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 plot(t, y1, 'r-')
 hold('on')
 plot(t, y2, 'bo')
 
 # or
 plot(t, y1, 'r-', t, y2, 'bo')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The effect of controlling the line styles can be seen in 
-Figure <A HREF="#fig:plot2c">fig:plot2c</a>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The effect of controlling the line styles can be seen in
+Figure <a href="#fig:plot2c">fig:plot2c</a>.
 
 <P>
-<IMG SRC="figs/plot2c.png" ALIGN="bottom" > Two curves in the same plot, with controlled line styles. <A NAME="fig:plot2c"></A>
+<center><hr>
+<caption><i>Two curves in the same plot, with controlled line styles. <a name="fig:plot2c"></A></i></caption>
+<p><img src="figs/plot2c.png" align="bottom" ></p>
+</center>
 
 <P>
 Assume now that we want to plot the blue circles at every 4 points only.
-We can grab every 4 points out of the <TT>t</TT> array by using an appropriate
-slice: <TT>t2 = t[::4]</TT>. Note that the first colon means the range from the
+We can grab every 4 points out of the <tt>t</tt> array by using an appropriate
+slice: <tt>t2 = t[::4]</tt>. Note that the first colon means the range from the
 first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 
 def f1(t):
@@ -607,49 +629,52 @@ plot(t, y1, 'r-6', t2, y2, 'bo3',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
      hardcopy='tmp2.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 In this plot we also adjust the size of the line and the circles by
-adding an integer: <TT>r-6</TT> means a red line with thickness 6 and <TT>bo5</TT>
+adding an integer: <tt>r-6</tt> means a red line with thickness 6 and <tt>bo5</tt>
 means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
-the Gnuplot program one can view the effect in Figure <A HREF="#fig:plot2g">fig:plot2g</a>.
+the Gnuplot program one can view the effect in Figure <a href="#fig:plot2g">fig:plot2g</a>.
 
 <P>
-<IMG SRC="figs/plot2g.png" ALIGN="bottom" > Circles at every 4 points and extended line thickness (6) and circle size (3). <A NAME="fig:plot2g"></A>
+<center><hr>
+<caption><i>Circles at every 4 points and extended line thickness (6) and circle size (3). <a name="fig:plot2g"></A></i></caption>
+<p><img src="figs/plot2g.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-The different available line colors include 
+The different available line colors include
 
-<UL>
-  <LI> yellow:   <TT>'y'</TT>
-  <LI> magenta:  <TT>'m'</TT>
-  <LI> cyan:     <TT>'c'</TT>
-  <LI> red:      <TT>'r'</TT>
-  <LI> green:    <TT>'g'</TT>
-  <LI> blue:     <TT>'b'</TT>
-  <LI> white:    <TT>'w'</TT>
-  <LI> black:    <TT>'k'</TT>
-</UL>
+<ul>
+  <li> yellow:   <tt>'y'</tt>
+  <li> magenta:  <tt>'m'</tt>
+  <li> cyan:     <tt>'c'</tt>
+  <li> red:      <tt>'r'</tt>
+  <li> green:    <tt>'g'</tt>
+  <li> blue:     <tt>'b'</tt>
+  <li> white:    <tt>'w'</tt>
+  <li> black:    <tt>'k'</tt>
+</ul>
 
 The different available line types are
 
-<UL>
-  <LI> solid line:      <TT>'-'</TT>
-  <LI> dashed line:     <TT>'--'</TT>
-  <LI> dotted line:     <TT>':'</TT>
-  <LI> dash-dot line:   <TT>'-.'</TT>
-</UL>
+<ul>
+  <li> solid line:      <tt>'-'</tt>
+  <li> dashed line:     <tt>'--'</tt>
+  <li> dotted line:     <tt>':'</tt>
+  <li> dash-dot line:   <tt>'-.'</tt>
+</ul>
 
 During programming, you can find all these details in the
-documentation of the <TT>plot</TT> function. Just type <TT>help(plot)</TT>
-in an interactive Python shell or invoke <TT>pydoc</TT> with
-<TT>scitools.easyviz.plot</TT>. This tutorial is available
-through <TT>pydoc scitools.easyviz</TT>.
+documentation of the <tt>plot</tt> function. Just type <tt>help(plot)</tt>
+in an interactive Python shell or invoke <tt>pydoc</tt> with
+<tt>scitools.easyviz.plot</tt>. This tutorial is available
+through <tt>pydoc scitools.easyviz</tt>.
 
 <P>
 We remark that in the Gnuplot program all the different line types are
@@ -660,36 +685,36 @@ the line type specification.
 <P>
 Lots of markers at data points are available:
 
-<UL>
-  <LI> plus sign:                     <TT>'+'</TT>
-  <LI> circle:                        <TT>'o'</TT>
-  <LI> asterisk:                      <TT>'*'</TT>
-  <LI> point:                         <TT>'.'</TT>
-  <LI> cross:                         <TT>'x'</TT>
-  <LI> square:                        <TT>'s'</TT>
-  <LI> diamond:                       <TT>'d'</TT>
-  <LI> upward-pointing triangle:      <TT>'^'</TT>
-  <LI> downward-pointing triangle:    <TT>'v'</TT>
-  <LI> right-pointing triangle:       <TT>'>'</TT>
-  <LI> left-pointing triangle:        <TT>'<'</TT>
-  <LI> five-point star (pentagram):   <TT>'p'</TT>
-  <LI> six-point star (hexagram):     <TT>'h'</TT>
-  <LI> no marker (default): <TT>None</TT>
-</UL>
+<ul>
+  <li> plus sign:                     <tt>'+'</tt>
+  <li> circle:                        <tt>'o'</tt>
+  <li> asterisk:                      <tt>'*'</tt>
+  <li> point:                         <tt>'.'</tt>
+  <li> cross:                         <tt>'x'</tt>
+  <li> square:                        <tt>'s'</tt>
+  <li> diamond:                       <tt>'d'</tt>
+  <li> upward-pointing triangle:      <tt>'^'</tt>
+  <li> downward-pointing triangle:    <tt>'v'</tt>
+  <li> right-pointing triangle:       <tt>'>'</tt>
+  <li> left-pointing triangle:        <tt>'<'</tt>
+  <li> five-point star (pentagram):   <tt>'p'</tt>
+  <li> six-point star (hexagram):     <tt>'h'</tt>
+  <li> no marker (default): <tt>None</tt>
+</ul>
 
-Symbols and line styles may be combined, for instance as in <TT>'kx-'</TT>,
+Symbols and line styles may be combined, for instance as in <tt>'kx-'</tt>,
 which means a black solid line with black crosses at the data points.
 
 <P>
 
 <P>
-<B>Another Example.</B> Let us extend the previous example with a third
+<b>Another Example.</b> Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
 the f_2(t) curve:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 
 def f1(t):
@@ -721,79 +746,95 @@ ylabel('y')
 show()
 savefig('tmp3.eps')   # or hardcopy
 savefig('tmp3.png')   # or hardcopy
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The plot is shown in Figure <A HREF="#fig:plot3">fig:plot3</a>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The plot is shown in Figure <a href="#fig:plot3">fig:plot3</a>.
 
 <P>
-<IMG SRC="figs/plot3.png" ALIGN="bottom" > A plot with three curves.  <A NAME="fig:plot3"></A>
+<center><hr>
+<caption><i>A plot with three curves.  <a name="fig:plot3"></A></i></caption>
+<p><img src="figs/plot3.png" align="bottom" ></p>
+</center>
 
 <P>
-<B>Minimalistic Typing.</B> When exploring mathematics in the interactive Python shell, most of us
+<b>Minimalistic Typing.</b> When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<B>Text.</B> A text can be placed at a point (x,y) using the call
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<b>Text.</b> A text can be placed at a point (x,y) using the call
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 text(x, y, 'Some text')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<B>More Examples.</B> The examples in this tutorial, as well as
-additional examples, can be found in the <TT>examples</TT> directory in the
+<b>More Examples.</b> The examples in this tutorial, as well as
+additional examples, can be found in the <tt>examples</tt> directory in the
 root directory of the SciTools source code tree.
 
 <P>
-<H3>Interactive Plotting Sessions</H3>
+<h3>Math Syntax in Legends and Titles</h3>
+<P>
+Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.
+
+<P>
+<h3>Interactive Plotting Sessions</h3>
 <P>
 All the Easyviz commands can of course be issued in an interactive
-Python session. The only thing to comment is that the <TT>plot</TT> command
+Python session. The only thing to comment is that the <tt>plot</tt> command
 returns a result:
-<!-- BEGIN VERBATIM BLOCK   py-->
-<BLOCKQUOTE><PRE>
->>> t = linspace(0, 3, 51)
->>> plot(t, t**2*exp(-t**2))
+<blockquote>    <!-- begin verbatim block   py-->
+<pre>
+&gt;&gt;&gt; t = linspace(0, 3, 51)
+&gt;&gt;&gt; plot(t, t**2*exp(-t**2))
 [&lt;scitools.easyviz.common.Line object at 0xb5727f6c&gt;]
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Most users will just ignore this output line.
 
 <P>
 All Easyviz commands that produce a plot return an object reflecting the
-particular type of plot. The <TT>plot</TT> command returns a list of
-<TT>Line</TT> objects, one for each curve in the plot. These <TT>Line</TT>
+particular type of plot. The <tt>plot</tt> command returns a list of
+<tt>Line</tt> objects, one for each curve in the plot. These <tt>Line</tt>
 objects can be invoked to see, for instance, the value of different
 parameters in the plot:
-<!-- BEGIN VERBATIM BLOCK   py-->
-<BLOCKQUOTE><PRE>
->>> line, = plot(x, y, 'b')
->>> getp(line)
+<blockquote>    <!-- begin verbatim block   py-->
+<pre>
+&gt;&gt;&gt; line, = plot(x, y, 'b')
+&gt;&gt;&gt; getp(line)
 {'description': '',
  'dims': (4, 1, 1),
  'legend': '',
  'linecolor': 'b',
  'pointsize': 1.0,
  ...
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Such output is mostly of interest to advanced users.
 
 <P>
 
 <P>
-<H3>Making Animations <A NAME="easyviz:movie"></A></H3>
+<h3>Making Animations <a name="easyviz:movie"></A></h3>
 <P>
 
 <P>
@@ -803,29 +844,32 @@ plots stored in files.  Thereafter we must use a tool to combine the
 individual plot files into a movie file.
 
 <P>
-<B>Example.</B> The function
-f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2) 
+<b>Example.</b> The function
+f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large s and "peak-formed" for small s, see Figure
-<A HREF="#fig:plot4">fig:plot4</a>. The function is symmetric around x=m (m=0 in the
+<a href="#fig:plot4">fig:plot4</a>. The function is symmetric around x=m (m=0 in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as s is decreased. In Python we implement the
-formula above as a function <TT>f(x, m, s)</TT>.
+formula above as a function <tt>f(x, m, s)</tt>.
 
 <P>
-<IMG SRC="figs/plot4.png" ALIGN="bottom" > Different shapes of a Gaussian function. <A NAME="fig:plot4"></A>
+<center><hr>
+<caption><i>Different shapes of a Gaussian function. <a name="fig:plot4"></A></i></caption>
+<p><img src="figs/plot4.png" align="bottom" ></p>
+</center>
 
 <P>
 The animation is created by varying s in a loop and for each s
-issue a <TT>plot</TT> command. A moving curve is then visible on the screen.
+issue a <tt>plot</tt> command. A moving curve is then visible on the screen.
 One can also make a movie file that can be played as any other
 computer movie using a standard movie player. To this end, each plot
 is saved to a file, and all the files are combined together using some
-suitable tool, which is reached through the <TT>movie</TT> function in
+suitable tool, which is reached through the <tt>movie</tt> function in
 Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
-couple of issues with setting up the <TT>plot</TT> command for animations.
+couple of issues with setting up the <tt>plot</tt> command for animations.
 
 <P>
 The underlying plotting program will normally adjust the y axis to the
@@ -848,8 +892,8 @@ for animating how the Gaussian function evolves as the s parameter
 is decreased from 2 to 0.2:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 import time
 
@@ -877,37 +921,37 @@ for s in s_values:
 
 # Make movie file the simplest possible way
 movie('tmp*.png')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-Note that the s values are decreasing (<TT>linspace</TT> handles this
+Note that the s values are decreasing (<tt>linspace</tt> handles this
 automatically if the start value is greater than the stop value).
 Also note that we, simply because we think it is visually more
 attractive, let the y axis go from -0.1 although the f function is
 always greater than zero.
 
 <P>
-<B>Remarks on Filenames.</B> For each frame (plot) in the movie we store the plot in a file.  The
+<b>Remarks on Filenames.</b> For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
-of the form <TT>tmp0001.png</TT>, <TT>tmp0002.png</TT>, <TT>tmp0003.png</TT>, etc.  The
-printf format <TT>04d</TT> pads the integers with zeros such that <TT>1</TT> becomes
-<TT>0001</TT>, <TT>13</TT> becomes <TT>0013</TT> and so on.  The expression <TT>tmp*.png</TT> will
+of the form <tt>tmp0001.png</tt>, <tt>tmp0002.png</tt>, <tt>tmp0003.png</tt>, etc.  The
+printf format <tt>04d</tt> pads the integers with zeros such that <tt>1</tt> becomes
+<tt>0001</tt>, <tt>13</tt> becomes <tt>0013</tt> and so on.  The expression <tt>tmp*.png</tt> will
 now expand (by an alphabetic sort) to a list of all files in proper
 order. Without the padding with zeros, i.e., names of the form
-<TT>tmp1.png</TT>, <TT>tmp2.png</TT>, ..., <TT>tmp12.png</TT>, etc., the alphabetic order
-will give a wrong sequence of frames in the movie. For instance, 
-<TT>tmp12.png</TT> will appear before <TT>tmp2.png</TT>.
+<tt>tmp1.png</tt>, <tt>tmp2.png</tt>, ..., <tt>tmp12.png</tt>, etc., the alphabetic order
+will give a wrong sequence of frames in the movie. For instance,
+<tt>tmp12.png</tt> will appear before <tt>tmp2.png</tt>.
 
 <P>
 Note that the names of plot files specified when making hardopies must
-be consistent with the specification of names in the call to <TT>movie</TT>.
+be consistent with the specification of names in the call to <tt>movie</tt>.
 Typically, one applies a Unix wildcard notation in the call to
-<TT>movie</TT>, say <TT>plotfile*.eps</TT>, where the asterisk will match any set of
+<tt>movie</tt>, say <tt>plotfile*.png</tt>, where the asterisk will match any set of
 characters. When specifying hardcopies, we must then use a filename
-that is consistent with <TT>plotfile*.eps</TT>, that is, the filename must
-start with <TT>plotfile</TT> and end with <TT>.eps</TT>, but in between
+that is consistent with <tt>plotfile*.png</tt>, that is, the filename must
+start with <tt>plotfile</tt> and end with <tt>.png</tt>, but in between
 these two parts we are free to construct (e.g.) a frame number padded
 with zeros.
 
@@ -915,19 +959,19 @@ with zeros.
 We recommend to always remove previously generated plot files before
 a new set of files is made. Otherwise, the movie may get old and new
 files mixed up. The following Python code removes all files
-of the form <TT>tmp*.png</TT>:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+of the form <tt>tmp*.png</tt>:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 import glob, os
 for filename in glob.glob('tmp*.png'):
     os.remove(filename)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 These code lines should be inserted at the beginning of the code example
 above. Alternatively, one may store all plotfiles in a subfolder
 and later delete the subfolder. Here is a suitable code segment:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 import shutil, os
 subdir = 'temp'            # name of subfolder for plot files
 if os.path.isdir(subdir):  # does the subfolder already exist?
@@ -937,100 +981,215 @@ os.chdir(subdir)           # move to subfolder
 # ...perform all the plotting...
 # ...make movie...
 os.chdir(os.pardir)        # optional: move up to parent folder
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<B>Movie Formats.</B> Having a set of (e.g.) <TT>tmp*.png</TT> files, one can simply generate a movie by
-a <TT>movie('tmp*.png')</TT> call. The <TT>movie</TT> function generates a movie
-file called <TT>movie.avi</TT> (AVI format), <TT>movie.mpeg</TT> (MPEG format), or
-<TT>movie.gif</TT> (animated GIF format) in the current working
-directory. The movie format depends on the encoders found on your
-machine.
+<b>Movie Formats.</b> Having a set of (e.g.) <tt>tmp*.png</tt> files, one can simply generate a movie by
+a <tt>movie('tmp*.png')</tt> call. The format of the movie is determined by
+which video encoders that are installed on the computer. The <tt>movie</tt>
+function runs through a list of encoders (<tt>convert</tt>, <tt>mencoder</tt>,
+<tt>ffmpeg mpeg_encode</tt>, <tt>ppmtompeg</tt>, <tt>mpeg2enc</tt>, <tt>html</tt>) and choses the
+first one which is installed. The fall back encoder <tt>html</tt> actually
+does not create a video file, but makes insetad an HTML file that can
+play the series of hardcopies made (<tt>tmp*.png</tt>, for instance).
+When no filename is given to the <tt>movie</tt> function, the output file
+with the movie has filestem <tt>movie</tt> and extension depending on the
+video format and the encoder used. For example, if <tt>convert</tt> was used
+to create an animated GIF file, the default output file is <tt>movie.gif</tt>.
+Similarly, <tt>movie.avi</tt> is in AVI format, <tt>movie.mpeg</tt> is in MPEG format,
+and so forth.
 
 <P>
-You can get complete control of the movie format and the
-name of the movie file by supplying more arguments to the
-<TT>movie</TT> function. First, let us generate an animated GIF
-file called <TT>tmpmovie.gif</TT>:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
-movie('tmp_*.eps', encoder='convert', fps=2,
+You can get complete control of the movie format and the name of the
+movie file by supplying the <tt>encoder</tt> and <tt>output_file</tt> arguments to
+the <tt>movie</tt> function. This is the recommended use. Here is an
+example on generating an animated GIF file <tt>tmpmovie.gif</tt> with
+the <tt>convert</tt> program from the ImageMagick software suite:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The generation of animated GIF images applies the <TT>convert</TT> program
-from the ImageMagick suite. This program must of course be installed
-on the machine. The argument fps stands for frames per second so
-here the speed of the movie is slow in that there is a delay of half
-a second between each frame (image file).
-To view the animated GIF file, one can use the <TT>animate</TT>
-program (also from ImageMagick) and give the movie file as command-line
-argument. One can alternatively put the GIF file in a web page 
-in an IMG tag such that a browser automatically displays the movie.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+This call requires ImageMagick to be installed on the machine. The
+argument <tt>fps</tt> stands for frames per second so here the speed of the
+movie is slow in that there is a delay of half a second between each
+frame (image file).  To view the animated GIF file, one can use the
+<tt>animate</tt> program (also from ImageMagick) and give the movie file as
+command-line argument. One can alternatively put the GIF file in a web
+page in an IMG tag such that a browser automatically displays the
+movie.
+
+<P>
+Making an HTML file that can play the movie in a web browser
+is carried out by the call
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+movie('tmp_*.png', encoder='html', fps=10,
+      output_file='tmpmovie.html')
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Just load <tt>tmpmovie.html</tt> into a browser (e.g., run <tt>firefox tmpmovie.html</tt>
+from the command line).
 
 <P>
 An AVI movie can be generated by the call
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
-movie('tmp_*.eps', encoder='ffmpeg', fps=4,
-      output_file='tmpmovie1.avi',
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Alternatively, we may generate an MPEG movie using 
-the <TT>ppmtompeg</TT> encoder from the Netpbm suite of
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+movie('tmp_*.png', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie.avi',
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Alternatively, we may generate an MPEG movie using
+the <tt>ppmtompeg</tt> encoder from the Netpbm suite of
 image manipulation tools:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
-movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
-      output_file='tmpmovie2.mpeg',
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>ppmtompeg</TT> supports only a few (high) frame rates.
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+movie('tmp_*.png', encoder='ppmtompeg', fps=24,
+      output_file='tmpmovie.mpeg',
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>ppmtompeg</tt> supports only a few (high) frame rates.
 
 <P>
-The next sample call to <TT>movie</TT> uses the Mencoder tool and specifies 
-some additional arguments (video codec, video bitrate, and the 
+The next sample call to <tt>movie</tt> uses the Mencoder tool and specifies
+some additional arguments (video codec, video bitrate, and the
 quantization scale):
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
-movie('tmp_*.eps', encoder='mencoder', fps=24,
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+movie('tmp_*.png', encoder='mencoder', fps=24,
       output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Here is yet another example:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+movie('tmp_*.png', encoder='ffmpeg',
+      output_file='tmpmovie1c.mpeg', vodec='mpeg2video')
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The file <tt>examples/movie_demo1.py</tt> that comes with the SciTools source
+code generates frames in a movie and creates movie files in many formats.
 
 <P>
 Playing movie files can be done by a lot of programs. Windows Media
 Player is a default choice on Windows machines. On Unix, a variety
-of tools can be used. For animated GIF files the <TT>animate</TT> program
+of tools can be used. For animated GIF files the <tt>animate</tt> program
 from the ImageMagick suite is suitable, or one can simply
 show the file in a web page with the HTML command
-<TT><img src="tmpmovie.gif"></TT>. AVI and MPEG files can be played by,
+<tt><img src="tmpmovie.gif"></tt>. AVI and MPEG files can be played by,
 for example, the
-<TT>myplayer</TT>, <TT>vlc</TT>, or <TT>totem</TT> programs.
+<tt>myplayer</tt>, <tt>vlc</tt>, or <tt>totem</tt> programs.
 
 <P>
-<H3>Moving Plot Window</H3>
+<b>Making Movies in Batch.</b> Sometimes it is desired to carry out
+large numbers of computer experiments and create movies in each
+individual experiments. Then one probably does not want to have
+the screen full of movie windows. To turn off showing the movie
+on the screen while creating the individual frames, just
+give the <tt>show=False</tt> keyword argument to the <tt>plot</tt> function.
+All hardcopies and the movies are then made in batch, which also
+might speed up the program since rendering graphics on the screen
+is avoided.
+
+<P>
+<h3>Controlling the Aspect Ratio of Axes</h3>
+<P>
+By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.
+
+<P>
+In the <tt>gnuplot</tt> and <tt>matplotlib</tt>
+backends, we set <tt>daspectmode=manual</tt> and
+<tt>daspect=[r,1,1]</tt>, where <tt>r</tt> is the ratio of the y-axis length to
+the x-axis length
+(<tt>r</tt> equal to <tt>1</tt> gives a square plot area). For example,
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+plot(x, y, 'r-',
+     axis=[0, 1, 0, 1],
+     daspect=[1,1,1],
+     daspectmode='manual')
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Note that one should always use <tt>axis</tt> and set axes limits explicitly
+when prescribing the aspect ratio.
+
+<P>
+Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by <tt>daspect=[0.2,1,1])</tt>.
+Alternatively, one can apply <tt>daspectmode='equal'</tt> (which means
+equal physical units on the axis).
+
+<P>
+Here is an example which demonstrates various aspects of setting
+the aspect ratio:
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
+from scitools.std import *
+n = 20  # no of periods of a sine function
+r = 80  # resolution of each period
+x = linspace(0, n, r*n + 1)
+amplitude = 1 + sin(2*pi*0.05*x)
+y = amplitude*sin(2*pi*x)
+
+# x-axis goes from 0 to 20, y-axis from -2 to 2.
+
+subplot(2, 1, 1)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspectmode='equal',
+     title='daspectmode=equal',
+     )
+subplot(2, 1, 2)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[0.5,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[0.5,1,1]',
+     )
+
+figure()
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[1,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[1,1,1]',
+     )
+
+show()
+raw_input()
+</pre>
+</blockquote>   <! -- end verbatim block -->
+
+<P>
+<h3>Moving Plot Window</h3>
 <P>
 When calculating long time series, it may be desirable to have a
 moving plot window that follows the time series. The module
-<TT>MovingPlotWindow</TT> was made for this purpose. There are three
+<tt>MovingPlotWindow</tt> was made for this purpose. There are three
 different modes of this tool, where each mode moves the window
-in a certain way. With <TT>mode</TT> set as <TT>continuous movement</TT>,
+in a certain way. With <tt>mode</tt> set as <tt>continuous movement</tt>,
 the plot window moves with the curves continuously.
-With <TT>mode</TT> set as <TT>continuous drawing</TT>, the curves are drawn
+With <tt>mode</tt> set as <tt>continuous drawing</tt>, the curves are drawn
 from left to right in the plot window, as an animation (one step
 at a time). When the curves reach the right border of the plot window,
 the window (or more correctly, the x-axis) is moved in a jump
 to the right so that the curves are coming in from the left border
-again. With <TT>mode</TT> set as <TT>jumps</TT> the curves are plotted directly
-in the window and shown for a specified period of time (the <TT>pause</TT>
+again. With <tt>mode</tt> set as <tt>jumps</tt> the curves are plotted directly
+in the window and shown for a specified period of time (the <tt>pause</tt>
 parameter), then the axis jump one window to the right, and the
-curves are displayed in this (time) window. The <TT>jumps</TT> mode is
-well suited for quickly browsing a time series. The <TT>continuous
-drawing</TT> mode is aimed at studing the "tip" of the time series
-as they are computed, and <TT>continuous movement</TT> is a kind of
+curves are displayed in this (time) window. The <tt>jumps</tt> mode is
+well suited for quickly browsing a time series. The <tt>continuous
+drawing</tt> mode is aimed at studing the "tip" of the time series
+as they are computed, and <tt>continuous movement</tt> is a kind of
 default choice for most purposes. Running the module file gives
 a demo of the three modes.
 
@@ -1038,17 +1197,17 @@ a demo of the three modes.
 Below is an example of how to compute a time series by finite
 differences and comparing this series with the exact solutions.
 For large times, there is a fequency discrepancy that one wants
-to investigate. 
+to investigate.
 
 <P>
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pycod-->
+<pre>
 def _demo(I, k, dt, T, mode='continuous movement'):
     """
     Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
     method with time steps dt, from t=0 to t=T.
     """
-    if dt > 2./k:
+    if dt &gt; 2./k:
         print 'Unstable scheme'
     N = int(round(T/float(dt)))
     u = zeros(N+1)
@@ -1069,76 +1228,74 @@ def _demo(I, k, dt, T, mode='continuous movement'):
             plot(t[s:n+2], u[s:n+2], 'r-',
                  t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
                  axis=plot_manager.axis(),
-                 title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \
+                 title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \ 
                  % (t[n+1], mode))
         plot_manager.update(n)
-
-
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 An appropriate import statement is
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 from scitools.MovingPlotWindow import MovingPlotWindow
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
 <P>
-<H3>Advanced Easyviz Topics</H3>
+<h3>Advanced Easyviz Topics</h3>
 <P>
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants to
 fine-control the plot or how Easyviz behaves. First, we explain how to
-set the backend. Second, we tell how to speed up the 
-<TT>from scitools.std import *</TT> statement.  Third, we show how to operate with
+set the backend. Second, we tell how to speed up the
+<tt>from scitools.std import *</tt> statement.  Third, we show how to operate with
 the plotting program directly and using plotting program-specific
-advanced features. Fourth, we explain how the user can grab <TT>Figure</TT>
-and <TT>Axis</TT> objects that Easyviz produces "behind the curtain".
+advanced features. Fourth, we explain how the user can grab <tt>Figure</tt>
+and <tt>Axis</tt> objects that Easyviz produces "behind the curtain".
 
 <P>
-<H4>Controlling the Backend</H4>
+<h4>Controlling the Backend</h4>
 <P>
-The Easyviz backend can either be set in a configuration file (see 
+The Easyviz backend can either be set in a configuration file (see
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
 command-line option
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
  --SCITOOLS_easyviz_backend name
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-where <TT>name</TT> is the name of the backend: <TT>gnuplot</TT>, <TT>vtk</TT>,
-<TT>matplotlib</TT>, etc. Which backend you choose depends on what you have
+</pre>
+</blockquote>   <! -- end verbatim block -->
+where <tt>name</tt> is the name of the backend: <tt>gnuplot</tt>, <tt>vtk</tt>,
+<tt>matplotlib</tt>, etc. Which backend you choose depends on what you have
 available on your computer system and what kind of plotting
 functionality you want.
 
 <P>
 An alternative method is to import a specific backend in a program. Instead
-of the <TT>from scitools.std import *</TT> statement one writes
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+of the <tt>from scitools.std import *</tt> statement one writes
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 from numpy import *
 from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
 # or
 from scitools.easyviz.vtk_ import *      # work with VTK
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Note the trailing underscore in the module names for the various backends.
 
 <P>
 The following program prints a list of the names of the
 available backends on your computer system:
-<!-- BEGIN VERBATIM BLOCK   pro-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   pro-->
+<pre>
 from scitools.std import *
 backends = available_backends()
 print 'Available backends:', backends
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 There will be quite some output explaining the missing backends and
 what must be installed to use these backends. Be prepared for exceptions
 and error messages too.
@@ -1146,30 +1303,30 @@ and error messages too.
 <P>
 
 <P>
-<H4>Importing Just Easyviz <A NAME="easyviz:imports"></A></H4>
+<h4>Importing Just Easyviz <a name="easyviz:imports"></A></h4>
 <P>
 
 <P>
-The <TT>from scitools.std import *</TT> statement imports many modules and packages:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
-from numpy import *    
+The <tt>from scitools.std import *</tt> statement imports many modules and packages:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+from numpy import *
 from scitools.numpyutils import *  # some convenience functions
 from numpy.lib.scimath import *
 from scipy import *                # if scipy is installed
 import sys, operator, math
 from scitools.StringFunction import StringFunction
 from glob import glob
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>scipy</TT> import can take some time and lead to slow start-up of plot 
-scripts. A more minimalistic import for curve plotting is 
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>scipy</tt> import can take some time and lead to slow start-up of plot
+scripts. A more minimalistic import for curve plotting is
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 from scitools.easyviz import *
 from numpy import *
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Alternatively, one can edit the SciTools configuration file as
 explained below in the section "Setting Parameters in the
 Configuration File".
@@ -1177,135 +1334,138 @@ Configuration File".
 <P>
 Many discourage the use of "star import" as shown above. For example,
 the standard import of Numerical Python in all of its documentation is
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import numpy as np
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 A similar import for SciTools and Easyviz is
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import scitools.std as st
 import numpy as np
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Although <TT>np</TT> functions are important into the namespace of <TT>st</TT> in
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Although <tt>np</tt> functions are important into the namespace of <tt>st</tt> in
 this case, we recommend to distinguish the packages when using a prefix.
 A typical plotting example will then read
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x = np.linspace(0, 3, 51)
 y = x**2*np.exp(-x)
 st.plot(x, y, 'r-', title="Plot")
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 The corresponding syntax for the
-minimalistic import of <TT>scitools.easyviz</TT> and <TT>numpy</TT> reads
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+minimalistic import of <tt>scitools.easyviz</tt> and <tt>numpy</tt> reads
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import scitools.easyviz as ev
 import numpy as np
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
 <P>
-<H4>Setting Parameters in the Configuration File</H4>
+<h4>Setting Parameters in the Configuration File</h4>
 <P>
 Easyviz is a subpackage of SciTools, and the the SciTools
-configuration file, called <TT>scitools.cfg</TT> has several sections
-(<TT>[easyviz]</TT>, <TT>[gnuplot]</TT>, and <TT>[matplotlib]</TT>) where parameters
+configuration file, called <tt>scitools.cfg</tt> has several sections
+(<tt>[easyviz]</tt>, <tt>[gnuplot]</tt>, and <tt>[matplotlib]</tt>) where parameters
 controlling the behavior of plotting can be set. For example, the
-backend for Easyviz can be controlled with the <TT>backend</TT> parameter:
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
+backend for Easyviz can be controlled with the <tt>backend</tt> parameter:
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
 [easyviz]
 backend = vtk
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Similarly, Matplotlib's use of LaTeX can be controlled by a boolean
 parameter:
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
 [matplotlib]
 text.usetex = &lt;bool&gt; false
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The text <TT><bool></TT> indicates that this is a parameter with a boolean
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The text <tt><bool></tt> indicates that this is a parameter with a boolean
 
 <P>
-A configuration file with name <TT>.scitools.cfg</TT> file can be placed in
+A configuration file with name <tt>.scitools.cfg</tt> file can be placed in
 the current working folder, thereby affecting plots made in this
 folder, or it can be located in the user's home folder, which will
 affect all plotting sessions for the user in question. There is also a
-common SciTools config file <TT>scitools.cfg</TT> for the whole site, located
-in the directory where the <TT>scitools</TT> package is installed. It is 
-recommended to copy the <TT>scitools.cfg</TT>, either from installation or
-the SciTools source folder <TT>lib/scitools</TT>, to <TT>.scitools.cfg</TT>
+common SciTools config file <tt>scitools.cfg</tt> for the whole site, located
+in the directory where the <tt>scitools</tt> package is installed. It is
+recommended to copy the <tt>scitools.cfg</tt>, either from installation or
+the SciTools source folder <tt>lib/scitools</tt>, to <tt>.scitools.cfg</tt>
 in your home folder. Then you can easily control the Easyviz backend
-and other paramteres by editing your local <TT>.scitools.cfg</TT> file.
+and other paramteres by editing your local <tt>.scitools.cfg</tt> file.
 
 <P>
 Parameters set in the configuration file can also be set directly
 on the command line when running a program. The name of the
 command-line option is
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
 --SCITOOLS_sectionname_parametername
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-where <TT>sectionname</TT> is the name of the section in the file
-and <TT>parametername</TT> is the name of the
-parameter. For example, setting the <TT>backend</TT> parameter in the
-<TT>[easyviz]</TT> section by
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
+</pre>
+</blockquote>   <! -- end verbatim block -->
+where <tt>sectionname</tt> is the name of the section in the file
+and <tt>parametername</tt> is the name of the
+parameter. For example, setting the <tt>backend</tt> parameter in the
+<tt>[easyviz]</tt> section by
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
 --SCITOOLS_easyviz_backend gnuplot
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Here is an example where we use Matplotlib as backend, turn on
 the use of LaTeX in Matplotlib, and avoid the potentially slow import
 of SciPy:
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
-python myprogram.py --SCITOOLS_easyviz_backend matplotlib \ 
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
+python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
 <P>
-<H4>Working with the Plotting Program Directly</H4>
+<h4>Working with the Plotting Program Directly</h4>
 <P>
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
-different advanced features.  When Easyviz does not have a command
+diverse advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program (known as
+that communicates with the underlying plotting program (the
 "backend") and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
-Figure <A HREF="#fig:plot2i">fig:plot2i</a>.
+Figure <a href="#fig:plot2i">fig:plot2i</a>.
 
 <P>
-<IMG SRC="figs/plot2i.png" ALIGN="bottom" > Illustration of a text and an arrow using Gnuplot-specific commands. <A NAME="fig:plot2i"></A>
+<center><hr>
+<caption><i>Illustration of a text and an arrow using Gnuplot-specific commands. <a name="fig:plot2i"></A></i></caption>
+<p><img src="figs/plot2i.png" align="bottom" ></p>
+</center>
 
 <P>
 Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
-<TT>Gnuplot</TT> object and issue Gnuplot commands to this object
+<tt>Gnuplot</tt> object and issue Gnuplot commands to this object
 directly. Here is an example of the typical recipe, written after the
 core of the plot is made in the ordinary (plotting
 program-independent) way:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 if backend == 'gnuplot':
     g = get_backend()
     # g is a Gnuplot object, work with Gnuplot commands directly:
@@ -1320,27 +1480,46 @@ if backend == 'gnuplot':
     func = Gnuplot.Func('t**4*exp(-t)', title='t**4*exp(-t)')
     g('set tics border font "Courier,14"')
     g.plot(func, data)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 For the available features and the syntax of commands, we refer to
-the Gnuplot manual and the <TT>demo.py</TT> program in Python interface to
-Gnuplot.
+the Gnuplot manual and the <tt>demo.py</tt> program in Python interface to
+Gnuplot. Note that one must call <tt>g.hardcopy</tt> to save the figure
+to file. A call to <tt>savefig</tt> or <tt>hardcopy</tt> remakes the plot, but
+without the special calls <tt>g('...')</tt> so the label and arrow are
+left out of the hardcopy in the example above.
 
 <P>
 Here is an example with Matplotlib:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 if backend == 'matplotlib':
     pyplot = get_backend()
     # Work with standard matplotlib.pyplot functions
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The files <TT>grab_backend*.py</TT> in the <TT>examples</TT> folder of the SciTools
-source code contain many examples on how to do backend-specific operations,
-especially with Matplotlib.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The files <tt>grab_backend*.py</tt> in the <tt>examples</tt> folder of the SciTools
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the <tt>pyplot</tt> object, one must apply <tt>pyplot.savefig</tt> to
+correctly save the plot (a plain <tt>savefig</tt> or <tt>hardcopy</tt> remakes the
+plot without the features inserted by the <tt>pyplot</tt> object).
 
 <P>
-The idea advocated here is that you can quickly generate
+Here are some useful links to documentation of various plotting packages:
+
+<P>
+
+<ul>
+ <li> <a href="http://matplotlib.sourceforge.net/contents.html">Matplotlib Documentation</a>
+ <li> <a href="http://www.gnuplot.info/documentation.html">Gnuplot Documentation</a>
+ <li> <a href="http://t16web.lanl.gov/Kawano/gnuplot/index-e.html">Gnuplot Tips (Not So Frequently Asked Questions)</a>
+ <li> <a href="http://matplotlib.sourceforge.net/contents.html">Grace User's Guide</a>
+ <li> <a href="http://pyx.sourceforge.net/documentation.html">PyX Documentation</a>
+ <li> <a href="http://alumni.cs.ucr.edu/~titus/pyxTutorial/">PyX Tutorial for Gnuplot Users</a>
+</ul>
+
+The idea advocated by Easyviz goes as follows. You can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
@@ -1350,7 +1529,7 @@ without limiting the available functionality of various plotting programs.
 <P>
 
 <P>
-<H4>Working with Axis and Figure Objects</H4>
+<h4>Working with Axis and Figure Objects</h4>
 <P>
 Easyviz supports the concept of Axis objects, as in Matlab.
 The Axis object represents a set of axes, with curves drawn in the
@@ -1362,13 +1541,13 @@ windows on the screen or separate hardcopies.
 <P>
 Users with Matlab experience may prefer to set axis
 labels, ranges, and the title using an Axis object instead of
-providing the information in separate commands or as part of a <TT>plot</TT>
-command. The <TT>gca</TT> (get current axis) command returns an <TT>Axis</TT>
-object, whose <TT>set</TT> method can be used to set axis properties:
+providing the information in separate commands or as part of a <tt>plot</tt>
+command. The <tt>gca</tt> (get current axis) command returns an <tt>Axis</tt>
+object, whose <tt>set</tt> method can be used to set axis properties:
 
 <P>
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      savefig='tmp2.eps')
@@ -1378,70 +1557,70 @@ ax.setp(xlabel='t', ylabel='y',
         axis=[0, 4, -0.1, 0.6],
         title='Plotting two curves in the same plot')
 show()  # show the plot again after ax.setp actions
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-The <TT>figure()</TT> call makes a new figure, i.e., a
+The <tt>figure()</tt> call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
-The command <TT>figure(3)</TT> sets the current figure object to figure number
-3. 
+The command <tt>figure(3)</tt> sets the current figure object to figure number
+3.
 
 <P>
-Suppose we want to plot our <TT>y1</TT> and <TT>y2</TT> data in two separate windows.
-We need in this case to work with two <TT>Figure</TT> objects:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+Suppose we want to plot our <tt>y1</tt> and <tt>y2</tt> data in two separate windows.
+We need in this case to work with two <tt>Figure</tt> objects:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 plot(t, y1, 'r-', xlabel='t', ylabel='y',
      axis=[0, 4, -0.1, 0.6])
 
 figure()  # new figure
 
 plot(t, y2, 'bo', xlabel='t', ylabel='y')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-We may now go back to the first figure (with the <TT>y1</TT> data) and
+</pre>
+</blockquote>   <! -- end verbatim block -->
+We may now go back to the first figure (with the <tt>y1</tt> data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
 show()
 savefig('tmp2_1.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 We can also adjust figure 2:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 figure(2)  # go to second figure
 title('Another curve')
 savefig('tmp2_2.eps')
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The current <TT>Figure</TT> object is reached by <TT>gcf</TT> (get current figure),
-and the <TT>dump</TT> method dumps the internal parameters in the <TT>Figure</TT>
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The current <tt>Figure</tt> object is reached by <tt>gcf</tt> (get current figure),
+and the <tt>dump</tt> method dumps the internal parameters in the <tt>Figure</tt>
 object:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 fig = gcf(); print fig.dump()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 These parameters may be of interest for troubleshooting when Easyviz
 does not produce what you expect.
 
 <P>
 Let us then make a third figure with two plots, or more precisely, two
-axes: one with <TT>y1</TT> data and one with <TT>y2</TT> data.
-Easyviz has a command <TT>subplot(r,c,a)</TT> for creating <TT>r</TT>
-rows and <TT>c</TT> columns and set the current axis to axis number <TT>a</TT>.
-In the present case <TT>subplot(2,1,1)</TT> sets the current axis to
+axes: one with <tt>y1</tt> data and one with <tt>y2</tt> data.
+Easyviz has a command <tt>subplot(r,c,a)</tt> for creating <tt>r</tt>
+rows and <tt>c</tt> columns and set the current axis to axis number <tt>a</tt>.
+In the present case <tt>subplot(2,1,1)</tt> sets the current axis to
 the first set of axis in a "table" with two rows and one column.
 Here is the code for this third figure:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 figure()  # new, third figure
 # Plot y1 and y2 as two axis in the same figure
 subplot(2, 1, 1)
@@ -1451,39 +1630,99 @@ plot(t, y2, xlabel='t', ylabel='y')
 title('A figure with two plots')
 show()
 savefig('tmp2_3.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
+
+<P>
+Note: The Gnuplot backend will overwrite the tickmarks on the y axis
+if two or more curves in the same subplot have significantly different
+variations in y direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.
 
 <P>
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 ax = axes(viewport=[left, bottom, width, height])
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The four parameteres <TT>left</TT>, <TT>bottom</TT>, <TT>width</TT>, <TT>height</TT>
-are location values between 0 and 1 ((0,0) is the lower-left corner 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The four parameteres <tt>left</tt>, <tt>bottom</tt>, <tt>width</tt>, <tt>height</tt>
+are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
 
 <P>
-<H4>Turning Off All Plotting</H4>
+<h4>Mathematics and LaTeX in Legends, Title, and Axis Labels</h4>
+<P>
+Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.
+
+<P>
+
+<ul>
+  <li> With Matplotlib we recommend to use standard LaTeX.
+  <li> With Gnuplot we recommend plain text when plotting on
+    the screen, and greek letters preceded with a backslash
+    when saving to file. Gnuplot suports LaTeX syntax for
+    sub- and super-scripts (underscore and hat, resp.).
+    Other types of mathematics should be expressed in plain text.
+</ul>
+
+The file <tt>examples/math_text.py</tt> tests different syntax in legends,
+axis labels, and titles. Running this script with
+<tt>--SCITOOLS_easyviz_backend X</tt> for different values of <tt>X</tt>
+(<tt>gnuplot</tt>, <tt>matplotlib</tt>, <tt>grace</tt>, <tt>pyx</tt>, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.
+
+<P>
+If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
+from scitools.std import *
+...
+if backend == 'gnuplot':
+    title_screen = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+    title_eps = r'\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2'
+elif backend == 'matplotlib':
+    title_screen = title_eps = \
+          r'$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$'
+else:
+    title_screen = title_eps = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+
+plot(...)
+...
+title(title_screen)
+show()
+title(title_eps)
+savefig('myplot.eps')
+</pre>
+</blockquote>   <! -- end verbatim block -->
+
+<P>
+<h4>Turning Off All Plotting</h4>
 <P>
 Sometimes, especially during debugging or when trying out a large-scale
 experiment, it is nice to turn off all plotting on the screen and
-all making of hardcopies. This is easily done by 
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+all making of hardcopies. This is easily done by
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 turn_off_plotting(globals())
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-All the plot functions now "do nothing" (actually they are <TT>DoNothing</TT>
-objects from <TT>scitools.misc</TT>).
+</pre>
+</blockquote>   <! -- end verbatim block -->
+All the plot functions now "do nothing" (actually they are <tt>DoNothing</tt>
+objects from <tt>scitools.misc</tt>).
 
 <P>
-<H1>Visualization of Scalar Fields</H1>
+<h2>Visualization of Scalar Fields</h2>
 <P>
 A scalar field is a function from space or space-time to a real value.
 This real value typically reflects a scalar physical parameter at every
@@ -1501,11 +1740,11 @@ and pseudocolor plots, while in three dimensions (3D) we can create
 isosurface plots, volumetric slice plots, and contour slice plots.
 
 <P>
-<H3>Elevated Surface Plots</H3>
+<h3>Elevated Surface Plots</h3>
 <P>
-To create elevated surface plots we can use either the <TT>surf</TT> or the
-<TT>mesh</TT> command. Both commands have the same syntax, but the <TT>mesh</TT>
-command creates a wireframe mesh while the <TT>surf</TT> command creates a
+To create elevated surface plots we can use either the <tt>surf</tt> or the
+<tt>mesh</tt> command. Both commands have the same syntax, but the <tt>mesh</tt>
+command creates a wireframe mesh while the <tt>surf</tt> command creates a
 solid colored surface. 
 
 <P>
@@ -1518,57 +1757,63 @@ The x and y values in our 2D domain lie between -5 and 5.
 <P>
 The example first creates the necessary data arrays for 2D scalar
 field plotting: the coordinates in each direction, extensions of these
-arrays to form a <EM>ndgrid</EM>, and the function values. The latter array
+arrays to form a <em>ndgrid</em>, and the function values. The latter array
 is computed in a vectorized operation which requires the extended
-coordinate arrays from the <TT>ndgrid</TT> function.  The <TT>mesh</TT> command
+coordinate arrays from the <tt>ndgrid</tt> function.  The <tt>mesh</tt> command
 can then produce the plot with a syntax that mirrors the simplicity of
-the <TT>plot</TT> command for curves:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+the <tt>plot</tt> command for curves:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x = y = linspace(-5, 5, 21)
 xv, yv = ndgrid(x, y)
 values = sin(sqrt(xv**2 + yv**2))
 h = mesh(xv, yv, values)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>mesh</TT> command returns a reference to a new <TT>Surface</TT> object, here
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>mesh</tt> command returns a reference to a new <tt>Surface</tt> object, here
 stored in a variable h. This reference can be used to set or get
 properties in the object at a later stage if needed.  The resulting
-plot can be seen in Figure <A HREF="#fig:mesh_ex1">fig:mesh_ex1</a>.
+plot can be seen in Figure <a href="#fig:mesh_ex1">fig:mesh_ex1</a>.
 
 <P>
 We remark that the computations in the previous example are vectorized.
 The corresponding scalar computations using a double loop read
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 values = zeros(x.size, y.size)
 for i in xrange(x.size):
     for j in xrange(y.size):
         values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-However, for the <TT>mesh</TT> command to work, we need the vectorized
-extensions <TT>xv</TT> and <TT>yv</TT> of <TT>x</TT> and <TT>y</TT>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+However, for the <tt>mesh</tt> command to work, we need the vectorized
+extensions <tt>xv</tt> and <tt>yv</tt> of <tt>x</tt> and <tt>y</tt>.
 
 <P>
-<IMG SRC="figs/mesh_ex1.png" ALIGN="bottom" > Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). <A NAME="fig:mesh_ex1"></A>
+<center><hr>
+<caption><i>Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). <a name="fig:mesh_ex1"></A></i></caption>
+<p><img src="figs/mesh_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-The <TT>surf</TT> command employs the same syntax, but results in a different
-plot (see Figure <A HREF="#fig:surf_ex1">fig:surf_ex1</a>):
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+The <tt>surf</tt> command employs the same syntax, but results in a different
+plot (see Figure <a href="#fig:surf_ex1">fig:surf_ex1</a>):
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 surf(xv, yv, values)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<IMG SRC="figs/surf_ex1.png" ALIGN="bottom" > Result of the surf command (Gnuplot backend). <A NAME="fig:surf_ex1"></A>
+<center><hr>
+<caption><i>Result of the surf command (Gnuplot backend). <a name="fig:surf_ex1"></A></i></caption>
+<p><img src="figs/surf_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-The <TT>surf</TT> command offers many possibilities to adjust the resulting plot:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+The <tt>surf</tt> command offers many possibilities to adjust the resulting plot:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 setp(interactive=False)
 surf(xv, yv, values)
 shading('flat')
@@ -1577,33 +1822,36 @@ colormap(hot())
 axis([-6,6,-6,6,-1.5,1.5])
 view(35,45)
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Here we have specified a flat shading model, added a color bar, changed
-the color map to <TT>hot</TT>, set some suitable axis values, and changed the
+the color map to <tt>hot</tt>, set some suitable axis values, and changed the
 view point (the view takes two arguments: the azimuthal rotation and
 the elevation, both given in degrees). 
 The same plot can also be accomplished with one single, compound
-statement (just as Easyviz offers for the <TT>plot</TT> command): 
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+statement (just as Easyviz offers for the <tt>plot</tt> command): 
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 surf(xv, yv, values,
      shading='flat',
      colorbar='on',
      colormap=hot(),
      axis=[-6,6,-6,6,-1.5,1.5],
      view=[35,45])
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Figure <A HREF="#fig:surf_ex2">fig:surf_ex2</a> displays the result.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Figure <a href="#fig:surf_ex2">fig:surf_ex2</a> displays the result.
 
 <P>
-<IMG SRC="figs/surf_ex2.png" ALIGN="bottom" > Result of an extended surf command (Gnuplot backend). <A NAME="fig:surf_ex2"></A>
+<center><hr>
+<caption><i>Result of an extended surf command (Gnuplot backend). <a name="fig:surf_ex2"></A></i></caption>
+<p><img src="figs/surf_ex2.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Contour Plots</H3>
+<h3>Contour Plots</h3>
 <P>
 A contour plot is another useful technique for visualizing scalar
 fields. The primary examples on contour plots from everyday life is
@@ -1622,60 +1870,66 @@ contour plots:
 
 <P>
 
-<UL>
-  <LI> <TT>contour</TT>: Draw a standard contour plot, i.e., lines in the plane.
-  <LI> <TT>contourf</TT>: Draw a filled 2D contour plot, where the space between
+<ul>
+  <li> <tt>contour</tt>: Draw a standard contour plot, i.e., lines in the plane.
+  <li> <tt>contourf</tt>: Draw a filled 2D contour plot, where the space between
     the contour lines is filled with colors.
-  <LI> <TT>contour3</TT>: Same as <TT>contour</TT>, but the curves are drawn at their 
+  <li> <tt>contour3</tt>: Same as <tt>contour</tt>, but the curves are drawn at their 
     corresponding height levels in 3D space.
-  <LI> <TT>meshc</TT>: Works in the same way as <TT>mesh</TT> except that a
+  <li> <tt>meshc</tt>: Works in the same way as <tt>mesh</tt> except that a
      contour plot is drawn in the plane beneath the mesh. 
-  <LI> <TT>surfc</TT>: Same as <TT>meshc</TT> except that a solid surface is
+  <li> <tt>surfc</tt>: Same as <tt>meshc</tt> except that a solid surface is
     drawn instead of a wireframe mesh.
-</UL>
+</ul>
 
-We start with illustrating the plain <TT>contour</TT> command, assuming that
-we already have computed the <TT>xv</TT>, <TT>yv</TT>, and <TT>values</TT>
+We start with illustrating the plain <tt>contour</tt> command, assuming that
+we already have computed the <tt>xv</tt>, <tt>yv</tt>, and <tt>values</tt>
 arrays as shown in our first example on scalar field plotting.
-The basic syntax follows that of <TT>mesh</TT> and <TT>surf</TT>:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+The basic syntax follows that of <tt>mesh</tt> and <tt>surf</tt>:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 contour(xv, yv, values)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 By default, five uniformly spaced contour level curves are drawn, see
-Figure <A HREF="#fig:contour_ex1">fig:contour_ex1</a>. 
+Figure <a href="#fig:contour_ex1">fig:contour_ex1</a>. 
 
 <P>
-<IMG SRC="figs/contour_ex1.png" ALIGN="bottom" > Result of the simplest possible contour command (Gnuplot backend). <A NAME="fig:contour_ex1"></A>
+<center><hr>
+<caption><i>Result of the simplest possible contour command (Gnuplot backend). <a name="fig:contour_ex1"></A></i></caption>
+<p><img src="figs/contour_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 The number of levels in a contour plot can be specified with an additional
 argument:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 n = 15   # number of desired contour levels
 contour(xv, yv, values, n)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The result can be seen in Figure <A HREF="#fig:contour_ex2">fig:contour_ex2</a>. 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The result can be seen in Figure <a href="#fig:contour_ex2">fig:contour_ex2</a>. 
 
 <P>
-<IMG SRC="figs/contour_ex2.png" ALIGN="bottom" > A contour plot with 15 contour levels (Gnuplot backend). <A NAME="fig:contour_ex2"></A>
+<center><hr>
+<caption><i>A contour plot with 15 contour levels (Gnuplot backend). <a name="fig:contour_ex2"></A></i></caption>
+<p><img src="figs/contour_ex2.png" align="bottom" ></p>
+</center>
 
 <P>
 Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
 contour levels to be drawn can easily be specified as a list:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 levels = [-0.5, 0.1, 0.3, 0.9]
 contour(xv, yv, values, levels, clabels='on')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Now, the <TT>levels</TT> list specify the values of the contour levels, and
-the <TT>clabel</TT> keyword allows labeling of the level values in the plot.
-Figure <A HREF="#fig:contour_ex3">fig:contour_ex3</a> shows the result. We remark that the
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Now, the <tt>levels</tt> list specify the values of the contour levels, and
+the <tt>clabel</tt> keyword allows labeling of the level values in the plot.
+Figure <a href="#fig:contour_ex3">fig:contour_ex3</a> shows the result. We remark that the
 Gnuplot backend colors the contour lines and places the contour values
 and corresponding colors beside the plot. Figures that are reproduced
 in black and white only can then be hard to analyze. Other backends
@@ -1684,39 +1938,48 @@ corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.
 
 <P>
-<IMG SRC="figs/contour_ex3.png" ALIGN="bottom" > Four individually specified contour levels (Gnuplot backend). <A NAME="fig:contour_ex3"></A>
+<center><hr>
+<caption><i>Four individually specified contour levels (Gnuplot backend). <a name="fig:contour_ex3"></A></i></caption>
+<p><img src="figs/contour_ex3.png" align="bottom" ></p>
+</center>
 
 <P>
-The <TT>contourf</TT> command,
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+The <tt>contourf</tt> command,
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 contourf(xv, yv, values)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-gives a filled contour plot as shown in Figure <A HREF="#fig:contourf_ex1">fig:contourf_ex1</a>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+gives a filled contour plot as shown in Figure <a href="#fig:contourf_ex1">fig:contourf_ex1</a>.
 Only the Matplotlib and VTK backends currently supports filled
 contour plots. 
 
 <P>
-<IMG SRC="figs/contourf_ex1.png" ALIGN="bottom" > Filled contour plot created by the contourf command (VTK backend). <A NAME="fig:contourf_ex1"></A>
+<center><hr>
+<caption><i>Filled contour plot created by the contourf command (VTK backend). <a name="fig:contourf_ex1"></A></i></caption>
+<p><img src="figs/contourf_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 The contour lines can be "lifted up" in 3D space, as shown in Figure
-<A HREF="#fig:contour3_ex1">fig:contour3_ex1</a>, using the <TT>contour3</TT> command:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<a href="#fig:contour3_ex1">fig:contour3_ex1</a>, using the <tt>contour3</tt> command:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 contour3(xv, yv, values, 15)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<IMG SRC="figs/contour3_ex1.png" ALIGN="bottom" > Example on the contour3 command for elevated contour levels (Gnuplot backend). <A NAME="fig:contour3_ex1"></A>
+<center><hr>
+<caption><i>Example on the contour3 command for elevated contour levels (Gnuplot backend). <a name="fig:contour3_ex1"></A></i></caption>
+<p><img src="figs/contour3_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-Finally, we show a simple example illustrating the <TT>meshc</TT> and <TT>surfc</TT>
+Finally, we show a simple example illustrating the <tt>meshc</tt> and <tt>surfc</tt>
 commands: 
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 meshc(xv, yv, values, 
       clevels=10, 
       colormap=hot(), 
@@ -1727,57 +1990,66 @@ surfc(xv, yv, values,
       colormap=hsv(), 
       grid='off',
       view=(30,40))
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The resulting plots are displayed in Figures <A HREF="#fig:meshc_ex1">fig:meshc_ex1</a> and
-<A HREF="#fig:surfc_ex1">fig:surfc_ex1</a>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The resulting plots are displayed in Figures <a href="#fig:meshc_ex1">fig:meshc_ex1</a> and
+<a href="#fig:surfc_ex1">fig:surfc_ex1</a>.
 
 <P>
-<IMG SRC="figs/meshc_ex1.png" ALIGN="bottom" > Wireframe mesh with contours at the bottom (Gnuplot backend). <A NAME="fig:meshc_ex1"></A>
+<center><hr>
+<caption><i>Wireframe mesh with contours at the bottom (Gnuplot backend). <a name="fig:meshc_ex1"></A></i></caption>
+<p><img src="figs/meshc_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-<IMG SRC="figs/surfc_ex1.png" ALIGN="bottom" > Surface plot with contours (Gnuplot backend). <A NAME="fig:surfc_ex1"></A>
+<center><hr>
+<caption><i>Surface plot with contours (Gnuplot backend). <a name="fig:surfc_ex1"></A></i></caption>
+<p><img src="figs/surfc_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Pseudocolor Plots</H3>
+<h3>Pseudocolor Plots</h3>
 <P>
 Another way of visualizing a 2D scalar field in Easyviz is the
-<TT>pcolor</TT> command. This command creates a pseudocolor plot, which is a
+<tt>pcolor</tt> command. This command creates a pseudocolor plot, which is a
 flat surface viewed from above. The simplest form of this command
 follows the syntax of the other commands:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 pcolor(xv, yv, values)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 We can set the color shading in a pseudocolor plot either by giving
-the <TT>shading</TT> keyword argument to <TT>pcolor</TT> or by calling the <TT>shading</TT>
+the <tt>shading</tt> keyword argument to <tt>pcolor</tt> or by calling the <tt>shading</tt>
 command. The color shading is specified by a string that can be either
-<TT>'faceted'</TT> (default), <TT>'flat'</TT>, or <TT>'interp'</TT> (interpolated). The Gnuplot and
-Matplotlib backends support <TT>'faceted'</TT> and <TT>'flat'</TT> only, while the
+<tt>'faceted'</tt> (default), <tt>'flat'</tt>, or <tt>'interp'</tt> (interpolated). The Gnuplot and
+Matplotlib backends support <tt>'faceted'</tt> and <tt>'flat'</tt> only, while the
 VTK backend supports all of them.
 
 <P>
-<IMG SRC="figs/pcolor_ex1.png" ALIGN="bottom" > Pseudocolor plot (Gnuplot backend).
+<center><hr>
+<caption><i>Pseudocolor plot (Gnuplot backend).</i></caption>
+<p><img src="figs/pcolor_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Isosurface Plots</H3>
+<h3>Isosurface Plots</h3>
 <P>
 For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
 lines or isolines for 2D scalar fields. An isosurface connects points in
 a scalar field with (approximately) the same scalar value and is
 mathematically defined by the implicit equation f(x,y,z)=c. In Easyviz,
-isosurfaces are created with the <TT>isosurface</TT> command. We will
-demonstrate this command using 3D scalar field data from the <TT>flow</TT>
+isosurfaces are created with the <tt>isosurface</tt> command. We will
+demonstrate this command using 3D scalar field data from the <tt>flow</tt>
 function. This function, also found in Matlab,
 generates fluid flow data. Our first isosurface visualization example
 then looks as follows:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x, y, z, v = flow()  # generate fluid-flow data
 setp(interactive=False)
 h = isosurface(x,y,z,v,-3)
@@ -1787,25 +2059,28 @@ daspect([1,1,1])
 view(3)
 axis('tight')
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-After creating some scalar volume data with the <TT>flow</TT> function, we
+</pre>
+</blockquote>   <! -- end verbatim block -->
+After creating some scalar volume data with the <tt>flow</tt> function, we
 create an isosurface with the isovalue -3. The isosurface is then
-set a bit transparent (<TT>opacity=0.5</TT>) before we specify the shading
+set a bit transparent (<tt>opacity=0.5</tt>) before we specify the shading
 model and the view point. We also set the data aspect ratio to be
-equal in all directions with the <TT>daspect</TT> command.  The resulting
-plot is shown in Figure <A HREF="#fig:isosurface1">fig:isosurface1</a>. We remark that the
+equal in all directions with the <tt>daspect</tt> command.  The resulting
+plot is shown in Figure <a href="#fig:isosurface1">fig:isosurface1</a>. We remark that the
 Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
 <P>
-<IMG SRC="figs/isosurface1.png" ALIGN="bottom" > Isosurface plot (VTK backend). <A NAME="fig:isosurface1"></A>
+<center><hr>
+<caption><i>Isosurface plot (VTK backend). <a name="fig:isosurface1"></A></i></caption>
+<p><img src="figs/isosurface1.png" align="bottom" ></p>
+</center>
 
 <P>
-Here is another example that demonstrates the <TT>isosurface</TT> command
-(again using the <TT>flow</TT> function): 
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+Here is another example that demonstrates the <tt>isosurface</tt> command
+(again using the <tt>flow</tt> function): 
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x, y, z, v = flow()
 setp(interactive=False)
 h = isosurface(x,y,z,v,0)
@@ -1814,28 +2089,31 @@ daspect([1,4,4])
 view([-65,20])
 axis('tight')
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Figure <A HREF="#fig:isosurface2">fig:isosurface2</a> shows the resulting plot.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Figure <a href="#fig:isosurface2">fig:isosurface2</a> shows the resulting plot.
 
 <P>
-<IMG SRC="figs/isosurface2.png" ALIGN="bottom" > Another isosurface plot (VTK backend). <A NAME="fig:isosurface2"></A>
+<center><hr>
+<caption><i>Another isosurface plot (VTK backend). <a name="fig:isosurface2"></A></i></caption>
+<p><img src="figs/isosurface2.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Volumetric Slice Plot</H3>
+<h3>Volumetric Slice Plot</h3>
 <P>
-Another way of visualizing scalar volume data is by using the <TT>slice_</TT>
-command (since the name <TT>slice</TT> is already taken by a built-in
+Another way of visualizing scalar volume data is by using the <tt>slice_</tt>
+command (since the name <tt>slice</tt> is already taken by a built-in
 function in Python for array slicing, we have followed the standard
 Python convention and added a trailing underscore to the name in
-Easyviz - <TT>slice_</TT> is thus the counterpart to the Matlab function
-<TT>slice</TT>.). This command draws orthogonal slice planes through a
+Easyviz - <tt>slice_</tt> is thus the counterpart to the Matlab function
+<tt>slice</tt>.). This command draws orthogonal slice planes through a
 given volumetric data set. Here is an example on how to use the
-<TT>slice_</TT> command:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<tt>slice_</tt> command:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x, y, z = ndgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
                    sparse=True)
 v = x*exp(-x**2 - y**2 - z**2)
@@ -1844,34 +2122,37 @@ yslice = 2
 zslice = [-2, 0]
 slice_(x, y, z, v, xslice, yslice, zslice,
        colormap=hsv(), grid='off')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Note that we here use the SciTools function <TT>seq</TT> for specifying a
-uniform partitioning of an interval - the <TT>linspace</TT> function from
-<TT>numpy</TT> could equally well be used.  The first three arguments in the
-<TT>slice_</TT> call are the grid points in the x, y, and z
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Note that we here use the SciTools function <tt>seq</tt> for specifying a
+uniform partitioning of an interval - the <tt>linspace</tt> function from
+<tt>numpy</tt> could equally well be used.  The first three arguments in the
+<tt>slice_</tt> call are the grid points in the x, y, and z
 directions. The fourth argument is the scalar field defined on-top of
 the grid. The next three arguments defines either slice planes in the
 three space directions or a surface plane (currently not working). In
 this example we have created 6 slice planes: Three at the x axis (at
 x=-1.2, x=0.8, and x=2), one at the y axis (at y=2), and two
 at the z axis (at z=-2 and z=0.0). The result is presented in
-Figure <A HREF="#fig:slice1">fig:slice1</a>.
+Figure <a href="#fig:slice1">fig:slice1</a>.
 
 <P>
-<IMG SRC="figs/slice1.png" ALIGN="bottom" > Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend). <A NAME="fig:slice1"></A>
+<center><hr>
+<caption><i>Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend). <a name="fig:slice1"></A></i></caption>
+<p><img src="figs/slice1.png" align="bottom" ></p>
+</center>
 
 <P>
 <!-- OBS: -->
 <!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
 
 <P>
-<B>Contours in Slice Planes.</B> <P>
-With the <TT>contourslice</TT> command we can create contour plots
+<b>Contours in Slice Planes.</b> <P>
+With the <tt>contourslice</tt> command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example 
-using 3D scalar field data from the <TT>flow</TT> function:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+using 3D scalar field data from the <tt>flow</tt> function:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x, y, z, v = flow()
 setp(interactive=False)
 h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
@@ -1882,28 +2163,31 @@ ax.setp(fgcolor=(1,1,1), bgcolor=(0,0,0))
 box('on')
 view(3)
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The first four arguments given to <TT>contourslice</TT> in this example are
-the extended coordinates of the grid (<TT>x</TT>, <TT>y</TT>, <TT>z</TT>) and the 3D scalar
-field values in the volume (<TT>v</TT>). The next three arguments defines the
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The first four arguments given to <tt>contourslice</tt> in this example are
+the extended coordinates of the grid (<tt>x</tt>, <tt>y</tt>, <tt>z</tt>) and the 3D scalar
+field values in the volume (<tt>v</tt>). The next three arguments defines the
 slice planes in which we want to draw contour lines. In this
 particular example we have specified two contour plots in the planes
 x=1,2,\dots,9, none in y=const planes (empty
 list) , and one contour plot in the plane z=0. The last argument to
-<TT>contourslice</TT> is optional, it can be either an integer specifying the
+<tt>contourslice</tt> is optional, it can be either an integer specifying the
 number of contour lines (the default is five) or, as in the current
 example, a list specifying the level curves. Running the set of
-commands results in the plot shown in Figure <A HREF="#fig:contourslice1">fig:contourslice1</a>.
+commands results in the plot shown in Figure <a href="#fig:contourslice1">fig:contourslice1</a>.
 
 <P>
-<IMG SRC="figs/contourslice1.png" ALIGN="bottom" > Contours in slice planes (VTK backend). <A NAME="fig:contourslice1"></A>
+<center><hr>
+<caption><i>Contours in slice planes (VTK backend). <a name="fig:contourslice1"></A></i></caption>
+<p><img src="figs/contourslice1.png" align="bottom" ></p>
+</center>
 
 <P>
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import scipy.io
 mri = scipy.io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
@@ -1911,20 +2195,23 @@ image_num = 8
 
 # Displaying a 2D Contour Slice
 contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The MRI data set is loaded from the file <TT>mri_matlab_v6.mat</TT> with the
-aid from the <TT>loadmat</TT> function available in the <TT>io</TT> module in the
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The MRI data set is loaded from the file <tt>mri_matlab_v6.mat</tt> with the
+aid from the <tt>loadmat</tt> function available in the <tt>io</tt> module in the
 SciPy package. We then create a 2D contour slice plot with one slice
-in the plane z=8. Figure <A HREF="#fig:contourslice3">fig:contourslice3</a> displays the result.
+in the plane z=8. Figure <a href="#fig:contourslice3">fig:contourslice3</a> displays the result.
 
 <P>
-<IMG SRC="figs/contourslice3.png" ALIGN="bottom" > Contour slice plot of a 3D MRI data set (VTK backend). <A NAME="fig:contourslice3"></A>
+<center><hr>
+<caption><i>Contour slice plot of a 3D MRI data set (VTK backend). <a name="fig:contourslice3"></A></i></caption>
+<p><img src="figs/contourslice3.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H1>Visualization of Vector Fields</H1>
+<h2>Visualization of Vector Fields</h2>
 <P>
 A vector field is a function from space or space-time to a vector
 value, where the number of components in the vector corresponds to
@@ -1939,44 +2226,47 @@ stream ribbons, and stream tubes. Below we will look closer at each of
 these visualization techniques.
 
 <P>
-<H3>Quiver Plots</H3>
+<h3>Quiver Plots</h3>
 <P>
-The <TT>quiver</TT> and <TT>quiver3</TT> commands draw arrows to illustrate vector
+The <tt>quiver</tt> and <tt>quiver3</tt> commands draw arrows to illustrate vector
 values (length and direction) at discrete points.  As the names
-indicate, <TT>quiver</TT> is for 2D vector fields in the plane and <TT>quiver3</TT>
-plots vectors in 3D space.  The basic usage of the <TT>quiver</TT> command
+indicate, <tt>quiver</tt> is for 2D vector fields in the plane and <tt>quiver3</tt>
+plots vectors in 3D space.  The basic usage of the <tt>quiver</tt> command
 goes as follows:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x = y = linspace(-5, 5, 21)
 xv, yv = ndgrid(x, y, sparse=False)
 values = sin(sqrt(xv**2 + yv**2))
 uv, vv = gradient(values)
 quiver(xv, yv, uv, vv)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Our vector field in this example is simply the gradient of the scalar
 field used to illustrate the commands for 2D scalar field plotting.
-The <TT>gradient</TT> function computes the gradient using finite difference
-approximations.  The result is a vector field with components <TT>uv</TT> and
-<TT>vv</TT> in the x and y directions, respectively.  The grid points and
-the vector components are passed as arguments to <TT>quiver</TT>, which in
-turn produces the plot in Figure <A HREF="#fig:quiver_ex1">fig:quiver_ex1</a>.
+The <tt>gradient</tt> function computes the gradient using finite difference
+approximations.  The result is a vector field with components <tt>uv</tt> and
+<tt>vv</tt> in the x and y directions, respectively.  The grid points and
+the vector components are passed as arguments to <tt>quiver</tt>, which in
+turn produces the plot in Figure <a href="#fig:quiver_ex1">fig:quiver_ex1</a>.
 
 <P>
-<IMG SRC="figs/quiver_ex1.png" ALIGN="bottom" > Velocity vector plot (Gnuplot backend). <A NAME="fig:quiver_ex1"></A>
+<center><hr>
+<caption><i>Velocity vector plot (Gnuplot backend). <a name="fig:quiver_ex1"></A></i></caption>
+<p><img src="figs/quiver_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
 additional argument to scale the default lengths:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 scale = 2
 quiver(xv, yv, uv, vv, scale)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-This value of <TT>scale</TT> will thus stretch the vectors to their double length. 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+This value of <tt>scale</tt> will thus stretch the vectors to their double length. 
 To turn off the automatic scaling, we can set the scale value to zero.
 
 <P>
@@ -1986,8 +2276,8 @@ help to get a better perception of a given set of data. Here is an
 example demonstrating this principle for a simple scalar field, where
 we plot the field values as colors and add vectors to illustrate the
 associated gradient field:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
 values = sin(sqrt(xv**2 + yv**2))
 pcolor(xv, yv, values, shading='interp')
@@ -2002,63 +2292,72 @@ figure(2)
 contour(xv, yv, values, 15) 
 hold('on')
 quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The resulting plots can be seen in Figure <A HREF="#fig:quiver_ex2">fig:quiver_ex2</a> and
-<A HREF="#fig:quiver_ex3">fig:quiver_ex3</a>. 
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The resulting plots can be seen in Figure <a href="#fig:quiver_ex2">fig:quiver_ex2</a> and
+<a href="#fig:quiver_ex3">fig:quiver_ex3</a>. 
 
 <P>
-<IMG SRC="figs/quiver_ex2.png" ALIGN="bottom" > Combined quiver and pseudocolor plot (VTK backend). <A NAME="fig:quiver_ex2"></A>
-<IMG SRC="figs/quiver_ex3.png" ALIGN="bottom" > Combined quiver and pseudocolor plot (VTK backend). <A NAME="fig:quiver_ex3"></A>
+<center><hr>
+<caption><i>Combined quiver and pseudocolor plot (VTK backend). <a name="fig:quiver_ex2"></A></i></caption>
+<p><img src="figs/quiver_ex2.png" align="bottom" ></p>
+</center>
+<center><hr>
+<caption><i>Combined quiver and pseudocolor plot (VTK backend). <a name="fig:quiver_ex3"></A></i></caption>
+<p><img src="figs/quiver_ex3.png" align="bottom" ></p>
+</center>
 
 <P>
 Visualization of 3D vector fields by arrows at grid points can be done
-with the <TT>quiver3</TT> command. At the time of this writing, only the VTK
+with the <tt>quiver3</tt> command. At the time of this writing, only the VTK
 backend supports 3D quiver plots. A simple example of plotting the
 "radius vector field" v=(x,y,z) is given next:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 x = y = z = linspace(-3,3,4)
 xv, yv, zv = ndgrid(x, y, z, sparse=False)
 uv = xv
 vv = yv
 wv = zv
 quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The strings <TT>'filled'</TT> and <TT>'r'</TT> are optional and makes the arrows
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The strings <tt>'filled'</tt> and <tt>'r'</tt> are optional and makes the arrows
 become filled 
 and red, respectively. The resulting plot is presented in Figure 
-<A HREF="#fig:quiver3_ex1">fig:quiver3_ex1</a>. 
+<a href="#fig:quiver3_ex1">fig:quiver3_ex1</a>. 
 
 <P>
-<IMG SRC="figs/quiver3_ex1.png" ALIGN="bottom" > 3D quiver plot (VTK backend). <A NAME="fig:quiver3_ex1"></A>
+<center><hr>
+<caption><i>3D quiver plot (VTK backend). <a name="fig:quiver3_ex1"></A></i></caption>
+<p><img src="figs/quiver3_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 
 <P>
-<H3>Stream Plots</H3>
+<h3>Stream Plots</h3>
 <P>
 Stream plots constitute an alternative to arrow plots for visualizing
 vector fields.  The stream plot commands currently available in
-Easyviz are <TT>streamline</TT>, <TT>streamtube</TT>, and <TT>streamribbon</TT>.  Stream
+Easyviz are <tt>streamline</tt>, <tt>streamtube</tt>, and <tt>streamribbon</tt>.  Stream
 lines are lines aligned with the vector field, i.e., the vectors are
 tangents to the streamlines. Stream tubes are similar, but now the
 surfaces of thin tubes are aligned with the vectors.  Stream ribbons
 are also similar: thin sheets are aligned with the vectors. The latter
 type of visualization is also known as stream or flow sheets.  In the
-near future, Matlab commands such as <TT>streamslice</TT> and
-<TT>streamparticles</TT> might also be implemented.
+near future, Matlab commands such as <tt>streamslice</tt> and
+<tt>streamparticles</tt> might also be implemented.
 
 <P>
-We start with an example on how to use the <TT>streamline</TT> command. In
-this example (and in the following examples) we will use the <TT>wind</TT>
+We start with an example on how to use the <tt>streamline</tt> command. In
+this example (and in the following examples) we will use the <tt>wind</tt>
 data set that is included with Matlab. This data set represents air
 currents over a region of North America and is suitable for testing
 the different stream plot commands. The following commands will load
-the <TT>wind</TT> data set and then draw some stream lines from it:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+the <tt>wind</tt> data set and then draw some stream lines from it:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import scipy.io  # needed to load binary .mat-files
 
 # Load the wind data set and create variables
@@ -2077,81 +2376,84 @@ sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5),
 # Draw stream lines
 streamline(x, y, z, u, v, w, sx, sy, sz,
            view=3, axis=[60,140,10,60,-5,20])
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The <TT>wind</TT> data set is stored in a binary `.mat`-file called
-<TT>wind.mat</TT>. To load the data in this file into Python, we can use the
-<TT>loadmat</TT> function which is available through the <TT>io</TT> module in
-SciPy. Using the <TT>loadmat</TT> function on the `wind.mat`-file returns a
-Python dictionary (called <TT>wind</TT> in the current example) containing the NumPy
-arrays <TT>x</TT>, <TT>y</TT>, <TT>z</TT>, <TT>u</TT>, <TT>v</TT>, and <TT>w</TT>. The arrays <TT>u</TT>, <TT>v</TT>, and <TT>w</TT>
-are the 3D vector data, while the arrays <TT>x</TT>, <TT>y</TT>, and <TT>z</TT> defines the
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The <tt>wind</tt> data set is stored in a binary `.mat`-file called
+<tt>wind.mat</tt>. To load the data in this file into Python, we can use the
+<tt>loadmat</tt> function which is available through the <tt>io</tt> module in
+SciPy. Using the <tt>loadmat</tt> function on the `wind.mat`-file returns a
+Python dictionary (called <tt>wind</tt> in the current example) containing the NumPy
+arrays <tt>x</tt>, <tt>y</tt>, <tt>z</tt>, <tt>u</tt>, <tt>v</tt>, and <tt>w</tt>. The arrays <tt>u</tt>, <tt>v</tt>, and <tt>w</tt>
+are the 3D vector data, while the arrays <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> defines the
 (3D extended) coordinates for the associated grid. The data arrays in
-the dictionary <TT>wind</TT> are then stored in seperate variables for easier
+the dictionary <tt>wind</tt> are then stored in seperate variables for easier
 access later.
 
 <P>
-Before we call the <TT>streamline</TT> command we must set up some starting
+Before we call the <tt>streamline</tt> command we must set up some starting
 point coordinates for the stream lines. In this example, we have used
-the <TT>ndgrid</TT> command to define the starting points with the line:
-<!-- BEGIN VERBATIM BLOCK   -->
-<BLOCKQUOTE><PRE>
+the <tt>ndgrid</tt> command to define the starting points with the line:
+<blockquote>    <!-- begin verbatim block   -->
+<pre>
 sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 This command defines starting points which all lie on x=80,
 y=20,30,40,50, and z=0,5,10,15. We now have all the data we need
-for calling the <TT>streamline</TT> command. The first six arguments to the
-<TT>streamline</TT> command are the grid coordinates <TT>(x,y,z)</TT> and the 3D
-vector data <TT>(u,v,w)</TT>, while the next three arguments are the starting
-points which we defined with the <TT>ndgrid</TT> command above. The
-resulting plot is presented in Figure <A HREF="#fig:streamline_ex1">fig:streamline_ex1</a>.
+for calling the <tt>streamline</tt> command. The first six arguments to the
+<tt>streamline</tt> command are the grid coordinates <tt>(x,y,z)</tt> and the 3D
+vector data <tt>(u,v,w)</tt>, while the next three arguments are the starting
+points which we defined with the <tt>ndgrid</tt> command above. The
+resulting plot is presented in Figure <a href="#fig:streamline_ex1">fig:streamline_ex1</a>.
 
 <P>
-<IMG SRC="figs/streamline_ex1.png" ALIGN="bottom" > Stream line plot (Vtk backend). <A NAME="fig:streamline_ex1"></A>
+<center><hr>
+<caption><i>Stream line plot (Vtk backend). <a name="fig:streamline_ex1"></A></i></caption>
+<p><img src="figs/streamline_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-The next example demonstrates the <TT>streamtube</TT> command applied to the 
-same <TT>wind</TT> data set:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+The next example demonstrates the <tt>streamtube</tt> command applied to the 
+same <tt>wind</tt> data set:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 streamtube(x, y, z, u, v, w, sx, sy, sz,
            daspect=[1,1,1],
 	   view=3,
 	   axis='tight',
 	   shading='interp')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The arrays <TT>sx</TT>, <TT>sy</TT>, and <TT>sz</TT> are the same as in the previous
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The arrays <tt>sx</tt>, <tt>sy</tt>, and <tt>sz</tt> are the same as in the previous
 example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
-<A HREF="#fig:streamtube_ex1">fig:streamtube_ex1</a>.
+<a href="#fig:streamtube_ex1">fig:streamtube_ex1</a>.
 
 <P>
-<IMG SRC="figs/streamtube_ex1.png" ALIGN="bottom" > Stream tubes (Vtk backend). <A NAME="fig:streamtube_ex1"></A>
+<center><hr>
+<caption><i>Stream tubes (Vtk backend). <a name="fig:streamtube_ex1"></A></i></caption>
+<p><img src="figs/streamtube_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
-Finally, we illustrate the <TT>streamribbon</TT> command:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+Finally, we illustrate the <tt>streamribbon</tt> command:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 streamribbon(x, y, z, u, v, w, sx, sy, sz,
              ribbonwidth=5,
              daspect=[1,1,1],
              view=3,
              axis='tight',
              shading='interp')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Figure <A HREF="#fig:streamribbon_ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Figure <a href="#fig:streamribbon_ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.
 
 <P>
-<IMG SRC="figs/streamribbon_ex1.png" ALIGN="bottom" > Stream ribbons (VTK backend). <A NAME="fig:streamribbon_ex1"></A>
-
-<P>
-
-<P>
-
-<P>
+<center><hr>
+<caption><i>Stream ribbons (VTK backend). <a name="fig:streamribbon_ex1"></A></i></caption>
+<p><img src="figs/streamribbon_ex1.png" align="bottom" ></p>
+</center>
 
 <P>
 
@@ -2168,13 +2470,19 @@ Figure <A HREF="#fig:streamribbon_ex1">fig:streamribbon_ex1</a> shows the result
 <P>
 
 <P>
-<H3>Bar Charts</H3>
+
+<P>
+
+<P>
+
+<P>
+<h3>Bar Charts</h3>
 <P>
 Easyviz also supports a unified interface to simple bar charts.
 Here is a simple example for displaying tabular values, with one
 bar for each data point:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 from scitools.std import *
 languages = ['C', 'Java', 'C++', 'PHP', 'VB', 'C#', 'Python', 
              'Perl', 'JavaScript']
@@ -2184,20 +2492,23 @@ bar(ratings, 'r',
     ylabel='Ratings in percent (TIOBE Index, April 2010)',
     axis=[-1, len(languages), 0, 20],
     hardcopy='tmp.eps')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-The bar chart illustrates the data in the <TT>ratings</TT> list. These data
-correspond to the names in <TT>languages</TT>.
+</pre>
+</blockquote>   <! -- end verbatim block -->
+The bar chart illustrates the data in the <tt>ratings</tt> list. These data
+correspond to the names in <tt>languages</tt>.
 
 <P>
-<IMG SRC="figs/pyranking.png" ALIGN="bottom" > A simple bar chart illustrating the popularity of common programming languages.
+<center><hr>
+<caption><i>A simple bar chart illustrating the popularity of common programming languages.</i></caption>
+<p><img src="figs/pyranking.png" align="bottom" ></p>
+</center>
 
 <P>
 One may display groups of bars. The data can then be put in a matrix,
 where rows (1st index) correspond to the groups the columns to the
 data within one group:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 data = [[ 0.15416284  0.7400497   0.26331502]
         [ 0.53373939  0.01457496  0.91874701]
         [ 0.90071485  0.03342143  0.95694934]
@@ -2208,20 +2519,20 @@ bar(data,
     axis=[-1, data.shape[0], 0, 1.3],
     ylabel='Normalized CPU time',
     title='Bars from a matrix, now with more annotations')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 When the names of the groups (barticks) are quite long, rotating them
 90 degrees is preferable, and this is done by the keyword
-argument <TT>rotated_barticks=True</TT>.
+argument <tt>rotated_barticks=True</tt>.
 
 <P>
-The demo program in <TT>examples/bar_demo.py</TT> contains additional examples
+The demo program in <tt>examples/bar_demo.py</tt> contains additional examples
 and features.
 
 <P>
 
 <P>
-<H1>Backends</H1>
+<h2>Backends</h2>
 <P>
 As we have mentioned earlier, Easyviz is just a unified interface to
 other plotting packages, which we refer to as backends. We have
@@ -2240,23 +2551,23 @@ backend either.
 Some supported visualization programs are commented on below.
 
 <P>
-<B>Gnuplot.</B> Gnuplot is a command-driven interactive or scripted
+<b>Gnuplot.</b> Gnuplot is a command-driven interactive or scripted
 plotting utility that works on a wide variety of platforms. Gnuplot
 supports many types of plots in both 2D and 3D, including curve plots,
 contour plots, vector plots, and surface plots.  3D scalar and vector
 fields are not supported. To access Gnuplot from Python and send NumPy
-arrays to Gnuplot, we use the Python module <TT>Gnuplot</TT>.
+arrays to Gnuplot, we use the Python module <tt>Gnuplot</tt>.
 
 <P>
 
 <P>
-<B>Matlab.</B> Many view Matlab as the de facto standard for making curves
+<b>Matlab.</b> Many view Matlab as the de facto standard for making curves
 and plots of 2D scalar/vector fields.
 
 <P>
 
 <P>
-<B>Matplotlib.</B> Matplotlib is now quickly gaining wide popularity in
+<b>Matplotlib.</b> Matplotlib is now quickly gaining wide popularity in
 the scientific Python community and has established itself as the de
 facto standard for curve plotting and 2D contour and (recently) surface
 plotting. The interface to Matplotlib is Matlab-insipired, and
@@ -2272,7 +2583,7 @@ Matplotlib directly.
 <P>
 
 <P>
-<B>Grace.</B> Grace is a highly interactive curve plotting program on the
+<b>Grace.</b> Grace is a highly interactive curve plotting program on the
 Unix/X11 platform which has been popular for many years. It does not
 support 2D or 3D scalar or vector fields. However, it has a lot of
 functionality for computing with curves and adjusting/fine-tuning
@@ -2281,7 +2592,7 @@ plots interactively.
 <P>
 
 <P>
-<B>PyX.</B> PyX is a Python package for the creation of PostScript and
+<b>PyX.</b> PyX is a Python package for the creation of PostScript and
 PDF files. It combines an abstraction of the PostScript drawing model
 with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
 publication-ready quality are built out of these primitives.
@@ -2289,7 +2600,7 @@ publication-ready quality are built out of these primitives.
 <P>
 
 <P>
-<B>Pmw.Blt.Graph.</B> Pmw (Python Mega Widgets) extends the Tkinter
+<b>Pmw.Blt.Graph.</b> Pmw (Python Mega Widgets) extends the Tkinter
 package with more sophisticated widgets, included an interactive
 widget for curve plotting. This widget is based on the BLT package
 (an extension of Tk written in C).
@@ -2298,7 +2609,7 @@ The BLT backend offers currenlty only basic plotting functionality.
 <P>
 
 <P>
-<B>Veusz.</B> From <A HREF="http://home.gna.org/veusz">Veusz homepage</A>: Veusz is a
+<b>Veusz.</b> From <a href="http://home.gna.org/veusz">Veusz homepage</a>: Veusz is a
 GUI scientific plotting and graphing package. It is designed to
 produce publication-ready Postscript or PDF output. SVG, EMF and
 bitmap formats export are also supported. Veusz has a comprehensive
@@ -2307,36 +2618,36 @@ GUI and produces really high-quality plots.
 <P>
 
 <P>
-<B>VTK.</B> VTK (Visualization ToolKit) is a package primarily aimed at
+<b>VTK.</b> VTK (Visualization ToolKit) is a package primarily aimed at
 visualizing 2D and 3D scalar and vector fields by a range of techniques.
 VTK is used to achieve 2D and 3D visualizations of the same type as 
 Matlab offers. However, VTK can do much more (although the Easyviz 
 commands are restricted to what is typically offered by Matlab).
 
 <P>
-<H1>Design</H1>
+<h2>Design</h2>
 <P>
-<H3>Main Objects</H3>
+<h3>Main Objects</h3>
 <P>
 All code that is common to all backends is gathered together in a file
-called <TT>common.py</TT>. For each backend there is a separate file where
+called <tt>common.py</tt>. For each backend there is a separate file where
 the backend dependent code is stored. For example, code that are
 specific for the Gnuplot backend, are stored in a file called
-<TT>gnuplot_.py</TT> and code specific for the VTK backend are stored in
-<TT>vtk_.py</TT> (note the final underscore in the stem of the filename - all
+<tt>gnuplot_.py</tt> and code specific for the VTK backend are stored in
+<tt>vtk_.py</tt> (note the final underscore in the stem of the filename - all
 backend files have this underscore). 
 
 <P>
-Each backend is a subclass of class <TT>BaseClass</TT>. The <TT>BaseClass</TT> code
-is found in <TT>common.py</TT> and contains all common code for the backends.
-Basically, a backend class extends <TT>BaseClass</TT> with
+Each backend is a subclass of class <tt>BaseClass</tt>. The <tt>BaseClass</tt> code
+is found in <tt>common.py</tt> and contains all common code for the backends.
+Basically, a backend class extends <tt>BaseClass</tt> with
 rendering capabilities and backend-specific functionality. 
 
 <P>
 The most important method that needs to be implemented in the backend
-is the <TT>_replot</TT> method, which updates the backend and the plot after a
+is the <tt>_replot</tt> method, which updates the backend and the plot after a
 change in the data. Another important method for the backend class is
-the <TT>hardcopy</TT> method, which stores an image of the data in the current
+the <tt>hardcopy</tt> method, which stores an image of the data in the current
 figure to a file.
 
 <P>
@@ -2344,21 +2655,21 @@ Inspired by Matlab, the Easyviz interface is organized around figures and
 axes. A figure contains an arbitrary number of axes, and the axes can
 be placed in arbitrary positions in the figure window. Each figure appears
 in a separate window on the screen. The current figure is accessed by
-the <TT>gcf()</TT> call. Similarly, the current axes are accessed by calling
-<TT>gca()</TT>.
+the <tt>gcf()</tt> call. Similarly, the current axes are accessed by calling
+<tt>gca()</tt>.
 
 <P>
 It is
-natural to have one class for figures and one for axes. Class <TT>Figure</TT>
-contains a dictionary with one (default) or more <TT>Axis</TT> objects in
-addition to several properties such as figure width and height. Class <TT>Axis</TT>
+natural to have one class for figures and one for axes. Class <tt>Figure</tt>
+contains a dictionary with one (default) or more <tt>Axis</tt> objects in
+addition to several properties such as figure width and height. Class <tt>Axis</tt>
 has another dictionary with the plot data as well as lots of
 parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
 For example, when adding an
 elevated surface to the current figure, this surface will be
-appended to a list in the current <TT>Axis</TT> object. 
-Optionally one can add the surface to another <TT>Axis</TT>
-object by specifying the <TT>Axis</TT> instance as an argument. 
+appended to a list in the current <tt>Axis</tt> object. 
+Optionally one can add the surface to another <tt>Axis</tt>
+object by specifying the <tt>Axis</tt> instance as an argument. 
 
 <P>
 
@@ -2366,53 +2677,53 @@ object by specifying the <TT>Axis</TT> instance as an argument.
 All the objects that are to be plotted in a figure such as curves,
 surfaces, vectors, and so on, are stored in repsectively classes.  An
 elevated surface, for instance, is represented as an instance of class
-<TT>Surface</TT>.  All such classes are subclasses of
-<TT>PlotProperties</TT>. Besides being the base class of all objects that can
+<tt>Surface</tt>.  All such classes are subclasses of
+<tt>PlotProperties</tt>. Besides being the base class of all objects that can
 be plotted in a figure
-(<TT>Line</TT>, 
-<TT>Surface</TT>, 
-<TT>Contours</TT>, 
-<TT>VelocityVectors</TT>, 
-<TT>Streams</TT>, 
-<TT>Volume</TT>), 
-class <TT>PlotProperties</TT> also stores various properties that are common
+(<tt>Line</tt>, 
+<tt>Surface</tt>, 
+<tt>Contours</tt>, 
+<tt>VelocityVectors</tt>, 
+<tt>Streams</tt>, 
+<tt>Volume</tt>), 
+class <tt>PlotProperties</tt> also stores various properties that are common
 to all objects in a figure. Examples include line properties, material
-properties, storage arrays for x and y values for <TT>Line</TT> objects,
-and x, y, and z values for 3D objects such as <TT>Volume</TT>.
+properties, storage arrays for x and y values for <tt>Line</tt> objects,
+and x, y, and z values for 3D objects such as <tt>Volume</tt>.
 
 <P>
-The classes mentioned above, i.e., <TT>BaseClass</TT> with subclasses, class
-<TT>PlotProperties</TT> with subclasses, as well as class <TT>Figure</TT> and class
-<TT>Axis</TT> constitute the most important classes in the Easyviz interface.
-Other less important classes are <TT>Camera</TT>, <TT>Light</TT>, <TT>Colorbar</TT>, and
-<TT>MaterialProperties</TT>.
+The classes mentioned above, i.e., <tt>BaseClass</tt> with subclasses, class
+<tt>PlotProperties</tt> with subclasses, as well as class <tt>Figure</tt> and class
+<tt>Axis</tt> constitute the most important classes in the Easyviz interface.
+Other less important classes are <tt>Camera</tt>, <tt>Light</tt>, <tt>Colorbar</tt>, and
+<tt>MaterialProperties</tt>.
 
 <P>
-All the classes in <TT>common.py</TT> follows a convention where class parameters
-are set by a <TT>setp</TT> method and read by a <TT>getp</TT> method. For
-example, we can set the limits on the x axis by using the <TT>setp</TT>
-method in a <TT>Axis</TT> instance:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+All the classes in <tt>common.py</tt> follows a convention where class parameters
+are set by a <tt>setp</tt> method and read by a <tt>getp</tt> method. For
+example, we can set the limits on the x axis by using the <tt>setp</tt>
+method in a <tt>Axis</tt> instance:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 ax = gca()                  # get current axis
 ax.setp(xmin=-2, xmax=2)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 To extract the values of these limits we can write
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 xmin = ax.getp('xmin')
 xmax = ax.getp('xmax')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Normal use will seldom involve <TT>setp</TT> and <TT>getp</TT> functions, since most
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Normal use will seldom involve <tt>setp</tt> and <tt>getp</tt> functions, since most
 users will apply the Matlab-inspired interface and set, e.g., the
 limits by
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 xlim([-2,2])
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
@@ -2433,232 +2744,245 @@ xlim([-2,2])
 <P>
 
 <P>
-<H1>Installation</H1>
+<h2>Installation <a name="ev:tut:install"></A></h2>
+<P>
+
 <P>
 Easyviz comes with the SciTools package, so to install Easyviz, you
 must install SciTools, which is available from
-<A HREF="http://code.google.com/p/scitools">Google code</A>.
+<a href="http://code.google.com/p/scitools">Google code</a>.
 
 <P>
 If you run a Linux system that allows installation from Debian
-repositories (Ubuntu is an example), you get SciTools and all its
-dependencies with one Unix command:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
-Unix> sudo apt-get install python-scitools
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-(SciTools is in standard Debian.)
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:
+<blockquote>    <!-- begin verbatim block   sys-->
+<pre>
+Unix&gt; sudo apt-get install python-scitools
+</pre>
+</blockquote>   <! -- end verbatim block -->
+because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:
+<blockquote>    <!-- begin verbatim block   sys-->
+<pre>
+Unix&gt; sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+</pre>
+</blockquote>   <! -- end verbatim block -->
+
+<P>
 
 <P>
 Otherwise, you download the tarball with the SciTools software, pack it out,
-go the <TT>scitools</TT> folder, and run the standard command
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
-Unix/DOS> python setup.py install
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-Easyviz is reached as the package <TT>scitools.easyviz</TT> and can be
+go the <tt>scitools</tt> folder, and run the standard command
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+Unix/DOS&gt; python setup.py install
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Easyviz is reached as the package <tt>scitools.easyviz</tt> and can be
 imported in several ways (see the paragraph heading
 "Importing Just Easyviz" in the Tutorial).
 
 <P>
 Easyviz will not work unless you have one or more plotting programs
 correctly installed. Below, we have collected some brief information
-on installing various programs. (Note that if you do an <TT>apt-get
-install python-scitools</TT> all necessary plotting programs are
+on installing various programs. (Note that if you do an <tt>apt-get
+install python-scitools</tt> all necessary plotting programs are
 automatically installed for you.)
 
 <P>
 Please check your plotting program independently of Easyviz, as
-described in the <EM>Check Your Backends!</EM> section of the <EM>Troubleshooting</EM>
+described in the <em>Check Your Backends!</em> section of the <em>Troubleshooting</em>
 chapter, if you encounter strange errors during Easyviz plotting.
 
 <P>
-<H3>Installing Gnuplot</H3>
+<h3>Installing Gnuplot</h3>
 <P>
-<H3>Linux/Unix</H3>
+<h3>Linux/Unix</h3>
 <P>
-<B>Compile from Source.</B> Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
-easily on most Unix systems. You also need the <TT>Gnuplot</TT> Python
-module, which can be obtained from <TT>gnuplot-py.sourceforge.net</TT>.
+<b>Compile from Source.</b> Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+easily on most Unix systems. You also need the <tt>Gnuplot</tt> Python
+module, which can be obtained from <tt>gnuplot-py.sourceforge.net</tt>.
 
 <P>
-<B>Debian/Ubuntu.</B> Prebuilt versions are available for Debian/Ubuntu:
+<b>Debian/Ubuntu.</b> Prebuilt versions are available for Debian/Ubuntu:
 run
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 apt-get install gnuplot gnuplot-x11 python-gnuplot
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 but running these commands are not necessary since on Debian/Ubuntu you
-will install <TT>python-scitools</TT> which effectively installs all the
+will install <tt>python-scitools</tt> which effectively installs all the
 software that SciTools depend on.
 
 <P>
-<H3>Windows</H3>
+<h3>Windows</h3>
 <P>
 On Windows, one can either use Gnuplot under Cygwin or use a precompiled
 binary from sourgeforce.net.
 
 <P>
-<B>Using the Gnuplot Cygwin package.</B> In this case there are two things that needs to be changed in the
-<TT>gp_cygwin.py</TT> file in the top-level directory of the <TT>Gnuplot.py</TT>
-source tree. First you need to change the <TT>gnuplot_command</TT> variable
-to <TT>gnuplot</TT> instead of <TT>pgnuplot.exe</TT>. Then you should change the
-<TT>default_term</TT> variable to <TT>x11</TT> instead of <TT>windows</TT> since the
+<b>Using the Gnuplot Cygwin package.</b> In this case there are two things that needs to be changed in the
+<tt>gp_cygwin.py</tt> file in the top-level directory of the <tt>Gnuplot.py</tt>
+source tree. First you need to change the <tt>gnuplot_command</tt> variable
+to <tt>gnuplot</tt> instead of <tt>pgnuplot.exe</tt>. Then you should change the
+<tt>default_term</tt> variable to <tt>x11</tt> instead of <tt>windows</tt> since the
 Gnuplot Cygwin package is not compiled with the Windows
-terminal. Finally, install <TT>Gnuplot.py</TT> (<TT>python setup.py install</TT>)
-and launch X11 by running <TT>startx</TT> from a Cygwin prompt. Try to run
-the <TT>test.py</TT> script that comes with <TT>Gnuplot.py</TT>. If everything
+terminal. Finally, install <tt>Gnuplot.py</tt> (<tt>python setup.py install</tt>)
+and launch X11 by running <tt>startx</tt> from a Cygwin prompt. Try to run
+the <tt>test.py</tt> script that comes with <tt>Gnuplot.py</tt>. If everything
 works, Easyviz can use Gnuplot.
 
 <P>
-<B>Using Gnuplot Binaries.</B> <P>
+<b>Using Gnuplot Binaries.</b> <P>
 First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
 A possible URL is
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 The zip file may have another name for a newer version of Gnuplot on
 Windows.
 
 <P>
-Then unzip the <TT>gp424win32.zip</TT> file to the folder
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+Then unzip the <tt>gp424win32.zip</tt> file to the folder
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 C:\gnuplot
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Add the folder name
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 C:\gnuplot\bin
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-to the <TT>PATH</TT> environment variable (this is done in a graphical interface for
+</pre>
+</blockquote>   <! -- end verbatim block -->
+to the <tt>PATH</tt> environment variable (this is done in a graphical interface for
 setting environment variables).
 
 <P>
 Check out the latest SVN revision of the Python interface to
-Gnuplot, which is the Python module file <TT>Gnuplot.py</TT>:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+Gnuplot, which is the Python module file <tt>Gnuplot.py</tt>:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-Install <TT>Gnuplot.py</TT>:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+Install <tt>Gnuplot.py</tt>:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 cd gnuplot-py
 python setup.py bdist_wininst
 dist\gnuplot-py-1.8+.win32.exe
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 Check out the latest SVN revision of SciTools:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 svn co http://scitools.googlecode.com/svn/trunk/ scitools
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 Install SciTools:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 cd scitools
 python setup.py bdist_wininst
 dist\SciTools-0.4.win32.exe
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 (The SciTools version number differs.)
 
 <P>
-<H3>Installing Matplotlib</H3>
+<h3>Installing Matplotlib</h3>
 <P>
 This is normally just a matter of
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 python setup.py install
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 in the root directory of the Matplotlib code.
 
 <P>
-<B>Windows.</B> You can download prebuilt binaries from the Matplotlib home page.
+<b>Windows.</b> You can download prebuilt binaries from the Matplotlib home page.
 
 <P>
-<H1>Troubleshooting</H1>
+<h2>Troubleshooting</h2>
 <P>
-<H3>Can I Perform a Diagnostic Test of Easyviz?</H3>
+<h3>Can I Perform a Diagnostic Test of Easyviz?</h3>
 <P>
 Yes. It is wise to perform a diagnostic test before reporting any error
 or trouble to the SciTools maintainers. Find the source folder of SciTools
-and go to the <TT>misc</TT> subfolder. Run
-<!-- BEGIN VERBATIM BLOCK   dsni-->
-<BLOCKQUOTE><PRE>
+and go to the <tt>misc</tt> subfolder. Run
+<blockquote>    <!-- begin verbatim block   dsni-->
+<pre>
 python diagonstic.py
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 On the screen, you can see what you have of working software that Easyviz
 may use. You do not need to see "ok" after each test, but at least
 one plotting program must be properly installed. Include the detailed
-diagonstics in the <TT>scitools_diagnostic.log</TT> file as attachment in any
+diagonstics in the <tt>scitools_diagnostic.log</tt> file as attachment in any
 mail to the SciTools developers.
 
 <P>
-<H3>The Plot Window Disappears Immediately</H3>
+<h3>The Plot Window Disappears Immediately</h3>
 <P>
 Depending on the backend used for plotting with Easyviz, the plot
 window may be killed when the program terminates. Adding a statement
 that makes the program halt provides a remedy:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 raw_input('Press Return key to quit: ')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 The plot window will now stay on the screen until hitting the Enter/Return key.
 
 <P>
-Another remedy can be to add a <TT>show()</TT> call at the end of the plotting:
-<!-- BEGIN VERBATIM BLOCK   cod-->
-<BLOCKQUOTE><PRE>
+Another remedy can be to add a <tt>show()</tt> call at the end of the plotting:
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 <!-- test on Windows! -->
 
 <P>
-<H3>I Get Thread Errors While Plotting</H3>
+<h3>I Get Thread Errors While Plotting</h3>
 <P>
 With the Gnuplot backend, thread errors from Python may occur if you
-plot many curves. The remedy is to do <TT>import time</TT> and insert
-a <TT>time.sleep(0.2)</TT> (pause the program for 0.2 sec) between each call
-to the <TT>plot</TT> command. 
+plot many curves. The remedy is to do <tt>import time</tt> and insert
+a <tt>time.sleep(0.2)</tt> (pause the program for 0.2 sec) between each call
+to the <tt>plot</tt> command.
 
 <P>
 Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
 plotting many curves with the Gnuplot backend.
 
 <P>
-<H3>I Get Strange Errors Saying Something About LaTeX</H3>
+<h3>I Get Strange Errors Saying Something About LaTeX</h3>
 <P>
 You probably run Easyviz with Matplotlib as backend, and you do not
 have a working LaTeX installation. Matplotlib applies LaTeX for
 improved rendering of legends, titles, and numbers.  The fix is to
-turn off the use of LaTeX, which is done by the <TT>text.usetex</TT>
-parameter in the <TT>matplotlib</TT> section of the configuration file.  Set
-this parameter to <TT>false</TT>. See the subsection "Setting Parameters in
+turn off the use of LaTeX, which is done by the <tt>text.usetex</tt>
+parameter in the <tt>matplotlib</tt> section of the configuration file.  Set
+this parameter to <tt>false</tt>. See the subsection "Setting Parameters in
 the Configuration File" in the section "Advanced Easyviz Topics" in
 the Easyviz tutorial. The tutorial can be reached from the code.google.com
 site or by running pydoc scitools.easyviz. If you use Matplotlib as
-default plotting engine, we recommend to have a <TT>.scitools.cfg</TT>
+default plotting engine, we recommend to have a <tt>.scitools.cfg</tt>
 configuration file in your home folder and that use control the use
 of Matplotlib parameters in this file.
 
@@ -2669,186 +2993,209 @@ than Matplotlib.
 <P>
 
 <P>
-
-<P>
-<H3>Old Programs with 2D Scalar/Vector Field Plotting Do Not Work</H3>
+<h3>Old Programs with 2D Scalar/Vector Field Plotting Do Not Work</h3>
 <P>
 SciTools version 0.7 changed the default backend for plotting to
 Matplotlib instead of Gnuplot (provided you have Matplotlib and you
-run <TT>setup.py</TT> to install SciTools - binaries for Debian still has
+run <tt>setup.py</tt> to install SciTools - binaries for Debian still has
 Gnuplot as the plotting engine). Some functionality in Gnuplot, especially
 regarding 2D vector/scalar fields, is not yet present in Matplotlib
 and/or supported by the Easyviz interface to Matplotlib.
 You then need to explicitly run the script with Gnuplot as plottin
 engine:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 python myprogram.py --SCITOOLS_easyviz_backend gnuplot
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 or you must import gnuplot explicitly in the program:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 from scitools.std import *
 from scitools.easyviz.gnuplot_ import *
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-or you can edit the installed <TT>scitools.cfg</TT> file ("backend" keyword
-in the "easyviz" section), or your local version <TT>.scitools.cfg</TT> in
+</pre>
+</blockquote>   <! -- end verbatim block -->
+or you can edit the installed <tt>scitools.cfg</tt> file ("backend" keyword
+in the "easyviz" section), or your local version <tt>.scitools.cfg</tt> in
 your home folder, or maybe the simplest solution is to reinstall
 SciTools with Gnuplot as plotting engine:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 python setup.py install --easyviz_backend gnuplot
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
 <P>
-<H3>Can I Easily Turn Off All Plotting?</H3>
-<P>
-Yes, this is very convenient when debugging other (non-plotting) parts
-of a program. Just write
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
-from scitools.std import *
-turn_off_plotting(globals())
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
-
-<P>
-
-<P>
-<H3>Check Your Backends!</H3>
+<h3>Check Your Backends!</h3>
 <P>
 When you encounter a problem with Easyviz plotting, make sure that the
 backend works correctly on its own (there may, e.g., be installation
 problems with the backend - Easyviz just calls the backend to do the
-plotting). 
+plotting).
 
 <P>
-<H4>Gnuplot</H4>
+<h4>Gnuplot</h4>
 <P>
 For the Gnuplot backend you can try the following commands in a
 terminal window:
-<!-- BEGIN VERBATIM BLOCK   rpy-->
-<BLOCKQUOTE><PRE>
-Unix/DOS> gnuplot
-gnuplot> plot sin(x)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+<blockquote>    <!-- begin verbatim block   rpy-->
+<pre>
+Unix/DOS&gt; gnuplot
+gnuplot&gt; plot sin(x)
+</pre>
+</blockquote>   <! -- end verbatim block -->
 This should result in a plot of the sine function on the screen.
 If this command does not work, Easyviz will not work with the Gnuplot
 backend. A common problem is that Gnuplot is installed, but the path
-to the Gnuplot executable is not registered in the <TT>PATH</TT> environment
-variable. See the section <EM>Installing Gnuplot</EM> if you need help with 
+to the Gnuplot executable is not registered in the <tt>PATH</tt> environment
+variable. See the section <em>Installing Gnuplot</em> if you need help with
 installing the Gnuplot program and its Python interface.
 
 <P>
-<H4>Matplotlib</H4>
+<h4>Matplotlib</h4>
 <P>
 The following code tests if you have installed Matplotlib correctly:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 import matplotlib.pyplot as plt
 import numpy as np
 x = np.linspace(0, 2*np.pi, 101)
 y = np.sin(x)
 plt.plot(x, y)
 plt.show()
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 In case of problems, go to the Matplotlib source directory, remove the
-<TT>build</TT> subdirectory, and try a new install with <TT>python setup.py install</TT>.
+<tt>build</tt> subdirectory, and try a new install with <tt>python setup.py install</tt>.
 
 <P>
 
 <P>
-<H3>Trouble with Gnuplot and Threads</H3>
+<h3>Can I Easily Turn Off All Plotting?</h3>
+<P>
+Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+from scitools.std import *
+turn_off_plotting(globals())
+</pre>
+</blockquote>   <! -- end verbatim block -->
+
+<P>
+
+<P>
+<h3>How Can I Change the Type of Gnuplot Window?</h3>
+<P>
+The configuration file (<tt>.scitools.cfg</tt> in your home directory or a
+local directory, copied from <tt>scitools.cfg</tt> in the SciTools source
+code distribution) has an item for controlling the type of <em>terminal</em>
+used by Gnuplot:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+[gnuplot]
+...
+default_term               = &lt;str&gt; wxt
+</pre>
+</blockquote>   <! -- end verbatim block -->
+Here, the <tt>wxt</tt> terminal, based on wxWidgets, is chosen. Other
+choices are <tt>x11</tt> on systems supporting X11 graphics, or <tt>aqua</tt> on
+Mac. The <tt>wxt</tt> value is an allround choice since wxWidgets work, in theory,
+on all platforms.
+
+<P>
+<h3>How Can The Aspect Ratio of The Axes Be Controlled?</h3>
+<P>
+See the section "Controlling the Aspect Ratio of Axes" in the
+tutorial.
+
+<P>
+<h3>Trouble with Gnuplot and Threads</h3>
 <P>
 When using the Gnuplot backend, the following error may be encountered:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 thread.error: can't start new thread
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 A remedy is to create fewer plots, and for animations, update the plot
 window less frequently. For example,
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block   cod-->
+<pre>
 for i in range(number_of_frames_in_animation):
     &lt;prepare data&gt;
     if i % == 100:     # plot every 100 frames
         &lt;make plot&gt;
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<H3>Trouble with Movie Making</H3>
+<h3>Trouble with Movie Making</h3>
 <P>
-The call to <TT>movie</TT> demands that you have video encoders installed.
-The legal encoders are <TT>mencoder</TT>, <TT>ffmpeg</TT>, <TT>mpeg_encode</TT>, <TT>ppmtompeg</TT>,
-<TT>mpeg2enc</TT>, and <TT>convert</TT>. Some of these also require additional
+The call to <tt>movie</tt> demands that you have video encoders installed.
+The legal encoders are <tt>mencoder</tt>, <tt>ffmpeg</tt>, <tt>mpeg_encode</tt>, <tt>ppmtompeg</tt>,
+<tt>mpeg2enc</tt>, and <tt>convert</tt>. Some of these also require additional
 software to be installed.
 
 <P>
-To install (e.g.) <TT>convert</TT>, you need to install the ImageMagick
-software suite, since <TT>convert</TT> is a part of that package. ImageMagick
-is easy to install on most platforms. The <TT>ppmtompeg</TT> encoder is a part
-of the Netpbm software, while <TT>mpeg2enc</TT> is a part of <TT>mjpegtools</TT>.
+To install (e.g.) <tt>convert</tt>, you need to install the ImageMagick
+software suite, since <tt>convert</tt> is a part of that package. ImageMagick
+is easy to install on most platforms. The <tt>ppmtompeg</tt> encoder is a part
+of the Netpbm software, while <tt>mpeg2enc</tt> is a part of <tt>mjpegtools</tt>.
 
 <P>
-On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the <TT>movie</TT> function:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
-Unix> sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the <tt>movie</tt> function:
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+Unix&gt; sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 When something goes wrong with the movie making, check the output in
 the terminal window. By default, Easyviz prints the command that makes
 the movie. You can manually copy this command and run it again to start
 finding out what can be wrong. Just switching to a different encoder can be
-a quick remedy. The switch is done with the <TT>encoder</TT> keyword argument
-to <TT>movie</TT>, e.g.,
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+a quick remedy. The switch is done with the <tt>encoder</tt> keyword argument
+to <tt>movie</tt>, e.g.,
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 # Make animated GIF movie in the file tmpmovie.gif
 movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
-<H3>I Get Thread Errors with Gnuplot</H3>
+<h3>I Get Thread Errors with Gnuplot</h3>
 <P>
 When plotting inside a loop, e.g.,
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
 for i in some_values:
     ...
-    plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+    plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
          xlabel='t', ylabel='Xt', title='My Title')
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 Gnuplot may lead to thread errors. A remedy is to do some plotting
 outside the loop and then only update the data inside the loop:
-<!-- BEGIN VERBATIM BLOCK  -->
-<BLOCKQUOTE><PRE>
-plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+<blockquote>    <!-- begin verbatim block  -->
+<pre>
+plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
      xlabel='t', ylabel='Xt', title='My Title')
 for i in some_values:
     ...
     plot(t, X0)
-</PRE></BLOCKQUOTE>
-<! -- END VERBATIM BLOCK -->
+</pre>
+</blockquote>   <! -- end verbatim block -->
 
 <P>
 
 <P>
-<H3>Where Can I Find Easyviz Documentation?</H3>
+<h3>Where Can I Find Easyviz Documentation?</h3>
 <P>
 There is a verbose Easyviz documentation that mainly focuses on an
 introduction to Easyviz (what you read now is a part of that
@@ -2857,26 +3204,33 @@ documentation).
 <P>
 Another useful source of information is the many examples that come
 with the SciTools/Easyviz source code. The examples are located in
-the <TT>examples</TT> subfolder of the source.
+the <tt>examples</tt> subfolder of the source.
 
 <P>
 
 <P>
-<H3>I Cannot Find Out How My Plot Can Be Created</H3>
+<h3>Grace Gives Error Messages When Calling Savefig/Hardcopy</h3>
+<P>
+Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.
+
+<P>
+<h3>I Cannot Find Out How My Plot Can Be Created</h3>
 <P>
 Note that Easyviz only support the most basic types of plots:
 
 <P>
 
-<UL>
-  <LI> y=f(x) curves
-  <LI> bar plots
-  <LI> contour plots of 2D scalar fields
-  <LI> elevated 3D surfaces of 2D scalar fields
-  <LI> 3D isosurfaces of 3D scalar fields
-  <LI> arrows reflecting 2D/3D vector fields
-  <LI> streamlines, streamtubes, and streamribbon for 3D vector fields.
-</UL>
+<ul>
+  <li> y=f(x) curves
+  <li> bar plots
+  <li> contour plots of 2D scalar fields
+  <li> elevated 3D surfaces of 2D scalar fields
+  <li> 3D isosurfaces of 3D scalar fields
+  <li> arrows reflecting 2D/3D vector fields
+  <li> streamlines, streamtubes, and streamribbon for 3D vector fields.
+</ul>
 
 For such standard plots you can use Easyviz, otherwise you have to
 use a plotting package like Matplotlib, Gnuplot, or VTK directly
@@ -2888,104 +3242,103 @@ supported by all backends):
 
 <P>
 
-<UL>
-  <LI> autumn,
-  <LI> axes,
-  <LI> axis,
-  <LI> bone,
-  <LI> box,
-  <LI> brighten,
-  <LI> camdolly,
-  <LI> camlight,
-  <LI> camlookat,
-  <LI> campos,
-  <LI> camproj,
-  <LI> camroll,
-  <LI> camtarget,
-  <LI> camup,
-  <LI> camva,
-  <LI> camzoom,
-  <LI> caxis,
-  <LI> cla,
-  <LI> clabel,
-  <LI> clf,
-  <LI> close,
-  <LI> closefig,
-  <LI> closefigs,
-  <LI> colorbar,
-  <LI> colorcube,
-  <LI> colormap,
-  <LI> coneplot,
-  <LI> contour,
-  <LI> contour3,
-  <LI> contourf,
-  <LI> contourslice,
-  <LI> cool,
-  <LI> copper,
-  <LI> daspect,
-  <LI> figure,
-  <LI> fill,
-  <LI> fill3,
-  <LI> flag,
-  <LI> gca,
-  <LI> gcf,
-  <LI> get,
-  <LI> gray,
-  <LI> grid,
-  <LI> hardcopy,
-  <LI> hidden,
-  <LI> hold,
-  <LI> hot,
-  <LI> hsv,
-  <LI> ishold,
-  <LI> isocaps,
-  <LI> isosurface,
-  <LI> jet,
-  <LI> legend,
-  <LI> light,
-  <LI> lines,
-  <LI> loglog,
-  <LI> material,
-  <LI> mesh,
-  <LI> meshc,
-  <LI> openfig,
-  <LI> pcolor,
-  <LI> pink,
-  <LI> plot,
-  <LI> plot3,
-  <LI> prism,
-  <LI> quiver,
-  <LI> quiver3,
-  <LI> reducevolum,
-  <LI> savefig,
-  <LI> semilogx,
-  <LI> semilogy,
-  <LI> set,
-  <LI> shading,
-  <LI> show,
-  <LI> slice_,
-  <LI> spring,
-  <LI> streamline,
-  <LI> streamribbon,
-  <LI> streamslice,
-  <LI> streamtube,
-  <LI> subplot,
-  <LI> subvolume,
-  <LI> summer,
-  <LI> surf,
-  <LI> surfc,
-  <LI> surfl,
-  <LI> title,
-  <LI> vga,
-  <LI> view,
-  <LI> white,
-  <LI> winter,
-  <LI> xlabel,
-  <LI> ylabel,
-  <LI> zlabel
-</UL>
+<ul>
+  <li> autumn,
+  <li> axes,
+  <li> axis,
+  <li> bone,
+  <li> box,
+  <li> brighten,
+  <li> camdolly,
+  <li> camlight,
+  <li> camlookat,
+  <li> campos,
+  <li> camproj,
+  <li> camroll,
+  <li> camtarget,
+  <li> camup,
+  <li> camva,
+  <li> camzoom,
+  <li> caxis,
+  <li> cla,
+  <li> clabel,
+  <li> clf,
+  <li> close,
+  <li> closefig,
+  <li> closefigs,
+  <li> colorbar,
+  <li> colorcube,
+  <li> colormap,
+  <li> coneplot,
+  <li> contour,
+  <li> contour3,
+  <li> contourf,
+  <li> contourslice,
+  <li> cool,
+  <li> copper,
+  <li> daspect,
+  <li> figure,
+  <li> fill,
+  <li> fill3,
+  <li> flag,
+  <li> gca,
+  <li> gcf,
+  <li> get,
+  <li> gray,
+  <li> grid,
+  <li> hardcopy,
+  <li> hidden,
+  <li> hold,
+  <li> hot,
+  <li> hsv,
+  <li> ishold,
+  <li> isocaps,
+  <li> isosurface,
+  <li> jet,
+  <li> legend,
+  <li> light,
+  <li> lines,
+  <li> loglog,
+  <li> material,
+  <li> mesh,
+  <li> meshc,
+  <li> openfig,
+  <li> pcolor,
+  <li> pink,
+  <li> plot,
+  <li> plot3,
+  <li> prism,
+  <li> quiver,
+  <li> quiver3,
+  <li> reducevolum,
+  <li> savefig,
+  <li> semilogx,
+  <li> semilogy,
+  <li> set,
+  <li> shading,
+  <li> show,
+  <li> slice_,
+  <li> spring,
+  <li> streamline,
+  <li> streamribbon,
+  <li> streamslice,
+  <li> streamtube,
+  <li> subplot,
+  <li> subvolume,
+  <li> summer,
+  <li> surf,
+  <li> surfc,
+  <li> surfl,
+  <li> title,
+  <li> vga,
+  <li> view,
+  <li> white,
+  <li> winter,
+  <li> xlabel,
+  <li> ylabel,
+  <li> zlabel
+</ul>
 
-
-</BODY>
-</HTML>
+</body>
+</html>
     

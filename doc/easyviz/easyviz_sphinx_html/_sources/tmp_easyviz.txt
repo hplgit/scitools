@@ -1,10 +1,14 @@
-.. Automatically generated reST file from Doconce source 
+.. Automatically generated reST file from Doconce source
    (http://code.google.com/p/doconce/)
 
 .. TITLE: Easyviz Documentation
+
 .. AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
+
 .. AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
-.. DATE: Aug 08, 2008
+
+.. DATE: Jun 12, 2012
+
 
 Easyviz
 =======
@@ -222,7 +226,7 @@ is similar to the popular
 
         from matplotlib.pylab import *
 
-among Matplotlib users (although not promoted by Matplotlib developers). 
+among Matplotlib users (although not promoted by Matplotlib developers).
 The primary additional feature of the
 ``scitools.std`` import is the possibility to choose among many different
 backends for plotting, where Matplotlib is one of the options.
@@ -254,9 +258,12 @@ program:
         plot(t, y)
         show()  # optional
 
+If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see the chapter :ref:`ev:tut:install`.
+
 The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. This includes everything
-from ``numpy`` (from ``numpy import *``), 
+from ``numpy`` (from ``numpy import *``),
 all Easyviz plotting commands, some modules (``sys``, ``math``), and
 all of SciPy (``from scipy import *``) if SciPy is installed.
 In the program above, we first
@@ -302,7 +309,7 @@ An alternative name for ``hardcopy`` is ``savefig``:
         savefig('tmp1.png') # produce PNG
 
 The filename extension determines the format: ``.ps`` or
-``.eps`` for PostScript, and ``.png`` for PNG. 
+``.eps`` for PostScript, and ``.png`` for PNG.
 Figure :ref:`fig:plot1a` displays the resulting plot. With ``show(False)``
 we can suppress the plot from being shown at the screen, which is
 useful when create a large number of figure files in programs.
@@ -313,7 +320,7 @@ useful when create a large number of figure files in programs.
 .. figure:: figs/plot1a.png
 
 
-   A simple plot in PostScript format  
+   *A simple plot in PostScript format*
 
 
 On some platforms, some backends may result in a plot that is shown in
@@ -377,7 +384,7 @@ The keyword ``savefig`` can be replaced by ``hardcopy`` if desired.
 Note that we in the curve legend write ``t`` square as ``t^2`` (LaTeX style)
 rather than ``t**2`` (program style). Whichever form you choose is up to
 you, but the LaTeX form sometimes looks better in some plotting
-programs (Matplotlib and Gnuplot are two examples). 
+programs (Matplotlib and Gnuplot are two examples).
 See Figure :ref:`fig:plot1c` for what the modified
 plot looks like and how ``t^2`` is typeset in Gnuplot.
 
@@ -388,7 +395,7 @@ plot looks like and how ``t^2`` is typeset in Gnuplot.
 .. figure:: figs/plot1c.png
 
 
-   A single curve with  label, title, and axes adjusted.   
+   *A single curve with*
 
 
 
@@ -437,7 +444,7 @@ different approaches:
              title='Plotting two curves in the same plot',
              savefig='tmp2.eps')
 
-The sequence of the multiple legends is such that the first legend 
+The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
 and so on. The visual result appears in Figure :ref:`fig:plot2a`.
 
@@ -450,7 +457,7 @@ plot in the same window. This new plot just erases the previous curves.
 .. figure:: figs/plot2a.png
 
 
-   Two curves in the same plot  
+   *Two curves in the same plot*
 
 
 With the keyword argrument ``grid=True`` to ``plot`` we can add a
@@ -463,7 +470,7 @@ Figure :ref:`fig:plot2f`).
 .. figure:: figs/plot2f.png
 
 
-   Curves with a grid  
+   *Curves with a grid*
 
 
 The default location of the legends is dependent on the backend
@@ -476,7 +483,7 @@ the location by the ``loc`` keyword to the ``legend`` function, e.g.,
 
         legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
 
-The most popular values are upper right, upper left, lower left, 
+The most popular values are upper right, upper left, lower left,
 and lower right, depending on the shape of the curves and extend
 of the axes. The keyword argument ``fancybox`` draws a box around
 the legends if ``True``, otherwise no box is drawn. The corresponding
@@ -506,7 +513,7 @@ with Gnuplot and Matplotlib only.
 The ``legend`` function also accepts a list of legends instead of
 the legends as separate positional arguments. This allows an overlapping
 syntax between Matplotlib and Easyviz so that the same code can apply
-either of the packages (however, Matplotlib's keywords to 
+either of the packages (however, Matplotlib's keywords to
 ``plot``, like ``label`` and ``linewidth``, are not recognized so not all
 syntax is interchangable).
 
@@ -564,7 +571,7 @@ argument after the :math:`x` and :math:`y` coordinate arrays of the curve:
         # or
         plot(t, y1, 'r-', t, y2, 'bo')
 
-The effect of controlling the line styles can be seen in 
+The effect of controlling the line styles can be seen in
 Figure :ref:`fig:plot2c`.
 
 
@@ -573,7 +580,7 @@ Figure :ref:`fig:plot2c`.
 .. figure:: figs/plot2c.png
 
 
-   Two curves in the same plot, with controlled line styles  
+   *Two curves in the same plot, with controlled line styles*
 
 
 Assume now that we want to plot the blue circles at every 4 points only.
@@ -619,11 +626,11 @@ the Gnuplot program one can view the effect in Figure :ref:`fig:plot2g`.
 .. figure:: figs/plot2g.png
 
 
-   Circles at every 4 points and extended line thickness (6) and circle size (3)  
+   *Circles at every 4 points and extended line thickness (6) and circle size (3)*
 
 
 
-The different available line colors include 
+The different available line colors include
   * yellow:   ``'y'``
 
   * magenta:  ``'m'``
@@ -740,7 +747,7 @@ The plot is shown in Figure :ref:`fig:plot3`.
 .. figure:: figs/plot3.png
 
 
-   A plot with three curves  
+   *A plot with three curves*
 
 
 *Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
@@ -766,6 +773,19 @@ comparing the two sample functions we have used in the previous examples:
 *More Examples.* The examples in this tutorial, as well as
 additional examples, can be found in the ``examples`` directory in the
 root directory of the SciTools source code tree.
+
+Math Syntax in Legends and Titles
+---------------------------------
+
+Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.
 
 Interactive Plotting Sessions
 -----------------------------
@@ -815,7 +835,7 @@ plots stored in files.  Thereafter we must use a tool to combine the
 individual plot files into a movie file.
 
 *Example.* The function
-:math:`f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}` 
+:math:`f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}`
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large :math:`s` and "peak-formed" for small :math:`s`, see Figure
@@ -830,7 +850,7 @@ formula above as a function ``f(x, m, s)``.
 .. figure:: figs/plot4.png
 
 
-   Different shapes of a Gaussian function  
+   *Different shapes of a Gaussian function*
 
 
 The animation is created by varying :math:`s` in a loop and for each :math:`s`
@@ -907,16 +927,16 @@ printf format ``04d`` pads the integers with zeros such that ``1`` becomes
 now expand (by an alphabetic sort) to a list of all files in proper
 order. Without the padding with zeros, i.e., names of the form
 ``tmp1.png``, ``tmp2.png``, ..., ``tmp12.png``, etc., the alphabetic order
-will give a wrong sequence of frames in the movie. For instance, 
+will give a wrong sequence of frames in the movie. For instance,
 ``tmp12.png`` will appear before ``tmp2.png``.
 
 Note that the names of plot files specified when making hardopies must
 be consistent with the specification of names in the call to ``movie``.
 Typically, one applies a Unix wildcard notation in the call to
-``movie``, say ``plotfile*.eps``, where the asterisk will match any set of
+``movie``, say ``plotfile*.png``, where the asterisk will match any set of
 characters. When specifying hardcopies, we must then use a filename
-that is consistent with ``plotfile*.eps``, that is, the filename must
-start with ``plotfile`` and end with ``.eps``, but in between
+that is consistent with ``plotfile*.png``, that is, the filename must
+start with ``plotfile`` and end with ``.png``, but in between
 these two parts we are free to construct (e.g.) a frame number padded
 with zeros.
 
@@ -949,60 +969,89 @@ and later delete the subfolder. Here is a suitable code segment:
 
 
 *Movie Formats.* Having a set of (e.g.) ``tmp*.png`` files, one can simply generate a movie by
-a ``movie('tmp*.png')`` call. The ``movie`` function generates a movie
-file called ``movie.avi`` (AVI format), ``movie.mpeg`` (MPEG format), or
-``movie.gif`` (animated GIF format) in the current working
-directory. The movie format depends on the encoders found on your
-machine.
+a ``movie('tmp*.png')`` call. The format of the movie is determined by
+which video encoders that are installed on the computer. The ``movie``
+function runs through a list of encoders (``convert``, ``mencoder``,
+``ffmpeg mpeg_encode``, ``ppmtompeg``, ``mpeg2enc``, ``html``) and choses the
+first one which is installed. The fall back encoder ``html`` actually
+does not create a video file, but makes insetad an HTML file that can
+play the series of hardcopies made (``tmp*.png``, for instance).
+When no filename is given to the ``movie`` function, the output file
+with the movie has filestem ``movie`` and extension depending on the
+video format and the encoder used. For example, if ``convert`` was used
+to create an animated GIF file, the default output file is ``movie.gif``.
+Similarly, ``movie.avi`` is in AVI format, ``movie.mpeg`` is in MPEG format,
+and so forth.
 
-You can get complete control of the movie format and the
-name of the movie file by supplying more arguments to the
-``movie`` function. First, let us generate an animated GIF
-file called ``tmpmovie.gif``:
+You can get complete control of the movie format and the name of the
+movie file by supplying the ``encoder`` and ``output_file`` arguments to
+the ``movie`` function. This is the recommended use. Here is an
+example on generating an animated GIF file ``tmpmovie.gif`` with
+the ``convert`` program from the ImageMagick software suite:
 
 .. code-block:: python
 
-        movie('tmp_*.eps', encoder='convert', fps=2,
+        movie('tmp_*.png', encoder='convert', fps=2,
               output_file='tmpmovie.gif')
 
-The generation of animated GIF images applies the ``convert`` program
-from the ImageMagick suite. This program must of course be installed
-on the machine. The argument fps stands for frames per second so
-here the speed of the movie is slow in that there is a delay of half
-a second between each frame (image file).
-To view the animated GIF file, one can use the ``animate``
-program (also from ImageMagick) and give the movie file as command-line
-argument. One can alternatively put the GIF file in a web page 
-in an IMG tag such that a browser automatically displays the movie.
+This call requires ImageMagick to be installed on the machine. The
+argument ``fps`` stands for frames per second so here the speed of the
+movie is slow in that there is a delay of half a second between each
+frame (image file).  To view the animated GIF file, one can use the
+``animate`` program (also from ImageMagick) and give the movie file as
+command-line argument. One can alternatively put the GIF file in a web
+page in an IMG tag such that a browser automatically displays the
+movie.
+
+Making an HTML file that can play the movie in a web browser
+is carried out by the call
+
+.. code-block:: python
+
+        movie('tmp_*.png', encoder='html', fps=10,
+              output_file='tmpmovie.html')
+
+Just load ``tmpmovie.html`` into a browser (e.g., run ``firefox tmpmovie.html``
+from the command line).
 
 An AVI movie can be generated by the call
 
 .. code-block:: python
 
-        movie('tmp_*.eps', encoder='ffmpeg', fps=4,
-              output_file='tmpmovie1.avi',
+        movie('tmp_*.png', encoder='ffmpeg', fps=4,
+              output_file='tmpmovie.avi',
 
-Alternatively, we may generate an MPEG movie using 
+Alternatively, we may generate an MPEG movie using
 the ``ppmtompeg`` encoder from the Netpbm suite of
 image manipulation tools:
 
 .. code-block:: python
 
-        movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
-              output_file='tmpmovie2.mpeg',
+        movie('tmp_*.png', encoder='ppmtompeg', fps=24,
+              output_file='tmpmovie.mpeg',
 
 The ``ppmtompeg`` supports only a few (high) frame rates.
 
-The next sample call to ``movie`` uses the Mencoder tool and specifies 
-some additional arguments (video codec, video bitrate, and the 
+The next sample call to ``movie`` uses the Mencoder tool and specifies
+some additional arguments (video codec, video bitrate, and the
 quantization scale):
 
 .. code-block:: python
 
-        movie('tmp_*.eps', encoder='mencoder', fps=24,
+        movie('tmp_*.png', encoder='mencoder', fps=24,
               output_file='tmpmovie.mpeg',
               vcodec='mpeg2video', vbitrate=2400, qscale=4)
 
+Here is yet another example:
+
+.. code-block:: py
+
+
+        movie('tmp_*.png', encoder='ffmpeg',
+              output_file='tmpmovie1c.mpeg', vodec='mpeg2video')
+
+The file ``examples/movie_demo1.py`` that comes with the SciTools source
+code generates frames in a movie and creates movie files in many formats.
 
 Playing movie files can be done by a lot of programs. Windows Media
 Player is a default choice on Windows machines. On Unix, a variety
@@ -1012,6 +1061,88 @@ show the file in a web page with the HTML command
 ``<img src="tmpmovie.gif">``. AVI and MPEG files can be played by,
 for example, the
 ``myplayer``, ``vlc``, or ``totem`` programs.
+
+*Making Movies in Batch.* Sometimes it is desired to carry out
+large numbers of computer experiments and create movies in each
+individual experiments. Then one probably does not want to have
+the screen full of movie windows. To turn off showing the movie
+on the screen while creating the individual frames, just
+give the ``show=False`` keyword argument to the ``plot`` function.
+All hardcopies and the movies are then made in batch, which also
+might speed up the program since rendering graphics on the screen
+is avoided.
+
+Controlling the Aspect Ratio of Axes
+------------------------------------
+
+By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.
+
+In the ``gnuplot`` and ``matplotlib``
+backends, we set ``daspectmode=manual`` and
+``daspect=[r,1,1]``, where ``r`` is the ratio of the y-axis length to
+the x-axis length
+(``r`` equal to ``1`` gives a square plot area). For example,
+
+.. code-block:: python
+
+        plot(x, y, 'r-',
+             axis=[0, 1, 0, 1],
+             daspect=[1,1,1],
+             daspectmode='manual')
+
+Note that one should always use ``axis`` and set axes limits explicitly
+when prescribing the aspect ratio.
+
+Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by ``daspect=[0.2,1,1])``.
+Alternatively, one can apply ``daspectmode='equal'`` (which means
+equal physical units on the axis).
+
+Here is an example which demonstrates various aspects of setting
+the aspect ratio:
+
+.. code-block:: python
+
+        from scitools.std import *
+        n = 20  # no of periods of a sine function
+        r = 80  # resolution of each period
+        x = linspace(0, n, r*n + 1)
+        amplitude = 1 + sin(2*pi*0.05*x)
+        y = amplitude*sin(2*pi*x)
+        
+        # x-axis goes from 0 to 20, y-axis from -2 to 2.
+        
+        subplot(2, 1, 1)
+        plot(x, y,
+             axis=[x[0], x[-1], y.min(), y.max()],
+             daspectmode='equal',
+             title='daspectmode=equal',
+             )
+        subplot(2, 1, 2)
+        plot(x, y,
+             axis=[x[0], x[-1], y.min(), y.max()],
+             daspect=[0.5,1,1],
+             daspectmode='manual',
+             title='daspectmode=manual, daspect=[0.5,1,1]',
+             )
+        
+        figure()
+        plot(x, y,
+             axis=[x[0], x[-1], y.min(), y.max()],
+             daspect=[1,1,1],
+             daspectmode='manual',
+             title='daspectmode=manual, daspect=[1,1,1]',
+             )
+        
+        show()
+        raw_input()
+
 
 Moving Plot Window
 ------------------
@@ -1040,7 +1171,7 @@ a demo of the three modes.
 Below is an example of how to compute a time series by finite
 differences and comparing this series with the exact solutions.
 For large times, there is a fequency discrepancy that one wants
-to investigate. 
+to investigate.
 
 
 .. code-block:: python
@@ -1071,11 +1202,9 @@ to investigate.
                     plot(t[s:n+2], u[s:n+2], 'r-',
                          t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
                          axis=plot_manager.axis(),
-                         title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \
+                         title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" \ 
                          % (t[n+1], mode))
                 plot_manager.update(n)
-        
-        
 
 
 An appropriate import statement is
@@ -1093,7 +1222,7 @@ Advanced Easyviz Topics
 The information in the previous sections aims at being sufficient for
 the daily work with plotting curves. Sometimes, however, one wants to
 fine-control the plot or how Easyviz behaves. First, we explain how to
-set the backend. Second, we tell how to speed up the 
+set the backend. Second, we tell how to speed up the
 ``from scitools.std import *`` statement.  Third, we show how to operate with
 the plotting program directly and using plotting program-specific
 advanced features. Fourth, we explain how the user can grab ``Figure``
@@ -1102,7 +1231,7 @@ and ``Axis`` objects that Easyviz produces "behind the curtain".
 Controlling the Backend
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The Easyviz backend can either be set in a configuration file (see 
+The Easyviz backend can either be set in a configuration file (see
 "Setting Parameters in the Configuration File" below), by
 importing a special backend in the program, or by adding a
 command-line option
@@ -1152,7 +1281,7 @@ The ``from scitools.std import *`` statement imports many modules and packages:
 
 .. code-block:: python
 
-        from numpy import *    
+        from numpy import *
         from scitools.numpyutils import *  # some convenience functions
         from numpy.lib.scimath import *
         from scipy import *                # if scipy is installed
@@ -1160,8 +1289,8 @@ The ``from scitools.std import *`` statement imports many modules and packages:
         from scitools.StringFunction import StringFunction
         from glob import glob
 
-The ``scipy`` import can take some time and lead to slow start-up of plot 
-scripts. A more minimalistic import for curve plotting is 
+The ``scipy`` import can take some time and lead to slow start-up of plot
+scripts. A more minimalistic import for curve plotting is
 
 .. code-block:: python
 
@@ -1242,7 +1371,7 @@ the current working folder, thereby affecting plots made in this
 folder, or it can be located in the user's home folder, which will
 affect all plotting sessions for the user in question. There is also a
 common SciTools config file ``scitools.cfg`` for the whole site, located
-in the directory where the ``scitools`` package is installed. It is 
+in the directory where the ``scitools`` package is installed. It is
 recommended to copy the ``scitools.cfg``, either from installation or
 the SciTools source folder ``lib/scitools``, to ``.scitools.cfg``
 in your home folder. Then you can easily control the Easyviz backend
@@ -1274,7 +1403,7 @@ of SciPy:
 .. code-block:: py
 
 
-        python myprogram.py --SCITOOLS_easyviz_backend matplotlib \ 
+        python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
             --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 
 
@@ -1285,9 +1414,9 @@ Working with the Plotting Program Directly
 Easyviz supports just the most common plotting commands, typically the
 commands you use "95 percent" of the time when exploring curves.
 Various plotting packages have lots of additional commands for
-different advanced features.  When Easyviz does not have a command
+diverse advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program (known as
+that communicates with the underlying plotting program (the
 "backend") and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
@@ -1299,7 +1428,7 @@ Figure :ref:`fig:plot2i`.
 .. figure:: figs/plot2i.png
 
 
-   Illustration of a text and an arrow using Gnuplot-specific commands  
+   *Illustration of a text and an arrow using Gnuplot-specific commands*
 
 
 Easyviz does not support arrows at arbitrary places inside the plot,
@@ -1329,7 +1458,10 @@ program-independent) way:
 
 For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the ``demo.py`` program in Python interface to
-Gnuplot.
+Gnuplot. Note that one must call ``g.hardcopy`` to save the figure
+to file. A call to ``savefig`` or ``hardcopy`` remakes the plot, but
+without the special calls ``g('...')`` so the label and arrow are
+left out of the hardcopy in the example above.
 
 Here is an example with Matplotlib:
 
@@ -1340,10 +1472,27 @@ Here is an example with Matplotlib:
             # Work with standard matplotlib.pyplot functions
 
 The files ``grab_backend*.py`` in the ``examples`` folder of the SciTools
-source code contain many examples on how to do backend-specific operations,
-especially with Matplotlib.
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the ``pyplot`` object, one must apply ``pyplot.savefig`` to
+correctly save the plot (a plain ``savefig`` or ``hardcopy`` remakes the
+plot without the features inserted by the ``pyplot`` object).
 
-The idea advocated here is that you can quickly generate
+Here are some useful links to documentation of various plotting packages:
+
+ * `Matplotlib Documentation <http://matplotlib.sourceforge.net/contents.html>`_
+
+ * `Gnuplot Documentation <http://www.gnuplot.info/documentation.html>`_
+
+ * `Gnuplot Tips (Not So Frequently Asked Questions) <http://t16web.lanl.gov/Kawano/gnuplot/index-e.html>`_
+
+ * `Grace User's Guide <http://matplotlib.sourceforge.net/contents.html>`_
+
+ * `PyX Documentation <http://pyx.sourceforge.net/documentation.html>`_
+
+ * `PyX Tutorial for Gnuplot Users <http://alumni.cs.ucr.edu/~titus/pyxTutorial/>`_
+
+The idea advocated by Easyviz goes as follows. You can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
@@ -1384,7 +1533,7 @@ object, whose ``set`` method can be used to set axis properties:
 The ``figure()`` call makes a new figure, i.e., a
 new window with curve plots. Figures are numbered as 1, 2, and so on.
 The command ``figure(3)`` sets the current figure object to figure number
-3. 
+3.
 
 Suppose we want to plot our ``y1`` and ``y2`` data in two separate windows.
 We need in this case to work with two ``Figure`` objects:
@@ -1452,6 +1601,11 @@ Here is the code for this third figure:
         savefig('tmp2_3.eps')
 
 
+Note: The Gnuplot backend will overwrite the tickmarks on the :math:`y` axis
+if two or more curves in the same subplot have significantly different
+variations in :math:`y` direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.
+
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
 
@@ -1460,17 +1614,67 @@ must use the command
         ax = axes(viewport=[left, bottom, width, height])
 
 The four parameteres ``left``, ``bottom``, ``width``, ``height``
-are location values between 0 and 1 ((0,0) is the lower-left corner 
+are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).
+
+Mathematics and LaTeX in Legends, Title, and Axis Labels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.
+
+  * With Matplotlib we recommend to use standard LaTeX.
+
+  * With Gnuplot we recommend plain text when plotting on
+    the screen, and greek letters preceded with a backslash
+    when saving to file. Gnuplot suports LaTeX syntax for
+    sub- and super-scripts (underscore and hat, resp.).
+    Other types of mathematics should be expressed in plain text.
+
+The file ``examples/math_text.py`` tests different syntax in legends,
+axis labels, and titles. Running this script with
+``--SCITOOLS_easyviz_backend X`` for different values of ``X``
+(``gnuplot``, ``matplotlib``, ``grace``, ``pyx``, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.
+
+If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:
+
+.. code-block:: python
+
+        from scitools.std import *
+        ...
+        if backend == 'gnuplot':
+            title_screen = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+            title_eps = r'\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2'
+        elif backend == 'matplotlib':
+            title_screen = title_eps = \
+                  r'$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$'
+        else:
+            title_screen = title_eps = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+        
+        plot(...)
+        ...
+        title(title_screen)
+        show()
+        title(title_eps)
+        savefig('myplot.eps')
+
 
 Turning Off All Plotting
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes, especially during debugging or when trying out a large-scale
 experiment, it is nice to turn off all plotting on the screen and
-all making of hardcopies. This is easily done by 
+all making of hardcopies. This is easily done by
 
 .. code-block:: python
 
@@ -1551,7 +1755,7 @@ extensions ``xv`` and ``yv`` of ``x`` and ``y``.
 .. figure:: figs/mesh_ex1.png
 
 
-   Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)  
+   *Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)*
 
 
 The ``surf`` command employs the same syntax, but results in a different
@@ -1569,7 +1773,7 @@ plot (see Figure :ref:`fig:surf_ex1`):
 .. figure:: figs/surf_ex1.png
 
 
-   Result of the surf command (Gnuplot backend)  
+   *Result of the surf command (Gnuplot backend)*
 
 
 The ``surf`` command offers many possibilities to adjust the resulting plot:
@@ -1611,7 +1815,7 @@ Figure :ref:`fig:surf_ex2` displays the result.
 .. figure:: figs/surf_ex2.png
 
 
-   Result of an extended surf command (Gnuplot backend)  
+   *Result of an extended surf command (Gnuplot backend)*
 
 
 
@@ -1665,7 +1869,7 @@ Figure :ref:`fig:contour_ex1`.
 .. figure:: figs/contour_ex1.png
 
 
-   Result of the simplest possible contour command (Gnuplot backend)  
+   *Result of the simplest possible contour command (Gnuplot backend)*
 
 
 The number of levels in a contour plot can be specified with an additional
@@ -1685,7 +1889,7 @@ The result can be seen in Figure :ref:`fig:contour_ex2`.
 .. figure:: figs/contour_ex2.png
 
 
-   A contour plot with 15 contour levels (Gnuplot backend)  
+   *A contour plot with 15 contour levels (Gnuplot backend)*
 
 
 Sometimes one wants contour levels that are not equidistant or not
@@ -1714,7 +1918,7 @@ being displayed in black and white.
 .. figure:: figs/contour_ex3.png
 
 
-   Four individually specified contour levels (Gnuplot backend)  
+   *Four individually specified contour levels (Gnuplot backend)*
 
 
 The ``contourf`` command,
@@ -1734,7 +1938,7 @@ contour plots.
 .. figure:: figs/contourf_ex1.png
 
 
-   Filled contour plot created by the contourf command (VTK backend)  
+   *Filled contour plot created by the contourf command (VTK backend)*
 
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
@@ -1752,7 +1956,7 @@ The contour lines can be "lifted up" in 3D space, as shown in Figure
 .. figure:: figs/contour3_ex1.png
 
 
-   Example on the contour3 command for elevated contour levels (Gnuplot backend)  
+   *Example on the contour3 command for elevated contour levels (Gnuplot backend)*
 
 
 Finally, we show a simple example illustrating the ``meshc`` and ``surfc``
@@ -1781,7 +1985,7 @@ The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
 .. figure:: figs/meshc_ex1.png
 
 
-   Wireframe mesh with contours at the bottom (Gnuplot backend)  
+   *Wireframe mesh with contours at the bottom (Gnuplot backend)*
 
 
 
@@ -1790,7 +1994,7 @@ The resulting plots are displayed in Figures :ref:`fig:meshc_ex1` and
 .. figure:: figs/surfc_ex1.png
 
 
-   Surface plot with contours (Gnuplot backend)  
+   *Surface plot with contours (Gnuplot backend)*
 
 
 
@@ -1863,7 +2067,7 @@ isosurfaces.
 .. figure:: figs/isosurface1.png
 
 
-   Isosurface plot (VTK backend)  
+   *Isosurface plot (VTK backend)*
 
 
 Here is another example that demonstrates the ``isosurface`` command
@@ -1889,7 +2093,7 @@ Figure :ref:`fig:isosurface2` shows the resulting plot.
 .. figure:: figs/isosurface2.png
 
 
-   Another isosurface plot (VTK backend)  
+   *Another isosurface plot (VTK backend)*
 
 
 
@@ -1935,11 +2139,13 @@ Figure :ref:`fig:slice1`.
 .. figure:: figs/slice1.png
 
 
-   Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend)  
+   *Slice plot where the :math:`x` axis is sliced at -1.2, 0.8, and 2, the :math:`y` axis is sliced at 2, and the :math:`z` axis is sliced at -2 and 0.0 (VTK backend)*
 
 
 .. OBS:
+
 .. Slicing with a Surface-object does not work for JHR so far in VTK
+
 
 *Contours in Slice Planes.* With the ``contourslice`` command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example 
@@ -1977,7 +2183,7 @@ commands results in the plot shown in Figure :ref:`fig:contourslice1`.
 .. figure:: figs/contourslice1.png
 
 
-   Contours in slice planes (VTK backend)  
+   *Contours in slice planes (VTK backend)*
 
 
 Here is another example where we draw contour slices from a
@@ -2005,7 +2211,7 @@ in the plane :math:`z=8`. Figure :ref:`fig:contourslice3` displays the result.
 .. figure:: figs/contourslice3.png
 
 
-   Contour slice plot of a 3D MRI data set (VTK backend)  
+   *Contour slice plot of a 3D MRI data set (VTK backend)*
 
 
 
@@ -2055,7 +2261,7 @@ turn produces the plot in Figure :ref:`fig:quiver_ex1`.
 .. figure:: figs/quiver_ex1.png
 
 
-   Velocity vector plot (Gnuplot backend)  
+   *Velocity vector plot (Gnuplot backend)*
 
 
 The arrows in a quiver plot are automatically scaled to fit within the
@@ -2105,7 +2311,7 @@ The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
 .. figure:: figs/quiver_ex2.png
 
 
-   Combined quiver and pseudocolor plot (VTK backend)  
+   *Combined quiver and pseudocolor plot (VTK backend)*
 
 
 .. _fig:quiver_ex3:
@@ -2113,7 +2319,7 @@ The resulting plots can be seen in Figure :ref:`fig:quiver_ex2` and
 .. figure:: figs/quiver_ex3.png
 
 
-   Combined quiver and pseudocolor plot (VTK backend)  
+   *Combined quiver and pseudocolor plot (VTK backend)*
 
 
 Visualization of 3D vector fields by arrows at grid points can be done
@@ -2142,7 +2348,7 @@ and red, respectively. The resulting plot is presented in Figure
 .. figure:: figs/quiver3_ex1.png
 
 
-   3D quiver plot (VTK backend)  
+   *3D quiver plot (VTK backend)*
 
 
 
@@ -2223,7 +2429,7 @@ resulting plot is presented in Figure :ref:`fig:streamline_ex1`.
 .. figure:: figs/streamline_ex1.png
 
 
-   Stream line plot (Vtk backend)  
+   *Stream line plot (Vtk backend)*
 
 
 The next example demonstrates the ``streamtube`` command applied to the 
@@ -2249,7 +2455,7 @@ tubes. The resulting plot is presented in Figure
 .. figure:: figs/streamtube_ex1.png
 
 
-   Stream tubes (Vtk backend)  
+   *Stream tubes (Vtk backend)*
 
 
 Finally, we illustrate the ``streamribbon`` command:
@@ -2272,7 +2478,7 @@ Figure :ref:`fig:streamribbon_ex1` shows the resulting stream ribbons.
 .. figure:: figs/streamribbon_ex1.png
 
 
-   Stream ribbons (VTK backend)  
+   *Stream ribbons (VTK backend)*
 
 
 
@@ -2521,6 +2727,8 @@ limits by
 
 
 
+.. _ev:tut:install:
+
 Installation
 ============
 
@@ -2529,15 +2737,24 @@ must install SciTools, which is available from
 `Google code <http://code.google.com/p/scitools>`_.
 
 If you run a Linux system that allows installation from Debian
-repositories (Ubuntu is an example), you get SciTools and all its
-dependencies with one Unix command:
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:
 
-.. code-block:: py
-
+.. code-block:: console
 
         Unix> sudo apt-get install python-scitools
 
-(SciTools is in standard Debian.)
+because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:
+
+.. code-block:: console
+
+        Unix> sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+
+
 
 Otherwise, you download the tarball with the SciTools software, pack it out,
 go the ``scitools`` folder, and run the standard command
@@ -2567,7 +2784,7 @@ Installing Gnuplot
 Linux/Unix
 ----------
 
-*Compile from Source.* Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds 
+*Compile from Source.* Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
 easily on most Unix systems. You also need the ``Gnuplot`` Python
 module, which can be obtained from ``gnuplot-py.sourceforge.net``.
 
@@ -2722,13 +2939,14 @@ Another remedy can be to add a ``show()`` call at the end of the plotting:
 
 .. test on Windows!
 
+
 I Get Thread Errors While Plotting
 ----------------------------------
 
 With the Gnuplot backend, thread errors from Python may occur if you
 plot many curves. The remedy is to do ``import time`` and insert
 a ``time.sleep(0.2)`` (pause the program for 0.2 sec) between each call
-to the ``plot`` command. 
+to the ``plot`` command.
 
 Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
 plotting many curves with the Gnuplot backend.
@@ -2751,7 +2969,6 @@ of Matplotlib parameters in this file.
 
 Another fix of LaTeX-related problems is to switch to another backend
 than Matplotlib.
-
 
 
 Old Programs with 2D Scalar/Vector Field Plotting Do Not Work
@@ -2791,27 +3008,13 @@ SciTools with Gnuplot as plotting engine:
 
 
 
-Can I Easily Turn Off All Plotting?
------------------------------------
-
-Yes, this is very convenient when debugging other (non-plotting) parts
-of a program. Just write
-
-.. code-block:: py
-
-
-        from scitools.std import *
-        turn_off_plotting(globals())
-
-
-
 Check Your Backends!
 --------------------
 
 When you encounter a problem with Easyviz plotting, make sure that the
 backend works correctly on its own (there may, e.g., be installation
 problems with the backend - Easyviz just calls the backend to do the
-plotting). 
+plotting).
 
 Gnuplot
 ~~~~~~~
@@ -2829,7 +3032,7 @@ This should result in a plot of the sine function on the screen.
 If this command does not work, Easyviz will not work with the Gnuplot
 backend. A common problem is that Gnuplot is installed, but the path
 to the Gnuplot executable is not registered in the ``PATH`` environment
-variable. See the section *Installing Gnuplot* if you need help with 
+variable. See the section *Installing Gnuplot* if you need help with
 installing the Gnuplot program and its Python interface.
 
 Matplotlib
@@ -2851,6 +3054,46 @@ In case of problems, go to the Matplotlib source directory, remove the
 ``build`` subdirectory, and try a new install with ``python setup.py install``.
 
 
+Can I Easily Turn Off All Plotting?
+-----------------------------------
+
+Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write
+
+.. code-block:: py
+
+
+        from scitools.std import *
+        turn_off_plotting(globals())
+
+
+
+How Can I Change the Type of Gnuplot Window?
+--------------------------------------------
+
+The configuration file (``.scitools.cfg`` in your home directory or a
+local directory, copied from ``scitools.cfg`` in the SciTools source
+code distribution) has an item for controlling the type of *terminal*
+used by Gnuplot:
+
+.. code-block:: py
+
+
+        [gnuplot]
+        ...
+        default_term               = <str> wxt
+
+Here, the ``wxt`` terminal, based on wxWidgets, is chosen. Other
+choices are ``x11`` on systems supporting X11 graphics, or ``aqua`` on
+Mac. The ``wxt`` value is an allround choice since wxWidgets work, in theory,
+on all platforms.
+
+How Can The Aspect Ratio of The Axes Be Controlled?
+---------------------------------------------------
+
+See the section "Controlling the Aspect Ratio of Axes" in the
+tutorial.
+
 Trouble with Gnuplot and Threads
 --------------------------------
 
@@ -2864,8 +3107,7 @@ When using the Gnuplot backend, the following error may be encountered:
 A remedy is to create fewer plots, and for animations, update the plot
 window less frequently. For example,
 
-.. code-block:: py
-
+.. code-block:: python
 
         for i in range(number_of_frames_in_animation):
             <prepare data>
@@ -2919,7 +3161,7 @@ When plotting inside a loop, e.g.,
 
         for i in some_values:
             ...
-            plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+            plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
                  xlabel='t', ylabel='Xt', title='My Title')
 
 Gnuplot may lead to thread errors. A remedy is to do some plotting
@@ -2928,7 +3170,7 @@ outside the loop and then only update the data inside the loop:
 .. code-block:: py
 
 
-        plot(t, X0, 'r-6', axis=(0, 1, -2, 2), 
+        plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
              xlabel='t', ylabel='Xt', title='My Title')
         for i in some_values:
             ...
@@ -2947,6 +3189,13 @@ Another useful source of information is the many examples that come
 with the SciTools/Easyviz source code. The examples are located in
 the ``examples`` subfolder of the source.
 
+
+Grace Gives Error Messages When Calling Savefig/Hardcopy
+--------------------------------------------------------
+
+Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.
 
 I Cannot Find Out How My Plot Can Be Created
 --------------------------------------------

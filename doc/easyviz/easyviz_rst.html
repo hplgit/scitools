@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
 <title></title>
 <style type="text/css">
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 6253 2010-03-02 00:24:53Z milde $
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -46,6 +46,10 @@ blockquote.epigraph {
 
 dl.docutils dd {
   margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
 
 /* Uncomment (and remove this text!) to get bold-faced definition list terms
 dl.docutils dt {
@@ -185,7 +189,7 @@ img.align-center, .figure.align-center, object.align-center {
 
 /* reset inner alignment in figures */
 div.align-right {
-  text-align: left }
+  text-align: inherit }
 
 /* div.align-center * { */
 /*   text-align: left } */
@@ -245,7 +249,7 @@ pre.address {
   margin-top: 0 ;
   font: inherit }
 
-pre.literal-block, pre.doctest-block {
+pre.literal-block, pre.doctest-block, pre.math {
   margin-left: 2em ;
   margin-right: 2em }
 
@@ -318,7 +322,7 @@ ul.auto-toc {
 <!-- TITLE: Easyviz Documentation -->
 <!-- AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo -->
 <!-- AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo -->
-<!-- DATE: Aug 08, 2008 -->
+<!-- DATE: Jun 12, 2012 -->
 <div class="section" id="easyviz">
 <h1>Easyviz</h1>
 <p>Easyviz is a unified interface to various packages for scientific
@@ -524,6 +528,8 @@ for i in xrange(len(t)):
 plot(t, y)
 show()  # optional
 </pre>
+<p>If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see the chapter <a class="reference internal" href="#installation">Installation</a>.</p>
 <p>The first line imports all of SciTools and Easyviz that can be handy
 to have when doing scientific computations. This includes everything
 from <tt class="docutils literal">numpy</tt> (from <tt class="docutils literal">numpy import *</tt>),
@@ -568,7 +574,7 @@ we can suppress the plot from being shown at the screen, which is
 useful when create a large number of figure files in programs.</p>
 <div class="figure" id="fig-plot1a">
 <img alt="figs/plot1a.png" src="figs/plot1a.png" />
-<p class="caption">A simple plot in PostScript format  (fig:plot1a)</p>
+<p class="caption"><em>A simple plot in PostScript format</em>  (fig:plot1a)</p>
 </div>
 <p>On some platforms, some backends may result in a plot that is shown in
 just a fraction of a second on the screen before the plot window disappears
@@ -624,7 +630,7 @@ See Figure <a class="reference internal" href="#fig-plot1c">fig:plot1c</a> for w
 plot looks like and how <tt class="docutils literal">t^2</tt> is typeset in Gnuplot.</p>
 <div class="figure" id="fig-plot1c">
 <img alt="figs/plot1c.png" src="figs/plot1c.png" />
-<p class="caption">A single curve with  label, title, and axes adjusted.   (fig:plot1c)</p>
+<p class="caption"><em>A single curve with</em>  label, title, and axes adjusted.   (fig:plot1c)</p>
 </div>
 </div>
 <div class="section" id="plotting-multiple-curves">
@@ -675,14 +681,14 @@ and so on. The visual result appears in Figure <a class="reference internal" hre
 plot in the same window. This new plot just erases the previous curves.</p>
 <div class="figure" id="fig-plot2a">
 <img alt="figs/plot2a.png" src="figs/plot2a.png" />
-<p class="caption">Two curves in the same plot  (fig:plot2a)</p>
+<p class="caption"><em>Two curves in the same plot</em>  (fig:plot2a)</p>
 </div>
 <p>With the keyword argrument <tt class="docutils literal">grid=True</tt> to <tt class="docutils literal">plot</tt> we can add a
 grid, which is frequently used when plotting curves (see
 Figure <a class="reference internal" href="#fig-plot2f">fig:plot2f</a>).</p>
 <div class="figure" id="fig-plot2f">
 <img alt="figs/plot2f.png" src="figs/plot2f.png" />
-<p class="caption">Curves with a grid  (fig:plot2f)</p>
+<p class="caption"><em>Curves with a grid</em>  (fig:plot2f)</p>
 </div>
 <p>The default location of the legends is dependent on the backend
 (some have a fixed location, like Gnuplot, and some try to find
@@ -766,7 +772,7 @@ plot(t, y1, 'r-', t, y2, 'bo')
 Figure <a class="reference internal" href="#fig-plot2c">fig:plot2c</a>.</p>
 <div class="figure" id="fig-plot2c">
 <img alt="figs/plot2c.png" src="figs/plot2c.png" />
-<p class="caption">Two curves in the same plot, with controlled line styles  (fig:plot2c)</p>
+<p class="caption"><em>Two curves in the same plot, with controlled line styles</em>  (fig:plot2c)</p>
 </div>
 <p>Assume now that we want to plot the blue circles at every 4 points only.
 We can grab every 4 points out of the <tt class="docutils literal">t</tt> array by using an appropriate
@@ -802,7 +808,7 @@ and symbol size depends on the underlying plotting program. For
 the Gnuplot program one can view the effect in Figure <a class="reference internal" href="#fig-plot2g">fig:plot2g</a>.</p>
 <div class="figure" id="fig-plot2g">
 <img alt="figs/plot2g.png" src="figs/plot2g.png" />
-<p class="caption">Circles at every 4 points and extended line thickness (6) and circle size (3)  (fig:plot2g)</p>
+<p class="caption"><em>Circles at every 4 points and extended line thickness (6) and circle size (3)</em>  (fig:plot2g)</p>
 </div>
 <dl class="docutils">
 <dt>The different available line colors include</dt>
@@ -896,7 +902,7 @@ savefig('tmp3.png')   # or hardcopy
 <p>The plot is shown in Figure <a class="reference internal" href="#fig-plot3">fig:plot3</a>.</p>
 <div class="figure" id="fig-plot3">
 <img alt="figs/plot3.png" src="figs/plot3.png" />
-<p class="caption">A plot with three curves  (fig:plot3)</p>
+<p class="caption"><em>A plot with three curves</em>  (fig:plot3)</p>
 </div>
 <p><em>Minimalistic Typing.</em> When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
@@ -913,6 +919,18 @@ text(x, y, 'Some text')
 <p><em>More Examples.</em> The examples in this tutorial, as well as
 additional examples, can be found in the <tt class="docutils literal">examples</tt> directory in the
 root directory of the SciTools source code tree.</p>
+</div>
+<div class="section" id="math-syntax-in-legends-and-titles">
+<h2>Math Syntax in Legends and Titles</h2>
+<p>Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.</p>
 </div>
 <div class="section" id="interactive-plotting-sessions">
 <h2>Interactive Plotting Sessions</h2>
@@ -959,7 +977,7 @@ function evolves as s is decreased. In Python we implement the
 formula above as a function <tt class="docutils literal">f(x, m, s)</tt>.</p>
 <div class="figure" id="fig-plot4">
 <img alt="figs/plot4.png" src="figs/plot4.png" />
-<p class="caption">Different shapes of a Gaussian function  (fig:plot4)</p>
+<p class="caption"><em>Different shapes of a Gaussian function</em>  (fig:plot4)</p>
 </div>
 <p>The animation is created by varying s in a loop and for each s
 issue a <tt class="docutils literal">plot</tt> command. A moving curve is then visible on the screen.
@@ -1032,10 +1050,10 @@ will give a wrong sequence of frames in the movie. For instance,
 <p>Note that the names of plot files specified when making hardopies must
 be consistent with the specification of names in the call to <tt class="docutils literal">movie</tt>.
 Typically, one applies a Unix wildcard notation in the call to
-<tt class="docutils literal">movie</tt>, say <tt class="docutils literal"><span class="pre">plotfile*.eps</span></tt>, where the asterisk will match any set of
+<tt class="docutils literal">movie</tt>, say <tt class="docutils literal"><span class="pre">plotfile*.png</span></tt>, where the asterisk will match any set of
 characters. When specifying hardcopies, we must then use a filename
-that is consistent with <tt class="docutils literal"><span class="pre">plotfile*.eps</span></tt>, that is, the filename must
-start with <tt class="docutils literal">plotfile</tt> and end with <tt class="docutils literal">.eps</tt>, but in between
+that is consistent with <tt class="docutils literal"><span class="pre">plotfile*.png</span></tt>, that is, the filename must
+start with <tt class="docutils literal">plotfile</tt> and end with <tt class="docutils literal">.png</tt>, but in between
 these two parts we are free to construct (e.g.) a frame number padded
 with zeros.</p>
 <p>We recommend to always remove previously generated plot files before
@@ -1062,49 +1080,72 @@ os.chdir(subdir)           # move to subfolder
 os.chdir(os.pardir)        # optional: move up to parent folder
 </pre>
 <p><em>Movie Formats.</em> Having a set of (e.g.) <tt class="docutils literal"><span class="pre">tmp*.png</span></tt> files, one can simply generate a movie by
-a <tt class="docutils literal"><span class="pre">movie('tmp*.png')</span></tt> call. The <tt class="docutils literal">movie</tt> function generates a movie
-file called <tt class="docutils literal">movie.avi</tt> (AVI format), <tt class="docutils literal">movie.mpeg</tt> (MPEG format), or
-<tt class="docutils literal">movie.gif</tt> (animated GIF format) in the current working
-directory. The movie format depends on the encoders found on your
-machine.</p>
-<p>You can get complete control of the movie format and the
-name of the movie file by supplying more arguments to the
-<tt class="docutils literal">movie</tt> function. First, let us generate an animated GIF
-file called <tt class="docutils literal">tmpmovie.gif</tt>:</p>
+a <tt class="docutils literal"><span class="pre">movie('tmp*.png')</span></tt> call. The format of the movie is determined by
+which video encoders that are installed on the computer. The <tt class="docutils literal">movie</tt>
+function runs through a list of encoders (<tt class="docutils literal">convert</tt>, <tt class="docutils literal">mencoder</tt>,
+<tt class="docutils literal">ffmpeg mpeg_encode</tt>, <tt class="docutils literal">ppmtompeg</tt>, <tt class="docutils literal">mpeg2enc</tt>, <tt class="docutils literal">html</tt>) and choses the
+first one which is installed. The fall back encoder <tt class="docutils literal">html</tt> actually
+does not create a video file, but makes insetad an HTML file that can
+play the series of hardcopies made (<tt class="docutils literal"><span class="pre">tmp*.png</span></tt>, for instance).
+When no filename is given to the <tt class="docutils literal">movie</tt> function, the output file
+with the movie has filestem <tt class="docutils literal">movie</tt> and extension depending on the
+video format and the encoder used. For example, if <tt class="docutils literal">convert</tt> was used
+to create an animated GIF file, the default output file is <tt class="docutils literal">movie.gif</tt>.
+Similarly, <tt class="docutils literal">movie.avi</tt> is in AVI format, <tt class="docutils literal">movie.mpeg</tt> is in MPEG format,
+and so forth.</p>
+<p>You can get complete control of the movie format and the name of the
+movie file by supplying the <tt class="docutils literal">encoder</tt> and <tt class="docutils literal">output_file</tt> arguments to
+the <tt class="docutils literal">movie</tt> function. This is the recommended use. Here is an
+example on generating an animated GIF file <tt class="docutils literal">tmpmovie.gif</tt> with
+the <tt class="docutils literal">convert</tt> program from the ImageMagick software suite:</p>
 <pre class="literal-block">
-movie('tmp_*.eps', encoder='convert', fps=2,
+movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 </pre>
-<p>The generation of animated GIF images applies the <tt class="docutils literal">convert</tt> program
-from the ImageMagick suite. This program must of course be installed
-on the machine. The argument fps stands for frames per second so
-here the speed of the movie is slow in that there is a delay of half
-a second between each frame (image file).
-To view the animated GIF file, one can use the <tt class="docutils literal">animate</tt>
-program (also from ImageMagick) and give the movie file as command-line
-argument. One can alternatively put the GIF file in a web page
-in an IMG tag such that a browser automatically displays the movie.</p>
+<p>This call requires ImageMagick to be installed on the machine. The
+argument <tt class="docutils literal">fps</tt> stands for frames per second so here the speed of the
+movie is slow in that there is a delay of half a second between each
+frame (image file).  To view the animated GIF file, one can use the
+<tt class="docutils literal">animate</tt> program (also from ImageMagick) and give the movie file as
+command-line argument. One can alternatively put the GIF file in a web
+page in an IMG tag such that a browser automatically displays the
+movie.</p>
+<p>Making an HTML file that can play the movie in a web browser
+is carried out by the call:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='html', fps=10,
+      output_file='tmpmovie.html')
+</pre>
+<p>Just load <tt class="docutils literal">tmpmovie.html</tt> into a browser (e.g., run <tt class="docutils literal">firefox tmpmovie.html</tt>
+from the command line).</p>
 <p>An AVI movie can be generated by the call:</p>
 <pre class="literal-block">
-movie('tmp_*.eps', encoder='ffmpeg', fps=4,
-      output_file='tmpmovie1.avi',
+movie('tmp_*.png', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie.avi',
 </pre>
 <p>Alternatively, we may generate an MPEG movie using
 the <tt class="docutils literal">ppmtompeg</tt> encoder from the Netpbm suite of
 image manipulation tools:</p>
 <pre class="literal-block">
-movie('tmp_*.eps', encoder='ppmtompeg', fps=24,
-      output_file='tmpmovie2.mpeg',
+movie('tmp_*.png', encoder='ppmtompeg', fps=24,
+      output_file='tmpmovie.mpeg',
 </pre>
 <p>The <tt class="docutils literal">ppmtompeg</tt> supports only a few (high) frame rates.</p>
 <p>The next sample call to <tt class="docutils literal">movie</tt> uses the Mencoder tool and specifies
 some additional arguments (video codec, video bitrate, and the
 quantization scale):</p>
 <pre class="literal-block">
-movie('tmp_*.eps', encoder='mencoder', fps=24,
+movie('tmp_*.png', encoder='mencoder', fps=24,
       output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
 </pre>
+<p>Here is yet another example:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='ffmpeg',
+      output_file='tmpmovie1c.mpeg', vodec='mpeg2video')
+</pre>
+<p>The file <tt class="docutils literal">examples/movie_demo1.py</tt> that comes with the SciTools source
+code generates frames in a movie and creates movie files in many formats.</p>
 <p>Playing movie files can be done by a lot of programs. Windows Media
 Player is a default choice on Windows machines. On Unix, a variety
 of tools can be used. For animated GIF files the <tt class="docutils literal">animate</tt> program
@@ -1113,6 +1154,79 @@ show the file in a web page with the HTML command
 <tt class="docutils literal">&lt;img <span class="pre">src=&quot;tmpmovie.gif&quot;&gt;</span></tt>. AVI and MPEG files can be played by,
 for example, the
 <tt class="docutils literal">myplayer</tt>, <tt class="docutils literal">vlc</tt>, or <tt class="docutils literal">totem</tt> programs.</p>
+<p><em>Making Movies in Batch.</em> Sometimes it is desired to carry out
+large numbers of computer experiments and create movies in each
+individual experiments. Then one probably does not want to have
+the screen full of movie windows. To turn off showing the movie
+on the screen while creating the individual frames, just
+give the <tt class="docutils literal">show=False</tt> keyword argument to the <tt class="docutils literal">plot</tt> function.
+All hardcopies and the movies are then made in batch, which also
+might speed up the program since rendering graphics on the screen
+is avoided.</p>
+</div>
+<div class="section" id="controlling-the-aspect-ratio-of-axes">
+<h2>Controlling the Aspect Ratio of Axes</h2>
+<p>By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.</p>
+<p>In the <tt class="docutils literal">gnuplot</tt> and <tt class="docutils literal">matplotlib</tt>
+backends, we set <tt class="docutils literal">daspectmode=manual</tt> and
+<tt class="docutils literal"><span class="pre">daspect=[r,1,1]</span></tt>, where <tt class="docutils literal">r</tt> is the ratio of the y-axis length to
+the x-axis length
+(<tt class="docutils literal">r</tt> equal to <tt class="docutils literal">1</tt> gives a square plot area). For example:</p>
+<pre class="literal-block">
+plot(x, y, 'r-',
+     axis=[0, 1, 0, 1],
+     daspect=[1,1,1],
+     daspectmode='manual')
+</pre>
+<p>Note that one should always use <tt class="docutils literal">axis</tt> and set axes limits explicitly
+when prescribing the aspect ratio.</p>
+<p>Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by <tt class="docutils literal"><span class="pre">daspect=[0.2,1,1])</span></tt>.
+Alternatively, one can apply <tt class="docutils literal"><span class="pre">daspectmode='equal'</span></tt> (which means
+equal physical units on the axis).</p>
+<p>Here is an example which demonstrates various aspects of setting
+the aspect ratio:</p>
+<pre class="literal-block">
+from scitools.std import *
+n = 20  # no of periods of a sine function
+r = 80  # resolution of each period
+x = linspace(0, n, r*n + 1)
+amplitude = 1 + sin(2*pi*0.05*x)
+y = amplitude*sin(2*pi*x)
+
+# x-axis goes from 0 to 20, y-axis from -2 to 2.
+
+subplot(2, 1, 1)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspectmode='equal',
+     title='daspectmode=equal',
+     )
+subplot(2, 1, 2)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[0.5,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[0.5,1,1]',
+     )
+
+figure()
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[1,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[1,1,1]',
+     )
+
+show()
+raw_input()
+</pre>
 </div>
 <div class="section" id="moving-plot-window">
 <h2>Moving Plot Window</h2>
@@ -1319,16 +1433,16 @@ python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
 <p>Easyviz supports just the most common plotting commands, typically the
 commands you use &quot;95 percent&quot; of the time when exploring curves.
 Various plotting packages have lots of additional commands for
-different advanced features.  When Easyviz does not have a command
+diverse advanced features.  When Easyviz does not have a command
 that supports a particular feature, one can grab the Python object
-that communicates with the underlying plotting program (known as
+that communicates with the underlying plotting program (the
 &quot;backend&quot;) and work with this object directly, using plotting
 program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
 Figure <a class="reference internal" href="#fig-plot2i">fig:plot2i</a>.</p>
 <div class="figure" id="fig-plot2i">
 <img alt="figs/plot2i.png" src="figs/plot2i.png" />
-<p class="caption">Illustration of a text and an arrow using Gnuplot-specific commands  (fig:plot2i)</p>
+<p class="caption"><em>Illustration of a text and an arrow using Gnuplot-specific commands</em>  (fig:plot2i)</p>
 </div>
 <p>Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
@@ -1354,7 +1468,10 @@ if backend == 'gnuplot':
 </pre>
 <p>For the available features and the syntax of commands, we refer to
 the Gnuplot manual and the <tt class="docutils literal">demo.py</tt> program in Python interface to
-Gnuplot.</p>
+Gnuplot. Note that one must call <tt class="docutils literal">g.hardcopy</tt> to save the figure
+to file. A call to <tt class="docutils literal">savefig</tt> or <tt class="docutils literal">hardcopy</tt> remakes the plot, but
+without the special calls <tt class="docutils literal"><span class="pre">g('...')</span></tt> so the label and arrow are
+left out of the hardcopy in the example above.</p>
 <p>Here is an example with Matplotlib:</p>
 <pre class="literal-block">
 if backend == 'matplotlib':
@@ -1362,9 +1479,23 @@ if backend == 'matplotlib':
     # Work with standard matplotlib.pyplot functions
 </pre>
 <p>The files <tt class="docutils literal"><span class="pre">grab_backend*.py</span></tt> in the <tt class="docutils literal">examples</tt> folder of the SciTools
-source code contain many examples on how to do backend-specific operations,
-especially with Matplotlib.</p>
-<p>The idea advocated here is that you can quickly generate
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the <tt class="docutils literal">pyplot</tt> object, one must apply <tt class="docutils literal">pyplot.savefig</tt> to
+correctly save the plot (a plain <tt class="docutils literal">savefig</tt> or <tt class="docutils literal">hardcopy</tt> remakes the
+plot without the features inserted by the <tt class="docutils literal">pyplot</tt> object).</p>
+<p>Here are some useful links to documentation of various plotting packages:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/contents.html">Matplotlib Documentation</a></li>
+<li><a class="reference external" href="http://www.gnuplot.info/documentation.html">Gnuplot Documentation</a></li>
+<li><a class="reference external" href="http://t16web.lanl.gov/Kawano/gnuplot/index-e.html">Gnuplot Tips (Not So Frequently Asked Questions)</a></li>
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/contents.html">Grace User's Guide</a></li>
+<li><a class="reference external" href="http://pyx.sourceforge.net/documentation.html">PyX Documentation</a></li>
+<li><a class="reference external" href="http://alumni.cs.ucr.edu/~titus/pyxTutorial/">PyX Tutorial for Gnuplot Users</a></li>
+</ul>
+</blockquote>
+<p>The idea advocated by Easyviz goes as follows. You can quickly generate
 plots with Easyviz using standard commands that are independent of
 the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
@@ -1452,6 +1583,10 @@ title('A figure with two plots')
 show()
 savefig('tmp2_3.eps')
 </pre>
+<p>Note: The Gnuplot backend will overwrite the tickmarks on the y axis
+if two or more curves in the same subplot have significantly different
+variations in y direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.</p>
 <p>If we need to place an axis at an arbitrary position in the figure, we
 must use the command:</p>
 <pre class="literal-block">
@@ -1462,6 +1597,53 @@ are location values between 0 and 1 ((0,0) is the lower-left corner
 and (1,1) is the upper-right corner). However, this might be a bit
 different in the different backends (see the documentation for the
 backend in question).</p>
+</div>
+<div class="section" id="mathematics-and-latex-in-legends-title-and-axis-labels">
+<h3>Mathematics and LaTeX in Legends, Title, and Axis Labels</h3>
+<p>Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.</p>
+<blockquote>
+<ul class="simple">
+<li>With Matplotlib we recommend to use standard LaTeX.</li>
+<li>With Gnuplot we recommend plain text when plotting on
+the screen, and greek letters preceded with a backslash
+when saving to file. Gnuplot suports LaTeX syntax for
+sub- and super-scripts (underscore and hat, resp.).
+Other types of mathematics should be expressed in plain text.</li>
+</ul>
+</blockquote>
+<p>The file <tt class="docutils literal">examples/math_text.py</tt> tests different syntax in legends,
+axis labels, and titles. Running this script with
+<tt class="docutils literal"><span class="pre">--SCITOOLS_easyviz_backend</span> X</tt> for different values of <tt class="docutils literal">X</tt>
+(<tt class="docutils literal">gnuplot</tt>, <tt class="docutils literal">matplotlib</tt>, <tt class="docutils literal">grace</tt>, <tt class="docutils literal">pyx</tt>, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.</p>
+<p>If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:</p>
+<pre class="literal-block">
+from scitools.std import *
+...
+if backend == 'gnuplot':
+    title_screen = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+    title_eps = r'\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2'
+elif backend == 'matplotlib':
+    title_screen = title_eps = \
+          r'$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$'
+else:
+    title_screen = title_eps = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+
+plot(...)
+...
+title(title_screen)
+show()
+title(title_eps)
+savefig('myplot.eps')
+</pre>
 </div>
 <div class="section" id="turning-off-all-plotting">
 <h3>Turning Off All Plotting</h3>
@@ -1530,7 +1712,7 @@ for i in xrange(x.size):
 extensions <tt class="docutils literal">xv</tt> and <tt class="docutils literal">yv</tt> of <tt class="docutils literal">x</tt> and <tt class="docutils literal">y</tt>.</p>
 <div class="figure" id="fig-mesh-ex1">
 <img alt="figs/mesh_ex1.png" src="figs/mesh_ex1.png" />
-<p class="caption">Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)  (fig:mesh_ex1)</p>
+<p class="caption"><em>Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)</em>  (fig:mesh_ex1)</p>
 </div>
 <p>The <tt class="docutils literal">surf</tt> command employs the same syntax, but results in a different
 plot (see Figure <a class="reference internal" href="#fig-surf-ex1">fig:surf_ex1</a>):</p>
@@ -1539,7 +1721,7 @@ surf(xv, yv, values)
 </pre>
 <div class="figure" id="fig-surf-ex1">
 <img alt="figs/surf_ex1.png" src="figs/surf_ex1.png" />
-<p class="caption">Result of the surf command (Gnuplot backend)  (fig:surf_ex1)</p>
+<p class="caption"><em>Result of the surf command (Gnuplot backend)</em>  (fig:surf_ex1)</p>
 </div>
 <p>The <tt class="docutils literal">surf</tt> command offers many possibilities to adjust the resulting plot:</p>
 <pre class="literal-block">
@@ -1569,7 +1751,7 @@ surf(xv, yv, values,
 <p>Figure <a class="reference internal" href="#fig-surf-ex2">fig:surf_ex2</a> displays the result.</p>
 <div class="figure" id="fig-surf-ex2">
 <img alt="figs/surf_ex2.png" src="figs/surf_ex2.png" />
-<p class="caption">Result of an extended surf command (Gnuplot backend)  (fig:surf_ex2)</p>
+<p class="caption"><em>Result of an extended surf command (Gnuplot backend)</em>  (fig:surf_ex2)</p>
 </div>
 </div>
 <div class="section" id="contour-plots">
@@ -1618,7 +1800,7 @@ contour(xv, yv, values)
 Figure <a class="reference internal" href="#fig-contour-ex1">fig:contour_ex1</a>.</p>
 <div class="figure" id="fig-contour-ex1">
 <img alt="figs/contour_ex1.png" src="figs/contour_ex1.png" />
-<p class="caption">Result of the simplest possible contour command (Gnuplot backend)  (fig:contour_ex1)</p>
+<p class="caption"><em>Result of the simplest possible contour command (Gnuplot backend)</em>  (fig:contour_ex1)</p>
 </div>
 <p>The number of levels in a contour plot can be specified with an additional
 argument:</p>
@@ -1629,7 +1811,7 @@ contour(xv, yv, values, n)
 <p>The result can be seen in Figure <a class="reference internal" href="#fig-contour-ex2">fig:contour_ex2</a>.</p>
 <div class="figure" id="fig-contour-ex2">
 <img alt="figs/contour_ex2.png" src="figs/contour_ex2.png" />
-<p class="caption">A contour plot with 15 contour levels (Gnuplot backend)  (fig:contour_ex2)</p>
+<p class="caption"><em>A contour plot with 15 contour levels (Gnuplot backend)</em>  (fig:contour_ex2)</p>
 </div>
 <p>Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
@@ -1649,7 +1831,7 @@ corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.</p>
 <div class="figure" id="fig-contour-ex3">
 <img alt="figs/contour_ex3.png" src="figs/contour_ex3.png" />
-<p class="caption">Four individually specified contour levels (Gnuplot backend)  (fig:contour_ex3)</p>
+<p class="caption"><em>Four individually specified contour levels (Gnuplot backend)</em>  (fig:contour_ex3)</p>
 </div>
 <p>The <tt class="docutils literal">contourf</tt> command:</p>
 <pre class="literal-block">
@@ -1660,7 +1842,7 @@ Only the Matplotlib and VTK backends currently supports filled
 contour plots.</p>
 <div class="figure" id="fig-contourf-ex1">
 <img alt="figs/contourf_ex1.png" src="figs/contourf_ex1.png" />
-<p class="caption">Filled contour plot created by the contourf command (VTK backend)  (fig:contourf_ex1)</p>
+<p class="caption"><em>Filled contour plot created by the contourf command (VTK backend)</em>  (fig:contourf_ex1)</p>
 </div>
 <p>The contour lines can be &quot;lifted up&quot; in 3D space, as shown in Figure
 <a class="reference internal" href="#fig-contour3-ex1">fig:contour3_ex1</a>, using the <tt class="docutils literal">contour3</tt> command:</p>
@@ -1669,7 +1851,7 @@ contour3(xv, yv, values, 15)
 </pre>
 <div class="figure" id="fig-contour3-ex1">
 <img alt="figs/contour3_ex1.png" src="figs/contour3_ex1.png" />
-<p class="caption">Example on the contour3 command for elevated contour levels (Gnuplot backend)  (fig:contour3_ex1)</p>
+<p class="caption"><em>Example on the contour3 command for elevated contour levels (Gnuplot backend)</em>  (fig:contour3_ex1)</p>
 </div>
 <p>Finally, we show a simple example illustrating the <tt class="docutils literal">meshc</tt> and <tt class="docutils literal">surfc</tt>
 commands:</p>
@@ -1689,11 +1871,11 @@ surfc(xv, yv, values,
 <a class="reference internal" href="#fig-surfc-ex1">fig:surfc_ex1</a>.</p>
 <div class="figure" id="fig-meshc-ex1">
 <img alt="figs/meshc_ex1.png" src="figs/meshc_ex1.png" />
-<p class="caption">Wireframe mesh with contours at the bottom (Gnuplot backend)  (fig:meshc_ex1)</p>
+<p class="caption"><em>Wireframe mesh with contours at the bottom (Gnuplot backend)</em>  (fig:meshc_ex1)</p>
 </div>
 <div class="figure" id="fig-surfc-ex1">
 <img alt="figs/surfc_ex1.png" src="figs/surfc_ex1.png" />
-<p class="caption">Surface plot with contours (Gnuplot backend)  (fig:surfc_ex1)</p>
+<p class="caption"><em>Surface plot with contours (Gnuplot backend)</em>  (fig:surfc_ex1)</p>
 </div>
 </div>
 <div class="section" id="pseudocolor-plots">
@@ -1748,7 +1930,7 @@ Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.</p>
 <div class="figure" id="fig-isosurface1">
 <img alt="figs/isosurface1.png" src="figs/isosurface1.png" />
-<p class="caption">Isosurface plot (VTK backend)  (fig:isosurface1)</p>
+<p class="caption"><em>Isosurface plot (VTK backend)</em>  (fig:isosurface1)</p>
 </div>
 <p>Here is another example that demonstrates the <tt class="docutils literal">isosurface</tt> command
 (again using the <tt class="docutils literal">flow</tt> function):</p>
@@ -1765,7 +1947,7 @@ show()
 <p>Figure <a class="reference internal" href="#fig-isosurface2">fig:isosurface2</a> shows the resulting plot.</p>
 <div class="figure" id="fig-isosurface2">
 <img alt="figs/isosurface2.png" src="figs/isosurface2.png" />
-<p class="caption">Another isosurface plot (VTK backend)  (fig:isosurface2)</p>
+<p class="caption"><em>Another isosurface plot (VTK backend)</em>  (fig:isosurface2)</p>
 </div>
 </div>
 <div class="section" id="volumetric-slice-plot">
@@ -1801,7 +1983,7 @@ at the z axis (at z=-2 and z=0.0). The result is presented in
 Figure <a class="reference internal" href="#fig-slice1">fig:slice1</a>.</p>
 <div class="figure" id="fig-slice1">
 <img alt="figs/slice1.png" src="figs/slice1.png" />
-<p class="caption">Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend)  (fig:slice1)</p>
+<p class="caption"><em>Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend)</em>  (fig:slice1)</p>
 </div>
 <!-- OBS: -->
 <!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
@@ -1833,7 +2015,7 @@ example, a list specifying the level curves. Running the set of
 commands results in the plot shown in Figure <a class="reference internal" href="#fig-contourslice1">fig:contourslice1</a>.</p>
 <div class="figure" id="fig-contourslice1">
 <img alt="figs/contourslice1.png" src="figs/contourslice1.png" />
-<p class="caption">Contours in slice planes (VTK backend)  (fig:contourslice1)</p>
+<p class="caption"><em>Contours in slice planes (VTK backend)</em>  (fig:contourslice1)</p>
 </div>
 <p>Here is another example where we draw contour slices from a
 three-dimensional MRI data set:</p>
@@ -1852,7 +2034,7 @@ SciPy package. We then create a 2D contour slice plot with one slice
 in the plane z=8. Figure <a class="reference internal" href="#fig-contourslice3">fig:contourslice3</a> displays the result.</p>
 <div class="figure" id="fig-contourslice3">
 <img alt="figs/contourslice3.png" src="figs/contourslice3.png" />
-<p class="caption">Contour slice plot of a 3D MRI data set (VTK backend)  (fig:contourslice3)</p>
+<p class="caption"><em>Contour slice plot of a 3D MRI data set (VTK backend)</em>  (fig:contourslice3)</p>
 </div>
 </div>
 </div>
@@ -1890,7 +2072,7 @@ the vector components are passed as arguments to <tt class="docutils literal">qu
 turn produces the plot in Figure <a class="reference internal" href="#fig-quiver-ex1">fig:quiver_ex1</a>.</p>
 <div class="figure" id="fig-quiver-ex1">
 <img alt="figs/quiver_ex1.png" src="figs/quiver_ex1.png" />
-<p class="caption">Velocity vector plot (Gnuplot backend)  (fig:quiver_ex1)</p>
+<p class="caption"><em>Velocity vector plot (Gnuplot backend)</em>  (fig:quiver_ex1)</p>
 </div>
 <p>The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
@@ -1927,11 +2109,11 @@ quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
 <a class="reference internal" href="#fig-quiver-ex3">fig:quiver_ex3</a>.</p>
 <div class="figure" id="fig-quiver-ex2">
 <img alt="figs/quiver_ex2.png" src="figs/quiver_ex2.png" />
-<p class="caption">Combined quiver and pseudocolor plot (VTK backend)  (fig:quiver_ex2)</p>
+<p class="caption"><em>Combined quiver and pseudocolor plot (VTK backend)</em>  (fig:quiver_ex2)</p>
 </div>
 <div class="figure" id="fig-quiver-ex3">
 <img alt="figs/quiver_ex3.png" src="figs/quiver_ex3.png" />
-<p class="caption">Combined quiver and pseudocolor plot (VTK backend)  (fig:quiver_ex3)</p>
+<p class="caption"><em>Combined quiver and pseudocolor plot (VTK backend)</em>  (fig:quiver_ex3)</p>
 </div>
 <p>Visualization of 3D vector fields by arrows at grid points can be done
 with the <tt class="docutils literal">quiver3</tt> command. At the time of this writing, only the VTK
@@ -1951,7 +2133,7 @@ and red, respectively. The resulting plot is presented in Figure
 <a class="reference internal" href="#fig-quiver3-ex1">fig:quiver3_ex1</a>.</p>
 <div class="figure" id="fig-quiver3-ex1">
 <img alt="figs/quiver3_ex1.png" src="figs/quiver3_ex1.png" />
-<p class="caption">3D quiver plot (VTK backend)  (fig:quiver3_ex1)</p>
+<p class="caption"><em>3D quiver plot (VTK backend)</em>  (fig:quiver3_ex1)</p>
 </div>
 </div>
 <div class="section" id="stream-plots">
@@ -2017,7 +2199,7 @@ points which we defined with the <tt class="docutils literal">ndgrid</tt> comman
 resulting plot is presented in Figure <a class="reference internal" href="#fig-streamline-ex1">fig:streamline_ex1</a>.</p>
 <div class="figure" id="fig-streamline-ex1">
 <img alt="figs/streamline_ex1.png" src="figs/streamline_ex1.png" />
-<p class="caption">Stream line plot (Vtk backend)  (fig:streamline_ex1)</p>
+<p class="caption"><em>Stream line plot (Vtk backend)</em>  (fig:streamline_ex1)</p>
 </div>
 <p>The next example demonstrates the <tt class="docutils literal">streamtube</tt> command applied to the
 same <tt class="docutils literal">wind</tt> data set:</p>
@@ -2034,7 +2216,7 @@ tubes. The resulting plot is presented in Figure
 <a class="reference internal" href="#fig-streamtube-ex1">fig:streamtube_ex1</a>.</p>
 <div class="figure" id="fig-streamtube-ex1">
 <img alt="figs/streamtube_ex1.png" src="figs/streamtube_ex1.png" />
-<p class="caption">Stream tubes (Vtk backend)  (fig:streamtube_ex1)</p>
+<p class="caption"><em>Stream tubes (Vtk backend)</em>  (fig:streamtube_ex1)</p>
 </div>
 <p>Finally, we illustrate the <tt class="docutils literal">streamribbon</tt> command:</p>
 <pre class="literal-block">
@@ -2048,7 +2230,7 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
 <p>Figure <a class="reference internal" href="#fig-streamribbon-ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.</p>
 <div class="figure" id="fig-streamribbon-ex1">
 <img alt="figs/streamribbon_ex1.png" src="figs/streamribbon_ex1.png" />
-<p class="caption">Stream ribbons (VTK backend)  (fig:streamribbon_ex1)</p>
+<p class="caption"><em>Stream ribbons (VTK backend)</em>  (fig:streamribbon_ex1)</p>
 </div>
 </div>
 <div class="section" id="bar-charts">
@@ -2233,17 +2415,24 @@ xlim([-2,2])
 </div>
 </div>
 <div class="section" id="installation">
-<h1>Installation</h1>
+<span id="ev-tut-install"></span><h1>Installation</h1>
 <p>Easyviz comes with the SciTools package, so to install Easyviz, you
 must install SciTools, which is available from
 <a class="reference external" href="http://code.google.com/p/scitools">Google code</a>.</p>
 <p>If you run a Linux system that allows installation from Debian
-repositories (Ubuntu is an example), you get SciTools and all its
-dependencies with one Unix command:</p>
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:</p>
 <pre class="literal-block">
 Unix&gt; sudo apt-get install python-scitools
 </pre>
-<p>(SciTools is in standard Debian.)</p>
+<p>because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:</p>
+<pre class="literal-block">
+Unix&gt; sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+</pre>
 <p>Otherwise, you download the tarball with the SciTools software, pack it out,
 go the <tt class="docutils literal">scitools</tt> folder, and run the standard command:</p>
 <pre class="literal-block">
@@ -2424,15 +2613,6 @@ SciTools with Gnuplot as plotting engine:</p>
 python setup.py install --easyviz_backend gnuplot
 </pre>
 </div>
-<div class="section" id="can-i-easily-turn-off-all-plotting">
-<h2>Can I Easily Turn Off All Plotting?</h2>
-<p>Yes, this is very convenient when debugging other (non-plotting) parts
-of a program. Just write:</p>
-<pre class="literal-block">
-from scitools.std import *
-turn_off_plotting(globals())
-</pre>
-</div>
 <div class="section" id="check-your-backends">
 <h2>Check Your Backends!</h2>
 <p>When you encounter a problem with Easyviz plotting, make sure that the
@@ -2468,6 +2648,36 @@ plt.show()
 <p>In case of problems, go to the Matplotlib source directory, remove the
 <tt class="docutils literal">build</tt> subdirectory, and try a new install with <tt class="docutils literal">python setup.py install</tt>.</p>
 </div>
+</div>
+<div class="section" id="can-i-easily-turn-off-all-plotting">
+<h2>Can I Easily Turn Off All Plotting?</h2>
+<p>Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write:</p>
+<pre class="literal-block">
+from scitools.std import *
+turn_off_plotting(globals())
+</pre>
+</div>
+<div class="section" id="how-can-i-change-the-type-of-gnuplot-window">
+<h2>How Can I Change the Type of Gnuplot Window?</h2>
+<p>The configuration file (<tt class="docutils literal">.scitools.cfg</tt> in your home directory or a
+local directory, copied from <tt class="docutils literal">scitools.cfg</tt> in the SciTools source
+code distribution) has an item for controlling the type of <em>terminal</em>
+used by Gnuplot:</p>
+<pre class="literal-block">
+[gnuplot]
+...
+default_term               = &lt;str&gt; wxt
+</pre>
+<p>Here, the <tt class="docutils literal">wxt</tt> terminal, based on wxWidgets, is chosen. Other
+choices are <tt class="docutils literal">x11</tt> on systems supporting X11 graphics, or <tt class="docutils literal">aqua</tt> on
+Mac. The <tt class="docutils literal">wxt</tt> value is an allround choice since wxWidgets work, in theory,
+on all platforms.</p>
+</div>
+<div class="section" id="how-can-the-aspect-ratio-of-the-axes-be-controlled">
+<h2>How Can The Aspect Ratio of The Axes Be Controlled?</h2>
+<p>See the section &quot;Controlling the Aspect Ratio of Axes&quot; in the
+tutorial.</p>
 </div>
 <div class="section" id="trouble-with-gnuplot-and-threads">
 <h2>Trouble with Gnuplot and Threads</h2>
@@ -2537,6 +2747,12 @@ documentation).</p>
 <p>Another useful source of information is the many examples that come
 with the SciTools/Easyviz source code. The examples are located in
 the <tt class="docutils literal">examples</tt> subfolder of the source.</p>
+</div>
+<div class="section" id="grace-gives-error-messages-when-calling-savefig-hardcopy">
+<h2>Grace Gives Error Messages When Calling Savefig/Hardcopy</h2>
+<p>Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.</p>
 </div>
 <div class="section" id="i-cannot-find-out-how-my-plot-can-be-created">
 <h2>I Cannot Find Out How My Plot Can Be Created</h2>
@@ -2660,7 +2876,7 @@ supported by all backends):</p>
 <div class="system-messages section">
 <h1>Docutils System Messages</h1>
 <div class="system-message" id="id1">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2923); <em><a href="#id2">backlink</a></em></p>
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 3165); <em><a href="#id2">backlink</a></em></p>
 Unknown target name: &quot;slice&quot;.</div>
 </div>
 </div>
