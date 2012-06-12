@@ -1,8 +1,0 @@
-
-:mod:`scitools.easyviz.blt_`
-=======================
-
-.. automodule:: scitools.easyviz.blt_
-   :members:
-   :undoc-members:
-   :show-inheritance:

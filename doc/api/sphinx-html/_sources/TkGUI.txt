@@ -1,8 +1,0 @@
-
-:mod:`scitools.TkGUI`
-=======================
-
-.. automodule:: scitools.TkGUI
-   :members:
-   :undoc-members:
-   :show-inheritance:

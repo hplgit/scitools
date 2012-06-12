@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.PrmDictBase &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.PrmDictBase">
+<span id="scitools-prmdictbase"></span><h1><a class="reference internal" href="#module-scitools.PrmDictBase" title="scitools.PrmDictBase"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.PrmDictBase</span></tt></a><a class="headerlink" href="#module-scitools.PrmDictBase" title="Permalink to this headline">¶</a></h1>
+<p>Module for managing parameters.</p>
+<dl class="class">
+<dt id="scitools.PrmDictBase.PrmDictBase">
+<em class="property">class </em><tt class="descclassname">scitools.PrmDictBase.</tt><tt class="descname">PrmDictBase</tt><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for managing parameters stored in dictionaries.
+Typical use includes data or solver classes for solving physical
+problems numerically. One may then choose to hold all physical
+parameters in a dictionary physical_prm, containing
+(parameter name, value) pairs, and all numerical parameters in
+a dictionary numerical_prm. The physical_prm and numerical_prm
+dictionaries can then be defined in a subclass of PrmDictBase
+and managed by PrmDictBase. The management includes several
+convenient features:</p>
+<blockquote>
+<div><ul class="simple">
+<li>keeping all input data in one place</li>
+<li>setting of one or more parameters where the type of the value
+must match the type of the previous (initial) value</li>
+<li>pretty print of all defined parameters</li>
+<li>copying parameters from dictionaries to, e.g., local variables
+and back again, or to local namespaces and back again</li>
+<li>easy transition from parameter dictionaries to more sophisticated
+handling of input data, e.g., class scitools.ParameterInterface
+(GUI, CGI, command-line args)</li>
+</ul>
+</div></blockquote>
+<p>The subclass typically defines the dictionaries, say
+self.physical_prm and self.numerical_prm. Then these are
+appended to the inherited self._prm_list list to be registered.
+All members of this list are dictionaries that will not accept
+new keys (i.e., all parameters must be defined prior to registering
+them in self._prm_list). With this list one has a collection of all
+parameter dictionaries in the application.</p>
+<p>self._type_check[prm] is defined if we want to type check
+a parameter prm.
+if self._type_check[prm] is True (or False), prm must either
+be None, of the same type as the previously registered
+value of prm, or any number (float, int, complex) if
+the previous value prm was any number. Instead of a boolean
+value, self._type_check[prm] may hold a tuple of class types
+(to be used in isinstance checks), or a function which takes
+the value as argument and returns True if the that value is
+of the right type (otherwise False).</p>
+<p>In addition to the parameter dictionaries with fixed keys, class
+PrmDictBase also holds a self.user_prm, which is a dictionary
+of &#8220;meta data&#8221;, i.e., an arbitrary set of keys and values that
+can arbitrarily extended anywhere. If self.user_prm is None,
+no such meta data can exists (implying that only parameters
+registered in the dictionaries in self._prm_list are allowed - the
+programmer of subclasses can of course extend these parameter
+sets whenever desired; disallowing a parameter name is only a
+feature of the set function for setting the value of a (registered)
+parameter).</p>
+<p>Here is an example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scitools.PrmDictBase</span> <span class="kn">import</span> <span class="n">PrmDictBase</span>
+
+<span class="k">class</span> <span class="nc">SomeSolver</span><span class="p">(</span><span class="n">PrmDictBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">PrmDictBase</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c"># register parameters in dictionaries:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;density&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s">&#39;Cp&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                                   <span class="s">&#39;k&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s">&#39;L&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span> <span class="o">=</span>  <span class="p">{</span><span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;dt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s">&#39;tstop&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+        <span class="c"># attach dictionaries to base class list (required):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prm_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span><span class="p">]</span>
+
+        <span class="c"># specify parameters to be type checked when set:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type_check</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;dt&#39;</span><span class="p">:</span> <span class="p">(</span><span class="nb">float</span><span class="p">,),</span>
+              <span class="s">&#39;k&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">})</span>
+
+        <span class="c"># disallow arbitrary meta data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_prm</span> <span class="o">=</span> <span class="bp">None</span> <span class="c"># set to {} if meta data are allowed</span>
+
+        <span class="c"># initialize parameters according to keyword arguments:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># dt depends on n, L, k; update dt in case the three</span>
+        <span class="c"># others parameters have been changed</span>
+        <span class="c"># (in general this method is used to check consistency</span>
+        <span class="c"># between parameters and perform updates if necessary)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span><span class="p">[</span><span class="s">&#39;n&#39;</span><span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span><span class="p">[</span><span class="s">&#39;L&#39;</span><span class="p">]</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">L</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">dt_limit</span> <span class="o">=</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span><span class="p">[</span><span class="s">&#39;dt&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dt_limit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span><span class="p">[</span><span class="s">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_limit</span>
+
+    <span class="k">def</span> <span class="nf">compute1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># compute something</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">physical_prm</span><span class="p">[</span><span class="s">&#39;Cp&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">compute2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># turn numerical parameters into local variables:</span>
+        <span class="k">exec</span> <span class="bp">self</span><span class="o">.</span><span class="n">dicts2variables</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prm_list</span><span class="p">)</span>
+        <span class="c"># or exec self.dicts2variables(self.numerical_prm)  # selected prms</span>
+
+        <span class="c"># now we have local variables n, dt, tstop, density, Cp, k, L</span>
+        <span class="c"># that we can compute with, say</span>
+
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">k</span><span class="o">/</span><span class="n">Cp</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">dt</span>
+
+        <span class="c"># if some of the local variables are changed, say dt, they must</span>
+        <span class="c"># be inserted back into the parameter dictionaries:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables2dicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numerical_prm</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>    
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.dicts2namespace" title="scitools.PrmDictBase.PrmDictBase.dicts2namespace"><tt class="xref py py-obj docutils literal"><span class="pre">dicts2namespace</span></tt></a>(namespace,&nbsp;dicts[,&nbsp;overwrite])</td>
+<td>Make namespace variables out of dict items.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.dicts2namespace2" title="scitools.PrmDictBase.PrmDictBase.dicts2namespace2"><tt class="xref py py-obj docutils literal"><span class="pre">dicts2namespace2</span></tt></a>(namespace,&nbsp;dicts)</td>
+<td>As dicts2namespace2, but use exec.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.dicts2variables" title="scitools.PrmDictBase.PrmDictBase.dicts2variables"><tt class="xref py py-obj docutils literal"><span class="pre">dicts2variables</span></tt></a>(dicts)</td>
+<td>Make Python code string that defines local variables from</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.dump" title="scitools.PrmDictBase.PrmDictBase.dump"><tt class="xref py py-obj docutils literal"><span class="pre">dump</span></tt></a>()</td>
+<td>Dump all parameters and their values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.get" title="scitools.PrmDictBase.PrmDictBase.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>(**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.namespace2dicts" title="scitools.PrmDictBase.PrmDictBase.namespace2dicts"><tt class="xref py py-obj docutils literal"><span class="pre">namespace2dicts</span></tt></a>(namespace,&nbsp;dicts)</td>
+<td>Update dicts from variables in a namespace.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.properties" title="scitools.PrmDictBase.PrmDictBase.properties"><tt class="xref py py-obj docutils literal"><span class="pre">properties</span></tt></a>(global_namespace)</td>
+<td>Make properties out of local dictionaries.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.set" title="scitools.PrmDictBase.PrmDictBase.set"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>(**kwargs)</td>
+<td>Set kwargs data in parameter dictionaries.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.set_in_dict" title="scitools.PrmDictBase.PrmDictBase.set_in_dict"><tt class="xref py py-obj docutils literal"><span class="pre">set_in_dict</span></tt></a>(prm,&nbsp;value,&nbsp;d)</td>
+<td>Set d[prm]=value, but check if prm is registered in class</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.usage" title="scitools.PrmDictBase.PrmDictBase.usage"><tt class="xref py py-obj docutils literal"><span class="pre">usage</span></tt></a>()</td>
+<td>Print the name of all parameters that can be set.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.PrmDictBase.PrmDictBase.variables2dicts" title="scitools.PrmDictBase.PrmDictBase.variables2dicts"><tt class="xref py py-obj docutils literal"><span class="pre">variables2dicts</span></tt></a>(dicts,&nbsp;**variables)</td>
+<td>Insert the name=value keyword arguments in variables into the dictionaries in dicts (list of dictionaries).</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.dicts2namespace">
+<tt class="descname">dicts2namespace</tt><big>(</big><em>namespace</em>, <em>dicts</em>, <em>overwrite=True</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.dicts2namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.dicts2namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make namespace variables out of dict items.
+That is, for all dicts, insert all (key,value) pairs in
+the namespace dict.
+namespace is a dictionary, dicts is a list of dictionaries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.dicts2namespace2">
+<tt class="descname">dicts2namespace2</tt><big>(</big><em>namespace</em>, <em>dicts</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.dicts2namespace2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.dicts2namespace2" title="Permalink to this definition">¶</a></dt>
+<dd><p>As dicts2namespace2, but use exec.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.dicts2variables">
+<tt class="descname">dicts2variables</tt><big>(</big><em>dicts</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.dicts2variables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.dicts2variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make Python code string that defines local variables from
+all parameters in dicts (list of dictionaries of parameters).
+For example, if dicts[1] has a key n with value 1.0, the
+statement &#8216;n=1.0&#8217; will be included in the returned string.
+The calling code will typically exec this returned string
+to make local variables (short hands) from parameters stored
+in dictionaries. (Note that such local variables are read-only,
+changing their values will not be reflected in the dictionaries!).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump all parameters and their values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.get">
+<tt class="descname">get</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.namespace2dicts">
+<tt class="descname">namespace2dicts</tt><big>(</big><em>namespace</em>, <em>dicts</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.namespace2dicts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.namespace2dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update dicts from variables in a namespace.
+That is, for all keys in namespace, insert (key,value) pair
+in the dict in dicts that has the same key registered.
+namespace is a dictionary, dicts is a list of dictionaries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.properties">
+<tt class="descname">properties</tt><big>(</big><em>global_namespace</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make properties out of local dictionaries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.set">
+<tt class="descname">set</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set kwargs data in parameter dictionaries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.set_in_dict">
+<tt class="descname">set_in_dict</tt><big>(</big><em>prm</em>, <em>value</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.set_in_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.set_in_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set d[prm]=value, but check if prm is registered in class
+dictionaries, if the type is acceptable, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.usage">
+<tt class="descname">usage</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the name of all parameters that can be set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.variables2dicts">
+<tt class="descname">variables2dicts</tt><big>(</big><em>dicts</em>, <em>**variables</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.variables2dicts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.variables2dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert the name=value keyword arguments in variables into
+the dictionaries in dicts (list of dictionaries).
+This is the inverse of the dicts2variables function.</p>
+<p>Usage:
+exec self.dicts2variables(self.numerical_prm)
+# work with read-only n, dt, tstop
+...
+# update (in case n, dt, tstop was changed):
+self.variables2dicts(self.numerical_prm, n=n, dt=dt, tstop=tstop)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.PrmDictBase.message">
+<tt class="descclassname">scitools.PrmDictBase.</tt><tt class="descname">message</tt><big>(</big><em>m</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/PrmDictBase.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

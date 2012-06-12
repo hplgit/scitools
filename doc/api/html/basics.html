@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.basics &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" />
+    <link rel="next" title="scitools.configdata" href="configdata.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configdata.html" title="scitools.configdata"
+             accesskey="N">next</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.basics">
+<span id="scitools-basics"></span><h1><a class="reference internal" href="#module-scitools.basics" title="scitools.basics"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.basics</span></tt></a><a class="headerlink" href="#module-scitools.basics" title="Permalink to this headline">¶</a></h1>
+<p>Import modules and definitions for the scitools library.</p>
+<div class="section" id="import-of-numerical-python">
+<h2>Import of Numerical Python<a class="headerlink" href="#import-of-numerical-python" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p class="first">If scipy is installed, a from scipy import * is executed.
+scipy requires numpy as basic array library, and scipy replaces
+numpy functionality (at some cost of speed since scipy functions
+are more general).</p>
+<p>The user can turn off import of scipy in the configuration file
+(see below).</p>
+</li>
+<li><p class="first">If scipy is not available or not wanted, two options are possible,
+depending on what is set in the &#8220;numpy&#8221; section of the configuration
+file:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>from numpy import *
+(configuration file: numpytools = no)</li>
+<li>from numpytools import *
+which allows the user to transparently use Numeric, numarray,
+and numpy
+(configuration file: numpytools = yes)</li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>To make numpy/scipy and math more similar (and thereby ease
+vectorization of user-defined functions), we introduce the math
+function names asin, acos, and atan for numpy/scipy&#8217;s arcsin,
+arccos, and arctan.</p>
+</div>
+<div class="section" id="other-modules">
+<h2>Other modules<a class="headerlink" href="#other-modules" title="Permalink to this headline">¶</a></h2>
+<p>The from scitools.basics import * statement performs a
+from numpy (or scipy) import * as explained above, plus an import
+of the modules os, sys, operator, and math. The modules
+StringFunction and glob are also imported.</p>
+</div>
+<div class="section" id="definition-of-variables">
+<h2>Definition of variables<a class="headerlink" href="#definition-of-variables" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>SciTools defines a series of variables to monitor execution of
+programs: SAFECODE, OPTIMIZATION, backend (for Easyviz),
+VERBOSE, DEBUG, has_scipy. Many of these are set in a configuration
+file (see below) or in environment variables (SCITOOLS_SAFECODE,
+SCITOOLS_VERBOSE, SCITOOLS, SCITOOLS_DEBUG, SCITOOLS_easyviz_backend).</li>
+</ul>
+</div></blockquote>
+<p>All these variables are contained in basics.py.</p>
+</div>
+<div class="section" id="debug-functions">
+<h2>Debug functions<a class="headerlink" href="#debug-functions" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are imported from the debug module:</p>
+<blockquote>
+<div><ul class="simple">
+<li>watch(var): print out the name, type, and value of a variable and
+where in a program this output was requested (used to monitor variables).</li>
+<li>trace(message): print a message and where in the program this
+message was requested (used to trace the execution).</li>
+</ul>
+</div></blockquote>
+<p>These debug functions require the DEBUG variable to be different from 0.</p>
+</div>
+<div class="section" id="default-configuration-file">
+<h2>Default configuration file<a class="headerlink" href="#default-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>; Default configuration file scitools.cfg
+;
+; Items in this default file can be overridden by 
+;   .scitools.cfg in the directory where the Python program is started
+;   .scitools.cfg in the user&#8217;s home directory</p>
+<p>; Some variables in this file can also be overridden by environment
+; variables. The name of the environment variable is 
+; prefix_section_option, where section and option are the section and
+; option names as given below and prefix is set below.
+; Examples: SCITOOLS_globals_VERBOSE, SCITOOLS_easyviz_backend</p>
+<p>[modes]
+; Enable setting variables by environment variables with
+; prefix_variablename, e.g., SCITOOLS_globals_DEBUG
+envir prefix = SCITOOLS</p>
+<p>; Enable reading from command line through &#8211;variablename option, 
+; e.g., &#8211;SCITOOLS_globals_DEBUG
+; (such command-line options and values are removed from sys.argv
+; after being read such that the rest of the code is not affected)
+command line arguments = on</p>
+<p>[globals]
+SAFECODE     = &lt;bool&gt; on    ; boolean: safety checks or not
+OPTIMIZATION = &lt;str&gt;  off   ; &#8216;F77&#8217;, &#8216;C&#8217;, &#8216;vectorization&#8217;, &#8216;on&#8217;, etc.
+VERBOSE      = &lt;int&gt;  0     ; an int for the level of verbosity in output
+DEBUG        = &lt;int&gt;  0     ; debug level (0=off)
+; python -O implies that DEBUG is set to 0</p>
+<p>[scipy]
+;load = &lt;bool&gt; yes           ; yes: from scipy import * (may have side effects)
+load = &lt;bool&gt; no         ; yes: from scipy import * (may have side effects)</p>
+<p>[numpy]              
+numpytools = &lt;bool&gt; no   ; no: load numpy and numpyutils, yes: load numpytools</p>
+<p>; Configuration of SciPy/NumPy: see documentation of scitools.basics</p>
+<p>[easyviz]
+backend     = matplotlib  ; default backend
+; backends are gnuplot, matplotlib, matlab, veusz, grace, dx, pyx, vtk
+show        = &lt;bool&gt; yes  ; screenplot after each plot command
+interactive = &lt;bool&gt; yes  ; update backend after each change
+color       = &lt;bool&gt; no   ; hardcopy with color?
+linestyleorder = &lt;eval&gt; [&#8216;-&#8216;] ; line styles for plots with multiple lines
+colororder  = &lt;eval&gt; [&#8216;b&#8217;,&#8217;g&#8217;,&#8217;r&#8217;,&#8217;c&#8217;,&#8217;m&#8217;,&#8217;y&#8217;,&#8217;k&#8217;] ; same for colors
+clevels     = &lt;int&gt; 8     ; default number of contour levels in a contour plot
+hold        = &lt;bool&gt; off  ; hold or clear plot between plotting commands
+grid        = &lt;bool&gt; off  ; turn grid on or off by default
+box         = &lt;bool&gt; off  ; box around boundaries of the axes
+hidden      = &lt;bool&gt; on   ; use hidden line removal on meshes
+colormap    = &lt;eval&gt; None ; default colormap
+fontsize    = &lt;int&gt; 12    ; font size used in titles, labels, ...
+fontname    = &lt;str&gt; Helvetica  ; font used for titles, labels, ...
+fgcolor     = &lt;eval&gt; (0,0,0)   ; foreground color (titles, labels, axes, ...)
+bgcolor     = &lt;eval&gt; (1,1,1)   ; axis background color 
+cblocation  = &lt;str&gt; EastOutside  ; default location for a color bar
+size        = &lt;eval&gt; [None,None] ; default figure size</p>
+<p>[gnuplot]
+; See gp_unix.py in the Gnuplot.py source for details about the meaning
+; of these options.
+;gnuplot_command            = &lt;str&gt; gnuplot
+;recognizes_persist         = &lt;eval&gt; None
+prefer_persist             = &lt;int&gt; 1
+;recognizes_binary_splot    = &lt;int&gt; 1
+;prefer_inline_data         = &lt;int&gt; 0
+;support_fifo               = &lt;int&gt; 1
+;prefer_fifo_data           = &lt;int&gt; 1
+;default_term               = &lt;str&gt; x11
+;default_term               = &lt;str&gt; wxt   ; wxWidgets
+;default_lpr                = &lt;str&gt; | lpr
+;prefer_enhanced_postscript = &lt;int&gt; 1</p>
+<p>[matplotlib]
+; Override values from the matplotlib configuration file
+backend     = TkAgg  ; default backend
+; other backends are ps, Qt4Agg, GTK, GTKAgg, svg, agg, cairo, MacOSX, GTKCairo, WXAgg, TkAgg, QtAgg, FltkAgg, pdf, CocoaAgg, emf, gdk, template, WX
+;font.size   = &lt;int&gt; 10
+;axes.labelsize = &lt;int&gt; 10
+;text.fontsize = &lt;int&gt; 10
+;xtick.labelsize = &lt;int&gt; 8
+;ytick.labelsize = &lt;int&gt; 8
+text.usetex = &lt;bool&gt; false  ; use LaTeX or not</p>
+<p>Import statements in this module:
+from globaldata import *
+from numpy import *
+from numpyutils import *
+import sys, operator, math
+from StringFunction import StringFunction
+from glob import glob
+from debug import watch, trace</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">scitools.basics</span></tt></a><ul>
+<li><a class="reference internal" href="#import-of-numerical-python">Import of Numerical Python</a></li>
+<li><a class="reference internal" href="#other-modules">Other modules</a></li>
+<li><a class="reference internal" href="#definition-of-variables">Definition of variables</a></li>
+<li><a class="reference internal" href="#debug-functions">Debug functions</a></li>
+<li><a class="reference internal" href="#default-configuration-file">Default configuration file</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configdata.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.configdata</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/basics.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configdata.html" title="scitools.configdata"
+             >next</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

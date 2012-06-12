@@ -1,0 +1,912 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.pyx_ &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.easyviz.pyx_</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This backend is based on the Python graphics package PyX which creates</span>
+<span class="sd">PostScript and PDF files. The PyX backend does not produce any output until</span>
+<span class="sd">the hardcopy method is called. One can specify this backend by</span>
+
+<span class="sd">  python somefile.py --SCITOOLS_easyviz_backend pyx</span>
+
+<span class="sd">or one can specify the backend in the SciTools configuration file</span>
+<span class="sd">scitools.cfg under the [easyviz] section</span>
+
+<span class="sd">  [easyviz]</span>
+<span class="sd">  backend = pyx</span>
+
+<span class="sd">and then</span>
+
+<span class="sd">  from scitools.std import *</span>
+
+<span class="sd">or if just easyviz is needed</span>
+
+<span class="sd">  from scitools.easyviz import *</span>
+
+<span class="sd">REQUIREMENTS:</span>
+
+<span class="sd">pyx</span>
+
+<span class="sd">TODO:</span>
+
+<span class="sd">- add support for mesh and surf (requires PyX from svn)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">from</span> <span class="nn">common</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scitools.globaldata</span> <span class="kn">import</span> <span class="n">DEBUG</span><span class="p">,</span> <span class="n">VERBOSE</span>
+<span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">test_if_module_exists</span> 
+
+<span class="n">test_if_module_exists</span><span class="p">(</span><span class="s">&#39;pyx&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s">&#39;You need to install the PyX package.&#39;</span><span class="p">,</span> <span class="n">abort</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pyx</span> 
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<div class="viewcode-block" id="PyXBackend"><a class="viewcode-back" href="../../../pyx_.html#scitools.easyviz.pyx_.PyXBackend">[docs]</a><span class="k">class</span> <span class="nc">PyXBackend</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BaseClass</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Perform initialization that is special for this backend.&quot;&quot;&quot;</span>
+        
+        <span class="c"># Set docstrings of all functions to the docstrings of BaseClass</span>
+        <span class="c"># The exception is if something is very different</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;curfig&#39;</span><span class="p">))</span>
+
+        <span class="c"># conversion tables for format strings:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>   <span class="c"># no marker</span>
+            <span class="s">&#39;.&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>  <span class="c"># dot</span>
+            <span class="s">&#39;o&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">circle</span><span class="p">,</span>    <span class="c"># circle</span>
+            <span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">cross</span><span class="p">,</span>     <span class="c"># cross</span>
+            <span class="s">&#39;+&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">plus</span><span class="p">,</span>      <span class="c"># plus sign</span>
+            <span class="s">&#39;*&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>  <span class="c"># asterisk</span>
+            <span class="s">&#39;s&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">square</span><span class="p">,</span>    <span class="c"># square</span>
+            <span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">diamond</span><span class="p">,</span>   <span class="c"># diamond</span>
+            <span class="s">&#39;^&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">triangle</span><span class="p">,</span>  <span class="c"># triangle (up)</span>
+            <span class="s">&#39;v&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">triangle</span><span class="p">,</span>  <span class="c"># triangle (down)</span>
+            <span class="s">&#39;&lt;&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">triangle</span><span class="p">,</span>  <span class="c"># triangle (left)</span>
+            <span class="s">&#39;&gt;&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="o">.</span><span class="n">triangle</span><span class="p">,</span>  <span class="c"># triangle (right)</span>
+            <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>  <span class="c"># pentagram</span>
+            <span class="s">&#39;h&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>  <span class="c"># hexagram</span>
+            <span class="p">}</span>
+               
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>   <span class="c"># no color --&gt; blue</span>
+            <span class="s">&#39;r&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Red</span><span class="p">,</span>      <span class="c"># red</span>
+            <span class="s">&#39;g&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Green</span><span class="p">,</span>    <span class="c"># green</span>
+            <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Blue</span><span class="p">,</span>     <span class="c"># blue</span>
+            <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Cyan</span><span class="p">,</span>     <span class="c"># cyan</span>
+            <span class="s">&#39;m&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Magenta</span><span class="p">,</span>  <span class="c"># magenta</span>
+            <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Yellow</span><span class="p">,</span>   <span class="c"># yellow</span>
+            <span class="s">&#39;k&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">Black</span><span class="p">,</span>    <span class="c"># black</span>
+            <span class="s">&#39;w&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">cmyk</span><span class="o">.</span><span class="n">White</span><span class="p">,</span>    <span class="c"># white</span>
+            <span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_styles</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                              <span class="c"># no line</span>
+            <span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">linestyle</span><span class="o">.</span><span class="n">solid</span><span class="p">,</span>        <span class="c"># solid line</span>
+            <span class="s">&#39;:&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">linestyle</span><span class="o">.</span><span class="n">dotted</span><span class="p">,</span>       <span class="c"># dotted line</span>
+            <span class="s">&#39;-.&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">linestyle</span><span class="o">.</span><span class="n">dashdotted</span><span class="p">,</span>  <span class="c"># dash-dot line</span>
+            <span class="s">&#39;--&#39;</span><span class="p">:</span> <span class="n">pyx</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">linestyle</span><span class="o">.</span><span class="n">dashed</span>       <span class="c"># dashed line</span>
+            <span class="p">}</span>
+
+        <span class="c"># convert table for colorbar location:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_locations</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;North&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;South&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;East&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;West&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;NorthOutside&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;SouthOutside&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;EastOutside&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;WestOutside&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting backend standard variables&quot;</span>
+            <span class="k">for</span> <span class="n">disp</span> <span class="ow">in</span> <span class="s">&#39;self._markers self._colors self._line_styles&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="k">print</span> <span class="n">disp</span><span class="p">,</span> <span class="nb">eval</span><span class="p">(</span><span class="n">disp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="c"># return a linear or logarithmic (base 10) axis </span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Get axis scales&quot;</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;scale&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s">&#39;loglog&#39;</span><span class="p">:</span>
+            <span class="c"># use logarithmic scale on both x- and y-axis</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">log</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">log</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s">&#39;logx&#39;</span><span class="p">:</span>
+            <span class="c"># use logarithmic scale on x-axis and linear scale on y-axis</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">log</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">lin</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s">&#39;logy&#39;</span><span class="p">:</span>
+            <span class="c"># use linear scale on x-axis and logarithmic scale on y-axis</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">lin</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">log</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="c"># use linear scale on both x- and y-axis</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">lin</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">lin</span>
+        <span class="k">return</span> <span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span>
+    
+    <span class="k">def</span> <span class="nf">_set_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add text labels for x-, y-, and z-axis.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting labels&quot;</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xlabel&#39;</span><span class="p">)</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ylabel&#39;</span><span class="p">)</span>
+        <span class="n">zlabel</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zlabel&#39;</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
+            <span class="c"># add a text label on x-axis</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">xlabel</span>
+        <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
+            <span class="c"># add a text label on y-axis</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">ylabel</span>
+        <span class="k">if</span> <span class="n">zlabel</span><span class="p">:</span>
+            <span class="c"># add a text label on z-axis</span>
+            <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="nf">_set_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a title at the top of the axis.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting title&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="c"># set title</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">g</span><span class="o">.</span><span class="n">xpos</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">height</span><span class="o">+</span><span class="mf">0.2</span><span class="o">+</span><span class="n">g</span><span class="o">.</span><span class="n">ypos</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> 
+                   <span class="p">[</span><span class="n">pyx</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">halign</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+                    <span class="n">pyx</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">valign</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span>
+                    <span class="n">pyx</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">Large</span><span class="p">])</span>
+    
+    <span class="k">def</span> <span class="nf">_get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="c"># return axis limits in x, y, and z direction</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting axis limits&quot;</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+        <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="c"># let plotting package set &#39;nice&#39; axis limits in the x, y,</span>
+            <span class="c"># and z direction. If this is not automated in the plotting</span>
+            <span class="c"># package, one can use the following limits:</span>
+            <span class="c">#xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;manual&#39;</span><span class="p">:</span>
+            <span class="c"># (some) axis limits are frozen</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xmin&#39;</span><span class="p">)</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xmax&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">xmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">xmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># set x-axis limits</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmin</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmax</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># let plotting package set x-axis limits or use</span>
+                <span class="c">#xmin, xmax = ax.getp(&#39;xlim&#39;)</span>
+                <span class="k">pass</span>
+
+            <span class="n">ymin</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ymin&#39;</span><span class="p">)</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ymax&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ymin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">ymax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># set y-axis limits</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymin</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymax</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># let plotting package set y-axis limits or use</span>
+                <span class="c">#ymin, ymax = ax.getp(&#39;ylim&#39;)</span>
+                <span class="k">pass</span>
+
+            <span class="n">zmin</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zmin&#39;</span><span class="p">)</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zmax&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">zmin</span> <span class="ow">and</span> <span class="n">zmax</span><span class="p">:</span>
+                <span class="c"># set z-axis limits</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">zmin</span>
+                <span class="n">limits</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">zmax</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># let plotting package set z-axis limits or use</span>
+                <span class="c">#zmin, zmax = ax.getp(&#39;zlim&#39;)</span>
+                <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;tight&#39;</span><span class="p">:</span>
+            <span class="c"># set the limits on the axis to the range of the data. If</span>
+            <span class="c"># this is not automated in the plotting package, one can</span>
+            <span class="c"># use the following limits:</span>
+            <span class="c">#xmin, xmax, ymin, ymax, zmin, zmax = ax.get_limits()</span>
+            <span class="n">limits</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_limits</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;fill&#39;</span><span class="p">:</span>
+            <span class="c"># not sure about this</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">limits</span>
+
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set axes position.&quot;&quot;&quot;</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;viewport&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rect</span><span class="p">:</span>
+            <span class="c"># axes position is defined. In Matlab rect is defined as</span>
+            <span class="c"># [left,bottom,width,height], where the four parameters are</span>
+            <span class="c"># location values between 0 and 1 ((0,0) is the lower-left</span>
+            <span class="c"># corner and (1,1) is the upper-right corner).</span>
+            <span class="c"># NOTE: This can be different in the plotting package.</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_daspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set data aspect ratio.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;daspectmode&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;manual&#39;</span><span class="p">:</span>
+            <span class="n">dar</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;daspect&#39;</span><span class="p">)</span>  <span class="c"># dar is a list (len(dar) is 3).</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># daspectmode is &#39;auto&#39;. Plotting package handles data</span>
+            <span class="c"># aspect ratio automatically.</span>
+            <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="nf">_set_axis_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;method&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;equal&#39;</span><span class="p">:</span>
+            <span class="c"># tick mark increments on the x-, y-, and z-axis should</span>
+            <span class="c"># be equal in size.</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;image&#39;</span><span class="p">:</span>
+            <span class="c"># same effect as axis(&#39;equal&#39;) and axis(&#39;tight&#39;)</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;square&#39;</span><span class="p">:</span>
+            <span class="c"># make the axis box square in size</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;normal&#39;</span><span class="p">:</span>
+            <span class="c"># full size axis box</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;vis3d&#39;</span><span class="p">:</span>
+            <span class="c"># freeze data aspect ratio when rotating 3D objects</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_coordinate_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use either the default Cartesian coordinate system or a</span>
+<span class="sd">        matrix coordinate system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;direction&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;ij&#39;</span><span class="p">:</span>
+            <span class="c"># Use matrix coordinates. The origin of the coordinate</span>
+            <span class="c"># system is the upper-left corner. The i-axis should be</span>
+            <span class="c"># vertical and numbered from top to bottom, while the j-axis</span>
+            <span class="c"># should be horizontal and numbered from left to right.</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;xy&#39;</span><span class="p">:</span>
+            <span class="c"># use the default Cartesian axes form. The origin is at the</span>
+            <span class="c"># lower-left corner. The x-axis is vertical and numbered</span>
+            <span class="c"># from left to right, while the y-axis is vertical and</span>
+            <span class="c"># numbered from bottom to top.</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn box around axes boundary on or off.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting box&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;box&#39;</span><span class="p">):</span>
+            <span class="c"># display box </span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># do not display box</span>
+            <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="nf">_set_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn grid lines on or off.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting grid&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;grid&#39;</span><span class="p">):</span>
+            <span class="c"># turn grid lines on</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># turn grid lines off</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_hidden_line_removal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn on/off hidden line removal for meshes.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting hidden line removal&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;hidden&#39;</span><span class="p">):</span>
+            <span class="c"># turn hidden line removal on</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># turn hidden line removal off</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a colorbar to the axis.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting colorbar&quot;</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;colorbar&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cbar</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;visible&#39;</span><span class="p">):</span>
+            <span class="c"># turn on colorbar</span>
+            <span class="n">cbar_title</span> <span class="o">=</span> <span class="n">cbar</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cbtitle&#39;</span><span class="p">)</span>
+            <span class="n">cbar_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_locations</span><span class="p">[</span><span class="n">cbar</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cblocation&#39;</span><span class="p">)]</span>
+            <span class="c"># ...</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># turn off colorbar</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_caxis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the color axis scale.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting caxis&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;caxismode&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;manual&#39;</span><span class="p">:</span>
+            <span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;caxis&#39;</span><span class="p">)</span>
+            <span class="c"># NOTE: cmin and cmax might be None:</span>
+            <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">cmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c"># set color axis scaling according to cmin and cmax</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># use autoranging for color axis scale</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_set_colormap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the colormap.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting colormap&quot;</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;colormap&#39;</span><span class="p">)</span>
+        <span class="c"># cmap is plotting package dependent</span>
+
+    <span class="k">def</span> <span class="nf">_set_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set viewpoint specification.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting view&quot;</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camera&#39;</span><span class="p">)</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;view&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c"># setup a default 2D view</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;azimuth&#39;</span><span class="p">)</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;elevation&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">az</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">el</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># azimuth or elevation is not given. Set up a default</span>
+                <span class="c"># 3D view (az=-37.5 and el=30 is the default 3D view in</span>
+                <span class="c"># Matlab).</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># set a 3D view according to az and el</span>
+                <span class="k">pass</span>
+            
+            <span class="k">if</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cammode&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;manual&#39;</span><span class="p">:</span>
+                <span class="c"># for advanced camera handling:</span>
+                <span class="n">roll</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camroll&#39;</span><span class="p">)</span>
+                <span class="n">zoom</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camzoom&#39;</span><span class="p">)</span>
+                <span class="n">dolly</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camdolly&#39;</span><span class="p">)</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camtarget&#39;</span><span class="p">)</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;campos&#39;</span><span class="p">)</span>
+                <span class="n">up_vector</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camup&#39;</span><span class="p">)</span>
+                <span class="n">view_angle</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camva&#39;</span><span class="p">)</span>
+                <span class="n">projection</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;camproj&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_axis_props</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Setting axis properties&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_title</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_axis_method</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_daspect</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_coordinate_system</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_hidden_line_removal</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_colorbar</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_caxis</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_colormap</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_view</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;visible&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_labels</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_box</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_grid</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># turn off all axis labeling, tickmarks, and background</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_get_linespecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the line marker, line color, line style, and</span>
+<span class="sd">        line width of the item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">marker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;linemarker&#39;</span><span class="p">)]</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;linecolor&#39;</span><span class="p">)]</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line_styles</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;linetype&#39;</span><span class="p">)]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;linewidth&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">width</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">linewidth</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="o">*</span><span class="n">pyx</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">w_pt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">marker</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">width</span>
+
+    <span class="k">def</span> <span class="nf">_add_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a 2D or 3D curve to the scene.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding a line&quot;</span>
+        <span class="c"># get data:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="c"># get line specifiactions:</span>
+        <span class="n">marker</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_linespecs</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="n">styles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lineattrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">style</span><span class="p">:</span>
+            <span class="n">lineattrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+                <span class="n">lineattrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">width</span><span class="p">:</span>
+                <span class="n">lineattrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+            <span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">lineattrs</span><span class="o">=</span><span class="n">lineattrs</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">marker</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">color</span><span class="p">:</span> 
+                <span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="p">(</span><span class="n">marker</span><span class="p">,</span>
+                                                     <span class="n">symbolattrs</span><span class="o">=</span><span class="p">[</span><span class="n">color</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">symbol</span><span class="p">(</span><span class="n">marker</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">styles</span><span class="p">:</span>
+                <span class="n">styles</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">line</span><span class="p">([</span><span class="n">pyx</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">gradient</span><span class="o">.</span><span class="n">Rainbow</span><span class="p">])]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># zdata is given, add a 3D curve:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># no zdata, add a 2D curve:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;legend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">legend</span><span class="p">:</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">legend</span><span class="p">),</span>
+                               <span class="n">styles</span><span class="o">=</span><span class="n">styles</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="s">&#39;faceted&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding a surface&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">))</span>  <span class="c"># grid component in x-direction</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">))</span>  <span class="c"># grid component in y-direction</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>           <span class="c"># scalar field</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cdata&#39;</span><span class="p">)</span>           <span class="c"># pseudocolor data (can be None)</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]])</span>
+        
+        <span class="n">contours</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;contours&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">contours</span><span class="p">:</span>
+            <span class="c"># the current item is produced by meshc or surfc and we</span>
+            <span class="c"># should therefore add contours at the bottom:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_contours</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">placement</span><span class="o">=</span><span class="s">&#39;bottom&#39;</span><span class="p">)</span>
+
+        <span class="n">styles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;wireframe&#39;</span><span class="p">):</span>
+            <span class="c"># wireframe mesh (as produced by mesh or meshc)</span>
+            <span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">line</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># colored surface (as produced by surf, surfc, or pcolor)</span>
+            <span class="c"># use keyword argument shading to set the color shading mode</span>
+            <span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">surface</span><span class="p">())</span>
+            
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;legend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">legend</span><span class="p">:</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">legend</span><span class="p">),</span>
+               <span class="n">styles</span><span class="o">=</span><span class="n">styles</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">dodata</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_add_contours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">placement</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c"># The placement keyword can be either None or &#39;bottom&#39;. The</span>
+        <span class="c"># latter specifies that the contours should be placed at the</span>
+        <span class="c"># bottom (as in meshc or surfc).</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding contours&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">)</span>  <span class="c"># grid component in x-direction</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">)</span>  <span class="c"># grid component in y-direction</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>  <span class="c"># scalar field</span>
+
+        <span class="n">filled</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;filled&#39;</span><span class="p">)</span>  <span class="c"># draw filled contour plot if True</span>
+
+        <span class="n">cvector</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cvector&#39;</span><span class="p">)</span>
+        <span class="n">clevels</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;clevels&#39;</span><span class="p">)</span>  <span class="c"># number of contour levels</span>
+        <span class="k">if</span> <span class="n">cvector</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># the contour levels are chosen automatically</span>
+            <span class="c">#cvector =</span>
+            <span class="k">pass</span>
+
+        <span class="n">location</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;clocation&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="o">==</span> <span class="s">&#39;surface&#39;</span><span class="p">:</span>
+            <span class="c"># place the contours at the corresponding z level (contour3)</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">location</span> <span class="o">==</span> <span class="s">&#39;base&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">placement</span> <span class="o">==</span> <span class="s">&#39;bottom&#39;</span><span class="p">:</span>
+                <span class="c"># place the contours at the bottom (as in meshc or surfc)</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># standard contour plot</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;clabels&#39;</span><span class="p">):</span>
+            <span class="c"># add labels on the contour curves</span>
+            <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">_add_vectors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding vectors&quot;</span>
+        <span class="c"># uncomment the following command if there is no support for</span>
+        <span class="c"># automatic scaling of vectors in the current plotting package:</span>
+        <span class="c">#item.scale_vectors()</span>
+
+        <span class="c"># grid components:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="c"># vector components:</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;udata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;vdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;wdata&#39;</span><span class="p">)</span>
+        <span class="c"># get line specifiactions (marker=&#39;.&#39; means no marker):</span>
+        <span class="n">marker</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_linespecs</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="c"># scale the vectors according to this variable (scale=0 should</span>
+        <span class="c"># turn off automatic scaling):</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;arrowscale&#39;</span><span class="p">)</span>
+
+        <span class="n">filled</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;filledarrows&#39;</span><span class="p">)</span> <span class="c"># draw filled arrows if True</span>
+
+        <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># draw velocity vectors as arrows with components (u,v,w) at</span>
+            <span class="c"># points (x,y,z):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># draw velocity vectors as arrows with components (u,v) at</span>
+            <span class="c"># points (x,y):</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_add_streams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding streams&quot;</span>
+        <span class="c"># grid components:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="c"># vector components:</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;udata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;vdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;wdata&#39;</span><span class="p">)</span>
+        <span class="c"># starting positions for streams:</span>
+        <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;startx&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;starty&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;startz&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;tubes&#39;</span><span class="p">):</span>
+            <span class="c"># draw stream tubes from vector data (u,v,w) at points (x,y,z)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">)</span> <span class="c"># no points along the circumference of the tube</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;tubescale&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ribbons&#39;</span><span class="p">):</span>
+            <span class="c"># draw stream ribbons from vector data (u,v,w) at points (x,y,z)</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ribbonwidth&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># draw stream lines from vector data (u,v,w) at points (x,y,z)</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># draw stream lines from vector data (u,v) at points (x,y)</span>
+                <span class="k">pass</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_add_isosurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding a isosurface&quot;</span>
+        <span class="c"># grid components:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;vdata&#39;</span><span class="p">)</span>  <span class="c"># volume</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cdata&#39;</span><span class="p">)</span>  <span class="c"># pseudocolor data</span>
+        <span class="n">isovalue</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;isovalue&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding slices in a volume&quot;</span>
+        <span class="c"># grid components:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;vdata&#39;</span><span class="p">)</span>  <span class="c"># volume</span>
+
+        <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;slices&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rank</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c"># sx, sy, and sz defines a surface</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># sx, sy, and sz is either numbers or vectors with numbers</span>
+            <span class="k">pass</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_add_contourslices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Adding contours in slice planes&quot;</span>
+        <span class="c"># grid components:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;xdata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;ydata&#39;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;zdata&#39;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;vdata&#39;</span><span class="p">)</span>  <span class="c"># volume</span>
+
+        <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;slices&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rank</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c"># sx, sy, and sz defines a surface</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># sx, sy, and sz is either numbers or vectors with numbers</span>
+            <span class="k">pass</span>
+
+        <span class="n">cvector</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;cvector&#39;</span><span class="p">)</span>
+        <span class="n">clevels</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;clevels&#39;</span><span class="p">)</span>  <span class="c"># number of contour levels per plane</span>
+        <span class="k">if</span> <span class="n">cvector</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># the contour levels are chosen automatically</span>
+            <span class="c">#cvector =</span>
+            <span class="k">pass</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_get_figure_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Get figure size&quot;</span>
+        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;size&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">height</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># use the default width and height in plotting package</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="mi">15</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># golden mean</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">ratio</span><span class="p">)</span><span class="o">*</span><span class="n">width</span>
+        <span class="k">return</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span>
+
+<div class="viewcode-block" id="PyXBackend.figure"><a class="viewcode-back" href="../../../pyx_.html#scitools.easyviz.pyx_.PyXBackend.figure">[docs]</a>    <span class="k">def</span> <span class="nf">figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c"># Extension of BaseClass.figure:</span>
+        <span class="c"># add a plotting package figure instance as fig._g and create a</span>
+        <span class="c"># link to it as self._g</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">BaseClass</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">_g</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c"># create plotting package figure and save figure instance</span>
+            <span class="c"># as fig._g</span>
+            <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Fig &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;number&#39;</span><span class="p">))</span>
+                <span class="k">print</span> <span class="s">&quot;creating figure </span><span class="si">%s</span><span class="s"> in backend&quot;</span> <span class="o">%</span> <span class="n">name</span>
+
+            <span class="n">fig</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">_g</span>  <span class="c"># link for faster access</span>
+        <span class="k">return</span> <span class="n">fig</span>
+</div>
+    <span class="k">def</span> <span class="nf">_replot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replot all axes and all plotitems in the backend.&quot;&quot;&quot;</span>
+        <span class="c"># NOTE: only the current figure (gcf) is redrawn.</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Doing replot in backend&quot;</span>
+        
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+        <span class="c"># reset the plotting package instance in fig._g now if needed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_figure_size</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">xpos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="n">ypos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tmp_xpos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="n">tmp_ypos</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="n">column</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">nrows</span><span class="p">,</span> <span class="n">ncolumns</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;axshape&#39;</span><span class="p">)</span>
+        <span class="n">sbsp</span> <span class="o">=</span> <span class="mf">1.8</span>  <span class="c"># space between subplots</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">width</span><span class="o">/</span><span class="n">ncolumns</span><span class="o">-</span><span class="n">sbsp</span>  <span class="c"># subplot width</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">height</span><span class="o">/</span><span class="n">nrows</span><span class="o">-</span><span class="n">sbsp</span>    <span class="c"># subplot height</span>
+        <span class="k">for</span> <span class="n">axnr</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;axes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">legends</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_scale</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">xaxis</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">xmax</span><span class="p">),</span>
+                      <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">yaxis</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">ymax</span><span class="p">)}</span>
+            <span class="n">pth</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;pth&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pth</span><span class="p">:</span>
+                <span class="c"># create axes in tiled position</span>
+                <span class="c"># this is subplot(nrows,ncolumns,pth)</span>
+                <span class="n">xpos</span> <span class="o">=</span> <span class="n">tmp_xpos</span><span class="p">;</span>  <span class="n">ypos</span> <span class="o">=</span> <span class="n">tmp_ypos</span>
+                <span class="k">if</span> <span class="n">column</span> <span class="o">&lt;</span> <span class="n">ncolumns</span><span class="p">:</span>
+                    <span class="n">column</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">tmp_xpos</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">+</span> <span class="n">sbsp</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">column</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">tmp_xpos</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">nrows</span><span class="p">:</span>
+                        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">tmp_ypos</span> <span class="o">-=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">sbsp</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span> <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="n">h</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rect</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;viewport&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">rect</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span> <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span><span class="p">})</span>
+            <span class="n">graph</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">graphxy</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="c">#graph = pyx.graph.graphxyz(xpos, ypos, width=5, height=5, depth=5)</span>
+            <span class="n">plotitems</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;plotitems&#39;</span><span class="p">)</span>
+            <span class="n">plotitems</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmpPlotProperties</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">plotitems</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>  <span class="c"># insert graph into figure canvas</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_axis_props</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">plotitems</span><span class="p">:</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;function&#39;</span><span class="p">)</span> <span class="c"># function that produced this item</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Line</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_line</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Surface</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_surface</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">shading</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;shading&#39;</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Contours</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_contours</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">VelocityVectors</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_vectors</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Streams</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_streams</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Volume</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">func</span> <span class="o">==</span> <span class="s">&#39;isosurface&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_add_isosurface</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">func</span> <span class="o">==</span> <span class="s">&#39;slice_&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_add_slices</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">func</span> <span class="o">==</span> <span class="s">&#39;contourslice&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_add_contourslices</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="n">legend</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;legend&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
+                    <span class="c"># add legend to plot</span>
+                    <span class="n">legends</span> <span class="o">=</span> <span class="bp">True</span>
+
+            <span class="k">if</span> <span class="n">legends</span><span class="p">:</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">pyx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="s">&quot;tr&quot;</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+                    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;show&#39;</span><span class="p">):</span>
+            <span class="c"># display plot on the screen</span>
+            <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Dumping plot data to screen</span><span class="se">\n</span><span class="s">&quot;</span>
+                <span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+<div class="viewcode-block" id="PyXBackend.hardcopy"><a class="viewcode-back" href="../../../pyx_.html#scitools.easyviz.pyx_.PyXBackend.hardcopy">[docs]</a>    <span class="k">def</span> <span class="nf">hardcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Supported extensions: .pdf, .ps, .eps</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="s">&#39;color&#39;</span><span class="p">)</span>
+        <span class="n">replot</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;replot&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">replot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_replot</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Hardcopy to </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">filename</span>
+
+        <span class="n">basename</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
+            <span class="c"># no extension given, assume PostScript</span>
+            <span class="n">filename</span> <span class="o">+=</span> <span class="s">&#39;.ps&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">writetofile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="c"># reimplement methods like clf, closefig, closefigs</span></div>
+<div class="viewcode-block" id="PyXBackend.clf"><a class="viewcode-back" href="../../../pyx_.html#scitools.easyviz.pyx_.PyXBackend.clf">[docs]</a>    <span class="k">def</span> <span class="nf">clf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">fig</span><span class="o">.</span><span class="n">_g</span>
+        <span class="n">BaseClass</span><span class="o">.</span><span class="n">clf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="c"># implement colormap functions here</span>
+    <span class="c">#def jet(self, m=None):</span>
+    <span class="c">#    &quot;&quot;&quot;Variant of hsv.&quot;&quot;&quot;</span>
+    <span class="c">#    pass</span>
+    
+
+    <span class="c"># Now we add the doc string from the methods in BaseClass to the</span>
+    <span class="c"># methods that are reimplemented in this backend:</span></div>
+    <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">BaseClass</span><span class="o">.</span><span class="n">_matlab_like_cmds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;__&#39;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+            <span class="n">m1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;BaseClass.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">m2</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m1</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">!=</span> <span class="n">m2</span><span class="o">.</span><span class="n">__doc__</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">m2</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">m2</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+                    <span class="n">m2</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="n">m1</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">+</span> <span class="n">m2</span><span class="o">.</span><span class="n">__doc__</span>
+
+    </div>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">PyXBackend</span><span class="p">()</span>   <span class="c"># create backend instance</span>
+<span class="n">use</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>  <span class="c"># export public namespace of plt to globals()</span>
+<span class="n">backend</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">__file__</span><span class="p">))[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

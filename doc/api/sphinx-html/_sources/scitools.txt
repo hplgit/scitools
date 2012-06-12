@@ -1,8 +1,0 @@
-
-:mod:`scitools`
-=======================
-
-.. automodule:: scitools
-   :members:
-   :undoc-members:
-   :show-inheritance:

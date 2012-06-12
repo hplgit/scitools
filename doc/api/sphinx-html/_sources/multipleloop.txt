@@ -1,8 +1,0 @@
-
-:mod:`scitools.multipleloop`
-=======================
-
-.. automodule:: scitools.multipleloop
-   :members:
-   :undoc-members:
-   :show-inheritance:

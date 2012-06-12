@@ -169,7 +169,8 @@ class Plotter:
         for t in tp:
             print p.plot(t, sin(t), cos(t))
 
-    The output becomes::
+    The output from this code becomes::
+
                                  |                        c
                                  |         s            c
                                  |                 c
@@ -219,6 +220,7 @@ class Plotter:
                s                 |                 c
                        s         |                      c
                                  |                        c
+
 
     """
     def __init__(self, ymin, ymax, width=68, symbols='*o+x@',
@@ -258,6 +260,14 @@ class Plotter:
         return c
 
     def plot(self, x, *y, **kwargs):
+        """
+        Return next line in plot, given x and some y values.
+
+        Supported kwargs:
+        print_out_of_range_value: if True, print the value if it
+        is out of range.
+
+        """
         print_out_of_range_value = \
               kwargs.get('print_out_of_range_value', True)
         line = [' ']*(self.width + 1)
@@ -277,6 +287,43 @@ class Plotter:
             c = self._map(0)
             line[c] = '|'
         return ''.join(line) + y_value
+
+
+def plot(*args, **kwargs):
+    """
+    Easyviz-style plot command.
+    args holds x1, y1, x2, y2, ...::
+
+      plot(t, u1, t, u2, axis=[0, 10, -1, 1])
+
+    No other keyword arguments has any effect.
+    """
+    if 'axis' in kwargs:
+        ymin, ymax = kwargs['axis'][2:]
+    else:
+        ymin = 1E+20
+        ymax = -ymin
+        for i in range(1,len(args),2):
+            ymin = max(ymin, args[i].min())
+            ymax = max(ymax, args[i].max())
+    p = Plotter(ymin, ymax, width=70)
+    num_curves = len(args)/2
+    if num_curves > 4:
+        raise ValueError('avplotter.plot: cannot plot more than 4 curves')
+
+    x_length = len(args[0])
+    for i in range(2,len(args),2):
+        if len(args[i]) != x_length:
+            raise ValueError('avplotter.plot: all x coordinates for all curves must have the same length (%d vs %d)' % (len(args[i]), x_length))
+
+    x_array = args[0]
+    for i, x in enumerate(x_array):
+        try:
+            y = [args[j][i] for j in range(1,len(args),2)]
+        except IndexError:
+            raise ValueError('index %d in x_array is illegal in args[%d] (length=%d)' % (i, j, len(args[j])))
+
+        print p.plot(x_array, *y)
 
 
 def test_sin():

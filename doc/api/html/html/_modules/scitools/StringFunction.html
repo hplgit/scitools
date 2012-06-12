@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.StringFunction &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.StringFunction</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;Make a string with a mathematical expression behave as a Python function.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="c"># Default import of mathematical functions (in case the user</span>
+<span class="c"># supplies expressions with math functions and does not provide</span>
+<span class="c"># a globals keyword to the constructor with appropriate modules</span>
+<span class="c"># defining these math functions):</span>
+<span class="c"># from math import *</span>
+<span class="n">math_functions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;acos&#39;</span><span class="p">,</span> <span class="s">&#39;asin&#39;</span><span class="p">,</span> <span class="s">&#39;atan&#39;</span><span class="p">,</span> <span class="s">&#39;atan2&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">,</span> <span class="s">&#39;cos&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;cosh&#39;</span><span class="p">,</span> <span class="s">&#39;exp&#39;</span><span class="p">,</span> <span class="s">&#39;fabs&#39;</span><span class="p">,</span> <span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;log&#39;</span><span class="p">,</span> <span class="s">&#39;log10&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;pi&#39;</span><span class="p">,</span> <span class="s">&#39;pow&#39;</span><span class="p">,</span> <span class="s">&#39;sin&#39;</span><span class="p">,</span> <span class="s">&#39;sinh&#39;</span><span class="p">,</span> <span class="s">&#39;sqrt&#39;</span><span class="p">,</span> <span class="s">&#39;tan&#39;</span><span class="p">,</span> <span class="s">&#39;tanh&#39;</span><span class="p">]</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s">&#39;from math import &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">math_functions</span><span class="p">)</span>
+<span class="k">exec</span> <span class="n">s</span>
+<span class="c"># Problem: vectorized expressions require NumPy versions</span>
+<span class="c"># of the math functions. We try to detect errors arising from</span>
+<span class="c"># such lacking imports.</span>
+
+<span class="c"># The first edition of the &quot;Python for Computational Science&quot; book</span>
+<span class="c"># introduced the classes StringFunction1x, StringFunction1, and</span>
+<span class="c"># StringFunction. These are now (for the second edition) named</span>
+<span class="c"># StringFunction_v3, StringFunction_v4, and StringFunction_v5,</span>
+<span class="c"># respectively.</span>
+
+
+<span class="c"># The following implementation of StringFunction is an</span>
+<span class="c"># improved version compared to the one explained in the</span>
+<span class="c"># first edition of the book &quot;Python for Computational Science&quot;.</span>
+<span class="c"># The new version is created by Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;</span>
+<span class="c"># and Hans Petter Langtangen &lt;hpl@simula.no&gt;. The basic idea is to</span>
+<span class="c"># build a lambda function out of the string expression and define</span>
+<span class="c"># self.__call__ to be this lambda function.</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<div class="viewcode-block" id="StringFunction"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction">[docs]</a><span class="k">class</span> <span class="nc">StringFunction</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of a string formula as a function of one or</span>
+<span class="sd">    more variables, optionally with parameters.</span>
+
+<span class="sd">    Example on usage:</span>
+
+<span class="sd">    &gt;&gt;&gt; from scitools.StringFunction import StringFunction</span>
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1+sin(2*x)&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f(1.2)</span>
+<span class="sd">    1.6754631805511511</span>
+
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1+sin(2*t)&#39;, independent_variable=&#39;t&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f(1.2)</span>
+<span class="sd">    1.6754631805511511</span>
+
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1+A*sin(w*t)&#39;, independent_variable=&#39;t&#39;, \</span>
+<span class="sd">                           A=0.1, w=3.14159)</span>
+<span class="sd">    &gt;&gt;&gt; f(1.2)</span>
+<span class="sd">    0.94122173238695939</span>
+<span class="sd">    &gt;&gt;&gt; f.set_parameters(A=1, w=1)</span>
+<span class="sd">    &gt;&gt;&gt; f(1.2)</span>
+<span class="sd">    1.9320390859672263</span>
+
+<span class="sd">    &gt;&gt;&gt; f(1.2, A=2, w=1)   # can also set parameters in the call</span>
+<span class="sd">    2.8640781719344526</span>
+
+<span class="sd">    &gt;&gt;&gt; # function of two variables:</span>
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1+sin(2*x)*cos(y)&#39;, \</span>
+<span class="sd">                           independent_variables=(&#39;x&#39;,&#39;y&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; f(1.2,-1.1)</span>
+<span class="sd">    1.3063874788637866</span>
+
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1+V*sin(w*x)*exp(-b*t)&#39;, \</span>
+<span class="sd">                           independent_variables=(&#39;x&#39;,&#39;t&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; f.set_parameters(V=0.1, w=1, b=0.1)</span>
+<span class="sd">    &gt;&gt;&gt; f(1.0,0.1)</span>
+<span class="sd">    1.0833098208613807</span>
+<span class="sd">    &gt;&gt;&gt; str(f)  # print formula with parameters substituted by values</span>
+<span class="sd">    &#39;1+0.1*sin(1*x)*exp(-0.1*t)&#39;</span>
+<span class="sd">    &gt;&gt;&gt; repr(f)</span>
+<span class="sd">    &quot;StringFunction(&#39;1+V*sin(w*x)*exp(-b*t)&#39;, independent_variables=(&#39;x&#39;, &#39;t&#39;), b=0.10000000000000001, w=1, V=0.10000000000000001)&quot;</span>
+
+<span class="sd">    &gt;&gt;&gt; # vector field of x and y:</span>
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;[a+b*x,y]&#39;, \</span>
+<span class="sd">                           independent_variables=(&#39;x&#39;,&#39;y&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; f.set_parameters(a=1, b=2)</span>
+<span class="sd">    &gt;&gt;&gt; f(2,1)  # [1+2*2, 1]</span>
+<span class="sd">    [5, 1]</span>
+
+<span class="sd">    StringFunction expressions may contain fractions like 1/2 and these</span>
+<span class="sd">    always result in float division (not integer division). Here is</span>
+<span class="sd">    an example:</span>
+
+<span class="sd">    &gt;&gt;&gt; from scitools.StringFunction import StringFunction</span>
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;1/4 + 1/2*x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f(2)</span>
+<span class="sd">    1.25</span>
+
+
+<span class="sd">    The string parameter can, instead of a valid Python expression,</span>
+<span class="sd">    be a function in a file (module). The string is then the</span>
+<span class="sd">    complete path to the function, typically of the form</span>
+<span class="sd">    somepackage.somemodule.function_name. This functionality is useful</span>
+<span class="sd">    when simple string formulas cannot describe the function, e.g., when</span>
+<span class="sd">    there are multiple if-branches inside the function expression.</span>
+
+<span class="sd">    As an example, there is a function called _test_function::</span>
+
+<span class="sd">        def _test_function(x, c=0, a=1, b=2):</span>
+<span class="sd">            if x &gt; c:</span>
+<span class="sd">                return a*(x-c) + b</span>
+<span class="sd">            else:</span>
+<span class="sd">                return -a*(x-c) + b</span>
+
+<span class="sd">    in the module scitools.misc (i.e., the misc.py file in the scitools</span>
+<span class="sd">    package). We can then specify the complete path of this function</span>
+<span class="sd">    as &quot;string expression&quot;:</span>
+
+<span class="sd">    &gt;&gt;&gt; f = StringFunction(&#39;scitools.misc._test_function&#39;, independent_variable=&#39;x&#39;, a=10)</span>
+<span class="sd">    &gt;&gt;&gt; f(4)  # 10*(4-0) + 2 = 42</span>
+<span class="sd">    42</span>
+
+<span class="sd">    (Note that in Python 2.5 the _test_function can be coded as a</span>
+<span class="sd">    simple string expression a*(x-c)+b if x &gt; c else -a*(x-c)+b.)</span>
+
+<span class="sd">    Giving the name of a function in a file (module) is convenient in</span>
+<span class="sd">    user interfaces because the user can then write the name of</span>
+<span class="sd">    the function as a standard Python module.function path. StringFunction</span>
+<span class="sd">    turns this name, as a string, into a working module.function path.</span>
+
+<span class="sd">    Troubleshooting:</span>
+
+<span class="sd">    1)</span>
+<span class="sd">    The StringFunction class can work with sin, cos, exp, and other</span>
+<span class="sd">    mathematical functions if the argument is a scalar (float or int) type.</span>
+<span class="sd">    If the argument is a vector, the NumPy versions of sin, cos,</span>
+<span class="sd">    exp, etc., are needed. A common error message in the latter case is::</span>
+
+<span class="sd">       TypeError: only rank-0 arrays can be converted to Python scalars.</span>
+
+<span class="sd">    Make something like::</span>
+
+<span class="sd">       from numpy import *</span>
+<span class="sd">       # or</span>
+<span class="sd">       from scitools.std import *</span>
+<span class="sd">       # or</span>
+<span class="sd">       from numpy import sin, cos</span>
+
+<span class="sd">    in the calling code and supply globals=globals() as argument to</span>
+<span class="sd">    the constructor::</span>
+
+<span class="sd">       f = StringFunction(&#39;1+x*y&#39;, independent_variables=(&#39;x&#39;, &#39;y&#39;),</span>
+<span class="sd">                          globals=globals())</span>
+<span class="sd">       # f(p,q) will now work for NumPy arrays p and q.</span>
+
+<span class="sd">    You can also omit the globals argument when constructing the</span>
+<span class="sd">    StringFunction and later call</span>
+<span class="sd">    f.vectorize(globals())</span>
+<span class="sd">    to allow array arguments.</span>
+
+<span class="sd">    2) StringFunction builds a lambda function and evaluates this.</span>
+<span class="sd">    You can see the lambda function as a string by accessing the</span>
+<span class="sd">    _lambda attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>  <span class="c"># ensure a string</span>
+
+        <span class="c"># check if expression is a function in a module:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># a module function specification is on the form</span>
+        <span class="c"># [A-Za-z_][A-Za-z0-9_.]x where x+1 is the len(expression)</span>
+        <span class="c"># but there MUST be a dot in there</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;[A-Za-z_][A-Za-z0-9_.]{</span><span class="si">%d</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">expression</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">function</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span> <span class="o">=</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
+
+        <span class="c"># self._var holds the independent variables in a tuple:</span>
+        <span class="k">if</span> <span class="s">&#39;independent_variable&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>  <span class="c"># allow &quot;variable&quot; and &quot;variables&quot;</span>
+            <span class="c"># note that tuple(string) gives a tuple of the characters</span>
+            <span class="c"># so we need to be careful (if the indep. var has more than</span>
+            <span class="c"># one character)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;independent_variable&#39;</span><span class="p">]</span> <span class="c"># &#39;x&#39;, &#39;t&#39;, &#39;dudt&#39; etc.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;name &quot;</span><span class="si">%s</span><span class="s">&quot; of independent variable is illegal&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_var</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;independent_variables&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">(</span><span class="n">names</span><span class="p">,)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;independent variables=</span><span class="si">%s</span><span class="s"> is invalid&#39;</span> <span class="o">%</span> <span class="n">names</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_var</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+
+        <span class="c"># user&#39;s globals() array (with relevant imported modules/functions):</span>
+        <span class="k">if</span> <span class="s">&#39;globals&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;globals&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;globals&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+	<span class="k">try</span><span class="p">:</span>    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;independent_variable&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;independent_variables&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;globals&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># may fail if not all parameters are defined yet</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_lambda</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c">#print e</span>
+            <span class="k">pass</span> <span class="c"># ok at this stage: parameters might be missing</span>
+
+    <span class="k">def</span> <span class="nf">_build_lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Translate the expression to a lambda function taking the</span>
+<span class="sd">        independent variables as positional arguments and the</span>
+<span class="sd">        parameters as keyword arguments.</span>
+<span class="sd">        The idea is due to Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;lambda &#39;</span> <span class="o">+</span> <span class="n">args</span>
+
+        <span class="c"># add parameters as keyword arguments:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> \
+                                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;, &#39;</span> <span class="o">+</span> <span class="n">kwargs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># insert string expression as body in the lambda function:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">exec</span><span class="p">(</span><span class="s">&#39;import &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c"># let lambda call a function in a file (module):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;, module=</span><span class="si">%s</span><span class="s">: module.</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> \
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                  <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+            <span class="c"># note: we could use self._f directly here (giving the</span>
+            <span class="c"># full module path), but then we need to do import first,</span>
+            <span class="c"># all this is done in the __init__ and then it is simpler</span>
+            <span class="c"># to just let self_function_in_module point to the imported</span>
+            <span class="c"># function</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lambda</span> <span class="o">=</span> <span class="n">s</span> <span class="c"># store lambda function code; just for convenience</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_in_module</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__call__</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">Making StringFunction with formula </span><span class="si">%s</span><span class="s"> failed!</span>
+<span class="s">Tried to build a lambda function:</span><span class="se">\n</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+
+                <span class="c">## the following makes all instances have the same function :-(</span>
+                <span class="c">##StringFunction.__call__ = eval(s, self._globals)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># didn&#39;t work with self._globals...and we don&#39;t need it...????</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__call__</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="nb">locals</span><span class="p">())</span>
+                <span class="c">#self.__call__ = eval(s)</span>
+                <span class="c">#print &#39;call is&#39;, self.__call__</span>
+
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">prm</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">,</span> <span class="s">&#39;name &quot;</span><span class="si">%s</span><span class="s">&quot; is not defined - if it is &#39;</span>\
+                  <span class="s">&#39;a parameter,</span><span class="se">\n</span><span class="s">set it in the constructor or the &#39;</span>\
+                  <span class="s">&#39;set_parameters method, or provide</span><span class="se">\n</span><span class="s">globals=globals() &#39;</span>\
+                  <span class="s">&#39;in the constructor if &quot;</span><span class="si">%s</span><span class="s">&quot; is a global name in the &#39;</span>\
+                  <span class="s">&#39;calling code.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prm</span><span class="p">,</span> <span class="n">prm</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="StringFunction.set_parameters"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set keyword parameters in the function.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_lambda</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="StringFunction.vectorize"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.vectorize">[docs]</a>    <span class="k">def</span> <span class="nf">vectorize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">globals_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow the StringFunction object to take NumPy array</span>
+<span class="sd">        arguments. The calling code must have done a</span>
+<span class="sd">        from numpy import * or similar and send the globals()</span>
+<span class="sd">        dictionary as the argument globals_dict.</span>
+<span class="sd">        Alternatively, the globals() dictionary can be supplied</span>
+<span class="sd">        as a globals keyword argument to the constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span> <span class="o">=</span> <span class="n">globals_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_lambda</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="StringFunction.troubleshoot"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.troubleshoot">[docs]</a>    <span class="k">def</span> <span class="nf">troubleshoot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform function evaluation call with lots of testing to</span>
+<span class="sd">        try to help the user with problems.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;only rank-0 arrays can be converted to Python scalars&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+
+                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">The call resulted in the exception TypeError:&#39;</span>
+                <span class="k">print</span> <span class="n">e</span>
+
+                <span class="c"># *args contains NumPy arrays and the operations in</span>
+                <span class="c"># the string formula are not compatible</span>
+
+                <span class="c"># do we have intrinsic math functions of wrong type?</span>
+                <span class="n">math_funcs</span> <span class="o">=</span> <span class="bp">False</span><span class="p">;</span> <span class="n">not_NumPy</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">math_functions</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">math_funcs</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">))[</span><span class="mi">7</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;ufunc&#39;</span><span class="p">:</span>
+                            <span class="n">not_NumPy</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">math_funcs</span> <span class="ow">and</span> <span class="n">not_NumPy</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">This message is caused by using scalar math</span><span class="se">\n</span><span class="s">&#39;</span>\
+                          <span class="s">&#39;functions (like </span><span class="si">%s</span><span class="s">) with array arguments.</span><span class="se">\n</span><span class="s">&#39;</span>\
+                          <span class="s">&#39;Make some</span><span class="se">\n</span><span class="s">from numarray import *</span><span class="se">\n</span><span class="s">&#39;</span>\
+                          <span class="s">&#39;or similar in the calling code and &#39;</span>\
+                          <span class="s">&#39;supply the globals=globals() constructor</span><span class="se">\n</span><span class="s">&#39;</span>\
+                          <span class="s">&#39;argument when creating the StringFunction instance.&#39;</span>\
+                          <span class="o">%</span> <span class="n">f</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;Internal error - this should not happen...&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">e</span>
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;This call worked perfectly!&#39;</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the string function formula as a string, with</span>
+<span class="sd">        parameters substituted by their values.</span>
+
+<span class="sd">        The return value can be used when creating Fortran or C/C++</span>
+<span class="sd">        functions out of the string formula:</span>
+<span class="sd">        f = StringFunction(&#39;a + p*x&#39;, a=1, p=0)</span>
+<span class="sd">        somefile.write(&#39;double somefunc(double x) { return %s; }&#39; % str(f))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>  <span class="c"># formula with parameter names and indep. variables</span>
+
+        <span class="c"># Substitute parameter names by their numerical values.</span>
+        <span class="c"># Start with the most complicated parameter names</span>
+        <span class="c"># (this algorithm may fail).</span>
+        <span class="n">prm_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">prm_names</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">cmp</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+        <span class="n">prm_names</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">prm_names</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the code required to reconstruct this instance.&quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> \
+                            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;StringFunction(</span><span class="si">%s</span><span class="s">, independent_variables=</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;&quot;&quot;</span> <span class="o">%</span> \
+               <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">),</span> <span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c"># The next code generation functions work only for scalar</span>
+    <span class="c"># function values, not vector values (can extend to vectors by</span>
+    <span class="c"># checking if self._f has a list form, and then include the</span>
+    <span class="c"># return value as an array argument in the functions).</span>
+
+    <span class="k">def</span> <span class="nf">_no_of_vector_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of vector components in the string</span>
+<span class="sd">        expression.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ni</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ni</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="c"># function of more than one variable may be a vector field:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">ni</span><span class="p">)</span>  <span class="c"># try (0,0,...) as indep. variables</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ni</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c"># try another argument (in case (0,0,...) caused wrong calculations:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mf">1.105</span><span class="p">]</span><span class="o">*</span><span class="n">ni</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ni</span>
+
+
+<div class="viewcode-block" id="StringFunction.Cpp_code"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.Cpp_code">[docs]</a>    <span class="k">def</span> <span class="nf">Cpp_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function_name</span><span class="o">=</span><span class="s">&#39;somefunc&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dump the string expression to C++.</span>
+<span class="sd">        In C++ we use a plain function if there are no parameters,</span>
+<span class="sd">        otherwise we use a function object with operator() for</span>
+<span class="sd">        the function evaluation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">varlist</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;double </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">])</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+        <span class="c"># ** does not work in C, instead of doing sophisticated</span>
+        <span class="c"># parsing and edit, provide an error message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_check</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">:</span>
+            <span class="n">decl</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;double </span><span class="si">%s</span><span class="s">;&#39;</span> <span class="o">%</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="n">prms</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;double </span><span class="si">%s</span><span class="s">_=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> \
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="n">setp</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">_;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> \
+                             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="c"># function object:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">class </span><span class="si">%(function_name)s</span><span class="s"></span>
+<span class="s">{</span>
+<span class="s">  // parameters:</span>
+<span class="s">  </span><span class="si">%(decl)s</span><span class="s"></span>
+<span class="s"> public:</span>
+<span class="s">  </span><span class="si">%(function_name)s</span><span class="s"> (</span><span class="si">%(prms)s</span><span class="s">)</span>
+<span class="s">    { </span><span class="si">%(setp)s</span><span class="s"> }</span>
+<span class="s">  double operator() const (</span><span class="si">%(varlist)s</span><span class="s">)</span>
+<span class="s">    { return </span><span class="si">%(expr)s</span><span class="s">; }</span>
+<span class="s">};</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">double </span><span class="si">%(function_name)s</span><span class="s"> (</span><span class="si">%(varlist)s</span><span class="s">)</span>
+<span class="s">{ return </span><span class="si">%(expr)s</span><span class="s">; }</span>
+<span class="s">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="StringFunction.F77_code"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.F77_code">[docs]</a>    <span class="k">def</span> <span class="nf">F77_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function_name</span><span class="o">=</span><span class="s">&#39;somefunc&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dump the string expressions as a Fortran 77 function or subroutine.</span>
+
+<span class="sd">        Note: if pow(x,a) is used in the expression, this is</span>
+<span class="sd">        translated to x**a by a simple regex, which may fail if</span>
+<span class="sd">        there are function calls inside pow(.,.).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="s">&#39;real*8&#39;</span>
+        <span class="n">varlist</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">)</span>
+        <span class="n">varlist_decl</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;      </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> \
+                                  <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">])</span>
+        <span class="n">decl</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;      </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">real</span><span class="p">,</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+        <span class="kn">import</span> <span class="nn">re</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;pow\s*\(&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+            <span class="c"># try to replace pow(x,a) by x**a</span>
+            <span class="n">expr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;pow\(([^,]+),([^)]+)\)&#39;</span><span class="p">,</span> <span class="s">&#39;((\g&lt;1&gt;)**(\g&lt;2&gt;))&#39;</span><span class="p">,</span>
+                          <span class="n">expr</span><span class="p">)</span>
+        <span class="c"># set parameter values:</span>
+        <span class="n">setp</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;      </span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> \
+                          <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">      </span><span class="si">%(real)s</span><span class="s"> function </span><span class="si">%(function_name)s</span><span class="s">(</span><span class="si">%(varlist)s</span><span class="s">)</span>
+<span class="s">C     independent variables:</span>
+<span class="si">%(varlist_decl)s</span><span class="s"></span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">C     parameters:</span>
+<span class="si">%(decl)s</span><span class="s"></span>
+<span class="si">%(setp)s</span><span class="s"></span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">      </span><span class="si">%(function_name)s</span><span class="s"> = </span><span class="si">%(expr)s</span><span class="s"></span>
+
+<span class="s">      return</span>
+<span class="s">      end</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="StringFunction.F77_pow"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.F77_pow">[docs]</a>    <span class="k">def</span> <span class="nf">F77_pow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate an F77 function pow(x,a) (x**a). In some</span>
+<span class="sd">        string expressions that are to be translated to C/C++,</span>
+<span class="sd">        pow(x,a) must be used instead of x**a, but pow is not</span>
+<span class="sd">        defined in F77. This code dumpes the necessary F77 version</span>
+<span class="sd">        of pow such that string functions can be seamlessly translated</span>
+<span class="sd">        to C, C++, and F77.</span>
+
+<span class="sd">        Note: this function is difficult to use since it expects</span>
+<span class="sd">        exactly a single-precision power. We now rely on regular</span>
+<span class="sd">        expressions to replace pow(x,a) by x**a in F77_code instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+
+<span class="s">      real*8 function pow(x, a)</span>
+<span class="s">      real*8 x</span>
+<span class="s">C     the power a is usually a number (single precision),</span>
+<span class="s">C     note: it cannot be int</span>
+<span class="s">      real*4 a</span>
+<span class="s">      pow = x**a</span>
+<span class="s">      return</span>
+<span class="s">      end</span>
+<span class="s">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="StringFunction.C_code"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction.C_code">[docs]</a>    <span class="k">def</span> <span class="nf">C_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function_name</span><span class="o">=</span><span class="s">&#39;somefunc&#39;</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dump the string expressions as a C function.</span>
+<span class="sd">        If inline is true, the C++ inline keyword is inserted</span>
+<span class="sd">        to make the function inline.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inline</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;inline &#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+        <span class="c"># ** does not work in C, instead of doing sophisticated</span>
+        <span class="c"># parsing and edit, provide an error message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pow_check</span><span class="p">()</span>
+
+        <span class="n">varlist</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;double </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;double </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)</span><span class="se">\n</span><span class="s">{</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">function_name</span><span class="p">,</span> <span class="n">varlist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">:</span>
+            <span class="c"># declare variables for parameters:</span>
+            <span class="n">decl</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;double </span><span class="si">%s</span><span class="s">;&#39;</span> <span class="o">%</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="c"># set parameter values:</span>
+            <span class="n">prms</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> \
+                            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">])</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;  </span><span class="si">%s</span><span class="se">\n</span><span class="s">  </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="n">prms</span><span class="p">)</span>
+        <span class="c"># evaluate math expression:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;  return &#39;</span> <span class="o">+</span> <span class="n">expr</span> <span class="o">+</span> <span class="s">&#39;;</span><span class="se">\n</span><span class="s">}</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+    <span class="k">def</span> <span class="nf">_pow_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raise a SyntaxError exception if the ** power operator is used</span>
+<span class="sd">        in the string formula.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;**&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">,</span> \
+                  <span class="s">&#39;use pow(a,b) instead of a**b in the expression&#39;</span>\
+                  <span class="s">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">(since you demand translation to C/C++)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+</div>
+<span class="k">def</span> <span class="nf">_doctest</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">doctest</span><span class="o">,</span> <span class="nn">StringFunction</span>
+    <span class="k">return</span> <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">StringFunction</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_demo</span><span class="p">():</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">StringFunction</span><span class="p">(</span><span class="s">&#39;a+b*sin(x)&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">a</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;internals:&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">_lambda</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">_prms</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">StringFunction</span><span class="p">(</span><span class="s">&#39;amp*sin(a*t)*exp(-6.211*x)&#39;</span><span class="p">,</span>
+                       <span class="n">independent_variables</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;t&#39;</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;internals:&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">_lambda</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">_prms</span>
+    <span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">C_code</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">Cpp_code</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">F77_code</span><span class="p">()</span>
+
+
+<span class="c"># simplified &quot;pedagogical&quot; versions from the</span>
+<span class="c"># &quot;Python for Computational Science&quot; book:</span>
+
+<div class="viewcode-block" id="StringFunction_v1"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v1">[docs]</a><span class="k">class</span> <span class="nc">StringFunction_v1</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">expression</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">)</span>  <span class="c"># evaluate function expression</span>
+
+<span class="c"># compile eval expression:</span></div>
+<div class="viewcode-block" id="StringFunction_v2"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v2">[docs]</a><span class="k">class</span> <span class="nc">StringFunction_v2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="s">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;eval&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span><span class="p">)</span>
+
+<span class="c"># allow parameters and an arbitrary name of the independent variable:</span></div>
+<div class="viewcode-block" id="StringFunction_v3"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v3">[docs]</a><span class="k">class</span> <span class="nc">StringFunction_v3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span>
+                 <span class="n">independent_variable</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">,</span>
+                 <span class="n">set_parameters</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="s">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;eval&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var</span> <span class="o">=</span> <span class="n">independent_variable</span>  <span class="c"># &#39;x&#39;, &#39;t&#39; etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code</span> <span class="o">=</span> <span class="n">set_parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="n">expression</span>  <span class="c"># name of func is expression</span>
+
+<div class="viewcode-block" id="StringFunction_v3.set_parameters"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v3.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code</span> <span class="o">=</span> <span class="n">code</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c"># assign value to independent variable:</span>
+        <span class="k">exec</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c"># execute some user code (defining parameters etc.):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_code</span><span class="p">:</span>  <span class="k">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span><span class="p">)</span>
+
+<span class="c"># let parameters be keyword arguments:</span></div>
+<div class="viewcode-block" id="StringFunction_v4"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v4">[docs]</a><span class="k">class</span> <span class="nc">StringFunction_v4</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">expression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;independent_variable&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">)</span> <span class="c"># &#39;x&#39;, &#39;t&#39; etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;globals&#39;</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>  <span class="c"># class name = function expression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">,</span> <span class="s">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;eval&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+	<span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;independent_variable&#39;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;globals&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+
+<div class="viewcode-block" id="StringFunction_v4.set_parameters"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v4.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c"># include indep. variable in dictionary of function parameters:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="c"># evaluate function expression:</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StringFunction_v4.test"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v4.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">1.4325</span><span class="p">):</span>
+        <span class="c"># test that all parameters are defined</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c"># sample call</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">prm</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">,</span> <span class="s">&#39;Parameter &quot;</span><span class="si">%s</span><span class="s">&quot; is not defined,</span><span class="se">\n</span><span class="s">neither in &#39;</span>\
+                  <span class="s">&#39;the constructor nor set_parameters.</span><span class="se">\n</span><span class="s">&#39;</span>\
+                  <span class="s">&#39;Update the constructor call or call set_parameters&#39;</span>\
+                  <span class="s">&#39;(</span><span class="si">%s</span><span class="s">=...)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prm</span><span class="p">,</span> <span class="n">prm</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>  <span class="c"># accept other errors</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span>
+        <span class="c"># Substitute parameter names by their numerical values.</span>
+        <span class="c"># Start with the most complicated parameter names</span>
+        <span class="c"># (this algorithm may fail).</span>
+
+        <span class="c"># first remove indep. variables possibly inserted in self._prms</span>
+        <span class="c"># by the self.__call__ method:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">prm_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">prm_names</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">cmp</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+        <span class="n">prm_names</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">prm_names</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># first remove indep. variables possibly inserted in self._prms</span>
+        <span class="c"># by the self.__call__ method:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> \
+                            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;StringFunction1(</span><span class="si">%s</span><span class="s">, independent_variable=</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;&quot;&quot;</span> <span class="o">%</span> \
+               <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">),</span> <span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="StringFunction_v5"><a class="viewcode-back" href="../../StringFunction.html#scitools.StringFunction.StringFunction_v5">[docs]</a><span class="k">class</span> <span class="nc">StringFunction_v5</span><span class="p">(</span><span class="n">StringFunction_v4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extension of class StringFunction_v4 to an arbitrary</span>
+<span class="sd">    number of independent variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">StringFunction_v4</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;independent_variables&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="s">&#39;independent_variables&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="c"># add independent variables to self._prms:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f_compiled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_globals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># remove the independent variables from self._prms such that</span>
+        <span class="c"># this dict contains parameters (to be subsituted by values) only:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">StringFunction1</span><span class="o">.</span><span class="n">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># first remove indep. variables possibly inserted in self._prms</span>
+        <span class="c"># by the self.__call__ method:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> \
+                            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prms</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;StringFunction(</span><span class="si">%s</span><span class="s">, independent_variables=</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;&quot;&quot;</span> <span class="o">%</span> \
+               <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var</span><span class="p">),</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+</div>
+<span class="k">def</span> <span class="nf">_efficiency</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Perform some efficiency tests (this might take some time...):&#39;</span>
+    <span class="n">formula</span> <span class="o">=</span> <span class="s">&#39;sin(x) + x**3 + 2*x&#39;</span>
+    <span class="n">formula_wprm</span> <span class="o">=</span> <span class="n">formula</span> <span class="o">+</span> <span class="s">&#39; + A*B&#39;</span>
+    <span class="k">def</span> <span class="nf">s0</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">StringFunction_v1</span><span class="p">(</span><span class="n">formula</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">StringFunction_v2</span><span class="p">(</span><span class="n">formula</span><span class="p">)</span>  <span class="c"># compiled</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">StringFunction_v3</span><span class="p">(</span><span class="n">formula_wprm</span><span class="p">,</span> <span class="n">set_parameters</span><span class="o">=</span><span class="s">&#39;A=0; B=0&#39;</span><span class="p">)</span>
+    <span class="n">s4</span> <span class="o">=</span> <span class="n">StringFunction_v4</span><span class="p">(</span><span class="n">formula</span><span class="p">)</span>
+    <span class="n">s5</span> <span class="o">=</span> <span class="n">StringFunction_v5</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">independent_variables</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,),</span>
+                           <span class="n">A</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">s6</span> <span class="o">=</span> <span class="n">StringFunction</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">independent_variables</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,),</span>
+                        <span class="n">A</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">s7</span> <span class="o">=</span> <span class="n">s6</span><span class="o">.</span><span class="n">__call__</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mf">0.9</span>
+    <span class="c"># verification first:</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">,</span> <span class="n">s6</span><span class="p">,</span> <span class="n">s7</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;values of </span><span class="si">%s</span><span class="s"> for x=</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">400000</span>
+    <span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">timer</span>
+    <span class="kn">from</span> <span class="nn">scitools.EfficiencyTable</span> <span class="kn">import</span> <span class="n">EfficiencyTable</span> <span class="k">as</span> <span class="n">ET</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">ET</span><span class="p">(</span><span class="s">&#39;Efficiency check of StringFunction implementations; &#39;</span>
+           <span class="s">&#39;formula=</span><span class="si">%s</span><span class="s">, n=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="kn">import</span> <span class="nn">inspect</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">,</span> <span class="n">s6</span><span class="p">,</span> <span class="n">s7</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">repetitions</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span>
+                  <span class="n">comment</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">e</span>
+    <span class="k">print</span> <span class="s">&#39;End of efficiency tests</span><span class="se">\n</span><span class="s">&#39;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_doctest</span><span class="p">()</span>
+    <span class="n">_demo</span><span class="p">()</span>
+    <span class="n">_efficiency</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

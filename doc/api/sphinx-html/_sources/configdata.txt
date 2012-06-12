@@ -1,8 +1,0 @@
-
-:mod:`scitools.configdata`
-=======================
-
-.. automodule:: scitools.configdata
-   :members:
-   :undoc-members:
-   :show-inheritance:

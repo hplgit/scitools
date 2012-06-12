@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.errorcheck &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.errorcheck</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for checking compatibility of data structures,</span>
+<span class="sd">right type of data etc.</span>
+
+<span class="sd">Example: given a program &quot;check.py&quot;::</span>
+
+<span class="sd">    from numpy import linspace</span>
+<span class="sd">    q1 = linspace(0, 1, 5)</span>
+<span class="sd">    try:</span>
+<span class="sd">        right_length(q1, 2)</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+<span class="sd">    try:</span>
+<span class="sd">        right_size1(q1, (2,2))</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+<span class="sd">    try:    </span>
+<span class="sd">        q2 = linspace(0, 1, 6)</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+<span class="sd">    try:</span>
+<span class="sd">        right_size2(q1, q2)</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+<span class="sd">    try:</span>
+<span class="sd">        right_type(q2, list)</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+<span class="sd">    try:</span>
+<span class="sd">        wrong_type(q1)</span>
+<span class="sd">    except Exception, e:</span>
+<span class="sd">        print e.__class__.__name__, e</span>
+
+<span class="sd">Here is the output (each call triggers the exception)::</span>
+
+<span class="sd">    ValueError file &quot;check.py&quot;, line 5, main program</span>
+<span class="sd">    q1 has length 5, which is not compatible with assumed length 2</span>
+<span class="sd">    ValueError file &quot;check.py&quot;, line 9, main program</span>
+<span class="sd">    q1 has size (5,), which is not compatible with assumed size (2, 2)</span>
+<span class="sd">    ValueError file &quot;check.py&quot;, line 17, main program</span>
+<span class="sd">    q1 has size (5,), which is not compatible with size (6,) of q2</span>
+<span class="sd">    TypeError file &quot;check.py&quot;, line 21, main program</span>
+<span class="sd">    q2 is of type ndarray, while we expected &lt;type &#39;list&#39;&gt;</span>
+<span class="sd">    TypeError q1 is of wrong type (ndarray).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">types</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">inspect</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;right_length&#39;</span><span class="p">,</span> <span class="s">&#39;right_size1&#39;</span><span class="p">,</span> <span class="s">&#39;right_size2&#39;</span><span class="p">,</span>
+           <span class="s">&#39;get_type&#39;</span><span class="p">,</span> <span class="s">&#39;right_type&#39;</span><span class="p">,</span> <span class="s">&#39;wrong_type&#39;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_argname_in_call</span><span class="p">(</span><span class="n">call_name</span><span class="p">,</span> <span class="n">arg_no</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility function for extracting the name of an argument in a function</span>
+<span class="sd">    call.</span>
+
+<span class="sd">    Caveat: the function call is obtained as a string, and the arguments</span>
+<span class="sd">    obtained by splitting that string with respect to comma.</span>
+<span class="sd">    This can easily lead to errors, e.g., &#39;myfunc(a, (list,tuple), b)&#39;</span>
+<span class="sd">    will lead to the arguments &#39;a&#39;, &#39;(list&#39;, &#39;tuple)&#39;, and &#39;b&#39;.</span>
+<span class="sd">    &#39;b&#39; is not obtained as argument 3.</span>
+
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    call_name  name of the function in the call</span>
+<span class="sd">    arg_no     argument number to extract (1, 2, ...).</span>
+<span class="sd">    return     name of the argument and a string (&quot;where&quot;) describing</span>
+<span class="sd">               the original call&#39;s filename, line number and function.</span>
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+    <span class="c">#import pprint; pprint.pprint(stack)</span>
+    <span class="c">#print &#39;frameinfo:\n&#39;, inspect.getframeinfo(stack[3][0])</span>
+
+    <span class="c"># call from some function:</span>
+    <span class="n">filename</span><span class="p">,</span> <span class="n">line_number</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func_call</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="s">&#39;main program&#39;</span>
+    <span class="k">if</span> <span class="n">func_call</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;variable&#39;</span><span class="p">,</span> \
+               <span class="s">&#39;(info on variable names are missing since the call was made from an interpreter)&#39;</span>
+
+    <span class="n">func_call</span> <span class="o">=</span> <span class="n">func_call</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">where</span> <span class="o">=</span> <span class="s">&#39;file &quot;</span><span class="si">%s</span><span class="s">&quot;, line </span><span class="si">%d</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">line_number</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;</span><span class="si">%s</span><span class="s">\s*\((.*)\)&#39;</span> <span class="o">%</span> <span class="n">call_name</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">func_call</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c"># assume comma is separator (will not work if one of the args</span>
+        <span class="c"># is a tuple, dict or list explicitly listed with its value</span>
+        <span class="c"># in the call...)</span>
+        <span class="n">argname</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="n">arg_no</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">argname</span><span class="p">,</span> <span class="n">where</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;pattern=&quot;</span><span class="si">%s</span><span class="s">&quot; does not match &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> \
+                         <span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">func_call</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="right_length"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.right_length">[docs]</a><span class="k">def</span> <span class="nf">right_length</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that len(a) == length.</span>
+
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    a          any variable for which len(a) is meaningful</span>
+<span class="sd">    length     the expected length of a (integer).</span>
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">a_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;right_length&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s"> has length </span><span class="si">%s</span><span class="s">, which is not compatible with &#39;</span>\
+            <span class="s">&#39;assumed length </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">a_name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">length</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="right_size1"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.right_size1">[docs]</a><span class="k">def</span> <span class="nf">right_size1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that a has correct shape.</span>
+
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    a          NumPy array</span>
+<span class="sd">    shape      the expected shape of a (int or tuple)</span>
+<span class="sd">    =========  ======================================================    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&#39;shape&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s"> and not a NumPy array&#39;</span> <span class="o">%</span> \
+                        <span class="p">(</span><span class="n">a_name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">shape</span><span class="p">,)</span>  <span class="c"># wrap in tuple</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">:</span>
+        <span class="n">a_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;right_size1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s"> has size </span><span class="si">%s</span><span class="s">, which is not compatible with assumed size </span><span class="si">%s</span><span class="s">&#39;</span> \
+            <span class="o">%</span> <span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">a_name</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="right_size2"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.right_size2">[docs]</a><span class="k">def</span> <span class="nf">right_size2</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that a1 and a2 have equal shapes.</span>
+<span class="sd">    a1 and a2 are NumPy arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="s">&#39;shape&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="s">&#39;shape&#39;</span><span class="p">):</span>
+        <span class="k">pass</span> <span class="c"># ok, a1 and a2 are NumPy arrays</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s"> - both must be NumPy arrays&#39;</span> \
+                        <span class="o">%</span> <span class="p">(</span><span class="n">a1_name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a1</span><span class="p">),</span> <span class="n">a2_name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a2</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">a1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">a2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="n">a1_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;right_size2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">a2_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;right_size2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s"> has size </span><span class="si">%s</span><span class="s">, which is not compatible with size </span><span class="si">%s</span><span class="s"> of </span><span class="si">%s</span><span class="s">&#39;</span> \
+            <span class="o">%</span> <span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">a1_name</span><span class="p">,</span> <span class="n">a1</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a2</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a2_name</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+</div>
+<div class="viewcode-block" id="get_type"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.get_type">[docs]</a><span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract a&#39;s type. First, try to extract a&#39;s class name. If this</span>
+<span class="sd">    is unsuccessful, return type(a).</span>
+
+<span class="sd">    The session below illustrates differences between type(a) nad</span>
+<span class="sd">    get_type(a) for standard classes, instances of user-defined classes,</span>
+<span class="sd">    and class objects (new style and classic classes).</span>
+
+<span class="sd">    &gt;&gt;&gt; # standard built-in types:</span>
+<span class="sd">    &gt;&gt;&gt; c = [1,2,3]</span>
+<span class="sd">    &gt;&gt;&gt; d = &#39;my string&#39;</span>
+<span class="sd">    &gt;&gt;&gt; type(c)</span>
+<span class="sd">    &lt;type &#39;list&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(c)</span>
+<span class="sd">    &#39;list&#39;</span>
+<span class="sd">    &gt;&gt;&gt; type(d)</span>
+<span class="sd">    &lt;type &#39;str&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(d)</span>
+<span class="sd">    &#39;str&#39;</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; # user-defined classes and instances:</span>
+<span class="sd">    &gt;&gt;&gt; class A:          # classic class</span>
+<span class="sd">    ...     pass</span>
+<span class="sd">    ... </span>
+<span class="sd">    &gt;&gt;&gt; class B(object):  # new style class</span>
+<span class="sd">    ...     pass</span>
+<span class="sd">    ... </span>
+<span class="sd">    &gt;&gt;&gt; a = A()</span>
+<span class="sd">    &gt;&gt;&gt; type(a)</span>
+<span class="sd">    &lt;type &#39;instance&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(a)</span>
+<span class="sd">    &#39;A&#39;</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; b = B()</span>
+<span class="sd">    &gt;&gt;&gt; type(b)</span>
+<span class="sd">    &lt;class &#39;__main__.B&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(b)</span>
+<span class="sd">    &#39;B&#39;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # class objects A and B:</span>
+<span class="sd">    &gt;&gt;&gt; type(A)</span>
+<span class="sd">    &lt;type &#39;classobj&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(A)</span>
+<span class="sd">    &#39;classobj (i.e. a class object)&#39;</span>
+<span class="sd">    &gt;&gt;&gt; type(B)</span>
+<span class="sd">    &lt;type &#39;type&#39;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; get_type(B)</span>
+<span class="sd">    &#39;type (i.e. a class object)&#39;</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># try to get a&#39;s class name (if possible)</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s">&#39;type&#39;</span><span class="p">:</span>  <span class="c"># new style class object?</span>
+            <span class="c"># add some explanation (can get output &quot;a is of type type&quot;)</span>
+            <span class="n">tp</span> <span class="o">+=</span> <span class="s">&#39; (i.e. a class object)&#39;</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c"># rely on the type (would be less informative if a is instance)</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+        <span class="c"># if a is a classic class object, tp is &quot;&lt;type &#39;classobj&#39;&gt;&quot;</span>
+        <span class="c"># which we translate into something more readable:</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">==</span> <span class="s">&quot;&lt;type &#39;classobj&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="s">&quot;classobj (i.e. a class object)&quot;</span>
+    <span class="k">return</span> <span class="n">tp</span>
+</div>
+<span class="k">global</span> <span class="n">message</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+<div class="viewcode-block" id="right_type"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.right_type">[docs]</a><span class="k">def</span> <span class="nf">right_type</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">expected_types</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that variable a is of the type(s) specified by expected_types,</span>
+<span class="sd">    which is a list/tuple of built-in types (class names), user-defined</span>
+<span class="sd">    class names, or one of the functions callable or numpy.iterable.</span>
+
+<span class="sd">    return: True if the type is right. Otherwise, raise a TypeError exception</span>
+<span class="sd">    if raise_exception is True. If this value is False,</span>
+<span class="sd">    return False and place a message string explaining what is wrong</span>
+<span class="sd">    in the module variable errorcheck.message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expected_types</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">expected_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">expected_types</span><span class="p">]</span>  <span class="c"># wrap in list if just single type</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">get_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;a class object&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+        <span class="n">a_is_class_def</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a_is_class_def</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="kn">import</span> <span class="nn">numpy</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">expected_types</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="n">tp</span> <span class="ow">is</span> <span class="n">numpy</span><span class="o">.</span><span class="n">iterable</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tp</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">a_is_class_def</span><span class="p">:</span>
+            <span class="c"># a is a class object</span>
+            <span class="c">#print &#39;a is class definition&#39;</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">types</span><span class="o">.</span><span class="n">ClassType</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+                        <span class="n">match</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">break</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c">#print &#39;testing isinstance(a, %s)&#39; % str(tp)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">tp</span><span class="p">):</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">tp</span><span class="p">)):</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">break</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;right_type&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s"> is of type </span><span class="si">%s</span><span class="s">, while we expected </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+              <span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">a_name</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="s">&#39; or &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">expected_types</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">raise_exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">global</span> <span class="n">message</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">msg</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+</div>
+<div class="viewcode-block" id="wrong_type"><a class="viewcode-back" href="../../errorcheck.html#scitools.errorcheck.wrong_type">[docs]</a><span class="k">def</span> <span class="nf">wrong_type</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raise a TypeError exception expressing the type of variable a</span>
+<span class="sd">    and that this type is wrong.</span>
+
+<span class="sd">    a is any variable of any type, and comment is a text that can be</span>
+<span class="sd">    appended to the exception string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">get_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">a_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">get_argname_in_call</span><span class="p">(</span><span class="s">&#39;wrong_type&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> is of wrong type (</span><span class="si">%s</span><span class="s">). </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_name</span><span class="p">,</span> <span class="n">tp</span><span class="p">,</span> <span class="n">comment</span><span class="p">))</span>
+
+</div>
+<span class="n">_SAFECODE</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">globaldata</span> <span class="kn">import</span> <span class="n">SAFECODE</span> <span class="k">as</span> <span class="n">_SAFECODE</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_SAFECODE</span><span class="p">:</span>
+    <span class="c"># define (efficient) empty check functions that overrides the</span>
+    <span class="c"># comprehensive and expensive functions above:</span>
+    <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">__all__</span><span class="p">:</span>
+        <span class="n">efficient_version</span> <span class="o">=</span> <span class="s">&#39;def </span><span class="si">%s</span><span class="s">(*args): return True&#39;</span> <span class="o">%</span> <span class="n">func</span>
+        <span class="k">exec</span> <span class="n">efficient_version</span>
+
+<span class="k">def</span> <span class="nf">_test</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="mf">1.1</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">class</span> <span class="nc">myclass</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">C</span> <span class="o">=</span> <span class="n">myclass</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">right_type</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="p">[</span><span class="nb">callable</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">right_type</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">right_type</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="p">[</span><span class="n">myclass</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">right_type</span><span class="p">(</span><span class="n">myclass</span><span class="p">,</span> <span class="p">[</span><span class="n">myclass</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">right_type</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">message</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

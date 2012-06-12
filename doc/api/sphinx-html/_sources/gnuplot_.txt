@@ -1,8 +1,0 @@
-
-:mod:`scitools.easyviz.gnuplot_`
-=======================
-
-.. automodule:: scitools.easyviz.gnuplot_
-   :members:
-   :undoc-members:
-   :show-inheritance:

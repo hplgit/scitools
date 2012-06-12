@@ -1,8 +1,0 @@
-
-:mod:`easyviz`
-=======================
-
-.. automodule:: easyviz
-   :members:
-   :undoc-members:
-   :show-inheritance:

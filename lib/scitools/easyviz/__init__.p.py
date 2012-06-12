@@ -1,5 +1,5 @@
 '''
-# #include "doc/easyviz.dst.txt"
+# #include "../../../doc/src/easyviz/easyviz.dst.txt"
 '''
 
 __author__ = "Johannes H. Ring, Hans Petter Langtangen, Rolv Erlend Bredesen"
