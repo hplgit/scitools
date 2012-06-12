@@ -147,7 +147,7 @@
     <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1E-14</span>
     <span class="n">atol</span> <span class="o">=</span> <span class="mf">1E-14</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s">&#39;==&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">):</span>
+<div class="viewcode-block" id="FloatComparison.__init__"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s">&#39;==&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        operation is &#39;==&#39;, &#39;&lt;&#39;, &#39;&lt;=&#39;, &#39;&gt;&#39;, &#39;&gt;=&#39; or &#39;!=&#39;.</span>
 <span class="sd">        The value determines what operation that __call__ performs.</span>
@@ -169,8 +169,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span> <span class="o">=</span> <span class="n">operation</span>  <span class="c"># nice to store for printouts/tests</span>
             
         <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span> <span class="o">=</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span>
-
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="FloatComparison.__call__"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compares a with b: a == b, a!= b, a &lt; b, etc., depending</span>
 <span class="sd">        on how this FloatComparison was initialized.</span>
@@ -178,7 +178,7 @@
 <span class="sd">        performed in the methods eq, ne, lt, le, etc.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
-    
+    </div>
 <div class="viewcode-block" id="FloatComparison.eq"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.eq">[docs]</a>    <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tests a == b with tolerance.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">rtol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">rtol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span>
@@ -257,7 +257,7 @@
         <span class="sd">&quot;&quot;&quot;Tests a &gt;= b with tolerance.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FloatComparison.__str__"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return pretty print of operator, incl. tolerances.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span> <span class="o">==</span> <span class="s">&#39;==&#39;</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;a == b, computed as abs(a-b) &lt; </span><span class="si">%g</span><span class="s"> + </span><span class="si">%g</span><span class="s">*abs(b)&#39;</span> <span class="o">%</span> \
@@ -273,7 +273,7 @@
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
 
-<span class="c"># define convenience functions for quicker use of class FloatComparison:</span></div>
+<span class="c"># define convenience functions for quicker use of class FloatComparison:</span></div></div>
 <span class="n">float_eq</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;==&#39;</span><span class="p">)</span>
 <span class="n">float_eq</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a == b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
                    <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>

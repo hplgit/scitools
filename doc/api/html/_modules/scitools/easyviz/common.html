@@ -114,14 +114,14 @@
     <span class="n">_update_from_config_file</span><span class="p">(</span><span class="n">_local_prop</span><span class="p">)</span>  <span class="c"># get defaults from scitools.cfg</span>
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Keywords for the setp method&#39;</span><span class="p">,</span> <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="MaterialProperties.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.MaterialProperties.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="MaterialProperties.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.MaterialProperties.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="MaterialProperties.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.MaterialProperties.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -201,12 +201,12 @@
     <span class="n">_update_from_config_file</span><span class="p">(</span><span class="n">_local_prop</span><span class="p">)</span>  <span class="c"># get defaults from scitools.cfg</span>
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Keywords for the setp method&#39;</span><span class="p">,</span> <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotProperties.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.PlotProperties.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;material&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MaterialProperties</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="PlotProperties.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.PlotProperties.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -225,7 +225,7 @@
     <span class="c"># that one can call on the current figure f.ex.</span>
     <span class="c">#def __repr__(self):</span>
     <span class="c">#    return self.__str__()</span>
-
+</div>
 <div class="viewcode-block" id="PlotProperties.dump"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.PlotProperties.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dump the parameters of this object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -421,11 +421,11 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Line.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Line.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Line</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Line.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Line.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set line properties. Legal keyword arguments: x, y, format.</span>
@@ -530,12 +530,12 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Bars.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Bars.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Bars</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parseargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Bars.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Bars.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -610,7 +610,7 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Surface.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Surface.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Surface</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -621,7 +621,7 @@
                                               <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;ydata&#39;</span><span class="p">],</span>
                                               <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;zdata&#39;</span><span class="p">],</span>
                                               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Surface.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Surface.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -676,12 +676,12 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Contours.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Contours.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Contours</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parseargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Contours.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Contours.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -757,12 +757,12 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="VelocityVectors.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.VelocityVectors.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">VelocityVectors</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parseargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="VelocityVectors.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.VelocityVectors.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -880,12 +880,12 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Streams.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Streams.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Streams</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parseargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Streams.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Streams.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -1020,12 +1020,12 @@
                       <span class="n">PlotProperties</span><span class="o">.</span><span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                       <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Volume.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Volume.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Volume</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parseargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Volume.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Volume.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">PlotProperties</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -1143,15 +1143,15 @@
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Legal values for color bar location&#39;</span><span class="p">,</span>
                       <span class="n">_locations</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Colorbar.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Colorbar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Colorbar</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Colorbar.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Colorbar.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Colorbar.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Colorbar.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s">&#39;cblocation&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cblocation&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locations</span><span class="p">:</span>
@@ -1191,15 +1191,15 @@
     <span class="n">_update_from_config_file</span><span class="p">(</span><span class="n">_local_prop</span><span class="p">)</span>  <span class="c"># get defaults from scitools.cfg</span>
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Keywords for the setp method&#39;</span><span class="p">,</span> <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Light.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Light.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Light</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Light.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Light.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Light.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Light.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s">&#39;lightcolor&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;lightcolor&#39;</span><span class="p">]</span>
@@ -1259,16 +1259,16 @@
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Legal values for the mode keyword&#39;</span><span class="p">,</span> <span class="n">_modes</span><span class="p">)</span>
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Legal values for the camproj keyword&#39;</span><span class="p">,</span> <span class="n">_camprojs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Camera.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Camera.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Camera</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">axis</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Camera.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Camera.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Camera.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Camera.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s">&#39;cammode&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cammode&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modes</span><span class="p">:</span>
@@ -1410,17 +1410,17 @@
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Legal values for legend locations&#39;</span><span class="p">,</span>
                       <span class="nb">list</span><span class="p">(</span><span class="n">_legend_locs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Axis.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Axis.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Axis</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="c"># self was not available when _local_prop was defined:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;camera&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Colorbar</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Axis.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Axis.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Axis.dump"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Axis.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dump the parameters of this object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1774,17 +1774,17 @@
     <span class="n">_update_from_config_file</span><span class="p">(</span><span class="n">_local_prop</span><span class="p">)</span>  <span class="c"># get defaults from scitools.cfg</span>
     <span class="n">__doc__</span> <span class="o">+=</span> <span class="n">docadd</span><span class="p">(</span><span class="s">&#39;Keywords for the setp method&#39;</span><span class="p">,</span> <span class="n">_local_prop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Figure.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Figure.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Figure</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="c"># store a copy of the default values for use when figure is reset:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">Axis</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Figure.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Figure.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Figure.dump"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.Figure.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dump the contents of the figure (all axes).&quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Figure object:</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -1936,9 +1936,9 @@
                    <span class="s">&#39;color&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,(</span><span class="nb">bool</span><span class="p">))</span>
                    <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClass.__init__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.BaseClass.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">BaseClass</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="BaseClass.init"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.BaseClass.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize internal data structures.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># Pointer to the backend for manual labour.</span>
@@ -1946,9 +1946,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">BaseClass</span><span class="o">.</span><span class="n">_local_attrs</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseClass.__str__"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.BaseClass.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="BaseClass.setp"><a class="viewcode-back" href="../../../common.html#scitools.easyviz.common.BaseClass.setp">[docs]</a>    <span class="k">def</span> <span class="nf">setp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set object properties or attributes in this backend instance.</span>

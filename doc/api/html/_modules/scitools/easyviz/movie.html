@@ -93,7 +93,7 @@
                       <span class="s">&#39;mpeg2enc html&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">_legal_file_types</span> <span class="o">=</span> <span class="s">&#39;png gif jpg ps eps bmp tif tga pnm&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="MovieEncoder.__init__"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.MovieEncoder.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_files</span>
@@ -166,7 +166,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;File type must be </span><span class="si">%s</span><span class="s">, not &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> \
                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_legal_file_types</span><span class="p">,</span> <span class="n">file_type</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_type</span>
-
+</div>
 <div class="viewcode-block" id="MovieEncoder.encode"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.MovieEncoder.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Encode a series of images to a movie.&quot;&quot;&quot;</span>
         <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>

@@ -101,7 +101,7 @@
 <span class="sd">    =============      =============================================</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxField.__init__"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize scalar or vector field over a BoxGrid/UniformBoxGrid.</span>
 
@@ -157,7 +157,7 @@
 
         <span class="c"># doesn&#39;t  work: self.__getitem__ = self.values.__getitem__</span>
         <span class="c">#self.__setitem__ = self.values.__setitem__</span>
-
+</div>
 <div class="viewcode-block" id="BoxField.copy_values"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.copy_values">[docs]</a>    <span class="k">def</span> <span class="nf">copy_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Take a copy of the values array and reshape it if necessary.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
@@ -183,17 +183,17 @@
 
     <span class="c"># these are slower than u_ = u.values; u_[i] since an additional</span>
     <span class="c"># function call is required compared to NumPy array indexing:</span></div>
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>  <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxField.__getitem__"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+<div class="viewcode-block" id="BoxField.__setitem__"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>  <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</div>
+<div class="viewcode-block" id="BoxField.__str__"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nsd</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Vector field with </span><span class="si">%d</span><span class="s"> components&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Scalar field&#39;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;, over &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
-
+</div>
 <div class="viewcode-block" id="BoxField.gridline"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.gridline">[docs]</a>    <span class="k">def</span> <span class="nf">gridline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_coor</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_coor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">snap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

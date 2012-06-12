@@ -141,7 +141,7 @@ the first argument to the constructor.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(a,&nbsp;b[,&nbsp;rtol,&nbsp;atol])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.FloatComparison.FloatComparison.__call__" title="scitools.FloatComparison.FloatComparison.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(a,&nbsp;b[,&nbsp;rtol,&nbsp;atol])</td>
 <td>Compares a with b: a == b, a!= b, a &lt; b, etc., depending</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.FloatComparison.FloatComparison.eq" title="scitools.FloatComparison.FloatComparison.eq"><tt class="xref py py-obj docutils literal"><span class="pre">eq</span></tt></a>(a,&nbsp;b[,&nbsp;rtol,&nbsp;atol])</td>
@@ -176,6 +176,36 @@ the first argument to the constructor.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.FloatComparison.FloatComparison.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>a</em>, <em>b</em>, <em>rtol=None</em>, <em>atol=None</em><big>)</big><a class="reference internal" href="_modules/scitools/FloatComparison.html#FloatComparison.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.FloatComparison.FloatComparison.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares a with b: a == b, a!= b, a &lt; b, etc., depending
+on how this FloatComparison was initialized.
+a and b can be numbers or arrays. The comparison is actually
+performed in the methods eq, ne, lt, le, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.FloatComparison.FloatComparison.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>operation='=='</em>, <em>rtol=1e-14</em>, <em>atol=1e-14</em><big>)</big><a class="reference internal" href="_modules/scitools/FloatComparison.html#FloatComparison.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.FloatComparison.FloatComparison.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>operation is &#8216;==&#8217;, &#8216;&lt;&#8217;, &#8216;&lt;=&#8217;, &#8216;&gt;&#8217;, &#8216;&gt;=&#8217; or &#8216;!=&#8217;.
+The value determines what operation that __call__ performs.</p>
+<p>rtol: relative tolerance, atol: absolute tolerance.
+a==b is true if abs(a-b) &lt; atol + rtol*abs(b).
+atol comes into play when abs(b) is large.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.FloatComparison.FloatComparison.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.FloatComparison'</em><a class="headerlink" href="#scitools.FloatComparison.FloatComparison.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.FloatComparison.FloatComparison.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/FloatComparison.html#FloatComparison.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.FloatComparison.FloatComparison.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return pretty print of operator, incl. tolerances.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="scitools.FloatComparison.FloatComparison.atol">
 <tt class="descname">atol</tt><em class="property"> = 1e-14</em><a class="headerlink" href="#scitools.FloatComparison.FloatComparison.atol" title="Permalink to this definition">¶</a></dt>

@@ -71,7 +71,7 @@
 <span class="sd">    Interactive drawing of y=f(x) functions.</span>
 <span class="sd">    The drawing takes place in a Pmw.Blt.Graph widget.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xcoor</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span>
+<div class="viewcode-block" id="DrawFunction.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.DrawFunction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xcoor</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span>
                  <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                  <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                  <span class="n">curvename</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
@@ -139,7 +139,7 @@
             <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erase</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">,</span><span class="n">padx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">erase</span><span class="p">()</span> <span class="c"># some init</span>
-
+</div>
 <div class="viewcode-block" id="DrawFunction.pack"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.DrawFunction.pack">[docs]</a>    <span class="k">def</span> <span class="nf">pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">)</span>
 </div>
@@ -311,7 +311,7 @@
 
 </div>
 <div class="viewcode-block" id="DrawFunctionDialog"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.DrawFunctionDialog">[docs]</a><span class="k">class</span> <span class="nc">DrawFunctionDialog</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xcoor</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DrawFunctionDialog.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.DrawFunctionDialog.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xcoor</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dialog box with DrawFunction widget&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">Pmw</span><span class="o">.</span><span class="n">Dialog</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span>
                             <span class="n">title</span><span class="o">=</span><span class="s">&#39;Programmer-Defined Dialog&#39;</span><span class="p">,</span>
@@ -320,7 +320,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">d_gui</span> <span class="o">=</span> <span class="n">DrawFunction</span><span class="p">(</span><span class="n">xcoor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">interior</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d_gui</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="DrawFunctionDialog.action"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.DrawFunctionDialog.action">[docs]</a>    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="s">&#39;Approved&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_gui</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -351,7 +351,7 @@
 <span class="sd">    Utilities for transforming between canvas coordinates and</span>
 <span class="sd">    physical (real) coordinates.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CanvasCoords.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.CanvasCoords.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># 400x400 pixels is default:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas_y</span> <span class="o">=</span> <span class="mi">400</span>
         <span class="c"># origin: lower left corner:</span>
@@ -359,7 +359,7 @@
         <span class="c"># x and y measured in pixels:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas_x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xy_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas_x</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">x_range</span>
-
+</div>
 <div class="viewcode-block" id="CanvasCoords.set_coordinate_system"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.CanvasCoords.set_coordinate_system">[docs]</a>    <span class="k">def</span> <span class="nf">set_coordinate_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas_width</span><span class="p">,</span> <span class="n">canvas_height</span><span class="p">,</span>
                               <span class="n">x_origin</span><span class="p">,</span> <span class="n">y_origin</span><span class="p">,</span> <span class="n">x_range</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -469,7 +469,7 @@
 
 <div class="viewcode-block" id="InputPrm"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrm">[docs]</a><span class="k">class</span> <span class="nc">InputPrm</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class for holding data about a parameter.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="InputPrm.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">help</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmlarg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prmclass</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        default           default value</span>
@@ -526,7 +526,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>  <span class="c"># set parameter value</span>
         <span class="n">scitools</span><span class="o">.</span><span class="n">modulecheck</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;InputPrm constructor&#39;</span><span class="p">,</span> <span class="s">&#39;Scientific&#39;</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="InputPrm.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrm.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the value of the parameter.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span>
@@ -547,21 +547,21 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InputPrm.__repr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrm.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Application of eval to this output creates the instance.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&quot;InputPrm(name=&#39;</span><span class="si">%s</span><span class="s">&#39;, default=</span><span class="si">%s</span><span class="s">, str2type=</span><span class="si">%s</span><span class="s">, &quot;</span>\
                <span class="s">&quot;help=</span><span class="si">%s</span><span class="s">, unit=</span><span class="si">%s</span><span class="s">, cmlarg=</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> \
                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__str__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">str2type</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmlarg</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="InputPrm.__str__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrm.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compact output; just the value as a formatted string.</span>
 <span class="sd">        Note that __str__ is used by __repr__ so strings must</span>
 <span class="sd">        be enclosed in quotes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">)</span> <span class="c"># ensure quotes in strings</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_handle_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if v is of the form &#39;value unit&#39;, extract value, after</span>
@@ -641,7 +641,7 @@
 
     <span class="n">GUI_toolkit</span> <span class="o">=</span> <span class="s">&#39;Tkinter/Pmw&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="InputPrmGUI.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmGUI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">widget_type</span><span class="o">=</span><span class="s">&#39;entry&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">help</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmlarg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -698,7 +698,7 @@
             <span class="c"># no warning because minimal input, just name and a</span>
             <span class="c"># bool value, leads us here - which is okay - all other</span>
             <span class="c"># widgets become entries</span>
-
+</div>
 <div class="viewcode-block" id="InputPrmGUI.get_widget_type"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmGUI.get_widget_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_widget_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget_type</span></div>
     <span class="n">widget_type</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">get_widget_type</span><span class="p">)</span> <span class="c"># read-only</span>
 
@@ -829,7 +829,7 @@
 <div class="viewcode-block" id="InputPrmGUI.set"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmGUI.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">str2type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scan</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InputPrmGUI.__repr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmGUI.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Application of eval to this output creates the object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&quot;InputPrmGUI(name=&#39;</span><span class="si">%s</span><span class="s">&#39;, default=</span><span class="si">%s</span><span class="s">, str2type=</span><span class="si">%s</span><span class="s">, &quot;</span>\
                <span class="s">&quot;widget_type=&#39;</span><span class="si">%s</span><span class="s">&#39;, parent=None, values=</span><span class="si">%s</span><span class="s">, &quot;</span>\
@@ -838,10 +838,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_widget_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmlarg</span><span class="p">)</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="InputPrmCGI"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmCGI">[docs]</a><span class="k">class</span> <span class="nc">InputPrmCGI</span><span class="p">(</span><span class="n">InputPrm</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent a parameter by a form variable in HTML.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="InputPrmCGI.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmCGI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">widget_type</span><span class="o">=</span><span class="s">&#39;entry&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">help</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmlarg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -862,7 +862,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_widget_type</span> <span class="o">=</span> <span class="n">widget_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_form</span> <span class="o">=</span> <span class="n">form</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">values</span>
-
+</div>
 <div class="viewcode-block" id="InputPrmCGI.make_form_entry"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmCGI.make_form_entry">[docs]</a>    <span class="k">def</span> <span class="nf">make_form_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write the form&#39;s input field, according to widget_type.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -907,7 +907,7 @@
     <span class="c"># just inherit def set(self, value):</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InputPrmCGI.__repr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.InputPrmCGI.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Application of eval to this output creates the object.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&quot;InputPrmCGI(name=&#39;</span><span class="si">%s</span><span class="s">&#39;, default=</span><span class="si">%s</span><span class="s">, str2type=</span><span class="si">%s</span><span class="s">, &quot;</span>\
                <span class="s">&quot;widget_type=&#39;</span><span class="si">%s</span><span class="s">&#39;, form=None, values=</span><span class="si">%s</span><span class="s">, &quot;</span>\
@@ -916,7 +916,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_widget_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmlarg</span><span class="p">)</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="createInputPrm"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.createInputPrm">[docs]</a><span class="k">def</span> <span class="nf">createInputPrm</span><span class="p">(</span><span class="n">interface</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                    <span class="n">widget_type</span><span class="o">=</span><span class="s">&#39;entry&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                    <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -967,7 +967,7 @@
 <span class="sd">    Normally, this is automated in classes like AutoSimVizGUI and</span>
 <span class="sd">    AutoSimVizCGI.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s">&#39;plain&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prm_dict</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="Parameters.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s">&#39;plain&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prm_dict</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        @param interface: &#39;plain&#39;, &#39;CGI&#39;, or &#39;GUI&#39;</span>
 <span class="sd">        @param form: cgi.FieldStorage() object</span>
@@ -981,7 +981,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_form</span> <span class="o">=</span> <span class="n">form</span>  <span class="c"># used for CGI</span>
         <span class="k">for</span> <span class="n">prm</span> <span class="ow">in</span> <span class="n">prm_dict</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prm</span><span class="p">,</span> <span class="n">prm_dict</span><span class="p">[</span><span class="n">prm</span><span class="p">])</span>
-
+</div>
 <div class="viewcode-block" id="Parameters.add"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">str2type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">widget_type</span><span class="o">=</span><span class="s">&#39;entry&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">help</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmlarg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -1015,15 +1015,15 @@
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seq</span><span class="p">:</span>
                 <span class="n">p</span><span class="o">.</span><span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_form</span>
 </div>
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="Parameters.__setitem__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>  <span class="c"># is item attribute too (name2attr)?</span>
             <span class="c"># self.__dict__[name] = value # will not handle string w/unit</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Parameters.__getitem__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-
+</div>
 <div class="viewcode-block" id="Parameters.keys"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return parameter names. With this method Parameter objects p</span>
@@ -1031,12 +1031,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Parameters.__iter__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over keys in self.dict.&quot;&quot;&quot;</span>
         <span class="c"># short cut using generator function</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">name</span>
-
+</div>
 <div class="viewcode-block" id="Parameters.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return dictionary with (name,value) pairs.&quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1054,7 +1054,7 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="Parameters.__setattr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__setattr__">[docs]</a>    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If name2attr is called, self.m = 2.3 (using this</span>
 <span class="sd">        function) is safe, because this also implies update of</span>
@@ -1065,7 +1065,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="c">#if str(a) in self.dict:</span>
         <span class="c">#    self.dict[str(a)].set(value)</span>
-
+</div>
 <div class="viewcode-block" id="Parameters.parse_options"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.parse_options">[docs]</a>    <span class="k">def</span> <span class="nf">parse_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Examine the command line and for each -opt val pair,</span>
@@ -1108,17 +1108,17 @@
             <span class="n">s</span> <span class="o">+=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span> <span class="n">s</span>
 </div>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Parameters.__str__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Parameters.__repr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Parameters.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Parameters: interface=&quot;</span><span class="si">%s</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interface</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span> <span class="n">s</span>
 
 
-</div>
+</div></div>
 <div class="viewcode-block" id="parametersGUI"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.parametersGUI">[docs]</a><span class="k">def</span> <span class="nf">parametersGUI</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">pack_side</span><span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">,</span>
                   <span class="n">scrolled</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="mi">350</span><span class="p">}):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1195,11 +1195,11 @@
 <span class="sd">    to change the layout of the whole GUI in one common place.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AutoSimVizGUI.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.AutoSimVizGUI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">modulecheck</span>
         <span class="n">modulecheck</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Class AutoSimVizGUI&quot;</span><span class="p">,</span> <span class="s">&#39;Pmw&#39;</span><span class="p">,</span> <span class="s">&#39;Tkinter&#39;</span><span class="p">)</span>
         <span class="k">return</span>
-
+</div>
 <div class="viewcode-block" id="AutoSimVizGUI.make_prmGUI"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.AutoSimVizGUI.make_prmGUI">[docs]</a>    <span class="k">def</span> <span class="nf">make_prmGUI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">parent</span><span class="p">,</span>
                     <span class="n">parameters</span><span class="p">,</span>
@@ -1546,9 +1546,9 @@
 <span class="sd">    Organize a set of form variables for input data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AutoSimVizCGI.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.AutoSimVizCGI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span>
-
+</div>
 <div class="viewcode-block" id="AutoSimVizCGI.make"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.AutoSimVizCGI.make">[docs]</a>    <span class="k">def</span> <span class="nf">make</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
              <span class="n">form</span><span class="p">,</span>
              <span class="n">parameters</span><span class="p">,</span>
@@ -1660,7 +1660,7 @@
 <span class="sd">    contents of a FuncSpec object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="FuncSpec.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FuncSpec.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">representation</span><span class="p">,</span>
                  <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -1710,7 +1710,7 @@
             <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
             <span class="n">xcoor</span><span class="o">=</span><span class="n">xcoor</span><span class="p">,</span>
             <span class="n">scrolled_frame</span><span class="o">=</span><span class="n">scrolled_frame</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="FuncSpec.configure"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FuncSpec.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s">&#39;parameters&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;parameters&#39;</span><span class="p">]</span>
@@ -1797,16 +1797,16 @@
         <span class="n">text</span> <span class="o">+=</span> <span class="s">&#39;: &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">independent_variables</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">text</span>
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FuncSpec.__repr__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FuncSpec.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
         <span class="k">return</span> <span class="s">&#39;FuncSpec(&#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="StringFormula"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.StringFormula">[docs]</a><span class="k">class</span> <span class="nc">StringFormula</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
+<div class="viewcode-block" id="StringFormula.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.StringFormula.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fspec</span> <span class="o">=</span> <span class="n">func_spec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1829,7 +1829,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
             <span class="n">parametersGUI</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span>
                           <span class="n">scrolled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">scrolled_frame</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="StringFormula.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.StringFormula.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return function object.&quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">StringFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">formula</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span>
@@ -1843,7 +1843,7 @@
 
 </div></div>
 <div class="viewcode-block" id="UserFunction"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.UserFunction">[docs]</a><span class="k">class</span> <span class="nc">UserFunction</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
+<div class="viewcode-block" id="UserFunction.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.UserFunction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fspec</span> <span class="o">=</span> <span class="n">func_spec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1871,7 +1871,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
             <span class="n">parametersGUI</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span>
                           <span class="n">pack_side</span><span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">,</span><span class="n">scrolled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">scrolled_frame</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="UserFunction.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.UserFunction.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return function object.&quot;&quot;&quot;</span>
         <span class="c"># extract parameter values from the GUI?</span>
@@ -1895,14 +1895,14 @@
 
 </div></div>
 <div class="viewcode-block" id="Drawing"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Drawing">[docs]</a><span class="k">class</span> <span class="nc">Drawing</span><span class="p">(</span><span class="n">UserFunction</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
+<div class="viewcode-block" id="Drawing.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Drawing.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">):</span>
         <span class="n">UserFunction</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">xcoor</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;want DrawFunction widget, but no xcoor info&#39;</span>\
                              <span class="s">&#39; in the FuncSpec object&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span> <span class="o">=</span> <span class="n">DrawFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fspec</span><span class="o">.</span><span class="n">xcoor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Drawing.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.Drawing.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return function object.&quot;&quot;&quot;</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -1926,7 +1926,7 @@
 <span class="sd">    realized as a UserFunction, StringFormula, or Drawing</span>
 <span class="sd">    instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec_list</span><span class="p">):</span>
+<div class="viewcode-block" id="FunctionChoices.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FunctionChoices.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">func_spec_list</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">)</span>
@@ -1948,7 +1948,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">setnaturalsize</span><span class="p">()</span>
-
+</div>
 <div class="viewcode-block" id="FunctionChoices.get"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FunctionChoices.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return initialized function object corresponding to</span>
@@ -1972,13 +1972,13 @@
 <span class="sd">    drawing, string formulas, ready-made formulas with</span>
 <span class="sd">    free parameters, hardcoded Python functions etc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<div class="viewcode-block" id="FunctionSelector.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FunctionSelector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">=</span> <span class="n">Pmw</span><span class="o">.</span><span class="n">NoteBook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># FunctionChoices widgets</span>
-
+</div>
 <div class="viewcode-block" id="FunctionSelector.add"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FunctionSelector.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">func_spec_list</span><span class="p">):</span>
         <span class="n">new_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tab_text</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">group</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">new_page</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -2188,7 +2188,7 @@
 <span class="sd">    makes a graphical illustration of this dependence.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span>
+<div class="viewcode-block" id="FuncDependenceViz.__init__"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FuncDependenceViz.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span>
                  <span class="n">parameter_intervals</span><span class="o">=</span><span class="p">{},</span> <span class="c"># interval for each prm</span>
                  <span class="n">functions</span><span class="o">=</span><span class="p">{},</span>           <span class="c"># functions to be plotted</span>
                  <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>     <span class="c"># x axis range</span>
@@ -2294,7 +2294,7 @@
         <span class="c"># (must bind to master, not self.top)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;&lt;p&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psdump</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;&lt;q&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>  <span class="c"># convenient</span>
-
+</div>
 <div class="viewcode-block" id="FuncDependenceViz.psdump"><a class="viewcode-back" href="../../TkGUI.html#scitools.TkGUI.FuncDependenceViz.psdump">[docs]</a>    <span class="k">def</span> <span class="nf">psdump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">tkFileDialog</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">tkFileDialog</span><span class="o">.</span><span class="n">SaveAs</span><span class="p">(</span>

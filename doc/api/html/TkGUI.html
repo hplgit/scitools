@@ -74,6 +74,16 @@ the book &#8220;Python Scripting for Computational Science&#8221;.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.AutoSimVizCGI.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#AutoSimVizCGI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.AutoSimVizCGI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.AutoSimVizCGI.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.AutoSimVizCGI.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.AutoSimVizCGI.footer">
 <tt class="descname">footer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#AutoSimVizCGI.footer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.AutoSimVizCGI.footer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write out HTML footer instructions.</p>
@@ -149,6 +159,16 @@ to change the layout of the whole GUI in one common place.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.AutoSimVizGUI.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#AutoSimVizGUI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.AutoSimVizGUI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.AutoSimVizGUI.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.AutoSimVizGUI.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.AutoSimVizGUI.load_curveplot">
 <tt class="descname">load_curveplot</tt><big>(</big><em>filename</em>, <em>graph</em>, <em>curvename=''</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#AutoSimVizGUI.load_curveplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.AutoSimVizGUI.load_curveplot" title="Permalink to this definition">¶</a></dt>
@@ -258,6 +278,16 @@ physical (real) coordinates.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.CanvasCoords.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#CanvasCoords.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.CanvasCoords.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.CanvasCoords.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.CanvasCoords.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.CanvasCoords.c2p">
 <tt class="descname">c2p</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#scitools.TkGUI.CanvasCoords.c2p" title="Permalink to this definition">¶</a></dt>
@@ -384,6 +414,28 @@ The drawing takes place in a Pmw.Blt.Graph widget.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.DrawFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>xcoor</em>, <em>parent</em>, <em>ymin=0.0</em>, <em>ymax=1.0</em>, <em>width=500</em>, <em>height=200</em>, <em>curvename=' '</em>, <em>ylabel=''</em>, <em>xlabel=''</em>, <em>curvecolor='green'</em>, <em>curvewidth=4</em>, <em>yrange_widgets=True</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#DrawFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.DrawFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interactive drawing of a function.</p>
+<p>xcoor           grid points (on the x axsis) for interpolation
+parent          parent widget
+ymin, ymax      initial extent of the y axis
+width, height   size of widget
+curvename       name of function to be drawn
+xlabel, ylabel  labels on the axis
+curvecolor      color of the drawn curve
+curvewidth      line thickness of the drawn curve
+yrange_widgets  True: add text entries for range of y axis</p>
+<p>These parameters, except for parent and yrange_widgets,
+can also be set as keyword arguments in the configure method.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.DrawFunction.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.DrawFunction.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.DrawFunction.configure">
 <tt class="descname">configure</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#DrawFunction.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.DrawFunction.configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Legal parameters (kwargs):</p>
@@ -460,6 +512,17 @@ x and y are NumPy arrays of coordinates</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.DrawFunctionDialog.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>xcoor</em>, <em>parent=None</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#DrawFunctionDialog.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.DrawFunctionDialog.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dialog box with DrawFunction widget</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.DrawFunctionDialog.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.DrawFunctionDialog.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.DrawFunctionDialog.action">
 <tt class="descname">action</tt><big>(</big><em>result</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#DrawFunctionDialog.action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.DrawFunctionDialog.action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -487,6 +550,16 @@ x and y are NumPy arrays of coordinates</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.Drawing.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>func_spec</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Drawing.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Drawing.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.Drawing.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.Drawing.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.Drawing.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Drawing.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Drawing.get" title="Permalink to this definition">¶</a></dt>
@@ -528,6 +601,19 @@ makes a graphical illustration of this dependence.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.FuncDependenceViz.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>master</em>, <em>parameter_intervals={}</em>, <em>functions={}</em>, <em>xmin=0.0</em>, <em>xmax=1.0</em>, <em>resolution=101</em>, <em>width=500</em>, <em>height=400</em>, <em>viztool='Pmw.Blt.Graph'</em>, <em>plot_update='after'</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FuncDependenceViz.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FuncDependenceViz.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a set of functions depending on a set of parameters.
+This class creates a GUI where the parameters can be adjusted,
+and the effect on the function graphs can be seen immediately.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.FuncDependenceViz.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.FuncDependenceViz.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.FuncDependenceViz.bind_vectors2BLTgraph">
 <tt class="descname">bind_vectors2BLTgraph</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FuncDependenceViz.bind_vectors2BLTgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FuncDependenceViz.bind_vectors2BLTgraph" title="Permalink to this definition">¶</a></dt>
@@ -589,6 +675,44 @@ contents of a FuncSpec object.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.FuncSpec.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>representation</em>, <em>name=''</em>, <em>parameters=None</em>, <em>independent_variables=</em><span class="optional">[</span><span class="optional">]</span>, <em>formula=None</em>, <em>image=None</em>, <em>function_object=None</em>, <em>vector=0</em>, <em>description=None</em>, <em>xcoor=None</em>, <em>scrolled_frame=False</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FuncSpec.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FuncSpec.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arguments:</p>
+<dl class="docutils">
+<dt>&#64;param representation:  class Drawing, UserFunction, or</dt>
+<dd>StringFormula</dd>
+</dl>
+<p>&#64;param name:            name of function
+&#64;param parameters:      parameters in the function, either</p>
+<blockquote>
+<div>dict or Parameters instance</div></blockquote>
+<dl class="docutils">
+<dt>&#64;param independent_variables: list/tuple of strings with the</dt>
+<dd>names of the indep. variables.</dd>
+</dl>
+<p>&#64;param formula:         textual doc of function formula
+&#64;param image:           filename of GIF image (LaTeX)
+&#64;param function_object: callable object for evaluating the function
+&#64;param vector:          0: scalar function, &gt;0: no of vector comp.
+&#64;param description:     more verbose description than formula
+&#64;param xcoor:           array of coordinates for drawing
+&#64;param scrolled_frame:  scrollbars in the notebook page, False</p>
+<blockquote>
+<div>or dict: {&#8216;width&#8217;: 300, &#8216;height&#8217;:200}</div></blockquote>
+<p>Examples: see test_FunctionSelector in TkGUI.py.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.FuncSpec.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.FuncSpec.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.FuncSpec.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FuncSpec.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FuncSpec.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.FuncSpec.configure">
 <tt class="descname">configure</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FuncSpec.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FuncSpec.configure" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -624,6 +748,16 @@ instance.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.FunctionChoices.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>func_spec_list</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FunctionChoices.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FunctionChoices.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.FunctionChoices.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.FunctionChoices.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.FunctionChoices.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FunctionChoices.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FunctionChoices.get" title="Permalink to this definition">¶</a></dt>
@@ -663,6 +797,16 @@ free parameters, hardcoded Python functions etc.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.FunctionSelector.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>parent</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FunctionSelector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FunctionSelector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.FunctionSelector.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.FunctionSelector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.FunctionSelector.add">
 <tt class="descname">add</tt><big>(</big><em>name</em>, <em>func_spec_list</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#FunctionSelector.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.FunctionSelector.add" title="Permalink to this definition">¶</a></dt>
@@ -714,6 +858,62 @@ the page with the given name.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.InputPrm.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name=None</em>, <em>default=0.0</em>, <em>str2type=None</em>, <em>help=None</em>, <em>unit=None</em>, <em>cmlarg=None</em>, <em>prmclass=None</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrm.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrm.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default           default value
+str2type          string to type conversion</p>
+<blockquote>
+<div>(float, int, str, str2bool)</div></blockquote>
+<p>name              parameter name
+help              description of parameter
+unit              physical unit (dimension)
+cmlarg            command-line argument for sending</p>
+<blockquote>
+<div>this prm to an external program</div></blockquote>
+<dl class="docutils">
+<dt>prmclass          classification of this parameter, e.g.,</dt>
+<dd>&#8216;numerics&#8217;, &#8216;physics&#8217;, &#8216;material&#8217;, etc.</dd>
+</dl>
+<p>Note: value with unit only works if str is float or int</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">=</span><span class="n">InputPrm</span><span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">6.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;6 cm&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">0.059999999999999998</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">=</span><span class="n">InputPrm</span><span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span> <span class="s">&#39;1 m&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;1 km&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">1000.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">get_wunit</span><span class="p">()</span>
+<span class="go">&#39;1000.0 m&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">unit</span>
+<span class="go">&#39;m&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.InputPrm.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.InputPrm.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrm.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrm.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrm.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application of eval to this output creates the instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrm.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrm.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrm.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compact output; just the value as a formatted string.
+Note that __str__ is used by __repr__ so strings must
+be enclosed in quotes.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.InputPrm.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrm.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrm.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the value of the parameter.</p>
@@ -760,29 +960,88 @@ Otherwise, return value (with the right type).</p>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmCGI.get" title="scitools.TkGUI.InputPrmCGI.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getPhysicalQuantity</span></tt>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmCGI.getPhysicalQuantity" title="scitools.TkGUI.InputPrmCGI.getPhysicalQuantity"><tt class="xref py py-obj docutils literal"><span class="pre">getPhysicalQuantity</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_wunit</span></tt>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmCGI.get_wunit" title="scitools.TkGUI.InputPrmCGI.get_wunit"><tt class="xref py py-obj docutils literal"><span class="pre">get_wunit</span></tt></a>()</td>
 <td>Return value with unit (dimension) as string, if it has.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmCGI.make_form_entry" title="scitools.TkGUI.InputPrmCGI.make_form_entry"><tt class="xref py py-obj docutils literal"><span class="pre">make_form_entry</span></tt></a>()</td>
 <td>Write the form&#8217;s input field, according to widget_type.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(value)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmCGI.set" title="scitools.TkGUI.InputPrmCGI.set"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>(value)</td>
 <td>Set the value of the parameter.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name=None</em>, <em>default=0.0</em>, <em>str2type=None</em>, <em>widget_type='entry'</em>, <em>values=None</em>, <em>form=None</em>, <em>help=None</em>, <em>unit=None</em>, <em>cmlarg=None</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmCGI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default            default value
+str2type           function from string to type
+name               name of parameter
+widget_type        entry, slider, option, checkbutton
+values             option values
+form               cgi.FieldStorage object
+help               description of parameter
+unit               physical unit (dimension)
+cmlarg             command-line argument for sending</p>
+<blockquote>
+<div>this prm to an external program</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.InputPrmCGI.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmCGI.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application of eval to this output creates the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compact output; just the value as a formatted string.
+Note that __str__ is used by __repr__ so strings must
+be enclosed in quotes.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.InputPrmCGI.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmCGI.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.getPhysicalQuantity">
+<tt class="descname">getPhysicalQuantity</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.getPhysicalQuantity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.get_wunit">
+<tt class="descname">get_wunit</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.get_wunit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value with unit (dimension) as string, if it has.
+Otherwise, return value (with the right type).</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.InputPrmCGI.make_form_entry">
 <tt class="descname">make_form_entry</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmCGI.make_form_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.make_form_entry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the form&#8217;s input field, according to widget_type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmCGI.set">
+<tt class="descname">set</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of the parameter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.InputPrmCGI.v">
+<tt class="descname">v</tt><a class="headerlink" href="#scitools.TkGUI.InputPrmCGI.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of parameter</p>
 </dd></dl>
 
 </dd></dl>
@@ -802,13 +1061,13 @@ Otherwise, return value (with the right type).</p>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmGUI.get" title="scitools.TkGUI.InputPrmGUI.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>()</td>
 <td>Get GUI text/number, handle special input like numbers</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getPhysicalQuantity</span></tt>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmGUI.getPhysicalQuantity" title="scitools.TkGUI.InputPrmGUI.getPhysicalQuantity"><tt class="xref py py-obj docutils literal"><span class="pre">getPhysicalQuantity</span></tt></a>()</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmGUI.get_widget_type" title="scitools.TkGUI.InputPrmGUI.get_widget_type"><tt class="xref py py-obj docutils literal"><span class="pre">get_widget_type</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_wunit</span></tt>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmGUI.get_wunit" title="scitools.TkGUI.InputPrmGUI.get_wunit"><tt class="xref py py-obj docutils literal"><span class="pre">get_wunit</span></tt></a>()</td>
 <td>Return value with unit (dimension) as string, if it has.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.TkGUI.InputPrmGUI.make_GUI_variable_Tk" title="scitools.TkGUI.InputPrmGUI.make_GUI_variable_Tk"><tt class="xref py py-obj docutils literal"><span class="pre">make_GUI_variable_Tk</span></tt></a>(str2type,&nbsp;unit,&nbsp;name)</td>
@@ -831,6 +1090,41 @@ Otherwise, return value (with the right type).</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="scitools.TkGUI.InputPrmGUI.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name=None</em>, <em>default=0.0</em>, <em>str2type=None</em>, <em>widget_type='entry'</em>, <em>values=None</em>, <em>parent=None</em>, <em>help=None</em>, <em>unit=None</em>, <em>cmlarg=None</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmGUI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param default:           default value
+&#64;param str2type:          function from string to type
+&#64;param name:              name of parameter
+&#64;param widget_type:       entry, slider, option, checkbutton
+&#64;param values:            (min,max) interval or options
+&#64;param parent:            parent widget
+&#64;param help:              description of parameter
+&#64;param unit:              physical unit (dimension)
+&#64;param cmlarg:            command-line argument for sending</p>
+<blockquote>
+<div>this prm to an external program</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.InputPrmGUI.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmGUI.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmGUI.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application of eval to this output creates the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmGUI.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compact output; just the value as a formatted string.
+Note that __str__ is used by __repr__ so strings must
+be enclosed in quotes.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.InputPrmGUI.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmGUI.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get GUI text/number, handle special input like numbers
@@ -838,9 +1132,21 @@ with units, if necessary.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="scitools.TkGUI.InputPrmGUI.getPhysicalQuantity">
+<tt class="descname">getPhysicalQuantity</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.getPhysicalQuantity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.InputPrmGUI.get_widget_type">
 <tt class="descname">get_widget_type</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmGUI.get_widget_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.get_widget_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.InputPrmGUI.get_wunit">
+<tt class="descname">get_wunit</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.get_wunit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value with unit (dimension) as string, if it has.
+Otherwise, return value (with the right type).</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="scitools.TkGUI.InputPrmGUI.make_GUI_variable_Tk">
@@ -864,6 +1170,12 @@ setting and getting the value in/from a GUI.</p>
 <dt id="scitools.TkGUI.InputPrmGUI.set">
 <tt class="descname">set</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#InputPrmGUI.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.set" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.InputPrmGUI.v">
+<tt class="descname">v</tt><a class="headerlink" href="#scitools.TkGUI.InputPrmGUI.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of parameter</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="scitools.TkGUI.InputPrmGUI.widget_type">
@@ -924,6 +1236,54 @@ AutoSimVizCGI.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>interface='plain'</em>, <em>form=None</em>, <em>prm_dict={}</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param interface: &#8216;plain&#8217;, &#8216;CGI&#8217;, or &#8216;GUI&#8217;
+&#64;param form: cgi.FieldStorage() object
+&#64;param prm_dict: dictionary with (name,value) pairs
+(will be added using the add method)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__iter__">
+<tt class="descname">__iter__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over keys in self.dict.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.Parameters.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.Parameters.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__setattr__">
+<tt class="descname">__setattr__</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__setattr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If name2attr is called, self.m = 2.3 (using this
+function) is safe, because this also implies update of
+the corresponding InputPrm-type object in self.dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__setitem__">
+<tt class="descname">__setitem__</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.TkGUI.Parameters.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.Parameters.add">
 <tt class="descname">add</tt><big>(</big><em>name</em>, <em>default</em>, <em>str2type=None</em>, <em>widget_type='entry'</em>, <em>values=None</em>, <em>help=None</em>, <em>unit=None</em>, <em>cmlarg=None</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#Parameters.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.Parameters.add" title="Permalink to this definition">¶</a></dt>
@@ -999,6 +1359,16 @@ options.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.TkGUI.StringFormula.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>func_spec</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#StringFormula.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.StringFormula.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.StringFormula.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.StringFormula.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.TkGUI.StringFormula.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#StringFormula.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.StringFormula.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return function object.</p>
@@ -1021,6 +1391,16 @@ options.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.TkGUI.UserFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>func_spec</em><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#UserFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.UserFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.TkGUI.UserFunction.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.TkGUI'</em><a class="headerlink" href="#scitools.TkGUI.UserFunction.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.TkGUI.UserFunction.get">
 <tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/TkGUI.html#UserFunction.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.TkGUI.UserFunction.get" title="Permalink to this definition">¶</a></dt>

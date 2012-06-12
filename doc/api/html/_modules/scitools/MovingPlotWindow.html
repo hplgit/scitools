@@ -95,7 +95,7 @@
 <span class="sd">                plot_manager.update(n)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+<div class="viewcode-block" id="MovingPlotWindow.__init__"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
                  <span class="n">mode</span><span class="o">=</span><span class="s">&#39;continuous movement&#39;</span><span class="p">,</span>
                  <span class="n">pause</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -133,7 +133,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span> <span class="o">=</span> <span class="n">yaxis</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="n">pause</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_prev</span> <span class="o">=</span> <span class="mi">0</span>
-
+</div>
 <div class="viewcode-block" id="MovingPlotWindow.axis"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow.axis">[docs]</a>    <span class="k">def</span> <span class="nf">axis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the axis limits as a list ``[xmin, xmax, ymin, ymax]``.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length</span><span class="p">,</span>

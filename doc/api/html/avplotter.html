@@ -282,6 +282,24 @@ s                        |
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.avplotter.Plotter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>ymin</em>, <em>ymax</em>, <em>width=68</em>, <em>symbols='*o+x&#64;'</em>, <em>vertical_line=0</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#Plotter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.Plotter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a line by line plotter with the x axis pointing
+downward. The <cite>ymin</cite> and <cite>ymax</cite> variables define the
+extent of the y axis. The <cite>width</cite> parameter is the number
+of characters used for the y domain (axis). The symbols
+used for curves are given by the <cite>symbols</cite> string
+(first symbol, by default is <tt class="docutils literal"><span class="pre">*</span></tt>, next is <tt class="docutils literal"><span class="pre">o</span></tt>).
+The <cite>vertical_line</cite> parameter specifies for which y value
+where the x axis is drawn (y=0 by default).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.avplotter.Plotter.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.avplotter'</em><a class="headerlink" href="#scitools.avplotter.Plotter.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.avplotter.Plotter.plot">
 <tt class="descname">plot</tt><big>(</big><em>x</em>, <em>*y</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#Plotter.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.Plotter.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return next line in plot, given x and some y values.</p>

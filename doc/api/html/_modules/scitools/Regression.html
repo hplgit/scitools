@@ -212,7 +212,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TestRun.__init__"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                   <span class="n">logfile</span><span class="p">,</span>         <span class="c"># .v file</span>
                   <span class="n">removepath</span><span class="o">=</span><span class="s">&#39; &#39;</span>   <span class="c"># remove this from sys.argv[0] output</span>
                   <span class="p">):</span>
@@ -262,7 +262,7 @@
 
         <span class="c"># add current working directory to the path:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">curdir</span>
-
+</div>
 <div class="viewcode-block" id="TestRun.run"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">inputfile</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run program, store output on logfile.&quot;&quot;&quot;</span>
         <span class="c"># the logfile is always opened in the constructor so</span>
@@ -460,14 +460,14 @@
 <span class="sd">    regression test.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">removepath</span><span class="o">=</span><span class="s">&#39;  &#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="TestRunNumerics.__init__"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRunNumerics.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">removepath</span><span class="o">=</span><span class="s">&#39;  &#39;</span><span class="p">):</span>
         <span class="n">TestRun</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">removepath</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span> <span class="o">=</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s">&#39;d&#39;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">)</span>
         <span class="c"># don&#39;t bring the float logfile into existence if not necessary</span>
 
-
+</div>
     <span class="k">def</span> <span class="nf">_approxline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">realfilter</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Replace floating-point numbers in line by approximate</span>
@@ -587,7 +587,7 @@
 <span class="sd">    comparing .v with .r files. The result of the comparison</span>
 <span class="sd">    (the differing lines) are reported in HTML documents.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Verify.__init__"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.Verify.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">root</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span>        <span class="c"># root directory or a single file</span>
                  <span class="n">task</span><span class="o">=</span><span class="s">&#39;verify&#39;</span><span class="p">,</span>   <span class="c"># &#39;verify&#39; or &#39;update&#39;</span>
                  <span class="n">diffsummary</span> <span class="o">=</span> <span class="s">&#39;verify_log&#39;</span><span class="p">,</span>
@@ -646,7 +646,7 @@
         <span class="n">ds_d</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
         <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;/body&gt;&lt;/html&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">ds_d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_singlefile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run a single regression test.&quot;&quot;&quot;</span>
         <span class="c"># does the filename end with .verify?</span>
@@ -823,14 +823,14 @@
 <span class="sd">    applications in opt or nopt mode.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s">&#39;verify&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="VerifyDiffpack.__init__"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.VerifyDiffpack.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s">&#39;verify&#39;</span><span class="p">,</span>
                  <span class="n">diffsummary</span> <span class="o">=</span> <span class="s">&#39;verify_log&#39;</span><span class="p">,</span>
                  <span class="n">diffprog</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
                  <span class="n">makemode</span> <span class="o">=</span> <span class="s">&#39;opt&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">makemode</span> <span class="o">=</span> <span class="n">makemode</span>
         <span class="c"># run all the stuff:</span>
         <span class="n">Verify</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">diffsummary</span><span class="p">,</span> <span class="n">diffprog</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="VerifyDiffpack.run"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.VerifyDiffpack.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scriptfile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run script, but compile the application first.&quot;&quot;&quot;</span>
         <span class="c"># is this a Verify directory? (recall that we have chdir&#39;ed to dir)</span>
@@ -867,7 +867,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">thisdir</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="FloatDiff"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff">[docs]</a><span class="k">class</span> <span class="nc">FloatDiff</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
+<div class="viewcode-block" id="FloatDiff.__init__"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_TkPmw</span><span class="p">:</span>  <span class="c"># global variable set in top of the script</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s">&#39;Could not import Tkinter and Pmw&#39;</span><span class="p">)</span>
 
@@ -882,7 +882,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">resizescrollregion</span><span class="p">()</span> <span class="c"># make the scrollbars right</span>
 
         <span class="k">return</span>
-
+</div>
 <div class="viewcode-block" id="FloatDiff.loadfiles"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.loadfiles">[docs]</a>    <span class="k">def</span> <span class="nf">loadfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Purpose: build &quot;list&quot;, a list of relevant info for</span>

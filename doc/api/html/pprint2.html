@@ -157,6 +157,29 @@ String containing the printf format for formatting float objects.</li>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>stream=None</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle pretty printing operations onto a stream using a set of
+configured parameters.</p>
+<dl class="docutils">
+<dt>indent</dt>
+<dd>Number of spaces to indent for each level of nesting.</dd>
+<dt>width</dt>
+<dd>Attempted maximum number of columns in the output.</dd>
+<dt>depth</dt>
+<dd>The maximum depth to print out nested structures.</dd>
+<dt>stream</dt>
+<dd>The desired output stream.  If omitted (or false), the standard
+output stream available at construction will be used.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.pprint2.PrettyPrinter.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.pprint2'</em><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.pprint2.PrettyPrinter.format">
 <tt class="descname">format</tt><big>(</big><em>object</em>, <em>context</em>, <em>maxlevels</em>, <em>level</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format object for a specific context, returning a string

@@ -113,6 +113,57 @@ time series.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>window_width, dt, yaxis=[-1, 1], mode='continuous movement', pause=1.5</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>window_width</td>
+<td>tmax-tmin in a plot window</td>
+</tr>
+<tr class="row-odd"><td>dt</td>
+<td>time step (constant)</td>
+</tr>
+<tr class="row-even"><td>yaxis</td>
+<td>extent of y axis</td>
+</tr>
+<tr class="row-odd"><td>mode</td>
+<td>method for moving the plot window,
+see below.</td>
+</tr>
+</tbody>
+</table>
+<p>The mode parameter has three values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">'continuous</span> <span class="pre">movement'</span></tt>:
+the plot window moves one time step for each plot.</li>
+<li><tt class="docutils literal"><span class="pre">'continuous</span> <span class="pre">drawing'</span></tt>: the curves are drawn from left
+to right, one step at a time, and plot window jumps
+when the curve reaches the end.</li>
+<li><tt class="docutils literal"><span class="pre">'jumps'</span></tt>: the curves are shown in a window for a time
+equal to the pause argument, then the axis jumps
+to a new time window of the same length</li>
+</ul>
+</div></blockquote>
+<p>See also the test block of the module for
+testing out the three different modes of this class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.MovingPlotWindow'</em><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.MovingPlotWindow.MovingPlotWindow.axis">
 <tt class="descname">axis</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the axis limits as a list <tt class="docutils literal"><span class="pre">[xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax]</span></tt>.</p>

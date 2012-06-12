@@ -824,7 +824,7 @@
 <span class="sd">     [0, 1.2000000000000002, &#39;siny&#39;],</span>
 <span class="sd">     [0.5, 1.2000000000000002, &#39;siny&#39;]]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option_prefix</span><span class="o">=</span><span class="s">&#39;--&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="MultipleLoop.__init__"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.MultipleLoop.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option_prefix</span><span class="o">=</span><span class="s">&#39;--&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        option_prefix is the prefix that will be used in command-line</span>
 <span class="sd">        options (typically &#39;-&#39; or &#39;--&#39;).</span>
@@ -832,7 +832,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">option_prefix</span> <span class="o">=</span> <span class="n">option_prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prm_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combined</span> <span class="o">=</span> <span class="bp">False</span>
-
+</div>
 <div class="viewcode-block" id="MultipleLoop.register_parameter"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.MultipleLoop.register_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">register_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Register a parameter and its value or multiple values.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prm_values</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">input2values</span><span class="p">(</span><span class="n">values</span><span class="p">)))</span>
@@ -863,11 +863,11 @@
         <span class="c"># return no of removed experiments:</span>
         <span class="k">return</span> <span class="n">nex_orig</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultipleLoop.__iter__"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.MultipleLoop.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">combined</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">combine</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span>
-
+</div>
 <div class="viewcode-block" id="MultipleLoop.next"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.MultipleLoop.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span>
@@ -879,13 +879,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmlargs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">varied_parameters</span>
 </div></div>
 <div class="viewcode-block" id="ReportHTML"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.ReportHTML">[docs]</a><span class="k">class</span> <span class="nc">ReportHTML</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportHTML.__init__"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.ReportHTML.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="c"># new file</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;&quot;&quot;&lt;html&gt;&lt;body&gt;</span><span class="se">\n</span><span class="s">&quot;&quot;&quot;</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_section_counter</span> <span class="o">=</span> <span class="mi">0</span>
-
+</div>
 <div class="viewcode-block" id="ReportHTML.dump"><a class="viewcode-back" href="../../multipleloop.html#scitools.multipleloop.ReportHTML.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>

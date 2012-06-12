@@ -232,6 +232,16 @@ fd.write(&#8216;%d</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.Regression.FloatDiff.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>master</em>, <em>file1</em>, <em>file2</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#FloatDiff.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.FloatDiff.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Regression.FloatDiff.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.Regression'</em><a class="headerlink" href="#scitools.Regression.FloatDiff.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.Regression.FloatDiff.buildGUI">
 <tt class="descname">buildGUI</tt><big>(</big><em>list</em>, <em>file1</em>, <em>file2</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#FloatDiff.buildGUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.FloatDiff.buildGUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build list of fields and canvas (text and plot).</p>
@@ -310,6 +320,17 @@ test.append(&#8220;res1.dat&#8221;)</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.Regression.TestRun.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>logfile</em>, <em>removepath=' '</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#TestRun.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.TestRun.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up logfile, create a new one with header.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Regression.TestRun.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.Regression'</em><a class="headerlink" href="#scitools.Regression.TestRun.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.Regression.TestRun.append">
 <tt class="descname">append</tt><big>(</big><em>file</em>, <em>maxlines=0</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#TestRun.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.TestRun.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a file or a list of files to the logfile.</p>
@@ -384,7 +405,7 @@ regression test.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">append</span></tt>(file[,&nbsp;maxlines])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.append" title="scitools.Regression.TestRunNumerics.append"><tt class="xref py py-obj docutils literal"><span class="pre">append</span></tt></a>(file[,&nbsp;maxlines])</td>
 <td>Append a file or a list of files to the logfile.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.approx" title="scitools.Regression.TestRunNumerics.approx"><tt class="xref py py-obj docutils literal"><span class="pre">approx</span></tt></a>(realfilter)</td>
@@ -393,32 +414,48 @@ regression test.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.floatdump" title="scitools.Regression.TestRunNumerics.floatdump"><tt class="xref py py-obj docutils literal"><span class="pre">floatdump</span></tt></a>(program[,&nbsp;options])</td>
 <td>Run program and direct output to self.floatlogfile.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">graphics</span></tt>(program[,&nbsp;options])</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.graphics" title="scitools.Regression.TestRunNumerics.graphics"><tt class="xref py py-obj docutils literal"><span class="pre">graphics</span></tt></a>(program[,&nbsp;options])</td>
 <td>Run e.g.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grepfile</span></tt>(regex,&nbsp;file[,&nbsp;return_lineinfo])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.grepfile" title="scitools.Regression.TestRunNumerics.grepfile"><tt class="xref py py-obj docutils literal"><span class="pre">grepfile</span></tt></a>(regex,&nbsp;file[,&nbsp;return_lineinfo])</td>
 <td>Return a text consisting of the lines matching regex</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">loadfile</span></tt>(file)</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.loadfile" title="scitools.Regression.TestRunNumerics.loadfile"><tt class="xref py py-obj docutils literal"><span class="pre">loadfile</span></tt></a>(file)</td>
 <td>Return a file as a list of lines for text processing.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">movie</span></tt>(list_of_psfiles)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.movie" title="scitools.Regression.TestRunNumerics.movie"><tt class="xref py py-obj docutils literal"><span class="pre">movie</span></tt></a>(list_of_psfiles)</td>
 <td>Insert HTML commands for an animated gif picture.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">picture</span></tt>(psfile)</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.picture" title="scitools.Regression.TestRunNumerics.picture"><tt class="xref py py-obj docutils literal"><span class="pre">picture</span></tt></a>(psfile)</td>
 <td>Insert HTML commands for a gif picture.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>(program[,&nbsp;options,&nbsp;inputfile])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.run" title="scitools.Regression.TestRunNumerics.run"><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt></a>(program[,&nbsp;options,&nbsp;inputfile])</td>
 <td>Run program, store output on logfile.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">silentrun</span></tt>(program[,&nbsp;options])</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.silentrun" title="scitools.Regression.TestRunNumerics.silentrun"><tt class="xref py py-obj docutils literal"><span class="pre">silentrun</span></tt></a>(program[,&nbsp;options])</td>
 <td>Run program without storing output on logfile.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt>(text)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.TestRunNumerics.write" title="scitools.Regression.TestRunNumerics.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(text)</td>
 <td>Write message to logfile.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>logfile</em>, <em>removepath='  '</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#TestRunNumerics.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.TestRunNumerics.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Regression.TestRunNumerics.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.Regression'</em><a class="headerlink" href="#scitools.Regression.TestRunNumerics.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.append">
+<tt class="descname">append</tt><big>(</big><em>file</em>, <em>maxlines=0</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a file or a list of files to the logfile.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="scitools.Regression.TestRunNumerics.approx">
 <tt class="descname">approx</tt><big>(</big><em>realfilter</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#TestRunNumerics.approx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.TestRunNumerics.approx" title="Permalink to this definition">¶</a></dt>
@@ -430,6 +467,59 @@ them by approximate real numbers computed by realfilter.</p>
 <dt id="scitools.Regression.TestRunNumerics.floatdump">
 <tt class="descname">floatdump</tt><big>(</big><em>program</em>, <em>options=''</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#TestRunNumerics.floatdump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.TestRunNumerics.floatdump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run program and direct output to self.floatlogfile.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.graphics">
+<tt class="descname">graphics</tt><big>(</big><em>program</em>, <em>options=''</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.graphics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run e.g. graphics program if the environment variable
+BATCH_REGRESSION is not set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.grepfile">
+<tt class="descname">grepfile</tt><big>(</big><em>regex</em>, <em>file</em>, <em>return_lineinfo=1</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.grepfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a text consisting of the lines matching regex
+(regex can be string or list of strings, and
+return_lineinfo is true if each matched line is
+prefixed with the filename and the line file as
+a list of lines for text processing).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.loadfile">
+<tt class="descname">loadfile</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.loadfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a file as a list of lines for text processing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.movie">
+<tt class="descname">movie</tt><big>(</big><em>list_of_psfiles</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert HTML commands for an animated gif picture.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.picture">
+<tt class="descname">picture</tt><big>(</big><em>psfile</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.picture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert HTML commands for a gif picture.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.run">
+<tt class="descname">run</tt><big>(</big><em>program</em>, <em>options=''</em>, <em>inputfile=''</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run program, store output on logfile.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.silentrun">
+<tt class="descname">silentrun</tt><big>(</big><em>program</em>, <em>options=''</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.silentrun" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run program without storing output on logfile.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.TestRunNumerics.write">
+<tt class="descname">write</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#scitools.Regression.TestRunNumerics.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write message to logfile.</p>
 </dd></dl>
 
 </dd></dl>
@@ -459,6 +549,16 @@ comparing .v with .r files. The result of the comparison
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.Regression.Verify.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>root='.'</em>, <em>task='verify'</em>, <em>diffsummary='verify_log'</em>, <em>diffprog=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#Verify.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.Verify.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Regression.Verify.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.Regression'</em><a class="headerlink" href="#scitools.Regression.Verify.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.Regression.Verify.clean">
 <tt class="descname">clean</tt><big>(</big><em>dirname</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#Verify.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.Verify.clean" title="Permalink to this definition">¶</a></dt>
@@ -493,7 +593,7 @@ applications in opt or nopt mode.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.VerifyDiffpack.clean" title="scitools.Regression.VerifyDiffpack.clean"><tt class="xref py py-obj docutils literal"><span class="pre">clean</span></tt></a>(dirname)</td>
 <td>Clean up files, typically executables etc.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">diffCPUonly</span></tt>(difflines)</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Regression.VerifyDiffpack.diffCPUonly" title="scitools.Regression.VerifyDiffpack.diffCPUonly"><tt class="xref py py-obj docutils literal"><span class="pre">diffCPUonly</span></tt></a>(difflines)</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.Regression.VerifyDiffpack.run" title="scitools.Regression.VerifyDiffpack.run"><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt></a>(scriptfile)</td>
@@ -502,10 +602,25 @@ applications in opt or nopt mode.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.Regression.VerifyDiffpack.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>root='.'</em>, <em>task='verify'</em>, <em>diffsummary='verify_log'</em>, <em>diffprog=None</em>, <em>makemode='opt'</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#VerifyDiffpack.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.VerifyDiffpack.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Regression.VerifyDiffpack.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.Regression'</em><a class="headerlink" href="#scitools.Regression.VerifyDiffpack.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.Regression.VerifyDiffpack.clean">
 <tt class="descname">clean</tt><big>(</big><em>dirname</em><big>)</big><a class="reference internal" href="_modules/scitools/Regression.html#VerifyDiffpack.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Regression.VerifyDiffpack.clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clean up files, typically executables etc.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="scitools.Regression.VerifyDiffpack.diffCPUonly">
+<tt class="descname">diffCPUonly</tt><big>(</big><em>difflines</em><big>)</big><a class="headerlink" href="#scitools.Regression.VerifyDiffpack.diffCPUonly" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="scitools.Regression.VerifyDiffpack.run">

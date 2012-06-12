@@ -75,6 +75,16 @@
 </tbody>
 </table>
 <dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>database_name</em>, <em>mode='store'</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.NumPyDB.NumPyDB.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.NumPyDB'</em><a class="headerlink" href="#scitools.NumPyDB.NumPyDB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="scitools.NumPyDB.NumPyDB.dump">
 <tt class="descname">dump</tt><big>(</big><em>a</em>, <em>identifier</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dump NumPy array a with identifier.</p>
@@ -115,11 +125,21 @@ the distance between two identifiers.</p>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_cPickle.load" title="scitools.NumPyDB.NumPyDB_cPickle.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Load NumPy array with a given identifier. In case the</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt>(identifier[,&nbsp;bestapprox])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_cPickle.locate" title="scitools.NumPyDB.NumPyDB_cPickle.locate"><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Find position in files where data corresponding to identifier are stored.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_cPickle.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>database_name</em>, <em>mode='store'</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_cPickle.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_cPickle.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.NumPyDB.NumPyDB_cPickle.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.NumPyDB'</em><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_cPickle.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.NumPyDB.NumPyDB_cPickle.dump">
 <tt class="descname">dump</tt><big>(</big><em>a</em>, <em>identifier</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_cPickle.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_cPickle.dump" title="Permalink to this definition">¶</a></dt>
@@ -134,6 +154,15 @@ identifier is not found, bestapprox != None means that
 an approximation is sought. The bestapprox argument is
 then taken as a function that can be used for computing
 the distance between two identifiers id1 and id2.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_cPickle.locate">
+<tt class="descname">locate</tt><big>(</big><em>identifier</em>, <em>bestapprox=None</em><big>)</big><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_cPickle.locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find position in files where data corresponding
+to identifier are stored.
+bestapprox is a user-defined function for computing
+the distance between two identifiers.</p>
 </dd></dl>
 
 </dd></dl>
@@ -156,11 +185,21 @@ the distance between two identifiers id1 and id2.</p>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_pickle.load" title="scitools.NumPyDB.NumPyDB_pickle.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Load NumPy array with a given identifier. In case the</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt>(identifier[,&nbsp;bestapprox])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_pickle.locate" title="scitools.NumPyDB.NumPyDB_pickle.locate"><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Find position in files where data corresponding to identifier are stored.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_pickle.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>database_name</em>, <em>mode='store'</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_pickle.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_pickle.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.NumPyDB.NumPyDB_pickle.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.NumPyDB'</em><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_pickle.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.NumPyDB.NumPyDB_pickle.dump">
 <tt class="descname">dump</tt><big>(</big><em>a</em>, <em>identifier</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_pickle.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_pickle.dump" title="Permalink to this definition">¶</a></dt>
@@ -175,6 +214,15 @@ identifier is not found, bestapprox != None means that
 an approximation is sought. The bestapprox argument is
 then taken as a function that can be used for computing
 the distance between two identifiers id1 and id2.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_pickle.locate">
+<tt class="descname">locate</tt><big>(</big><em>identifier</em>, <em>bestapprox=None</em><big>)</big><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_pickle.locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find position in files where data corresponding
+to identifier are stored.
+bestapprox is a user-defined function for computing
+the distance between two identifiers.</p>
 </dd></dl>
 
 </dd></dl>
@@ -201,6 +249,16 @@ the distance between two identifiers id1 and id2.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_shelve.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>database_name</em>, <em>mode='store'</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_shelve.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_shelve.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.NumPyDB.NumPyDB_shelve.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.NumPyDB'</em><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_shelve.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.NumPyDB.NumPyDB_shelve.dump">
 <tt class="descname">dump</tt><big>(</big><em>a</em>, <em>identifier</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_shelve.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_shelve.dump" title="Permalink to this definition">¶</a></dt>
@@ -243,11 +301,21 @@ the distance between two identifiers id1 and id2.</p>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_text.load" title="scitools.NumPyDB.NumPyDB_text.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Load NumPy array with a given identifier. In case the</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt>(identifier[,&nbsp;bestapprox])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.NumPyDB.NumPyDB_text.locate" title="scitools.NumPyDB.NumPyDB_text.locate"><tt class="xref py py-obj docutils literal"><span class="pre">locate</span></tt></a>(identifier[,&nbsp;bestapprox])</td>
 <td>Find position in files where data corresponding to identifier are stored.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_text.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>database_name</em>, <em>mode='store'</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_text.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_text.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.NumPyDB.NumPyDB_text.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.NumPyDB'</em><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_text.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.NumPyDB.NumPyDB_text.dump">
 <tt class="descname">dump</tt><big>(</big><em>a</em>, <em>identifier</em><big>)</big><a class="reference internal" href="_modules/scitools/NumPyDB.html#NumPyDB_text.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_text.dump" title="Permalink to this definition">¶</a></dt>
@@ -262,6 +330,15 @@ identifier is not found, bestapprox != None means that
 an approximation is sought. The bestapprox argument is
 then taken as a function that can be used for computing
 the distance between two identifiers id1 and id2.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.NumPyDB.NumPyDB_text.locate">
+<tt class="descname">locate</tt><big>(</big><em>identifier</em>, <em>bestapprox=None</em><big>)</big><a class="headerlink" href="#scitools.NumPyDB.NumPyDB_text.locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find position in files where data corresponding
+to identifier are stored.
+bestapprox is a user-defined function for computing
+the distance between two identifiers.</p>
 </dd></dl>
 
 </dd></dl>

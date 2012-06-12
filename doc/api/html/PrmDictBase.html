@@ -207,6 +207,105 @@ parameter).</p>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__class__">
+<tt class="descname">__class__</tt><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__class__" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__delattr__">
+<tt class="descname">__delattr__</tt><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__dict__">
+<tt class="descname">__dict__</tt><em class="property"> = dict_proxy({'__module__': 'scitools.PrmDictBase', 'set': &lt;function set at 0x861b8c0&gt;, 'dump': &lt;function dump at 0x861b848&gt;, 'get': &lt;function get at 0x861ba28&gt;, 'dicts2namespace': &lt;function dicts2namespace at 0x861bb18&gt;, '__dict__': &lt;attribute '__dict__' of 'PrmDictBase' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'PrmDictBase' objects&gt;, 'properties': &lt;function properties at 0x861baa0&gt;, '__init__': &lt;function __init__ at 0x861b2a8&gt;, 'set_in_dict': &lt;function set_in_dict at 0x861b938&gt;, '_prm_dict_names': &lt;function _prm_dict_names at 0x861b758&gt;, 'dicts2variables': &lt;function dicts2variables at 0x861bc80&gt;, 'dicts2namespace2': &lt;function dicts2namespace2 at 0x861bb90&gt;, 'usage': &lt;function usage at 0x861b7d0&gt;, 'variables2dicts': &lt;function variables2dicts at 0x861bcf8&gt;, 'namespace2dicts': &lt;function namespace2dicts at 0x861bc08&gt;, '_update': &lt;function _update at 0x861b9b0&gt;, '__doc__': '\nBase class for managing parameters stored in dictionaries.\nTypical use includes data or solver classes for solving physical\nproblems numerically. One may then choose to hold all physical\nparameters in a dictionary physical_prm, containing\n(parameter name, value) pairs, and all numerical parameters in\na dictionary numerical_prm. The physical_prm and numerical_prm\ndictionaries can then be defined in a subclass of PrmDictBase\nand managed by PrmDictBase. The management includes several\nconvenient features:\n\n - keeping all input data in one place\n - setting of one or more parameters where the type of the value\n   must match the type of the previous (initial) value\n - pretty print of all defined parameters\n - copying parameters from dictionaries to, e.g., local variables\n   and back again, or to local namespaces and back again\n - easy transition from parameter dictionaries to more sophisticated\n   handling of input data, e.g., class scitools.ParameterInterface\n   (GUI, CGI, command-line args)\n\nThe subclass typically defines the dictionaries, say\nself.physical_prm and self.numerical_prm. Then these are\nappended to the inherited self._prm_list list to be registered.\nAll members of this list are dictionaries that will not accept\nnew keys (i.e., all parameters must be defined prior to registering\nthem in self._prm_list). With this list one has a collection of all\nparameter dictionaries in the application.\n\nself._type_check[prm] is defined if we want to type check\na parameter prm.\nif self._type_check[prm] is True (or False), prm must either\nbe None, of the same type as the previously registered\nvalue of prm, or any number (float, int, complex) if\nthe previous value prm was any number. Instead of a boolean\nvalue, self._type_check[prm] may hold a tuple of class types\n(to be used in isinstance checks), or a function which takes\nthe value as argument and returns True if the that value is\nof the right type (otherwise False).\n\n\nIn addition to the parameter dictionaries with fixed keys, class\nPrmDictBase also holds a self.user_prm, which is a dictionary\nof &quot;meta data&quot;, i.e., an arbitrary set of keys and values that\ncan arbitrarily extended anywhere. If self.user_prm is None,\nno such meta data can exists (implying that only parameters\nregistered in the dictionaries in self._prm_list are allowed - the\nprogrammer of subclasses can of course extend these parameter\nsets whenever desired; disallowing a parameter name is only a\nfeature of the set function for setting the value of a (registered)\nparameter).\n\nHere is an example::\n\n    from scitools.PrmDictBase import PrmDictBase\n\n    class SomeSolver(PrmDictBase):\n        def __init__(self, **kwargs):\n            PrmDictBase.__init__(self)\n            # register parameters in dictionaries:\n            self.physical_prm = {\'density\': 1.0, \'Cp\': 1.0,\n                                       \'k\': 1.0, \'L\': 1.0}\n            self.numerical_prm =  {\'n\': 10, \'dt\': 0.1, \'tstop\': 3}\n\n            # attach dictionaries to base class list (required):\n            self._prm_list = [self.physical_prm, self.numerical_prm]\n\n            # specify parameters to be type checked when set:\n            self._type_check.update({\'n\': True, \'dt\': (float,),\n                  \'k\': lambda k: isinstance(int,float) and k&gt;0})\n\n            # disallow arbitrary meta data\n            self.user_prm = None # set to {} if meta data are allowed\n\n            # initialize parameters according to keyword arguments:\n            self.set(**kwargs)\n\n\n        def _update(self):\n            # dt depends on n, L, k; update dt in case the three\n            # others parameters have been changed\n            # (in general this method is used to check consistency\n            # between parameters and perform updates if necessary)\n            n = self.numerical_prm[\'n\']\n            L = self.physical_prm[\'L\']\n            k = self.physical_prm[\'k\']\n\n            self.u = zeros(n+1, Float)\n            h = L/float(n)\n            dt_limit = h**2/(2*k)\n            if self.numerical_prm[\'dt\'] &gt; dt_limit:\n                self.numerical_prm[\'dt\'] = dt_limit\n\n        def compute1(self):\n            # compute something\n            return self.physical_prm[\'k\']/self.physical_prm[\'Cp\']\n\n        def compute2(self):\n            # turn numerical parameters into local variables:\n            exec self.dicts2variables(self._prm_list)\n            # or exec self.dicts2variables(self.numerical_prm)  # selected prms\n\n            # now we have local variables n, dt, tstop, density, Cp, k, L\n            # that we can compute with, say\n\n            Q = k/Cp\n            dt = 0.9*dt\n\n            # if some of the local variables are changed, say dt, they must\n            # be inserted back into the parameter dictionaries:\n            self.variables2dicts(self.numerical_prm, dt=dt)    \n\n    '})</em><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.__format__">
+<tt class="descname">__format__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__getattribute__">
+<tt class="descname">__getattribute__</tt><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__hash__">
+<tt class="descname">__hash__</tt><big>(</big><em>) &lt;==&gt; hash(x</em><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.PrmDictBase'</em><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.PrmDictBase.PrmDictBase.__new__">
+<em class="property">static </em><tt class="descname">__new__</tt><big>(</big><em>S</em>, <em>...</em><big>)</big> &rarr; a new object with type S, a subtype of T<a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__new__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.__reduce__">
+<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.__reduce_ex__">
+<tt class="descname">__reduce_ex__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><em>) &lt;==&gt; repr(x</em><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__setattr__">
+<tt class="descname">__setattr__</tt><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.PrmDictBase.PrmDictBase.__sizeof__">
+<tt class="descname">__sizeof__</tt><big>(</big><big>)</big> &rarr; int<a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__str__">
+<tt class="descname">__str__</tt><big>(</big><em>) &lt;==&gt; str(x</em><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.PrmDictBase.PrmDictBase.__subclasshook__">
+<em class="property">static </em><tt class="descname">__subclasshook__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__subclasshook__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract classes can override this to customize issubclass().</p>
+<p>This is invoked early on by abc.ABCMeta.__subclasscheck__().
+It should return True, False or NotImplemented.  If it returns
+NotImplemented, the normal algorithm is used.  Otherwise, it
+overrides the normal algorithm (and the outcome is cached).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.PrmDictBase.PrmDictBase.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="scitools.PrmDictBase.PrmDictBase.dicts2namespace">
 <tt class="descname">dicts2namespace</tt><big>(</big><em>namespace</em>, <em>dicts</em>, <em>overwrite=True</em><big>)</big><a class="reference internal" href="_modules/scitools/PrmDictBase.html#PrmDictBase.dicts2namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.PrmDictBase.PrmDictBase.dicts2namespace" title="Permalink to this definition">¶</a></dt>

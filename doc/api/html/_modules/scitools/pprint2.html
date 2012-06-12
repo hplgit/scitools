@@ -171,7 +171,7 @@
     <span class="k">return</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="PrettyPrinter"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter">[docs]</a><span class="k">class</span> <span class="nc">PrettyPrinter</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PrettyPrinter.__init__"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle pretty printing operations onto a stream using a set of</span>
 <span class="sd">        configured parameters.</span>
 
@@ -201,7 +201,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">stream</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">stdout</span>
-
+</div>
 <div class="viewcode-block" id="PrettyPrinter.pprint"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.pprint">[docs]</a>    <span class="k">def</span> <span class="nf">pprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>

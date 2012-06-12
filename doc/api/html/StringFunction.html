@@ -243,6 +243,33 @@ expressions to replace pow(x,a) by x**a in F77_code instead.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="scitools.StringFunction.StringFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the code required to reconstruct this instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string function formula as a string, with
+parameters substituted by their values.</p>
+<p>The return value can be used when creating Fortran or C/C++
+functions out of the string formula:
+f = StringFunction(&#8216;a + p*x&#8217;, a=1, p=0)
+somefile.write(&#8216;double somefunc(double x) { return %s; }&#8217; % str(f))</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scitools.StringFunction.StringFunction.set_parameters">
 <tt class="descname">set_parameters</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction.set_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set keyword parameters in the function.</p>
@@ -278,11 +305,26 @@ as a globals keyword argument to the constructor.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v1.__call__" title="scitools.StringFunction.StringFunction_v1.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v1.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v1.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v1.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v1.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v1.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v1.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction_v1.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction_v1.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -295,11 +337,26 @@ as a globals keyword argument to the constructor.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v2.__call__" title="scitools.StringFunction.StringFunction_v2.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v2.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v2.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v2.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v2.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction_v2.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction_v2.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -312,7 +369,7 @@ as a globals keyword argument to the constructor.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v3.__call__" title="scitools.StringFunction.StringFunction_v3.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v3.set_parameters" title="scitools.StringFunction.StringFunction_v3.set_parameters"><tt class="xref py py-obj docutils literal"><span class="pre">set_parameters</span></tt></a>(code)</td>
@@ -320,6 +377,21 @@ as a globals keyword argument to the constructor.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v3.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v3.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v3.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v3.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em>, <em>independent_variable='x'</em>, <em>set_parameters=''</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v3.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction_v3.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction_v3.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.StringFunction.StringFunction_v3.set_parameters">
 <tt class="descname">set_parameters</tt><big>(</big><em>code</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v3.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v3.set_parameters" title="Permalink to this definition">¶</a></dt>
@@ -337,7 +409,7 @@ as a globals keyword argument to the constructor.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v4.__call__" title="scitools.StringFunction.StringFunction_v4.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v4.set_parameters" title="scitools.StringFunction.StringFunction_v4.set_parameters"><tt class="xref py py-obj docutils literal"><span class="pre">set_parameters</span></tt></a>(**kwargs)</td>
@@ -348,6 +420,31 @@ as a globals keyword argument to the constructor.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v4.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v4.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v4.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v4.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction_v4.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v4.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v4.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v4.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v4.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="scitools.StringFunction.StringFunction_v4.set_parameters">
 <tt class="descname">set_parameters</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v4.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v4.set_parameters" title="Permalink to this definition">¶</a></dt>
@@ -373,17 +470,52 @@ number of independent variables.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v5.__call__" title="scitools.StringFunction.StringFunction_v5.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(*args)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parameters</span></tt>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v5.set_parameters" title="scitools.StringFunction.StringFunction_v5.set_parameters"><tt class="xref py py-obj docutils literal"><span class="pre">set_parameters</span></tt></a>(**kwargs)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">test</span></tt>([x])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.StringFunction.StringFunction_v5.test" title="scitools.StringFunction.StringFunction_v5.test"><tt class="xref py py-obj docutils literal"><span class="pre">test</span></tt></a>([x])</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v5.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>expression</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v5.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.StringFunction.StringFunction_v5.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.StringFunction'</em><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v5.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/StringFunction.html#StringFunction_v5.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.set_parameters">
+<tt class="descname">set_parameters</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.StringFunction.StringFunction_v5.test">
+<tt class="descname">test</tt><big>(</big><em>x=1.4325</em><big>)</big><a class="headerlink" href="#scitools.StringFunction.StringFunction_v5.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

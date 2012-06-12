@@ -199,11 +199,11 @@
     <span class="n">things_created</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">things_drawn</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<div class="viewcode-block" id="Thing.__new__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Thing.__new__">[docs]</a>    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;override __new__ so we can count the number of Things&quot;&quot;&quot;</span>
         <span class="n">Thing</span><span class="o">.</span><span class="n">things_created</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-    
+    </div>
 <div class="viewcode-block" id="Thing.bbox"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Thing.bbox">[docs]</a>    <span class="k">def</span> <span class="nf">bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;return the bounding box of this object if it is drawn</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -308,10 +308,10 @@
 <div class="viewcode-block" id="Simple"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Simple">[docs]</a><span class="k">class</span> <span class="nc">Simple</span><span class="p">(</span><span class="n">Thing</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;the graphical representation of a simple value like a number</span>
 <span class="sd">    or a string&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Simple.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Simple.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="n">lumpy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
-
+</div>
 <div class="viewcode-block" id="Simple.drawme"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Simple.drawme">[docs]</a>    <span class="k">def</span> <span class="nf">drawme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">flip</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">flip</span>        
@@ -338,9 +338,9 @@
 <span class="sd">    target of a reference (since it is not really a value at</span>
 <span class="sd">    run-time).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Index.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Index.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
-
+</div>
 <div class="viewcode-block" id="Index.drawme"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Index.drawme">[docs]</a>    <span class="k">def</span> <span class="nf">drawme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">flip</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">flip</span>        
@@ -355,7 +355,7 @@
     <span class="sd">&quot;&quot;&quot;the graphical representation of a mapping type (usually a</span>
 <span class="sd">    dictionary).  Sequence and Instance inherit from Mapping.&quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Mapping.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Mapping.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="n">lumpy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="n">make_kvps</span><span class="p">(</span><span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boxoptions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">outline</span><span class="o">=</span><span class="s">&#39;purple&#39;</span><span class="p">)</span>
@@ -364,7 +364,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-
+</div>
 <div class="viewcode-block" id="Mapping.bbox"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Mapping.bbox">[docs]</a>    <span class="k">def</span> <span class="nf">bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;the bbox of a Mapping is the bbox of its box item.</span>
 <span class="sd">        This is different from other Things.</span>
@@ -461,7 +461,7 @@
     <span class="sd">&quot;&quot;&quot;the graphical representation of a sequence type (mostly</span>
 <span class="sd">    lists and tuples)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Sequence.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Sequence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="n">lumpy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="n">make_bindings</span><span class="p">(</span><span class="n">lumpy</span><span class="p">,</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
 
@@ -478,12 +478,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">boxoptions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">outline</span><span class="o">=</span><span class="s">&#39;green2&#39;</span><span class="p">)</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="Instance"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Instance">[docs]</a><span class="k">class</span> <span class="nc">Instance</span><span class="p">(</span><span class="n">Mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The graphical representation of an object (usually).</span>
 <span class="sd">    Anything with a __dict__ is treated as an Instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Instance.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Instance.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="n">lumpy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
 
         <span class="c"># if this object has a class, make a Thing to</span>
@@ -531,7 +531,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="n">seq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boxoptions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">outline</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Instance.scan_bindings"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Instance.scan_bindings">[docs]</a>    <span class="k">def</span> <span class="nf">scan_bindings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;scan the bindings in this Instance, looking for</span>
 <span class="sd">        references to other object types; also, make a note</span>
@@ -546,7 +546,7 @@
 <div class="viewcode-block" id="Frame"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Frame">[docs]</a><span class="k">class</span> <span class="nc">Frame</span><span class="p">(</span><span class="n">Mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The graphical representation of a frame,</span>
 <span class="sd">    implemented as a list of Bindings&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+<div class="viewcode-block" id="Frame.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Frame.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
         <span class="nb">iter</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">locals</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bindings</span> <span class="o">=</span> <span class="n">make_bindings</span><span class="p">(</span><span class="n">lumpy</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">func</span>
@@ -554,7 +554,7 @@
     
 
 
-<span class="c"># the following are short functions that check for certain attributes</span></div>
+<span class="c"># the following are short functions that check for certain attributes</span></div></div>
 <div class="viewcode-block" id="hasname"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.hasname">[docs]</a><span class="k">def</span> <span class="nf">hasname</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span> <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;__name__&#39;</span><span class="p">)</span></div>
 <div class="viewcode-block" id="hasclass"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.hasclass">[docs]</a><span class="k">def</span> <span class="nf">hasclass</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span> <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;__class__&#39;</span><span class="p">)</span></div>
 <div class="viewcode-block" id="hasdict"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.hasdict">[docs]</a><span class="k">def</span> <span class="nf">hasdict</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span> <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;__dict__&#39;</span><span class="p">)</span></div>
@@ -569,7 +569,7 @@
 <span class="sd">    object diagram, and contains a ClassDiagramClass, which</span>
 <span class="sd">    controls how the Class appears in a class diagram.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">):</span>
+<div class="viewcode-block" id="Class.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Class.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">):</span>
         <span class="n">Instance</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cdc</span> <span class="o">=</span> <span class="n">ClassDiagramClass</span><span class="p">(</span><span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cdc</span><span class="o">.</span><span class="n">cls</span> <span class="o">=</span> <span class="bp">self</span>
@@ -604,7 +604,7 @@
         <span class="c"># height and depth are used to lay out the tree</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="bp">None</span>
-        
+        </div>
 <div class="viewcode-block" id="Class.add_child"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Class.add_child">[docs]</a>    <span class="k">def</span> <span class="nf">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;when a subclass is created, it notifies its parent</span>
 <span class="sd">        classes, who update their list of children&quot;&quot;&quot;</span>
@@ -656,7 +656,7 @@
 <span class="sd">    in a Class Diagram (which is different from the way class</span>
 <span class="sd">    objects appear in Object Diagrams).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassDiagramClass.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ClassDiagramClass.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classobj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classobj</span> <span class="o">=</span> <span class="n">classobj</span>
 
@@ -693,7 +693,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">boxoptions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">outline</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lineoptions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 
-
+</div>
 <div class="viewcode-block" id="ClassDiagramClass.drawme"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ClassDiagramClass.drawme">[docs]</a>    <span class="k">def</span> <span class="nf">drawme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">flip</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -807,11 +807,11 @@
     <span class="sd">&quot;&quot;&quot;the graphical representation of the binding between a</span>
 <span class="sd">    key and a value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="Binding.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Binding.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="n">lumpy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
-
+</div>
 <div class="viewcode-block" id="Binding.rebind"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Binding.rebind">[docs]</a>    <span class="k">def</span> <span class="nf">rebind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 </div>
@@ -869,12 +869,12 @@
 <div class="viewcode-block" id="ReferenceArrow"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ReferenceArrow">[docs]</a><span class="k">class</span> <span class="nc">ReferenceArrow</span><span class="p">(</span><span class="n">Thing</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;a reference arrow, which show a reference in an object diagram</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="ReferenceArrow.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ReferenceArrow.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
-        
+        </div>
 <div class="viewcode-block" id="ReferenceArrow.draw"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ReferenceArrow.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diag</span> <span class="o">=</span> <span class="n">diag</span>
         <span class="n">canvas</span> <span class="o">=</span> <span class="n">diag</span><span class="o">.</span><span class="n">canvas</span>
@@ -891,13 +891,13 @@
     <span class="sd">&quot;&quot;&quot;an inheritance arrow, which shows an is-a relationship</span>
 <span class="sd">    between classes in a class diagram.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentArrow.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ParentArrow.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span>
         <span class="n">underride</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
-        
+        </div>
 <div class="viewcode-block" id="ParentArrow.draw"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ParentArrow.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diag</span> <span class="o">=</span> <span class="n">diag</span>
         <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child</span>
@@ -926,13 +926,13 @@
     <span class="sd">&quot;&quot;&quot;a contains arrow, which shows a has-a relationship between</span>
 <span class="sd">    classes in a class diagram.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="ContainsArrow.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ContainsArrow.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span>
         <span class="n">underride</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="n">arrow</span><span class="o">=</span><span class="n">LAST</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
-        
+        </div>
 <div class="viewcode-block" id="ContainsArrow.draw"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ContainsArrow.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diag</span> <span class="o">=</span> <span class="n">diag</span>
         <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">child</span>
@@ -958,10 +958,10 @@
 <div class="viewcode-block" id="Stack"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Stack">[docs]</a><span class="k">class</span> <span class="nc">Stack</span><span class="p">(</span><span class="n">Thing</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The graphical representation of a stack.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">):</span>
+<div class="viewcode-block" id="Stack.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Stack.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">Frame</span><span class="p">(</span><span class="n">lumpy</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">frames</span><span class="p">]</span>
-    
+    </div>
 <div class="viewcode-block" id="Stack.drawme"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Stack.drawme">[docs]</a>    <span class="k">def</span> <span class="nf">drawme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diag</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">flip</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         
@@ -994,8 +994,8 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">numpy</span>
 <div class="viewcode-block" id="NumPyArray"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.NumPyArray">[docs]</a>    <span class="k">class</span> <span class="nc">NumPyArray</span><span class="p">:</span>
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">])</span></div>
+<div class="viewcode-block" id="NumPyArray.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.NumPyArray.__init__">[docs]</a>        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">])</span></div></div>
     <span class="n">numpy_array_type</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="c"># no numpy</span>
@@ -1052,7 +1052,7 @@
 </div>
 <div class="viewcode-block" id="Snapframe"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapframe">[docs]</a><span class="k">class</span> <span class="nc">Snapframe</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;the data structure that represents a frame&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tup</span><span class="p">):</span>
+<div class="viewcode-block" id="Snapframe.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapframe.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tup</span><span class="p">):</span>
         <span class="n">frame</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">tup</span>
         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg_names</span><span class="p">,</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
@@ -1065,7 +1065,7 @@
         <span class="c"># the function name for the top-most frame is __main__</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="s">&#39;__main__&#39;</span>
-
+</div>
 <div class="viewcode-block" id="Snapframe.subtract"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapframe.subtract">[docs]</a>    <span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;delete all the keys in other from self</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1078,7 +1078,7 @@
 <div class="viewcode-block" id="Snapshot"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapshot">[docs]</a><span class="k">class</span> <span class="nc">Snapshot</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;the data structure that represents a stack&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Snapshot.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapshot.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;convert from the format returned by inspect</span>
 <span class="sd">        to a list of frames.  Drop the last three frames,</span>
 <span class="sd">        which are the Lumpy functions object_diagram, make_stack,</span>
@@ -1088,7 +1088,7 @@
         <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">Snapframe</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">st</span><span class="p">[</span><span class="mi">3</span><span class="p">:]]</span>
         <span class="n">frames</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">=</span><span class="n">frames</span>
-
+</div>
 <div class="viewcode-block" id="Snapshot.spew"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Snapshot.spew">[docs]</a>    <span class="k">def</span> <span class="nf">spew</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;print the frames in this snapshot&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
@@ -1105,7 +1105,7 @@
 <div class="viewcode-block" id="Lumpy"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Lumpy">[docs]</a><span class="k">class</span> <span class="nc">Lumpy</span><span class="p">(</span><span class="n">Gui</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;the Lumpy object represents the GUI window.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">pedantic</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Lumpy.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Lumpy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">pedantic</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;debug is passed to Gui.__init__; it makes the outlines</span>
 <span class="sd">        of the frames visible.</span>
 <span class="sd">        If pedantic is false, simple values are replicated, rather</span>
@@ -1153,7 +1153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">opaque_class</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">make_reference</span><span class="p">()</span>
-
+</div>
 <div class="viewcode-block" id="Lumpy.restrict_class"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Lumpy.restrict_class">[docs]</a>    <span class="k">def</span> <span class="nf">restrict_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classobj</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;restrict this class so that when it is drawn, only</span>
 <span class="sd">        the given vars are shown</span>
@@ -1295,7 +1295,7 @@
 <div class="viewcode-block" id="Diagram"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Diagram">[docs]</a><span class="k">class</span> <span class="nc">Diagram</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;the parent class for ClassDiagram and ObjectDiagram.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">):</span>
+<div class="viewcode-block" id="Diagram.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Diagram.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lumpy</span> <span class="o">=</span> <span class="n">lumpy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arrows</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -1304,7 +1304,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s">&#39;+0+0&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">protocol</span><span class="p">(</span><span class="s">&quot;WM_DELETE_WINDOW&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
-
+</div>
 <div class="viewcode-block" id="Diagram.ca"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.Diagram.ca">[docs]</a>    <span class="k">def</span> <span class="nf">ca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;make a canvas for the diagram&quot;&quot;&quot;</span>
         <span class="n">underride</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">BOTH</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">N</span><span class="o">+</span><span class="n">S</span><span class="o">+</span><span class="n">E</span><span class="o">+</span><span class="n">W</span><span class="p">)</span>
@@ -1385,10 +1385,10 @@
 </div></div>
 <div class="viewcode-block" id="ObjectDiagram"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ObjectDiagram">[docs]</a><span class="k">class</span> <span class="nc">ObjectDiagram</span><span class="p">(</span><span class="n">Diagram</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ObjectDiagram.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ObjectDiagram.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Object Diagram&#39;</span>
         <span class="n">Diagram</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="ObjectDiagram.draw"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ObjectDiagram.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thing</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;draw the given thing&quot;&quot;&quot;</span>
         <span class="n">thing</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pos</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]),</span> <span class="n">flip</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1408,11 +1408,11 @@
 </div></div>
 <div class="viewcode-block" id="ClassDiagram"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ClassDiagram">[docs]</a><span class="k">class</span> <span class="nc">ClassDiagram</span><span class="p">(</span><span class="n">Diagram</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassDiagram.__init__"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ClassDiagram.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Class Diagram&#39;</span>
         <span class="n">Diagram</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumpy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classes</span> <span class="o">=</span> <span class="n">classes</span>
-
+</div>
 <div class="viewcode-block" id="ClassDiagram.draw"><a class="viewcode-back" href="../../Lumpy.html#scitools.Lumpy.ClassDiagram.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;draw the class diagram, including the classes in self.classes,</span>
 <span class="sd">        or if there are none, then all the classes Lumpy has seen.&quot;&quot;&quot;</span>

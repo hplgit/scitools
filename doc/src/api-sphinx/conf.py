@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # SciTools documentation build configuration file, created by
-# sphinx-quickstart on Tue Jun 12 18:51:23 2012.
+# sphinx-quickstart on Tue Jun 12 19:24:29 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #

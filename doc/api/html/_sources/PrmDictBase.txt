@@ -5,4 +5,6 @@
 .. automodule:: scitools.PrmDictBase
    :members:
    :undoc-members:
+   :special-members:
+   :inherited-members:
    :show-inheritance:

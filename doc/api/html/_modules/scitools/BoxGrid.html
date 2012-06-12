@@ -92,7 +92,7 @@
 <span class="sd">    =============      ====================================================</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="UniformBoxGrid.__init__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>                  <span class="c"># minimum coordinates</span>
                  <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>                  <span class="c"># maximum coordinates</span>
                  <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>             <span class="c"># cell divisions</span>
@@ -146,7 +146,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> \
                  <span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_more_init</span><span class="p">()</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_more_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coorv</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">)</span>
@@ -239,7 +239,7 @@
         <span class="k">return</span> <span class="n">kwargs</span></div>
     <span class="n">string2griddata</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">string2griddata</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<div class="viewcode-block" id="UniformBoxGrid.__getitem__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return access to coordinate array in direction no i, or direction</span>
 <span class="sd">        name i, or return the coordinate of a point if i is an nsd-tuple.</span>
@@ -269,11 +269,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">wrong_type</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="s">&#39;Must be str, int, tuple&#39;</span><span class="p">)</span>
             
-
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__setitem__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;subscript assignment is not valid for &#39;</span>\
                              <span class="s">&#39;</span><span class="si">%s</span><span class="s"> instances&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="UniformBoxGrid.ncells"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.ncells">[docs]</a>    <span class="k">def</span> <span class="nf">ncells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return no of cells in direction i.&quot;&quot;&quot;</span>
         <span class="c"># i has the meaning as in __getitem__. May be removed if not much used</span>
@@ -302,28 +302,28 @@
 <div class="viewcode-block" id="UniformBoxGrid.ok"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.ok">[docs]</a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">True</span>  <span class="c"># constructor init only =&gt; always ok</span>
 </div>
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UniformBoxGrid.__len__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Total number of grid points.&quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">*=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">n</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__repr__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> \
             <span class="s">&#39;(min=</span><span class="si">%s</span><span class="s">, max=</span><span class="si">%s</span><span class="s">, division=</span><span class="si">%s</span><span class="s">, dirnames=</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__str__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print, using the syntax of init_fromstring.&quot;&quot;&quot;</span>
         <span class="n">domain</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;[</span><span class="si">%g</span><span class="s">,</span><span class="si">%g</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span> \
                            <span class="k">for</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">)])</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;[0:</span><span class="si">%d</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="n">div</span> <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">])</span>
         <span class="k">return</span> <span class="s">&#39;domain=</span><span class="si">%s</span><span class="s">  indices=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
-                      
+                      </div>
 <div class="viewcode-block" id="UniformBoxGrid.interpolator"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.interpolator">[docs]</a>    <span class="k">def</span> <span class="nf">interpolator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point_values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a self.nsd dimension array point_values with</span>
@@ -435,7 +435,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vectorized_iter</span> <span class="o">=</span> <span class="n">vectorized_version</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UniformBoxGrid.__iter__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># Idea: set up slices for the various self.iterator_domain</span>
         <span class="c"># values. In scalar mode, make a loop over the slices and</span>
         <span class="c"># yield the scalar value. In vectorized mode, return the</span>
@@ -549,7 +549,7 @@
                             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
                                 <span class="k">yield</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
                              
-
+</div>
 <div class="viewcode-block" id="UniformBoxGrid.locate_cell"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.locate_cell">[docs]</a>    <span class="k">def</span> <span class="nf">locate_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a point (x, (x,y), (x,y,z)), locate the cell in which</span>
@@ -726,7 +726,7 @@
 <span class="sd">    space dimension) components, each component contains the</span>
 <span class="sd">    grid coordinates in that space direction (stored as an array).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coor</span><span class="p">,</span> <span class="n">dirnames</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">)):</span>
+<div class="viewcode-block" id="BoxGrid.__init__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coor</span><span class="p">,</span> <span class="n">dirnames</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">)):</span>
         
         <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                 <span class="nb">min</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">],</span>
@@ -735,11 +735,11 @@
                                 <span class="n">dirnames</span><span class="o">=</span><span class="n">dirnames</span><span class="p">)</span>
         <span class="c"># override:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coor</span> <span class="o">=</span> <span class="n">coor</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="BoxGrid.__repr__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> <span class="s">&#39;(coor=</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span>
         <span class="k">return</span> <span class="n">s</span>
-
+</div>
 <div class="viewcode-block" id="BoxGrid.locate_cell"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.locate_cell">[docs]</a>    <span class="k">def</span> <span class="nf">locate_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Cannot locate point in cells in non-uniform grids&#39;</span><span class="p">)</span>
     

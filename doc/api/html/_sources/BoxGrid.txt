@@ -5,4 +5,6 @@
 .. automodule:: scitools.BoxGrid
    :members:
    :undoc-members:
+   :special-members:
+   :inherited-members:
    :show-inheritance:
