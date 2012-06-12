@@ -2,7 +2,7 @@
 import time
 
 class MovingPlotWindow:
-    """
+    '''
     Make a plot window that follows the tip (end) of a very long
     time series.
 
@@ -38,6 +38,7 @@ class MovingPlotWindow:
                          axis=plot_manager.axis(),
                          title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" % (t[n+1], mode))
                 plot_manager.update(n)
+    '''
 
     def __init__(self, window_width, dt, yaxis=[-1,1],
                  mode='continuous movement',
@@ -55,17 +56,17 @@ class MovingPlotWindow:
 
         The mode parameter has three values:
 
-          * continuous movement:
+          * ``'continuous movement'``:
             the plot window moves one time step for each plot.
-          * continuous drawing: the curves are drawn from left
+          * ``'continuous drawing'``: the curves are drawn from left
             to right, one step at a time, and plot window jumps
             when the curve reaches the end.
-          * jumps: the curves are shown in a window for a time
+          * ``'jumps'``: the curves are shown in a window for a time
             equal to the pause argument, then the axis jumps
             to a new time window of the same length
 
 
-        See also the test block for
+        See also the test block of the module for
         testing out the three different modes of this class.
         """
         self.taxis_length_in_steps = int(round(window_width/float(dt)))

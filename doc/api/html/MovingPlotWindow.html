@@ -56,11 +56,45 @@
             
   <div class="section" id="module-scitools.MovingPlotWindow">
 <span id="scitools-movingplotwindow"></span><h1><a class="reference internal" href="#module-scitools.MovingPlotWindow" title="scitools.MovingPlotWindow"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.MovingPlotWindow</span></tt></a><a class="headerlink" href="#module-scitools.MovingPlotWindow" title="Permalink to this headline">¶</a></h1>
-<p>Manag a moving plot window to display very long time series.</p>
+<p>Manage a moving plot window for displaying very long time series.</p>
 <dl class="class">
 <dt id="scitools.MovingPlotWindow.MovingPlotWindow">
 <em class="property">class </em><tt class="descclassname">scitools.MovingPlotWindow.</tt><tt class="descname">MovingPlotWindow</tt><big>(</big><em>window_width, dt, yaxis=[-1, 1], mode='continuous movement', pause=1.5</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
+<dd><p>Make a plot window that follows the tip (end) of a very long
+time series.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>def demo(I, k, dt, T, mode='continuous movement'):
+    """
+    Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+    method with time steps dt, from t=0 to t=T.
+    """
+    if dt &gt; 2./k:
+        print 'Unstable scheme'
+    N = int(round(T/float(dt)))
+    u = zeros(N+1)
+    t = linspace(0, T, N+1)
+
+    umin = -1.2*I
+    umax = -umin
+    period = 2*pi/k  # period of the oscillations
+    window_width =
+    plot_manager = MovingPlotWindow(
+                     window_width, dt, yaxis=[umin, umax],
+                     mode=mode)
+    u[0] = I
+    u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+    for n in range(1,N):
+        u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+
+        if plot_manager.plot(n):
+            s = plot_manager.first_index_in_plot
+            plot(t[s:n+2], u[s:n+2], 'r-',
+                 t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                 axis=plot_manager.axis(),
+                 title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" % (t[n+1], mode))
+        plot_manager.update(n)</pre>
+</div>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -68,32 +102,34 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.axis" title="scitools.MovingPlotWindow.MovingPlotWindow.axis"><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt></a>()</td>
-<td></td>
+<td>Return the axis limits as a list <tt class="docutils literal"><span class="pre">[xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax]</span></tt>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.plot" title="scitools.MovingPlotWindow.MovingPlotWindow.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(n)</td>
-<td>Given time step number n in the time series,</td>
+<td>Return True if a plot is to be drawn at time step number <tt class="docutils literal"><span class="pre">n</span></tt>,</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.update" title="scitools.MovingPlotWindow.MovingPlotWindow.update"><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt></a>(n)</td>
-<td></td>
+<td>Update the plot manager (<tt class="docutils literal"><span class="pre">MovingPlotWindow</span></tt>) at time step <tt class="docutils literal"><span class="pre">n</span></tt>.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="scitools.MovingPlotWindow.MovingPlotWindow.axis">
 <tt class="descname">axis</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.axis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return the axis limits as a list <tt class="docutils literal"><span class="pre">[xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax]</span></tt>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="scitools.MovingPlotWindow.MovingPlotWindow.plot">
 <tt class="descname">plot</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given time step number n in the time series,
-return True if the plot is to be drawn, False otherwise.</p>
+<dd><p>Return True if a plot is to be drawn at time step number <tt class="docutils literal"><span class="pre">n</span></tt>,
+otherwise return False.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="scitools.MovingPlotWindow.MovingPlotWindow.update">
 <tt class="descname">update</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the plot manager (<tt class="docutils literal"><span class="pre">MovingPlotWindow</span></tt>) at time step <tt class="docutils literal"><span class="pre">n</span></tt>.</p>
+</dd></dl>
 
 </dd></dl>
 

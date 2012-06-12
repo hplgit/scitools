@@ -85,7 +85,9 @@ if [ $? -ne 0 ]; then echo; echo "Install numpydoc: download numpy (or get the l
 
 # Generate HTML documentation
 rm -rf _build
+if [ ! -d figs ]; then
 ln -s ../easyviz/figs .
+fi
 make html
 
 # equip doc with plain text format (for pydoc):
