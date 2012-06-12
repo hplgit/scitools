@@ -5,7 +5,7 @@ this_dir=`pwd`
 version=`python -c "import scitools as st; print st.version"`
 
 # make easyviz doc with reST/Sphinx format:
-doconce insertdocstr ../easyviz
+doconce insertdocstr sphinx ../easyviz
 cd ../../../lib/scitools
 doconce insertdocstr sphinx .
 cd $this_dir
@@ -85,6 +85,7 @@ if [ $? -ne 0 ]; then echo; echo "Install numpydoc: download numpy (or get the l
 
 # Generate HTML documentation
 rm -rf _build
+ln -s ../easyviz/figs .
 make html
 
 # equip doc with plain text format (for pydoc):
@@ -92,6 +93,7 @@ cd ../../../lib/scitools
 doconce insertdocstr plain .
 cd $this_dir
 
+cp -r ../easyviz/figs _build/html/
 ls _build/html
 #cp -r _build/html ../../api/
 
