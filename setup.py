@@ -9,7 +9,7 @@ python setup.py install [, --prefix=$PREFIX --easyviz_backend backendname]
 
 import os, sys, socket, re, glob, platform
 
-scripts = [os.path.join("bin", "scitools"), os.path.join("bin", "pyreport")]
+scripts = [os.path.join("bin", "scitools"),]
 
 if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
     # In the Windows command prompt we can't execute Python scripts
@@ -94,8 +94,7 @@ setup(
     package_data = {'': ['scitools.cfg']},
     scripts = scripts,
     data_files=[(os.path.join("share", "man", "man1"),
-                 [os.path.join("doc", "man", "man1", "scitools.1.gz"),
-                  os.path.join("doc", "man", "man1", "pyreport.1.gz")])],
+                 [os.path.join("doc", "man", "man1", "scitools.1.gz"),])],
     )
 
 if os.path.isfile(config_file + '.cop'):
