@@ -1,19 +1,30 @@
 #!/usr/bin/env python
-"""
+'''
 Module for estimating convergence rate of numerical algorithms,
 based on data from a set of experiments.
 
-Recommended usage:
-Vary only discretization parameter (h in spatial problems, h/dt**q for
-some q so that h/dt**q=const, in time-dependent problems with time step dt).
-Use class OneDiscretizationPrm, or the function convergence_rate,
-or the analyze_filedata convenience function. Start with reading
-the convergence_rate function (too see an easily adapted example).
+It is recommended to vary only
+one discretization parameter h. In spatial problems, h is the mesh
+spacing dx, dy, or dz.
+In time-dependent problems, where the expected convergence rate is
+h^p + dt^q, choose h^p/dt^q = const.
+Use class ``OneDiscretizationPrm``, or the function ``convergence_rate``,
+or the ``analyze_filedata`` convenience function.
 
-(There is support for fitting more general error models, like
-C1*h**r1 + C2*h*dt**r2, with nonlinear least squares, but sound
-fits are more challenging to obtain.)
-"""
+Here is a simple example::
+
+    h = [0.2, 0.1, 0.05, 0.025]  # discretization parameters
+    e = [compute_error(hi) for hi in h]
+
+    rates, C = OneDiscretizationPrm.pairwise_rates(h, e)
+    print C, rates  # see if rates converges
+    print 'final rate:', rates[-1]
+
+There is support for fitting more general error models, like
+C1*h^r1 + C2*h*dt^r2, with nonlinear least squares, but in that case it
+is more challenging to find sound fits.
+'''
+
 from scitools.misc import import_module
 from numpy import zeros, array, asarray, log10, transpose, linalg, linspace
 import sys
@@ -43,7 +54,7 @@ class OneDiscretizationPrm(object):
         return C*h**a
 
     def loglog_error_model(p, d):
-        """As error_model if log-log data was used in the estimation."""
+        """As ``error_model``, but log-log data was used in the estimation."""
         C, a = p
         h = d[0]
         return log(C) + a*log(h)
@@ -54,8 +65,8 @@ class OneDiscretizationPrm(object):
         Linear least squares algorithm.
         Suitable for problems with only one distinct
         discretization parameter.
-        *d* is the sequence of discretization parameter values, and
-        *e* is the sequence of corresponding error values.
+        `d` is the sequence of discretization parameter values, and
+        `e` is the sequence of corresponding error values.
 
         The error model the data is supposed to fit reads
         ``log(e[i]) = log(C[i]) + a*log(d[i])``.
@@ -73,13 +84,13 @@ class OneDiscretizationPrm(object):
         ======== ===========================================================
         d        list of values of the (single) discretization
                  parameter in each experiment:
-                 d[i] provides the values of the discretization,
+                 ``d[i]`` provides the values of the discretization,
                  parameter in experiement no. i.
-        e        list of error values; e = (e_1, e_2, ...),
-                 e[i] is the error associated with the parameters d[i]
-
+        e        list of error values; ``e = (e_1, e_2, ...)``,
+                 ``e[i]`` is the error associated with the parameters
+                 ``d[i]``
         p0       starting values for the unknown parameters vector
-        return   a, C; a is the exponent, C is the factor in front.
+        return   r, C; r is the exponent, C is the factor in front
         ======== ===========================================================
         """
         if len(d) != len(e):
@@ -126,9 +137,17 @@ class OneDiscretizationPrm(object):
                 plot_title='', filename='tmp.ps'):
         """
         Run linear, nonlinear and successive rates models.
-        d: list/array of discretization parameter.
-        e: errors corresponding to d.
         Plot results for comparison of the three approaches.
+
+        ============== =================================================
+        Argument       Description
+        ============== =================================================
+        d              list/array of discretization parameter
+        e              errors corresponding to d
+        initial_guess  estimate of convergence rate parameters
+        plot_title     title in plot
+        filename       name of plot file
+        ============== =================================================
         """
         # convert to NumPy arrays:
         d = asarray(d, float);  e = asarray(e, float)
@@ -240,17 +259,21 @@ class ManyDiscretizationPrm(object):
 
     def nonlinear_fit(d, e, initial_guess):
         """
-        @param d: list of values of the set of discretization
-              parameters in each experiment:
-              d = ((d_1,d_2,d_3),(d_1,d_2,d_3,),...);
-              d[i] provides the values of the discretization
-              parameters in experiement no. i.
-        @param e: list of error values; e = (e_1, e_2, ...):
-              e[i] is the error associated with the parameters
-              d[i].
-        @param initial_guess: the starting value for the unknown
-        parameters vector.
-        @return: list of fitted paramters.
+        ============== ================================================
+        Argument       Description
+        ============== ================================================
+        d              list of values of the set of discretization
+                       parameters in each experiment:
+                       ``d = ((d_1,d_2,d_3),(d_1,d_2,d_3,),...)``;
+                       ``d[i]`` provides the values of the
+                       discretization parameters in experiement no. i.
+        e              list of error values; ``e = (e_1, e_2, ...)``:
+                       ``e[i]`` is the error associated with the
+                       parameters ``d[i]``
+        initial_guess  the starting value for the unknown
+                       parameters vector
+        return         list of fitted parameters
+        ============== ================================================
         """
         if len(d) != len(e):
             raise ValueError('len(d) != len(e)')
@@ -290,6 +313,12 @@ def _test1():
     OneDiscretizationPrm.analyze(d, e, initial_guess=(3,2))
 
 def analyze_filedata():
+    """
+    Reads ``f C r`` from the command line, where ``f`` is the name of
+    a file, ``C`` and ``r`` are the initial guesses of the parameters
+    in the error model E = C*h^r. A 4th command-line argument can be
+    the plot title.
+    """
     # read filename and initial guess of C and r in error formula E=C*h^r
     f = open(sys.argv[1], 'r')
     C = float(sys.argv[2])

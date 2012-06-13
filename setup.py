@@ -90,6 +90,7 @@ setup(
     # (py_modules) since package_data= only works with packages=
     packages = ["scitools",
                 os.path.join("scitools", "easyviz"),
+                os.path.join("scitools", "pyreport"),
 		],
     package_data = {'': ['scitools.cfg']},
     scripts = scripts,

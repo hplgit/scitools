@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="latin1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=latin1" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<title></title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+
+        pre.answer {
+            margin-bottom: 1px ;
+            margin-top: 1px ;
+            margin-left: 6ex ;
+            font-family: serif ;
+            font-size: 100% ;
+            background-color: #cccccc ; 
+        }
+        pre.text {
+        }
+        .pysrc {
+            font-weight: normal;
+            /*background-color: #eeece0;*/
+            background-color: #eef2f7;
+            background-image: url("yellow-white.png");
+            background-position:  right;
+            background-repeat: repeat-y;
+            border: 1px solid;
+            border-color: #999999;
+            margin: 20px;
+            padding:10px 10px 10px 20px;
+            font-size: smaller;
+            white-space: pre ;
+        }
+
+        .pykeyword {
+            font-weight: bold;
+            color: #262668 ;
+        }
+        .pycomment { color: #007600; }
+        /*.pystring { color: #ad0000; }*/
+        .pystring { color: #0000bb; }
+        .pynumber { color:purple; }
+        .pyoperator { color:purple; font-weight: bold; }
+        .pytext { color:black; }
+        .pyerror { font-weight: bold; color: red; }
+
+        .bracket {
+            height: 4px;
+            width: 10px;
+        }
+        .bracketfill {
+            width: 10px;
+            background-color: #FFFFFF; 
+        }
+        .collapse {
+            border: 0px; 
+            background-color: #99CCFF; 
+            padding: 0px;
+            font-size: xx-small;
+            text-align: right;
+        }
+        </style>
+
+<!-- http://www.randomsnippets.com/2008/02/12/how-to-hide-and-show-your-div/ -->
+<script language="javascript"> 
+function toggle_hidden(showHideDiv, switchTextDiv) {
+    var ele = document.getElementById(showHideDiv);
+    var eleinv = document.getElementById(showHideDiv+'inv');
+    var text = document.getElementById(switchTextDiv);
+    if(ele.style.display == "block") {
+        ele.style.display = "none";
+        eleinv.style.display = "block";
+        text.innerHTML = "<small>+</small>";
+        }
+    else {
+        ele.style.display = "block";
+        eleinv.style.display = "none";
+        text.innerHTML = " <small>&nbsp;</small>" ;
+        }
+    } 
+
+function hide_all(contentDiv,controlDiv){
+    var text = document.getElementById('hideall');
+    if (contentDiv.constructor == Array) {
+        for(i=0; i < contentDiv.length; i++) {
+        toggle_hidden(contentDiv[i], controlDiv[i]);
+        }
+    }
+    else {
+        toggle_hidden(contentDiv, controlDiv);
+    }
+
+}
+</script>
+        
+</head>
+<body><div id="hideall" class="collapse"
+            onclick="hide_all(['pysrc0', 'pysrc1', 'pysrc2', 'pysrc3', 'pysrc4', 'pysrc5', 'pysrc6', 'pysrc7', 'pysrc8'],['toggle0', 'toggle1', 'toggle2', 'toggle3', 'toggle4', 'toggle5', 'toggle6', 'toggle7', 'toggle8'])">toggle all code blocks</div><br>
+        
+<div class="document">
+
+
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc0','toggle0');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc0inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc0" style="display: block "><span class="pykeyword">from</span> <span class="pytext">scipy</span><span class="pyoperator">.</span><span class="pytext">integrate</span> <span class="pykeyword">import</span> <span class="pytext">ode</span>
+
+<span class="pycomment"># Demo of "scitools pyreport", a modification of the original</span>
+<span class="pycomment"># pyreport code to work with both matplotlib and scitools.easyviz.</span>
+
+<span class="pycomment"># Comment lines starting with #! employ reStructuredText syntax,</span>
+<span class="pycomment"># which has primitive math support but works well in HTML,</span>
+<span class="pycomment"># while comment lines starting with #$ employ LaTeX syntax,</span>
+<span class="pycomment"># which does not work in HTML but looks fine in PDF.</span>
+<span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle0">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><div class="section" id="demonstrations">
+<h1>Demonstrations</h1>
+<p>Run with <tt class="docutils literal"><span class="pre">-l</span> <span class="pre">-e</span></tt> options to turn on LaTeX support.
+<tt class="docutils literal"><span class="pre">-t</span> pdf</tt> gives PDF output while <tt class="docutils literal"><span class="pre">-t</span> html</tt> specifies
+HTML output. The name stem of the output file is specified
+by the <tt class="docutils literal"><span class="pre">-o</span></tt> option.</p>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc1','toggle1');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc1inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc1" style="display: block "><span class="pystring">"""
+scitools pyreport -l -e -t pdf  -o report_mpl -a '0.05 9' demo_pyreport.py
+scitools pyreport -l -e -t html -o report_mpl -a '0.05 9' demo_pyreport.py
+scitools pyreport -l -e -t pdf  -o report_evz -a '0.05 9 easyviz' demo_pyreport.py
+scitools pyreport -l -e -t html -o report_evz -a '0.05 9 easyviz' demo_pyreport.py
+"""</span><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle1">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table></div>
+<div class="section" id="solving-the-logistic-equation">
+<h1>Solving the logistic equation</h1>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc2','toggle2');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc2inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc2" style="display: block "><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle2">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><p>The (scaled) logistic equation reads</p>
+<div>
+<math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+<mtable>
+<mtr>
+<mtd><mi>u</mi><mo>'</mo><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>u</mi><mo>(</mo><mn>1</mn><mo>-</mo><mi>u</mi><mo>)</mo><mo>,</mo></mtd></mtr></mtable></math>
+</div>
+<p>for <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><mi>t</mi><mo>&#8712;</mo><mo>(</mo><mn>0</mn><mo>,</mo><mi>T</mi><mo>]</mo></mrow></math> and with initial condition <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi>&#945;</mi></mrow></math>.</p>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc3','toggle3');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc3inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc3" style="display: block "><span class="pycomment"># LaTeX version:</span>
+<span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle3">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc4','toggle4');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc4inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc4" style="display: block "><span class="pykeyword">def</span> <span class="pytext">f</span><span class="pyoperator">(</span><span class="pytext">t</span><span class="pyoperator">,</span> <span class="pytext">u</span><span class="pyoperator">)</span><span class="pyoperator">:</span>
+    <span class="pykeyword">return</span> <span class="pytext">u</span><span class="pyoperator">*</span><span class="pyoperator">(</span><span class="pynumber">1</span><span class="pyoperator">-</span><span class="pytext">u</span><span class="pyoperator">)</span>  <span class="pycomment"># logistic equation</span>
+
+
+<span class="pykeyword">try</span><span class="pyoperator">:</span>
+    <span class="pytext">alpha</span> <span class="pyoperator">=</span> <span class="pytext">float</span><span class="pyoperator">(</span><span class="pytext">sys</span><span class="pyoperator">.</span><span class="pytext">argv</span><span class="pyoperator">[</span><span class="pynumber">1</span><span class="pyoperator">]</span><span class="pyoperator">)</span>
+<span class="pykeyword">except</span> <span class="pytext">IndexError</span><span class="pyoperator">:</span>
+    <span class="pytext">alpha</span> <span class="pyoperator">=</span> <span class="pynumber">0.1</span>  <span class="pycomment"># default</span>
+
+
+<span class="pykeyword">try</span><span class="pyoperator">:</span>
+    <span class="pytext">T</span> <span class="pyoperator">=</span> <span class="pytext">float</span><span class="pyoperator">(</span><span class="pytext">sys</span><span class="pyoperator">.</span><span class="pytext">argv</span><span class="pyoperator">[</span><span class="pynumber">2</span><span class="pyoperator">]</span><span class="pyoperator">)</span>
+<span class="pykeyword">except</span> <span class="pytext">IndexError</span><span class="pyoperator">:</span>
+    <span class="pytext">T</span> <span class="pyoperator">=</span> <span class="pynumber">8</span><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle4">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><p>We solve the logistic equation using the <tt class="docutils literal">dopri5</tt>
+solver in <tt class="docutils literal">scipy.integrate.ode</tt>. This is a Dormand-Prince
+adaptive Runge-Kutta method of order 4-5.</p>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc5','toggle5');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc5inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc5" style="display: block "><span class="pytext">solver</span> <span class="pyoperator">=</span> <span class="pytext">ode</span><span class="pyoperator">(</span><span class="pytext">f</span><span class="pyoperator">)</span>
+<span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">set_integrator</span><span class="pyoperator">(</span><span class="pystring">'dopri5'</span><span class="pyoperator">,</span> <span class="pytext">atol</span><span class="pyoperator">=</span><span class="pynumber">1E-6</span><span class="pyoperator">,</span> <span class="pytext">rtol</span><span class="pyoperator">=</span><span class="pynumber">1E-4</span><span class="pyoperator">)</span>
+<span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">set_initial_value</span><span class="pyoperator">(</span><span class="pytext">alpha</span><span class="pyoperator">,</span> <span class="pynumber">0</span><span class="pyoperator">)</span><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle5">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><p>The solution is computed at equally spaced time steps
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><msub><mi>t</mi><mi>i</mi></msub><mo>=</mo><mi>i</mi><mo>&#916;</mo><mi>t</mi></mrow></math>, with <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><mo>&#916;</mo><mi>t</mi><mo>=</mo><mn>0</mn><mo>.</mo><mn>2</mn></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mo>.</mo><mo>.</mo><mo>.</mo></mrow></math>.
+The integration between <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><msub><mi>t</mi><mi>i</mi></msub></mrow></math> and <math xmlns="http://www.w3.org/1998/Math/MathML">
+<mrow><msub><mi>t</mi>
+<mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></math> applies smaller,
+adaptive time steps, adjusted to meet the prescribed
+tolerances of the solution.</p>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc6','toggle6');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc6inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc6" style="display: block "><span class="pycomment"># LaTeX version:</span>
+<span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle6">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><p>The solution is computed at equally spaced time steps
+$t_i=iDelta t$, with $Delta t=0.2$, $i=1,2,3,ldots$.
+The integration between $t_i$ and $t_{i+1}$ applies smaller,
+adaptive time steps, adjusted to meet the prescribed
+tolerances of the solution.</p>
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc7','toggle7');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc7inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc7" style="display: block "><span class="pytext">dt</span> <span class="pyoperator">=</span> <span class="pynumber">0.2</span>         <span class="pycomment"># time step</span>
+
+<span class="pytext">u</span> <span class="pyoperator">=</span> <span class="pyoperator">[</span><span class="pyoperator">]</span><span class="pyoperator">;</span>  <span class="pytext">t</span> <span class="pyoperator">=</span> <span class="pyoperator">[</span><span class="pyoperator">]</span>  <span class="pycomment"># store solution and times</span>
+
+<span class="pykeyword">while</span> <span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">successful</span><span class="pyoperator">(</span><span class="pyoperator">)</span> <span class="pykeyword">and</span> <span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">t</span> <span class="pyoperator">&lt;</span> <span class="pytext">T</span><span class="pyoperator">:</span>
+    <span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">integrate</span><span class="pyoperator">(</span><span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">t</span> <span class="pyoperator">+</span> <span class="pytext">dt</span><span class="pyoperator">)</span>
+    <span class="pycomment"># current time is in solver.t, current solution in solver.y</span>
+    <span class="pytext">u</span><span class="pyoperator">.</span><span class="pytext">append</span><span class="pyoperator">(</span><span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">y</span><span class="pyoperator">)</span><span class="pyoperator">;</span>  <span class="pytext">t</span><span class="pyoperator">.</span><span class="pytext">append</span><span class="pyoperator">(</span><span class="pytext">solver</span><span class="pyoperator">.</span><span class="pytext">t</span><span class="pyoperator">)</span>
+
+<span class="pytext">plot</span> <span class="pyoperator">=</span> <span class="pystring">'matplotlib'</span>
+<span class="pykeyword">try</span><span class="pyoperator">:</span>
+    <span class="pykeyword">if</span> <span class="pytext">sys</span><span class="pyoperator">.</span><span class="pytext">argv</span><span class="pyoperator">[</span><span class="pynumber">3</span><span class="pyoperator">]</span> <span class="pyoperator">==</span> <span class="pystring">'easyviz'</span><span class="pyoperator">:</span>
+        <span class="pytext">plot</span> <span class="pyoperator">=</span> <span class="pystring">'easyviz'</span>
+<span class="pykeyword">except</span> <span class="pytext">IndexError</span><span class="pyoperator">:</span>
+    <span class="pykeyword">pass</span>
+<span class="pykeyword">if</span> <span class="pytext">plot</span> <span class="pyoperator">==</span> <span class="pystring">'matplotlib'</span><span class="pyoperator">:</span>
+    <span class="pykeyword">import</span> <span class="pytext">matplotlib</span><span class="pyoperator">.</span><span class="pytext">pyplot</span> <span class="pykeyword">as</span> <span class="pytext">plt</span>
+<span class="pykeyword">else</span><span class="pyoperator">:</span>
+    <span class="pykeyword">import</span> <span class="pytext">scitools</span><span class="pyoperator">.</span><span class="pytext">std</span> <span class="pykeyword">as</span> <span class="pytext">plt</span>
+
+<span class="pytext">plt</span><span class="pyoperator">.</span><span class="pytext">plot</span><span class="pyoperator">(</span><span class="pytext">t</span><span class="pyoperator">,</span> <span class="pytext">u</span><span class="pyoperator">)</span>
+<span class="pytext">plt</span><span class="pyoperator">.</span><span class="pytext">xlabel</span><span class="pyoperator">(</span><span class="pystring">'t'</span><span class="pyoperator">)</span>
+<span class="pytext">plt</span><span class="pyoperator">.</span><span class="pytext">ylabel</span><span class="pyoperator">(</span><span class="pystring">'u'</span><span class="pyoperator">)</span>
+<span class="pytext">plt</span><span class="pyoperator">.</span><span class="pytext">axis</span><span class="pyoperator">(</span><span class="pyoperator">[</span><span class="pytext">t</span><span class="pyoperator">[</span><span class="pynumber">0</span><span class="pyoperator">]</span><span class="pyoperator">,</span> <span class="pytext">t</span><span class="pyoperator">[</span><span class="pyoperator">-</span><span class="pynumber">1</span><span class="pyoperator">]</span><span class="pyoperator">,</span> <span class="pynumber">0</span><span class="pyoperator">,</span> <span class="pynumber">1.1</span><span class="pyoperator">]</span><span class="pyoperator">)</span>
+<span class="pytext">plt</span><span class="pyoperator">.</span><span class="pytext">show</span><span class="pyoperator">(</span><span class="pyoperator">)</span><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle7">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table><img alt="demo_pyreport_pyreport_0.png" src="demo_pyreport_pyreport_0.png" />
+<table width=100% cellpadding=0 cellspacing=0 onclick="toggle_hidden('pysrc8','toggle8');"><tr>
+                        <td rowspan="3"> <div class="pysrc" id="pysrc8inv" style="display:
+                       none">...</div><div class="pysrc" id="pysrc8" style="display: block "><span class="pytext"></span></div>
+                       </td>
+                       <td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       <tr>
+                       <td class="bracketfill"></td>
+                       <td width=5px class="collapse">
+                           <div id="toggle8">
+                           <small>.</small>
+                           </div>
+                       </td>
+                       </tr>
+                       <tr><td colspan="2" class="collapse bracket"></td>
+                       </tr>
+                       </table></div>
+</div>
+</body>
+</html>
+
