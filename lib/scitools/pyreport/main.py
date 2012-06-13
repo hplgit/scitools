@@ -321,7 +321,14 @@ class MyImport(object):
         scitools = self.original_import("scitools.easyviz")
         #scitools.easyviz.setp(interactive=False)
         imported = self.original_import(name, globals, locals, fromlist)
-        imported.show = myshow
+        if hasattr(imported, "show"):
+            imported.show = myshow
+        elif hasattr(imported, "std"):
+            imported.std.show = myshow
+        elif hasattr(imported, "easyviz"):
+            imported.easyviz.show = myshow
+        else:
+            imported.show = myshow
         return imported
 
 def execute_block_list(block_list, options=copy.copy(default_options)):
