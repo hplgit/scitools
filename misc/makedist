@@ -35,8 +35,7 @@ mkdir -p dist
 hg archive --type tgz --exclude ".hg*" dist/scitools-$VERSION.tar.gz
 hg archive --prefix "scitools-$VERSION" --type tgz \
     --exclude ".hg*" --exclude "doc/api" --exclude "doc/easyviz" \
-    --exclude "lib/scitools/easyviz/doc" \
-    dist/scitools-lite-$VERSION.tar.gz
+    --exclude "doc/src" dist/scitools-lite-$VERSION.tar.gz
 
 # Create Windows installer
 rm -f dist/SciTools-$VERSION.win32.exe
