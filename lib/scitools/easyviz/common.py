@@ -91,8 +91,12 @@ class PlotProperties(object):
     All properties are stored in the dictionary self._prop.
 
     """
-    _colors = "b g r m c y k w".split()
-    _markers = "o + x * s d v ^ < > p h .".split()
+    #_colors  = "b g r m c y k w".split()
+    _colors  = "b r g m c y k w".split()
+    #_markers = "o + x * s d v ^ < > p h .".split()
+    _markers = "o s v + ^ x d * < > p h .".split()
+    _colors2markers = dict([(color, marker)
+                      for color, marker in zip(_colors, _markers)])
     _linestyles = ": -. -- -".split()
     _sizes = "1 2 3 4 5 6 7 8 9".split()
     _styledoc = {'y': 'yellow',
@@ -142,6 +146,7 @@ class PlotProperties(object):
         'material': None,
         'memoryorder': 'yxz',  # FIXME: this is deprecated and will be removed
         'indexing': 'ij',  # 'xy' is Cartesian indexing, 'ij' matrix indexing
+        'default_lines': 'with_markers'  # 'plain'
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method', _local_prop.keys())

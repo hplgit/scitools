@@ -415,6 +415,12 @@ class MatplotlibBackend(BaseClass):
         color = item.getp('linecolor')
         style = item.getp('linetype')
         width = item.getp('linewidth')
+        if PlotProperties._local_prop['default_lines'] == 'with_markers' \
+               and color and marker == '' and style == '':
+            # always add marker so that curves in png/eps can be
+            # distinguised in black-and-white
+            marker = PlotProperties._colors2markers[color]
+            style = '-'
         if width:
             width = float(width)
         return marker, color, style, width

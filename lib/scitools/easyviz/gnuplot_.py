@@ -653,6 +653,16 @@ class GnuplotBackend(BaseClass):
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
         width = item.getp('linewidth')
+
+        if PlotProperties._local_prop['default_lines'] == 'with_markers' \
+               and color and marker == None and style == None:
+            # always add marker so that curves in png/eps can be
+            # distinguised in black-and-white
+            marker = self._markers[PlotProperties._colors2markers[
+                item.getp('linecolor')]]
+            style = 'lines'
+            width = 2
+
         return marker, color, style, width
 
     def _get_withstring(self, marker, color, style, width):
