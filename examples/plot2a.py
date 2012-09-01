@@ -12,13 +12,14 @@ y1 = f1(t)
 y2 = f2(t)
 
 # Matlab-style syntax:
-plot(t, y1)
+plot(t, y1, 'r-')
 hold('on')
-plot(t, y2)
+plot(t, y2, 'b-')
 
 xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-savefig('tmp2.eps')
+savefig('plot2a.eps')
+savefig('plot2a.png')
 raw_input('Press Return key to quit: ')

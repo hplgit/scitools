@@ -12,7 +12,7 @@ title('Wireframe mesh of the peaks function')
 #hardcopy('mesh1a.png', color=True)
 
 figure()
-x = linspace(-8,8,31)
+x = linspace(-8,8,51)
 xv, yv = ndgrid(x,x)
 r = sqrt(xv**2 + yv**2) + eps
 values = sin(r)/r

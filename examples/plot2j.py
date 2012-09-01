@@ -12,7 +12,7 @@ y2 = f2(t)
 
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
-     savefig='tmp2.eps')
+     savefig='plot2j.png')
 
 ax = gca()   # get current Axis object
 ax.setp(xlabel='t', ylabel='y',

@@ -19,6 +19,7 @@ xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
 title('Plotting two curves in the same plot')
-savefig('tmp2.eps')
+savefig('plot2c.eps')
+savefig('plot2c.png')
 
 raw_input('Press Return key to quit: ')

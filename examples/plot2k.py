@@ -26,12 +26,12 @@ raw_input('Press Return to continue: ')
 figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
-savefig('tmp2_1.eps')
+savefig('plot2k_1.png')
 show()
 
 figure(2)  # go to second figure
 title('Another curve')
-savefig('tmp2_2.eps')
+savefig('plot2k_2.png')
 show()
 
 figure()  # new, third figure

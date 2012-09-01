@@ -1,3 +1,15 @@
+===== Suddenly my old plots have thick lines and large markers =====
+
+The default behavior of `plot(x,y)` was changed in August, 2012, such
+that the line thickness is 2 and markers are inserted at the data
+points.  The reason is that curves in PNG files printed in black and
+white (typically in reports) were hard to distinguish with the old
+default behavior (line of thickness 1). The new default behavior is
+better suited for increased use of PNG as file format.
+
+To get the old default behavior, replace `plot(x,y)` by
+`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired.
+
 ===== Can I Perform a Diagnostic Test of Easyviz? =====
 
 Yes. It is wise to perform a diagnostic test before reporting any error
@@ -17,13 +29,13 @@ mail to the SciTools developers.
 Depending on the backend used for plotting with Easyviz, the plot
 window may be killed when the program terminates. Adding a statement
 that makes the program halt provides a remedy:
-!bc cod
+!bc pycod
 raw_input('Press Return key to quit: ')
 !ec
 The plot window will now stay on the screen until hitting the Enter/Return key.
 
 Another remedy can be to add a `show()` call at the end of the plotting:
-!bc cod
+!bc pycod
 show()
 !ec
 # test on Windows!
@@ -160,7 +172,7 @@ thread.error: can't start new thread
 !ec
 A remedy is to create fewer plots, and for animations, update the plot
 window less frequently. For example,
-!bc cod
+!bc pycod
 for i in range(number_of_frames_in_animation):
     <prepare data>
     if i % == 100:     # plot every 100 frames

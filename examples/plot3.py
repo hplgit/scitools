@@ -1,5 +1,4 @@
-from scitools.easyviz import *
-from numpy import *
+from scitools.std import *
 
 def f1(t):
     return t**2*exp(-t**2)
@@ -19,16 +18,16 @@ y3 = y2[::4] + noise
 
 plot(t, y1, 'r-')
 hold('on')
-plot(t, y2, '')
+plot(t, y2, 'ks-')
 plot(t3, y3, 'bo')
 
 legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
-title('Simple Plot Demo')
+title('Simple Plot Demo of t^2*exp(-t^2) and t^4*exp(-t^2) functions')
 axis([0, 3, -0.05, 0.6])
 xlabel('t')
 ylabel('y')
-savefig('tmp3.eps') 
-savefig('tmp3.png')
+savefig('plot3.eps')
+savefig('plot3.png')
 show()
 
 raw_input('Press Return key to quit: ')

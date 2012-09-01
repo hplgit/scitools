@@ -15,7 +15,7 @@ plot(t, y1, 'r-', t, y2, 'bo',
      axis=[0, 4, -0.1, 0.6],
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
-     savefig='tmp2.eps')
+     savefig='plot2h.png')
 
 # grab the backend plotting object and work with the plotting
 # program directly:
@@ -28,7 +28,7 @@ if backend == 'gnuplot':
     g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
     g('save "tmp.gnu"')  # save all settings for later tuning
     g.refresh()
-    g.hardcopy('tmp2.eps')  # make new hardcopy (do not use savefig/hardcopy)
+    g.hardcopy('plot2h.png')  # make new hardcopy (do not use savefig/hardcopy)
 
 fig = gcf(); print fig.dump()
 

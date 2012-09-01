@@ -1,8 +1,11 @@
 plot0a.py:  summarizing demo script, using Matlab-style syntax.
 plot0b.py:  as plot0a.py, but with a single plot command.
-plot1a.py:  a first intro to plotting a curve with Easyviz.
+plot1a.py:  default plot with Easyviz.
+plot1a2.py: as plot1a.py, but with line style specified.
 plot1b.py:  as plot1a.py, but labels, legends, etc. are added in Matlab style.
 plot1c.py:  as plot1b.py, but a single plot command.
+plot1d.py:  as plot1b.py, but with logarithmic scale on the y axis.
+plot1e.py:  as plot1c.py, but with logarithmic scale on the y axis.
 plot2a.py:  plotting two curves, using Matlab style.
 plot2b.py:  as plot2a.py, but a single plot command.
 plot2c.py:  as plot2a.py, but control of the line styles.
@@ -17,6 +20,7 @@ plot2l.py:  as plot2e.py, but with legend location and legend fancybox.
 plot2m.py:  as plot2b.py, but with latex syntax in legends and title.
 plot2n.py:  as plot2b.py, but with a text in the plot.
 plot2o.py:  demo of how to set the aspect ratio of axis.
+plot3.py:  demo of plotting three curves of different length
 plot4.py:   three Gaussian bell functions (for illustrating movie_demo1 frames).
 movie_demo1.py:  primary animation example.
 movie_demo2.py:  another animation example.

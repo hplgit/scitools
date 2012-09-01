@@ -7,7 +7,7 @@ contour(peaks())
 
 figure()
 # Here we draw 15 red contour lines with double line width:
-xv, yv = ndgrid(linspace(-3,3,31),linspace(-3,3,31))
+xv, yv = ndgrid(linspace(-3,3,51),linspace(-3,3,51))
 values = xv*exp(-xv**2-yv**2)
 contour(xv, yv, values, 15, 'r', linewidth=2)
 
@@ -31,7 +31,7 @@ hold('off')
 figure()
 # Another example:
 x = linspace(-2,2,201)
-y = linspace(-1,1,31)
+y = linspace(-1,1,51)
 xv, yv = ndgrid(x,y)
 values = sin(3*yv - xv**2 + 1) + cos(2*yv**2 - 2*xv)
 contour(xv,yv,values,clabels='on')  # contour(x,y,values,..) also works

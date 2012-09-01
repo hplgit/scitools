@@ -1,7 +1,8 @@
-#TITLE: Easyviz Documentation
-#AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
-#AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
-#DATE: Jun 12, 2012
+TITLE: Easyviz Documentation
+AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
+AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
+DATE: today
+TOC: on
 
 ======= Easyviz =======
 
@@ -25,7 +26,7 @@ treated next, before we show how 2D and 3D vector fields can be handled.
 
 The recommended standard import of `numpy`
 and `matplotlib` in programs reads:
-!bc cod
+!bc pycod
 import numpy as np
 import matplotlib.pyplot as plt
 !ec
@@ -40,7 +41,7 @@ prefixes and all plotting commands are decorated with an "extra"
 Python code as close to Matlab and standard mathematical syntax as
 possible.  Therefore, examples in this manual employ the "star
 import":
-!bc cod
+!bc pycod
 from scitools.std import *
 !ec
 This statement imports the Easyviz plotting commands and also performs
@@ -48,7 +49,7 @@ This statement imports the Easyviz plotting commands and also performs
 `log` are available and work for arrays, as in Matlab, and the plotting
 commands are the same as those in Matlab. This type of import statement
 is similar to the popular
-!bc cod
+!bc pycod
 from matplotlib.pylab import *
 !ec
 among Matplotlib users (although not promoted by Matplotlib developers).

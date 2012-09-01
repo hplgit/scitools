@@ -33,7 +33,7 @@ os.system("matlab -nojvm -nosplash -r mytest")
 # Now we create a contour plot in combination with a quiver plot:
 
 reset()  # remove the previous Matlab commands
-xx, yy = ndgrid(linspace(-3,3,31), linspace(-3,3,31), sparse=False)
+xx, yy = ndgrid(linspace(-3,3,51), linspace(-3,3,51), sparse=False)
 zz = peaks(xx, yy)
 contour(xx,yy,zz,12,hold='on')
 uu, vv = gradient(zz)

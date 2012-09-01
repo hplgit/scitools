@@ -1,7 +1,8 @@
-#TITLE: Easyviz Documentation
-#AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
-#AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
-#DATE: Jun 12, 2012
+TITLE: Easyviz Documentation
+AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
+AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
+DATE: today
+TOC: on
 
 ======= Easyviz =======
 
@@ -28,7 +29,7 @@ which is straightforward for array computing, but (previously)
 annoying for plotting. Easyviz was therefore also made to ease the
 switch between Python and Matlab.
 
-If you encounter problems with using Easyviz, please visit the 
+If you encounter problems with using Easyviz, please visit the
 *Troubleshooting* chapter and the *Installation* chapter at the
 end of the documentation.
 
@@ -44,8 +45,8 @@ The present documentation is available in a number of formats:
   * "Wiki": "http://code.google.com/p/scitools/wiki/EasyvizDocumentation"
   * "Doconce source": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
-The documentation is written in the 
-"Doconce": "http://code.google.com/p/doconce" 
+The documentation is written in the
+"Doconce": "http://code.google.com/p/doconce"
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
@@ -56,16 +57,16 @@ OpenOffice, RTF, Word, and plain untagged ASCII).
 __First principle.__ Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple
 
-!bc
+!bc pycod
 t = linspace(0, 3, 51)    # 51 points between 0 and 3
 y = t**2*exp(-t**2)
-plot(t, y) 
+plot(t, y)
 !ec
 plots the data in (the NumPy array) `t` versus the data in (the NumPy
 array) `y`. If you need legends, control of the axis, as well as
 additional curves, all this is obtained by the standard Matlab-style
 commands
-!bc
+!bc pycod
 y2 = t**4*exp(-t**2)
 # pick out each 4 points and add random noise:
 t3 = t[::4]
@@ -87,7 +88,7 @@ hardcopy('tmp0.png')  # this one can be included in HTML
 !ec
 Easyviz also allows these additional function calls to be executed
 as a part of the `plot` call:
-!bc
+!bc pycod
 plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data'),
      title='Simple Plot Demo',
@@ -100,7 +101,7 @@ hardcopy('tmp0.png')
 !ec
 A scalar function $f(x,y)$ may be visualized
 as an elevated surface with colors using these commands:
-!bc
+!bc pycod
 x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
 xv, yv = ndgrid(x, x)    # define a 2D grid with points (xv,yv)
 values = f(xv, yv)       # function values
@@ -165,7 +166,7 @@ treated next, before we show how 2D and 3D vector fields can be handled.
 
 The recommended standard import of `numpy`
 and `matplotlib` in programs reads:
-!bc cod
+!bc pycod
 import numpy as np
 import matplotlib.pyplot as plt
 !ec
@@ -180,7 +181,7 @@ prefixes and all plotting commands are decorated with an "extra"
 Python code as close to Matlab and standard mathematical syntax as
 possible.  Therefore, examples in this manual employ the "star
 import":
-!bc cod
+!bc pycod
 from scitools.std import *
 !ec
 This statement imports the Easyviz plotting commands and also performs
@@ -188,7 +189,7 @@ This statement imports the Easyviz plotting commands and also performs
 `log` are available and work for arrays, as in Matlab, and the plotting
 commands are the same as those in Matlab. This type of import statement
 is similar to the popular
-!bc cod
+!bc pycod
 from matplotlib.pylab import *
 !ec
 among Matplotlib users (although not promoted by Matplotlib developers).
@@ -201,18 +202,18 @@ backends for plotting, where Matplotlib is one of the options.
 
 Let us plot the curve $y = t^2\exp(-t^2)$|$y = t**2*exp(-t**2)$ for
 $t$ values between 0 and 3.  First we generate equally spaced
-coordinates for $t$, say 51 values (50 intervals). Then we compute the
+coordinates for $t$, say 31 values (30 intervals). Then we compute the
 corresponding $y$ values at these points, before we call the
 `plot(t,y)` command to make the curve plot.  Here is the complete
 program:
 
-!bc pro
+!bc pypro
 from scitools.std import *
 
 def f(t):
     return t**2*exp(-t**2)
 
-t = linspace(0, 3, 51)    # 51 points between 0 and 3
+t = linspace(0, 3, 31)    # 31 points between 0 and 3
 y = zeros(len(t))         # allocate y with float elements
 for i in xrange(len(t)):
     y[i] = f(t[i])
@@ -233,54 +234,126 @@ pre-allocate the `y` array and fill it with values, element by
 element, in a Python loop. Alternatively, we may operate
 on the whole `t` array at once, which yields faster and shorter code:
 
-!bc pro
+!bc pypro
 from scitools.std import *
 
 def f(t):
     return t**2*exp(-t**2)
 
-t = linspace(0, 3, 51)    # 51 points between 0 and 3
+t = linspace(0, 3, 31)    # 31 points between 0 and 3
 y = f(t)                  # compute all f values at once
 plot(t, y)
 show()                    # optional
 !ec
 The `f` function can also be skipped, if desired, so that we can write
 directly
-!bc cod
+!bc pycod
 y = t**2*exp(-t**2)
 !ec
 
 To include the plot in electronic documents, we need a hardcopy of the
-figure in PostScript, PNG, or another image format.  The `hardcopy`
+figure in PostScript, PNG, or another image format.  The `savefig`
 command produces files with images in various formats:
-!bc cod
-hardcopy('tmp1.eps') # produce PostScript
-hardcopy('tmp1.png') # produce PNG
-!ec
-An alternative name for `hardcopy` is `savefig`:
-!bc cod
+!bc pycod
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
 !ec
+An alternative name for `savefig` is `hardcopy`:
+!bc pycod
+hardcopy('tmp1.eps') # produce PostScript
+hardcopy('tmp1.png') # produce PNG
+!ec
 The filename extension determines the format: `.ps` or
 `.eps` for PostScript, and `.png` for PNG.
-Figure ref{fig:plot1a} displays the resulting plot. With `show(False)`
+Figures ref{fig:plot1a:g} and ref{fig:plot1a:m} display the resulting
+image file with the plot, as generated
+with the Gnuplot and Matplotlib plotting packages, respectively.
+With `show(False)`
 we can suppress the plot from being shown at the screen, which is
-useful when create a large number of figure files in programs.
+useful when creating a large number of figure files in programs.
 
-FIGURE:[figs/plot1a.eps] A simple plot in PostScript format. label{fig:plot1a}
+FIGURE:[figs/plot1a_g, width=400] Default plot generated by Gnuplot. label{fig:plot1a:g}
+
+FIGURE:[figs/plot1a_m, width=400] Default plot generated by Matplotlib. label{fig:plot1a:m}
 
 On some platforms, some backends may result in a plot that is shown in
 just a fraction of a second on the screen before the plot window disappears
 (using the Gnuplot backend on Windows machines or using the Matplotlib
 backend constitute two examples). To make the window stay on the screen,
 add
-!bc cod
+!bc pycod
 raw_input('Press the Return key to quit: ')
 !ec
 at the end of the program. The plot window is killed when the program
 terminates, and this satement postpones the termination until the user
 hits the Return key.
+
+===== Controlling Line Styles =====
+
+By default, Easyviz plots a curve with a solid line of thickness 2 and
+markers of size 2 at each data point. This default behavior is
+inspired by the usual needs to include thicker lines and markers to
+distinguish multiple curves plots, especially if image files are to
+appear in black and white in printed reports.  However, the line style
+can easily be controlled by adding a string `s` after the `y`
+argument: `plot(x, y, s)`. The syntax of the string `s` is inspired by
+Matlab. For example, `r-` means a red solid line of unit thickness
+(see Figure ref{fig:plot1a:rs}), `r--` means a red dashed line, `r-o`
+means a red solid line with circles as markers at each data point,
+`r--o` is the same except that the line is dashed. In general, if `s`
+is `clms`, the first character `c` is the color, `l` is the line type,
+`m` is the marker type, and `s` is the size of the line and marker. A
+blue line with thickness 6 and cross symbols as markers of size 6 is
+specified by `b-x6`.  The effect of the given line thickness and
+symbol size depends on the underlying plotting program.  One can omit
+the line type or color: `yo` specifies yellow circles and `-` gives
+solid line of thickness 1 and default color .
+
+FIGURE:[figs/plot1a2, width=400] Red solid line. label{fig:plot1a:rs}
+
+The different available line colors include
+  * yellow:   `'y'`
+  * magenta:  `'m'`
+  * cyan:     `'c'`
+  * red:      `'r'`
+  * green:    `'g'`
+  * blue:     `'b'`
+  * white:    `'w'`
+  * black:    `'k'`
+
+The different available line types are
+  * solid line:      `'-'`
+  * dashed line:     `'--'`
+  * dotted line:     `':'`
+  * dash-dot line:   `'-.'`
+
+Lots of markers at data points are available:
+  * plus sign:                     `'+'`
+  * circle:                        `'o'`
+  * asterisk:                      `'*'`
+  * point:                         `'.'`
+  * cross:                         `'x'`
+  * square:                        `'s'`
+  * diamond:                       `'d'`
+  * upward-pointing triangle:      `'^'`
+  * downward-pointing triangle:    `'v'`
+  * right-pointing triangle:       `'>'`
+  * left-pointing triangle:        `'<'`
+  * five-point star (pentagram):   `'p'`
+  * six-point star (hexagram):     `'h'`
+  * no marker (default): `None`
+
+During programming, you can find all these details in the
+documentation of the `plot` function. Just type `help(plot)`
+in an interactive Python shell or invoke `pydoc` with
+`scitools.easyviz.plot`. This tutorial is available
+through `pydoc scitools.easyviz`.
+
+We remark that in the Gnuplot program all the different line types are
+drawn as solid lines on the screen. The hardcopy chooses automatically
+different line types (solid, dashed, etc.) and not in accordance with
+the line type specification.
+
 
 
 ===== Decorating the Plot =====
@@ -293,7 +366,8 @@ most plotting programs will automatically adjust the axes to the range of the
 data).
 All such things are easily added after the `plot` command:
 
-!bc cod
+!bc pycod
+plot(x, y, 'r-')
 xlabel('t')
 ylabel('y')
 legend('t^2*exp(-t^2)')
@@ -305,8 +379,8 @@ Easyviz and Matlab almost trivial.
 Easyviz has also introduced a more "Pythonic" `plot` command where
 all the plot properties can be set at once:
 
-!bc cod
-plot(t, y,
+!bc pycod
+plot(t, y, 'r-',
      xlabel='t',
      ylabel='y',
      legend='t^2*exp(-t^2)',
@@ -329,8 +403,49 @@ See Figure ref{fig:plot1c} for what the modified
 plot looks like and how `t^2` is typeset in Gnuplot.
 
 
-FIGURE:[figs/plot1c.eps] A single curve with label, title, and axes adjusted. label{fig:plot1c}
+FIGURE:[figs/plot1c, width=400] A single curve with label, title, and axes adjusted. label{fig:plot1c}
 
+
+===== Using Logarithmic Scales =====
+
+Sometimes logarithmic scales are need on the $x$ or $y$ axis. This is
+easily specified by replacing `plot(x,y)` by `loglog(x,y)`, `semilogx(x,y)`,
+or `semilogy(x,y)` for the three cases of logarithmic scales on both axes,
+on the $x$ axis only, or on the $y$ axis only. A complete
+example, displayed in Figure ref{fig:plot1d}, reads
+
+!bc pycod
+def f(t):
+    return exp(-t**2)
+
+t = linspace(0, 3, 51)    # 51 points between 0 and 3
+y = f(t)
+semilogy(t, y, 'r-2')
+
+xlabel('t')
+ylabel('y')
+legend('exp(-t^2)')
+title('Logarithmic scale on the y axis')
+!ec
+
+FIGURE:[figs/plot1d, width=400] Logarithmic scale on one axis. label{fig:plot1d}
+
+The specification of
+logarithmic scales can also be done through keyword arguments to the
+`plot` function: `log='xy'`, `log='x'`, or `log='y'`, which should
+be self-explaining syntax. The following call produces the same plot
+as above.
+
+!bc pycod
+plot(t, y, 'r-2',
+     log='y',
+     xlabel='t',
+     ylabel='y',
+     legend='exp(-t^2)',
+     title='Logarithmic scale on the y axis',
+     savefig='tmp1.png',
+     show=True)
+!ec
 
 ===== Plotting Multiple Curves =====
 
@@ -344,7 +459,7 @@ issue a `hold('on')` command. Alternatively, we can provide all
 data in a single `plot` command. A complete program illustrates the
 different approaches:
 
-!bc pro
+!bc pypro
 from scitools.std import *   # for curve plotting
 
 def f1(t):
@@ -376,18 +491,21 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
 !ec
 The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
-and so on. The visual result appears in Figure ref{fig:plot2a}.
+and so on. The visual result appears in Figures ref{fig:plot2a}
+and ref{fig:plot2a:gp}.
 
 Doing a `hold('off')` makes the next `plot` command create a new
 plot in the same window. This new plot just erases the previous curves.
 
-FIGURE:[figs/plot2a.eps] Two curves in the same plot. label{fig:plot2a}
+FIGURE:[figs/plot2a, width=400] Two curves in the same plot, PNG file produced by Gnuplot. label{fig:plot2a}
+
+FIGURE:[figs/plot2a_gp, width=350] Two curves in the same plot, PostScript file produced by Gnuplot. label{fig:plot2a:gp}
 
 With the keyword argrument `grid=True` to `plot` we can add a
 grid, which is frequently used when plotting curves (see
 Figure ref{fig:plot2f}).
 
-FIGURE:[figs/plot2f.eps] Curves with a grid. label{fig:plot2f}
+FIGURE:[figs/plot2f, width=400] Curves with a grid. label{fig:plot2f}
 
 The default location of the legends is dependent on the backend
 (some have a fixed location, like Gnuplot, and some try to find
@@ -413,7 +531,7 @@ The `loc` and `fancybox` specifications work (at present)
 with Gnuplot and Matplotlib only.
 
 
-FIGURE: [figs/plot2l.eps, width=400] A figure with legends placed to the upper left with a box frame.
+FIGURE: [figs/plot2l, width=400] A figure with legends placed to the upper left with a box frame.
 
 The `legend` function also accepts a list of legends instead of
 the legends as separate positional arguments. This allows an overlapping
@@ -429,7 +547,7 @@ The `hold` command either adds a new curve or replaces old curve(s) by
 new ones. Often one wants to make multiple figures in a program,
 realized as multiple windows on the screen. The `figure()` command
 creates a new figure:
-!bc cod
+!bc pycod
 x = linspace(-2, 2, 81)
 y1 = sin(pi*x)*exp(-0.5*x**2)
 plot(x, y1)
@@ -445,24 +563,19 @@ plot(x, y3)
 More information in the `figure` command is found later on under the
 heading *Working with Axis and Figure Objects*.
 
-
-===== Controlling Line Styles =====
-
 When plotting multiple curves in the same plot, the individual curves
 get distinct default line styles, depending on the program that is
 used to produce the curve (and the settings for this program). It
 might well happen that you get a green and a red curve (which is bad
 for a significant portion of the male population).  Therefore,
-we often want to control the line style in detail. Say we want the first
-curve (`t` and `y1`) to be drawn as a red solid line and the second
-curve (`t` and `y2`) as blue circles at the discrete data points.  The
-Matlab-inspired syntax for specifying line types applies a letter for
-the color and a symbol from the keyboard for the line type. For
-example, `r-` represents a red (`r`) line (`-`), while `bo` means blue
-(`b`) circles (`o`). The line style specification is added as an
-argument after the $x$ and $y$ coordinate arrays of the curve:
+we often want to control the line style in detail when plotting
+multiple curves.
 
-!bc cod
+Say we want the first curve (`t` and `y1`) to be drawn as a red solid
+line (`r-`) and the second curve (`t` and `y2`) as blue circles (`bo`) at the
+discrete data points:
+
+!bc pycod
 plot(t, y1, 'r-')
 hold('on')
 plot(t, y2, 'bo')
@@ -470,10 +583,9 @@ plot(t, y2, 'bo')
 # or
 plot(t, y1, 'r-', t, y2, 'bo')
 !ec
-The effect of controlling the line styles can be seen in
-Figure ref{fig:plot2c}.
+The resulting effect can be seen in Figure ref{fig:plot2c}.
 
-FIGURE:[figs/plot2c.eps] Two curves in the same plot, with controlled line styles. label{fig:plot2c}
+FIGURE:[figs/plot2c, width=400] Two curves in the same plot, with controlled line styles. label{fig:plot2c}
 
 Assume now that we want to plot the blue circles at every 4 points only.
 We can grab every 4 points out of the `t` array by using an appropriate
@@ -482,7 +594,7 @@ first to the last data point, while the second colon separates this
 range from the stride, i.e., how many points we should "jump over"
 when we pick out a set of values of the array.
 
-!bc pro
+!bc pypro
 from scitools.std import *
 
 def f1(t):
@@ -510,61 +622,14 @@ means red circles with size 5. The effect of the given line thickness
 and symbol size depends on the underlying plotting program. For
 the Gnuplot program one can view the effect in Figure ref{fig:plot2g}.
 
-FIGURE:[figs/plot2g.eps] Circles at every 4 points and extended line thickness (6) and circle size (3). label{fig:plot2g}
-
-
-The different available line colors include
-  * yellow:   `'y'`
-  * magenta:  `'m'`
-  * cyan:     `'c'`
-  * red:      `'r'`
-  * green:    `'g'`
-  * blue:     `'b'`
-  * white:    `'w'`
-  * black:    `'k'`
-
-The different available line types are
-  * solid line:      `'-'`
-  * dashed line:     `'--'`
-  * dotted line:     `':'`
-  * dash-dot line:   `'-.'`
-
-During programming, you can find all these details in the
-documentation of the `plot` function. Just type `help(plot)`
-in an interactive Python shell or invoke `pydoc` with
-`scitools.easyviz.plot`. This tutorial is available
-through `pydoc scitools.easyviz`.
-
-We remark that in the Gnuplot program all the different line types are
-drawn as solid lines on the screen. The hardcopy chooses automatically
-different line types (solid, dashed, etc.) and not in accordance with
-the line type specification.
-
-Lots of markers at data points are available:
-  * plus sign:                     `'+'`
-  * circle:                        `'o'`
-  * asterisk:                      `'*'`
-  * point:                         `'.'`
-  * cross:                         `'x'`
-  * square:                        `'s'`
-  * diamond:                       `'d'`
-  * upward-pointing triangle:      `'^'`
-  * downward-pointing triangle:    `'v'`
-  * right-pointing triangle:       `'>'`
-  * left-pointing triangle:        `'<'`
-  * five-point star (pentagram):   `'p'`
-  * six-point star (hexagram):     `'h'`
-  * no marker (default): `None`
-
-Symbols and line styles may be combined, for instance as in `'kx-'`,
-which means a black solid line with black crosses at the data points.
+FIGURE:[figs/plot2g, width=400] Circles at every 4 points and extended line thickness (6) and circle size (3). label{fig:plot2g}
 
 
 __Another Example.__ Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
 the $f_2(t)$ curve:
 
-!bc pro
+!bc pypro
 from scitools.std import *
 
 def f1(t):
@@ -599,7 +664,7 @@ savefig('tmp3.png')   # or hardcopy
 !ec
 The plot is shown in Figure ref{fig:plot3}.
 
-FIGURE:[figs/plot3.eps] A plot with three curves.  label{fig:plot3}
+FIGURE:[figs/plot3, width=400] A plot with three curves.  label{fig:plot3}
 
 __Minimalistic Typing.__
 When exploring mathematics in the interactive Python shell, most of us
@@ -607,7 +672,7 @@ are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
 
-!bc cod
+!bc pycod
 t = linspace(0, 3, 51)
 plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 !ec
@@ -681,7 +746,7 @@ figure).  Our goal is to make an animation where we see how this
 function evolves as $s$ is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
 
-FIGURE:[figs/plot4.eps] Different shapes of a Gaussian function. label{fig:plot4}
+FIGURE:[figs/plot4, width=400] Different shapes of a Gaussian function. label{fig:plot4}
 
 The animation is created by varying $s$ in a loop and for each $s$
 issue a `plot` command. A moving curve is then visible on the screen.
@@ -710,7 +775,7 @@ Now we are ready to take a look at the complete code
 for animating how the Gaussian function evolves as the $s$ parameter
 is decreased from 2 to 0.2:
 
-!bc pro
+!bc pypro
 from scitools.std import *
 import time
 
@@ -773,7 +838,7 @@ We recommend to always remove previously generated plot files before
 a new set of files is made. Otherwise, the movie may get old and new
 files mixed up. The following Python code removes all files
 of the form `tmp*.png`:
-!bc cod
+!bc pycod
 import glob, os
 for filename in glob.glob('tmp*.png'):
     os.remove(filename)
@@ -781,7 +846,7 @@ for filename in glob.glob('tmp*.png'):
 These code lines should be inserted at the beginning of the code example
 above. Alternatively, one may store all plotfiles in a subfolder
 and later delete the subfolder. Here is a suitable code segment:
-!bc cod
+!bc pycod
 import shutil, os
 subdir = 'temp'            # name of subfolder for plot files
 if os.path.isdir(subdir):  # does the subfolder already exist?
@@ -814,7 +879,7 @@ movie file by supplying the `encoder` and `output_file` arguments to
 the `movie` function. This is the recommended use. Here is an
 example on generating an animated GIF file `tmpmovie.gif` with
 the `convert` program from the ImageMagick software suite:
-!bc cod
+!bc pycod
 movie('tmp_*.png', encoder='convert', fps=2,
       output_file='tmpmovie.gif')
 !ec
@@ -829,7 +894,7 @@ movie.
 
 Making an HTML file that can play the movie in a web browser
 is carried out by the call
-!bc cod
+!bc pycod
 movie('tmp_*.png', encoder='html', fps=10,
       output_file='tmpmovie.html')
 !ec
@@ -837,14 +902,14 @@ Just load `tmpmovie.html` into a browser (e.g., run `firefox tmpmovie.html`
 from the command line).
 
 An AVI movie can be generated by the call
-!bc cod
+!bc pycod
 movie('tmp_*.png', encoder='ffmpeg', fps=4,
       output_file='tmpmovie.avi',
 !ec
 Alternatively, we may generate an MPEG movie using
 the `ppmtompeg` encoder from the Netpbm suite of
 image manipulation tools:
-!bc cod
+!bc pycod
 movie('tmp_*.png', encoder='ppmtompeg', fps=24,
       output_file='tmpmovie.mpeg',
 !ec
@@ -853,7 +918,7 @@ The `ppmtompeg` supports only a few (high) frame rates.
 The next sample call to `movie` uses the Mencoder tool and specifies
 some additional arguments (video codec, video bitrate, and the
 quantization scale):
-!bc cod
+!bc pycod
 movie('tmp_*.png', encoder='mencoder', fps=24,
       output_file='tmpmovie.mpeg',
       vcodec='mpeg2video', vbitrate=2400, qscale=4)
@@ -898,7 +963,7 @@ backends, we set `daspectmode=manual` and
 `daspect=[r,1,1]`, where `r` is the ratio of the y-axis length to
 the x-axis length
 (`r` equal to `1` gives a square plot area). For example,
-!bc cod
+!bc pycod
 plot(x, y, 'r-',
      axis=[0, 1, 0, 1],
      daspect=[1,1,1],
@@ -916,7 +981,7 @@ equal physical units on the axis).
 
 Here is an example which demonstrates various aspects of setting
 the aspect ratio:
-!bc pro
+!bc pypro
 from scitools.std import *
 n = 20  # no of periods of a sine function
 r = 80  # resolution of each period
@@ -1015,7 +1080,7 @@ functionality you want.
 
 An alternative method is to import a specific backend in a program. Instead
 of the `from scitools.std import *` statement one writes
-!bc cod
+!bc pycod
 from numpy import *
 from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
 # or
@@ -1025,7 +1090,7 @@ Note the trailing underscore in the module names for the various backends.
 
 The following program prints a list of the names of the
 available backends on your computer system:
-!bc pro
+!bc pypro
 from scitools.std import *
 backends = available_backends()
 print 'Available backends:', backends
@@ -1039,7 +1104,7 @@ and error messages too.
 label{easyviz:imports}
 
 The `from scitools.std import *` statement imports many modules and packages:
-!bc cod
+!bc pycod
 from numpy import *
 from scitools.numpyutils import *  # some convenience functions
 from numpy.lib.scimath import *
@@ -1050,7 +1115,7 @@ from glob import glob
 !ec
 The `scipy` import can take some time and lead to slow start-up of plot
 scripts. A more minimalistic import for curve plotting is
-!bc cod
+!bc pycod
 from scitools.easyviz import *
 from numpy import *
 !ec
@@ -1150,7 +1215,7 @@ program-specific command syntax.  Let us illustrate this principle
 with an example where we add a text and an arrow in the plot, see
 Figure ref{fig:plot2i}.
 
-FIGURE:[figs/plot2i.eps] Illustration of a text and an arrow using Gnuplot-specific commands. label{fig:plot2i}
+FIGURE:[figs/plot2i, width=400] Illustration of a text and an arrow using Gnuplot-specific commands. label{fig:plot2i}
 
 Easyviz does not support arrows at arbitrary places inside the plot,
 but Gnuplot does. If we use Gnuplot as backend, we may grab the
@@ -1159,7 +1224,7 @@ directly. Here is an example of the typical recipe, written after the
 core of the plot is made in the ordinary (plotting
 program-independent) way:
 
-!bc cod
+!bc pycod
 if backend == 'gnuplot':
     g = get_backend()
     # g is a Gnuplot object, work with Gnuplot commands directly:
@@ -1183,7 +1248,7 @@ without the special calls `g('...')` so the label and arrow are
 left out of the hardcopy in the example above.
 
 Here is an example with Matplotlib:
-!bc cod
+!bc pycod
 if backend == 'matplotlib':
     pyplot = get_backend()
     # Work with standard matplotlib.pyplot functions
@@ -1227,7 +1292,7 @@ providing the information in separate commands or as part of a `plot`
 command. The `gca` (get current axis) command returns an `Axis`
 object, whose `set` method can be used to set axis properties:
 
-!bc cod
+!bc pycod
 plot(t, y1, 'r-', t, y2, 'bo',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      savefig='tmp2.eps')
@@ -1246,7 +1311,7 @@ The command `figure(3)` sets the current figure object to figure number
 
 Suppose we want to plot our `y1` and `y2` data in two separate windows.
 We need in this case to work with two `Figure` objects:
-!bc cod
+!bc pycod
 plot(t, y1, 'r-', xlabel='t', ylabel='y',
      axis=[0, 4, -0.1, 0.6])
 
@@ -1257,7 +1322,7 @@ plot(t, y2, 'bo', xlabel='t', ylabel='y')
 We may now go back to the first figure (with the `y1` data) and
 set a title and legends in this plot, show the plot, and make a PostScript
 version of the plot:
-!bc cod
+!bc pycod
 figure(1)  # go back to first figure
 title('One curve')
 legend('t^2*exp(-t^2)')
@@ -1274,7 +1339,7 @@ show()
 The current `Figure` object is reached by `gcf` (get current figure),
 and the `dump` method dumps the internal parameters in the `Figure`
 object:
-!bc cod
+!bc pycod
 fig = gcf(); print fig.dump()
 !ec
 These parameters may be of interest for troubleshooting when Easyviz
@@ -1287,7 +1352,7 @@ rows and `c` columns and set the current axis to axis number `a`.
 In the present case `subplot(2,1,1)` sets the current axis to
 the first set of axis in a "table" with two rows and one column.
 Here is the code for this third figure:
-!bc cod
+!bc pycod
 figure()  # new, third figure
 # Plot y1 and y2 as two axis in the same figure
 subplot(2, 1, 1)
@@ -1306,7 +1371,7 @@ set the axes extent explicitly.
 
 If we need to place an axis at an arbitrary position in the figure, we
 must use the command
-!bc cod
+!bc pycod
 ax = axes(viewport=[left, bottom, width, height])
 !ec
 The four parameteres `left`, `bottom`, `width`, `height`
@@ -1341,7 +1406,7 @@ without LaTeX syntax.
 
 If it is important to have Easyviz code that works with several
 backends, one can apply a little if-else test:
-!bc cod
+!bc pycod
 from scitools.std import *
 ...
 if backend == 'gnuplot':
@@ -1366,7 +1431,7 @@ savefig('myplot.eps')
 Sometimes, especially during debugging or when trying out a large-scale
 experiment, it is nice to turn off all plotting on the screen and
 all making of hardcopies. This is easily done by
-!bc cod
+!bc pycod
 turn_off_plotting(globals())
 !ec
 All the plot functions now "do nothing" (actually they are `DoNothing`
@@ -1393,10 +1458,10 @@ isosurface plots, volumetric slice plots, and contour slice plots.
 To create elevated surface plots we can use either the `surf` or the
 `mesh` command. Both commands have the same syntax, but the `mesh`
 command creates a wireframe mesh while the `surf` command creates a
-solid colored surface. 
+solid colored surface.
 
 Our examples will make use of the scalar field
-$f(x,y) = \sin r$|$f(x,y)=sin(r)$, 
+$f(x,y) = \sin r$|$f(x,y)=sin(r)$,
 where $r$ is the distance in the plane from the origin, i.e.,
 $r=\sqrt{x^2+y^2}$|$r=sqrt(x**2+y**2)$.
 The $x$ and $y$ values in our 2D domain lie between -5 and 5.
@@ -1408,7 +1473,7 @@ is computed in a vectorized operation which requires the extended
 coordinate arrays from the `ndgrid` function.  The `mesh` command
 can then produce the plot with a syntax that mirrors the simplicity of
 the `plot` command for curves:
-!bc
+!bc pycod
 x = y = linspace(-5, 5, 21)
 xv, yv = ndgrid(x, y)
 values = sin(sqrt(xv**2 + yv**2))
@@ -1421,7 +1486,7 @@ plot can be seen in Figure ref{fig:mesh_ex1}.
 
 We remark that the computations in the previous example are vectorized.
 The corresponding scalar computations using a double loop read
-!bc
+!bc pycod
 values = zeros(x.size, y.size)
 for i in xrange(x.size):
     for j in xrange(y.size):
@@ -1430,18 +1495,18 @@ for i in xrange(x.size):
 However, for the `mesh` command to work, we need the vectorized
 extensions `xv` and `yv` of `x` and `y`.
 
-FIGURE:[figs/mesh_ex1.eps] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). label{fig:mesh_ex1}
+FIGURE:[figs/mesh_ex1, width=500] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). label{fig:mesh_ex1}
 
 The `surf` command employs the same syntax, but results in a different
 plot (see Figure ref{fig:surf_ex1}):
-!bc
+!bc pycod
 surf(xv, yv, values)
 !ec
 
-FIGURE:[figs/surf_ex1.eps] Result of the surf command (Gnuplot backend). label{fig:surf_ex1}
+FIGURE:[figs/surf_ex1, width=500] Result of the surf command (Gnuplot backend). label{fig:surf_ex1}
 
 The `surf` command offers many possibilities to adjust the resulting plot:
-!bc
+!bc pycod
 setp(interactive=False)
 surf(xv, yv, values)
 shading('flat')
@@ -1454,10 +1519,10 @@ show()
 Here we have specified a flat shading model, added a color bar, changed
 the color map to `hot`, set some suitable axis values, and changed the
 view point (the view takes two arguments: the azimuthal rotation and
-the elevation, both given in degrees). 
+the elevation, both given in degrees).
 The same plot can also be accomplished with one single, compound
-statement (just as Easyviz offers for the `plot` command): 
-!bc
+statement (just as Easyviz offers for the `plot` command):
+!bc pycod
 surf(xv, yv, values,
      shading='flat',
      colorbar='on',
@@ -1467,7 +1532,7 @@ surf(xv, yv, values,
 !ec
 Figure ref{fig:surf_ex2} displays the result.
 
-FIGURE:[figs/surf_ex2.eps] Result of an extended surf command (Gnuplot backend). label{fig:surf_ex2}
+FIGURE:[figs/surf_ex2, width=500] Result of an extended surf command (Gnuplot backend). label{fig:surf_ex2}
 
 
 ===== Contour Plots =====
@@ -1491,11 +1556,11 @@ contour plots:
   * `contourf`: Draw a filled 2D contour plot, where the space between
     the contour lines is filled with colors.
 
-  * `contour3`: Same as `contour`, but the curves are drawn at their 
+  * `contour3`: Same as `contour`, but the curves are drawn at their
     corresponding height levels in 3D space.
 
   * `meshc`: Works in the same way as `mesh` except that a
-     contour plot is drawn in the plane beneath the mesh. 
+     contour plot is drawn in the plane beneath the mesh.
 
   * `surfc`: Same as `meshc` except that a solid surface is
     drawn instead of a wireframe mesh.
@@ -1504,28 +1569,28 @@ We start with illustrating the plain `contour` command, assuming that
 we already have computed the `xv`, `yv`, and `values`
 arrays as shown in our first example on scalar field plotting.
 The basic syntax follows that of `mesh` and `surf`:
-!bc
+!bc pycod
 contour(xv, yv, values)
 !ec
 By default, five uniformly spaced contour level curves are drawn, see
-Figure ref{fig:contour_ex1}. 
+Figure ref{fig:contour_ex1}.
 
-FIGURE:[figs/contour_ex1.eps] Result of the simplest possible contour command (Gnuplot backend). label{fig:contour_ex1}
+FIGURE:[figs/contour_ex1, width=500] Result of the simplest possible contour command (Gnuplot backend). label{fig:contour_ex1}
 
 The number of levels in a contour plot can be specified with an additional
 argument:
-!bc
+!bc pycod
 n = 15   # number of desired contour levels
 contour(xv, yv, values, n)
 !ec
-The result can be seen in Figure ref{fig:contour_ex2}. 
+The result can be seen in Figure ref{fig:contour_ex2}.
 
-FIGURE:[figs/contour_ex2.eps] A contour plot with 15 contour levels (Gnuplot backend). label{fig:contour_ex2}
+FIGURE:[figs/contour_ex2, width=500] A contour plot with 15 contour levels (Gnuplot backend). label{fig:contour_ex2}
 
 Sometimes one wants contour levels that are not equidistant or not
 distributed throughout the range of the scalar field. Individual
 contour levels to be drawn can easily be specified as a list:
-!bc
+!bc pycod
 levels = [-0.5, 0.1, 0.3, 0.9]
 contour(xv, yv, values, levels, clabels='on')
 !ec
@@ -1539,46 +1604,46 @@ may draw the contour lines in black and annotate each line with the
 corresponding contour level value.  Such plots are better suited for
 being displayed in black and white.
 
-FIGURE:[figs/contour_ex3.eps] Four individually specified contour levels (Gnuplot backend). label{fig:contour_ex3}
+FIGURE:[figs/contour_ex3, width=500] Four individually specified contour levels (Gnuplot backend). label{fig:contour_ex3}
 
 The `contourf` command,
-!bc
+!bc pycod
 contourf(xv, yv, values)
 !ec
 gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
 Only the Matplotlib and VTK backends currently supports filled
-contour plots. 
+contour plots.
 
-FIGURE:[figs/contourf_ex1.eps] Filled contour plot created by the contourf command (VTK backend). label{fig:contourf_ex1}
+FIGURE:[figs/contourf_ex1, width=500] Filled contour plot created by the contourf command (VTK backend). label{fig:contourf_ex1}
 
 The contour lines can be "lifted up" in 3D space, as shown in Figure
 ref{fig:contour3_ex1}, using the `contour3` command:
-!bc
+!bc pycod
 contour3(xv, yv, values, 15)
 !ec
 
-FIGURE:[figs/contour3_ex1.eps] Example on the contour3 command for elevated contour levels (Gnuplot backend). label{fig:contour3_ex1}
+FIGURE:[figs/contour3_ex1, width=500] Example on the contour3 command for elevated contour levels (Gnuplot backend). label{fig:contour3_ex1}
 
 Finally, we show a simple example illustrating the `meshc` and `surfc`
-commands: 
-!bc
-meshc(xv, yv, values, 
-      clevels=10, 
-      colormap=hot(), 
+commands:
+!bc pycod
+meshc(xv, yv, values,
+      clevels=10,
+      colormap=hot(),
       grid='off')
 figure()
-surfc(xv, yv, values, 
-      clevels=15, 
-      colormap=hsv(), 
+surfc(xv, yv, values,
+      clevels=15,
+      colormap=hsv(),
       grid='off',
       view=(30,40))
 !ec
 The resulting plots are displayed in Figures ref{fig:meshc_ex1} and
 ref{fig:surfc_ex1}.
 
-FIGURE:[figs/meshc_ex1.eps] Wireframe mesh with contours at the bottom (Gnuplot backend). label{fig:meshc_ex1}
+FIGURE:[figs/meshc_ex1, width=500] Wireframe mesh with contours at the bottom (Gnuplot backend). label{fig:meshc_ex1}
 
-FIGURE:[figs/surfc_ex1.eps] Surface plot with contours (Gnuplot backend). label{fig:surfc_ex1}
+FIGURE:[figs/surfc_ex1, width=500] Surface plot with contours (Gnuplot backend). label{fig:surfc_ex1}
 
 
 ===== Pseudocolor Plots =====
@@ -1587,7 +1652,7 @@ Another way of visualizing a 2D scalar field in Easyviz is the
 `pcolor` command. This command creates a pseudocolor plot, which is a
 flat surface viewed from above. The simplest form of this command
 follows the syntax of the other commands:
-!bc
+!bc pycod
 pcolor(xv, yv, values)
 !ec
 We can set the color shading in a pseudocolor plot either by giving
@@ -1597,7 +1662,7 @@ command. The color shading is specified by a string that can be either
 Matplotlib backends support `'faceted'` and `'flat'` only, while the
 VTK backend supports all of them.
 
-FIGURE:[figs/pcolor_ex1.eps] Pseudocolor plot (Gnuplot backend).
+FIGURE:[figs/pcolor_ex1, width=500] Pseudocolor plot (Gnuplot backend).
 
 
 ===== Isosurface Plots =====
@@ -1611,7 +1676,7 @@ demonstrate this command using 3D scalar field data from the `flow`
 function. This function, also found in Matlab,
 generates fluid flow data. Our first isosurface visualization example
 then looks as follows:
-!bc
+!bc pycod
 x, y, z, v = flow()  # generate fluid-flow data
 setp(interactive=False)
 h = isosurface(x,y,z,v,-3)
@@ -1631,11 +1696,11 @@ plot is shown in Figure ref{fig:isosurface1}. We remark that the
 Gnuplot backend does not support 3D scalar fields and hence not
 isosurfaces.
 
-FIGURE:[figs/isosurface1.eps] Isosurface plot (VTK backend). label{fig:isosurface1}
+FIGURE:[figs/isosurface1, width=500] Isosurface plot (VTK backend). label{fig:isosurface1}
 
 Here is another example that demonstrates the `isosurface` command
-(again using the `flow` function): 
-!bc
+(again using the `flow` function):
+!bc pycod
 x, y, z, v = flow()
 setp(interactive=False)
 h = isosurface(x,y,z,v,0)
@@ -1647,7 +1712,7 @@ show()
 !ec
 Figure ref{fig:isosurface2} shows the resulting plot.
 
-FIGURE:[figs/isosurface2.eps] Another isosurface plot (VTK backend). label{fig:isosurface2}
+FIGURE:[figs/isosurface2, width=500] Another isosurface plot (VTK backend). label{fig:isosurface2}
 
 
 ===== Volumetric Slice Plot =====
@@ -1660,7 +1725,7 @@ Easyviz - `slice_` is thus the counterpart to the Matlab function
 `slice`.). This command draws orthogonal slice planes through a
 given volumetric data set. Here is an example on how to use the
 `slice_` command:
-!bc
+!bc pycod
 x, y, z = ndgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
                    sparse=True)
 v = x*exp(-x**2 - y**2 - z**2)
@@ -1682,17 +1747,17 @@ $x=-1.2$, $x=0.8$, and $x=2$), one at the $y$ axis (at $y=2$), and two
 at the $z$ axis (at $z=-2$ and $z=0.0$). The result is presented in
 Figure ref{fig:slice1}.
 
-FIGURE:[figs/slice1.eps] Slice plot where the $x$ axis is sliced at -1.2, 0.8, and 2, the $y$ axis is sliced at 2, and the $z$ axis is sliced at -2 and 0.0 (VTK backend). label{fig:slice1}
+FIGURE:[figs/slice1, width=500] Slice plot where the $x$ axis is sliced at -1.2, 0.8, and 2, the $y$ axis is sliced at 2, and the $z$ axis is sliced at -2 and 0.0 (VTK backend). label{fig:slice1}
 
 # OBS:
 #Slicing with a Surface-object does not work for JHR so far in VTK
 
-__Contours in Slice Planes.__ 
+__Contours in Slice Planes.__
 
 With the `contourslice` command we can create contour plots
-in planes aligned with the coordinate axes. Here is an example 
+in planes aligned with the coordinate axes. Here is an example
 using 3D scalar field data from the `flow` function:
-!bc
+!bc pycod
 x, y, z, v = flow()
 setp(interactive=False)
 h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
@@ -1716,11 +1781,11 @@ number of contour lines (the default is five) or, as in the current
 example, a list specifying the level curves. Running the set of
 commands results in the plot shown in Figure ref{fig:contourslice1}.
 
-FIGURE:[figs/contourslice1.eps] Contours in slice planes (VTK backend). label{fig:contourslice1}
+FIGURE:[figs/contourslice1, width=500] Contours in slice planes (VTK backend). label{fig:contourslice1}
 
 Here is another example where we draw contour slices from a
 three-dimensional MRI data set:
-!bc
+!bc pycod
 import scipy.io
 mri = scipy.io.loadmat('mri_matlab_v6.mat')
 D = mri['D']
@@ -1734,7 +1799,7 @@ aid from the `loadmat` function available in the `io` module in the
 SciPy package. We then create a 2D contour slice plot with one slice
 in the plane $z=8$. Figure ref{fig:contourslice3} displays the result.
 
-FIGURE:[figs/contourslice3.eps] Contour slice plot of a 3D MRI data set (VTK backend). label{fig:contourslice3}
+FIGURE:[figs/contourslice3, width=500] Contour slice plot of a 3D MRI data set (VTK backend). label{fig:contourslice3}
 
 
 ======= Visualization of Vector Fields =======
@@ -1757,7 +1822,7 @@ values (length and direction) at discrete points.  As the names
 indicate, `quiver` is for 2D vector fields in the plane and `quiver3`
 plots vectors in 3D space.  The basic usage of the `quiver` command
 goes as follows:
-!bc
+!bc pycod
 x = y = linspace(-5, 5, 21)
 xv, yv = ndgrid(x, y, sparse=False)
 values = sin(sqrt(xv**2 + yv**2))
@@ -1772,16 +1837,16 @@ approximations.  The result is a vector field with components `uv` and
 the vector components are passed as arguments to `quiver`, which in
 turn produces the plot in Figure ref{fig:quiver_ex1}.
 
-FIGURE:[figs/quiver_ex1.eps] Velocity vector plot (Gnuplot backend). label{fig:quiver_ex1}
+FIGURE:[figs/quiver_ex1, width=500] Velocity vector plot (Gnuplot backend). label{fig:quiver_ex1}
 
 The arrows in a quiver plot are automatically scaled to fit within the
 grid. If we want to control the length of the arrows, we can pass an
 additional argument to scale the default lengths:
-!bc
+!bc pycod
 scale = 2
 quiver(xv, yv, uv, vv, scale)
 !ec
-This value of `scale` will thus stretch the vectors to their double length. 
+This value of `scale` will thus stretch the vectors to their double length.
 To turn off the automatic scaling, we can set the scale value to zero.
 
 Quiver plots are often used in combination with other plotting
@@ -1790,7 +1855,7 @@ help to get a better perception of a given set of data. Here is an
 example demonstrating this principle for a simple scalar field, where
 we plot the field values as colors and add vectors to illustrate the
 associated gradient field:
-!bc
+!bc pycod
 xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
 values = sin(sqrt(xv**2 + yv**2))
 pcolor(xv, yv, values, shading='interp')
@@ -1802,21 +1867,23 @@ uv, vv = gradient(values)
 hold('on')
 quiver(xv, yv, uv, vv, 'filled', 'k', axis=[-6,6,-6,6])
 figure(2)
-contour(xv, yv, values, 15) 
+contour(xv, yv, values, 15)
 hold('on')
-quiver(xv, yv, uv, vv, axis=[-6,6,-6,6]) 
+quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
 !ec
 The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
-ref{fig:quiver_ex3}. 
+ref{fig:quiver_ex3}.
 
-FIGURE:[figs/quiver_ex2.eps] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex2}
-FIGURE:[figs/quiver_ex3.eps] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex3}
+FIGURE:[figs/quiver_ex2, width=500] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex2}
+
+
+FIGURE:[figs/quiver_ex3, width=500] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex3}
 
 Visualization of 3D vector fields by arrows at grid points can be done
 with the `quiver3` command. At the time of this writing, only the VTK
 backend supports 3D quiver plots. A simple example of plotting the
 "radius vector field" $\vec v = (x,y,z)$|$v=(x,y,z)$ is given next:
-!bc
+!bc pycod
 x = y = z = linspace(-3,3,4)
 xv, yv, zv = ndgrid(x, y, z, sparse=False)
 uv = xv
@@ -1825,11 +1892,11 @@ wv = zv
 quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
 !ec
 The strings `'filled'` and `'r'` are optional and makes the arrows
-become filled 
-and red, respectively. The resulting plot is presented in Figure 
-ref{fig:quiver3_ex1}. 
+become filled
+and red, respectively. The resulting plot is presented in Figure
+ref{fig:quiver3_ex1}.
 
-FIGURE:[figs/quiver3_ex1.eps] 3D quiver plot (VTK backend). label{fig:quiver3_ex1}
+FIGURE:[figs/quiver3_ex1, width=500] 3D quiver plot (VTK backend). label{fig:quiver3_ex1}
 
 
 ===== Stream Plots =====
@@ -1851,7 +1918,7 @@ data set that is included with Matlab. This data set represents air
 currents over a region of North America and is suitable for testing
 the different stream plot commands. The following commands will load
 the `wind` data set and then draw some stream lines from it:
-!bc
+!bc pycod
 import scipy.io  # needed to load binary .mat-files
 
 # Load the wind data set and create variables
@@ -1864,9 +1931,9 @@ v = wind['v']
 w = wind['w']
 
 # Create starting points for the stream lines
-sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5), 
+sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5),
                     sparse=False)
-  
+
 # Draw stream lines
 streamline(x, y, z, u, v, w, sx, sy, sz,
            view=3, axis=[60,140,10,60,-5,20])
@@ -1885,7 +1952,7 @@ access later.
 Before we call the `streamline` command we must set up some starting
 point coordinates for the stream lines. In this example, we have used
 the `ndgrid` command to define the starting points with the line:
-!bc 
+!bc pycod
 sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
 !ec
 This command defines starting points which all lie on $x=80$,
@@ -1896,11 +1963,11 @@ vector data `(u,v,w)`, while the next three arguments are the starting
 points which we defined with the `ndgrid` command above. The
 resulting plot is presented in Figure ref{fig:streamline_ex1}.
 
-FIGURE:[figs/streamline_ex1.eps] Stream line plot (Vtk backend). label{fig:streamline_ex1}
+FIGURE:[figs/streamline_ex1, width=500] Stream line plot (Vtk backend). label{fig:streamline_ex1}
 
-The next example demonstrates the `streamtube` command applied to the 
+The next example demonstrates the `streamtube` command applied to the
 same `wind` data set:
-!bc
+!bc pycod
 streamtube(x, y, z, u, v, w, sx, sy, sz,
            daspect=[1,1,1],
 	   view=3,
@@ -1912,10 +1979,10 @@ example and defines the starting positions for the center lines of the
 tubes. The resulting plot is presented in Figure
 ref{fig:streamtube_ex1}.
 
-FIGURE:[figs/streamtube_ex1.eps] Stream tubes (Vtk backend). label{fig:streamtube_ex1}
+FIGURE:[figs/streamtube_ex1, width=500] Stream tubes (Vtk backend). label{fig:streamtube_ex1}
 
 Finally, we illustrate the `streamribbon` command:
-!bc
+!bc pycod
 streamribbon(x, y, z, u, v, w, sx, sy, sz,
              ribbonwidth=5,
              daspect=[1,1,1],
@@ -1925,7 +1992,7 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
 !ec
 Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
 
-FIGURE:[figs/streamribbon_ex1.eps] Stream ribbons (VTK backend). label{fig:streamribbon_ex1}
+FIGURE:[figs/streamribbon_ex1, width=500] Stream ribbons (VTK backend). label{fig:streamribbon_ex1}
 
 
 
@@ -1942,9 +2009,9 @@ FIGURE:[figs/streamribbon_ex1.eps] Stream ribbons (VTK backend). label{fig:strea
 Easyviz also supports a unified interface to simple bar charts.
 Here is a simple example for displaying tabular values, with one
 bar for each data point:
-!bc cod
+!bc pycod
 from scitools.std import *
-languages = ['C', 'Java', 'C++', 'PHP', 'VB', 'C#', 'Python', 
+languages = ['C', 'Java', 'C++', 'PHP', 'VB', 'C#', 'Python',
              'Perl', 'JavaScript']
 ratings = [18, 18, 9.7, 9.7, 6.4, 4.4, 4.2, 3.6, 2.5]
 bar(ratings, 'r',
@@ -1956,17 +2023,17 @@ bar(ratings, 'r',
 The bar chart illustrates the data in the `ratings` list. These data
 correspond to the names in `languages`.
 
-FIGURE:[figs/pyranking.eps] A simple bar chart illustrating the popularity of common programming languages.
+FIGURE:[figs/pyranking] A simple bar chart illustrating the popularity of common programming languages.
 
 One may display groups of bars. The data can then be put in a matrix,
 where rows (1st index) correspond to the groups the columns to the
 data within one group:
-!bc cod
+!bc pycod
 data = [[ 0.15416284  0.7400497   0.26331502]
         [ 0.53373939  0.01457496  0.91874701]
         [ 0.90071485  0.03342143  0.95694934]
         [ 0.13720932  0.28382835  0.60608318]]
-bar(data, 
+bar(data,
     barticks=['group 1', 'group 2', 'group 3', 'group 4'],
     legend=['bar 1', 'bar 2', 'bar 3'],
     axis=[-1, data.shape[0], 0, 1.3],
@@ -2289,6 +2356,18 @@ You can download prebuilt binaries from the Matplotlib home page.
 
 ======= Troubleshooting =======
 
+===== Suddenly my old plots have thick lines and large markers =====
+
+The default behavior of `plot(x,y)` was changed in August, 2012, such
+that the line thickness is 2 and markers are inserted at the data
+points.  The reason is that curves in PNG files printed in black and
+white (typically in reports) were hard to distinguish with the old
+default behavior (line of thickness 1). The new default behavior is
+better suited for increased use of PNG as file format.
+
+To get the old default behavior, replace `plot(x,y)` by
+`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired.
+
 ===== Can I Perform a Diagnostic Test of Easyviz? =====
 
 Yes. It is wise to perform a diagnostic test before reporting any error
@@ -2308,13 +2387,13 @@ mail to the SciTools developers.
 Depending on the backend used for plotting with Easyviz, the plot
 window may be killed when the program terminates. Adding a statement
 that makes the program halt provides a remedy:
-!bc cod
+!bc pycod
 raw_input('Press Return key to quit: ')
 !ec
 The plot window will now stay on the screen until hitting the Enter/Return key.
 
 Another remedy can be to add a `show()` call at the end of the plotting:
-!bc cod
+!bc pycod
 show()
 !ec
 # test on Windows!
@@ -2451,7 +2530,7 @@ thread.error: can't start new thread
 !ec
 A remedy is to create fewer plots, and for animations, update the plot
 window less frequently. For example,
-!bc cod
+!bc pycod
 for i in range(number_of_frames_in_animation):
     <prepare data>
     if i % == 100:     # plot every 100 frames

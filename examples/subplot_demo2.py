@@ -8,7 +8,7 @@ from scitools.std import *
 
 setp(interactive=False)
 
-x = linspace(0,2*pi,31)
+x = linspace(0,2*pi,51)
 
 a1 = subplot(211)
 l1 = plot(x,sin(x),'x')

@@ -127,25 +127,25 @@ def test3():
     x20 = f0[q:q+n+1];
     x30 = f0[2*q:2*q+n+1];
 
-    # [x11;x21;x31] is velocity (same as tangent) vector:
+    # [x11;x21;x51] is velocity (same as tangent) vector:
     x11 = f1[0:n+1];
     x21 = f1[q:q+n+1];
-    x31 = f1[2*q:2*q+n+1];
+    x51 = f1[2*q:2*q+n+1];
 
     # [x12;x22;x32] is acceleration vector:
     x12 = f2[0:n+1];
     x22 = f2[q:q+n+1];
     x32 = f2[2*q:2*q+n+1];
 
-    speed = sqrt(x11**2 + x21**2 + x31**2);
+    speed = sqrt(x11**2 + x21**2 + x51**2);
 
     # This is the dot-product of the velocity and acceleration vectors:
-    velacc = x11*x12 + x21*x22 + x31*x32;
+    velacc = x11*x12 + x21*x22 + x51*x32;
 
     # Here is the normal vector:
     nrml1 = speed**2 * x12 - velacc*x11;
     nrml2 = speed**2 * x22 - velacc*x21;
-    nrml3 = speed**2 * x32 - velacc*x31;
+    nrml3 = speed**2 * x32 - velacc*x51;
     normallength = sqrt(nrml1**2 + nrml2**2 + nrml3**2);
 
     # And here is the normalized normal vector:
@@ -154,8 +154,8 @@ def test3():
     unitnormal3 = nrml3 / normallength;
 
     # And the binormal vector ( B = T x N )
-    binormal1 = (x21*unitnormal3 - x31*unitnormal2) / speed;
-    binormal2 = (x31*unitnormal1 - x11*unitnormal3) / speed;
+    binormal1 = (x21*unitnormal3 - x51*unitnormal2) / speed;
+    binormal2 = (x51*unitnormal1 - x11*unitnormal3) / speed;
     binormal3 = (x11*unitnormal2 - x21*unitnormal1) / speed;
 
     # s is the coordinate along the circular cross-sections of the tube:

@@ -10,9 +10,11 @@ t = linspace(0, 3, 51)
 y1 = f1(t)
 y2 = f2(t)
 
-plot(t, y1, t, y2, xlabel='t', ylabel='y',
+plot(t, y1, 'r-', t, y2, 'b-',
+     xlabel='t', ylabel='y',
      legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
      title='Plotting two curves in the same plot',
-     savefig='tmp2.eps')
+     savefig='plot2b.png')
 
+savefig('plot2b.png')
 raw_input('Press Return key to quit: ')

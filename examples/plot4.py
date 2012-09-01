@@ -12,10 +12,11 @@ x = linspace(m -3*s_start, m + 3*s_start, 1000)
 
 # Make a plot of three s values
 for s in s_start, 1, s_stop:
-    plot(x, f(x,m,s))
+    plot(x, f(x,m,s), '-')
     hold('on')
     legend('s=%s' %s)
 title('A Gaussian Bell Function')
-savefig('tmp4.eps')
+savefig('plot4.png')
+savefig('plot4.eps')
 
 raw_input('Press Return key to quit: ')
