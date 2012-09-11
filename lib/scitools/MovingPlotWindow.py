@@ -6,23 +6,50 @@ class MovingPlotWindow:
     Make a plot window that follows the tip (end) of a very long
     time series.
 
-    Example::
+    Here is an example where we have computed a long time series
+    stored in an array ``u``. The time series is displayed by
+    following a window of 8 periods. Along with ``u``, an
+    analytical solution ``I*cos(w*t)`` is also plotted::
+
+        import scitools.std as st
+        from numpy import cos, pi
+        from scitools.MovingPlotWindow import MovingPlotWindow
+
+        def visualize_front(u, t, I, w):
+            one_period = 2*pi/w
+            umin = -1.2*I;  umax = -umin
+            plot_manager = MovingPlotWindow(
+                window_width=8*one_period,
+                dt=t[1]-t[0],
+                yaxis=[umin, umax],
+                mode='continuous drawing')
+            for n in range(1,len(u)):
+                if plot_manager.plot(n):
+                    s = plot_manager.first_index_in_plot
+                    st.plot(t[s:n+1], u[s:n+1], 'r-',
+                            t[s:n+1], I*cos(w*t)[s:n+1], 'b-',
+                            title='t=%6.3f' % t[n],
+                            axis=plot_manager.axis())
+                plot_manager.update(n)
+
+    Here is another example where the ``MovingPlotWindow`` object
+    is used for plotting during the simulation::
 
         def demo(I, k, dt, T, mode='continuous movement'):
             """
-            Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
-            method with time steps dt, from t=0 to t=T.
+            Solve u'' + k**2*u = 0, u(0)=I, u'(0)=0 by a finite
+            difference method with time steps dt, from t=0 to t=T.
             """
             if dt > 2./k:
                 print 'Unstable scheme'
             N = int(round(T/float(dt)))
-            u = zeros(N+1)
-            t = linspace(0, T, N+1)
+            u = st.zeros(N+1)
+            t = st.linspace(0, T, N+1)
 
             umin = -1.2*I
             umax = -umin
             period = 2*pi/k  # period of the oscillations
-            window_width =
+            window_width = 8*period
             plot_manager = MovingPlotWindow(
                              window_width, dt, yaxis=[umin, umax],
                              mode=mode)
@@ -35,8 +62,7 @@ class MovingPlotWindow:
                     s = plot_manager.first_index_in_plot
                     plot(t[s:n+2], u[s:n+2], 'r-',
                          t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
-                         axis=plot_manager.axis(),
-                         title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" % (t[n+1], mode))
+                         axis=plot_manager.axis())
                 plot_manager.update(n)
     '''
 

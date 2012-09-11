@@ -1018,7 +1018,7 @@ class MatplotlibBackend(BaseClass):
 
         Optional arguments:
 
-          dpi         -- image resolution. Default is 150.
+          dpi         -- image resolution. Default is 600.
           orientation -- 'portrait' (default) or 'landscape'. Only available
                          for PostScript output.
 
@@ -1032,10 +1032,11 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Hardcopy to %s" % filename
 
-        dpi = kwargs.get('dpi', 150)
+        dpi = kwargs.get('dpi', 600)
         orientation = kwargs.get('orientation', 'portrait')
 
         self._g.savefig(filename,
+                        dpi=dpi,
                         facecolor='w',
                         edgecolor='w',
                         orientation=orientation)
