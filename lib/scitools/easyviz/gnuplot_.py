@@ -1432,8 +1432,9 @@ class GnuplotBackend(BaseClass):
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
             self._doing_PS = True
-        elif terminal == 'pdf':
+        elif terminal == 'pdf' or terminal == 'pdfcairo':
             fontsize = kwargs.get('fontsize', 8)
+            fontsize = kwargs.get('fontname', 'Helvetica')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append('font "%s,%s"' % (fontname, fontsize))
@@ -1442,18 +1443,10 @@ class GnuplotBackend(BaseClass):
             setterm.append('dl 3')  # dashlength
             # FIXME: Should self._doing_PS be True or False in this case?
             self._doing_PS = True
-        elif terminal == 'pdfcairo':
-            fontsize = kwargs.get('fontsize', 8)
-            setterm.append(enhanced and 'enhanced' or 'noenhanced')
-            setterm.append(color and 'color' or 'mono')
-            setterm.append(solid and 'solid' or 'dashed')
-            setterm.append('font "%s,%s"' % (fontname, fontsize))
-            setterm.append('linewidth 4')
-            setterm.append('dashlength 3')
-            # FIXME: Should self._doing_PS be True or False in this case?
-            self._doing_PS = True
         elif terminal == 'png':
-            pass
+            fontsize = kwargs.get('fontsize', 14)
+            fontname = kwargs.get('fontname', 'Helvetica')
+            setterm.append('font %s %s' % (fontname, fontsize))
         self._g(' '.join(setterm))
         self._g('set output "%s"' % filename)
         self._replot()
