@@ -655,13 +655,14 @@ class GnuplotBackend(BaseClass):
         width = item.getp('linewidth')
 
         if PlotProperties._local_prop['default_lines'] == 'with_markers' \
-               and color and marker == None and style == None:
-            # always add marker so that curves in png/eps can be
-            # distinguised in black-and-white
-            marker = self._markers[PlotProperties._colors2markers[
-                item.getp('linecolor')]]
+           and color and marker == None and style == None:
+            # Add marker (if not too many points) so that curves in
+            # png/eps can be distinguised in black-and-white
+            if len(item.getp('xdata')) <= 61:
+                marker = self._markers[PlotProperties._colors2markers[
+                    item.getp('linecolor')]]
             style = 'lines'
-            width = 2
+            width = 1  # only PNG needs thicker lines and that is set in savefig
 
         return marker, color, style, width
 
@@ -1368,13 +1369,16 @@ class GnuplotBackend(BaseClass):
 
         ext2term = {'.ps': 'postscript',
                     '.eps': 'postscript',
-                    '.png': 'png'}
+                    '.png': 'png',
+                    #'.pdf': 'pdfcairo', does not work well
+                    '.pdf': 'postscript',
+                    }
 
         # check if we have a PDF terminal
         if _check_terminal('pdfcairo'):
-            ext2term['.pdf'] = 'pdfcairo'
             # teach Gnuplot.py about the pdfcairo terminal
             # FIXME: This might need some tweaking. Or is this even needed?
+            # Seems so, because Gnuplot does not define pdfcairo
             Gnuplot.termdefs.terminal_opts['pdfcairo'] = [
                 Gnuplot.termdefs.KeywordOrBooleanArg(
                     options=['landscape', 'portrait', 'eps', 'default'],
@@ -1427,26 +1431,32 @@ class GnuplotBackend(BaseClass):
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(solid and 'solid' or 'dashed')
-            setterm.append(' dashlength 5 linewidth 3')  # look best
+            setterm.append(' dashlength 5 linewidth 3')  # looks best
             #setterm.append(' dashlength 5 linewidth 4')
             setterm.append('"%s"' % fontname)
             setterm.append('%s' % fontsize)
             self._doing_PS = True
         elif terminal == 'pdf' or terminal == 'pdfcairo':
-            fontsize = kwargs.get('fontsize', 8)
+            # Setting fontsizes etc is not successful with Gnuplot.hardcopy
+            # Instead: use ps2pdf to convert to pdf
+            fontsize = kwargs.get('fontsize', 20)
             fontsize = kwargs.get('fontname', 'Helvetica')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append('font "%s,%s"' % (fontname, fontsize))
-            setterm.append('linewidth 4')
+            #setterm.append(' dashlength 3 linewidth 3')  # looks best
+            setterm.append(' dashlength 3 linewidth 1')  # looks best
+            #setterm.append('linewidth 4'); setterm.append('dl 3')  # old
             setterm.append(solid and 'solid' or 'dashed')
-            setterm.append('dl 3')  # dashlength
             # FIXME: Should self._doing_PS be True or False in this case?
             self._doing_PS = True
+            keyw.update({'color': color, 'solid': solid})
         elif terminal == 'png':
             fontsize = kwargs.get('fontsize', 14)
             fontname = kwargs.get('fontname', 'Helvetica')
+            setterm.append('linewidth 5')
             setterm.append('font %s %s' % (fontname, fontsize))
+            keyw.update({'color': color})
         self._g(' '.join(setterm))
         self._g('set output "%s"' % filename)
         self._replot()
@@ -1454,6 +1464,13 @@ class GnuplotBackend(BaseClass):
             # Need to call hardcopy in Gnuplot.py to avoid ending up with
             # a PostScript file with multiple pages:
             self._g.hardcopy(**keyw)
+            if terminal == 'postscript' and ext == '.pdf':
+                # Wanted PDF, used postscript, need to convert with ps2pdf
+                failure = os.system('ps2pdf -dEPSCrop %s' % filename)
+                if failure:
+                    print 'Tried to make PDF format from PostScript, but the\nps2pdf program would not run successfully.'
+                # Cannot delete filename in case a postscript version was
+                # requested
         self._g('quit')
         self._g = self.gcf()._g  # set self._g to the correct instance again
         self._doing_PS = False

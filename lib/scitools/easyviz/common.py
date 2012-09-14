@@ -3001,6 +3001,9 @@ class BaseClass(object):
         """
         if 'description' not in kwargs:
             kwargs['description'] = 'plot: 2D curve plot'
+        if 'label' in kwargs and 'legend' not in kwargs:
+            kwargs['legend'] = kwargs['label']
+
         ax, args, nargs = self._check_args(*args)
 
         if nargs == 0:
