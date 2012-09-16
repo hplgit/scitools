@@ -658,9 +658,9 @@ class GnuplotBackend(BaseClass):
            and color and marker == None and style == None:
             # Add marker (if not too many points) so that curves in
             # png/eps can be distinguised in black-and-white
-            if len(item.getp('xdata')) <= 61:
-                marker = self._markers[PlotProperties._colors2markers[
-                    item.getp('linecolor')]]
+            #if len(item.getp('xdata')) <= 61:  # fixed in _add_line
+            marker = self._markers[PlotProperties._colors2markers[
+                item.getp('linecolor')]]
             style = 'lines'
             width = 1  # only PNG needs thicker lines and that is set in savefig
 
@@ -676,8 +676,11 @@ class GnuplotBackend(BaseClass):
         if color is not None:
             if style is None:
                 if marker:
-                    withstring = "points lt %d pt %d ps %d " \
-                                 % (color, marker, width)
+                    # use thicker lines for larger markers
+                    marker_lw = 1 if width <= 2 else width/2
+
+                    withstring = "points lt %d pt %d ps %d lw %s" \
+                                 % (color, marker, width, marker_lw)
                 else:
                     withstring = "lines lt %d lw %d" % (color, width)
             elif style == 'lines':
@@ -723,6 +726,15 @@ class GnuplotBackend(BaseClass):
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
+            if withstring.startswith('linespoints') and \
+               marker == self._markers[PlotProperties._colors2markers[
+                item.getp('linecolor')]]:
+                # assume that user has empty format spec and that
+                # _get_linespecs has set marker and solid line, then
+                # limit to 15 markers for visibility
+                every = int(len(x)/15.)
+                withstring += ' pi ' + str(every)
+
             kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring,
                       'using': '1:($2)'}

@@ -2799,7 +2799,8 @@ class BaseClass(object):
         elif nargs == 1:
             items[-1].setp(legend=str(args[0]))
         else:
-            raise TypeError("legend: wrong number of arguments")
+            pass # ok with legend() or legend(loc='...'), as in matplotlib
+
 
         if self.getp('interactive') and self.getp('show'):
             self._replot()

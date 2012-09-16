@@ -417,10 +417,10 @@ class MatplotlibBackend(BaseClass):
         width = item.getp('linewidth')
         if PlotProperties._local_prop['default_lines'] == 'with_markers' \
                and color and marker == '' and style == '':
-            # Add marker (if not too many points so that curves in
-            # png/eps can be distinguised in black-and-white
-            if len(item.getp('xdata')) <= 61:
-                marker = PlotProperties._colors2markers[color]
+            # Add marker so that curves in png/pdf/eps can be distinguised
+            # in black-and-white
+            #if len(item.getp('xdata')) <= 61:  # this is solved in _add_line
+            marker = PlotProperties._colors2markers[color]
             style = '-'
         if width:
             width = float(width)
@@ -497,6 +497,7 @@ class MatplotlibBackend(BaseClass):
         fmt = marker+color+style
         if not width:
             width = 1.0
+        #print 'plt: %s color=[%s] marker=[%s] style=[%s]' % (fmt, color, marker, style), width
 
         if z is not None:
             # zdata is given, add a 3D curve:
@@ -509,6 +510,28 @@ class MatplotlibBackend(BaseClass):
             legend = self._fix_latex(legend)
             if legend:
                 l[0].set_label(legend)
+            if marker and width != 1.0:
+                # marker size is given in pixels in matplotlib
+                markersize = width*5
+                l[0].set_markersize(markersize)
+                l[0].set_markeredgecolor(color)
+                # unfilled markers
+                l[0].set_markerfacecolor("None")  # note the quotes!
+                # use thicker lines for larger markers
+                marker_lw = 1 if width <= 2 else width/2
+                l[0].set_markeredgewidth(marker_lw)
+
+            if style == '-' and marker == PlotProperties._colors2markers[color]\
+               and len(x) > 61:
+                # assume that user has empty format spec and that
+                # _get_linespecs has set marker and solid line, then
+                # limit to 15 markers for visibility
+                every = int(len(x)/15.)
+                l[0].set_markevery(every)
+                # downside: user has specified line and markers, but with
+                # line one should limit the no of markers - if data points
+                # are important, the user should use markers only, or
+                # dashed lines
 
     def _add_filled_line(self, item):
         """Add a 2D or 3D filled curve."""
