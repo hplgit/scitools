@@ -1417,7 +1417,6 @@ class GnuplotBackend(BaseClass):
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
                              (ext2term.keys(), ext))
         terminal = ext2term.get(ext, 'postscript')
-        print 'FILENAME', filename
 
         self.setp(**kwargs)
         color = self.getp('color')
@@ -1477,17 +1476,6 @@ class GnuplotBackend(BaseClass):
             # Need to call hardcopy in Gnuplot.py to avoid ending up with
             # a PostScript file with multiple pages:
             self._g.hardcopy(**keyw)
-            if terminal == 'postscript' and ext == '.pdf':
-                # Wanted PDF, used postscript, need to convert with ps2pdf
-                scratchfile = '.tmp.pdf'
-                os.rename(filename, scratchfile)
-                failure = os.system('ps2pdf -dEPSCrop %s %s' %
-                                    (scratchfile, filename))
-                os.remove(scratchfile)
-                if failure:
-                    print 'Tried to make PDF format from PostScript, but the\nps2pdf program would not run successfully.'
-                # Cannot delete filename in case a postscript version was
-                # requested
         self._g('quit')
         self._g = self.gcf()._g  # set self._g to the correct instance again
         self._doing_PS = False
@@ -1495,6 +1483,18 @@ class GnuplotBackend(BaseClass):
         if self.getp('interactive') and self.getp('show'):
             self._replot()
 
+        if terminal == 'postscript' and ext == '.pdf':
+            # Wanted PDF, used postscript, need to convert with ps2pdf
+            scratchfile = '.tmp.pdf'
+            if os.path.isfile(filename):
+                os.rename(filename, scratchfile)
+                failure = os.system('ps2pdf -dEPSCrop %s %s' %
+                                    (scratchfile, filename))
+                if failure:
+                    print 'Tried to make PDF format from PostScript, but the\nps2pdf program would not run successfully.'
+                os.remove(scratchfile)
+            else:
+                print 'Could not make', filename
 
     def hardcopy_old(self, filename, **kwargs):
         """
