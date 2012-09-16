@@ -1405,8 +1405,8 @@ class GnuplotBackend(BaseClass):
                 Gnuplot.termdefs.StringArg(argname='fontname'),
                 Gnuplot.termdefs.BareStringArg(argname='fontsize'),
                 ]
-        elif _check_terminal('pdf'):
-            ext2term['.pdf'] = 'pdf'
+        #elif _check_terminal('pdf'):
+        #    ext2term['.pdf'] = 'pdf'
 
         basename, ext = os.path.splitext(filename)
         if not ext:
@@ -1417,6 +1417,7 @@ class GnuplotBackend(BaseClass):
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
                              (ext2term.keys(), ext))
         terminal = ext2term.get(ext, 'postscript')
+        print 'FILENAME', filename
 
         self.setp(**kwargs)
         color = self.getp('color')
@@ -1433,7 +1434,7 @@ class GnuplotBackend(BaseClass):
             fontsize = kwargs.get('fontsize', 20)
             keyw.update({'color': color, 'enhanced': enhanced, 'solid': solid,
                          'fontname': fontname, 'fontsize': fontsize})
-            if ext == '.eps':
+            if ext == '.eps' or ext == '.pdf':
                 keyw['mode'] = 'eps'
                 setterm.append('eps')
             else:
@@ -1478,7 +1479,11 @@ class GnuplotBackend(BaseClass):
             self._g.hardcopy(**keyw)
             if terminal == 'postscript' and ext == '.pdf':
                 # Wanted PDF, used postscript, need to convert with ps2pdf
-                failure = os.system('ps2pdf -dEPSCrop %s' % filename)
+                scratchfile = '.tmp.pdf'
+                os.rename(filename, scratchfile)
+                failure = os.system('ps2pdf -dEPSCrop %s %s' %
+                                    (scratchfile, filename))
+                os.remove(scratchfile)
                 if failure:
                     print 'Tried to make PDF format from PostScript, but the\nps2pdf program would not run successfully.'
                 # Cannot delete filename in case a postscript version was
