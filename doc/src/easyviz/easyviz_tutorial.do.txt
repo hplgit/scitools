@@ -58,14 +58,16 @@ command produces files with images in various formats:
 !bc pycod
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
+savefig('tmp1.pdf') # produce PDF
 !ec
 An alternative name for `savefig` is `hardcopy`:
 !bc pycod
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
+hardcopy('tmp1.pdf') # produce PDF
 !ec
 The filename extension determines the format: `.ps` or
-`.eps` for PostScript, and `.png` for PNG.
+`.eps` for PostScript, `.png` for PNG, and `.pdf` for PDF.
 Figures ref{fig:plot1a:g} and ref{fig:plot1a:m} display the resulting
 image file with the plot, as generated
 with the Gnuplot and Matplotlib plotting packages, respectively.
@@ -91,14 +93,17 @@ hits the Return key.
 
 ===== Controlling Line Styles =====
 
-By default, Easyviz plots a curve with a solid line of thickness 2 and
-markers of size 2 at each data point. This default behavior is
-inspired by the usual needs to include thicker lines and markers to
+By default, Easyviz plots a curve with a solid line of thickness 1 and
+markers at each data point. If the number of data points exceeds 61,
+just 15 equally spaced markers are drawn to avoid cluttering the plot.
+This default behavior is
+inspired by the usual needs to include markers to
 distinguish multiple curves plots, especially if image files are to
 appear in black and white in printed reports.  However, the line style
-can easily be controlled by adding a string `s` after the `y`
+and markers can easily be controlled by adding a string `s` after the `y`
 argument: `plot(x, y, s)`. The syntax of the string `s` is inspired by
-Matlab. For example, `r-` means a red solid line of unit thickness
+Matlab. For example, `r-` means a red solid line of unit thickness and
+no markers
 (see Figure ref{fig:plot1a:rs}), `r--` means a red dashed line, `r-o`
 means a red solid line with circles as markers at each data point,
 `r--o` is the same except that the line is dashed. In general, if `s`

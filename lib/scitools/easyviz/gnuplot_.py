@@ -655,7 +655,8 @@ class GnuplotBackend(BaseClass):
         width = item.getp('linewidth')
 
         if PlotProperties._local_prop['default_lines'] == 'with_markers' \
-           and color and marker == None and style == None:
+           and color and marker == None and style == None \
+           and item.getp('zdata') is None:
             # Add marker (if not too many points) so that curves in
             # png/eps can be distinguised in black-and-white
             #if len(item.getp('xdata')) <= 61:  # fixed in _add_line
@@ -1488,6 +1489,8 @@ class GnuplotBackend(BaseClass):
             scratchfile = '.tmp.pdf'
             if os.path.isfile(filename):
                 os.rename(filename, scratchfile)
+                # Can also use the epstopdf script
+                # see http://phaseportrait.blogspot.no/2007/06/bounding-boxes-and-eps-to-pdf.html#epstopdf
                 failure = os.system('ps2pdf -dEPSCrop %s %s' %
                                     (scratchfile, filename))
                 if failure:

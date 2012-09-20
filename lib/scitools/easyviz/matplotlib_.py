@@ -416,7 +416,8 @@ class MatplotlibBackend(BaseClass):
         style = item.getp('linetype')
         width = item.getp('linewidth')
         if PlotProperties._local_prop['default_lines'] == 'with_markers' \
-               and color and marker == '' and style == '':
+               and color and marker == '' and style == '' \
+               and item.getp('zdata') is None::
             # Add marker so that curves in png/pdf/eps can be distinguised
             # in black-and-white
             #if len(item.getp('xdata')) <= 61:  # this is solved in _add_line
@@ -1042,7 +1043,7 @@ class MatplotlibBackend(BaseClass):
 
         Optional arguments:
 
-          dpi         -- image resolution. Default is 150.
+          dpi         -- image resolution. Default is 100.
           orientation -- 'portrait' (default) or 'landscape'. Only available
                          for PostScript output.
 
@@ -1056,7 +1057,7 @@ class MatplotlibBackend(BaseClass):
         if DEBUG:
             print "Hardcopy to %s" % filename
 
-        dpi = kwargs.get('dpi', 150)
+        dpi = kwargs.get('dpi', 100)
         orientation = kwargs.get('orientation', 'portrait')
 
         self._g.savefig(filename,

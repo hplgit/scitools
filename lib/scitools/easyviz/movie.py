@@ -34,7 +34,7 @@ class MovieEncoder(object):
         'force_conversion': False,   # force conversion (to png) if True
         'cleanup': True,             # clean up temporary files
         }
-    _legal_encoders = 'convert mencoder ffmpeg mpeg_encode ppmtompeg '\
+    _legal_encoders = 'convert mencoder ffmpeg avconv mpeg_encode ppmtompeg '\
                       'mpeg2enc html'.split()
     _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
 
@@ -294,7 +294,7 @@ class MovieEncoder(object):
         return cmd
 
     def _ffmpeg(self):
-        """Return a string with commands for making a movie with the FFmpeg
+        """Return a string with commands for making a movie with the ffmpeg
         tool.
         """
         encoder = self._prop['encoder']
@@ -355,6 +355,10 @@ class MovieEncoder(object):
         if self._prop['quiet']:
             cmd += ' > /dev/null 2>&1'
         return cmd
+
+    def _avconv(self):
+        """avconv can use same command as ffmpeg."""
+        return self._ffmpeg().replace('ffmpeg', 'avconv')
 
     def _mpeg_encode(self):
         """Return a string with commands for making a movie with the
@@ -756,7 +760,7 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600,
     string, so several such javascript sections can be used in the
     same html file.
 
-    This function is based on code written by R.J. LeVeque, based on
+    This function is based on code written by R. J. LeVeque, based on
     a template from Alan McIntyre.
     """
     import os
@@ -864,7 +868,7 @@ def movie(input_files, **kwargs):
 
     This function makes it very easy to create a movie file from a
     series of image files. Several different encoding tools can be
-    used, such as an HTML file, MEncoder, FFmpeg, mpeg_encode,
+    used, such as an HTML file, MEncoder, ffmpeg, mpeg_encode,
     ppmtompeg (Netpbm), mpeg2enc (MJPEGTools), and convert (ImageMagick),
     to combine the image files together. The encoding tool will be chosen
     automatically among these if more than one is installed on the
@@ -943,7 +947,7 @@ def movie(input_files, **kwargs):
 
     Notes:
 
-        * When using the FFmpeg or the Mpeg2enc tools, the image
+        * When using the ffmpeg or the Mpeg2enc tools, the image
           files should be given (if possible) as a string on the
           format '{1}%{2}d{3}', where the name components are as
           follows:
@@ -958,7 +962,7 @@ def movie(input_files, **kwargs):
           copies of these files which will then be renamed to the
           required filename format.
 
-        * MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
+        * MEncoder, ffmpeg, and Mpeg2enc supports only .jpg and
           .png image files. So, if the input files are on another
           format, there will automatically be made copies which
           in turn will be converted to the correct format.
@@ -989,7 +993,7 @@ def movie(input_files, **kwargs):
     Note: 'ppmtompeg' and 'mpeg_encode' is the same tool.
 
     vbitrate: Sets the bit rate of the movie. The default is 800 kbps
-    when using the FFmpeg and MEncoder encoders. For
+    when using the ffmpeg and MEncoder encoders. For
     mpeg_encode, ppmtompeg, and mpeg2enc, this option is by
     default not specified. This option has no effect on the
     convert tool from ImageMagick.
@@ -1031,7 +1035,7 @@ def movie(input_files, **kwargs):
       - 'ffvhuff'    - nonstandard 20% smaller HuffYUV using YV12
       - 'asv1'       - ASUS Video v1
       - 'asv2'       - ASUS Video v2
-      - 'ffv1'       - FFmpeg's lossless video codec
+      - 'ffv1'       - ffmpeg's lossless video codec
 
     The default codec is 'mpeg4' for mencoder/ffmpeg and
     'mpeg1video' for mpeg2enc.
@@ -1140,7 +1144,7 @@ def movie(input_files, **kwargs):
     Known issues:
 
       * JPEG images created by the Vtk backend does not seem to work with
-        the MEncoder and FFmpeg tools. This can be fixed by setting the
+        the MEncoder and ffmpeg tools. This can be fixed by setting the
         force_conversion argument to True. This will force conversion of the
         JPEG files to PNG files which in turn should successfully create the
         movie.
