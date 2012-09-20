@@ -417,7 +417,7 @@ class MatplotlibBackend(BaseClass):
         width = item.getp('linewidth')
         if PlotProperties._local_prop['default_lines'] == 'with_markers' \
                and color and marker == '' and style == '' \
-               and item.getp('zdata') is None::
+               and item.getp('zdata') is None:
             # Add marker so that curves in png/pdf/eps can be distinguised
             # in black-and-white
             #if len(item.getp('xdata')) <= 61:  # this is solved in _add_line
