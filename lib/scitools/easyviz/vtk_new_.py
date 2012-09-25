@@ -38,15 +38,15 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
-from scitools.misc import test_if_module_exists 
+from scitools.misc import check_if_module_exists 
 from scitools.numpyutils import allclose
 from misc import _update_from_config_file
 
-test_if_module_exists('vtk', msg='You need to install the vtk package.', abort=False)
+check_if_module_exists('vtk', msg='You need to install the vtk package.', abort=False)
 import vtk
 import os
 
-test_if_module_exists('Tkinter', msg='You need to install the Tkinter package.')
+check_if_module_exists('Tkinter', msg='You need to install the Tkinter package.')
 import Tkinter
 # use old behavior in Tkinter module to get around issue with Tcl
 # (more info: http://www.python.org/doc/2.3/whatsnew/node18.html)

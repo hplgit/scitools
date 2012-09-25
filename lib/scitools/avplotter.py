@@ -326,7 +326,7 @@ def plot(*args, **kwargs):
         print p.plot(x_array, *y)
 
 
-def test_sin():
+def run_sin():
     a = 0.2
     p = Plotter(-1-a, 1+a, width=50)
     from math import sin, pi
@@ -389,7 +389,7 @@ t=12.57                          |                          -0.00
 """
     assert _compare(ans, s)
 
-def test_2_curves_v1():
+def run_2_curves_v1():
     p_sin = Plotter(-1, 1, width=25, symbols='s')
     p_cos = Plotter(-1, 1, width=25, symbols='c')
     from math import sin, cos, pi
@@ -451,7 +451,7 @@ s            |                         c|
 """
     assert _compare(ans, s)
 
-def test_2_curves_v2():
+def run_2_curves_v2():
     p = Plotter(-1, 1, width=50, symbols='sc')
     from math import sin, cos, pi
     from numpy import linspace
@@ -512,7 +512,7 @@ s                        |
 """
     assert _compare(ans, s)
 
-def test_random_walk():
+def run_random_walk():
     import time, numpy as np
     p = Plotter(-1, 1, width=75)
     np.random.seed(10)
@@ -1704,7 +1704,7 @@ def _compare(ans, s):
     return True
 
 if __name__ == '__main__':
-    test_sin(); test_2_curves_v1(); test_2_curves_v2(); test_random_walk()
+    run_sin(); run_2_curves_v1(); run_2_curves_v2(); run_random_walk()
     import sys
     try:
         if sys.argv[1] == 'random_walk':

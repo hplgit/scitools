@@ -63,9 +63,9 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists 
+from scitools.misc import check_if_module_exists 
 
-if test_if_module_exists('pygrace', msg='You need to install the pygrace package from http://www.cacr.caltech.edu/~mmckerns/pygrace.html (Not PyGrace from sourceforge!) and the grace program.', abort=False):
+if check_if_module_exists('pygrace', msg='You need to install the pygrace package from http://www.cacr.caltech.edu/~mmckerns/pygrace.html (Not PyGrace from sourceforge!) and the grace program.', abort=False):
     from pygrace import grace_np
 else:
     raise ImportError('Cannot import grace_np from pygrace')

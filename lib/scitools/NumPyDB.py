@@ -254,7 +254,7 @@ def float_dist(id1, id2):
     return abs(float(id1) - float(id2))
 
 
-def test_dist(id1, id2):
+def _test_dist(id1, id2):
     """
     Return distance between identifiers id1 and id2.
     The identifiers are of the form 'time=some number'.
@@ -308,8 +308,8 @@ def main(n, length, method, name):
     print "identifier='time=4.000000e+00': found"
     if len(w[0]) < 20: print w[0]
 
-    w = datain.load('time=5', bestapprox=test_dist)
-    print "identifier='time=5' and bestapprox=test_dest found"
+    w = datain.load('time=5', bestapprox=_test_dist)
+    print "identifier='time=5' and bestapprox=_test_dest found"
     if len(w[0]) < 20: print w[0]
     t1 = time.clock()
     print "%s %.2f s" % (out, t1-t0)

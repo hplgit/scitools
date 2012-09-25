@@ -96,9 +96,9 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists 
+from scitools.misc import check_if_module_exists 
 
-test_if_module_exists('DX', msg='You need to install the py2dx package.', abort=False)
+check_if_module_exists('DX', msg='You need to install the py2dx package.', abort=False)
 import DX
 import Tkinter
 import tempfile

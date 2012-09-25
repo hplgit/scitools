@@ -4,7 +4,7 @@ from scitools.numpyutils import zeros, ones, exp, reshape, ravel, \
 def available_backends():
     """Return a list of the available backends."""
     import os
-    from scitools.misc import test_if_module_exists
+    from scitools.misc import check_if_module_exists
     files = os.listdir(os.path.dirname(__file__))
     files.remove('template_.py')
     if '__init__.py' in files:
@@ -15,7 +15,7 @@ def available_backends():
     for b in backends:
         module = 'scitools.easyviz.' + b[:-3]
         try:
-            test_if_module_exists(module, abort=False, raise_exception=True, msg='')
+            check_if_module_exists(module, abort=False, raise_exception=True, msg='')
             available.append(module[17:])
         except:
             pass

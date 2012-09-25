@@ -33,8 +33,8 @@ def import_module(package, module=None):
         raise ImportError(msg)
 
 
-def test_if_module_exists(modulename, msg='',
-                          raise_exception=False, abort=True):
+def check_if_module_exists(modulename, msg='',
+                           raise_exception=False, abort=True):
     """
     Test if modulename can be imported, and if not, write
     an error message and (optionally) raise an exception, continue or

@@ -1950,7 +1950,7 @@ class FunctionSelector:
         #dump(f, hide_nonpublic=False)
 
 
-def test_FunctionChoices(root):
+def _test_FunctionChoices(root):
     class MyFunc:
         def __init__(self, a, b):
             self.a = a;  self.b = b

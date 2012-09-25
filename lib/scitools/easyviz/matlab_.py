@@ -47,7 +47,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists 
+from scitools.misc import check_if_module_exists 
 
 try:
     from scikits.mlabwrap import mlab
@@ -56,7 +56,7 @@ except ImportError:
         from mlabwrap import mlab
     except ImportError:
         # mlabwrap is not available
-        test_if_module_exists('mlabwrap', msg='You need to install the mlabwrap package.', abort=False)
+        check_if_module_exists('mlabwrap', msg='You need to install the mlabwrap package.', abort=False)
 
 
 class MatlabBackend(BaseClass):

@@ -35,10 +35,10 @@ from common import *
 from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists , system
+from scitools.misc import check_if_module_exists , system
 from misc import arrayconverter, _update_from_config_file, _check_type
 
-test_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
+check_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
 import Gnuplot
 import tempfile
 import os

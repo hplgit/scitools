@@ -29,10 +29,10 @@ from __future__ import division
 from common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import test_if_module_exists
+from scitools.misc import check_if_module_exists
 from misc import _update_from_config_file
 
-test_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
+check_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
 
 import matplotlib
 import matplotlib.colors
