@@ -1363,8 +1363,23 @@ def compute_histogram(samples, nbins=50, piecewise_constant=True):
             x[i] = (bin_edges[i] + bin_edges[i+1])/2.0
     return x, y
 
+def _test_factorial(n=80):
+    import timeit
+    cpu = {}
+    for version in ['math', 'scipy', 'plain iterative',
+                    'plain recursive', 'lambda list comprehension',
+                    'lambda recursive', 'lambda functional',
+                    'reduce']:
+        t = timeit.Timer('factorial(%s, method="%s")' % (n, version),
+                         'from scitools.std import factorial')
+        #cpu[version] = t.timeit(100000)
+        cpu[version] = t.timeit(10000)
+    cpu_min = min(list(cpu.values()))
+    cpu = {version: cpu[version]/cpu_min for version in cpu}
+    for version in cpu:
+        print '%-25s %5.1f' % (version, cpu[version])
 
-def factorial(n, method='reduce'):
+def factorial(n, method='math'):
     """
     Compute the factorial n! using long integers (and pure Python code).
     Different implementations are available (see source code for
@@ -1375,17 +1390,21 @@ def factorial(n, method='reduce'):
     the various pure Python implementations can be of interest
     for comparison).
 
-    Here is an efficiency comparison of the methods (computing 80!):
+    Here is an efficiency comparison of the methods (computing 80!
+    via python -c 'import scitools.numpyutils as n; n._test_factorial()')
+
 
     ==========================   =====================
             Method                Normalized CPU time
     ==========================   =====================
-    reduce                             1.00
-    lambda list comprehension          1.70
-    lambda functional                  3.08
-    plain recursive                    5.83
-    lambda recursive                  21.73
-    scipy                            131.18
+    math                          1.0
+    reduce                        1.3
+    plain iterative               1.3
+    lambda list comprehension     3.5
+    scipy                         4.3
+    lambda functional             4.5
+    lambda recursive              4.6
+    plain recursive              13.1
     ==========================   =====================
 
     """
@@ -1396,7 +1415,19 @@ def factorial(n, method='reduce'):
     if n == 0 or n == 1:
         return 1
 
-    if method == 'plain iterative':
+    if method == 'math':
+        import math
+        return math.factorial(n)
+    elif method == 'scipy':
+        try:
+            import scipy.misc
+            return scipy.misc.factorial(n)
+        except ImportError:
+            print 'numpyutils.factorial: scipy is not available'
+            print 'default method="reduce" is used instead'
+            return reduce(operator.mul, xrange(2, n+1))
+            # or return factorial(n)
+    elif method == 'plain iterative':
         f = 1
         for i in range(1, n+1):
             f *= i
@@ -1419,15 +1450,6 @@ def factorial(n, method='reduce'):
         return fc(n)
     elif method == 'reduce':
         return reduce(operator.mul, xrange(2, n+1))
-    elif method == 'scipy':
-        try:
-            import scipy.misc.common as sc
-            return sc.factorial(n)
-        except ImportError:
-            print 'numpyutils.factorial: scipy is not available'
-            print 'default method="reduce" is used instead'
-            return reduce(operator.mul, xrange(2, n+1))
-            # or return factorial(n)
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
 

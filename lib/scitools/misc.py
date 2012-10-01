@@ -584,14 +584,19 @@ def function_UI(functions, argv, verbose=True):
     function_names = [f.__name__ for f in functions]
     if len(argv) == 2 and argv[1] in function_names and usage[argv[1]]:
         fname = argv[1]
-        print 'Usage:', fname, ' '.join(usage[fname])
-        if doc[fname]:
-            print '\nDocstring:\n', doc[fname]
-        sys.exit(1)
+        if usage[fname]:
+            print 'Usage:', fname, ' '.join(usage[fname])
+            if doc[fname]:
+                print '\nDocstring:\n', doc[fname]
+            sys.exit(1)
 
     if len(argv) == 2 and argv[1].endswith('help'):
         all_usage()
         sys.exit(0)
+
+    for arg in argv[:]:  # iterate over a copy
+        if arg.startswith('-'):  # option
+            del argv[argv.index(arg)]  # remove --option
 
     cmd = '%s(%s)' % (argv[1], ', '.join(argv[2:]))
     #if len(argv[2:]) == len(usage[fname]):
@@ -615,7 +620,7 @@ def _function_args_doc(functions):
         args = inspect.getargspec(f)
         if args.defaults is None:
             # Only positional arguments
-            usage[f] = args.args
+            usage[f.__name__] = args.args
         else:
             # Keyword arguments too, build complete list
             usage[f.__name__] = args.args[:-len(args.defaults)] + \

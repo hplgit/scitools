@@ -60,7 +60,7 @@ pyreport:
   they are caught by pyreport and the resulting graphs are inserted in
   the output pdf. Comments lines starting with \"#!\" are interpreted
   as rst lines and pretty printed accordingly in the pdf.
-       
+
 
 Examples:
 
@@ -303,8 +303,11 @@ def rename(from_regex, to_regex, filenames, backup=True):
                     shutil.copy(filename, filename + '.old~~')
                 elif os.path.isdir(filename):
                     shutil.copytree(filename, filename + '.old~~')
-            os.rename(filename, newname)
-            print '%s renamed to %s' % (filename, newname)
+            if os.path.isfile(filename):
+                os.rename(filename, newname)
+                print '%s renamed to %s' % (filename, newname)
+            else:
+                print 'No such file:', filename
 
 
 
