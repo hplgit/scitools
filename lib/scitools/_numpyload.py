@@ -67,7 +67,7 @@ The Numeric names are always available in addition to the native names.
 For example, an import numpy.linalg is associated with a::
 
   LinearAlgebra = numpy.linalg
-  
+
 Note that the MA module is not imported since it redefines
 the repr function (array([1,2]) becomes [1,2] as for a list) if
 the Numeric is used. The user must always explicitly import this package
@@ -90,7 +90,7 @@ the following procedure is applied:
 
   1. The command line arguments are checked for a --numarray,
      --Numeric, or --numpy option.
-   
+
   2. If the user has already imported Numeric, numarray, or numpy by an::
 
      import Numeric
@@ -103,7 +103,7 @@ the following procedure is applied:
      module (module in sys.modules is used to check whether it should
      be Numeric, numarray, or numpy). If the user has imported more than
      one of the three module alternatives, numpy is used.
-   
+
   3. The environment variable NUMPYARRAY is checked.
      If this variable contains "numarray", "Numeric", or "numpy" the
      corresponding module is imported.
@@ -134,10 +134,10 @@ different names in Numeric, numarray, and numpy:
  - NumPy_type:
            returns the type of an array, i.e., "Numeric", "numarray",
            or "numpy"
-           
+
  - NumPy_dtype:
            returns the type of the data in an array, i.e., 'd', 'i', etc.
-           
+
  - fortran_storage:
            transparent transform of an array to column major (Fortran) storage
            that preserves the nature (Numeric, numarray, numpy) of the array
@@ -210,7 +210,7 @@ _NumPy_modules = (
     ('MLab', 'numarray.linear_algebra.mlab', 'numpy.oldnumeric.mlab'),
     ('MA', 'numarray.ma.MA', 'numpy.ma'),
     )
-     
+
 if basic_NumPy == 'numpy':
     try:
         # fix backward compatibility with Numeric names:
@@ -230,7 +230,7 @@ if basic_NumPy == 'numpy':
 	    elif _numpy_name != '':
 		exec 'import %s; %s = %s' % \
 		(_numpy_name, _Numeric_name, _numpy_name)
-		
+
 	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
 	from numpy import *
@@ -245,7 +245,7 @@ if basic_NumPy == 'numpy':
         LinearAlgebra.eigenvalues = linalg.eigvals
         LinearAlgebra.eigenvectors = linalg.eig
 
-    except ImportError, e:
+    except ImportError as e:
         raise ImportError('%s\nnumpy import failed!\n'\
               'see doc of %s module for how to choose Numeric instead' % \
               (e, __name__))
@@ -297,10 +297,10 @@ if basic_NumPy == 'numarray':
                 'but it does not have the functionality of the RNG module')
         RNG = __Dummy()
         del _Numeric_name, _numarray_name, _dummy1, __Dummy, _NumPy_modules
-        
+
         from numarray import *
 
-    except ImportError, e:
+    except ImportError as e:
         raise ImportError('%s\nnumarray import failed!\n'\
         'see doc of %s module for how to choose Numeric instead' % \
         (e, __name__))
@@ -356,7 +356,7 @@ if basic_NumPy == 'Numeric':
         def linspace(start, stop, num=50, endpoint=True, retstep=False):
             return asarray(numpy.linspace(start, stop, num, endpoint, retstep))
 
-        
+
         # hack if LinearAlgebra.eigenvalues hang (because of trouble
         # with gcc and Numeric and -ffloat-store flag):
 
@@ -392,8 +392,8 @@ if basic_NumPy == 'Numeric':
             LinearAlgebra.eigenvalues = numpy_eigenvalues
             LinearAlgebra.eigenvectors = numpy_eigenvectors
         del _problems
-        
-    except ImportError, e:
+
+    except ImportError as e:
         raise ImportError('%s\nNumeric import failed!\n'\
         'see doc of %s module for how to choose numarray instead' % \
         (e, __name__))
@@ -468,7 +468,7 @@ except NameError:
     # for Numeric we do not import MA since it affects output format
     pass
 ra = RandomArray
-la = LinearAlgebra 
+la = LinearAlgebra
 
 def NumPy_type(a):
     """
@@ -483,7 +483,7 @@ def NumPy_type(a):
     types = {'Numeric': 'Numeric.ArrayType',
              'numarray': 'numarray.NumArray',
              'numpy': 'numpy.ndarray'}
-	     
+
     # Check for non NumPy types first
     if isinstance(a, tuple):
 	return "tuple"
@@ -539,4 +539,4 @@ def fortran_storage(a):
     else:
         import numpy
         return numpy.asarray(a, fortran=True)
-    
+

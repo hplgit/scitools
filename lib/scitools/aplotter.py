@@ -22,140 +22,140 @@ Here are examples on various plot commands:
 >>> x = linspace(-2, 2, 81)
 >>> y = exp(-0.5*x**2)*cos(pi*x)
 >>> plot(x, y)
-                                        |                                       
-                                       -+1                                      
-                                     // |\\                                     
-                                    /   |  \                                    
-                                   /    |   \                                   
-                                  /     |   \                                   
-                                  /     |    \                                  
-                                 /      |     \                                 
-                                /       |      \                                
-                               /        |      \                                
-   -------\                    /        |       \                    -------*   
+                                        |
+                                       -+1
+                                     // |\\
+                                    /   |  \
+                                   /    |   \
+                                  /     |   \
+                                  /     |    \
+                                 /      |     \
+                                /       |      \
+                               /        |      \
+   -------\                    /        |       \                    -------*
 ---+-------\\-----------------/---------+--------\-----------------//-------+---
-   -2        \                /         |        \                /       +2    
-              \\              /         |         \             //              
-                \            /          |         \            /                
-                 \\         /           |          \         //                 
-                   \       /            |           \       /                   
-                    \    //             |            \-    //                   
-                     ----               -0.63          ---/                     
-                                        |                                       
->>> 
+   -2        \                /         |        \                /       +2
+              \\              /         |         \             //
+                \            /          |         \            /
+                 \\         /           |          \         //
+                   \       /            |           \       /
+                    \    //             |            \-    //
+                     ----               -0.63          ---/
+                                        |
+>>>
 >>> plot(x, y, draw_axes=False)
-                                                                                
-                                       -+1                                      
-                                     //  \\                                     
-                                    /      \                                    
-                                   /        \                                   
-                                  /         \                                   
-                                  /          \                                  
-                                 /            \                                 
-                                /              \                                
-                               /               \                                
-   -------\                    /                \                    -------*   
-   +       \\                 /                  \                 //       +   
-   -2        \                /                  \                /       +2    
-              \\              /                   \             //              
-                \            /                    \            /                
-                 \\         /                      \         //                 
-                   \       /                        \       /                   
-                    \    //                          \-    //                   
-                     ----               -0.63          ---/                     
-                                                                                
->>> 
+
+                                       -+1
+                                     //  \\
+                                    /      \
+                                   /        \
+                                  /         \
+                                  /          \
+                                 /            \
+                                /              \
+                               /               \
+   -------\                    /                \                    -------*
+   +       \\                 /                  \                 //       +
+   -2        \                /                  \                /       +2
+              \\              /                   \             //
+                \            /                    \            /
+                 \\         /                      \         //
+                   \       /                        \       /
+                    \    //                          \-    //
+                     ----               -0.63          ---/
+
+>>>
 >>> # plot symbols (the dot argument) at data points:
 >>> plot(x, y, plot_slope=False)
-                                        |                                       
-                                       *+1                                      
-                                     ** |**                                     
-                                    *   |  *                                    
-                                   *    |   *                                   
-                                        |                                       
-                                  *     |    *                                  
-                                 *      |     *                                 
-                                *       |      *                                
-                                        |                                       
-   ********                    *        |       *                    ********   
+                                        |
+                                       *+1
+                                     ** |**
+                                    *   |  *
+                                   *    |   *
+                                        |
+                                  *     |    *
+                                 *      |     *
+                                *       |      *
+                                        |
+   ********                    *        |       *                    ********
 ---+-------**-----------------*---------+--------*-----------------**-------+---
-   -2        *                          |                         *       +2    
-              **              *         |         *             **              
-                *            *          |         *            *                
-                 **         *           |          *         **                 
-                   *       *            |           *       *                   
-                    *    **             |            **    **                   
-                     ****               -0.63          ****                     
-                                        |                                       
->>>  
+   -2        *                          |                         *       +2
+              **              *         |         *             **
+                *            *          |         *            *
+                 **         *           |          *         **
+                   *       *            |           *       *
+                    *    **             |            **    **
+                     ****               -0.63          ****
+                                        |
+>>>
 >>> # drop axis labels:
 >>> plot(x, y, plot_labels=False)
-                                        |                                       
-                                       -\                                       
-                                     // |\\                                     
-                                    /   |  \                                    
-                                   /    |   \                                   
-                                  /     |   \                                   
-                                  /     |    \                                  
-                                 /      |     \                                 
-                                /       |      \                                
-                               /        |      \                                
-   -------\                    /        |       \                    -------*   
+                                        |
+                                       -\
+                                     // |\\
+                                    /   |  \
+                                   /    |   \
+                                  /     |   \
+                                  /     |    \
+                                 /      |     \
+                                /       |      \
+                               /        |      \
+   -------\                    /        |       \                    -------*
 -----------\\-----------------/---------+--------\-----------------//-----------
-             \                /         |        \                /             
-              \\              /         |         \             //              
-                \            /          |         \            /                
-                 \\         /           |          \         //                 
-                   \       /            |           \       /                   
-                    \    //             |            \-    //                   
-                     ----               |              ---/                     
-                                        |                                       
->>> 
+             \                /         |        \                /
+              \\              /         |         \             //
+                \            /          |         \            /
+                 \\         /           |          \         //
+                   \       /            |           \       /
+                    \    //             |            \-    //
+                     ----               |              ---/
+                                        |
+>>>
 >>> plot(x, y, dot='o', plot_slope=False)
-                                        |                                       
-                                       o+1                                      
-                                     oo |oo                                     
-                                    o   |  o                                    
-                                   o    |   o                                   
-                                        |                                       
-                                  o     |    o                                  
-                                 o      |     o                                 
-                                o       |      o                                
-                                        |                                       
-   oooooooo                    o        |       o                    oooooooo   
+                                        |
+                                       o+1
+                                     oo |oo
+                                    o   |  o
+                                   o    |   o
+                                        |
+                                  o     |    o
+                                 o      |     o
+                                o       |      o
+                                        |
+   oooooooo                    o        |       o                    oooooooo
 ---+-------oo-----------------o---------+--------o-----------------oo-------+---
-   -2        o                          |                         o       +2    
-              oo              o         |         o             oo              
-                o            o          |         o            o                
-                 oo         o           |          o         oo                 
-                   o       o            |           o       o                   
-                    o    oo             |            oo    oo                   
-                     oooo               -0.63          oooo                     
-                                        |                                       
->>> 
+   -2        o                          |                         o       +2
+              oo              o         |         o             oo
+                o            o          |         o            o
+                 oo         o           |          o         oo
+                   o       o            |           o       o
+                    o    oo             |            oo    oo
+                     oooo               -0.63          oooo
+                                        |
+>>>
 >>> # store plot in a string:
 >>> p = plot(x, y, output=str)
 >>> print p
-                                        |                                       
-                                       -+1                                      
-                                     // |\\                                     
-                                    /   |  \                                    
-                                   /    |   \                                   
-                                  /     |   \                                   
-                                  /     |    \                                  
-                                 /      |     \                                 
-                                /       |      \                                
-                               /        |      \                                
-   -------\                    /        |       \                    -------*   
+                                        |
+                                       -+1
+                                     // |\\
+                                    /   |  \
+                                   /    |   \
+                                  /     |   \
+                                  /     |    \
+                                 /      |     \
+                                /       |      \
+                               /        |      \
+   -------\                    /        |       \                    -------*
 ---+-------\\-----------------/---------+--------\-----------------//-------+---
-   -2        \                /         |        \                /       +2    
-              \\              /         |         \             //              
-                \            /          |         \            /                
-                 \\         /           |          \         //                 
-                   \       /            |           \       /                   
-                    \    //             |            \-    //                   
-                     ----               -0.63          ---/                     
-                                        |                                       
+   -2        \                /         |        \                /       +2
+              \\              /         |         \             //
+                \            /          |         \            /
+                 \\         /           |          \         //
+                   \       /            |           \       /
+                    \    //             |            \-    //
+                     ----               -0.63          ---/
+                                        |
 """
 #-----------------------------------------------
 #aplotter.py - ascii art function plotter
@@ -201,7 +201,7 @@ def transposed(mat):
 		result.append([x[i] for x in mat])
 	return result
 
-def y_reversed(mat):    
+def y_reversed(mat):
 	result = []
 	for i in range(len(mat)):
 		result.append(list(reversed(mat[i])))
@@ -237,7 +237,7 @@ class Plotter(object):
 			s = "size: %s, bl: %s, tr: %s, step: %s" % ((self.x_size, self.y_size), (self.min_x, self.min_y), (self.max_x, self.max_y),
 														 (self.x_step, self.y_step))
 			return s
-	
+
 	def __init__(self, **kwargs):
 
 		self.x_size = kwargs.get("x_size", 80)
@@ -269,7 +269,7 @@ class Plotter(object):
 			draw_symbol = "\\"
 		elif slope < math.tan(-3*math.pi/8):
 			draw_symbol = "|"
-		return draw_symbol    
+		return draw_symbol
 
 
 	def plot_labels(self, output_buffer, plot_data):
@@ -285,14 +285,14 @@ class Plotter(object):
 		if plot_data.x_size < 16:
 			do_plot_x_label = False
 		elif plot_data.x_size < 23:
-			x_str = "%+.2g" 
+			x_str = "%+.2g"
 
-		y_str = "%+g"    
+		y_str = "%+g"
 		if plot_data.x_size < 8:
 			do_plot_y_label = False
 		elif plot_data.x_size < 11:
 			y_str = "%+.2g"
-			
+
 		act_min_x = (plot_data.min_x + plot_data.x_mod*margin_factor)
 		act_max_x = (plot_data.max_x - plot_data.x_mod*margin_factor)
 		act_min_y = (plot_data.min_y + plot_data.y_mod*margin_factor)
@@ -307,7 +307,7 @@ class Plotter(object):
 			max_x_str = "%+.2g" % act_max_x
 		else:
 			max_x_str = x_str % act_max_x
-		
+
 		if abs(act_min_y) < 1:
 			min_y_str = "%+.2g" % act_min_y
 		else:
@@ -317,21 +317,21 @@ class Plotter(object):
 			max_y_str = "%+.2g" % act_max_y
 		else:
 			max_y_str = y_str % act_max_y
-						 
+
 		min_x_coord = self.get_coord(act_min_x,plot_data.min_x,plot_data.x_step)
 		max_x_coord = self.get_coord(act_max_x,plot_data.min_x,plot_data.x_step)
 		min_y_coord = self.get_coord(act_min_y,plot_data.min_y,plot_data.y_step)
 		max_y_coord = self.get_coord(act_max_y,plot_data.min_y,plot_data.y_step)
-								 
+
 
 		#print plot_data
-		
+
 		y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)
 
 		#if plot_data.min_x < 0 and plot_data.max_x > 0:
 		x_zero_coord = self.get_coord(0, plot_data.min_x, plot_data.x_step)
 		#else:
-		
+
 		#pass
 
 		output_buffer[x_zero_coord][min_y_coord] = "+"
@@ -339,7 +339,7 @@ class Plotter(object):
 		output_buffer[min_x_coord][y_zero_coord] = "+"
 		output_buffer[max_x_coord][y_zero_coord] = "+"
 
-		if do_plot_x_label:        
+		if do_plot_x_label:
 
 			for i,c in enumerate(min_x_str):
 				output_buffer[min_x_coord+i][y_zero_coord-1] = c
@@ -352,11 +352,11 @@ class Plotter(object):
 				output_buffer[x_zero_coord+i][max_y_coord] = c
 			for i,c in enumerate(min_y_str):
 				output_buffer[x_zero_coord+i][min_y_coord] = c
-			
 
-		
-		
-	
+
+
+
+
 	def plot_data(self, xy_seq, output_buffer, plot_data):
 		if self.plot_slope:
 			xy_seq = list(xy_seq)
@@ -379,9 +379,9 @@ class Plotter(object):
 							draw_symbol = self.get_symbol_by_slope(slope, draw_symbol)
 					if x < plot_data.min_x or x >= plot_data.max_x or y < plot_data.min_y or y >= plot_data.max_y:
 						continue
-					
+
 					x_coord = self.get_coord(x, plot_data.min_x, plot_data.x_step)
-					y_coord = self.get_coord(y, plot_data.min_y, plot_data.y_step)            
+					y_coord = self.get_coord(y, plot_data.min_y, plot_data.y_step)
 					if x_coord >= 0 and x_coord < len(output_buffer) and y_coord >= 0 and y_coord < len(output_buffer[0]):
 						if self.draw_axes:
 							if y_coord == self.get_coord(0, plot_data.min_y, plot_data.y_step) and draw_symbol == "-":
@@ -405,8 +405,8 @@ class Plotter(object):
 		x0,y0 = start_coord
 		x1,y1 = end_coord
 		if (x0,y0) == (x1,y1):
-			return True    
-		
+			return True
+
 		clipped_line = clip_line(start, end, (plot_data.min_x, plot_data.min_y), (plot_data.max_x, plot_data.max_y))
 		if clipped_line != None:
 			start,end = clipped_line
@@ -420,7 +420,7 @@ class Plotter(object):
 		if (x0,y0) == (x1,y1):
 			return True
 		x_zero_coord = self.get_coord(0, plot_data.min_x, plot_data.x_step)
-		y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)   
+		y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)
 
 		if start[0]-end[0] == 0:
 			draw_symbol = "|"
@@ -440,8 +440,8 @@ class Plotter(object):
 					if self.draw_axes and cur_y == y_zero_coord and draw_symbol == "-":
 						cur_draw_symbol = "="
 					output_buffer[x0+x][cur_y] = cur_draw_symbol
-				
-				
+
+
 			else:
 				s = sign(delta[1])
 				slope = float(delta[0])/delta[1]
@@ -452,18 +452,18 @@ class Plotter(object):
 					if self.draw_axes and cur_y == y_zero_coord and draw_symbol == "-":
 						cur_draw_symbol = "="
 					output_buffer[int(x0+slope*y)][cur_y] = cur_draw_symbol
-		except Exception, e:
+		except Exception as e:
 			print start, end
 			print start_coord, end_coord
 			print plot_data
 			raise e
 
-		return False            
-		
-		
+		return False
+
+
 	def plot_single(self, seq, min_x = None, max_x = None, min_y = None, max_y = None):
 		return self.plot_double(range(len(seq)),seq, min_x, max_x, min_y, max_y)
-		
+
 
 
 
@@ -506,8 +506,8 @@ class Plotter(object):
 		return result
 
 	def draw_axes(self, output_buffer, plot_data):
-		
-		
+
+
 		draw_x = False
 		draw_y = False
 
@@ -516,17 +516,17 @@ class Plotter(object):
 			zero_x = self.get_coord(0, plot_data.min_x, plot_data.x_step)
 			for y in xrange(plot_data.y_size):
 				output_buffer[zero_x][y] = "|"
-				
+
 		if plot_data.min_y <= 0 and plot_data.max_y > 0:
 			draw_x = True
-			zero_y = self.get_coord(0, plot_data.min_y, plot_data.y_step)    
+			zero_y = self.get_coord(0, plot_data.min_y, plot_data.y_step)
 			for x in xrange(plot_data.x_size):
 				output_buffer[x][zero_y] = "-"
 
 		if draw_x and draw_y:
 			output_buffer[zero_x][zero_y] = "+"
-		
-		
+
+
 	@staticmethod
 	def get_coord(val, min, step):
 		result = int((val - min)/step)
@@ -551,13 +551,13 @@ def clip_line(line_pt_1, line_pt_2, rect_bottom_left, rect_top_right):
 	ts.append( float(rect_top_right[0]-line_pt_1[0])/(line_pt_2[0]-line_pt_1[0]) )
 	ts.append( float(rect_bottom_left[1]-line_pt_1[1])/(line_pt_2[1]-line_pt_1[1]) )
 	ts.append( float(rect_top_right[1]-line_pt_1[1])/(line_pt_2[1]-line_pt_1[1]) )
-	
+
 	ts.sort()
 	if ts[2] < 0 or ts[2] >= 1 or ts[3] < 0 or ts[2]>= 1:
 		return None
 	result = [(pt_1 + t*(pt_2-pt_1)) for t in (ts[2],ts[3]) for (pt_1, pt_2) in zip(line_pt_1, line_pt_2)]
 	return (result[0],result[1]), (result[2], result[3])
-	
+
 
 
 def plot(*args,**flags):
@@ -577,7 +577,7 @@ def plot(*args,**flags):
 		print r
 	else:
 		return r
-	
+
 __all__ = ["Plotter","plot"]
 
 def _demo():
@@ -601,6 +601,6 @@ y = exp(-0.5*x**2)*sin(2*pi*x)
 	for c in cmd:
 		print '\n\n', c
 	        exec(c)
-	
+
 if __name__ == '__main__':
 	_demo()

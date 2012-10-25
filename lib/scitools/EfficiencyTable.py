@@ -59,7 +59,7 @@ class EfficiencyTable:
             else:
                 self.experiments[e] = other.experiments[e]
         return self
-            
+
     def __add__(self, other):
         """As e += table (see __iadd__)."""
         e = EfficiencyTable(self.description)
@@ -73,7 +73,7 @@ class EfficiencyTable:
         By default, this is the maximum CPU time encountered in the data.
         """
         self._normalization_time = t
-        
+
     def _reference_CPU_time(self, experiment_idx=0):
         if self._normalization_time is not None:
             # try first to see if there is an experiment with the
@@ -87,8 +87,8 @@ class EfficiencyTable:
             description = 'some external experiment'
             self.experiments[description] = [self._normalization_time]
             return self._normalization_time, description
-            
-                
+
+
         # no given normalization time, find best performance:
         # (only search among positive CPU times for an experiment with
         # index experiment_idx)
@@ -109,7 +109,7 @@ class EfficiencyTable:
             # did not find any CPU time > cpu_eps
             raise ValueError('too small CPU times (all less than %E)' % cpu_eps)
         return best, best_key
-    
+
     def __str__(self):
         """
         Print out a sorted list (with respect to CPU times) of the experiments.
@@ -124,7 +124,7 @@ class EfficiencyTable:
         # inv_dict is the inverse dictionary of self.experiments, i.e.,
         # CPU time is the key and the description is the valid.
         # Only the first CPU time entry is used.
-        
+
         # inv_dict computation does not work if the CPU times are very
         # small (0.00 is the key of many), so we need to add a small
         # random number to very small CPU times
@@ -140,7 +140,7 @@ class EfficiencyTable:
             self.experiments[k][0] = CPU_time
             inv_dict[CPU_time] = k
         # sort CPU-times:
-        cpu_times0 = inv_dict.keys()
+        cpu_times0 = list(inv_dict.keys())
         cpu_times0.sort()
         s = '\n\n' + '*'*80 + '\n' + self.description + '\n' + '*'*80 + '\n'
         self.best, self.best_key = self._reference_CPU_time(0)
@@ -148,7 +148,8 @@ class EfficiencyTable:
              'CPU time:\n  %s\n\n' % \
              (self.best_key, str(self.experiments[self.best_key])[1:-1])
 
-        max_length = max([len(string) for string in self.experiments.keys()])
+        max_length = max([len(string) for string in
+                          list(self.experiments.keys())])
         for cpu_time_key in cpu_times0:
             description = inv_dict[cpu_time_key]
             s += '%%-%ds | ' % max_length % description
@@ -202,9 +203,9 @@ set xrange [0:%d]
 %s
 """ % (len(curves[name])+1, cmd))
     f.close()
-                   
-        
-        
+
+
+
 def _test(n):
     # how much does it cost to run an empty loop with
     # range, xrange and iseq?
@@ -221,7 +222,7 @@ def _test(n):
                       'n=%d' % n).timeit(5)
     e.add('for i in iseq(stop=n-1): pass', t3)
     print e
-    
+
 if __name__ == '__main__':
     import sys
     try:

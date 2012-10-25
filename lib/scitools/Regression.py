@@ -629,9 +629,9 @@ class Verify:
     def _diff(self, dirname, basename, scriptfile):
         """Run script and find differences from reference results."""
         # run scriptfile, but ensure that it is executable
-        os.chmod(scriptfile, 0755)
-        # 0755: owner all, group+others can read and execute
-        # 0644: owner r+w, group+others r
+        os.chmod(scriptfile, 0o755)
+        # 0o755: owner all, group+others can read and execute
+        # 0o644: owner r+w, group+others r
         self.run(scriptfile)
 
         # compare new output (.v) with reference results (.r)
@@ -709,7 +709,7 @@ class Verify:
                             shfile.write('floatdiff.py %s %s\n' %\
                                          (vfile, rfile))
                             shfile.close()
-                            os.chmod(shfilename, 0755)
+                            os.chmod(shfilename, 0o755)
                             ds_d.write(
                              '<P><A HREF="%s">Floating-point difference '\
                              'between %s and %s without any approximations</A>\n' % \

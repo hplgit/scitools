@@ -153,7 +153,7 @@ class NumPyDB_pickle (NumPyDB):
         fd.close()
         return a, id
 
-import cPickle
+import cPickle[[[
 
 class NumPyDB_cPickle (NumPyDB):
     """Use basic cPickle class."""
@@ -198,7 +198,7 @@ class NumPyDB_shelve:
             # since the keys() function in a shelf object
             # is slow, we store the keys:
             fd = shelve.open(self.filename)
-            self.keys = fd.keys()
+            self.keys = list(fd.keys())
             fd.close()
 
     def dump(self, a, identifier):

@@ -317,7 +317,7 @@ class MovieEncoder(object):
                 files = glob.glob(files)
                 files.sort()
         if isinstance(files, (list,tuple)):
-            basename = 'easyviz_tmp_'
+            basename = 'tmp_easyviz_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
             file_type = 'png'
             self._tmp_files = files[:]
@@ -365,7 +365,7 @@ class MovieEncoder(object):
         mpeg_encode tool.
         """
         encoder = self._prop['encoder']
-        basename = 'easyviz_tmp_'  # basename for temporary files
+        basename = 'tmp_easyviz_'  # basename for temporary files
 
         # set frame rate:
         # mpeg_encode only supports a given set of frame rates:
@@ -535,7 +535,7 @@ FORCE_ENCODE_LAST_FRAME
                 files = glob.glob(files)
                 files.sort()
         if isinstance(files, (list,tuple)):
-            basename = 'easyviz_tmp_'
+            basename = 'tmp_easyviz_'
             files = self._any2any(files, basename=basename, ofile_ext='.png')
             file_type = 'png'
             self._tmp_files = files[:]
@@ -624,7 +624,7 @@ FORCE_ENCODE_LAST_FRAME
             cmd += ' -v 0' # verbosity level 0 (warnings and errors only)
         return cmd
 
-    def _any2any(self, files, basename='easyviz_tmp_',
+    def _any2any(self, files, basename='tmp_easyviz_',
                  size=None, ofile_ext='.pnm'):
         """Convert a list of files to the file format specified in the
         ofile_ext keyword argument. Using either Netpbm tools or convert

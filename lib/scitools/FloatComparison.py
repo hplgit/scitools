@@ -34,7 +34,7 @@ class FloatComparison:
     names float_eq, float_ne, float_lt, float_le, float_gt and float_ge
     for the various operators can be used instead. For example,
     float_eq is a FloatComparison object for the equality operator.
-    
+
     Here is an interactive example::
 
     >>> from FloatComparison import FloatComparison, float_eq, \
@@ -47,7 +47,7 @@ class FloatComparison:
     >>> float_eq.set_relative_tolerance(1E-2)
     >>> print float_eq
     a == b, computed as abs(a-b) < 0.01 + 0.01*abs(b)
-    >>> 
+    >>>
     >>> float_eq(2.1, 2.100001)
     True
     >>> # tolerances can be given as part of the test:
@@ -82,7 +82,7 @@ class FloatComparison:
     True
     >>> compare.ge(a, b)
     False
-    
+
     The __call__ method calls eq, ne, lt, le, gt, or ge, depending on
     the first argument to the constructor.
     """
@@ -96,7 +96,7 @@ class FloatComparison:
         """
         operation is '==', '<', '<=', '>', '>=' or '!='.
         The value determines what operation that __call__ performs.
-        
+
         rtol: relative tolerance, atol: absolute tolerance.
         a==b is true if abs(a-b) < atol + rtol*abs(b).
         atol comes into play when abs(b) is large.
@@ -112,7 +112,7 @@ class FloatComparison:
         else:
             raise ValueError('Wrong operation "%s"' % operation)
         self.comparison_op = operation  # nice to store for printouts/tests
-            
+
         FloatComparison.rtol, FloatComparison.atol = rtol, atol
 
     def __call__(self, a, b, rtol=None, atol=None):
@@ -123,48 +123,48 @@ class FloatComparison:
         performed in the methods eq, ne, lt, le, etc.
         """
         return self.operation(a, b, rtol, atol)
-    
+
     def eq(self, a, b, rtol=None, atol=None):
         """Tests a == b with tolerance."""
         if rtol is None: rtol = FloatComparison.rtol
         if atol is None: atol = FloatComparison.atol
-        if isinstance(a, (float, int, long)):
+        if isinstance(a, (float, int)):
             return math.fabs(a-b) < atol + rtol*math.fabs(b)
         elif isinstance(a, complex):
             return self.eq(a.real, b.real, rtol, atol) and \
                    self.eq(a.imag, b.imag, rtol, atol)
         else: # assume NumPy array, tuple or list
             try:
-                return numpy.allclose(numpy.asarray(a), 
+                return numpy.allclose(numpy.asarray(a),
                                       numpy.asarray(b),
                                       rtol, atol)
                 #r = numpy.abs(a-b) < atol + rtol*numpy.abs(b)
                 #return r.all()
-            except Exception, e:
+            except Exception as e:
                 raise TypeError('Illegal types: a is %s and b is %s' % \
                                 (type(a), type(b)))
 
     def ne(self, a, b, rtol=None, atol=None):
         """Tests a != b with tolerance."""
         return not self.eq(a, b, rtol, atol)
-    
+
     def set_absolute_tolerance(self, atol):
         FloatComparison.atol = atol
-        
+
     def set_relative_tolerance(self, rtol):
         FloatComparison.rtol = rtol
-            
+
     def get_absolute_tolerance(self):
         return FloatComparison.atol
-        
+
     def get_relative_tolerance(self):
         return FloatComparison.rtol
-            
+
     def lt(self, a, b, rtol=None, atol=None):
         """Tests a < b with tolerance."""
         if rtol is None: rtol = FloatComparison.rtol
         if atol is None: atol = FloatComparison.atol
-        if isinstance(a, (float, int, long)):
+        if isinstance(a, (float, int)):
             return operator.lt(a, b + atol + rtol*math.fabs(b))
         elif isinstance(a, complex):
             return self.lt(a.real, b.real, op, rtol, atol) and \
@@ -185,7 +185,7 @@ class FloatComparison:
         """Tests a > b with tolerance."""
         if rtol is None: rtol = FloatComparison.rtol
         if atol is None: atol = FloatComparison.atol
-        if isinstance(a, (float, int, long)):
+        if isinstance(a, (float, int)):
             return operator.gt(a, b - atol - rtol*math.fabs(b))
         elif isinstance(a, complex):
             return self.gt(a.real, b.real, op, rtol, atol) and \
@@ -278,6 +278,6 @@ def _test():
     msg = 'works' if ok else 'does not work'
     print '\nThe module', msg
 
-    
+
 if __name__ == '__main__':
     _test()

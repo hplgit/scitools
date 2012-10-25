@@ -23,7 +23,7 @@ class UniformBoxGrid(object):
     nsd                no of spatial dimensions in the grid
     min_coor           array of minimum coordinates
     max_coor           array of maximum coordinates
-    division           array of cell divisions in the 
+    division           array of cell divisions in the
     delta              array of grid spacings
     dirnames           names of the space directions ('x', 'y', etc.)
     shape              (nx+1, ny+1, ...); dimension of array over grid
@@ -63,7 +63,7 @@ class UniformBoxGrid(object):
             division = [division]
         if isinstance(dirnames, str):
             dirnames = [dirnames]
-        
+
         self.nsd = len(min)
         # strip dirnames down to right space dim (in case the default
         # with three components were unchanged by the user):
@@ -102,7 +102,7 @@ class UniformBoxGrid(object):
         self.npoints = 1
         for i in range(len(self.shape)):
             self.npoints *= self.shape[i]
-            
+
         self.tolerance = (max(self.max_coor) - min(self.min_coor))*1E-14
 
         # nicknames: xcoor, ycoor, xcoorv, ycoorv, etc
@@ -115,15 +115,15 @@ class UniformBoxGrid(object):
             xdummy, \
             self.ycoorv_xfixed_boundary, \
             self.zcoorv_xfixed_boundary = ndgrid(0, self.ycoor, self.zcoor)
-            
+
             self.xcoorv_yfixed_boundary, \
             ydummy, \
             self.zcoorv_yfixed_boundary = ndgrid(self.xcoor, 0, self.zcoor)
-            
+
             self.xcoorv_yfixed_boundary, \
             self.zcoorv_yfixed_boundary, \
             zdummy = ndgrid(self.xcoor, self.ycoor, 0)
-            
+
     # could have _ in all variable names and define read-only
     # access via properties
 
@@ -157,7 +157,7 @@ class UniformBoxGrid(object):
         The data dictionary can be used as keyword arguments to the
         class UniformBoxGrid constructor.
         """
-        
+
         domain  = r'\[([^,]*),([^\]]*)\]'
         indices = r'\[([^:,]*):([^\]]*)\]'
         import re
@@ -188,7 +188,7 @@ class UniformBoxGrid(object):
         """
         Return access to coordinate array in direction no i, or direction
         name i, or return the coordinate of a point if i is an nsd-tuple.
-        
+
         >>> g = UniformBoxGrid(x=(0,1), y=(-1,1), nx=2, ny=4)  # xy grid
         >>> g[0][0] == g.min[0]   # min coor in direction 0
         True
@@ -213,7 +213,7 @@ class UniformBoxGrid(object):
             return tuple([self.coor[k][i[k]] for k in range(len(i))])
         else:
             wrong_type(i, 'i', 'Must be str, int, tuple')
-            
+
 
     def __setitem__(self, i, value):
         raise AttributeError('subscript assignment is not valid for '\
@@ -243,7 +243,7 @@ class UniformBoxGrid(object):
         except IndexError:
             print i, 'is not a valid index'
             return None
-    
+
     def ok(self):
         return True  # constructor init only => always ok
 
@@ -268,7 +268,7 @@ class UniformBoxGrid(object):
                            for min_, max_ in zip(self.min_coor, self.max_coor)])
         indices = 'x'.join(['[0:%d]' % div for div in self.division])
         return 'domain=%s  indices=%s' % (domain, indices)
-                      
+
     def interpolator(self, point_values):
         """
         Given a self.nsd dimension array point_values with
@@ -280,7 +280,7 @@ class UniformBoxGrid(object):
         given a filled array point_values[i,j], compute
         interpolator = grid.interpolator(point_values)
         v = interpolator(0.1243, 9.231)  # interpolate point_values
-        
+
         >>> g=UniformBoxGrid(x=(0,2), nx=2, y=(-1,1), ny=2)
         >>> g
         UniformBoxGrid(x=(0,2), nx=2, y=(-1,1), ny=2)
@@ -333,12 +333,12 @@ class UniformBoxGrid(object):
             msg = 'calling a function, which is supposed to be vectorized'
         try:
             self.compatible(a)
-        except (IndexError,TypeError), e:
+        except (IndexError,TypeError) as e:
             print 'e=',e, type(e), e.__class__.__name__
             raise e.__class__('BoxGrid.vectorized_eval(f):\n%s, BUT:\n%s' % \
                               (msg, e))
         return a
-        
+
     def init_fromstring(s):
         data = UniformBoxGrid.string2griddata(s)
         return UniformBoxGrid(**data)
@@ -385,9 +385,9 @@ class UniformBoxGrid(object):
         # values. In scalar mode, make a loop over the slices and
         # yield the scalar value. In vectorized mode, return the
         # appropriate slices.
-        
+
         self._slices = []  # elements meant to be slice objects
-                    
+
         if self.iterator_domain == 'all':
             self._slices.append([])
             for i in range(self.nsd):
@@ -416,7 +416,7 @@ class UniformBoxGrid(object):
                     else:
                         n = len(self.coor[i])
                         self._slices[-1].append((i, slice(n-1, n, 1)))
-                        
+
         elif self.iterator_domain == 'interior_boundary':
             for i in range(self.nsd):
                 self._slices.append([])
@@ -463,7 +463,7 @@ class UniformBoxGrid(object):
         else:
             raise ValueError('iterator over "%s" is not impl.' % \
                              self.iterator_domain)
-        
+
 #    "def __next__(self):"
         """
         If vectorized mode:
@@ -493,7 +493,7 @@ class UniformBoxGrid(object):
                         for j in xrange(slices[1].start, slices[1].stop):
                             for k in xrange(slices[2].start, slices[2].stop):
                                 yield [i, j, k]
-                             
+
 
     def locate_cell(self, point):
         """
@@ -510,7 +510,7 @@ class UniformBoxGrid(object):
         directly for look up in an array of values. The corresponding
         element in the distance array is then set 0.
         4) the indices of the nearest grid point.
-        
+
         The method only works for uniform grid spacing.
         Used for interpolation.
 
@@ -571,7 +571,7 @@ class UniformBoxGrid(object):
                 index[i] += 1
                 nearest_point[i] = index[i]
                 distance[i] = 0.0
-                
+
         return index, distance, grid_point, nearest_point
 
     def interpolate(v0, v1, x0, x1, x):
@@ -582,7 +582,7 @@ class UniformBoxGrid(object):
         Compute start and end indices of a line through the grid,
         and return a tuple that can be used as slice for the
         grid points along the line.
-        
+
         The line must be in x, y or z direction (direction=0,1 or 2).
         If end_coor=None, the line ends where the grid ends.
         start_coor holds the coordinates of the start of the line.
@@ -610,14 +610,14 @@ class UniformBoxGrid(object):
         ((1, slice(0, 5, 1)), True)
 
         """
-        
+
         start_cell, start_distance, start_match, start_nearest = \
                     self.locate_cell(start_coor)
         # If snapping the line onto to the grid is not desired, the
         # start_cell and start_match lists must be used for interpolation
         # (i.e., interpolation is needed in the directions i where
         # start_match[i] is False).
-        
+
         start_snapped = start_nearest[:]
         if end_coor is None:
             end_snapped = start_snapped[:]
@@ -634,12 +634,12 @@ class UniformBoxGrid(object):
         # was not snapped
         return tuple(line_slice), not array(start_match).all()
 
-        
+
     def gridplane_slice(self, value, constant_coor=0):
         """
         Compute a slice for a plane through the grid,
         defined by coor[constant_coor]=value.
-        
+
         Return a tuple that can be used as slice, plus a boolean
         parameter "snapped" reflecting if the plane was snapped
         onto a grid plane (i.e., value did not correspond to
@@ -658,9 +658,9 @@ class UniformBoxGrid(object):
                        for i in range(self.nsd)]
         plane_slice[constant_coor] = start_nearest[constant_coor]
         return tuple(plane_slice), not start_match[constant_coor]
-        
 
-        
+
+
 class BoxGrid(UniformBoxGrid):
     """
     Extension of class UniformBoxGrid to non-uniform box grids.
@@ -672,7 +672,7 @@ class BoxGrid(UniformBoxGrid):
     grid coordinates in that space direction (stored as an array).
     """
     def __init__(self, coor, dirnames=('x', 'y', 'z')):
-        
+
         UniformBoxGrid.__init__(self,
                                 min=[a[0] for a in coor],
                                 max=[a[-1] for a in coor],
@@ -687,8 +687,8 @@ class BoxGrid(UniformBoxGrid):
 
     def locate_cell(self, point):
         raise NotImplementedError('Cannot locate point in cells in non-uniform grids')
-    
-        
+
+
 def _test(g, points=None):
     print 'g=%s' % str(g)
     # dump all the contents of a grid object:
@@ -730,7 +730,7 @@ def _test(g, points=None):
         for p in points:
             index, distance = g.locate_cell(p)
             print 'point %s is in cell %s, distance=%s' % (p, index, distance)
-    
+
 
 def _test2():
     g1 = UniformBoxGrid(min=0, max=1, division=4)
@@ -748,19 +748,19 @@ def _test2():
                         division=(4,2), dirnames=('y','z'))
     _test(g4)
     print 'g4["y"][-1]:', g4["y"][-1]
-    
+
 def _test4():
     from numpy import sin, zeros, exp
     # check vectorization evaluation:
     g = UniformBoxGrid(min=(0,0), max=(1,1), division=(3,3))
     try:
         g.vectorized_eval(lambda x,y: 2)
-    except TypeError, msg:
+    except TypeError as msg:
         # fine, expect to arrive here
         print '*** Expected error in this test:', msg
     try:
         g.vectorized_eval(lambda x,y: zeros((2,2))+2)
-    except IndexError, msg:
+    except IndexError as msg:
         # fine, expect to arrive here
         print '*** Expected error in this test:', msg
 
@@ -769,7 +769,7 @@ def _test4():
     a = g.vectorized_eval(lambda x,y: zeros(g.shape)+2)
     print a
 
-        
+
 if __name__ == '__main__':
     _test2()
     #_test4()

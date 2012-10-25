@@ -8,27 +8,27 @@ Example: given a program "check.py"::
     q1 = linspace(0, 1, 5)
     try:
         right_length(q1, 2)
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
     try:
         right_size1(q1, (2,2))
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
-    try:    
+    try:
         q2 = linspace(0, 1, 6)
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
     try:
         right_size2(q1, q2)
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
     try:
         right_type(q2, list)
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
     try:
         wrong_type(q1)
-    except Exception, e:
+    except Exception as e:
         print e.__class__.__name__, e
 
 Here is the output (each call triggers the exception)::
@@ -61,14 +61,14 @@ def get_argname_in_call(call_name, arg_no):
     will lead to the arguments 'a', '(list', 'tuple)', and 'b'.
     'b' is not obtained as argument 3.
 
-    =========  ======================================================    
+    =========  ======================================================
     call_name  name of the function in the call
     arg_no     argument number to extract (1, 2, ...).
     return     name of the argument and a string ("where") describing
                the original call's filename, line number and function.
-    =========  ======================================================    
+    =========  ======================================================
     """
-    
+
     stack = inspect.stack()
     #import pprint; pprint.pprint(stack)
     #print 'frameinfo:\n', inspect.getframeinfo(stack[3][0])
@@ -101,10 +101,10 @@ def right_length(a, length):
     """
     Check that len(a) == length.
 
-    =========  ======================================================    
+    =========  ======================================================
     a          any variable for which len(a) is meaningful
     length     the expected length of a (integer).
-    =========  ======================================================    
+    =========  ======================================================
     """
     if len(a) != length:
         a_name, where = get_argname_in_call('right_length', 1)
@@ -118,10 +118,10 @@ def right_size1(a, shape):
     """
     Check that a has correct shape.
 
-    =========  ======================================================    
+    =========  ======================================================
     a          NumPy array
     shape      the expected shape of a (int or tuple)
-    =========  ======================================================    
+    =========  ======================================================
     """
     if not hasattr(a, 'shape'):
         raise TypeError('%s is %s and not a NumPy array' % \
@@ -176,20 +176,20 @@ def get_type(a):
     <type 'str'>
     >>> get_type(d)
     'str'
-    >>> 
+    >>>
     >>> # user-defined classes and instances:
     >>> class A:          # classic class
     ...     pass
-    ... 
+    ...
     >>> class B(object):  # new style class
     ...     pass
-    ... 
+    ...
     >>> a = A()
     >>> type(a)
     <type 'instance'>
     >>> get_type(a)
     'A'
-    >>> 
+    >>>
     >>> b = B()
     >>> type(b)
     <class '__main__.B'>
@@ -205,8 +205,8 @@ def get_type(a):
     <type 'type'>
     >>> get_type(B)
     'type (i.e. a class object)'
-    >>> 
-    
+    >>>
+
     """
     try:
         # try to get a's class name (if possible)
@@ -284,7 +284,7 @@ def right_type(a, expected_types, raise_exception=True):
             global message
             message = msg
             return False
-        
+
 
 def wrong_type(a, comment=''):
     """

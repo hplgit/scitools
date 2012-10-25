@@ -3,11 +3,13 @@
 Module for managing parameters.
 """
 import re, os, sys
+import collections
+import numbers
 
 def message(m):
     if os.environ.get('DEBUG', '0') == '1':
         print m
-    
+
 
 class PrmDictBase(object):
     """
@@ -120,10 +122,10 @@ Here is an example::
 
             # if some of the local variables are changed, say dt, they must
             # be inserted back into the parameter dictionaries:
-            self.variables2dicts(self.numerical_prm, dt=dt)    
+            self.variables2dicts(self.numerical_prm, dt=dt)
 
     """
-    
+
     def __init__(self):
         # dicts whose keys are fixed (non-extensible):
         self._prm_list = []     # fill in subclass
@@ -134,7 +136,7 @@ Here is an example::
         """Return the name of all self.*_prm dictionaries."""
         return [attr for attr in self.__dict__ if \
                 re.search(r'^[^_].*_prm$', attr)]
-                
+
     def usage(self):
         """Print the name of all parameters that can be set."""
         prm_dict_names = self._prm_dict_names()
@@ -142,7 +144,7 @@ Here is an example::
         for name in prm_dict_names:
             d = self.__dict__[name]
             if isinstance(d, dict):
-                k = d.keys()
+                k = list(d.keys())
                 k.sort(lambda a,b: cmp(a.lower(),b.lower()))
                 prm_names += k
         print 'registered parameters:\n'
@@ -151,14 +153,14 @@ Here is an example::
         # alternative (sort all in one bunch):
         # names = []
         # for d in self._prm_list:
-        #     names += d.keys()
+        #     names += list(d.keys())
         # names.sort
         # print names
 
     def dump(self):
         """Dump all parameters and their values."""
         for d in self._prm_list:
-            keys = d.keys()
+            keys = list(d.keys())
             keys.sort(lambda a,b: cmp(a.lower(),b.lower()))
             for prm in keys:
                 print '%s = %s' % (prm, d[prm])
@@ -169,11 +171,11 @@ Here is an example::
         if len(kwargs) == 0:
             self.usage()
             return
-        
+
         for prm in kwargs:
             _set = False
             for d in self._prm_list:
-                if len(d.keys()) == 0:
+                if len(list(d.keys())) == 0:
                     raise ValueError('self._prm_list is wrong (empty)')
                 try:
                     if self.set_in_dict(prm, kwargs[prm], d):
@@ -211,8 +213,8 @@ Here is an example::
                         if isinstance(value, (type(d[prm]), None)):
                             can_set = True
                         # allow mixing int, float, complex:
-                        elif operator.isNumberType(value) and\
-                                 operator.isNumberType(d[prm]):
+                        elif isinstance(value, numbers.Number) and\
+                                 isinstance(d[prm], numbers.Number):
                             can_set = True
                 elif isinstance(self._type_check[prm], (tuple,list,type)):
                     # self._type_check[prm] holds either the type or
@@ -240,7 +242,7 @@ Here is an example::
             message('%s=%s is assigned' % (prm, value))
             return True
         return False
-        
+
 
     def _update(self):
         """Check data consistency and make updates."""
@@ -250,7 +252,7 @@ Here is an example::
     def get(self, **kwargs):
         return [self._solver_prm[prm] \
                 for prm in kwargs if prm in self._solver_prm]
-                
+
     def properties(self, global_namespace):
         """Make properties out of local dictionaries."""
         for ds in self._prm_dict_names():
@@ -263,7 +265,7 @@ Here is an example::
                       (self.__class__.__name__, prm, ds, prm,
                        ' doc="read-only property"')
                 print cmd
-                exec cmd in global_namespace, locals()
+                exec(cmd, global_namespace, locals())
 
     def dicts2namespace(self, namespace, dicts, overwrite=True):
         """
@@ -295,10 +297,10 @@ Here is an example::
         # allow dicts to be a single dictionary:
         if not isinstance(dicts, (list,tuple)):
             dicts = [dicts]
-            
+
         for d in dicts:
             for key in d:
-                exec '%s=%s' % (key,repr(d[key])) in globals(), namespace
+                exec('%s=%s' % (key,repr(d[key])), globals(), namespace)
 
     def namespace2dicts(self, namespace, dicts):
         """
@@ -359,6 +361,6 @@ Here is an example::
             for d in dicts:
                 if name in d:
                     d[name] = variables[name]
-    
+
 
 # initial tests are found in src/py/examples/classdicts.py

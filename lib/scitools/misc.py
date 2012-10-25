@@ -63,7 +63,7 @@ def check_if_module_exists(modulename, msg='',
                 sys.exit(1)
             else:
                 return False
-    except Exception, e:
+    except Exception as e:
         if msg:
             print msg
             print 'Got an exception while trying to import %s:\n' % \
@@ -293,12 +293,12 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
     try:
         b = str2bool(s)
         return b
-    except (ValueError, TypeError), e:
+    except (ValueError, TypeError) as e:
         # s is not a boolean value, try eval(s):
         try:
             b = eval(s, globals_, locals_)
             return b
-        except Exception, e:
+        except Exception as e:
             if debug:
                 print """
 scitools.misc.str2obj:

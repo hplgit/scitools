@@ -213,7 +213,7 @@ class StringFunction:
         try:
             # may fail if not all parameters are defined yet
             self._build_lambda()
-        except NameError, e:
+        except NameError as e:
             #print e
             pass # ok at this stage: parameters might be missing
 
@@ -257,7 +257,7 @@ class StringFunction:
             if self._function_in_module is None:
                 try:
                     self.__call__ = eval(s, self._globals)
-                except Exception, e:
+                except Exception as e:
                     print """
 Making StringFunction with formula %s failed!
 Tried to build a lambda function:\n %s""" % (self._f, s)
@@ -271,7 +271,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
                 #self.__call__ = eval(s)
                 #print 'call is', self.__call__
 
-        except NameError, e:
+        except NameError as e:
             prm = str(e).split()[1]
             raise NameError, 'name "%s" is not defined - if it is '\
                   'a parameter,\nset it in the constructor or the '\
@@ -304,7 +304,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
         """
         try:
             v = self(*args, **kwargs)
-        except TypeError, e:
+        except TypeError as e:
             if str(e).find('only rank-0 arrays can be converted to Python scalars') != -1:
 
                 print '\nThe call resulted in the exception TypeError:'
@@ -333,7 +333,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
                     print 'Internal error - this should not happen...'
             else:
                 print e
-        except NameError, e:
+        except NameError as e:
             print e
         else:
             print 'This call worked perfectly!'
@@ -621,7 +621,7 @@ class StringFunction_v4:
         try:
             self(x)  # sample call
             return True
-        except NameError, e:
+        except NameError as e:
             prm = str(e).split()[2]
             raise NameError, 'Parameter "%s" is not defined,\nneither in '\
                   'the constructor nor set_parameters.\n'\

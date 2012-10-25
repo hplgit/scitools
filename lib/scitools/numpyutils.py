@@ -1669,7 +1669,7 @@ def arr(shape=None, element_type=float,
 
         try:
             return linspace(interval[0], interval[1], shape)
-        except MemoryError, e:
+        except MemoryError as e:
             # print more information (size of data):
             print e, 'of size %s' % shape
 
@@ -1684,7 +1684,7 @@ def arr(shape=None, element_type=float,
 
         try:
             return zeros(shape, dtype=element_type, order=order)
-        except MemoryError, e:
+        except MemoryError as e:
             # print more information (size of data):
             print e, 'of size %s' % shape
 

@@ -14,7 +14,7 @@ def _update_from_config_file(d, section='easyviz'):
         if key in data:
             try:
                 d[key] = data[key][0]
-            except Exception, e:
+            except Exception as e:
                 raise Exception('%s, trying to set key=%s to "%s"' % \
                                 (str(e), key, data[key][0]))
 
@@ -33,7 +33,7 @@ def _check_type(var, name, type):
 
 def _check_size(a, a_name, expected_size):
     if isinstance(expected_size, int):
-        expected_size = (expected_size,) 
+        expected_size = (expected_size,)
     if shape(a) != expected_size:
         raise ValueError('%s has shape %s, expected %s' % \
                          (a_name, a.shape, expected_size))
@@ -65,7 +65,7 @@ def _check_xyzv(*args, **kwargs):
                    shape(x)==(nx,), \
                    "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
                    (shape(x), (nx,ny,nz), (nx,1,1), (nx,))
-        
+
             if shape(x) == (nx,ny,nz):
                 assert shape(y) == (nx,ny,nz), \
                        "_check_xyzv: x has shape %s, expected y to be %s, " \
@@ -92,7 +92,7 @@ def _check_xyzv(*args, **kwargs):
                    shape(x)==(ny,), \
                    "_check_xyzv: x has shape %s, expected %s, %s, or %s" % \
                    (shape(x), (nx,ny,nz), (1,ny,1), (ny,))
-        
+
             if shape(x) == (nx,ny,nz):
                 assert shape(y) == (nx,ny,nz), \
                        "_check_xyzv: x has shape %s, expected y to be %s, " \
@@ -114,7 +114,7 @@ def _check_xyzv(*args, **kwargs):
                 assert shape(z) == (nz,), \
                        "_check_xyzv: x has shape %s, expected z to be %s, " \
                        "not %s" % (shape(x), (nz,), shape(z))
-        
+
     return x, y, z, v
 
 def _check_xyz(*args, **kwargs):
@@ -126,7 +126,7 @@ def _check_xyz(*args, **kwargs):
         x, y, z = [asarray(a) for a in args]
     else:
         raise TypeError("_check_xyz: wrong number of arguments")
-    
+
     try:
         nx, ny = shape(z)
     except:
@@ -143,7 +143,7 @@ def _check_xyz(*args, **kwargs):
             assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
                    "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
                    (shape(x), (nx,ny), (nx,1), (nx,))
-        
+
             assert shape(y) == (nx,ny) or shape(y) == (1,ny) or len(y) == ny, \
                    "_check_xyz: y has shape %s, expected %s, %s, or %s" % \
                    (shape(y), (nx,ny), (1,ny), (ny,))
@@ -151,13 +151,13 @@ def _check_xyz(*args, **kwargs):
             assert shape(x) == (nx,ny) or shape(x) == (1,ny) or len(x) == ny, \
                    "_check_xyz: x has shape %s, expected %s, %s, or %s" % \
                    (shape(x), (nx,ny), (1,ny), (ny,))
-        
+
             assert shape(y) == (nx,ny) or shape(y) == (nx,1) or len(y) == nx, \
                    "_check_xyz: y has shape %s, expected %s, %s, or %s" % \
                    (shape(y), (nx,ny), (nx,1), (nx,))
-        
+
     return x, y, z
-    
+
 def _check_xyuv(*args, **kwargs):
     nargs = len(args)
     if nargs == 2:
@@ -167,12 +167,12 @@ def _check_xyuv(*args, **kwargs):
         x, y, u, v = [asarray(a) for a in args]
     else:
         raise TypeError("_check_xyuv: wrong number of arguments")
-    
+
     indexing = kwargs.get('indexing', 'ij')
 
     us = shape(u)
     assert us == shape(v), "_check_xyuv: u and v must be of same shape"
-    
+
     if len(us) == 1:
         if x is None and y is None:
             x = range(us[0])
@@ -190,7 +190,7 @@ def _check_xyuv(*args, **kwargs):
                 y = seq(ny-1)
             else:
                 x = seq(ny-1)
-                y = seq(nx-1)                
+                y = seq(nx-1)
         else:
             if indexing == 'ij':
                 assert shape(x)==(nx,ny) or shape(x)==(nx,1) or \
@@ -212,7 +212,7 @@ def _check_xyuv(*args, **kwargs):
                        "or %s" % (shape(y), (nx,ny), (nx,1), (nx,))
     else:
         raise ValueError("_check_xyuv: u must be 1D or 2D, not %dD" % len(us))
-        
+
     return x, y, u, v
 
 def _check_xyzuvw(*args, **kwargs):
@@ -230,7 +230,7 @@ def _check_xyzuvw(*args, **kwargs):
     us = shape(u)
     assert us == shape(v) == shape(w), \
            "_check_xyzuvw: u, v, and w must be of same shape"
-    
+
     if len(us) == 1:
         if x is None and y is None:
             x = seq(us[0]-1)
@@ -270,7 +270,7 @@ def _check_xyzuvw(*args, **kwargs):
                        % (shape(x), us, (1,ny,1), (ny,))
                 assert shape(y)==us or shape(y)==(nx,1,1) or shape(y)==(nx,), \
                        "_check_xyzuvw: y has shape %s, expected %s, %s, or %s"\
-                       % (shape(y), us, (nx,1,1), (nx,))                
+                       % (shape(y), us, (nx,1,1), (nx,))
         assert shape(z) == us or shape(z) == (1,1,nz) or shape(z) == (nz,), \
                "_check_xyzuvw: z has shape %s, expected %s, %s, or %s" % \
                (shape(z), us, (1,1,nz), (nz,))
@@ -295,7 +295,7 @@ def arrayconverter(a):
 def _cmpPlotProperties(a,b):
     """Sort cmp-function for PlotProperties"""
     plotorder = [Volume, Streams, Surface, Contours,
-                 VelocityVectors, Bars, Line] 
+                 VelocityVectors, Bars, Line]
     assert isinstance(a, PlotProperties)
     assert isinstance(b, PlotProperties)
     assert len(PlotProperties.__class__.__subclasses__(PlotProperties)) == \

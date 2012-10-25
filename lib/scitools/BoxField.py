@@ -320,7 +320,7 @@ u2 = interpolate(u, V2)
         ncomponents = int(nodal_values.size/grid.npoints)
         try:
             nodal_values.shape = (ncomponents, grid.npoints)
-        except ValueError, e:
+        except ValueError as e:
             raise ValueError('Vector field (nodal_values) has length %d, there are %d grid points, and this does not match with %d components' % (nodal_values.size, grid.npoints, ncomponents))
         vector_field = [_rank12rankd_mesh(nodal_values[i,:].copy(),
                                           grid.shape) \
@@ -331,7 +331,7 @@ u2 = interpolate(u, V2)
     else:
         try:
             nodal_values = _rank12rankd_mesh(nodal_values, grid.shape)
-        except ValueError, e:
+        except ValueError as e:
             raise ValueError('DOLFIN function has vector of size %s while the provided mesh has %d points and shape %s' % (nodal_values.size, grid.npoints, grid.shape))
         bf = BoxField(grid, name=dolfin_function.name(),
                       vector=0, values=nodal_values)
@@ -350,7 +350,7 @@ def update_from_dolfin_array(dolfin_array, box_field):
                                   # the problem is in _rank12rankd_mesh
     try:
         nodal_values = _rank12rankd_mesh(nodal_values, box_field.grid.shape)
-    except ValueError, e:
+    except ValueError as e:
         raise ValueError('DOLFIN function has vector of size %s while the provided mesh demands %s' % (nodal_values.size, grid.shape))
     box_field.set_values(nodal_values)
     return box_field
