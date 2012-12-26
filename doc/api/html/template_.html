@@ -1,0 +1,2736 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.template_ &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.template_">
+<span id="scitools-easyviz-template"></span><h1><a class="reference internal" href="#module-scitools.easyviz.template_" title="scitools.easyviz.template_"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.easyviz.template_</span></tt></a><a class="headerlink" href="#module-scitools.easyviz.template_" title="Permalink to this headline">¶</a></h1>
+<p>This is a template file for writing new backends. It is a fully functional
+backend, but no output is produced. One can specify this backend by</p>
+<blockquote>
+<div>python somefile.py &#8211;SCITOOLS_easyviz_backend template</div></blockquote>
+<p>or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section</p>
+<blockquote>
+<div>[easyviz]
+backend = template</div></blockquote>
+<p>and then</p>
+<blockquote>
+<div>from scitools.std import *</div></blockquote>
+<p>or if just easyviz is needed</p>
+<blockquote>
+<div>from scitools.easyviz import *</div></blockquote>
+<p>When writing a new backend, one can copy this file to <a href="#id3"><span class="problematic" id="id4">xxx_</span></a>.py (note the
+underscore), where &#8216;xxx&#8217; is the name of the new backend. Then replace all
+instances of &#8216;template&#8217; with &#8216;xxx&#8217; and start implementing the class
+methods below. The most important methods are figure, _replot, and hardcopy.</p>
+<p>REQUIREMENTS:</p>
+<p>&lt;fill in requirements for backend&gt;</p>
+<dl class="class">
+<dt id="scitools.easyviz.template_.TemplateBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.template_.</tt><tt class="descname">TemplateBackend</tt><a class="reference internal" href="_modules/scitools/easyviz/template_.html#TemplateBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="common.html#scitools.easyviz.common.BaseClass" title="scitools.easyviz.common.BaseClass"><tt class="xref py py-class docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.autumn" title="scitools.easyviz.template_.TemplateBackend.autumn"><tt class="xref py py-obj docutils literal"><span class="pre">autumn</span></tt></a>([m])</td>
+<td>Shades of red and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.axes" title="scitools.easyviz.template_.TemplateBackend.axes"><tt class="xref py py-obj docutils literal"><span class="pre">axes</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in specified positions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.axis" title="scitools.easyviz.template_.TemplateBackend.axis"><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Choose the axis limits and appearance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.bar" title="scitools.easyviz.template_.TemplateBackend.bar"><tt class="xref py py-obj docutils literal"><span class="pre">bar</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a bar graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.bone" title="scitools.easyviz.template_.TemplateBackend.bone"><tt class="xref py py-obj docutils literal"><span class="pre">bone</span></tt></a>([m])</td>
+<td>Gray-scale with a tinge of blue color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.box" title="scitools.easyviz.template_.TemplateBackend.box"><tt class="xref py py-obj docutils literal"><span class="pre">box</span></tt></a>(*args)</td>
+<td>Display a box around the boundaries of the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.brighten" title="scitools.easyviz.template_.TemplateBackend.brighten"><tt class="xref py py-obj docutils literal"><span class="pre">brighten</span></tt></a>(*args)</td>
+<td>Brighten or darken the color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camdolly" title="scitools.easyviz.template_.TemplateBackend.camdolly"><tt class="xref py py-obj docutils literal"><span class="pre">camdolly</span></tt></a>(*args)</td>
+<td>Dolly camera.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camlight" title="scitools.easyviz.template_.TemplateBackend.camlight"><tt class="xref py py-obj docutils literal"><span class="pre">camlight</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create or set position of a light.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camlookat" title="scitools.easyviz.template_.TemplateBackend.camlookat"><tt class="xref py py-obj docutils literal"><span class="pre">camlookat</span></tt></a>(*args)</td>
+<td>Move camera and target to view specified objects.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.campos" title="scitools.easyviz.template_.TemplateBackend.campos"><tt class="xref py py-obj docutils literal"><span class="pre">campos</span></tt></a>(*args)</td>
+<td>Camera position.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camproj" title="scitools.easyviz.template_.TemplateBackend.camproj"><tt class="xref py py-obj docutils literal"><span class="pre">camproj</span></tt></a>(*args)</td>
+<td>Camera projection.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camroll" title="scitools.easyviz.template_.TemplateBackend.camroll"><tt class="xref py py-obj docutils literal"><span class="pre">camroll</span></tt></a>(*args)</td>
+<td>Roll camera.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camtarget" title="scitools.easyviz.template_.TemplateBackend.camtarget"><tt class="xref py py-obj docutils literal"><span class="pre">camtarget</span></tt></a>(*args)</td>
+<td>Camera target.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camup" title="scitools.easyviz.template_.TemplateBackend.camup"><tt class="xref py py-obj docutils literal"><span class="pre">camup</span></tt></a>(*args)</td>
+<td>Camera up vector.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camva" title="scitools.easyviz.template_.TemplateBackend.camva"><tt class="xref py py-obj docutils literal"><span class="pre">camva</span></tt></a>(*args)</td>
+<td>Camera view angle.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.camzoom" title="scitools.easyviz.template_.TemplateBackend.camzoom"><tt class="xref py py-obj docutils literal"><span class="pre">camzoom</span></tt></a>(*args)</td>
+<td>Zoom camera.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.caxis" title="scitools.easyviz.template_.TemplateBackend.caxis"><tt class="xref py py-obj docutils literal"><span class="pre">caxis</span></tt></a>(*args)</td>
+<td>Set the limits for the color axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.cla" title="scitools.easyviz.template_.TemplateBackend.cla"><tt class="xref py py-obj docutils literal"><span class="pre">cla</span></tt></a>(*args)</td>
+<td>Clear the current axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.clabel" title="scitools.easyviz.template_.TemplateBackend.clabel"><tt class="xref py py-obj docutils literal"><span class="pre">clabel</span></tt></a>(*args)</td>
+<td>Control labeling of contours.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.clf" title="scitools.easyviz.template_.TemplateBackend.clf"><tt class="xref py py-obj docutils literal"><span class="pre">clf</span></tt></a>()</td>
+<td>Clear the current figure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.close" title="scitools.easyviz.template_.TemplateBackend.close"><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt></a>(*args)</td>
+<td>Close figure.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.closefig" title="scitools.easyviz.template_.TemplateBackend.closefig"><tt class="xref py py-obj docutils literal"><span class="pre">closefig</span></tt></a>(arg)</td>
+<td>Close figure window.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.closefigs" title="scitools.easyviz.template_.TemplateBackend.closefigs"><tt class="xref py py-obj docutils literal"><span class="pre">closefigs</span></tt></a>()</td>
+<td>Close all figure windows.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.colorbar" title="scitools.easyviz.template_.TemplateBackend.colorbar"><tt class="xref py py-obj docutils literal"><span class="pre">colorbar</span></tt></a>(*args)</td>
+<td>Display a color bar.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.colorcube" title="scitools.easyviz.template_.TemplateBackend.colorcube"><tt class="xref py py-obj docutils literal"><span class="pre">colorcube</span></tt></a>([m])</td>
+<td>Enhanced color-cube color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.colormap" title="scitools.easyviz.template_.TemplateBackend.colormap"><tt class="xref py py-obj docutils literal"><span class="pre">colormap</span></tt></a>(*args)</td>
+<td>Specify colormap.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.coneplot" title="scitools.easyviz.template_.TemplateBackend.coneplot"><tt class="xref py py-obj docutils literal"><span class="pre">coneplot</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D cone plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.contour" title="scitools.easyviz.template_.TemplateBackend.contour"><tt class="xref py py-obj docutils literal"><span class="pre">contour</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D contour plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.contour3" title="scitools.easyviz.template_.TemplateBackend.contour3"><tt class="xref py py-obj docutils literal"><span class="pre">contour3</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw 3D contour plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.contourf" title="scitools.easyviz.template_.TemplateBackend.contourf"><tt class="xref py py-obj docutils literal"><span class="pre">contourf</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled contour plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.contourslice" title="scitools.easyviz.template_.TemplateBackend.contourslice"><tt class="xref py py-obj docutils literal"><span class="pre">contourslice</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw contour lines in slice planes.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.cool" title="scitools.easyviz.template_.TemplateBackend.cool"><tt class="xref py py-obj docutils literal"><span class="pre">cool</span></tt></a>([m])</td>
+<td>Shades of cyan and magenta color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.copper" title="scitools.easyviz.template_.TemplateBackend.copper"><tt class="xref py py-obj docutils literal"><span class="pre">copper</span></tt></a>([m])</td>
+<td>Linear copper-tone color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.daspect" title="scitools.easyviz.template_.TemplateBackend.daspect"><tt class="xref py py-obj docutils literal"><span class="pre">daspect</span></tt></a>(*args)</td>
+<td>Change the data aspect ratio.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.figure" title="scitools.easyviz.template_.TemplateBackend.figure"><tt class="xref py py-obj docutils literal"><span class="pre">figure</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create a new figure or switch between figures and return Figure object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.fill" title="scitools.easyviz.template_.TemplateBackend.fill"><tt class="xref py py-obj docutils literal"><span class="pre">fill</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled 2D polygons.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.fill3" title="scitools.easyviz.template_.TemplateBackend.fill3"><tt class="xref py py-obj docutils literal"><span class="pre">fill3</span></tt></a>()</td>
+<td>Draw filled 3D polygons.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.flag" title="scitools.easyviz.template_.TemplateBackend.flag"><tt class="xref py py-obj docutils literal"><span class="pre">flag</span></tt></a>([m])</td>
+<td>Alternating red, white, blue, and black color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.gca" title="scitools.easyviz.template_.TemplateBackend.gca"><tt class="xref py py-obj docutils literal"><span class="pre">gca</span></tt></a>()</td>
+<td>Return the current axis in the current figure.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.gcf" title="scitools.easyviz.template_.TemplateBackend.gcf"><tt class="xref py py-obj docutils literal"><span class="pre">gcf</span></tt></a>()</td>
+<td>Return current figure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.getp" title="scitools.easyviz.template_.TemplateBackend.getp"><tt class="xref py py-obj docutils literal"><span class="pre">getp</span></tt></a>(*args)</td>
+<td>Get object properties or an attribute in this backend instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.gray" title="scitools.easyviz.template_.TemplateBackend.gray"><tt class="xref py py-obj docutils literal"><span class="pre">gray</span></tt></a>([m])</td>
+<td>Linear gray-scale color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.grid" title="scitools.easyviz.template_.TemplateBackend.grid"><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt></a>(*args)</td>
+<td>Toggle the display of grid lines.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.hardcopy" title="scitools.easyviz.template_.TemplateBackend.hardcopy"><tt class="xref py py-obj docutils literal"><span class="pre">hardcopy</span></tt></a>(filename,&nbsp;**kwargs)</td>
+<td>Save a hardcopy of the current figure to file (with the given filename).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.hidden" title="scitools.easyviz.template_.TemplateBackend.hidden"><tt class="xref py py-obj docutils literal"><span class="pre">hidden</span></tt></a>(*args)</td>
+<td>Toggle hidden line removal in the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.hold" title="scitools.easyviz.template_.TemplateBackend.hold"><tt class="xref py py-obj docutils literal"><span class="pre">hold</span></tt></a>(*args)</td>
+<td>Change the hold state of the current axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.hot" title="scitools.easyviz.template_.TemplateBackend.hot"><tt class="xref py py-obj docutils literal"><span class="pre">hot</span></tt></a>([m])</td>
+<td>Black-red-yellow-white color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.hsv" title="scitools.easyviz.template_.TemplateBackend.hsv"><tt class="xref py py-obj docutils literal"><span class="pre">hsv</span></tt></a>([m])</td>
+<td>Hue-saturation-value color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.init" title="scitools.easyviz.template_.TemplateBackend.init"><tt class="xref py py-obj docutils literal"><span class="pre">init</span></tt></a>()</td>
+<td>Initialize internal data structures.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.ishold" title="scitools.easyviz.template_.TemplateBackend.ishold"><tt class="xref py py-obj docutils literal"><span class="pre">ishold</span></tt></a>()</td>
+<td>Return the hold state (True if hold is on, and False if it is off).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.isocaps" title="scitools.easyviz.template_.TemplateBackend.isocaps"><tt class="xref py py-obj docutils literal"><span class="pre">isocaps</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurface end caps.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.isosurface" title="scitools.easyviz.template_.TemplateBackend.isosurface"><tt class="xref py py-obj docutils literal"><span class="pre">isosurface</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurfaces from 3D scalar fields.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.jet" title="scitools.easyviz.template_.TemplateBackend.jet"><tt class="xref py py-obj docutils literal"><span class="pre">jet</span></tt></a>([m])</td>
+<td>Variant of hsv.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.legend" title="scitools.easyviz.template_.TemplateBackend.legend"><tt class="xref py py-obj docutils literal"><span class="pre">legend</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Add legend(s) to the current plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.light" title="scitools.easyviz.template_.TemplateBackend.light"><tt class="xref py py-obj docutils literal"><span class="pre">light</span></tt></a>(**kwargs)</td>
+<td>Add a light to the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.lines" title="scitools.easyviz.template_.TemplateBackend.lines"><tt class="xref py py-obj docutils literal"><span class="pre">lines</span></tt></a>([m])</td>
+<td>Color map with the line colors.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.loglog" title="scitools.easyviz.template_.TemplateBackend.loglog"><tt class="xref py py-obj docutils literal"><span class="pre">loglog</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a loglog plot with logarithmic scaling on x- and y-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.m1" title="scitools.easyviz.template_.TemplateBackend.m1"><tt class="xref py py-obj docutils literal"><span class="pre">m1</span></tt></a>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.m2" title="scitools.easyviz.template_.TemplateBackend.m2"><tt class="xref py py-obj docutils literal"><span class="pre">m2</span></tt></a>(filename,&nbsp;**kwargs)</td>
+<td>Save a hardcopy of the current figure to file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.material" title="scitools.easyviz.template_.TemplateBackend.material"><tt class="xref py py-obj docutils literal"><span class="pre">material</span></tt></a>(*args)</td>
+<td>Set the material reflectance mode.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.mesh" title="scitools.easyviz.template_.TemplateBackend.mesh"><tt class="xref py py-obj docutils literal"><span class="pre">mesh</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D mesh surface.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.meshc" title="scitools.easyviz.template_.TemplateBackend.meshc"><tt class="xref py py-obj docutils literal"><span class="pre">meshc</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a mesh with a contour plot beneath.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.openfig" title="scitools.easyviz.template_.TemplateBackend.openfig"><tt class="xref py py-obj docutils literal"><span class="pre">openfig</span></tt></a>([filename])</td>
+<td>Load figures saved in a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.pcolor" title="scitools.easyviz.template_.TemplateBackend.pcolor"><tt class="xref py py-obj docutils literal"><span class="pre">pcolor</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D pseudocolor plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.pink" title="scitools.easyviz.template_.TemplateBackend.pink"><tt class="xref py py-obj docutils literal"><span class="pre">pink</span></tt></a>([m])</td>
+<td>Pastel shades of pink color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.plot" title="scitools.easyviz.template_.TemplateBackend.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw line and scatter plots.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.plot3" title="scitools.easyviz.template_.TemplateBackend.plot3"><tt class="xref py py-obj docutils literal"><span class="pre">plot3</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw lines and points in 3D space.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.prism" title="scitools.easyviz.template_.TemplateBackend.prism"><tt class="xref py py-obj docutils literal"><span class="pre">prism</span></tt></a>([m])</td>
+<td>Prism color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.quiver" title="scitools.easyviz.template_.TemplateBackend.quiver"><tt class="xref py py-obj docutils literal"><span class="pre">quiver</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw arrows from a 2D vector field.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.quiver3" title="scitools.easyviz.template_.TemplateBackend.quiver3"><tt class="xref py py-obj docutils literal"><span class="pre">quiver3</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw velocity vectors in 3D space.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.savefig" title="scitools.easyviz.template_.TemplateBackend.savefig"><tt class="xref py py-obj docutils literal"><span class="pre">savefig</span></tt></a>([filename])</td>
+<td>Save all current figures to a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.semilogx" title="scitools.easyviz.template_.TemplateBackend.semilogx"><tt class="xref py py-obj docutils literal"><span class="pre">semilogx</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on x-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.semilogy" title="scitools.easyviz.template_.TemplateBackend.semilogy"><tt class="xref py py-obj docutils literal"><span class="pre">semilogy</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on y-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.setp" title="scitools.easyviz.template_.TemplateBackend.setp"><tt class="xref py py-obj docutils literal"><span class="pre">setp</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Set object properties or attributes in this backend instance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.shading" title="scitools.easyviz.template_.TemplateBackend.shading"><tt class="xref py py-obj docutils literal"><span class="pre">shading</span></tt></a>(*args)</td>
+<td>Control the color shading of surfaces.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.show" title="scitools.easyviz.template_.TemplateBackend.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>()</td>
+<td>Redraw the current figure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.slice_" title="scitools.easyviz.template_.TemplateBackend.slice_"><tt class="xref py py-obj docutils literal"><span class="pre">slice_</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw volumetric slice plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.spring" title="scitools.easyviz.template_.TemplateBackend.spring"><tt class="xref py py-obj docutils literal"><span class="pre">spring</span></tt></a>([m])</td>
+<td>Shades of magenta and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.stem" title="scitools.easyviz.template_.TemplateBackend.stem"><tt class="xref py py-obj docutils literal"><span class="pre">stem</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a stem plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.streamline" title="scitools.easyviz.template_.TemplateBackend.streamline"><tt class="xref py py-obj docutils literal"><span class="pre">streamline</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines from 2D or 3D vector data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.streamribbon" title="scitools.easyviz.template_.TemplateBackend.streamribbon"><tt class="xref py py-obj docutils literal"><span class="pre">streamribbon</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream ribbons from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.streamslice" title="scitools.easyviz.template_.TemplateBackend.streamslice"><tt class="xref py py-obj docutils literal"><span class="pre">streamslice</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines in axis aligned slice planes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.streamtube" title="scitools.easyviz.template_.TemplateBackend.streamtube"><tt class="xref py py-obj docutils literal"><span class="pre">streamtube</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream tubes from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.subplot" title="scitools.easyviz.template_.TemplateBackend.subplot"><tt class="xref py py-obj docutils literal"><span class="pre">subplot</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in tiled positions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.summer" title="scitools.easyviz.template_.TemplateBackend.summer"><tt class="xref py py-obj docutils literal"><span class="pre">summer</span></tt></a>([m])</td>
+<td>Shades of green and yellow color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.surf" title="scitools.easyviz.template_.TemplateBackend.surf"><tt class="xref py py-obj docutils literal"><span class="pre">surf</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D solid surface.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.surfc" title="scitools.easyviz.template_.TemplateBackend.surfc"><tt class="xref py py-obj docutils literal"><span class="pre">surfc</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Draw a solid surface with contours beneath.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.surfl" title="scitools.easyviz.template_.TemplateBackend.surfl"><tt class="xref py py-obj docutils literal"><span class="pre">surfl</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>3D shaded surface with lighting.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.title" title="scitools.easyviz.template_.TemplateBackend.title"><tt class="xref py py-obj docutils literal"><span class="pre">title</span></tt></a>(*args)</td>
+<td>Add title to the current plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.vga" title="scitools.easyviz.template_.TemplateBackend.vga"><tt class="xref py py-obj docutils literal"><span class="pre">vga</span></tt></a>([m])</td>
+<td>Windows colormap for 16 colors.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.view" title="scitools.easyviz.template_.TemplateBackend.view"><tt class="xref py py-obj docutils literal"><span class="pre">view</span></tt></a>(*args)</td>
+<td>Specify viewpoint.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.white" title="scitools.easyviz.template_.TemplateBackend.white"><tt class="xref py py-obj docutils literal"><span class="pre">white</span></tt></a>([m])</td>
+<td>All white color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.winter" title="scitools.easyviz.template_.TemplateBackend.winter"><tt class="xref py py-obj docutils literal"><span class="pre">winter</span></tt></a>([m])</td>
+<td>Shades of blue and green color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.xlabel" title="scitools.easyviz.template_.TemplateBackend.xlabel"><tt class="xref py py-obj docutils literal"><span class="pre">xlabel</span></tt></a>(*args)</td>
+<td>Add a label to the x-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.xlim" title="scitools.easyviz.template_.TemplateBackend.xlim"><tt class="xref py py-obj docutils literal"><span class="pre">xlim</span></tt></a>(*args)</td>
+<td>Set or get limits on x axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.ylabel" title="scitools.easyviz.template_.TemplateBackend.ylabel"><tt class="xref py py-obj docutils literal"><span class="pre">ylabel</span></tt></a>(*args)</td>
+<td>Add a label to the y-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.ylim" title="scitools.easyviz.template_.TemplateBackend.ylim"><tt class="xref py py-obj docutils literal"><span class="pre">ylim</span></tt></a>(*args)</td>
+<td>Set or get limits on y axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.zlabel" title="scitools.easyviz.template_.TemplateBackend.zlabel"><tt class="xref py py-obj docutils literal"><span class="pre">zlabel</span></tt></a>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.template_.TemplateBackend.zlim" title="scitools.easyviz.template_.TemplateBackend.zlim"><tt class="xref py py-obj docutils literal"><span class="pre">zlim</span></tt></a>(*args)</td>
+<td>Set or get limits on z axis.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__class__">
+<tt class="descname">__class__</tt><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__class__" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__delattr__">
+<tt class="descname">__delattr__</tt><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__dict__">
+<tt class="descname">__dict__</tt><em class="property"> = dict_proxy({'_set_hidden_line_removal': &lt;function _set_hidden_line_removal at 0xa5638c0&gt;, '__module__': 'scitools.easyviz.template_', '_set_title': &lt;function _set_title at 0x915a230&gt;, 'figure': &lt;function figure at 0xa551f50&gt;, '_add_contours': &lt;function _add_contours at 0xa563ed8&gt;, '_init': &lt;function _init at 0xa79a140&gt;, '_set_grid': &lt;function _set_grid at 0xa648410&gt;, '_set_colorbar': &lt;function _set_colorbar at 0xa563578&gt;, '_set_daspect': &lt;function _set_daspect at 0x915a0c8&gt;, '_set_axis_props': &lt;function _set_axis_props at 0xa563050&gt;, '_add_surface': &lt;function _add_surface at 0xa563b18&gt;, '__init__': &lt;function __init__ at 0x9cd1668&gt;, '_add_contourslices': &lt;function _add_contourslices at 0xa563668&gt;, '_replot': &lt;function _replot at 0xa551b18&gt;, 'm1': &lt;unbound method BaseClass.zlabel&gt;, '_set_limits': &lt;function _set_limits at 0x915a1b8&gt;, '_add_line': &lt;function _add_line at 0xa563f50&gt;, '_set_axis_method': &lt;function _set_axis_method at 0x915a050&gt;, '__doc__': None, '_add_isosurface': &lt;function _add_isosurface at 0xa563500&gt;, '_set_position': &lt;function _set_position at 0x915a140&gt;, '_set_colormap': &lt;function _set_colormap at 0xa5631b8&gt;, 'm2': &lt;function hardcopy at 0xa551578&gt;, 'hardcopy': &lt;function hardcopy at 0xa551578&gt;, '_set_box': &lt;function _set_box at 0xab8f1b8&gt;, '_get_linespecs': &lt;function _get_linespecs at 0xa563c80&gt;, '_set_figure_size': &lt;function _set_figure_size at 0xa563848&gt;, '_set_labels': &lt;function _set_labels at 0x915a2a8&gt;, '_set_coordinate_system': &lt;function _set_coordinate_system at 0x915a8c0&gt;, '_add_streams': &lt;function _add_streams at 0xa563de8&gt;, '_add_vectors': &lt;function _add_vectors at 0xa563a28&gt;, '_set_view': &lt;function _set_view at 0xa5630c8&gt;, '_set_scale': &lt;function _set_scale at 0x915a320&gt;, 'cmd': 'zlabel', '_set_caxis': &lt;function _set_caxis at 0xa563398&gt;, '_add_slices': &lt;function _add_slices at 0xa5639b0&gt;})</em><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__format__">
+<tt class="descname">__format__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__getattribute__">
+<tt class="descname">__getattribute__</tt><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__hash__">
+<tt class="descname">__hash__</tt><big>(</big><em>) &lt;==&gt; hash(x</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/template_.html#TemplateBackend.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.easyviz.template_'</em><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.easyviz.template_.TemplateBackend.__new__">
+<em class="property">static </em><tt class="descname">__new__</tt><big>(</big><em>S</em>, <em>...</em><big>)</big> &rarr; a new object with type S, a subtype of T<a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__new__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__reduce__">
+<tt class="descname">__reduce__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__reduce_ex__">
+<tt class="descname">__reduce_ex__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><em>) &lt;==&gt; repr(x</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__setattr__">
+<tt class="descname">__setattr__</tt><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__sizeof__">
+<tt class="descname">__sizeof__</tt><big>(</big><big>)</big> &rarr; int<a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.easyviz.template_.TemplateBackend.__subclasshook__">
+<em class="property">static </em><tt class="descname">__subclasshook__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__subclasshook__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract classes can override this to customize issubclass().</p>
+<p>This is invoked early on by abc.ABCMeta.__subclasscheck__().
+It should return True, False or NotImplemented.  If it returns
+NotImplemented, the normal algorithm is used.  Otherwise, it
+overrides the normal algorithm (and the outcome is cached).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.autumn">
+<tt class="descname">autumn</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.autumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of red and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.axes">
+<tt class="descname">axes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create axes in specified positions.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axes</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns a default Axis instance.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the axis in the Axis instance ax as the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axes</span><span class="p">(</span><span class="n">viewport</span><span class="o">=</span><span class="n">RECT</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>returns a axis at the position given in RECT. RECT is normally a list
+[left,bottom,width,height], where the four parameters (values between
+0 and 1) specifies the location and size of the axis box ((0,0) is the
+lower-left corner and (1,1) is the upper-right corner). However, this
+is backend-dependent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.axis">
+<tt class="descname">axis</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose the axis limits and appearance.</p>
+<blockquote>
+<div><p>Calling:</p>
+<div class="highlight-python"><pre>axis([xmin, xmax, ymin, ymax[, zmin, zmax]])</pre>
+</div>
+<p>sets the limits on the x-, y-, and z-axes in the current plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>axis(xmin, xmax, ymin, ymax[, zmin, zmax])</pre>
+</div>
+<p>gives the same result as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the limits on the x-, y-, and z-axes for the current plot.
+If the view in the current plot is a 2D view, only the limits on the
+x- and y-axis are returned.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets axis scaling to mode, where mode can be</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;auto&#8217;   - autoscaling is used</li>
+<li>&#8216;manual&#8217; - freeze the scaling at the current limits</li>
+<li>&#8216;tight&#8217;  - sets the axis limits to the range of the data</li>
+<li>&#8216;fill&#8217;   - has currently no affect</li>
+</ul>
+</div></blockquote>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the appearance of the current axis as specified by method.</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>Legal values for method are:</dt>
+<dd><blockquote class="first">
+<div><ul class="simple">
+<li>&#8216;equal&#8217;, &#8216;image&#8217;, &#8216;normal&#8217;, &#8216;square&#8217;, &#8216;vis3d&#8217;</li>
+</ul>
+</div></blockquote>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the direction of the increasing values on the axes.</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;ij&#8217; - reverse y-axis</li>
+<li>&#8216;xy&#8217; - restore y-axis</li>
+</ul>
+</div></blockquote>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>turns off the visibility of the axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>turns the visibility of the axis back on.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">affects the Axis object ax instead of the current axis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.bar">
+<tt class="descname">bar</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a bar graph.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where data is a dictionary on the form</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>data = {&#8216;method1&#8217;: {&#8216;thing1&#8217;: value, &#8216;thing2&#8217;: value},</dt>
+<dd>&#8216;method2&#8217;: {&#8216;thing1&#8217;: value, &#8216;thing2&#8217;: value},
+&#8216;method3&#8217;: {&#8216;thing1&#8217;: value, &#8216;thing2&#8217;: value},}</dd>
+</dl>
+</div></blockquote>
+<p>will draw m bars for every name (key in data), one for each key in
+data[name], where the height indicates the value. The name is placed
+beneath each of the bar groups on the x axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw a bar for each of the elements in the vector/matrix Y.
+If Y is a matrix, a group of bars from the elements of each row of
+Y will be created.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above only that the values on the x axis is defined
+by the vector x.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the specified width on the bars. The default width is 0.8, while
+a width of 1.0 should make the bars just touch each other (might vary
+in the different backends).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the given color for all the bars.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bar</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Bars object.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">rand</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.bone">
+<tt class="descname">bone</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.bone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray-scale with a tinge of blue color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.box">
+<tt class="descname">box</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a box around the boundaries of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">box</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays a box at the boundaries of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">box</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>turns off the box.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">box</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>toggles the display of a box in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">box</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>Note: box(True) and box(False) is the same as box(&#8216;on&#8217;) and
+box(&#8216;off&#8217;), respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.brighten">
+<tt class="descname">brighten</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.brighten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Brighten or darken the color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camdolly">
+<tt class="descname">camdolly</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camdolly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dolly camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camdolly</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>moves the camera position along the direction of projection.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camdolly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camlight">
+<tt class="descname">camlight</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camlight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create or set position of a light.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="s">&#39;headlight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates a light in the current axis at the position of the camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="s">&#39;right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates a light right and up from the camera in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates a light left and up from the camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>is the same as camlight(&#8216;right&#8217;).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates a light at azimuth, elevation (both given in degrees) from
+the camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the style of the light, where style can be either &#8216;local&#8217;
+(default) or &#8216;inifinite&#8217;.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlight</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>places Light object l at the specified position.</p>
+<p>&#64;return: A Light object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camlookat">
+<tt class="descname">camlookat</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camlookat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move camera and target to view specified objects.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlookat</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>views the PlotProperties object obj.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlookat</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>views the objects in the Axis object ax.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camlookat</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>views the objects in the current axes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.campos">
+<tt class="descname">campos</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.campos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera position.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campos</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the position of the camera in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campos</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the camera position.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">campos</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets or gets the position of the camera in the Axis object ax instead
+of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camproj">
+<tt class="descname">camproj</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camproj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera projection.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camproj</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the camera projection of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camproj</span><span class="p">(</span><span class="n">projeciton</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the projection of the camera to projection, where projection can
+be either &#8216;orthographic&#8217; (default) or &#8216;perspective&#8217;.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camproj</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets or gets the camera projection of the Axis object ax instead of
+the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camroll">
+<tt class="descname">camroll</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camroll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camroll</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>rotates the camera about the direction of projection.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camroll</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>rotates the camera in the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camtarget">
+<tt class="descname">camtarget</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camtarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera target.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camtarget</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the camera target of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camtarget</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the target for the camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camtarget</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camtarget</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets or gets the camera target in the Axis object ax instead of the
+current axis..</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camup">
+<tt class="descname">camup</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera up vector.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camup</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the up vector of the camera in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camup</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the camera up vector.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as the above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camup</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets or gets the up vector for the camera in the Axis object ax
+instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camva">
+<tt class="descname">camva</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camva" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera view angle.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camva</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the camera view angle of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camva</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the camera view angle.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camva</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets or gets the camera view angle in the Axis object ax instead of
+the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.camzoom">
+<tt class="descname">camzoom</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.camzoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zoom camera.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camzoom</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>zooms the camera the specified factor. A value greater than 1 is a
+zoom-in, while a value less than 1 is a zoom-out.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">camzoom</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>zooms the camera in the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.caxis">
+<tt class="descname">caxis</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.caxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the limits for the color axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">caxis</span><span class="p">([</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>changes the limits for the color axis to range from cmin to cmax.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">caxis</span><span class="p">(</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the same result as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">caxis</span><span class="p">(</span><span class="s">&#39;manual&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>freezes the limits at the current range.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">caxis</span><span class="p">(</span><span class="s">&#39;auto&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses autoranging for the color axis limits (default).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span> <span class="o">=</span> <span class="n">caxis</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the current color axis limits.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">caxis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.cla">
+<tt class="descname">cla</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.cla" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cla</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>clears the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cla</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>clears the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.clabel">
+<tt class="descname">clabel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.clabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control labeling of contours.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clabel</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds height labels to a contour plot (obj must be a Contours
+object).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clabel</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>removes the labeling of the contour lines (default).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.close">
+<tt class="descname">close</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close figure.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>closes the current figure.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">close</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>closes the figure with number num.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>closes the Figure object fig.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>closes all figures.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>arg</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close figure window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all figure windows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.template_.TemplateBackend.cmd">
+<tt class="descname">cmd</tt><em class="property"> = 'zlabel'</em><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.colorbar">
+<tt class="descname">colorbar</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a color bar.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>displays a colorbar in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colorbar</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>removes the colorbar from the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colorbar</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays a colorbar in the current axis at the location specified by
+loc, where loc may be any of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;North&#8217;        - inside plot box near top</li>
+<li>&#8216;South&#8217;        - inside bottom</li>
+<li>&#8216;East&#8217;         - inside right</li>
+<li>&#8216;West&#8217;         - inside left</li>
+<li>&#8216;NorthOutside&#8217; - outside plot box near top</li>
+<li>&#8216;SouthOutside&#8217; - outside bottom</li>
+<li>&#8216;EastOutside&#8217;  - outside right</li>
+<li>&#8216;WestOutside&#8217;  - outside left</li>
+</ul>
+</div></blockquote>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colorbar</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Colorbar object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.colorcube">
+<tt class="descname">colorcube</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.colorcube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced color-cube color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.colormap">
+<tt class="descname">colormap</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.colormap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify colormap.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colormap</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the colormap in map as the current colormap (map is dependent
+on the current backend).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colormap</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the colormap to the default colormap, i.e., jet.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span> <span class="o">=</span> <span class="n">colormap</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the current colormap.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">colormap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the figure corresponding to the Axis object ax instead of the
+current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.coneplot">
+<tt class="descname">coneplot</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.coneplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a 3D cone plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>draws velocity vectors as cones from the 3D vector field defined by
+U, V, and W at the points given in the arrays Cx, Cy, and Cz. The
+arrays X, Y, and Z defines the grid coordinates for vector field. The
+shape of U, V, and W is assumed to be the same, while the grid
+components must either have the same shape as U or fulfill the
+requirement len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, but it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will automatically scale the cones by the factor scale (default is 1).
+To turn of automatic scaling, use a scale value of 0.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the colors in the array C to color the cones (C must have the
+same shape as U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s">&#39;quiver&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will plot arrows instead of cones.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coneplot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Streams object.</p>
+<p>Examples:</p>
+<p>FIXME: Add conplot example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.contour">
+<tt class="descname">contour</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a 2D contour plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays a contour plot where the values in the scalar field Z are
+treated as heights above a plane. The grid components X and Y must
+either have the same shape as Z or fulfill the requirement len(X)==n
+and len(Y)==m, where m,n=shape(Z).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling contour(range(n),range(m),Z), where
+m,n=shape(Z).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays a contour plot with n contour lines (default is 8 lines).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays contours at levels given in the array v.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the color and line style as given in the format string fmt to
+draw the contour lines (see the plot command for further details on
+format strings). This overrides the default behavior of using the
+current colormap to color the contour lines.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contours</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots into the Axis object ax instead of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour</span><span class="p">(</span><span class="o">...</span><span class="p">,</span><span class="n">clabels</span><span class="o">=</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling h=contour(...) followed by clabel(h,&#8217;on&#8217;).</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># draw a contour plot of the peaks function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">contour</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Draw 10 red contour lines with double line width:
+&gt;&gt;&gt; contour(xv, yv, values, 10, &#8216;r&#8217;, linewidth=2)</p>
+<p>Draw contour lines at -2, 0, 2, and 5:
+&gt;&gt;&gt; contour(xv, yv, values, [-2,0,2,5])</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.contour3">
+<tt class="descname">contour3</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.contour3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw 3D contour plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contour3</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling contour(...), except that the contours are
+drawn at their coresponding height level.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contour3</span><span class="p">(</span><span class="n">peaks</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.contourf">
+<tt class="descname">contourf</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.contourf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw filled contour plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourf</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling contour(...) with the exception that the space
+between the contour lines is filled with colors.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contourf</span><span class="p">(</span><span class="n">peaks</span><span class="p">(),</span> <span class="n">clabel</span><span class="o">=</span><span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.contourslice">
+<tt class="descname">contourslice</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.contourslice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw contour lines in slice planes.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">Sx</span><span class="p">,</span><span class="n">Sy</span><span class="p">,</span><span class="n">Sz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw contour lines in planes aligned with the coordinate axes
+at the points in the arrays Sx, Sy, and Sz. The arrays X, Y, and Z
+defines the grid coordinates for the volume V and they must either
+have the same shape as V or fulfill the requirement len(X)==n,
+len(Y)==m, and len(Z)==p, where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">Sx</span><span class="p">,</span><span class="n">Sy</span><span class="p">,</span><span class="n">Sz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, but it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">,</span><span class="n">ZI</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw contour lines through the volume V along the surface given
+in the arrays XI, YI, and ZI.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">,</span><span class="n">ZI</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, but it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw n contour lines per plane instead of the default of five
+contour lines.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw contour lines at the levels given in the array v.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">contourslice</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Volume object.</p>
+<p>Example:
+&gt;&gt;&gt; xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17),
+...                       linspace(-2,2,25))
+&gt;&gt;&gt; vv = xx*exp(-xx**2-yy**2-zz**2)
+&gt;&gt;&gt; contourslice(xx, yy, zz, vv, [-.7,.7], [], [0], view=3)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.cool">
+<tt class="descname">cool</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.cool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of cyan and magenta color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.copper">
+<tt class="descname">copper</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.copper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear copper-tone color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.daspect">
+<tt class="descname">daspect</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.daspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the data aspect ratio.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the data aspect ratio for the x, y, and z axis (e.g.,
+daspect([1,2,4]) means that one unit in x direction is equal in
+length to two units in y direction and four units in z direction).
+For example, daspect([r,1,1]) makes the physical size of the
+y axis in the plot r times the x axis.</p>
+<p>The size of the axes must be explicitly in order for the
+daspect command to work properly.
+Note that setting the aspect ratio is not supported by all backends.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the data aspect ratio for the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the data aspect ratio mode, where mode can be &#8216;auto&#8217;, &#8216;equal&#8217;,
+or &#8216;manual&#8217;. By specifying the mode to &#8216;auto&#8217; (default), the data
+aspect ratio will be automatically computed so that each axis spans
+the available space in the figure window. In the &#8216;manual&#8217; mode
+the user sets the aspect ratio, while &#8216;equal&#8217; means that the
+the same units are used in both axes (for example, if the x axis
+goes from 0 to 10 and the y axis from 0 to 1, and we want the
+x axis ten times as long as the y axis, the manual aspect ratio
+er 0.1, and &#8216;equal&#8217; will automatically set the ratio to 0.1).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>returns the data aspect ratio mode.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the data aspect ratio to r. This is for backends that do not
+support setting individual aspect ratios for the x, y, and z axis
+(like the Gnuplot backend). If the backend do support individual
+aspect ratios, the aspect ratio is set to r for all three axes.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">daspect</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the the Axis object ax instead of the current axis.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">surf</span><span class="p">(</span><span class="n">peaks</span><span class="p">(</span><span class="mi">21</span><span class="p">))</span>
+<span class="go">&lt;scitools.easyviz.common.Surface object at 0xb7d7950c&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">daspect</span><span class="p">()</span>
+<span class="go">(1.0, 1.0, 0.71549553759291729)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surf</span><span class="p">(</span><span class="n">peaks</span><span class="p">(</span><span class="mi">21</span><span class="p">))</span>
+<span class="go">&lt;scitools.easyviz.common.Surface object at 0xb58ff70c&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">daspect</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/template_.html#TemplateBackend.figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new figure or switch between figures and return Figure object.
+num is the figure number of the new or existing figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.fill">
+<tt class="descname">fill</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw filled 2D polygons.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.fill3">
+<tt class="descname">fill3</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.fill3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw filled 3D polygons.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.flag">
+<tt class="descname">flag</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternating red, white, blue, and black color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.gca">
+<tt class="descname">gca</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.gca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current axis in the current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.gcf">
+<tt class="descname">gcf</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.gcf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.getp">
+<tt class="descname">getp</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.getp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get object properties or an attribute in this backend instance.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">getp</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>returns the attribute with name &#8216;name&#8217; in this backend instance.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">getp</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>returns the property with name &#8216;name&#8217; of the object given in obj. This
+object must have a get method (like Figure, Axis, or PlotProperties
+objects).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">getp</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays all property names and values for the object given in obj.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.gray">
+<tt class="descname">gray</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.gray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear gray-scale color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.grid">
+<tt class="descname">grid</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle the display of grid lines.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">grid</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays grid lines in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">grid</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>removes the grid lines from the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>toggles the display of grid lines in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">grid</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses Axis object ax instead of the current axis.</p>
+<p>Note that calling grid(True) and grid(False) is the same as calling
+grid(&#8216;on&#8217;) and grid(&#8216;off&#8217;), respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/template_.html#TemplateBackend.hardcopy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions: &lt;fill in extensions for this backend&gt;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.hidden">
+<tt class="descname">hidden</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.hidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle hidden line removal in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hidden</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>turns hidden line removal on if state is &#8216;on&#8217; (or True) and off if
+state is &#8216;off&#8217; (or False). Hidden line removal is turned on by
+default.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hidden</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>toggles the hidden state.</p>
+<p>Note: Some backends has no support for hidden line removal (e.g.,
+VTK).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.hold">
+<tt class="descname">hold</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.hold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the hold state of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hold</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>makes every subsequent plotting commands be added to the current plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hold</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>clears the previous plot before the new plot is drawn. This is the
+default behavior.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hold</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>toggles the hold state in the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">hold</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>affects the Axis object ax instead of the current axis.</p>
+<p>Note that one can use hold(True) and hold(False) instead of
+hold(&#8216;on&#8217;) and hold(&#8216;off&#8217;), respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.hot">
+<tt class="descname">hot</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.hot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Black-red-yellow-white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.hsv">
+<tt class="descname">hsv</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hue-saturation-value color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize internal data structures.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.ishold">
+<tt class="descname">ishold</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.ishold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hold state (True if hold is on, and False if it is off).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.isocaps">
+<tt class="descname">isocaps</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.isocaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw isosurface end caps.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.isosurface">
+<tt class="descname">isosurface</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.isosurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw isosurfaces from 3D scalar fields.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">isosurface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">isovalue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>creates an isosurface for the volume V at the iso value given by
+isovalue. The arrays X, Y, and Z defines the grid for the volume V
+and they must either have the same shape as V or fulfill the
+requirement len(X)==n, len(Y)==m, and len(Z)==p, where
+m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">isosurface</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">isovalue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, but it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">isosurface</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the colors in the array C instead of the colors in the
+scalar field V (C and V must have the same shape).</p>
+<p>&#64;return: A Volume object.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">flow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isosurface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">daspect</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.jet">
+<tt class="descname">jet</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.jet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variant of hsv.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.legend">
+<tt class="descname">legend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add legend(s) to the current plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">legend</span><span class="p">(</span><span class="n">string1</span><span class="p">,</span> <span class="n">string2</span><span class="p">,</span> <span class="n">string3</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>or</dt>
+<dd>legend([string1, string2, string3,...])</dd>
+</dl>
+<p>adds legends to the current plot using the given strings as labels.
+Note that the number of strings should match the number of items in
+the current axis (i.e., getp(gca(), &#8216;numberofitems&#8217;)), but a
+less legends than curve items are allowed.xo</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">legend</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the given string as a legend to the last item added to the
+current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">legend</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>affects the Axis object ax instead of the current axis.</p>
+<p>The keyword arguments (<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs) are ignored, but makes it
+possible to seemlessly switch between easyviz and matplotlib.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.light">
+<tt class="descname">light</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a light to the current axis.</p>
+<p>Calling:</p>
+<blockquote>
+<div>light()</div></blockquote>
+<p>will add a light to the current axis with default values for all
+light properties.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">light</span><span class="p">(</span><span class="n">prop1</span><span class="o">=</span><span class="n">value1</span><span class="p">,</span> <span class="n">prop2</span><span class="o">=</span><span class="n">value2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds a light with properties as given in the keyword arguments.</p>
+<p>&#64;return: A Light object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.lines">
+<tt class="descname">lines</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color map with the line colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.loglog">
+<tt class="descname">loglog</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.loglog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a loglog plot with logarithmic scaling on x- and y-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">loglog</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling plot(...) with the exception that a
+logarithmic (base 10) scale is used for both x- and y-axes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.m1">
+<tt class="descname">m1</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.m1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.m2">
+<tt class="descname">m2</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.m2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions: &lt;fill in extensions for this backend&gt;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.material">
+<tt class="descname">material</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the material reflectance mode.</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>material([ka, kd, ks[, n[, sc]]])</pre>
+</div>
+<p>changes the ambient/diffuse/specular strength, specular exponent,
+and specular color reflectance of objects.</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>material(ka, kd, ks[, n[, sc]])</pre>
+</div>
+<p>is the same as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">material</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the material mode, where mode can be one of the following
+strings:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;shiny&#8217;   - shiny objects</li>
+<li>&#8216;dull&#8217;,   - dull objects</li>
+<li>&#8216;metal&#8217;   - metallic objects</li>
+<li>&#8216;default&#8217; - default material properties</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.mesh">
+<tt class="descname">mesh</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a 3D mesh surface.</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>mesh(X, Y, Z[, C])</pre>
+</div>
+<p>plots the colored mesh defined by scalar field Z defined on the grid
+given by X and Y. The grid components X and Y must either have the
+same shape as Z or fulfill the requirement len(X)==n and len(Y)==m,
+where m,n=shape(Z). The color is determined by the array C which must
+have the same shape as Z. If the color array C is not given, Z is used
+as the color array (i.e., C=Z).</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>mesh(Z[, C])</pre>
+</div>
+<p>is the same as calling mesh(range(n), range(m), Z[, C]),
+where m,n = shape(Z).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mesh</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots into the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Surface object.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zz</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">xx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">yy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">zz</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.meshc">
+<tt class="descname">meshc</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.meshc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a mesh with a contour plot beneath.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">meshc</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling mesh(...) only that a contour plot is drawn
+beneath the mesh.</p>
+<p>Examples:</p>
+<p>Draw a mesh with contour lines:
+&gt;&gt;&gt; x = linspace(-2, 2, 21)
+&gt;&gt;&gt; xx, yy = meshgrid(x)
+&gt;&gt;&gt; zz = peaks(xx, yy)
+&gt;&gt;&gt; meshc(xx, yy, zz)</p>
+<p>Draw a mesh with 20 contour lines:
+&gt;&gt;&gt; meshc(xx, yy, zz, clevels=20)</p>
+<p>Draw a mesh with contour lines at height -0.2, -0.5, 0.2, 0.5:
+&gt;&gt;&gt; meshc(xx, yy, zz, cvector=[-0.2,-0.5,0.2,0.5])</p>
+<p>Draw a mesh with contours and label the contours:
+&gt;&gt;&gt; meshc(xx, yy, zz, clabels=&#8217;on&#8217;)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.openfig">
+<tt class="descname">openfig</tt><big>(</big><em>filename='figspickle.txt'</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.openfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load figures saved in a file (with the given filename).
+The format of this file is currently standard Python pickle format.
+All figures in a previous session were dumped to the file, and
+all these figures are by this method reloaded and added to the
+current set of figures.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.pcolor">
+<tt class="descname">pcolor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.pcolor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a 2D pseudocolor plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pcolor</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>draw a pseudocolor plot of the 2D array C.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pcolor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>same as above, only that the grid is specified by the X and Y arrays.
+These arrays must either have the same shape as C or fulfill the
+requirement len(X)==n and len(Y)==m, where m,n=shape(C).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pcolor</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>Examples:</p>
+<p>Simple pseudocolor plot:
+&gt;&gt;&gt; pcolor(peaks(31))</p>
+<p>Draw a pseudocolor plot with interpolated shading:
+&gt;&gt;&gt; pcolor(peaks(), shading=&#8217;interp&#8217;,
+...        colorbar=&#8217;on&#8217;, colormap=hot())</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.pink">
+<tt class="descname">pink</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.pink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastel shades of pink color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.plot">
+<tt class="descname">plot</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw line and scatter plots.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots y against x, i.e., if x and y are vectors of length n, then
+this will plot all the points (x[i], y[i]) for 0&lt;=i&lt;n.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots values in y on y-axis (same as plot(range(len(y)),y)).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots values in y on y-axis formated like fmt (see below).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">fmt1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">fmt2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>same as hold(&#8216;on&#8217;) followed by multiple plot(x,y,fmt).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>like above, but automatically chooses different colors.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses x as the x values for all the supplied curves.
+x=&#8217;auto&#8217; has the same effect as x=range(len(y1)).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="o">...</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses logarithmic (base 10) scales on either the x- or y-axes (or both).
+mode can be</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;x&#8217;  - logarithmic scale on x-axis</li>
+<li>&#8216;y&#8217;  - logarithmic scale on y-axis</li>
+<li>&#8216;xy&#8217; - logarithmic scales on both x- and y-axes.</li>
+</ul>
+</div></blockquote>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots into the Axis object ax instead of the current axis.</p>
+<p>The plot command returns a list a of all Line objects created.</p>
+<p>The following format specifiers exist:</p>
+<blockquote>
+<div><p>y     yellow        .     point              -     solid
+m     magenta       o     circle             :     dotted
+c     cyan          x     x-mark             -.    dashdot
+r     red           +     plus               &#8211;    dashed
+g     green         *     star
+b     blue          s     square
+w     white         d     diamond
+k     black         v     triangle (down)</p>
+<blockquote>
+<div>^     triangle (up)
+&lt;     triangle (left)
+&gt;     triangle (right)
+p     pentagram
+h     hexagram</div></blockquote>
+</div></blockquote>
+<p>Examples:</p>
+<p>Draw a line from a Python list:
+&gt;&gt;&gt; plot([1,2,3])</p>
+<p>Draw three red crosses:
+&gt;&gt;&gt; plot([1,2,3], &#8216;rx&#8217;)</p>
+<p>A somewhat more complex example:
+&gt;&gt;&gt; x = linspace(0, 15, 76)   # 0, 0.2, 0.4, ..., 15
+&gt;&gt;&gt; y1 = sin(x)*x
+&gt;&gt;&gt; y2 = sin(x)*sqrt(x)
+&gt;&gt;&gt; plot(x, y1, &#8216;b-&#8216;, x, y2, &#8216;ro&#8217;,
+...      legend=(&#8216;x*sin(x)&#8217;, &#8216;sqrt(x)*sin(x)&#8217;))</p>
+<p>Note: loglog, semilogy, and semilogx are like plot(...,log=&#8217;xy&#8217;),
+plot(...,log=&#8217;y&#8217;), and plot(...,log=&#8217;x&#8217;), respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.plot3">
+<tt class="descname">plot3</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.plot3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw lines and points in 3D space.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots z against x and y, i.e., if x, y, and z are vectors of length n,
+then this will plot all the points (x[i], y[i], z[i]) for 0&lt;=i&lt;n.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots values in z on the z-axis
+(same as plot3(range(len(z)), range(len(z)), z)).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots values in z on z-axis formated like fmt (see the plot command).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">fmt1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">fmt2</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>same as hold(&#8216;on&#8217;) followed by multiple plot3(x,y,z,fmt).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>like above, but automatically chooses different colors.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses x as the values on the x-axis and y as the values on the y-axis
+for all the supplied curves (assuming that all have the same length).
+By setting x=&#8217;auto&#8217; and y=&#8217;auto&#8217; has the same effect as
+x=range(len(z1)) and y=range(len(z1)), respectively.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots into the Axis object ax instead of the current axis.</p>
+<p>The plot3 command returns a list containing all the created Line
+objects.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span><span class="mi">301</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot3</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">t</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;A helix&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.prism">
+<tt class="descname">prism</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.prism" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prism color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.quiver">
+<tt class="descname">quiver</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.quiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw arrows from a 2D vector field.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>displays vectors as arrows with components U and V at the grid
+defined by X and Y. The arrays U and V must both have the same shape
+and the grid components X and Y must either have the same shape as
+U or fulfill the requirement len(X)==n and len(y)==m, where
+m,n=shape(u).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling quiver(range(n),range(m),U,V), where
+m,n=shape(u)).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s">&#39;filled&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>draw filled arrows.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the line specification as given in the format string fmt. See
+the plot command for further details on specifying the format string.</p>
+<p>Examples:</p>
+<p>Plot the gradient field of the function z = x**2 + y**2:
+&gt;&gt;&gt; x = y = linspace(-2, 2, 21)
+&gt;&gt;&gt; xv, yv = meshgrid(x,y)
+&gt;&gt;&gt; values = xv**2 + yv**2
+&gt;&gt;&gt; contour(xv, yv, values, 10, hold=&#8217;on&#8217;)
+&lt;scitools.easyviz.common.Contours object at 0xb45f374c&gt;
+&gt;&gt;&gt; uv, vv = gradient(values, 0.2)
+&gt;&gt;&gt; quiver(xv, yv, uv, vv)
+&lt;scitools.easyviz.common.VelocityVectors object at 0xb45435cc&gt;
+&gt;&gt;&gt; hold(&#8216;off&#8217;)</p>
+<p>Another example:
+&gt;&gt;&gt; x = linspace(0,3,80)
+&gt;&gt;&gt; y = sin(2*pi*x)
+&gt;&gt;&gt; theta = 2*pi*x+pi/2
+&gt;&gt;&gt; u = sin(theta)/10
+&gt;&gt;&gt; v = cos(theta)/10
+&gt;&gt;&gt; quiver(x,y,u,v,0.04,&#8217;b&#8217;,hold=&#8217;on&#8217;)
+&lt;scitools.easyviz.common.VelocityVectors object at 0xb768e1cc&gt;
+&gt;&gt;&gt; plot(x,y,&#8217;r&#8217;)
+[&lt;scitools.easyviz.common.Line object at 0xb768e36c&gt;]
+&gt;&gt;&gt; hold(&#8216;off&#8217;)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.quiver3">
+<tt class="descname">quiver3</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.quiver3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw velocity vectors in 3D space.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots arrows from the 3D vector field with components U,V,W at the
+grid defined by X,Y,Z. The shape of the three vector components is
+assumed to be the same, while the grid components must either have
+the same shape as U or fulfill the requirements len(X)==n, len(Y)==m,
+and len(Z)==p, where m,n,p=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the same result as above, but it is assumed that
+X,Y = meshgrid(range(n),range(m)), where m,n=shape(Z).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>scales the arrows by the scale factor given in s. The default is s=1,
+while a value of s=0 turns off automatic scaling.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s">&#39;filled&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>fills the arrows.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the specification on the arrows as given in the format string
+fmt (see the plot command for further information on format strings).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">quiver3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots the vectors in the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A VelocityVectors object.</p>
+<p>Examples:</p>
+<p>Draw the &#8220;radius vector field&#8221; v = (x,y,z):
+&gt;&gt;&gt; x = y = linspace(-3,3,4)
+&gt;&gt;&gt; xv, yv, zv = meshgrid(x, y, sparse=False)
+&gt;&gt;&gt; yv, vv, wv = xv, yv, zv
+&gt;&gt;&gt; quiver3(xv, yv, zv, uv, uv, wv, &#8216;filled&#8217;, &#8216;r&#8217;,
+...         axis=[-7,7,-7,7,-7,7])</p>
+<p>Draw the path of a projectile as a function of time:
+FIXME: This example is taken from ...
+&gt;&gt;&gt; vz = 10  # Velocity
+&gt;&gt;&gt; a = -32  # Acceleration
+&gt;&gt;&gt; t = linspace(0,1,11)
+&gt;&gt;&gt; z = vz*t + 1./2*a*t**2
+&gt;&gt;&gt; vx = 2
+&gt;&gt;&gt; x = vx*t
+&gt;&gt;&gt; vy = 3
+&gt;&gt;&gt; y = vy*t
+&gt;&gt;&gt; u = gradient(x)
+&gt;&gt;&gt; v = gradient(y)
+&gt;&gt;&gt; w = gradient(z)
+&gt;&gt;&gt; scale = 0
+&gt;&gt;&gt; quiver3(x,y,z,u,v,w,0,view=[70,18],grid=&#8217;on&#8217;,
+...         axis=[0,3.5,0,3,-10,2])</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.savefig">
+<tt class="descname">savefig</tt><big>(</big><em>filename='figspickle.txt'</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.savefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save all current figures to a file (with the given filename).
+The file has standard Python pickle format (dict of Figure
+instances). The figures can later be reloaded by the openfig
+method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.semilogx">
+<tt class="descname">semilogx</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.semilogx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a semilog plot with logarithmic scaling on x-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">semilogx</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling plot(...) with the exception that a
+logarithmic (base 10) scale is used for the x-axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.semilogy">
+<tt class="descname">semilogy</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.semilogy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a semilog plot with logarithmic scaling on y-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">semilogy</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling plot(...) with the exception that a
+logarithmic (base 10) scale is used for the y-axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.setp">
+<tt class="descname">setp</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.setp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set object properties or attributes in this backend instance.</p>
+<p>Calling:</p>
+<div class="highlight-python"><pre>setp([obj,] prop1=value1, prop2=value2, ...)</pre>
+</div>
+<p>will set the attributes as given in this backend instance. If the
+optional positional argument obj is a given object with a set method
+(like Figure, Axis, and PlotProperties objects), the (relevant)
+properties and values are also set in this object. This also works on
+a list with objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.shading">
+<tt class="descname">shading</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.shading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the color shading of surfaces.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">shading</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>changes the shading mode in the current axis to the one specified by
+by mode. Valid modes are &#8216;flat&#8217;, &#8216;interp&#8217; (interpolated or Gouraud)
+and &#8216;faceted&#8217; (default).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">shading</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.show">
+<tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redraw the current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.slice_">
+<tt class="descname">slice_</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.slice_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw volumetric slice plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slice_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">Sx</span><span class="p">,</span><span class="n">Sy</span><span class="p">,</span><span class="n">Sz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>draws orthogonal slice planes through the volumetric data set V
+defined on the grid with components X, Y, and Z. The grid components
+must either have the same shape as V or fulfill the requirement
+len(X)==n, len(Y)==m, and len(Z)==p, where m,n,p=shape(V). The Sx,
+Sy, and Sz arrays defines the slice planes in the x, y, and z
+direction, respectively.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slice_</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">Sx</span><span class="p">,</span><span class="n">Sy</span><span class="p">,</span><span class="n">Sz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling slice_(range(n),range(m),range(p),V,Sx,Sy,Sz),
+where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slice_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">,</span><span class="n">ZI</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>draws slices through the volumetric data set V along the surface
+defined by the arrays XI,YI,ZI.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slice_</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">,</span><span class="n">ZI</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling slice_(range(n),range(m),range(p)),V,XI,YI,ZI),
+where m,n,p = shape(V).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">slice_</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets which interpolation method to be used, where method can be either
+&#8216;linear&#8217; (default), &#8216;cubic&#8217;, or &#8216;nearest&#8217;.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">slice</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plots into the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A Volume object.</p>
+<p>Examples:</p>
+<p>Visualize the function x*exp(-x**2-y**2-z**2) over the range
+-2 &gt; x,y,z &lt; 2:
+&gt;&gt;&gt; xx, yy, zz = meshgrid(linspace(-2,2,21), linspace(-2,2,17),
+...                       linspace(-2,2,25))
+&gt;&gt;&gt; vv = x*exp(-xx**2-yy**2-zz**2)
+&gt;&gt;&gt; slice_(xx, yy, zz, vv, [-1.2,.8,2], 2, [-2,-.2])</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.spring">
+<tt class="descname">spring</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.spring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of magenta and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.stem">
+<tt class="descname">stem</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.stem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a stem plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.streamline">
+<tt class="descname">streamline</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.streamline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw streamlines from 2D or 3D vector data.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span><span class="n">startz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw streamlines from the 3D vector field with components
+U,V,W defined on the grid given by X,Y,Z. The arrays U,V,W should
+all have the same shape and the grid components X,Y,Z must either
+have the same shape as U or fulfill the requirement len(X)==n,
+len(Y)==m, and len(Z)==p, where m,n,p=shape(U). The starting
+positions for the streamlines are defined in the arrays startx,
+starty, and startz.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span><span class="n">startz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, except that it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw streamlines from the 2D vector field with components U,V
+defined on the grid given by X,Y. The arrays U,V should have the same
+shape and the grid componetns X,Y mist either have the same shape as
+U or fulfill the requirement len(X)==n and len(Y)==m, where
+m,n=shape(u). The starting positions for the streamlines are defined
+in the arrays startx and starty.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, except that it is assumed that
+X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the given step size instead of the default step size of 0.1.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamline</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>The streamline command returns a Streams object.</p>
+<p>Examples:</p>
+<p>FIXME: Add streamline example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.streamribbon">
+<tt class="descname">streamribbon</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.streamribbon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw stream ribbons from 3D vector data.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamribbon</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling streamlines(...), except that only 3D vector
+fields are supported by the streamribbon command. The optional
+positional argument stepsize is not supported either.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamribbon</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>specifies the width of the ribbons.</p>
+<p>Examples:</p>
+<p>FIXME: Add streamribbon example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.streamslice">
+<tt class="descname">streamslice</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.streamslice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw streamlines in axis aligned slice planes.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span><span class="n">startz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw streamlines (with direction arrows) from the 3D vector field
+with components U, V, and W in planes aligned with the coordinate axes
+at the points given in the arrays startx, starty, and startz. The
+arrays U, V, and W must all have the same shape and the grid
+coordinates given in the arrays X, Y, and Z must either have the same
+shape as U or fulfill the requirement len(X)==n, len(Y)==m, and
+len(Z)==p, where m,n,p=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="n">startx</span><span class="p">,</span><span class="n">starty</span><span class="p">,</span><span class="n">startz</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, except that it is assumed that
+X,Y,Z = meshgrid(range(n),range(m),range(p)), where m,n,p=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will draw streamlines from the 2D vector field with components U and
+V. The vector components must have equal shape and the arrays X and Y
+should either have the same shape as U or fulfill the requirement
+len(X)==n and len(Y)==m, where m,n=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as above, except that it is assumed that
+X,Y = meshgrid(range(n),range(m)), where m,n=shape(U).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s">&#39;arrows&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will display direction arrows (default).</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s">&#39;noarrows&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will not display direction arrows.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamslice</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>&#64;return: A ??? object.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wind</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s">&#39;wind.mat&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;u&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="s">&#39;w&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">streamslice</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">w</span><span class="p">,[],[],[</span><span class="mi">4</span><span class="p">],</span><span class="n">daspect</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.streamtube">
+<tt class="descname">streamtube</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.streamtube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw stream tubes from 3D vector data.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamtube</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling streamlines(...), except that only 3D vector
+fields are supported by the streamtube command. The optional
+positional argument stepsize is not supported either.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">streamtube</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="p">[</span><span class="n">scale</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>will scale the width of the tubes according to scale (default is 1),
+while the variable n sets the number of points along the
+circumference of the tube (default is 20).</p>
+<p>Examples:</p>
+<p>FIXME: Add streamtube example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.subplot">
+<tt class="descname">subplot</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.subplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create axes in tiled positions.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">subplot</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>splits the Figure window into m rows and n columns of small axes. The
+p-th axis is then selected for the current plot and the Axis object
+is returned.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">subplot</span><span class="p">(</span><span class="n">mnp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling subplot(m,n,p) as long as m&lt;=n&lt;=p&lt;10.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loglog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="s">&#39;b-s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.summer">
+<tt class="descname">summer</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.summer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of green and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.surf">
+<tt class="descname">surf</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.surf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a 3D solid surface.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">surf</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling mesh(...), except that a solid colored surface
+is drawn instead of a wireframe mesh.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zz</span> <span class="o">=</span> <span class="n">xx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">yy</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">zz</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.surfc">
+<tt class="descname">surfc</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.surfc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a solid surface with contours beneath.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">surfc</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is the same as calling surf(...) only that a contour plot is drawn
+beneath the surface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.surfl">
+<tt class="descname">surfl</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.surfl" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D shaded surface with lighting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.title">
+<tt class="descname">title</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add title to the current plot.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">title</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s at the top of the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">title</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds a title to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.vga">
+<tt class="descname">vga</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.vga" title="Permalink to this definition">¶</a></dt>
+<dd><p>Windows colormap for 16 colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.view">
+<tt class="descname">view</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify viewpoint.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">view</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>sets the viewpoint according to azimuth (horizontal rotation) and
+elevation (vertical). Both azimuth and elevation should be given in
+degrees.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">view</span><span class="p">([</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>is the same as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">view</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>changes the view to the default 2D view.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">view</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>changes the view to the default 3D view.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">view</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>uses the Axis object ax instead of the current axis.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">surf</span><span class="p">(</span><span class="n">peaks</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>      <span class="c"># the default 2D view</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">65</span><span class="p">)</span>  <span class="c"># azimuth=40 and elevation=65</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>      <span class="c"># back to the default 3D view</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surf</span><span class="p">(</span><span class="n">peaks</span><span class="p">(),</span><span class="n">view</span><span class="o">=</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>  <span class="c"># as a keyword argument</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.white">
+<tt class="descname">white</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.white" title="Permalink to this definition">¶</a></dt>
+<dd><p>All white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.winter">
+<tt class="descname">winter</tt><big>(</big><em>m=None</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.winter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of blue and green color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.xlabel">
+<tt class="descname">xlabel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.xlabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the x-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the x-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the label to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.xlim">
+<tt class="descname">xlim</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.xlim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or get limits on x axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xlim</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the x limits on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the same results as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the x limits for the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xlim</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>affects the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.ylabel">
+<tt class="descname">ylabel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.ylabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the y-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ylabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the y-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ylabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the label to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.ylim">
+<tt class="descname">ylim</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.ylim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or get limits on y axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ylim</span><span class="p">([</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the y limits on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the same results as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ylim</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the y limits for the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ylim</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>affects the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.zlabel">
+<tt class="descname">zlabel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.zlabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.template_.TemplateBackend.zlim">
+<tt class="descname">zlim</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.template_.TemplateBackend.zlim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or get limits on z axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlim</span><span class="p">([</span><span class="n">zmin</span><span class="p">,</span><span class="n">zmax</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>sets the z limits on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlim</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span><span class="n">zmax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the same results as above.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="n">zlim</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>returns the z limits for the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlim</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>affects the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/template_.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

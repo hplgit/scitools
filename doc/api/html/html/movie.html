@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.movie &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.movie">
+<span id="scitools-easyviz-movie"></span><h1><a class="reference internal" href="#module-scitools.easyviz.movie" title="scitools.easyviz.movie"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.easyviz.movie</span></tt></a><a class="headerlink" href="#module-scitools.easyviz.movie" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="scitools.easyviz.movie.MovieEncoder">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.movie.</tt><tt class="descname">MovieEncoder</tt><big>(</big><em>input_files</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/movie.html#MovieEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.movie.MovieEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class for turning a series of filenames with frames in a movie into
+a movie file.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.movie.MovieEncoder.encode" title="scitools.easyviz.movie.MovieEncoder.encode"><tt class="xref py py-obj docutils literal"><span class="pre">encode</span></tt></a>()</td>
+<td>Encode a series of images to a movie.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.easyviz.movie.MovieEncoder.encode">
+<tt class="descname">encode</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/movie.html#MovieEncoder.encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.movie.MovieEncoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a series of images to a movie.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.easyviz.movie.html_movie">
+<tt class="descclassname">scitools.easyviz.movie.</tt><tt class="descname">html_movie</tt><big>(</big><em>plotfiles</em>, <em>interval_ms=300</em>, <em>width=800</em>, <em>height=600</em>, <em>casename='movie'</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/movie.html#html_movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.movie.html_movie" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Takes a list plotfiles which should be for example of the form:</dt>
+<dd>[&#8216;frame00.png&#8217;, &#8216;frame01.png&#8217;, ... ]</dd>
+</dl>
+<p>where each string should be the name of an image file and they should be
+in the proper order for viewing as an animation.</p>
+<p>The result is html text strings that incorporate javascript to
+loop through the plots one after another.  The html text also features
+buttons for controlling the movie.
+The parameter iterval_ms is the time interval between loading
+successive images and is in milliseconds.</p>
+<p>The width and height parameters do not seem to have any effect
+for reasons not understood.</p>
+<p>The following strings are returned: header, javascript code, form
+with movie and buttons, and footer. Concatenating these strings
+and dumping to an html file yields a kind of movie file to be
+viewed in a browser. The images variable in the javascript code
+is unique for each movie, because it is annotated by the casename
+string, so several such javascript sections can be used in the
+same html file.</p>
+<p>This function is based on code written by R.J. LeVeque, based on
+a template from Alan McIntyre.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.easyviz.movie.movie">
+<tt class="descclassname">scitools.easyviz.movie.</tt><tt class="descname">movie</tt><big>(</big><em>input_files</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/movie.html#movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.movie.movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a movie from a series of image files.</p>
+<p>This function makes it very easy to create a movie file from a
+series of image files. Several different encoding tools can be
+used, such as an HTML file, MEncoder, FFmpeg, mpeg_encode,
+ppmtompeg (Netpbm), mpeg2enc (MJPEGTools), and convert (ImageMagick),
+to combine the image files together. The encoding tool will be chosen
+automatically among these if more than one is installed on the
+machine in question (unless it is specified as a keyword argument
+to the movie function).</p>
+<p>Suppose we have some image files named <cite>image_0000.eps</cite>, <cite>image_0001.eps</cite>,
+<cite>image_0002.eps</cite>, ... Note that the zero-padding, obtained by the printf
+format <cite>04d</cite> in this case, ensures that the files are listed in correct
+numeric order when using a wildcard notation like <cite>image_*.eps</cite>.
+We want to make a movie out of these files, where each file constitutes
+a frame in the movie. This task can be accomplished by the simple call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">movie</span><span class="p">(</span><span class="s">&#39;image_*.eps&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a movie file with a default name such as <cite>movie.html</cite>,
+<cite>movie.avi</cite>, <cite>movie.mpeg</cite>, or <cite>movie.gif</cite>, depending on the
+encoding tool chosen by the movie function. The file resides in
+the current working directory. The movie function checks a list of
+encoders and chooses the first it finds installed on the computer.</p>
+<p>Note: We strongly recommend to always clean up previously generated
+files for the frames in movies:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;image_*.eps&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Otherwise, there is a danger of mixing old and new files in the movie!</p>
+<p>One can easily specify the name of the movie file and explicitly
+specify the encoder. For example, an animated GIF movie can be
+created by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">movie</span><span class="p">(</span><span class="s">&#39;image_*.eps&#39;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="s">&#39;convert&#39;</span><span class="p">,</span>
+      <span class="n">output_file</span><span class="o">=</span><span class="s">&#39;../wave2D.gif&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The encoder here is the convert program from the ImageMagick suite
+of image manipulation tools. The resulting movie file will be
+named &#8216;wave2D.gif&#8217; and placed in the parent directory.</p>
+<p>Another convenient encoder is simply to make an HTML file that can
+play a series of image files:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">movie</span><span class="p">(</span><span class="s">&#39;image_*.png&#39;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">,</span>
+      <span class="n">output_file</span><span class="o">=</span><span class="s">&#39;../wave2D.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Just load the output file into a web browser and play the movie.</p>
+<p>If you want to create an MPEG movie by using the MEncoder
+tool, you can do this with the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">movie</span><span class="p">(</span><span class="s">&#39;image_*.eps&#39;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="s">&#39;mencoder&#39;</span><span class="p">,</span>
+      <span class="n">output_file</span><span class="o">=</span><span class="s">&#39;/home/johannr/wave2D.mpeg&#39;</span><span class="p">,</span>
+      <span class="n">vcodec</span><span class="o">=</span><span class="s">&#39;mpeg2video&#39;</span><span class="p">,</span> <span class="n">vbitrate</span><span class="o">=</span><span class="mi">2400</span><span class="p">,</span> <span class="n">qscale</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, we have also specified the video codec to be mpeg2video, the video
+bitrate to be 2400 kbps, the quantization scale (quality) to be 4, and
+the number of frames per second to be 10.</p>
+<p>Demo programs showing various use of the movie function can be
+found as the files movie_demo*.py files in the examples directory
+of the scitools source code tree.</p>
+<p>Suitable movie players are vlc for MPEG and AVI formats, and
+animate for animated GIF files.</p>
+<p>Below follows a more detailed description of the various arguments that
+are available in this function.</p>
+<p>Required arguments:</p>
+<p>input_files: Specifies the image files which will be used to make the
+movie. The argument must be given either as a string,
+e.g., &#8216;image_*.png&#8217; or a list/tuple of strings, e.g.,
+glob.glob(&#8216;image_*.png&#8217;).</p>
+<p>Notes:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">When using the FFmpeg or the Mpeg2enc tools, the image
+files should be given (if possible) as a string on the
+format &#8216;{1}%{2}d{3}&#8217;, where the name components are as
+follows:</p>
+<ul class="simple">
+<li>{1} filename prefix (e.g. <a href="#id1"><span class="problematic" id="id2">image_</span></a>)</li>
+<li>{2} counting placeholder (like in C, printf, e.g. 04)</li>
+<li>{3} file extension (e.g. .png or .jpg)</li>
+</ul>
+<p>Example of a correct description of the input files
+is image_%04d.png. If the input files are not given on
+the correct format, there will automatically be made
+copies of these files which will then be renamed to the
+required filename format.</p>
+</li>
+<li><p class="first">MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and
+.png image files. So, if the input files are on another
+format, there will automatically be made copies which
+in turn will be converted to the correct format.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Optional arguments:</p>
+<p>output_file: Sets the name of the output movie. If not set, a default
+name like movie.avi, movie.mpeg, or movie.gif (depending
+on the output format) will be given.</p>
+<p>Note: When using the convert tool to combine the images,
+the extension of the file name is used to determine the
+file format of the final movie. For example, if a name like
+movie.gif is given, the resulting movie will become an
+animated gif file. Other supported movie formats are MPEG
+(.mpg, .mpeg, or .m2v) and MNG (Multiple-image Network
+Graphics).</p>
+<p>overwrite_output: If True, the file given in the output_file
+argument above will be overwritten without warning (if it already
+exists). The default is True.</p>
+<p>encoder: Sets the encoder tool to be used. Currently the following
+encoders are supported: &#8216;html&#8217;, &#8216;mencoder&#8217;, &#8216;ffmpeg&#8217;,
+&#8216;mpeg_encode&#8217;, &#8216;ppmtompeg&#8217; (from the Netpbm package),
+&#8216;mpeg2enc&#8217; (from the MJPEGTools package), and &#8216;convert&#8217;
+(from the ImageMagick package).
+Note: &#8216;ppmtompeg&#8217; and &#8216;mpeg_encode&#8217; is the same tool.</p>
+<p>vbitrate: Sets the bit rate of the movie. The default is 800 kbps
+when using the FFmpeg and MEncoder encoders. For
+mpeg_encode, ppmtompeg, and mpeg2enc, this option is by
+default not specified. This option has no effect on the
+convert tool from ImageMagick.</p>
+<p>vbuffer: Sets the video buffer size. The default is to use the
+current encoding tools default video buffer size. In some
+cases it might be necessary to push this up to 500K or
+more.</p>
+<p>fps: Sets the number of frames per second for the final movie.
+The default is 25 fps.</p>
+<p>Notes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The &#8216;mpeg_encode&#8217;, &#8216;ppmtompeg&#8217;, and &#8216;mpeg2enc&#8217; tools only
+supports the following frame rates: 23.976, 24, 25,
+29.97, 30, 50, 59.94, and 60 fps.</li>
+<li>Not all video codecs have support for arbitrary frame
+rates (e.g., &#8216;mpeg1video&#8217; and &#8216;mpeg2video&#8217;).</li>
+</ul>
+</div></blockquote>
+<p>vcodec: Sets the video codec to be used. Some of the possible codecs
+are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;mjpeg&#8217;      - Motion JPEG</li>
+<li>&#8216;ljpeg&#8217;      - Lossless JPEG</li>
+<li>&#8216;h263&#8217;       - H.263</li>
+<li>&#8216;h263p&#8217;      - H.263+</li>
+<li>&#8216;mpeg4&#8217;      - MPEG-4 (DivX 4/5)</li>
+<li>&#8216;msmpeg4&#8217;    - DivX 3</li>
+<li>&#8216;msmpeg4v2&#8217;  - DivX 3</li>
+<li>&#8216;msmpeg4v2&#8217;  - MS MPEG4v2</li>
+<li>&#8216;wmv1&#8217;       - Windows Media Video, version 1 (AKA WMV7)</li>
+<li>&#8216;wmv2&#8217;       - Windows Media Video, version 2 (AKA WMV8)</li>
+<li>&#8216;rv10&#8217;       - an old RealVideo codec</li>
+<li>&#8216;mpeg1video&#8217; - MPEG-1 video</li>
+<li>&#8216;mpeg2video&#8217; - MPEG-2 video</li>
+<li>&#8216;huffyuv&#8217;    - HuffYUV</li>
+<li>&#8216;ffvhuff&#8217;    - nonstandard 20% smaller HuffYUV using YV12</li>
+<li>&#8216;asv1&#8217;       - ASUS Video v1</li>
+<li>&#8216;asv2&#8217;       - ASUS Video v2</li>
+<li>&#8216;ffv1&#8217;       - FFmpeg&#8217;s lossless video codec</li>
+</ul>
+</div></blockquote>
+<p>The default codec is &#8216;mpeg4&#8217; for mencoder/ffmpeg and
+&#8216;mpeg1video&#8217; for mpeg2enc.</p>
+<p>Notes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Run &#8216;ffmpeg -formats&#8217; for a longer list of available
+codecs.</li>
+<li>The mencoder tool can also use the &#8216;xvid&#8217; codec.</li>
+<li>Only &#8216;mpeg1video&#8217; and &#8216;mpeg2video&#8217; are available when
+using the mpeg2enc tool.</li>
+<li>This option has no effect when using mpeg_encode,
+ppmtompeg, or convert as the encoding tool.</li>
+</ul>
+</div></blockquote>
+<p>qscale: The quantization scale value (qscale) give a trade-off
+between quality and compression. A lower value means better
+quality but larger files. Larger values gives better
+compression, but worse quality. The qscale value must be an
+integer between 1 and 31. The default is to not set the
+qscale option.</p>
+<p>Note: When using mpeg_encode or ppmtompeg it is possible
+to have different qscale values for I, P, and B frames
+(see the iqscale, pqscale, and bqscale options below).</p>
+<p>qmin: Sets the minimum quantization scale value. Must be given as
+an integer between 1 and 31. The default is 2.</p>
+<p>qmax: Sets the maximum quantization scale value. Must be given as
+an integer between 1 and 31. The default is 31.</p>
+<p>iqscale: Sets the quantization scale value (see qscale) for I
+frames. This option only affects mpeg_encode and ppmtompeg.
+The default is to use the same value as in qscale. If
+qscale is not given, then 8 is the default value for
+iqscale.</p>
+<p>pqscale: Same as iqscale, but for P frames. If qscale is not given,
+then 10 is the default value for pqscale.</p>
+<p>bqscale: Same as iqscale, but for B frames. If qscale is not given,
+then 25 is the default value for bqscale.</p>
+<p>pattern: Sets the pattern (sequence) of I, P, and B frames. The
+default pattern is &#8216;I&#8217; which gives good quality (but
+worse compression). Another standard sequence is
+&#8216;IBBPBBPBBPBBPBB&#8217;. This option has only an effect when
+using mpeg_encode or ppmtompeg as the encoding tool.</p>
+<p>size: Sets the size of the final movie. The size must be given
+as a tuple/list (e.g. (640,480)) or as a string. The
+format of the string must be &#8216;wxh&#8217; (e.g. &#8216;320x240&#8217;), but
+the following abbreviations are also recognized:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;sqcif&#8217; - 128x96</li>
+<li>&#8216;qcif&#8217;  - 176x144</li>
+<li>&#8216;cif&#8217;   - 352x288</li>
+<li>&#8216;4cif&#8217;  - 704x576</li>
+</ul>
+</div></blockquote>
+<p>The default is to use the same size as the input images.</p>
+<p>aspect: Sets the aspect ratio of the movie (e.g. 4/3 or 16/9).</p>
+<p>Notes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;mpeg_encode&#8217; and &#8216;ppmtompeg&#8217; only support the following
+aspect ratios: 1.0, 0.6735, 0.7031, 0.7615,0.8055,
+0.8437, 0.8935, 0.9157, 0.9815, 1.0255, 1.0695, 1.0950,
+1.1575, and 1.2015.</li>
+<li>&#8216;mpeg2enc&#8217; only supports the following aspect ratios: 1.0,
+1.33, 1.77, and 2.21.</li>
+</ul>
+</div></blockquote>
+<p>preferred_package: Sets whether to prefer the Netpbm package or the
+ImageMagick package if both of them are installed. Must be
+given as a string, i.e, either &#8216;imagemagick&#8217; (default) or
+&#8216;netpbm&#8217;.</p>
+<p>Notes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>If only one of the packages is installed, then that
+package will be used.</li>
+<li>If none of the packages are installed, then some
+operations might stop in lack of needed programs.</li>
+</ul>
+</div></blockquote>
+<p>gop_size: Sets the number of frames in a group of pictures (GOP).
+The default is to use the chosen encoding tools default
+value.</p>
+<p>quiet: If True, then the operations will run quietly and only
+complain on errors. The default is False.</p>
+<p>cleanup: If True (default), all temporary files that are created
+during the execution of the movie command will be deleted.</p>
+<p>force_conversion: Forces conversion of images. This is a hack that can
+be used if the encoding tool has problems reading the input
+image files. If this is set to True, the images will be
+converted even if they are in a format recognized by the
+encoding tool. The default is False.</p>
+<p>Known issues:</p>
+<blockquote>
+<div><ul class="simple">
+<li>JPEG images created by the Vtk backend does not seem to work with
+the MEncoder and FFmpeg tools. This can be fixed by setting the
+force_conversion argument to True. This will force conversion of the
+JPEG files to PNG files which in turn should successfully create the
+movie.</li>
+<li>Aspect ratio in mpeg_encode does not seem to work.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/movie.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

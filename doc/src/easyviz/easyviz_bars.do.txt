@@ -1,0 +1,42 @@
+===== Bar Charts =====
+
+Easyviz also supports a unified interface to simple bar charts.
+Here is a simple example for displaying tabular values, with one
+bar for each data point:
+!bc pycod
+from scitools.std import *
+languages = ['C', 'Java', 'C++', 'PHP', 'VB', 'C#', 'Python',
+             'Perl', 'JavaScript']
+ratings = [18, 18, 9.7, 9.7, 6.4, 4.4, 4.2, 3.6, 2.5]
+bar(ratings, 'r',
+    barticks=languages,
+    ylabel='Ratings in percent (TIOBE Index, April 2010)',
+    axis=[-1, len(languages), 0, 20],
+    hardcopy='tmp.eps')
+!ec
+The bar chart illustrates the data in the `ratings` list. These data
+correspond to the names in `languages`.
+
+FIGURE:[figs/pyranking] A simple bar chart illustrating the popularity of common programming languages.
+
+One may display groups of bars. The data can then be put in a matrix,
+where rows (1st index) correspond to the groups the columns to the
+data within one group:
+!bc pycod
+data = [[ 0.15416284  0.7400497   0.26331502]
+        [ 0.53373939  0.01457496  0.91874701]
+        [ 0.90071485  0.03342143  0.95694934]
+        [ 0.13720932  0.28382835  0.60608318]]
+bar(data,
+    barticks=['group 1', 'group 2', 'group 3', 'group 4'],
+    legend=['bar 1', 'bar 2', 'bar 3'],
+    axis=[-1, data.shape[0], 0, 1.3],
+    ylabel='Normalized CPU time',
+    title='Bars from a matrix, now with more annotations')
+!ec
+When the names of the groups (barticks) are quite long, rotating them
+90 degrees is preferable, and this is done by the keyword
+argument `rotated_barticks=True`.
+
+The demo program in `examples/bar_demo.py` contains additional examples
+and features.

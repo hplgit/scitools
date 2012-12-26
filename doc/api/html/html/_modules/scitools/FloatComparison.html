@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.FloatComparison &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.FloatComparison</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">operator</span>
+
+<div class="viewcode-block" id="FloatComparison"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison">[docs]</a><span class="k">class</span> <span class="nc">FloatComparison</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class FloatComparison is used to test</span>
+<span class="sd">    a == b, a &lt; b, a &lt;= b, a &gt; b, a &gt;= b and a != b</span>
+<span class="sd">    when a and b are floating-point numbers, complex numbers,</span>
+<span class="sd">    or NumPy arrays.</span>
+
+<span class="sd">    Because of possible round-off errors in the numbers, the tests are</span>
+<span class="sd">    performed approximately with a prescribed tolerance.</span>
+
+<span class="sd">    For example, a==b is true if abs(a-b) &lt; atol + rtol*abs(b).</span>
+<span class="sd">    The atol parameter comes into play when |a| and |b| are large.</span>
+<span class="sd">    (It would be mathematically more appealing to have</span>
+<span class="sd">    rtol*max(abs(a), abs(b)), but float_eq is used with a is</span>
+<span class="sd">    close to b so the max function is not necessary.)</span>
+
+<span class="sd">    If the desired test is |a-b| &lt; eps, set atol=eps and rtol=0.</span>
+<span class="sd">    If a relative test is wanted, |(a-b)/b| &lt; eps, set atol=0</span>
+<span class="sd">    and rtol=eps.</span>
+
+<span class="sd">    The test a &lt; b is performed as a &lt; b + atol (a can be</span>
+<span class="sd">    larger than b, but not more than atol).</span>
+<span class="sd">    A corresponding relative test reads a/abs(b) &lt; 1 + rtol.</span>
+<span class="sd">    These are combined into a common test a &lt; b + atol + rtol*abs(b).</span>
+<span class="sd">    Similarly, a &gt; b if a &gt; b - atol (i.e., a can be less than b,</span>
+<span class="sd">    but not less than b-atol). The relative test is then</span>
+<span class="sd">    a/abs(b) &gt; 1 - rtol. These are combined to</span>
+<span class="sd">    a &gt; b - a tol - rtol*abs(b). The &gt;= and &lt;= operators</span>
+<span class="sd">    are the same as &gt; and &lt; when tolerances are used.</span>
+
+<span class="sd">    Class FloatComparison can be used directly, or the convenience</span>
+<span class="sd">    names float_eq, float_ne, float_lt, float_le, float_gt and float_ge</span>
+<span class="sd">    for the various operators can be used instead. For example,</span>
+<span class="sd">    float_eq is a FloatComparison object for the equality operator.</span>
+<span class="sd">    </span>
+<span class="sd">    Here is an interactive example::</span>
+
+<span class="sd">    &gt;&gt;&gt; from FloatComparison import FloatComparison, float_eq, \</span>
+<span class="sd">             float_ne, float_lt, float_le, float_gt, float_ge</span>
+<span class="sd">    &gt;&gt;&gt; float_eq.get_absolute_tolerance()   # default</span>
+<span class="sd">    1e-14</span>
+<span class="sd">    &gt;&gt;&gt; float_eq.get_relative_tolerance()   # default</span>
+<span class="sd">    1e-14</span>
+<span class="sd">    &gt;&gt;&gt; float_eq.set_absolute_tolerance(1E-2)</span>
+<span class="sd">    &gt;&gt;&gt; float_eq.set_relative_tolerance(1E-2)</span>
+<span class="sd">    &gt;&gt;&gt; print float_eq</span>
+<span class="sd">    a == b, computed as abs(a-b) &lt; 0.01 + 0.01*abs(b)</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; float_eq(2.1, 2.100001)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; # tolerances can be given as part of the test:</span>
+<span class="sd">    &gt;&gt;&gt; float_ne(2.1, 2.100001, atol=1E-14, rtol=1E-14)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; float_gt(2.0999999, 2.1000001)      # not greater with strict tol</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; print float_gt</span>
+<span class="sd">    a &gt; b, computed as a &gt; b - 1e-14 - 1e-14*abs(b)</span>
+<span class="sd">    &gt;&gt;&gt; float_gt.set_absolute_tolerance(1E-4)</span>
+<span class="sd">    &gt;&gt;&gt; print float_gt</span>
+<span class="sd">    a &gt; b, computed as a &gt; b - 0.0001 - 1e-14*abs(b)</span>
+<span class="sd">    &gt;&gt;&gt; float_gt(2.0999999, 2.1000001)      # greater with less strict tol</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy</span>
+<span class="sd">    &gt;&gt;&gt; a = numpy.array([2.1,      2.1000001])</span>
+<span class="sd">    &gt;&gt;&gt; b = numpy.array([2.100001, 2.0999999])</span>
+<span class="sd">    &gt;&gt;&gt; float_eq(a, b)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; float_lt(a, b)  # not less with strict tol</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; float_lt(a, b, atol=1E-2, rtol=1E-2)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; # use class FloatComparison directly:</span>
+<span class="sd">    &gt;&gt;&gt; compare = FloatComparison(&#39;==&#39;, atol=1E-3, rtol=1E-3)</span>
+<span class="sd">    &gt;&gt;&gt; compare(2.1, 2.100001)     # __call__ directs to compare.eq</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; compare.gt(2.1, 2.100001)  # same tolerance</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; compare.ge(a, b)</span>
+<span class="sd">    False</span>
+<span class="sd">    </span>
+<span class="sd">    The __call__ method calls eq, ne, lt, le, gt, or ge, depending on</span>
+<span class="sd">    the first argument to the constructor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># rtol and atol are static attributes so that changing</span>
+    <span class="c"># tolerances in e.g. the float_eq object also changes</span>
+    <span class="c"># the tolerances in all other comparison objects (float_lt, etc.).</span>
+    <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1E-14</span>
+    <span class="n">atol</span> <span class="o">=</span> <span class="mf">1E-14</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s">&#39;==&#39;</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1E-14</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        operation is &#39;==&#39;, &#39;&lt;&#39;, &#39;&lt;=&#39;, &#39;&gt;&#39;, &#39;&gt;=&#39; or &#39;!=&#39;.</span>
+<span class="sd">        The value determines what operation that __call__ performs.</span>
+<span class="sd">        </span>
+<span class="sd">        rtol: relative tolerance, atol: absolute tolerance.</span>
+<span class="sd">        a==b is true if abs(a-b) &lt; atol + rtol*abs(b).</span>
+<span class="sd">        atol comes into play when abs(b) is large.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">comparisons</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;==&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eq</span><span class="p">,</span>
+                       <span class="s">&#39;!=&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="p">,</span>
+                       <span class="s">&#39;&lt;&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lt</span><span class="p">,</span>
+                       <span class="s">&#39;&lt;=&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">le</span><span class="p">,</span>
+                       <span class="s">&#39;&gt;&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gt</span><span class="p">,</span>
+                       <span class="s">&#39;&gt;=&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ge</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">comparisons</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="n">comparisons</span><span class="p">[</span><span class="n">operation</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Wrong operation &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">operation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span> <span class="o">=</span> <span class="n">operation</span>  <span class="c"># nice to store for printouts/tests</span>
+            
+        <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span> <span class="o">=</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares a with b: a == b, a!= b, a &lt; b, etc., depending</span>
+<span class="sd">        on how this FloatComparison was initialized.</span>
+<span class="sd">        a and b can be numbers or arrays. The comparison is actually</span>
+<span class="sd">        performed in the methods eq, ne, lt, le, etc.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="FloatComparison.eq"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.eq">[docs]</a>    <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a == b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rtol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">rtol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span>
+        <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">atol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># assume NumPy array, tuple or list</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> 
+                                      <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">b</span><span class="p">),</span>
+                                      <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+                <span class="c">#r = numpy.abs(a-b) &lt; atol + rtol*numpy.abs(b)</span>
+                <span class="c">#return r.all()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Illegal types: a is </span><span class="si">%s</span><span class="s"> and b is </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="FloatComparison.ne"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.ne">[docs]</a>    <span class="k">def</span> <span class="nf">ne</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a != b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="FloatComparison.set_absolute_tolerance"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.set_absolute_tolerance">[docs]</a>    <span class="k">def</span> <span class="nf">set_absolute_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atol</span><span class="p">):</span>
+        <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span> <span class="o">=</span> <span class="n">atol</span>
+        </div>
+<div class="viewcode-block" id="FloatComparison.set_relative_tolerance"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.set_relative_tolerance">[docs]</a>    <span class="k">def</span> <span class="nf">set_relative_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rtol</span><span class="p">):</span>
+        <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span> <span class="o">=</span> <span class="n">rtol</span>
+            </div>
+<div class="viewcode-block" id="FloatComparison.get_absolute_tolerance"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.get_absolute_tolerance">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span>
+        </div>
+<div class="viewcode-block" id="FloatComparison.get_relative_tolerance"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.get_relative_tolerance">[docs]</a>    <span class="k">def</span> <span class="nf">get_relative_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span>
+            </div>
+<div class="viewcode-block" id="FloatComparison.lt"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.lt">[docs]</a>    <span class="k">def</span> <span class="nf">lt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a &lt; b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rtol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">rtol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span>
+        <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">atol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># assume NumPy array</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="o">+</span> <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>  <span class="c"># all must be true</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Illegal types: a is </span><span class="si">%s</span><span class="s"> and b is </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="FloatComparison.le"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.le">[docs]</a>    <span class="k">def</span> <span class="nf">le</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a &lt;= b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FloatComparison.gt"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.gt">[docs]</a>    <span class="k">def</span> <span class="nf">gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a &gt; b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rtol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">rtol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span>
+        <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">atol</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">atol</span> <span class="o">-</span> <span class="n">rtol</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span> <span class="ow">and</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># assume NumPy array</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">-</span> <span class="n">atol</span> <span class="o">-</span> <span class="n">rtol</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>  <span class="c"># all must be true</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Illegal types: a is </span><span class="si">%s</span><span class="s"> and b is </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="FloatComparison.ge"><a class="viewcode-back" href="../../FloatComparison.html#scitools.FloatComparison.FloatComparison.ge">[docs]</a>    <span class="k">def</span> <span class="nf">ge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests a &gt;= b with tolerance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return pretty print of operator, incl. tolerances.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span> <span class="o">==</span> <span class="s">&#39;==&#39;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;a == b, computed as abs(a-b) &lt; </span><span class="si">%g</span><span class="s"> + </span><span class="si">%g</span><span class="s">*abs(b)&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span> <span class="o">==</span> <span class="s">&#39;!=&#39;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;a != b, computed as abs(a-b) &gt; </span><span class="si">%g</span><span class="s"> + </span><span class="si">%g</span><span class="s">*abs(b)&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;a </span><span class="si">%s</span><span class="s"> b, computed as a &gt; b - </span><span class="si">%g</span><span class="s"> - </span><span class="si">%g</span><span class="s">*abs(b)&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;a </span><span class="si">%s</span><span class="s"> b, computed as a &lt; b + </span><span class="si">%g</span><span class="s"> + </span><span class="si">%g</span><span class="s">*abs(b)&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comparison_op</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">FloatComparison</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+<span class="c"># define convenience functions for quicker use of class FloatComparison:</span></div>
+<span class="n">float_eq</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;==&#39;</span><span class="p">)</span>
+<span class="n">float_eq</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a == b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">float_ne</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;!=&#39;</span><span class="p">)</span>
+<span class="n">float_ne</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a != b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">float_lt</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;&lt;&#39;</span><span class="p">)</span>
+<span class="n">float_lt</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a &lt; b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">float_le</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;&lt;=&#39;</span><span class="p">)</span>
+<span class="n">float_le</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a &lt;= b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">float_gt</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;&gt;&#39;</span><span class="p">)</span>
+<span class="n">float_gt</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a &gt; b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+<span class="n">float_ge</span> <span class="o">=</span> <span class="n">FloatComparison</span><span class="p">(</span><span class="s">&#39;&gt;=&#39;</span><span class="p">)</span>
+<span class="n">float_ge</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;    Test if a &gt;= b within some tolerance.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> \
+                   <span class="n">FloatComparison</span><span class="o">.</span><span class="n">__doc__</span>
+
+<span class="k">def</span> <span class="nf">_test</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Verify FloatComparison functions.&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">2.3</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="mf">2.30000001</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="mf">2.29999998</span>
+
+    <span class="n">a_a</span>  <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span>  <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">a_b1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b1</span><span class="p">,</span> <span class="n">b1</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">a_b2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b2</span><span class="p">,</span> <span class="n">b2</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">float_eq</span><span class="p">,</span> <span class="n">float_ne</span><span class="p">,</span> <span class="n">float_lt</span><span class="p">,</span> <span class="n">float_le</span><span class="p">,</span> <span class="n">float_gt</span><span class="p">,</span> <span class="n">float_ge</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">set_absolute_tolerance</span><span class="p">(</span><span class="mf">1E-4</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">set_relative_tolerance</span><span class="p">(</span><span class="mf">1E-4</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">&#39;atol=</span><span class="si">%g</span><span class="s">, rtol=</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">float_eq</span><span class="o">.</span><span class="n">atol</span><span class="p">,</span> <span class="n">float_eq</span><span class="o">.</span><span class="n">rtol</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;, a=</span><span class="si">%.16f</span><span class="s">, b=</span><span class="si">%.16f</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;, a=</span><span class="si">%.16f</span><span class="s">, b=</span><span class="si">%.16f</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r2</span><span class="p">)</span>
+        <span class="n">r3</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">a_a</span><span class="p">,</span> <span class="n">a_b1</span><span class="p">)</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;, a=</span><span class="si">%s</span><span class="s">, b=</span><span class="si">%s</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_a</span><span class="p">,</span> <span class="n">a_b1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r3</span><span class="p">)</span>
+        <span class="n">r4</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">a_a</span><span class="p">,</span> <span class="n">a_b2</span><span class="p">)</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;, a=</span><span class="si">%s</span><span class="s">, b=</span><span class="si">%s</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a_a</span><span class="p">,</span> <span class="n">a_b2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">,</span> <span class="n">r4</span>
+
+    <span class="n">ok</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">printout</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="n">float_ne</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">False</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+                <span class="n">ok</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">True</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+                <span class="n">ok</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;works&#39;</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="s">&#39;does not work&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">The module&#39;</span><span class="p">,</span> <span class="n">msg</span>
+
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

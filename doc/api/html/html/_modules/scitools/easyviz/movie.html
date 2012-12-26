@@ -1,0 +1,1259 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.movie &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.easyviz.movie</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">findprograms</span>
+<span class="kn">from</span> <span class="nn">misc</span> <span class="kn">import</span> <span class="n">_check_type</span>
+
+<div class="viewcode-block" id="MovieEncoder"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.MovieEncoder">[docs]</a><span class="k">class</span> <span class="nc">MovieEncoder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for turning a series of filenames with frames in a movie into</span>
+<span class="sd">    a movie file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_local_prop</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;input_files&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>         <span class="c"># image files</span>
+        <span class="s">&#39;output_file&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>         <span class="c"># resulting movie</span>
+        <span class="s">&#39;overwrite_output&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>    <span class="c"># overwrite output file if True</span>
+        <span class="s">&#39;encoder&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c"># encoding tool</span>
+        <span class="s">&#39;vbitrate&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>            <span class="c"># video bit rate</span>
+        <span class="s">&#39;vbuffer&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c"># video buffer</span>
+        <span class="s">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>                   <span class="c"># default frame rate</span>
+        <span class="s">&#39;vcodec&#39;</span><span class="p">:</span> <span class="s">&#39;mpeg4&#39;</span><span class="p">,</span>           <span class="c"># default video codec</span>
+        <span class="s">&#39;size&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c"># final movie size</span>
+        <span class="s">&#39;quiet&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>              <span class="c"># run in quite mode</span>
+        <span class="s">&#39;aspect&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>              <span class="c"># aspect ratio</span>
+        <span class="s">&#39;preferred_package&#39;</span><span class="p">:</span> <span class="s">&#39;ImageMagick&#39;</span><span class="p">,</span>  <span class="c"># prefer ImageMagick or Netpbm</span>
+        <span class="s">&#39;qscale&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>              <span class="c"># quantization scale</span>
+        <span class="s">&#39;qmin&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>                   <span class="c"># minimum quantization scale</span>
+        <span class="s">&#39;qmax&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span>                  <span class="c"># maximum quantization scale</span>
+        <span class="s">&#39;iqscale&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c"># quantization scale for I frames</span>
+        <span class="s">&#39;pqscale&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c"># quantization scale for P frames</span>
+        <span class="s">&#39;bqscale&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c"># quantization scale for B frames</span>
+        <span class="s">&#39;pattern&#39;</span><span class="p">:</span> <span class="s">&#39;I&#39;</span><span class="p">,</span>              <span class="c"># pattern for I, P, and B frames</span>
+        <span class="s">&#39;gop_size&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>            <span class="c"># size of GOP (group of pictures)</span>
+        <span class="s">&#39;force_conversion&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>   <span class="c"># force conversion (to png) if True</span>
+        <span class="s">&#39;cleanup&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>             <span class="c"># clean up temporary files</span>
+        <span class="p">}</span>
+    <span class="n">_legal_encoders</span> <span class="o">=</span> <span class="s">&#39;convert mencoder ffmpeg mpeg_encode ppmtompeg &#39;</span>\
+                      <span class="s">&#39;mpeg2enc html&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">_legal_file_types</span> <span class="o">=</span> <span class="s">&#39;png gif jpg ps eps bmp tif tga pnm&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_prop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_files</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="c"># provide some space before print statements</span>
+
+        <span class="c"># Determine which encoder to be used</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">encoder</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># No encoder given, find the first installed among the legal ones</span>
+            <span class="k">for</span> <span class="n">enc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legal_encoders</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">enc</span><span class="p">):</span>
+                    <span class="n">encoder</span> <span class="o">=</span> <span class="n">enc</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">encoder</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># No encoder is installed, fall back on html</span>
+                <span class="n">encoder</span> <span class="o">=</span> <span class="s">&#39;html&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legal_encoders</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;encoder must be </span><span class="si">%s</span><span class="s">, not &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_legal_encoders</span><span class="p">,</span> <span class="n">encoder</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">encoder</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;html&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">encoder</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;The selected encoder (</span><span class="si">%s</span><span class="s">) is not installed&quot;</span> \
+                                <span class="o">%</span> <span class="n">encoder</span><span class="p">)</span>
+
+        <span class="c"># Determine the file type of the input files</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span><span class="nb">list</span><span class="p">)):</span>
+            <span class="n">file_</span> <span class="o">=</span> <span class="n">input_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">file_</span> <span class="o">=</span> <span class="n">input_files</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;The input files must be given as either a &quot;</span>\
+                             <span class="s">&quot;list/tuple of strings or a string, not &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> \
+                             <span class="nb">type</span><span class="p">(</span><span class="n">input_files</span><span class="p">))</span>
+
+        <span class="c"># Check that the input files do exist</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c"># Are input_files on ffmpeg/mpeg2enc format or Unix wildcard format?</span>
+            <span class="n">ffmpeg_format</span> <span class="o">=</span> <span class="s">r&#39;(.+)%\d+d(\..+)&#39;</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ffmpeg_format</span><span class="p">,</span> <span class="n">input_files</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">wildcard_format</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;*&#39;</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wildcard_format</span> <span class="o">=</span> <span class="n">input_files</span>
+            <span class="n">all_input_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">wildcard_format</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">all_input_files</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;No files of the form </span><span class="si">%s</span><span class="s"> exist.&#39;</span> <span class="o">%</span> <span class="n">input_files</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;Found </span><span class="si">%d</span><span class="s"> files of the format </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_input_files</span><span class="p">),</span> <span class="n">input_files</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c"># list of specific filenames</span>
+            <span class="n">all_input_files</span> <span class="o">=</span> <span class="n">input_files</span>
+        <span class="n">error_encountered</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">all_input_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;Input file </span><span class="si">%s</span><span class="s"> does not exist.&#39;</span> <span class="o">%</span> <span class="n">f</span>
+                <span class="n">error_encountered</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">error_encountered</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;Some input files were not found.&#39;</span><span class="p">)</span>
+
+        <span class="n">fname</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unable to determine file type from file name.&quot;</span><span class="p">)</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="c"># remove the . (dot)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legal_file_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;File type must be </span><span class="si">%s</span><span class="s">, not &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> \
+                            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_legal_file_types</span><span class="p">,</span> <span class="n">file_type</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_type</span>
+
+<div class="viewcode-block" id="MovieEncoder.encode"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.MovieEncoder.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Encode a series of images to a movie.&quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">encoder</span> <span class="o">==</span> <span class="s">&#39;html&#39;</span><span class="p">:</span>
+            <span class="c"># Don&#39;t make movie file, just an html file that can play png files</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Making HTML code for displaying&#39;</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+            <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">]</span>
+            <span class="n">interval_ms</span> <span class="o">=</span> <span class="mf">1000.0</span><span class="o">/</span><span class="n">fps</span>
+            <span class="n">outf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">outf</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">outf</span> <span class="o">=</span> <span class="s">&#39;movie.html&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># Ensure .html extension</span>
+                <span class="n">outf</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">outf</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.html&#39;</span>
+            <span class="n">casename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">outf</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">header</span><span class="p">,</span> <span class="n">jscode</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">footer</span> <span class="o">=</span> \
+                <span class="n">html_movie</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">interval_ms</span><span class="p">,</span> <span class="n">casename</span><span class="o">=</span><span class="n">casename</span><span class="p">)</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outf</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span> <span class="o">+</span> <span class="n">jscode</span> <span class="o">+</span> <span class="n">form</span> <span class="o">+</span> <span class="n">footer</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">movie in output file&quot;</span><span class="p">,</span> <span class="n">outf</span>
+            <span class="k">return</span>
+
+        <span class="c"># Get command string (all other encoders are run as stand-alone apps)</span>
+        <span class="k">exec</span><span class="p">(</span><span class="s">&#39;cmd=self._</span><span class="si">%s</span><span class="s">()&#39;</span> <span class="o">%</span> <span class="n">encoder</span><span class="p">)</span>
+
+        <span class="c"># Run command</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">scitools.easyviz.movie function runs the command: </span><span class="se">\n\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">cmd</span>
+        <span class="n">failure</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">scitools.easyviz.movie could not make movie&#39;</span>
+            <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span><span class="s">&#39;Check error messages from the encoder in the terminal window&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">movie in output file&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+
+        <span class="c"># Clean up temporary files</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;cleanup&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_tmp_files&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">tmp_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_convert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string with commands for making a movie with the convert</span>
+<span class="sd">        tool (from ImageMagick).&quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">encoder</span>
+
+        <span class="c"># set number of frames per second:</span>
+        <span class="c">#cmd += &#39; -delay 1x%s&#39; % self._prop[&#39;fps&#39;]</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -delay </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="c"># set size:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -scale </span><span class="si">%s</span><span class="s">x</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c"># get image files:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;(.*)%(\d+)d(.*\..*)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">pre</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;[0-9]&#39;</span><span class="o">*</span><span class="n">num</span> <span class="o">+</span> <span class="n">ext</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39; is not a valid file specification or the files &quot;</span> \
+                <span class="s">&quot;does not exist.&quot;</span> <span class="o">%</span> <span class="n">files</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+
+        <span class="c"># set output file:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;movie.gif&#39;</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">output_file</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">!=</span> <span class="s">&#39;.gif&#39;</span><span class="p">:</span>
+            <span class="n">output_file</span> <span class="o">+=</span> <span class="s">&#39;.gif&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;overwrite_output&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Output file &#39;</span><span class="si">%s</span><span class="s">&#39; already exist. Use&quot;</span> \
+                            <span class="s">&quot; &#39;overwrite_output=True&#39; to overwrite the file.&quot;</span> \
+                            <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">output_file</span>
+
+        <span class="k">return</span> <span class="n">cmd</span>
+
+    <span class="k">def</span> <span class="nf">_mencoder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string with commands for making a movie with the MEncoder</span>
+<span class="sd">        tool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">encoder</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;(.*)%(\d+)d(.*\..*)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">pre</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;[0-9]&#39;</span><span class="o">*</span><span class="n">num</span> <span class="o">+</span> <span class="n">ext</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39; is not a valid file specification or the files &quot;</span>\
+                    <span class="s">&quot;does not exist.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;jpg&#39;</span><span class="p">,</span> <span class="s">&#39;png&#39;</span><span class="p">]</span> <span class="ow">or</span> \
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;force_conversion&#39;</span><span class="p">]:</span>
+                <span class="c"># since mencoder only supports jpg and png files, we have to</span>
+                <span class="c"># create copies of the input files and convert them to jpg.</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_any2any</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">ofile_ext</span><span class="o">=</span><span class="s">&#39;.png&#39;</span><span class="p">)</span>
+                <span class="n">file_type</span> <span class="o">=</span> <span class="s">&#39;png&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">[:]</span> <span class="c"># store files for later removal</span>
+            <span class="c"># give the files as a comma separated string to mencoder:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &quot;mf://</span><span class="si">%s</span><span class="s">&quot; -mf&#39;</span> <span class="o">%</span> <span class="n">files</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; fps=</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:type=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">file_type</span>
+        <span class="n">vbitrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbitrate&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">vbitrate</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">vbitrate</span> <span class="o">=</span> <span class="mi">800</span>
+        <span class="n">vcodec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vcodec&#39;</span><span class="p">]</span>
+        <span class="n">qscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span>
+        <span class="n">qmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qmin&#39;</span><span class="p">]</span>
+        <span class="n">qmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qmax&#39;</span><span class="p">]</span>
+        <span class="n">vbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">vcodec</span> <span class="o">==</span> <span class="s">&#39;xvid&#39;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -ovc xvid -xvidencopts&#39;</span>
+            <span class="k">if</span> <span class="n">qscale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; fixed_quant=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">qscale</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; bitrate=</span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="n">vbitrate</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;min_iquant=</span><span class="si">%s</span><span class="s">:max_iquant=</span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qmin</span><span class="p">,</span> <span class="n">qmax</span><span class="p">)</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;min_pquant=</span><span class="si">%s</span><span class="s">:max_pquant=</span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qmin</span><span class="p">,</span> <span class="n">qmax</span><span class="p">)</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;min_bquant=</span><span class="si">%s</span><span class="s">:max_bquant=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qmin</span><span class="p">,</span> <span class="n">qmax</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># mbd: macroblock decision</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -ovc lavc -lavcopts vcodec=</span><span class="si">%s</span><span class="s">:mbd=1&#39;</span> <span class="o">%</span> <span class="n">vcodec</span>
+            <span class="k">if</span> <span class="n">vbitrate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:vbitrate=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">vbitrate</span>
+                <span class="c">#cmd += &#39;:vrc_minrate=%s:vrc_maxrate=%s&#39; % ((vbitrate,)*2)</span>
+            <span class="k">if</span> <span class="n">qscale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:vqscale=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">qscale</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:vqmin=</span><span class="si">%s</span><span class="s">:vqmax=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qmin</span><span class="p">,</span> <span class="n">qmax</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">vbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:vrc_buf_size=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">vbuffer</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">aspect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39;:aspect=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">aspect</span>
+        <span class="c">#cmd += &#39; -oac copy&#39; # audio</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -vf scale=</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c"># if no output file is given, use &#39;movie.avi&#39; as default:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;movie.avi&#39;</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;overwrite_output&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Output file &#39;</span><span class="si">%s</span><span class="s">&#39; already exist. Use&quot;</span> \
+                            <span class="s">&quot; &#39;overwrite_output=True&#39; to overwrite the file.&quot;</span> \
+                            <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -o </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">output_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &gt; /dev/null 2&gt;&amp;1&#39;</span>
+        <span class="k">return</span> <span class="n">cmd</span>
+
+    <span class="k">def</span> <span class="nf">_ffmpeg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string with commands for making a movie with the FFmpeg</span>
+<span class="sd">        tool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">encoder</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;(.*)%(\d+)d(.*\..*)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;jpg&#39;</span><span class="p">,</span> <span class="s">&#39;png&#39;</span><span class="p">]</span> <span class="ow">or</span> \
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;force_conversion&#39;</span><span class="p">]:</span>
+                    <span class="n">pre</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="n">ext</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                    <span class="n">files</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;[0-9]&#39;</span><span class="o">*</span><span class="n">num</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                    <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">basename</span> <span class="o">=</span> <span class="s">&#39;easyviz_tmp_&#39;</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_any2any</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">basename</span><span class="p">,</span> <span class="n">ofile_ext</span><span class="o">=</span><span class="s">&#39;.png&#39;</span><span class="p">)</span>
+            <span class="n">file_type</span> <span class="o">=</span> <span class="s">&#39;png&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">[:]</span>
+            <span class="c"># create a new string with the right pattern:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%04d</span><span class="s">.png&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -i &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">files</span>
+        <span class="n">vbitrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbitrate&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">vbitrate</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">vbitrate</span> <span class="o">=</span> <span class="s">&quot;800k&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -b </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">vbitrate</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -r </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">]</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -s </span><span class="si">%s</span><span class="s">x</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vcodec&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -vcodec </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vcodec&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;overwrite_output&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -y&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -aspect </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -qscale </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -qmin </span><span class="si">%s</span><span class="s"> -qmax </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                   <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qmin&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qmax&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -bufsize </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;gop_size&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -g </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;gop_size&#39;</span><span class="p">])</span>
+        <span class="c">#cmd += &#39; -target dvd&#39;</span>
+        <span class="c"># if no output file is given, use &#39;movie.avi&#39; as default:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;movie.avi&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &gt; /dev/null 2&gt;&amp;1&#39;</span>
+        <span class="k">return</span> <span class="n">cmd</span>
+
+    <span class="k">def</span> <span class="nf">_mpeg_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string with commands for making a movie with the</span>
+<span class="sd">        mpeg_encode tool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="s">&#39;easyviz_tmp_&#39;</span>  <span class="c"># basename for temporary files</span>
+
+        <span class="c"># set frame rate:</span>
+        <span class="c"># mpeg_encode only supports a given set of frame rates:</span>
+        <span class="n">legal_frame_rates</span> <span class="o">=</span> <span class="p">(</span><span class="mf">23.976</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mf">29.97</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">59.94</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">legal_frame_rates</span><span class="p">:</span>
+            <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> only supports the these frame rates: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> \
+                             <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">legal_frame_rates</span><span class="p">))</span>
+
+        <span class="c"># set aspect ratio:</span>
+        <span class="n">legal_aspects</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6735</span><span class="p">,</span> <span class="mf">0.7031</span><span class="p">,</span> <span class="mf">0.7615</span><span class="p">,</span> <span class="mf">0.8055</span><span class="p">,</span>
+                         <span class="mf">0.8437</span><span class="p">,</span> <span class="mf">0.8935</span><span class="p">,</span> <span class="mf">0.9157</span><span class="p">,</span> <span class="mf">0.9815</span><span class="p">,</span> <span class="mf">1.0255</span><span class="p">,</span>
+                         <span class="mf">1.0695</span><span class="p">,</span> <span class="mf">1.0950</span><span class="p">,</span> <span class="mf">1.1575</span><span class="p">,</span> <span class="mf">1.2015</span><span class="p">)</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">aspect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">aspect</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">legal_aspects</span><span class="p">:</span>
+                <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> \
+                      <span class="s">&quot;</span><span class="si">%s</span><span class="s"> only supports the following aspect ratios: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> \
+                      <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">legal_aspects</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">aspect</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">print</span> <span class="n">aspect</span>
+
+        <span class="c"># get image files:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;(.*)%(\d+)d(.*\..*)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">pre</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;[0-9]&#39;</span><span class="o">*</span><span class="n">num</span> <span class="o">+</span> <span class="n">ext</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39; is not a valid file specification or the files &quot;</span> \
+                <span class="s">&quot;does not exist.&quot;</span> <span class="o">%</span> <span class="n">files</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;pnm&#39;</span> <span class="ow">or</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;force_conversion&#39;</span><span class="p">]:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_any2any</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">basename</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">[:]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+        <span class="c"># set input dir:</span>
+        <span class="n">input_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">input_dir</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">input_dir</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+
+        <span class="c"># set output file:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;movie.mpeg&#39;</span>
+        <span class="n">mpeg_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mpeg_file</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;overwrite_output&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Output file &#39;</span><span class="si">%s</span><span class="s">&#39; already exist. Use&quot;</span> \
+                            <span class="s">&quot; &#39;overwrite_output=True&#39; to overwrite the file.&quot;</span> \
+                            <span class="o">%</span> <span class="n">mpeg_file</span><span class="p">)</span>
+
+        <span class="c"># set pattern (sequence of I, P, and B frames):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;pattern&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>  <span class="c"># pattern must be uppercase</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># give warning?</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;I&#39;</span>
+
+        <span class="c"># set quantization scale for I, P, and B frames:</span>
+        <span class="n">qscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span>
+        <span class="n">iqscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;iqscale&#39;</span><span class="p">]</span>
+        <span class="n">pqscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;pqscale&#39;</span><span class="p">]</span>
+        <span class="n">bqscale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;bqscale&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">qscale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">iqscale</span> <span class="o">=</span> <span class="n">qscale</span>
+            <span class="k">if</span> <span class="n">pqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">pqscale</span> <span class="o">=</span> <span class="n">qscale</span>
+            <span class="k">if</span> <span class="n">bqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">bqscale</span> <span class="o">=</span> <span class="n">qscale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">iqscale</span> <span class="o">=</span> <span class="mi">8</span>
+            <span class="k">if</span> <span class="n">pqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">pqscale</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="k">if</span> <span class="n">bqscale</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">bqscale</span> <span class="o">=</span> <span class="mi">25</span>
+
+        <span class="c"># set gop size:</span>
+        <span class="n">gop_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;gop_size&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">gop_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">gop_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gop_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gop_size</span> <span class="o">=</span> <span class="mi">15</span>
+
+        <span class="c"># create an mpeg_encode parameter file:</span>
+        <span class="n">mpeg_encode_file</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.mpeg_encode-input&quot;</span> <span class="o">%</span> <span class="n">basename</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">mpeg_encode_file</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">PATTERN	         </span><span class="si">%(pattern)s</span><span class="s"></span>
+<span class="s">OUTPUT           </span><span class="si">%(mpeg_file)s</span><span class="s"></span>
+<span class="s">BASE_FILE_FORMAT PNM</span>
+<span class="s">INPUT_CONVERT    *</span>
+<span class="s">GOP_SIZE         </span><span class="si">%(gop_size)d</span><span class="s"></span>
+<span class="s">#GOP_SIZE         16</span>
+<span class="s">SLICES_PER_FRAME 1</span>
+<span class="s">INPUT_DIR        </span><span class="si">%(input_dir)s</span><span class="s"></span>
+<span class="s">INPUT</span>
+<span class="si">%(files)s</span><span class="s"></span>
+<span class="s">END_INPUT</span>
+<span class="s">PIXEL            FULL</span>
+<span class="s">#PIXEL            HALF</span>
+<span class="s">RANGE            10</span>
+<span class="s">PSEARCH_ALG      LOGARITHMIC</span>
+<span class="s">BSEARCH_ALG      CROSS2</span>
+<span class="s">IQSCALE	         </span><span class="si">%(iqscale)d</span><span class="s"></span>
+<span class="s">PQSCALE	         </span><span class="si">%(pqscale)d</span><span class="s"></span>
+<span class="s">BQSCALE	         </span><span class="si">%(bqscale)d</span><span class="s"></span>
+<span class="s">REFERENCE_FRAME  ORIGINAL</span>
+<span class="s">FRAME_RATE       </span><span class="si">%(fps)d</span><span class="s"></span>
+<span class="s">ASPECT_RATIO     </span><span class="si">%(aspect)s</span><span class="s"></span>
+<span class="s">FORCE_ENCODE_LAST_FRAME</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">())</span>
+
+        <span class="c"># set video bit rate and buffer size:</span>
+        <span class="n">vbitrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbitrate&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vbitrate</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">)):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;BIT_RATE         </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vbitrate</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">))</span>
+        <span class="n">vbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vbuffer</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">)):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;BUFFER_SIZE      </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">vbuffer</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_tmp_files&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mpeg_encode_file</span><span class="p">)</span>
+
+        <span class="c"># create the command string:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">encoder</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -realquiet&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">mpeg_encode_file</span>
+        <span class="k">return</span> <span class="n">cmd</span>
+
+    <span class="c"># mpeg_encode and ppmtompeg is the same encoding tool:</span>
+    <span class="n">_ppmtompeg</span> <span class="o">=</span> <span class="n">_mpeg_encode</span>
+
+    <span class="k">def</span> <span class="nf">_mpeg2enc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string with commands for making a movie with the</span>
+<span class="sd">        mpeg2enc tool (from MJPEGTools).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;encoder&#39;</span><span class="p">]</span>
+        <span class="n">png2yuv</span> <span class="o">=</span> <span class="s">&#39;png2yuv&#39;</span>
+        <span class="n">jpeg2yuv</span> <span class="o">=</span> <span class="s">&#39;jpeg2yuv&#39;</span>
+        <span class="n">yuvscaler</span> <span class="o">=</span> <span class="s">&#39;yuvscaler&#39;</span>
+
+        <span class="n">file_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;file_type&#39;</span><span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;input_files&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s">r&#39;(.*)%(\d+)d(.*\..*)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;jpg&#39;</span><span class="p">,</span> <span class="s">&#39;png&#39;</span><span class="p">]</span> <span class="ow">or</span> \
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;force_conversion&#39;</span><span class="p">]:</span>
+                    <span class="n">pre</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="n">ext</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                    <span class="n">files</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;[0-9]&#39;</span><span class="o">*</span><span class="n">num</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                    <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">basename</span> <span class="o">=</span> <span class="s">&#39;easyviz_tmp_&#39;</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_any2any</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">basename</span><span class="p">,</span> <span class="n">ofile_ext</span><span class="o">=</span><span class="s">&#39;.png&#39;</span><span class="p">)</span>
+            <span class="n">file_type</span> <span class="o">=</span> <span class="s">&#39;png&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">[:]</span>
+            <span class="c"># create a new string with the right pattern:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%04d</span><span class="s">.png&#39;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s">&#39;jpg&#39;</span> <span class="ow">and</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">jpeg2yuv</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="n">jpeg2yuv</span>
+        <span class="k">elif</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">png2yuv</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="n">png2yuv</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;png2yuv or jpeg2yuv is not installed&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -f 25&#39;</span> <span class="c"># frame rate</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -I p&#39;</span>  <span class="c"># interlacing mode: p = none / progressive</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -j &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">files</span> <span class="c"># set image files</span>
+        <span class="c"># find start image:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">9999</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">files</span> <span class="o">%</span> <span class="n">i</span><span class="p">):</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -b </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">i</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -v 0&#39;</span> <span class="c"># verbosity level 0</span>
+
+        <span class="c"># set size of movie (by using the yuvscaler tool):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">yuvscaler</span><span class="p">):</span>
+            <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">size</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; | </span><span class="si">%(yuvscaler)s</span><span class="s"> -O SIZE_</span><span class="si">%(width)s</span><span class="s">x</span><span class="si">%(height)s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+
+        <span class="c"># if no output file is given, use &#39;movie.avi&#39; as default:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;movie.mpeg&#39;</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;overwrite_output&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Output file &#39;</span><span class="si">%s</span><span class="s">&#39; already exist. Use&quot;</span> \
+                            <span class="s">&quot; &#39;overwrite_output=True&#39; to overwrite the file.&quot;</span> \
+                            <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; | &#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="n">encoder</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vcodec&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;mpeg2video&#39;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -f 3&#39;</span> <span class="c"># generic mpeg-2 video</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -f 0&#39;</span> <span class="c"># generic mpeg-1 video</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbitrate&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -b </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbitrate&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -V </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;vbuffer&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -q </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;qscale&#39;</span><span class="p">]</span>
+
+        <span class="c"># set movie frame rate:</span>
+        <span class="n">legal_fps</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;23.976&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;24&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;25&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;29.97&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                     <span class="s">&#39;30&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;50&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s">&#39;59.94&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s">&#39;60&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;fps&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fps</span> <span class="ow">in</span> <span class="n">legal_fps</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;fps must be </span><span class="si">%s</span><span class="s">, not </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> \
+                             <span class="p">(</span><span class="n">fps_convert</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">fps</span><span class="p">))</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -F </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">legal_fps</span><span class="p">[</span><span class="n">fps</span><span class="p">]</span>
+        <span class="c">#cmd += &#39; --cbr&#39; # constant bit rate</span>
+        <span class="n">gop_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;gop_size&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">gop_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># set min (-g) and max (-G) gop size to the same value:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -g </span><span class="si">%s</span><span class="s"> -G </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gop_size</span><span class="p">,</span> <span class="n">gop_size</span><span class="p">)</span>
+
+        <span class="c"># set aspect ratio:</span>
+        <span class="n">legal_aspects</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;1.0&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;1.3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;1.7&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;2.21&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_aspect_ratio</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">aspect</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">aspect</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">legal_aspects</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">aspect</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">legal_aspects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                        <span class="n">aspect</span> <span class="o">=</span> <span class="n">legal_aspects</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">aspect</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">legal_aspects</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s">&quot;aspect must be either 1:1, 4:3, 16:9, or 2.21:1,&quot;</span> \
+                        <span class="s">&quot; not &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">aspect</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -a </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">aspect</span>
+
+        <span class="c"># set output file:</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -o </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&#39; -v 0&#39;</span> <span class="c"># verbosity level 0 (warnings and errors only)</span>
+        <span class="k">return</span> <span class="n">cmd</span>
+
+    <span class="k">def</span> <span class="nf">_any2any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="s">&#39;easyviz_tmp_&#39;</span><span class="p">,</span>
+                 <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ofile_ext</span><span class="o">=</span><span class="s">&#39;.pnm&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert a list of files to the file format specified in the</span>
+<span class="sd">        ofile_ext keyword argument. Using either Netpbm tools or convert</span>
+<span class="sd">        (from the ImageMagick package).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">netpbm_converters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;.png&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;pngtopnm&#39;</span><span class="p">,</span> <span class="s">&#39;pnmtopng&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.gif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;giftopnm&#39;</span><span class="p">,</span>  <span class="s">&#39;ppmtogif&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.jpg&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;jpegtopnm&#39;</span><span class="p">,</span> <span class="s">&#39;pnmtojpeg&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.ps&#39;</span><span class="p">:</span>  <span class="p">(</span><span class="s">&#39;pstopnm&#39;</span><span class="p">,</span> <span class="s">&#39;pnmtops&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.eps&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;pstopnm&#39;</span><span class="p">,</span> <span class="s">&#39;pnmtops&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.bmp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;bmptopnm&#39;</span><span class="p">,</span> <span class="s">&#39;ppmtobmp&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.tif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;tifftopnm&#39;</span><span class="p">,</span> <span class="s">&#39;pnmtotiff&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.tga&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;tgatopnm&#39;</span><span class="p">,</span> <span class="s">&#39;ppmtotga&#39;</span><span class="p">),</span>
+                             <span class="s">&#39;.pnm&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                             <span class="p">}</span>
+        <span class="n">_check_type</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="s">&#39;files&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span>
+        <span class="n">ifile_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">anytopnm</span> <span class="o">=</span> <span class="n">netpbm_converters</span><span class="p">[</span><span class="n">ifile_ext</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pnmtoany</span> <span class="o">=</span> <span class="n">netpbm_converters</span><span class="p">[</span><span class="n">ofile_ext</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pnmscale</span> <span class="o">=</span> <span class="s">&#39;pnmscale&#39;</span>
+        <span class="c">#pnmcrop = &#39;pnmcrop&#39;</span>
+        <span class="n">convert</span> <span class="o">=</span> <span class="s">&#39;convert&#39;</span>
+
+        <span class="n">app</span> <span class="o">=</span> <span class="n">anytopnm</span>
+        <span class="k">if</span> <span class="n">findprograms</span><span class="p">((</span><span class="n">convert</span><span class="p">,</span> <span class="n">anytopnm</span><span class="p">,</span> <span class="n">pnmtoany</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;preferred_package&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;imagemagick&#39;</span><span class="p">:</span>
+                <span class="n">app</span> <span class="o">=</span> <span class="n">convert</span>
+        <span class="k">elif</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">convert</span><span class="p">):</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="n">convert</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">findprograms</span><span class="p">((</span><span class="n">anytopnm</span><span class="p">,</span> <span class="n">pnmtoany</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Neither </span><span class="si">%s</span><span class="s"> nor </span><span class="si">%s</span><span class="s"> was found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">convert</span><span class="p">,</span><span class="n">anytopnm</span><span class="p">))</span>
+
+        <span class="n">quiet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">]</span>
+        <span class="n">new_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># counter</span>
+        <span class="k">for</span> <span class="n">file_</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">new_file</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s%04d%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ofile_ext</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">app</span> <span class="o">==</span> <span class="n">anytopnm</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="k">if</span> <span class="n">quiet</span> <span class="ow">and</span> <span class="n">app</span> <span class="o">!=</span> <span class="s">&#39;cat&#39;</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">+=</span> <span class="s">&#39;-quiet&#39;</span>
+                <span class="k">if</span> <span class="n">app</span> <span class="o">==</span> <span class="s">&#39;pstopnm&#39;</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">+=</span> <span class="s">&#39; -stdout&#39;</span>
+                    <span class="c">#options += &#39; -portrait&#39;</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%(app)s</span><span class="s"> </span><span class="si">%(options)s</span><span class="s"> </span><span class="si">%(file_)s</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">pnmscale</span><span class="p">):</span>
+                    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">size</span>
+                    <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">%(pnmscale)s</span><span class="s"> -width </span><span class="si">%(w)s</span><span class="s"> -height </span><span class="si">%(h)s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">pnmtoany</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+                        <span class="n">options</span> <span class="o">+=</span> <span class="s">&#39;-quiet&#39;</span>
+                    <span class="k">if</span> <span class="n">pnmtoany</span> <span class="o">==</span> <span class="s">&#39;pnmtojpeg&#39;</span><span class="p">:</span>
+                        <span class="n">options</span> <span class="o">+=</span> <span class="s">&#39; -quality 100&#39;</span> <span class="c"># don&#39;t lose quality</span>
+                    <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&quot; | </span><span class="si">%(pnmtoany)s</span><span class="s"> </span><span class="si">%(options)s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s">&quot; &gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">new_file</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">+=</span> <span class="s">&#39;-resize </span><span class="si">%s</span><span class="s">x</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">size</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%(app)s</span><span class="s"> </span><span class="si">%(options)s</span><span class="s"> </span><span class="si">%(file_)s</span><span class="s"> </span><span class="si">%(new_file)s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">cmd</span>
+            <span class="n">failure</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;... </span><span class="si">%s</span><span class="s"> failed, jumping to next file...&quot;</span> <span class="o">%</span> <span class="n">app</span>
+                <span class="k">continue</span>
+            <span class="n">new_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                <span class="n">apps</span> <span class="o">=</span> <span class="n">app</span>
+                <span class="k">if</span> <span class="n">app</span> <span class="o">!=</span> <span class="n">convert</span> <span class="ow">and</span> <span class="n">pnmtoany</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">apps</span> <span class="o">+=</span> <span class="s">&#39; and </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">pnmtoany</span>
+                <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> transformed via </span><span class="si">%s</span><span class="s"> to </span><span class="si">%s</span><span class="s"> (</span><span class="si">%d</span><span class="s"> Kb)&quot;</span> <span class="o">%</span> \
+                      <span class="p">(</span><span class="n">file_</span><span class="p">,</span><span class="n">apps</span><span class="p">,</span><span class="n">new_file</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">new_file</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">new_files</span>
+
+    <span class="k">def</span> <span class="nf">_get_aspect_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse and return the aspect ratio.&quot;&quot;&quot;</span>
+        <span class="c"># accept aspect ratio on the form 4:3, 4/3, or 1.3333</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">aspect</span> <span class="o">=</span> <span class="n">aspect</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">aspect</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
+                <span class="n">aspect</span> <span class="o">=</span> <span class="n">aspect</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span> <span class="n">aspect</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span> <span class="n">aspect</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">aspect</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">aspect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">aspect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span> <span class="n">aspect</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">aspect</span>
+
+    <span class="k">def</span> <span class="nf">_get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse and return the size.&quot;&quot;&quot;</span>
+        <span class="n">legal_sizes</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;sqcif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">96</span><span class="p">),</span>
+                       <span class="s">&#39;qcif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">176</span><span class="p">,</span> <span class="mi">144</span><span class="p">),</span>
+                       <span class="s">&#39;cif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">352</span><span class="p">,</span> <span class="mi">288</span><span class="p">),</span>
+                       <span class="s">&#39;4cif&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">704</span><span class="p">,</span> <span class="mi">576</span><span class="p">)}</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop</span><span class="p">[</span><span class="s">&#39;size&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">legal_sizes</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">legal_sizes</span><span class="p">[</span><span class="n">size</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span> <span class="c"># wxh</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span><span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">size</span>
+</div>
+<div class="viewcode-block" id="html_movie"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.html_movie">[docs]</a><span class="k">def</span> <span class="nf">html_movie</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">,</span> <span class="n">interval_ms</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+               <span class="n">casename</span><span class="o">=</span><span class="s">&#39;movie&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a list plotfiles which should be for example of the form:</span>
+<span class="sd">        [&#39;frame00.png&#39;, &#39;frame01.png&#39;, ... ]</span>
+<span class="sd">    where each string should be the name of an image file and they should be</span>
+<span class="sd">    in the proper order for viewing as an animation.</span>
+
+<span class="sd">    The result is html text strings that incorporate javascript to</span>
+<span class="sd">    loop through the plots one after another.  The html text also features</span>
+<span class="sd">    buttons for controlling the movie.</span>
+<span class="sd">    The parameter iterval_ms is the time interval between loading</span>
+<span class="sd">    successive images and is in milliseconds.</span>
+
+<span class="sd">    The width and height parameters do not seem to have any effect</span>
+<span class="sd">    for reasons not understood.</span>
+
+<span class="sd">    The following strings are returned: header, javascript code, form</span>
+<span class="sd">    with movie and buttons, and footer. Concatenating these strings</span>
+<span class="sd">    and dumping to an html file yields a kind of movie file to be</span>
+<span class="sd">    viewed in a browser. The images variable in the javascript code</span>
+<span class="sd">    is unique for each movie, because it is annotated by the casename</span>
+<span class="sd">    string, so several such javascript sections can be used in the</span>
+<span class="sd">    same html file.</span>
+
+<span class="sd">    This function is based on code written by R.J. LeVeque, based on</span>
+<span class="sd">    a template from Alan McIntyre.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span><span class="nb">list</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;html_movie: plotfiles=</span><span class="si">%s</span><span class="s"> of wrong type </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span>
+                        <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">)))</span>
+    <span class="c"># Check that the plot files really exist</span>
+    <span class="n">missing_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">plotfiles</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">missing_files</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Missing plot files: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">missing_files</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;.png&#39;</span> <span class="ow">or</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;.jpg&#39;</span> <span class="ow">or</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;.jpeg&#39;</span> <span class="ow">or</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;gif&#39;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Plotfiles (</span><span class="si">%s</span><span class="s">, ...) must be PNG files with &#39;</span>\
+                         <span class="s">&#39;extension .png&#39;</span> <span class="o">%</span> <span class="n">plotfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">&lt;html&gt;</span>
+<span class="s">&lt;head&gt;</span>
+<span class="s">&lt;/head&gt;</span>
+<span class="s">&lt;body&gt;</span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="n">no_images</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">)</span>
+    <span class="n">jscode</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">&lt;script language=&quot;Javascript&quot;&gt;</span>
+<span class="s">&lt;!---</span>
+<span class="s">var num_images_</span><span class="si">%(casename)s</span><span class="s"> = </span><span class="si">%(no_images)d</span><span class="s">;</span>
+<span class="s">var img_width = </span><span class="si">%(width)d</span><span class="s">;</span>
+<span class="s">var img_height = </span><span class="si">%(height)d</span><span class="s">;</span>
+<span class="s">var interval = </span><span class="si">%(interval_ms)d</span><span class="s">;</span>
+<span class="s">var images_</span><span class="si">%(casename)s</span><span class="s"> = new Array();</span>
+
+<span class="s">function preload_images_</span><span class="si">%(casename)s</span><span class="s">()</span>
+<span class="s">{</span>
+<span class="s">   t = document.getElementById(&quot;progress&quot;);</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">plotfiles</span><span class="p">:</span>
+        <span class="n">jscode</span> <span class="o">+=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">   t.innerHTML = &quot;Preloading image &quot;;</span>
+<span class="s">   images_</span><span class="si">%(casename)s</span><span class="s">[</span><span class="si">%(i)s</span><span class="s">] = new Image(img_width, img_height);</span>
+<span class="s">   images_</span><span class="si">%(casename)s</span><span class="s">[</span><span class="si">%(i)s</span><span class="s">].src = &quot;</span><span class="si">%(fname)s</span><span class="s">&quot;;</span>
+<span class="s">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">jscode</span> <span class="o">+=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">   t.innerHTML = &quot;&quot;;</span>
+<span class="s">}</span>
+
+<span class="s">function tick_</span><span class="si">%(casename)s</span><span class="s">()</span>
+<span class="s">{</span>
+<span class="s">   if (frame_</span><span class="si">%(casename)s</span><span class="s"> &gt; num_images_</span><span class="si">%(casename)s</span><span class="s"> - 1)</span>
+<span class="s">       frame_</span><span class="si">%(casename)s</span><span class="s"> = 0;</span>
+
+<span class="s">   document.movie.src = images_</span><span class="si">%(casename)s</span><span class="s">[frame_</span><span class="si">%(casename)s</span><span class="s">].src;</span>
+<span class="s">   frame_</span><span class="si">%(casename)s</span><span class="s"> += 1;</span>
+<span class="s">   tt = setTimeout(&quot;tick_</span><span class="si">%(casename)s</span><span class="s">()&quot;, interval);</span>
+<span class="s">}</span>
+
+<span class="s">function startup_</span><span class="si">%(casename)s</span><span class="s">()</span>
+<span class="s">{</span>
+<span class="s">   preload_images_</span><span class="si">%(casename)s</span><span class="s">();</span>
+<span class="s">   frame_</span><span class="si">%(casename)s</span><span class="s"> = 0;</span>
+<span class="s">   setTimeout(&quot;tick_</span><span class="si">%(casename)s</span><span class="s">()&quot;, interval);</span>
+<span class="s">}</span>
+
+<span class="s">function stopit()</span>
+<span class="s">{ clearTimeout(tt); }</span>
+
+<span class="s">function restart_</span><span class="si">%(casename)s</span><span class="s">()</span>
+<span class="s">{ tt = setTimeout(&quot;tick_</span><span class="si">%(casename)s</span><span class="s">()&quot;, interval); }</span>
+
+<span class="s">function slower()</span>
+<span class="s">{ interval = interval/0.7; }</span>
+
+<span class="s">function faster()</span>
+<span class="s">{ interval = interval*0.7; }</span>
+
+<span class="s">// ---&gt;</span>
+<span class="s">&lt;/script&gt;</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+    <span class="n">plotfile0</span> <span class="o">=</span> <span class="n">plotfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">&lt;form&gt;</span>
+<span class="s">&amp;nbsp;</span>
+<span class="s">&lt;input type=&quot;button&quot; value=&quot;Start movie&quot; onClick=&quot;startup_</span><span class="si">%(casename)s</span><span class="s">()&quot;&gt;</span>
+<span class="s">&lt;input type=&quot;button&quot; value=&quot;Pause movie&quot; onClick=&quot;stopit()&quot;&gt;</span>
+<span class="s">&lt;input type=&quot;button&quot; value=&quot;Restart movie&quot; onClick=&quot;restart_</span><span class="si">%(casename)s</span><span class="s">()&quot;&gt;</span>
+<span class="s">&amp;nbsp;</span>
+<span class="s">&lt;input type=&quot;button&quot; value=&quot;Slower&quot; onClick=&quot;slower()&quot;&gt;</span>
+<span class="s">&lt;input type=&quot;button&quot; value=&quot;Faster&quot; onClick=&quot;faster()&quot;&gt;</span>
+<span class="s">&lt;/form&gt;</span>
+
+<span class="s">&lt;p&gt;&lt;div ID=&quot;progress&quot;&gt;&lt;/div&gt;&lt;/p&gt;</span>
+<span class="s">&lt;img src=&quot;</span><span class="si">%(plotfile0)s</span><span class="s">&quot; name=&quot;movie&quot; border=2/&gt;</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+    <span class="n">footer</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;/body&gt;</span><span class="se">\n</span><span class="s">&lt;/html&gt;</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">jscode</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">footer</span>
+
+</div>
+<div class="viewcode-block" id="movie"><a class="viewcode-back" href="../../../movie.html#scitools.easyviz.movie.movie">[docs]</a><span class="k">def</span> <span class="nf">movie</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a movie from a series of image files.</span>
+
+<span class="sd">    This function makes it very easy to create a movie file from a</span>
+<span class="sd">    series of image files. Several different encoding tools can be</span>
+<span class="sd">    used, such as an HTML file, MEncoder, FFmpeg, mpeg_encode,</span>
+<span class="sd">    ppmtompeg (Netpbm), mpeg2enc (MJPEGTools), and convert (ImageMagick),</span>
+<span class="sd">    to combine the image files together. The encoding tool will be chosen</span>
+<span class="sd">    automatically among these if more than one is installed on the</span>
+<span class="sd">    machine in question (unless it is specified as a keyword argument</span>
+<span class="sd">    to the movie function).</span>
+
+<span class="sd">    Suppose we have some image files named `image_0000.eps`, `image_0001.eps`,</span>
+<span class="sd">    `image_0002.eps`, ... Note that the zero-padding, obtained by the printf</span>
+<span class="sd">    format `04d` in this case, ensures that the files are listed in correct</span>
+<span class="sd">    numeric order when using a wildcard notation like `image_*.eps`.</span>
+<span class="sd">    We want to make a movie out of these files, where each file constitutes</span>
+<span class="sd">    a frame in the movie. This task can be accomplished by the simple call::</span>
+
+<span class="sd">        movie(&#39;image_*.eps&#39;)</span>
+
+<span class="sd">    The result is a movie file with a default name such as `movie.html`,</span>
+<span class="sd">    `movie.avi`, `movie.mpeg`, or `movie.gif`, depending on the</span>
+<span class="sd">    encoding tool chosen by the movie function. The file resides in</span>
+<span class="sd">    the current working directory. The movie function checks a list of</span>
+<span class="sd">    encoders and chooses the first it finds installed on the computer.</span>
+
+<span class="sd">    Note: We strongly recommend to always clean up previously generated</span>
+<span class="sd">    files for the frames in movies::</span>
+
+<span class="sd">        for f in glob.glob(&#39;image_*.eps&#39;):</span>
+<span class="sd">            os.remove(f)</span>
+
+<span class="sd">    Otherwise, there is a danger of mixing old and new files in the movie!</span>
+
+<span class="sd">    One can easily specify the name of the movie file and explicitly</span>
+<span class="sd">    specify the encoder. For example, an animated GIF movie can be</span>
+<span class="sd">    created by::</span>
+
+<span class="sd">        movie(&#39;image_*.eps&#39;, encoder=&#39;convert&#39;,</span>
+<span class="sd">              output_file=&#39;../wave2D.gif&#39;)</span>
+
+<span class="sd">    The encoder here is the convert program from the ImageMagick suite</span>
+<span class="sd">    of image manipulation tools. The resulting movie file will be</span>
+<span class="sd">    named &#39;wave2D.gif&#39; and placed in the parent directory.</span>
+
+<span class="sd">    Another convenient encoder is simply to make an HTML file that can</span>
+<span class="sd">    play a series of image files::</span>
+
+<span class="sd">        movie(&#39;image_*.png&#39;, encoder=&#39;html&#39;,</span>
+<span class="sd">              output_file=&#39;../wave2D.html&#39;)</span>
+
+<span class="sd">    Just load the output file into a web browser and play the movie.</span>
+
+<span class="sd">    If you want to create an MPEG movie by using the MEncoder</span>
+<span class="sd">    tool, you can do this with the following command::</span>
+
+<span class="sd">        movie(&#39;image_*.eps&#39;, encoder=&#39;mencoder&#39;,</span>
+<span class="sd">              output_file=&#39;/home/johannr/wave2D.mpeg&#39;,</span>
+<span class="sd">              vcodec=&#39;mpeg2video&#39;, vbitrate=2400, qscale=4, fps=10)</span>
+
+<span class="sd">    Here, we have also specified the video codec to be mpeg2video, the video</span>
+<span class="sd">    bitrate to be 2400 kbps, the quantization scale (quality) to be 4, and</span>
+<span class="sd">    the number of frames per second to be 10.</span>
+
+<span class="sd">    Demo programs showing various use of the movie function can be</span>
+<span class="sd">    found as the files movie_demo*.py files in the examples directory</span>
+<span class="sd">    of the scitools source code tree.</span>
+
+<span class="sd">    Suitable movie players are vlc for MPEG and AVI formats, and</span>
+<span class="sd">    animate for animated GIF files.</span>
+
+<span class="sd">    Below follows a more detailed description of the various arguments that</span>
+<span class="sd">    are available in this function.</span>
+
+<span class="sd">    Required arguments:</span>
+
+<span class="sd">    input_files: Specifies the image files which will be used to make the</span>
+<span class="sd">    movie. The argument must be given either as a string,</span>
+<span class="sd">    e.g., &#39;image_*.png&#39; or a list/tuple of strings, e.g.,</span>
+<span class="sd">    glob.glob(&#39;image_*.png&#39;).</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">        * When using the FFmpeg or the Mpeg2enc tools, the image</span>
+<span class="sd">          files should be given (if possible) as a string on the</span>
+<span class="sd">          format &#39;{1}%{2}d{3}&#39;, where the name components are as</span>
+<span class="sd">          follows:</span>
+
+<span class="sd">          - {1} filename prefix (e.g. image_)</span>
+<span class="sd">          - {2} counting placeholder (like in C, printf, e.g. 04)</span>
+<span class="sd">          - {3} file extension (e.g. .png or .jpg)</span>
+
+<span class="sd">          Example of a correct description of the input files</span>
+<span class="sd">          is image_%04d.png. If the input files are not given on</span>
+<span class="sd">          the correct format, there will automatically be made</span>
+<span class="sd">          copies of these files which will then be renamed to the</span>
+<span class="sd">          required filename format.</span>
+
+<span class="sd">        * MEncoder, FFmpeg, and Mpeg2enc supports only .jpg and</span>
+<span class="sd">          .png image files. So, if the input files are on another</span>
+<span class="sd">          format, there will automatically be made copies which</span>
+<span class="sd">          in turn will be converted to the correct format.</span>
+
+<span class="sd">    Optional arguments:</span>
+
+<span class="sd">    output_file: Sets the name of the output movie. If not set, a default</span>
+<span class="sd">    name like movie.avi, movie.mpeg, or movie.gif (depending</span>
+<span class="sd">    on the output format) will be given.</span>
+
+<span class="sd">    Note: When using the convert tool to combine the images,</span>
+<span class="sd">    the extension of the file name is used to determine the</span>
+<span class="sd">    file format of the final movie. For example, if a name like</span>
+<span class="sd">    movie.gif is given, the resulting movie will become an</span>
+<span class="sd">    animated gif file. Other supported movie formats are MPEG</span>
+<span class="sd">    (.mpg, .mpeg, or .m2v) and MNG (Multiple-image Network</span>
+<span class="sd">    Graphics).</span>
+
+<span class="sd">    overwrite_output: If True, the file given in the output_file</span>
+<span class="sd">    argument above will be overwritten without warning (if it already</span>
+<span class="sd">    exists). The default is True.</span>
+
+<span class="sd">    encoder: Sets the encoder tool to be used. Currently the following</span>
+<span class="sd">    encoders are supported: &#39;html&#39;, &#39;mencoder&#39;, &#39;ffmpeg&#39;,</span>
+<span class="sd">    &#39;mpeg_encode&#39;, &#39;ppmtompeg&#39; (from the Netpbm package),</span>
+<span class="sd">    &#39;mpeg2enc&#39; (from the MJPEGTools package), and &#39;convert&#39;</span>
+<span class="sd">    (from the ImageMagick package).</span>
+<span class="sd">    Note: &#39;ppmtompeg&#39; and &#39;mpeg_encode&#39; is the same tool.</span>
+
+<span class="sd">    vbitrate: Sets the bit rate of the movie. The default is 800 kbps</span>
+<span class="sd">    when using the FFmpeg and MEncoder encoders. For</span>
+<span class="sd">    mpeg_encode, ppmtompeg, and mpeg2enc, this option is by</span>
+<span class="sd">    default not specified. This option has no effect on the</span>
+<span class="sd">    convert tool from ImageMagick.</span>
+
+<span class="sd">    vbuffer: Sets the video buffer size. The default is to use the</span>
+<span class="sd">    current encoding tools default video buffer size. In some</span>
+<span class="sd">    cases it might be necessary to push this up to 500K or</span>
+<span class="sd">    more.</span>
+
+<span class="sd">    fps: Sets the number of frames per second for the final movie.</span>
+<span class="sd">    The default is 25 fps.</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">     * The &#39;mpeg_encode&#39;, &#39;ppmtompeg&#39;, and &#39;mpeg2enc&#39; tools only</span>
+<span class="sd">       supports the following frame rates: 23.976, 24, 25,</span>
+<span class="sd">       29.97, 30, 50, 59.94, and 60 fps.</span>
+
+<span class="sd">     * Not all video codecs have support for arbitrary frame</span>
+<span class="sd">       rates (e.g., &#39;mpeg1video&#39; and &#39;mpeg2video&#39;).</span>
+
+<span class="sd">    vcodec: Sets the video codec to be used. Some of the possible codecs</span>
+<span class="sd">    are:</span>
+
+<span class="sd">      - &#39;mjpeg&#39;      - Motion JPEG</span>
+<span class="sd">      - &#39;ljpeg&#39;      - Lossless JPEG</span>
+<span class="sd">      - &#39;h263&#39;       - H.263</span>
+<span class="sd">      - &#39;h263p&#39;      - H.263+</span>
+<span class="sd">      - &#39;mpeg4&#39;      - MPEG-4 (DivX 4/5)</span>
+<span class="sd">      - &#39;msmpeg4&#39;    - DivX 3</span>
+<span class="sd">      - &#39;msmpeg4v2&#39;  - DivX 3</span>
+<span class="sd">      - &#39;msmpeg4v2&#39;  - MS MPEG4v2</span>
+<span class="sd">      - &#39;wmv1&#39;       - Windows Media Video, version 1 (AKA WMV7)</span>
+<span class="sd">      - &#39;wmv2&#39;       - Windows Media Video, version 2 (AKA WMV8)</span>
+<span class="sd">      - &#39;rv10&#39;       - an old RealVideo codec</span>
+<span class="sd">      - &#39;mpeg1video&#39; - MPEG-1 video</span>
+<span class="sd">      - &#39;mpeg2video&#39; - MPEG-2 video</span>
+<span class="sd">      - &#39;huffyuv&#39;    - HuffYUV</span>
+<span class="sd">      - &#39;ffvhuff&#39;    - nonstandard 20% smaller HuffYUV using YV12</span>
+<span class="sd">      - &#39;asv1&#39;       - ASUS Video v1</span>
+<span class="sd">      - &#39;asv2&#39;       - ASUS Video v2</span>
+<span class="sd">      - &#39;ffv1&#39;       - FFmpeg&#39;s lossless video codec</span>
+
+<span class="sd">    The default codec is &#39;mpeg4&#39; for mencoder/ffmpeg and</span>
+<span class="sd">    &#39;mpeg1video&#39; for mpeg2enc.</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">      * Run &#39;ffmpeg -formats&#39; for a longer list of available</span>
+<span class="sd">        codecs.</span>
+
+<span class="sd">      * The mencoder tool can also use the &#39;xvid&#39; codec.</span>
+
+<span class="sd">      * Only &#39;mpeg1video&#39; and &#39;mpeg2video&#39; are available when</span>
+<span class="sd">        using the mpeg2enc tool.</span>
+
+<span class="sd">      * This option has no effect when using mpeg_encode,</span>
+<span class="sd">        ppmtompeg, or convert as the encoding tool.</span>
+
+<span class="sd">    qscale: The quantization scale value (qscale) give a trade-off</span>
+<span class="sd">    between quality and compression. A lower value means better</span>
+<span class="sd">    quality but larger files. Larger values gives better</span>
+<span class="sd">    compression, but worse quality. The qscale value must be an</span>
+<span class="sd">    integer between 1 and 31. The default is to not set the</span>
+<span class="sd">    qscale option.</span>
+
+<span class="sd">    Note: When using mpeg_encode or ppmtompeg it is possible</span>
+<span class="sd">    to have different qscale values for I, P, and B frames</span>
+<span class="sd">    (see the iqscale, pqscale, and bqscale options below).</span>
+
+<span class="sd">    qmin: Sets the minimum quantization scale value. Must be given as</span>
+<span class="sd">    an integer between 1 and 31. The default is 2.</span>
+
+<span class="sd">    qmax: Sets the maximum quantization scale value. Must be given as</span>
+<span class="sd">    an integer between 1 and 31. The default is 31.</span>
+
+<span class="sd">    iqscale: Sets the quantization scale value (see qscale) for I</span>
+<span class="sd">    frames. This option only affects mpeg_encode and ppmtompeg.</span>
+<span class="sd">    The default is to use the same value as in qscale. If</span>
+<span class="sd">    qscale is not given, then 8 is the default value for</span>
+<span class="sd">    iqscale.</span>
+
+<span class="sd">    pqscale: Same as iqscale, but for P frames. If qscale is not given,</span>
+<span class="sd">    then 10 is the default value for pqscale.</span>
+
+<span class="sd">    bqscale: Same as iqscale, but for B frames. If qscale is not given,</span>
+<span class="sd">    then 25 is the default value for bqscale.</span>
+
+<span class="sd">    pattern: Sets the pattern (sequence) of I, P, and B frames. The</span>
+<span class="sd">    default pattern is &#39;I&#39; which gives good quality (but</span>
+<span class="sd">    worse compression). Another standard sequence is</span>
+<span class="sd">    &#39;IBBPBBPBBPBBPBB&#39;. This option has only an effect when</span>
+<span class="sd">    using mpeg_encode or ppmtompeg as the encoding tool.</span>
+
+<span class="sd">    size: Sets the size of the final movie. The size must be given</span>
+<span class="sd">    as a tuple/list (e.g. (640,480)) or as a string. The</span>
+<span class="sd">    format of the string must be &#39;wxh&#39; (e.g. &#39;320x240&#39;), but</span>
+<span class="sd">    the following abbreviations are also recognized:</span>
+
+<span class="sd">      - &#39;sqcif&#39; - 128x96</span>
+<span class="sd">      - &#39;qcif&#39;  - 176x144</span>
+<span class="sd">      - &#39;cif&#39;   - 352x288</span>
+<span class="sd">      - &#39;4cif&#39;  - 704x576</span>
+
+<span class="sd">    The default is to use the same size as the input images.</span>
+
+<span class="sd">    aspect: Sets the aspect ratio of the movie (e.g. 4/3 or 16/9).</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">      * &#39;mpeg_encode&#39; and &#39;ppmtompeg&#39; only support the following</span>
+<span class="sd">        aspect ratios: 1.0, 0.6735, 0.7031, 0.7615,0.8055,</span>
+<span class="sd">        0.8437, 0.8935, 0.9157, 0.9815, 1.0255, 1.0695, 1.0950,</span>
+<span class="sd">        1.1575, and 1.2015.</span>
+
+<span class="sd">      * &#39;mpeg2enc&#39; only supports the following aspect ratios: 1.0,</span>
+<span class="sd">        1.33, 1.77, and 2.21.</span>
+
+<span class="sd">    preferred_package: Sets whether to prefer the Netpbm package or the</span>
+<span class="sd">    ImageMagick package if both of them are installed. Must be</span>
+<span class="sd">    given as a string, i.e, either &#39;imagemagick&#39; (default) or</span>
+<span class="sd">    &#39;netpbm&#39;.</span>
+
+<span class="sd">    Notes:</span>
+
+<span class="sd">      * If only one of the packages is installed, then that</span>
+<span class="sd">        package will be used.</span>
+
+<span class="sd">      * If none of the packages are installed, then some</span>
+<span class="sd">        operations might stop in lack of needed programs.</span>
+
+<span class="sd">    gop_size: Sets the number of frames in a group of pictures (GOP).</span>
+<span class="sd">    The default is to use the chosen encoding tools default</span>
+<span class="sd">    value.</span>
+
+<span class="sd">    quiet: If True, then the operations will run quietly and only</span>
+<span class="sd">    complain on errors. The default is False.</span>
+
+<span class="sd">    cleanup: If True (default), all temporary files that are created</span>
+<span class="sd">    during the execution of the movie command will be deleted.</span>
+
+<span class="sd">    force_conversion: Forces conversion of images. This is a hack that can</span>
+<span class="sd">    be used if the encoding tool has problems reading the input</span>
+<span class="sd">    image files. If this is set to True, the images will be</span>
+<span class="sd">    converted even if they are in a format recognized by the</span>
+<span class="sd">    encoding tool. The default is False.</span>
+
+<span class="sd">    Known issues:</span>
+
+<span class="sd">      * JPEG images created by the Vtk backend does not seem to work with</span>
+<span class="sd">        the MEncoder and FFmpeg tools. This can be fixed by setting the</span>
+<span class="sd">        force_conversion argument to True. This will force conversion of the</span>
+<span class="sd">        JPEG files to PNG files which in turn should successfully create the</span>
+<span class="sd">        movie.</span>
+
+<span class="sd">      * Aspect ratio in mpeg_encode does not seem to work.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="n">MovieEncoder</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">me</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

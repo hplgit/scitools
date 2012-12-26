@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.BoxField" href="BoxField.html" />
+    <link rel="prev" title="SciTools Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BoxField.html" title="scitools.BoxField"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="SciTools Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools">
+<span id="scitools"></span><h1><a class="reference internal" href="#module-scitools" title="scitools"><tt class="xref py py-mod docutils literal"><span class="pre">scitools</span></tt></a><a class="headerlink" href="#module-scitools" title="Permalink to this headline">¶</a></h1>
+<p>SciTools is a Python package containing lots of useful tools for
+scientific computing in Python. The package is built on top of other
+widely used packages such as NumPy, SciPy, ScientificPython, Gnuplot,
+Matplotlib, VTK, and others. SciTools can be downloaded from
+code.google.com/p/scitools.</p>
+<p>The SciTools package contains a lot of modules:</p>
+<blockquote>
+<div><ul class="simple">
+<li>easyviz: package for unified Matlab-like plotting syntax</li>
+<li>basics: imports from numpy, scipy, scitools.numpyutils</li>
+<li>std: imports of basics and easyviz</li>
+<li>misc: many non-numerical convenience functions</li>
+<li>numpyutils: many numerical convenience functions</li>
+<li>StringFunction: turns string formulas into callable functions</li>
+<li>configdata: user-friendly access to Python config files</li>
+<li>filetable: read/write tabular data in files into/from arrays</li>
+<li>debug: useful functions for debugging</li>
+<li>pprint2: improvement of pprint for formatting control of floats</li>
+<li>multipleloop: makes a loop from all combinations of a set of parameters</li>
+<li>EfficiencyTable: nice table report from efficiency experiments</li>
+<li>globaldata: holds all global data in the scitools package</li>
+<li>sound: tools for easy sound generation and manipulation</li>
+<li>aplotter: curve plotting in pure ASCII</li>
+<li>Lumpy: visualization of the data structures in a Python program</li>
+</ul>
+</div></blockquote>
+<p>Some modules and classes are closely related to and explained in the
+text in the book &#8220;Python Scripting for Computational Science&#8221;, by
+H. P. Langtangen, 3rd edition, 2nd printing, Springer, 2009:</p>
+<blockquote>
+<div><ul class="simple">
+<li>NumPyDB: a simple database for holding NumPy arrays</li>
+<li>Regression: module for performing regression tests (also with floats)</li>
+<li>CanvasCoord: transformations between canvas and physical coordinates</li>
+<li>DrawFunction: enables users to draw a function (in Pmw.Blt plotting widget)</li>
+<li>FunctionSelector: Tk/Pmw-based widgets for selecting functions</li>
+<li>FuncDependenceViz: visualization of how functions vary with parameters</li>
+<li>ParameterInterface: a simplified GUI generator for simulation programs</li>
+<li>PrmDictBase: module for holding parameters in simulation programs</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>Some preliminary modules include</dt>
+<dd><ul class="first last simple">
+<li>BoxGrid: a structured grid in 1D, 2D, or 2D</li>
+<li>BoxField: a scalar or vector field over a BoxGrid</li>
+</ul>
+</dd>
+</dl>
+<p>See the different modules for more detailed information.</p>
+<p>The most convenient SciTools import statement reads:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scitools.std</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>This statement imports from numpy, scipy (if available),
+scitools.numpyutils (many numerical convenince functions), and all
+Easyviz plotting capabilities. (See the documentation of
+scitools.std for a precise list of imports implied by the
+above statement.)</p>
+<p>Many programmers prefer to avoid the &#8220;star import&#8221; above, which
+has the disadvantage of filling up the global namespace with
+a large number of names. The key import statement is then:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scitools.std</span> <span class="kn">as</span> <span class="nn">st</span>
+</pre></div>
+</div>
+<p>All functions and modules must then be prefixed by <tt class="docutils literal"><span class="pre">st</span></tt>:
+<tt class="docutils literal"><span class="pre">st.float_eq</span></tt>, <tt class="docutils literal"><span class="pre">st.StringFunction</span></tt>, <tt class="docutils literal"><span class="pre">st.plot</span></tt>, etc.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">SciTools Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BoxField.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.BoxField</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/scitools.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BoxField.html" title="scitools.BoxField"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="SciTools Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

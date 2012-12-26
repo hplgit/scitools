@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.filetable &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.filetable</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Read tabular data from file into NumPy arrays and vice versa.</span>
+
+<span class="sd">This module provides functions for</span>
+<span class="sd">1) reading row-column table data from file into NumPy arrays, and</span>
+<span class="sd">2) writing two-dimensional NumPy arrays to file in a table fashion.</span>
+
+<span class="sd">  - read: Load a table with numbers into a two-dim. NumPy array.</span>
+
+<span class="sd">  - write: Write a two-dim. NumPy array a in tabular form.</span>
+
+<span class="sd">  - read_columns:</span>
+<span class="sd">    As read, but the columns are returned as separate arrays instead</span>
+<span class="sd">    of a two-dimensional array.</span>
+
+<span class="sd">  - write_columns:</span>
+<span class="sd">    As write, but the arguments are comma-separated one-dimensional</span>
+<span class="sd">    arrays, one for each column, instead of a two-dimensional array.</span>
+
+<span class="sd">The file format requires the same number of &quot;words&quot; (numbers)</span>
+<span class="sd">on each line. Comment lines are allowed, but a blank line</span>
+<span class="sd">indicates a delimiter in the data set, and lines after the blank</span>
+<span class="sd">line will not be read.</span>
+
+<span class="sd">Example: Assume we have a data file `tmp.dat` with the numbers::</span>
+
+<span class="sd">  0        0.0        0.0        1.0</span>
+<span class="sd">  1        1.0        1.0        2.0</span>
+<span class="sd">  2        4.0        8.0       17.0</span>
+<span class="sd">  3        9.0       27.0       82.0</span>
+<span class="sd">  4       16.0       64.0      257.0</span>
+<span class="sd">  5       25.0      125.0      626.0</span>
+
+<span class="sd">The following session demonstrates key functions in this module::</span>
+
+<span class="sd">    &gt;&gt;&gt; import scitools.filetable as ft</span>
+<span class="sd">    &gt;&gt;&gt; s = open(&#39;tmp.dat&#39;, &#39;r&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; table = ft.read(s)</span>
+<span class="sd">    &gt;&gt;&gt; s.close()</span>
+<span class="sd">    &gt;&gt;&gt; print table</span>
+<span class="sd">    [[   0.    0.    0.    1.]</span>
+<span class="sd">     [   1.    1.    1.    2.]</span>
+<span class="sd">     [   2.    4.    8.   17.]</span>
+<span class="sd">     [   3.    9.   27.   82.]</span>
+<span class="sd">     [   4.   16.   64.  257.]</span>
+<span class="sd">     [   5.   25.  125.  626.]]</span>
+
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s = open(&#39;tmp.dat&#39;, &#39;r&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; x, y1, y2, y3 = ft.read_columns(s)</span>
+<span class="sd">    &gt;&gt;&gt; s.close()</span>
+<span class="sd">    &gt;&gt;&gt; print x</span>
+<span class="sd">    [ 0.  1.  2.  3.  4.  5.]</span>
+<span class="sd">    &gt;&gt;&gt; print y1</span>
+<span class="sd">    [  0.   1.   4.   9.  16.  25.]</span>
+<span class="sd">    &gt;&gt;&gt; print y2</span>
+<span class="sd">    [   0.    1.    8.   27.   64.  125.]</span>
+<span class="sd">    &gt;&gt;&gt; print y3</span>
+<span class="sd">    [   1.    2.   17.   82.  257.  626.]</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s = open(&#39;tmp2.dat&#39;,&#39;w&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ft.write(s, table)</span>
+<span class="sd">    &gt;&gt;&gt; s.close()</span>
+
+<span class="sd">The `tmp2.dat` file looks as follows::</span>
+
+<span class="sd">    0       0       0       1</span>
+<span class="sd">    1       1       1       2</span>
+<span class="sd">    2       4       8       17</span>
+<span class="sd">    3       9       27      82</span>
+<span class="sd">    4       16      64      257</span>
+<span class="sd">    5       25      125     626</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c"># author: Hans Petter Langtangen &lt;hpl@ifi.uio.no&gt;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;read&#39;</span><span class="p">,</span> <span class="s">&#39;read_columns&#39;</span><span class="p">,</span> <span class="s">&#39;readfile&#39;</span><span class="p">,</span>
+           <span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="s">&#39;write_columns&#39;</span><span class="p">,]</span>
+
+<span class="c"># simple version (not as effective as function read):</span>
+<span class="k">def</span> <span class="nf">read_v1</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">commentchar</span><span class="o">=</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load a table with numbers into a two-dim. NumPy array.&quot;&quot;&quot;</span>
+    <span class="c"># read until next blank line:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># total set of numbers (r[i]: numbers in i-th row)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>  <span class="c"># might call read several times for a file</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">break</span>  <span class="c"># end of file</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span> <span class="k">break</span>  <span class="c"># blank line</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">commentchar</span><span class="p">:</span> <span class="k">continue</span> <span class="c"># treat next line</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../filetable.html#scitools.filetable.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">commentchar</span><span class="o">=</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a table with numbers into a two-dim. NumPy array.</span>
+<span class="sd">    @param fileobj: open file object.</span>
+<span class="sd">    @param commentchar: lines starting with commentchar are skipped</span>
+<span class="sd">    (a blank line is an array data delimiter and stops reading).</span>
+<span class="sd">    @return: two-dimensional (row-column) NumPy array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># based on a version by Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+    <span class="n">commentchar</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">commentchar</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">break</span>  <span class="c"># end of file</span>
+        <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span> <span class="k">break</span>  <span class="c"># blank line</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">commentchar</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span> <span class="k">continue</span> <span class="c"># treat next line</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">break</span>
+
+    <span class="n">shape1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">shape1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+
+    <span class="n">blankline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">\s*</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>  <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">commentline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;^</span><span class="si">%s</span><span class="s">[^</span><span class="se">\n</span><span class="s">]*</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">commentchar</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">filestr</span> <span class="o">=</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="c"># remove lines after a blank line</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">blankline</span><span class="p">,</span> <span class="n">filestr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">filestr</span> <span class="o">=</span> <span class="n">filestr</span><span class="p">[:</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c"># skip lines starting with the comment character</span>
+    <span class="n">filestr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">commentline</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">filestr</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filestr</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">shape1</span><span class="p">,</span> <span class="n">shape1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+</div>
+<div class="viewcode-block" id="read_columns"><a class="viewcode-back" href="../../filetable.html#scitools.filetable.read_columns">[docs]</a><span class="k">def</span> <span class="nf">read_columns</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">commentchar</span><span class="o">=</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;As read. Return columns as separate arrays.&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">commentchar</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+<span class="c"># for backward compatibility:</span></div>
+<div class="viewcode-block" id="readfile"><a class="viewcode-back" href="../../filetable.html#scitools.filetable.readfile">[docs]</a><span class="k">def</span> <span class="nf">readfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">commentchar</span><span class="o">=</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    As read, but a filename (and not a file object) can be given.</span>
+<span class="sd">    Return: columns as separate arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">commentchar</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+
+
+<span class="c"># simple write version:</span></div>
+<span class="k">def</span> <span class="nf">write_v1</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a two-dim. NumPy array a in tabular form to fileobj.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;a 2D array is required, shape now is &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+<span class="c"># faster write version:</span>
+<span class="k">def</span> <span class="nf">write_v2</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a two-dim. NumPy array a in tabular form to fileobj.&quot;&quot;&quot;</span>
+    <span class="c"># written by Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+                                                <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span> <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="si">%g</span><span class="se">\t</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+                                                <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">str_fmt</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str_fmt</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="c"># don&#39;t think about</span>
+    <span class="c"># out = str(a).replace(&#39;[&#39;,&#39;&#39;).replace(&#39;,&#39;, &#39;\t&#39;)</span>
+    <span class="c"># fileobj.write(out + &#39;\n&#39;)</span>
+    <span class="c"># the str(a) conversion is *extremely* expensive</span>
+
+<span class="k">def</span> <span class="nf">write_v3</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Short and fast version, compared to write_v1 and write_v2.&quot;&quot;&quot;</span>
+    <span class="c"># written by Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;</span>
+    <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ravel</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="write"><a class="viewcode-back" href="../../filetable.html#scitools.filetable.write">[docs]</a><span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write a two-dim. NumPy array a in tabular form to fileobj.&quot;&quot;&quot;</span>
+    <span class="c"># fastest version (of the write family of functions) so far...</span>
+    <span class="c"># written by Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;a 2D array is required, shape now is &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">512</span>
+    <span class="n">shape0</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">shape1</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">str_fmt</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%g</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">shape1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="c"># use a big format string</span>
+    <span class="n">str_fmt_N</span> <span class="o">=</span> <span class="n">str_fmt</span> <span class="o">*</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">shape0</span><span class="o">/</span><span class="n">N</span><span class="p">):</span>
+      <span class="n">a1</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">N</span><span class="p">,:]</span>
+      <span class="c"># put a1 in  1D array form; ravel better than reshape for</span>
+      <span class="c"># non-contiguous arrays.</span>
+      <span class="n">a1</span> <span class="o">=</span> <span class="n">ravel</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+      <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str_fmt_N</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape0</span> <span class="o">-</span> <span class="n">shape0</span><span class="o">%</span><span class="n">N</span><span class="p">,</span> <span class="n">shape0</span><span class="p">):</span>
+      <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str_fmt</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+</div>
+<div class="viewcode-block" id="write_columns"><a class="viewcode-back" href="../../filetable.html#scitools.filetable.write_columns">[docs]</a><span class="k">def</span> <span class="nf">write_columns</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    As write, but the column data are represented as one-dimensional</span>
+<span class="sd">    arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    
+    
+<span class="c"># testing:</span></div>
+<span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncolumns</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">fromfunction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">nrows</span><span class="p">,</span><span class="n">ncolumns</span><span class="p">))</span>
+    <span class="n">narrays</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c"># no of arrays in the file</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# </span><span class="si">%d</span><span class="s"> arrays in this file</span><span class="se">\n</span><span class="s">#</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">narrays</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">narrays</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# a new array with </span><span class="si">%d</span><span class="s"> rows:  </span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">nrows</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>  <span class="c"># array delimiter</span>
+
+<span class="k">def</span> <span class="nf">_test</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">_generate</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&quot;tmp.1&quot;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tmp.1&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">narrays</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">print</span> <span class="s">&#39;found </span><span class="si">%d</span><span class="s"> arrays in file&#39;</span> <span class="o">%</span> <span class="n">narrays</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">narrays</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;read an array with shape&#39;</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;read:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">,</span> <span class="s">&quot;seconds</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tmp.2&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;write:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">,</span> <span class="s">&quot;seconds&quot;</span>
+    
+    <span class="c"># compare with TableIO:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">TableIO.TableIO</span> <span class="kn">as</span> <span class="nn">TableIO</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c"># exit silently</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">TableIO</span><span class="o">.</span><span class="n">readColumns</span><span class="p">(</span><span class="s">&quot;tmp.1&quot;</span><span class="p">,</span> <span class="s">&quot;#&quot;</span><span class="p">)</span>
+    <span class="c">#print &#39;p:&#39;, p</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;TableIO.readColumns:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">,</span> <span class="s">&quot;seconds</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="n">TableIO</span><span class="o">.</span><span class="n">writeArray</span><span class="p">(</span><span class="s">&quot;tmp.3&quot;</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;TableIO.writeArray:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">,</span><span class="s">&quot;seconds&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

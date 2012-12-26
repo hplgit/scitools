@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.pprint2 &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.pprint2</h1><div class="highlight"><pre>
+<span class="c">#  Modification of the Python module pprint: the pprint2 module has a</span>
+<span class="c">#  global variable float_format, which can be set to a printf format</span>
+<span class="c">#  string, which will be used when writing out float objects.</span>
+<span class="c">#  Lists, dicts, and tuples containing real numbers will be printed</span>
+<span class="c">#  in a prettier way with pprint2.</span>
+
+<span class="c">#&gt;&gt;&gt; data = [1./3, 1./49*49, 84.6/423]</span>
+<span class="c">#&gt;&gt;&gt; data</span>
+<span class="c">#[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="c">#&gt;&gt;&gt; import pprint</span>
+<span class="c">#&gt;&gt;&gt; pprint.pprint(data)</span>
+<span class="c">#[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="c">#&gt;&gt;&gt; import scitools.pprint2 as pprint2</span>
+<span class="c">#&gt;&gt;&gt; pprint2.pprint(data)</span>
+<span class="c">#[0.333333, 1, 0.2]</span>
+<span class="c">#&gt;&gt;&gt; pprint2.float_format = &#39;%.12E&#39;</span>
+<span class="c">#&gt;&gt;&gt; pprint2.pprint(data)</span>
+<span class="c">#[3.333333333333E-01, 1.000000000000E+00, 2.000000000000E-01]</span>
+
+<span class="c">#  Modifications by Hans Petter Langtangen, hpl@simula.no</span>
+<span class="c">#------------------------------------------------------------------------</span>
+
+<span class="c">#  Author:      Fred L. Drake, Jr.</span>
+<span class="c">#               fdrake@acm.org</span>
+<span class="c">#</span>
+<span class="c">#  This is a simple little module I wrote to make life easier.  I didn&#39;t</span>
+<span class="c">#  see anything quite like it in the library, though I may have overlooked</span>
+<span class="c">#  something.  I wrote this when I was trying to read some heavily nested</span>
+<span class="c">#  tuples with fairly non-descriptive content.  This is modeled very much</span>
+<span class="c">#  after Lisp/Scheme - style pretty-printing of lists.  If you find it</span>
+<span class="c">#  useful, thank small children who sleep at night.</span>
+
+<span class="sd">&quot;&quot;&quot;Support to pretty-print lists, tuples, &amp; dictionaries recursively.</span>
+
+<span class="sd">Very simple, but useful, especially in debugging data structures.</span>
+
+<span class="sd">Slight extension of the original pprint module in Python such that</span>
+<span class="sd">floating-point numbers can be written with a specificed format</span>
+<span class="sd">(float_format) and not by their repr string (which explicitly</span>
+<span class="sd">displays round-off errors).</span>
+
+<span class="sd">&gt;&gt;&gt; data = [1./3, 1./49*49, 84.6/423]</span>
+<span class="sd">&gt;&gt;&gt; data</span>
+<span class="sd">[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="sd">&gt;&gt;&gt; import pprint</span>
+<span class="sd">&gt;&gt;&gt; pprint.pprint(data)</span>
+<span class="sd">[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="sd">&gt;&gt;&gt; import scitools.pprint2 as pprint2</span>
+<span class="sd">&gt;&gt;&gt; pprint2.pprint(data)</span>
+<span class="sd">[0.333333, 1, 0.2]</span>
+<span class="sd">&gt;&gt;&gt; pprint2.float_format = &#39;%.12E&#39;</span>
+<span class="sd">&gt;&gt;&gt; pprint2.pprint(data)</span>
+<span class="sd">[3.333333333333E-01, 1.000000000000E+00, 2.000000000000E-01]</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">  - PrettyPrinter():</span>
+<span class="sd">    Handle pretty-printing operations onto a stream using a configured</span>
+<span class="sd">    set of formatting parameters.</span>
+
+<span class="sd">Functions:</span>
+
+<span class="sd">  - pformat():</span>
+<span class="sd">    Format a Python object into a pretty-printed representation.</span>
+
+<span class="sd">  - pprint():</span>
+<span class="sd">    Pretty-print a Python object to a stream [default is sys.stdout].</span>
+
+<span class="sd">  - saferepr():</span>
+<span class="sd">    Generate a &#39;standard&#39; repr()-like value, but protect against recursive</span>
+<span class="sd">    data structures.</span>
+
+<span class="sd">Global data:</span>
+
+<span class="sd">  - float_format:</span>
+<span class="sd">    String containing the printf format for formatting float objects.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span> <span class="kn">as</span> <span class="nn">_sys</span>
+
+<span class="kn">from</span> <span class="nn">cStringIO</span> <span class="kn">import</span> <span class="n">StringIO</span> <span class="k">as</span> <span class="n">_StringIO</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;pprint&quot;</span><span class="p">,</span><span class="s">&quot;pformat&quot;</span><span class="p">,</span><span class="s">&quot;isreadable&quot;</span><span class="p">,</span><span class="s">&quot;isrecursive&quot;</span><span class="p">,</span><span class="s">&quot;saferepr&quot;</span><span class="p">,</span>
+           <span class="s">&quot;PrettyPrinter&quot;</span><span class="p">]</span>
+
+<span class="n">float_format</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%g</span><span class="s">&#39;</span>
+
+<span class="c"># cache these for faster access:</span>
+<span class="n">_commajoin</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span>
+<span class="n">_id</span> <span class="o">=</span> <span class="nb">id</span>
+<span class="n">_len</span> <span class="o">=</span> <span class="nb">len</span>
+<span class="n">_type</span> <span class="o">=</span> <span class="nb">type</span>
+
+
+<div class="viewcode-block" id="pprint"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.pprint">[docs]</a><span class="k">def</span> <span class="nf">pprint</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pretty-print a Python object to a stream [default is sys.stdout].&quot;&quot;&quot;</span>
+    <span class="n">printer</span> <span class="o">=</span> <span class="n">PrettyPrinter</span><span class="p">(</span>
+        <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
+    <span class="n">printer</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="pformat"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.pformat">[docs]</a><span class="k">def</span> <span class="nf">pformat</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Format a Python object into a pretty-printed representation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="saferepr"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.saferepr">[docs]</a><span class="k">def</span> <span class="nf">saferepr</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Version of repr() which can handle recursive data structures.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="isreadable"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.isreadable">[docs]</a><span class="k">def</span> <span class="nf">isreadable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine if saferepr(object) is readable by eval().&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="isrecursive"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.isrecursive">[docs]</a><span class="k">def</span> <span class="nf">isrecursive</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine if object requires a recursive representation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="PrettyPrinter"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter">[docs]</a><span class="k">class</span> <span class="nc">PrettyPrinter</span><span class="p">:</span>
+<div class="viewcode-block" id="PrettyPrinter.__init__"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle pretty printing operations onto a stream using a set of</span>
+<span class="sd">        configured parameters.</span>
+
+<span class="sd">        indent</span>
+<span class="sd">            Number of spaces to indent for each level of nesting.</span>
+
+<span class="sd">        width</span>
+<span class="sd">            Attempted maximum number of columns in the output.</span>
+
+<span class="sd">        depth</span>
+<span class="sd">            The maximum depth to print out nested structures.</span>
+
+<span class="sd">        stream</span>
+<span class="sd">            The desired output stream.  If omitted (or false), the standard</span>
+<span class="sd">            output stream available at construction will be used.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">indent</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;indent must be &gt;= 0&quot;</span>
+        <span class="k">assert</span> <span class="n">depth</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;depth must be &gt; 0&quot;</span>
+        <span class="k">assert</span> <span class="n">width</span><span class="p">,</span> <span class="s">&quot;width must be != 0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_depth</span> <span class="o">=</span> <span class="n">depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span> <span class="o">=</span> <span class="n">indent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">stream</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">stdout</span>
+</div>
+<div class="viewcode-block" id="PrettyPrinter.pprint"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.pprint">[docs]</a>    <span class="k">def</span> <span class="nf">pprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PrettyPrinter.pformat"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.pformat">[docs]</a>    <span class="k">def</span> <span class="nf">pformat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="n">sio</span> <span class="o">=</span> <span class="n">_StringIO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">sio</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sio</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="PrettyPrinter.isrecursive"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.isrecursive">[docs]</a>    <span class="k">def</span> <span class="nf">isrecursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="PrettyPrinter.isreadable"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.isreadable">[docs]</a>    <span class="k">def</span> <span class="nf">isreadable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="n">s</span><span class="p">,</span> <span class="n">readable</span><span class="p">,</span> <span class="n">recursive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">readable</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">recursive</span>
+</div>
+    <span class="k">def</span> <span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">allowance</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">objid</span> <span class="o">=</span> <span class="n">_id</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">objid</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_recursion</span><span class="p">(</span><span class="nb">object</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_recursive</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_readable</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">return</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="n">_type</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">sepLines</span> <span class="o">=</span> <span class="n">_len</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">indent</span> <span class="o">-</span> <span class="n">allowance</span><span class="p">)</span>
+        <span class="n">write</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">write</span>
+
+        <span class="k">if</span> <span class="n">sepLines</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="s">&quot;__repr__&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__repr__</span><span class="p">:</span>
+                <span class="n">write</span><span class="p">(</span><span class="s">&#39;{&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">write</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="s">&#39; &#39;</span><span class="p">)</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">_len</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">length</span><span class="p">:</span>
+                    <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span>
+                    <span class="n">items</span>  <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="n">key</span><span class="p">,</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                    <span class="n">write</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+                    <span class="n">write</span><span class="p">(</span><span class="s">&#39;: &#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">indent</span> <span class="o">+</span> <span class="n">_len</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">allowance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                            <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                            <span class="n">write</span><span class="p">(</span><span class="s">&#39;,</span><span class="se">\n</span><span class="si">%s%s</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">*</span><span class="n">indent</span><span class="p">,</span> <span class="n">rep</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">indent</span> <span class="o">+</span> <span class="n">_len</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>
+                                          <span class="n">allowance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                    <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span>
+                    <span class="k">del</span> <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span>
+                <span class="n">write</span><span class="p">(</span><span class="s">&#39;}&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">list</span><span class="o">.</span><span class="n">__repr__</span><span class="p">)</span> <span class="ow">or</span> \
+               <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="o">.</span><span class="n">__repr__</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">write</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">)</span>
+                    <span class="n">endchar</span> <span class="o">=</span> <span class="s">&#39;]&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">write</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">)</span>
+                    <span class="n">endchar</span> <span class="o">=</span> <span class="s">&#39;)&#39;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">write</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="s">&#39; &#39;</span><span class="p">)</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">_len</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">length</span><span class="p">:</span>
+                    <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="nb">object</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stream</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">allowance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="nb">object</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                            <span class="n">write</span><span class="p">(</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">*</span><span class="n">indent</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span>
+                                          <span class="n">allowance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+                    <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent_per_level</span>
+                    <span class="k">del</span> <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">write</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">write</span><span class="p">(</span><span class="n">endchar</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="n">write</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="nb">repr</span><span class="p">,</span> <span class="n">readable</span><span class="p">,</span> <span class="n">recursive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">_depth</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">readable</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_readable</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_recursive</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="nb">repr</span>
+
+<div class="viewcode-block" id="PrettyPrinter.format"><a class="viewcode-back" href="../../pprint2.html#scitools.pprint2.PrettyPrinter.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Format object for a specific context, returning a string</span>
+<span class="sd">        and flags indicating whether the representation is &#39;readable&#39;</span>
+<span class="sd">        and whether the object represents a recursive construct.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+
+<span class="c"># Return triple (repr_string, isreadable, isrecursive).</span>
+</div></div>
+<span class="k">def</span> <span class="nf">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="n">_type</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;locale&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">object</span><span class="p">),</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="s">&quot;&#39;&quot;</span> <span class="ow">in</span> <span class="nb">object</span> <span class="ow">and</span> <span class="s">&#39;&quot;&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">object</span><span class="p">:</span>
+            <span class="n">closure</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span>
+            <span class="n">quotes</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;&quot;&#39;</span><span class="p">:</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">&quot;&#39;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">closure</span> <span class="o">=</span> <span class="s">&quot;&#39;&quot;</span>
+            <span class="n">quotes</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">}</span>
+        <span class="n">qget</span> <span class="o">=</span> <span class="n">quotes</span><span class="o">.</span><span class="n">get</span>
+        <span class="n">sio</span> <span class="o">=</span> <span class="n">_StringIO</span><span class="p">()</span>
+        <span class="n">write</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">write</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">object</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+                <span class="n">write</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">write</span><span class="p">(</span><span class="n">qget</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">char</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&quot;</span><span class="si">%s%s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">closure</span><span class="p">,</span> <span class="n">sio</span><span class="o">.</span><span class="n">getvalue</span><span class="p">(),</span> <span class="n">closure</span><span class="p">)),</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="s">&quot;__repr__&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__repr__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">object</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span>
+        <span class="n">objid</span> <span class="o">=</span> <span class="n">_id</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">maxlevels</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="n">maxlevels</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;{...}&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">objid</span> <span class="ow">in</span> <span class="n">context</span>
+        <span class="k">if</span> <span class="n">objid</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_recursion</span><span class="p">(</span><span class="nb">object</span><span class="p">),</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">True</span>
+        <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">readable</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">recursive</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">append</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">append</span>
+        <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">saferepr</span> <span class="o">=</span> <span class="n">_safe_repr</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">krepr</span><span class="p">,</span> <span class="n">kreadable</span><span class="p">,</span> <span class="n">krecur</span> <span class="o">=</span> <span class="n">saferepr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">vrepr</span><span class="p">,</span> <span class="n">vreadable</span><span class="p">,</span> <span class="n">vrecur</span> <span class="o">=</span> <span class="n">saferepr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">krepr</span><span class="p">,</span> <span class="n">vrepr</span><span class="p">))</span>
+            <span class="n">readable</span> <span class="o">=</span> <span class="n">readable</span> <span class="ow">and</span> <span class="n">kreadable</span> <span class="ow">and</span> <span class="n">vreadable</span>
+            <span class="k">if</span> <span class="n">krecur</span> <span class="ow">or</span> <span class="n">vrecur</span><span class="p">:</span>
+                <span class="n">recursive</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">del</span> <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s">&quot;{</span><span class="si">%s</span><span class="s">}&quot;</span> <span class="o">%</span> <span class="n">_commajoin</span><span class="p">(</span><span class="n">components</span><span class="p">),</span> <span class="n">readable</span><span class="p">,</span> <span class="n">recursive</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">list</span><span class="o">.</span><span class="n">__repr__</span><span class="p">)</span> <span class="ow">or</span> \
+       <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="o">.</span><span class="n">__repr__</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">object</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&quot;[]&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s">&quot;[</span><span class="si">%s</span><span class="s">]&quot;</span>
+        <span class="k">elif</span> <span class="n">_len</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s">&quot;(</span><span class="si">%s</span><span class="s">,)&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">object</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&quot;()&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s">&quot;(</span><span class="si">%s</span><span class="s">)&quot;</span>
+        <span class="n">objid</span> <span class="o">=</span> <span class="n">_id</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">maxlevels</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="n">maxlevels</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format</span> <span class="o">%</span> <span class="s">&quot;...&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">objid</span> <span class="ow">in</span> <span class="n">context</span>
+        <span class="k">if</span> <span class="n">objid</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_recursion</span><span class="p">(</span><span class="nb">object</span><span class="p">),</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">True</span>
+        <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">readable</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">recursive</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">append</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">append</span>
+        <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">object</span><span class="p">:</span>
+            <span class="n">orepr</span><span class="p">,</span> <span class="n">oreadable</span><span class="p">,</span> <span class="n">orecur</span> <span class="o">=</span> <span class="n">_safe_repr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">maxlevels</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">append</span><span class="p">(</span><span class="n">orepr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">oreadable</span><span class="p">:</span>
+                <span class="n">readable</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="n">orecur</span><span class="p">:</span>
+                <span class="n">recursive</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">del</span> <span class="n">context</span><span class="p">[</span><span class="n">objid</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">format</span> <span class="o">%</span> <span class="n">_commajoin</span><span class="p">(</span><span class="n">components</span><span class="p">),</span> <span class="n">readable</span><span class="p">,</span> <span class="n">recursive</span>
+
+    <span class="n">rep</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">float_format</span> <span class="o">%</span> <span class="nb">object</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)):</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="s">&#39;(</span><span class="si">%s</span><span class="s">+</span><span class="si">%s</span><span class="s">j)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">float_format</span><span class="p">,</span> <span class="n">float_format</span><span class="p">)</span> <span class="o">%</span> \
+              <span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rep</span><span class="p">,</span> <span class="p">(</span><span class="n">rep</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rep</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;&lt;&#39;</span><span class="p">)),</span> <span class="bp">False</span>
+
+
+<span class="k">def</span> <span class="nf">_recursion</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s">&quot;&lt;Recursion on </span><span class="si">%s</span><span class="s"> with id=</span><span class="si">%s</span><span class="s">&gt;&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">_type</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">_id</span><span class="p">(</span><span class="nb">object</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">_perfcheck</span><span class="p">(</span><span class="nb">object</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="k">if</span> <span class="nb">object</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">object</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;string&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">{</span><span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">})]</span> <span class="o">*</span> <span class="mi">100000</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">PrettyPrinter</span><span class="p">()</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">_safe_repr</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+    <span class="n">t3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;_safe_repr:&quot;</span><span class="p">,</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span>
+    <span class="k">print</span> <span class="s">&quot;pformat:&quot;</span><span class="p">,</span> <span class="n">t3</span> <span class="o">-</span> <span class="n">t2</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">_perfcheck</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

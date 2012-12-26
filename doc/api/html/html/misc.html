@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.misc &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.misc">
+<span id="scitools-misc"></span><h1><a class="reference internal" href="#module-scitools.misc" title="scitools.misc"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.misc</span></tt></a><a class="headerlink" href="#module-scitools.misc" title="Permalink to this headline">¶</a></h1>
+<p>A collection of Python utilities originally developed for the
+&#8220;Python for Computational Science&#8221; book.</p>
+<dl class="attribute">
+<dt id="scitools.misc.BG">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">BG</tt><a class="headerlink" href="#scitools.misc.BG" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#scitools.misc.BackgroundCommand" title="scitools.misc.BackgroundCommand"><tt class="xref py py-class docutils literal"><span class="pre">BackgroundCommand</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.misc.BackgroundCommand">
+<em class="property">class </em><tt class="descclassname">scitools.misc.</tt><tt class="descname">BackgroundCommand</tt><big>(</big><em>result='result'</em>, <em>func=None</em>, <em>args=</em><span class="optional">[</span><span class="optional">]</span>, <em>kwargs={}</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#BackgroundCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.BackgroundCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<p>Run a function call with assignment in the background.
+Useful for putting time-consuming calculations/graphics
+in the background in an interactive Python shell.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">BG</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">gridloop</span><span class="p">,</span> <span class="s">&#39;sin(x*y)-exp(-x*y)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="go">running gridloop(&#39;sin(x*y)-exp(-x*y)&#39;,) in a thread</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># continue with other interactive tasks</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">finished</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">f</span>  <span class="c"># result of function call</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getName</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isAlive</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isDaemon</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">is_alive</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">join</span></tt>([timeout])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.misc.BackgroundCommand.run" title="scitools.misc.BackgroundCommand.run"><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setDaemon</span></tt>(daemonic)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setName</span></tt>(name)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">start</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.misc.BackgroundCommand.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#BackgroundCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.BackgroundCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.misc.Command">
+<em class="property">class </em><tt class="descclassname">scitools.misc.</tt><tt class="descname">Command</tt><big>(</big><em>func</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#Command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.Command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative to lambda functions.</p>
+<p>This class should with Python version 2.5 and later be replaced
+by functools.partial.
+However, you cannot simply do a:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Command</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span>
+</pre></div>
+</div>
+<p>to be backward compatible with your old programs that use Command,
+because Command and functools.partial supply the positional
+arguments in different manners: Command calls the underlying
+function with new arguments followed by the originally recorded
+arguments, while functools.partial does it the other way around
+(first original arguments, then new positional arguments).</p>
+<p>This Command class is kept for backward compatibility. New usage
+should employ functools.partial instead.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.misc.DoNothing">
+<em class="property">class </em><tt class="descclassname">scitools.misc.</tt><tt class="descname">DoNothing</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#DoNothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.DoNothing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Handy class for making other objects inactive.
+(DoNothing is a generic dispatcher, accepting anyting and
+doing nothing.)</p>
+<p>Whatever we do, we always get a DoNothing object, with which
+we can do whatever we want to, but nothing will happen.</p>
+<p>For example, say a plot function returns a plot object that
+is used widely in a code to create windows with visualizations
+on the screen, and you want to turn off all these visualizations:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">DoNothing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">DoNothing</span><span class="p">(</span><span class="s">&#39;Plotting turned off&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;My plot&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+<span class="go">&lt;class &#39;scitools.misc.DoNothing&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="go">trying update but no action (DoNothing object)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">viz</span><span class="o">.</span><span class="n">properties</span><span class="p">()</span>
+<span class="go">trying properties but no action (DoNothing object)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">&lt;class &#39;scitools.misc.DoNothing&#39;&gt;</span>
+</pre></div>
+</div>
+<p>One can turn the messages &#8216;trying ... but no action&#8217; off by
+giving the argument silent=True to the constructor:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">DoNothing</span><span class="p">(</span><span class="s">&#39;Plotting turned off&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;My plot&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viz</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">viz</span><span class="o">.</span><span class="n">properties</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.misc.DoNothing.next" title="scitools.misc.DoNothing.next"><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.misc.DoNothing.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#DoNothing.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.DoNothing.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.misc.Download">
+<em class="property">class </em><tt class="descclassname">scitools.misc.</tt><tt class="descname">Download</tt><big>(</big><em>url</em>, <em>filename</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#Download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.Download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getName</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isAlive</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isDaemon</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">is_alive</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">join</span></tt>([timeout])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.misc.Download.run" title="scitools.misc.Download.run"><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setDaemon</span></tt>(daemonic)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setName</span></tt>(name)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">start</span></tt>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.misc.Download.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#Download.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.Download.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.misc.Recorder">
+<em class="property">class </em><tt class="descclassname">scitools.misc.</tt><tt class="descname">Recorder</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#Recorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.Recorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is a wrapper of a module or instance which will
+record all actions done with the module/instance.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">Recorder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.std</span> <span class="kn">import</span> <span class="n">plt</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="n">linspace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">_g</span><span class="p">)</span>  <span class="c"># make the plot object record itself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span>
+<span class="gp">... </span>     <span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="s">&#39;b-&#39;</span><span class="p">,</span>
+<span class="gp">... </span>     <span class="n">title</span><span class="o">=</span><span class="s">&#39;A test&#39;</span><span class="p">)</span>
+<span class="go">[&lt;scitools.easyviz.common.Line object at 0x1749c50&gt;, &lt;scitools.easyviz.common.Line object at 0x1749bd0&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># look at what we have done with the plt._g object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">_g</span><span class="o">.</span><span class="n">replay</span><span class="p">()</span>
+<span class="go">reset()</span>
+<span class="go">__call__(&#39;unset multiplot&#39;,)</span>
+<span class="go">__call__(&#39;set datafile missing &quot;nan&quot;&#39;,)</span>
+<span class="go">__call__(&#39;set key right top&#39;,)</span>
+<span class="go">__call__(&#39;set title &quot;A test&quot;&#39;,)</span>
+<span class="go">__call__(&#39;unset logscale x&#39;,)</span>
+<span class="go">__call__(&#39;unset logscale y&#39;,)</span>
+<span class="go">__call__(&#39;set autoscale&#39;,)</span>
+<span class="go">__call__(&#39;set xrange[*:*]&#39;,)</span>
+<span class="go">__call__(&#39;set yrange[*:*]&#39;,)</span>
+<span class="go">__call__(&#39;set zrange[*:*]&#39;,)</span>
+<span class="go">__call__(&#39;set size noratio&#39;,)</span>
+<span class="go">__call__(&#39;set size nosquare&#39;,)</span>
+<span class="go">__call__(&#39;set yrange [] noreverse&#39;,)</span>
+<span class="go">__call__(&#39;set hidden3d&#39;,)</span>
+<span class="go">__call__(&#39;unset colorbox&#39;,)</span>
+<span class="go">__call__(&#39;set cbrange [*:*]&#39;,)</span>
+<span class="go">__call__(&#39;set palette model RGB defined (0 &quot;blue&quot;, 3 &quot;cyan&quot;, 4 &quot;green&quot;, 5 &quot;yellow&quot;, 8 &quot;red&quot;, 10 &quot;black&quot;)&#39;,)</span>
+<span class="go">__call__(&#39;unset view&#39;,)</span>
+<span class="go">__call__(&#39;set view map&#39;,)</span>
+<span class="go">__call__(&#39;set xtics&#39;,)</span>
+<span class="go">__call__(&#39;set ytics&#39;,)</span>
+<span class="go">__call__(&#39;set ztics&#39;,)</span>
+<span class="go">__call__(&#39;set border 1+2+4+8+16 linetype -1 linewidth .4&#39;,)</span>
+<span class="go">__call__(&#39;unset xlabel&#39;,)</span>
+<span class="go">__call__(&#39;unset ylabel&#39;,)</span>
+<span class="go">__call__(&#39;unset zlabel&#39;,)</span>
+<span class="go">__call__(&#39;set border 4095 linetype -1 linewidth .4&#39;,)</span>
+<span class="go">__call__(&#39;unset grid&#39;,)</span>
+<span class="go">plot(&lt;Gnuplot.PlotItems._FIFOFileItem instance at 0x174d998&gt;,)</span>
+<span class="go">replot(&lt;Gnuplot.PlotItems._FIFOFileItem instance at 0x174db90&gt;,)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.misc.Recorder.replay" title="scitools.misc.Recorder.replay"><tt class="xref py py-obj docutils literal"><span class="pre">replay</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.misc.Recorder.replay">
+<tt class="descname">replay</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#Recorder.replay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.Recorder.replay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.after">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">after</tt><big>(</big><em>string</em>, <em>character</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#after"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.after" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return part of string after character.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.before">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">before</tt><big>(</big><em>string</em>, <em>character</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#before"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.before" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return part of string before character.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.cmldict">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">cmldict</tt><big>(</big><em>argv</em>, <em>cmlargs=None</em>, <em>validity=0</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#cmldict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.cmldict" title="Permalink to this definition">¶</a></dt>
+<dd><p>The cmldict function takes a dictionary cmlargs with default
+values for the command-line options and returns a modified form of
+this dictionary after the options given in the list argv are
+parsed and inserted. One will typically supply sys.argv[1:] as the
+argv argument. In case cmlargs is None, the dictionary is built
+from scratch inside the function.  The flag validity is false (0)
+if any option in argv can be inserted in cmlargs, otherwise the
+function will issue an error message if an option is not already
+present in cmlargs with a default value (notice that cmlargs=None
+and validity=1 is an incompatible setting).</p>
+<p>Example:
+cmlargs = {&#8216;p&#8217; : 0, &#8216;file&#8217; : None, &#8216;q&#8217; : 0, &#8216;v&#8217; : 0}
+argv = &#8220;-p 2 &#8211;file out -q 0&#8221;.split()
+p = cmldict(argv, cmlargs)</p>
+<p>p equals {&#8216;p&#8217; : 2, &#8216;file&#8217; : out, &#8216;q&#8217; : 0}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.f">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">f</tt><big>(</big><em>a</em>, <em>b</em>, <em>max=1.2</em>, <em>min=2.2</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.find">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">find</tt><big>(</big><em>func</em>, <em>rootdir</em>, <em>arg=None</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traverse the directory tree rootdir and call func for each file.
+arg is a user-provided argument transferred to func(filename,arg).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.findprograms">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">findprograms</tt><big>(</big><em>programs</em>, <em>searchlibs=</em><span class="optional">[</span><span class="optional">]</span>, <em>write_message=False</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#findprograms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.findprograms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of programs (programs), find the full path
+of each program and return a dictionary with the program
+name as key and the full path as value. The value is None
+if the program is not found.</p>
+<p>The program list can either be a list/tuple or a
+dictionary (in the latter case, the keys are the programs
+and the values are explanations of the programs).
+If write_message is true, the function writes a message
+if a program is not found. In that case, None is returned
+if not all programs are found.</p>
+<p>A single program can also be given as first argument. In that
+case, findprograms returns True or False according to whether
+the program is found or not.</p>
+<p>Example on usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">findprograms</span><span class="p">(</span><span class="s">&#39;plotmtv&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;plotmtv ...&#39;</span><span class="p">)</span>
+
+<span class="c"># write a message if a program is not found:</span>
+<span class="k">if</span> <span class="n">findprograms</span><span class="p">([</span><span class="s">&#39;plotmtv&#39;</span><span class="p">],</span> <span class="n">write_message</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;plotmtv ...&#39;</span><span class="p">)</span>
+
+<span class="n">programs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;gs&#39;</span><span class="p">,</span> <span class="s">&#39;convert&#39;</span><span class="p">]</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">programs</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="s">&#39;gs&#39;</span><span class="p">]:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;gs ...&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="s">&#39;convert&#39;</span><span class="p">]:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;convert ...&#39;</span><span class="p">)</span>
+
+<span class="n">programs</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;gs&#39;</span> <span class="p">:</span> <span class="s">&#39;Ghostscript: file format conversions&#39;</span><span class="p">,</span>
+             <span class="s">&#39;convert&#39;</span> <span class="p">:</span> <span class="s">&#39;File format conversion from ImageMagick&#39;</span><span class="p">,</span>
+           <span class="p">}</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">findprograms</span><span class="p">(</span><span class="n">programs</span><span class="p">,</span> <span class="n">write_message</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;the mentioned programs need to be installed&#39;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fix_latex_command_regex">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fix_latex_command_regex</tt><big>(</big><em>pattern</em>, <em>application='match'</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fix_latex_command_regex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fix_latex_command_regex" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Given a pattern for a regular expression match or substitution,</dt>
+<dd><p class="first">the function checks for problematic patterns commonly
+encountered when working with LaTeX texts, namely commands
+starting with a backslash.</p>
+<p>For a pattern to be matched or substituted, and extra backslash is
+always needed (either a special regex construction like w leads
+to wrong match, or c leads to wrong substitution since just
+escapes c so only the c is replaced, leaving an undesired
+backslash). For the replacement pattern in a substitutions, specified
+by the application=&#8217;replacement&#8217; argument, a backslash
+before any of the characters abfgnrtv must be preceeded by an
+additional backslash.</p>
+<p>The application variable equals &#8216;match&#8217; if pattern is used for
+a match and &#8216;replacement&#8217; if pattern defines a replacement
+regex in a re.sub command.</p>
+<p>Caveats: let pattern just contain LaTeX commands, not combination
+of commands and other regular expressions (s, d, etc.) as the
+latter will end up with an extra undesired backslash.</p>
+<p>Here are examples on failures:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;egin\{equation\}&#39;</span><span class="p">,</span> <span class="s">r&#39;\[&#39;</span><span class="p">,</span> <span class="s">r&#39;egin{equation}&#39;</span><span class="p">)</span>
+<span class="go">&#39;\begin{equation}&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># match of mbox, not \mbox, and wrong output:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;\mbox\{(.+?)\}&#39;</span><span class="p">,</span> <span class="s">r&#39;</span>
+</pre></div>
+</div>
+</dd>
+<dt>box{g&lt;1&gt;}&#8217;, r&#8217;mbox{not}&#8217;)</dt>
+<dd>&#8216;</dd>
+</dl>
+<p>box{not}&#8217;</p>
+<blockquote>
+<div><p>Here are examples on using this function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">fix_latex_command_regex</span> <span class="k">as</span> <span class="n">fix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pattern</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s">r&#39;egin\{equation\}&#39;</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="s">&#39;match&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="s">r&#39;\[&#39;</span><span class="p">,</span> <span class="s">r&#39;egin{equation}&#39;</span><span class="p">)</span>
+<span class="go">&#39;\[&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pattern</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s">r&#39;\mbox\{(.+?)\}&#39;</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="s">&#39;match&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">replacement</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s">r&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="docutils">
+<dt>box{g&lt;1&gt;}&#8217;, application=&#8217;replacement&#8217;)</dt>
+<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="s">r&#39;\mbox{not}&#39;</span><span class="p">)</span>
+<span class="go">&#39;\fbox{not}&#39;</span>
+</pre></div>
+</div>
+<p>Avoid mixing LaTeX commands and ordinary regular expression
+commands, e.g.:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pattern</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s">r&#39;\mbox\{(\d+)\}&#39;</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="s">&#39;match&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pattern</span>
+<span class="go">&#39;\\mbox\{(\\d+)\}&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="s">r&#39;\mbox{987}&#39;</span><span class="p">)</span>
+<span class="go">&#39;\mbox{987}&#39;  # no substitution, no match</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.flatten">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">flatten</tt><big>(</big><em>nested_data</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a flattened iterator over nested_data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nested_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="mi">3</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,[</span><span class="mi">7</span><span class="p">,[</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]]]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">flatten</span><span class="p">(</span><span class="n">nested_list</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flat</span>
+<span class="go">[1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+</pre></div>
+</div>
+<p>(Minor adjustment of code by Goncalo Rodrigues, see
+<a class="reference external" href="http://aspn.activestate.com/ASPN/Mail/Message/python-tutor/2302348">http://aspn.activestate.com/ASPN/Mail/Message/python-tutor/2302348</a>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme1">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme1</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme2">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme2</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme3">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme3</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme4">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme4</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme5">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme5</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme6">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme6</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme7">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme7</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.fontscheme8">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">fontscheme8</tt><big>(</big><em>root</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#fontscheme8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.fontscheme8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative font scheme for Tkinter-based widgets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.func_to_method">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">func_to_method</tt><big>(</big><em>func</em>, <em>class_</em>, <em>method_name=None</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#func_to_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.func_to_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a function to a class <a href="#id1"><span class="problematic" id="id2">class_</span></a> as method_name.
+If method_name is not given, func.__name__ becomes
+the name of the method.
+Borrowed from recipe 5.12 in the Python Cookbook.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.function_UI">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">function_UI</tt><big>(</big><em>functions</em>, <em>argv</em>, <em>verbose=True</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#function_UI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.function_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>User interface for calling a collection of functions from the
+command line by writing the function name and its arguments.
+functions is a list of possible functions to be called. argv is
+sys.argv from the calling code.
+function_UI returns a command to be evaluated (function call)
+in the calling code.</p>
+<p>This function autogenerates a user interface to a module.
+Suppose a module has a set of functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">test_mymethod1</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">test_method2a</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">test_method2b</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following code automatically creates a user interface
+and executes calls to the functions above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">function_UI</span>
+<span class="n">function_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;test_&#39;</span><span class="p">)]</span>
+<span class="n">function_UI</span><span class="p">(</span><span class="n">function_names</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On the command line the user can now type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">programname</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>and automatically get a help string for each function, consisting
+of the function name, all its positional arguments and all its
+keyword arguments.</p>
+<p>Alternatively, writing just the function name:</p>
+<div class="highlight-python"><pre>programname functionname</pre>
+</div>
+<p>prints a usage string if this function requires arguments, otherwise
+the function is just called.</p>
+<p>Finally, when arguments are supplied:</p>
+<div class="highlight-python"><pre>programname functionname arg1 arg2 arg3 ...</pre>
+</div>
+<p>the function is called with the given arguments. Safe and easy use
+is ensured by always giving keyword arguments:</p>
+<div class="highlight-python"><pre>programname functionname arg1=value1 arg2=value2 arg3=value3 ...</pre>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.hardware_info">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">hardware_info</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#hardware_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.hardware_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of various types of hardware info from
+various modules.</p>
+<p>Recommended use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">hardware_info</span>
+<span class="kn">import</span> <span class="nn">pprint</span><span class="p">;</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">hardware_info</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.interpret_as_callable_or_StringFunction">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">interpret_as_callable_or_StringFunction</tt><big>(</big><em>s</em>, <em>iv</em>, <em>globals_</em>, <em>**named_parameters</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#interpret_as_callable_or_StringFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.interpret_as_callable_or_StringFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable object if <tt class="docutils literal"><span class="pre">s</span></tt> is the name of such an
+object, otherwise turn <tt class="docutils literal"><span class="pre">s</span></tt> to a <tt class="docutils literal"><span class="pre">StringFunction</span></tt> object with
+<tt class="docutils literal"><span class="pre">iv</span></tt> as the name of the independent variable.
+The <tt class="docutils literal"><span class="pre">named_parameters</span></tt> dictionary holds parameters in
+string expressions.
+Used by the <tt class="docutils literal"><span class="pre">read_cml</span></tt> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.isiterable">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">isiterable</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#isiterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.isiterable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true of data is iterable, else False.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.lines2paragraphs">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">lines2paragraphs</tt><big>(</big><em>lines</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#lines2paragraphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.lines2paragraphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of paragraphs from a list of lines
+(normally holding the lines in a file).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.memusage">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">memusage</tt><big>(</big><em>_proc_pid_stat='/proc/28007/stat'</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#memusage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.memusage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return virtual memory size in bytes of the running python.
+Copied from the SciPy package (scipy_test.testing.py).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.movefiles">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">movefiles</tt><big>(</big><em>files</em>, <em>destdir</em>, <em>confirm=True</em>, <em>verbose=True</em>, <em>copy=True</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#movefiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.movefiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a set of files to a a destination directory tree,
+but let the original complete path be reflected in the
+destination tree.</p>
+<p>files         list of filenames
+destdir       root of destination directory tree
+confirm       let the user confirm movement of each file
+verbose       write out the original and new path of each file
+copy          True: copy, False: move</p>
+<p>The function is useful for backing up or temporarily moving
+files; the files are easily restored in their original
+locations since the original complete path is maintained in
+the destination directory tree.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.oneline">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">oneline</tt><big>(</big><em>infile</em>, <em>outfile</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#oneline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.oneline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform all paragraphs in infile (filename) to one-line strings
+and write the result to outfile (filename).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.pathsearch">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">pathsearch</tt><big>(</big><em>programs=</em><span class="optional">[</span><span class="optional">]</span>, <em>modules=</em><span class="optional">[</span><span class="optional">]</span>, <em>where=0</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#pathsearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.pathsearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of programs (programs) and modules (modules),
+search for these programs and modules in the directories
+in the PATH and PYTHONPATH environment variables, respectively.
+Check that each directory has read and write access too.
+The function is useful for checking that PATH and PYTHONPATH
+are appropriately set in CGI scripts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.pow_eff">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">pow_eff</tt><big>(</big><em>a</em>, <em>b</em>, <em>powfunc=&lt;built-in function pow&gt;</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#pow_eff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.pow_eff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a^b. Smart function that happened to be slower
+than a straight math.pow.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.preprocess_all_files">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">preprocess_all_files</tt><big>(</big><em>rootdir</em>, <em>options=''</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#preprocess_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.preprocess_all_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run preprocess on all files of the form basename.p.ext
+in the directory with root rootdir. The output of each
+preprocess run is directed to basename.ext.</p>
+<p>&#64;param rootdir: root of directory tree to be processed.
+&#64;param options: options (string) to preprocess program.
+&#64;return: nested list of ((dir, basename.p.ext, basename.p), success))
+tuples. success is boolean and indicates if the preprocess command
+was a success (or not).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.primes">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">primes</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#primes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.primes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the prime numbers &lt;= n.
+Standard optimized sieve algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.read_cml">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">read_cml</tt><big>(</big><em>option, default=None, argv=['/usr/bin/sphinx-build', '-b', 'html', '-d', '_build/doctrees', '.', '_build/html']</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#read_cml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.read_cml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for option (e.g. &#8216;-p&#8217;, &#8216;&#8211;plotfile&#8217;) among the command-line
+arguments and return the associated value (the proceeding argument).
+If the option is not found, the default argument is returned
+as str(default) (to have a unified behavior in that everything returned
+from read_cml is a string).</p>
+<p>The call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">str2obj</span><span class="p">(</span><span class="n">read_cml</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">default</span><span class="o">=...</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>will return a Python object (with the right type) corresponding to
+the value of the object (see the str2obj function).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>option</td>
+<td>command-line option (str)</td>
+</tr>
+<tr class="row-odd"><td>default</td>
+<td>default value associated with the option</td>
+</tr>
+<tr class="row-even"><td>argv</td>
+<td>list that is scanned for command-line arguments</td>
+</tr>
+<tr class="row-odd"><td>return value</td>
+<td>the item in argv after the option, or default if option
+is not found</td>
+</tr>
+</tbody>
+</table>
+<p>See the read_cml_func function for reading function expressions
+or function/instance names on the command line and returning
+callable objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.read_cml_func">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">read_cml_func</tt><big>(</big><em>option</em>, <em>default_func</em>, <em>iv='t'</em>, <em>globals_=None</em>, <em>**named_parameters</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#read_cml_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.read_cml_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locate <tt class="docutils literal"><span class="pre">--option</span></tt> on the command line (<tt class="docutils literal"><span class="pre">sys.argv</span></tt>) and find
+the corresponding value (next <tt class="docutils literal"><span class="pre">sys.argv</span></tt> element).
+This value is supposed to specify a Python function, an
+instance with a <tt class="docutils literal"><span class="pre">__call__</span></tt> method, None, or a string that can be
+turned into a <tt class="docutils literal"><span class="pre">scitools.StringFunction.StringFunction</span></tt>
+function with <tt class="docutils literal"><span class="pre">iv</span></tt> as the name of the independent variable(s)
+(list of strings in case of more than one independent variable).
+If <tt class="docutils literal"><span class="pre">--option</span></tt> is not found, the argument <tt class="docutils literal"><span class="pre">default_func</span></tt>,
+a given callable or string, is returned (if string, <tt class="docutils literal"><span class="pre">iv</span></tt>
+reflects the name of the independent variable(s) in the
+string).</p>
+<p>The <tt class="docutils literal"><span class="pre">globals_</span></tt> argument is just passed on to the
+<tt class="docutils literal"><span class="pre">StringFunction</span></tt> object if the value of the option for default
+function is a string. Similary, the <tt class="docutils literal"><span class="pre">named_parameters</span></tt> dictionary
+is passed on to the <tt class="docutils literal"><span class="pre">StringFunction</span></tt> object and assumed to
+hold parameters in the string expressions (variables different
+from the independent variable).</p>
+<p>This function always returns a callable object or None.</p>
+<p>Here is an interactive session showing the use of <tt class="docutils literal"><span class="pre">read_cml_func</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">read_cml_func</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># fake command-line arguments by filling in sys.argv:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="s">&#39;--func1 myfunc --func3 sin(x)&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</pre></div>
+</div>
+<p>...     return 1 + x
+...
+&gt;&gt;&gt;
+&gt;&gt;&gt; # &#8211;func1 has myfunc as value, must pass on globals() or just
+&gt;&gt;&gt; # myfunc as name to read_cml_func
+&gt;&gt;&gt; #f = read_cml_func(&#8216;&#8211;func1&#8217;, &#8216;1&#8217;, globals_=globals())
+&gt;&gt;&gt; f = read_cml_func(&#8216;&#8211;func1&#8217;, &#8216;1&#8217;, globals_={&#8216;myfunc&#8217;: myfunc})
+&gt;&gt;&gt; type(f)
+&lt;type &#8216;function&#8217;&gt;
+&gt;&gt;&gt; f(10)
+11
+&gt;&gt;&gt; # &#8211;func3 is given as a string expression &#8220;sin(x)&#8221; on the command line
+&gt;&gt;&gt; f = read_cml_func(&#8216;&#8211;func3&#8217;, &#8216;0&#8217;, iv=&#8217;x&#8217;)
+&gt;&gt;&gt; type(f)
+&lt;type &#8216;instance&#8217;&gt;
+&gt;&gt;&gt; repr(f)
+&#8220;StringFunction(&#8216;sin(x)&#8217;, independent_variables=(&#8216;x&#8217;,), )&#8221;
+&gt;&gt;&gt; str(f)
+&#8216;sin(x)&#8217;
+&gt;&gt;&gt; f(pi)
+1.2246467991473532e-16
+&gt;&gt;&gt;
+&gt;&gt;&gt; # &#8211;func2 is not given on the command line, use the default
+&gt;&gt;&gt; # value &#8220;A*cos(w*t)&#8221;, which is a string expression.
+&gt;&gt;&gt; # Pass on a <a href="#id3"><span class="problematic" id="id4">globals_</span></a> dict with cos from numpy such that f works
+&gt;&gt;&gt; # with array argument for t
+&gt;&gt;&gt; import numpy
+&gt;&gt;&gt; f = read_cml_func(&#8216;&#8211;func2&#8217;, &#8216;A*cos(w*t)&#8217;, iv=&#8217;t&#8217;, A=3, w=pi, globals_={&#8216;cos&#8217;: numpy.cos})
+&gt;&gt;&gt; # More general case where the string should have all numpy functions:
+&gt;&gt;&gt; #f = read_cml_func(&#8216;&#8211;func2&#8217;, &#8216;A*cos(w*t)&#8217;, iv=&#8217;t&#8217;, A=3, w=pi, globals_=dir(numpy))
+&gt;&gt;&gt; type(f)
+&lt;type &#8216;instance&#8217;&gt;
+&gt;&gt;&gt; repr(f)
+&#8220;StringFunction(&#8216;A*cos(w*t)&#8217;, independent_variables=(&#8216;t&#8217;,), A=3, w=3.141592653589793)&#8221;
+&gt;&gt;&gt; str(f)
+&#8216;3*cos(3.14159265359*t)&#8217;
+&gt;&gt;&gt; t = numpy.array([1, 4])
+&gt;&gt;&gt; f(t)
+array([-3.,  3.])
+&gt;&gt;&gt;
+&gt;&gt;&gt; # No &#8211;func4 on the command line (sys.argv), implying that
+&gt;&gt;&gt; # f becomes a StringFunction with value 0
+&gt;&gt;&gt; f = read_cml_func(&#8216;&#8211;func4&#8217;, &#8216;0&#8217;)
+&gt;&gt;&gt; type(f)
+&lt;type &#8216;instance&#8217;&gt;
+&gt;&gt;&gt; repr(f)
+&#8220;StringFunction(&#8216;0&#8217;, independent_variables=(&#8216;t&#8217;,), )&#8221;
+&gt;&gt;&gt; str(f)
+&#8216;0&#8217;
+&gt;&gt;&gt; f(1)
+0</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.remove_multiple_items">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">remove_multiple_items</tt><big>(</big><em>somelist</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#remove_multiple_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.remove_multiple_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given some list somelist, return a list where identical items
+are removed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.sorted_os_path_walk">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">sorted_os_path_walk</tt><big>(</big><em>root</em>, <em>func</em>, <em>arg</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#sorted_os_path_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.sorted_os_path_walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like os.path.walk, but directories and files are visited and
+listed in alphabetic order.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.str2bool">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">str2bool</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#str2bool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.str2bool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a string s, holding some boolean value
+(&#8216;on&#8217;, &#8216;off&#8217;, &#8216;True&#8217;, &#8216;False&#8217;, &#8216;yes&#8217;, &#8216;no&#8217; - case insensitive)
+into boolean variable. s can also be a boolean. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">str2bool</span><span class="p">(</span><span class="s">&#39;OFF&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str2bool</span><span class="p">(</span><span class="s">&#39;yes&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.str2obj">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">str2obj</tt><big>(</big><em>s</em>, <em>globals_=None</em>, <em>locals_=None</em>, <em>debug=False</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#str2obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.str2obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn string s into the corresponding object. str2obj is mainly
+used to take a string from a GUI or the command line and
+create a Python object. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="s">&#39;0.3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0.3 &lt;type &#39;float&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="s">&#39;(1,8)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">(1, 8) &lt;type &#39;tuple&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Method: eval(s) can normally do the job, but if s is meant to
+be turned into a string object, eval works only if s has explicit
+quotes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span><span class="p">(</span><span class="s">&#39;some string&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">SyntaxError</span>: <span class="n">unexpected EOF while parsing</span>
+</pre></div>
+</div>
+<p>(eval tries to parse &#8216;some string&#8217; as Python code.)
+Similarly, if s is a boolean word, say &#8216;off&#8217; or &#8216;yes&#8217;,
+eval will not work.</p>
+<p>In this function we first try to see if s is a boolean value,
+using scitools.misc.str2bool. If this does is not successful,
+we try eval(s, <a href="#id5"><span class="problematic" id="id6">globals_</span></a>, <a href="#id7"><span class="problematic" id="id8">locals_</span></a>), and if it works, we return
+the resulting object. Otherwise, s is (most probably) a string,
+so we return s itself. The None value of <a href="#id9"><span class="problematic" id="id10">locals_</span></a> and <a href="#id11"><span class="problematic" id="id12">globals_</span></a>
+implies using locals() and globals() in this function.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">strings</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;0.3&#39;</span><span class="p">,</span> <span class="s">&#39;5&#39;</span><span class="p">,</span> <span class="s">&#39;[-1,2]&#39;</span><span class="p">,</span> <span class="s">&#39;-1+3j&#39;</span><span class="p">,</span> <span class="s">&#39;dict(a=1,b=0,c=2)&#39;</span><span class="p">,</span>
+<span class="gp">... </span>           <span class="s">&#39;some string&#39;</span><span class="p">,</span> <span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="s">&#39;ON&#39;</span><span class="p">,</span> <span class="s">&#39;no&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">obj</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;&quot;</span><span class="si">%s</span><span class="s">&quot; -&gt; </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">&quot;0.3&quot; -&gt; 0.3 &lt;type &#39;float&#39;&gt;</span>
+<span class="go">&quot;5&quot; -&gt; 5 &lt;type &#39;int&#39;&gt;</span>
+<span class="go">&quot;[-1,2]&quot; -&gt; [-1, 2] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">&quot;-1+3j&quot; -&gt; (-1+3j) &lt;type &#39;complex&#39;&gt;</span>
+<span class="go">&quot;dict(a=1,b=0,=2)&quot; -&gt;  {&#39;a&#39;: 1, &#39;c&#39;: 2, &#39;b&#39;: 0} &lt;type &#39;dict&#39;&gt;</span>
+<span class="go">&quot;some string&quot; -&gt; some string &lt;type &#39;str&#39;&gt;</span>
+<span class="go">&quot;true&quot; -&gt; True &lt;type &#39;bool&#39;&gt;</span>
+<span class="go">&quot;ON&quot; -&gt; True &lt;type &#39;bool&#39;&gt;</span>
+<span class="go">&quot;no&quot; -&gt; False &lt;type &#39;bool&#39;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>If the name of a user defined function, class or instance is
+sent to str2obj, the calling code must also send locals() and
+globals() dictionaries as extra arguments. Otherwise, str2obj
+will not know how to &#8220;eval&#8221; the string and produce the right
+object (user-defined types are unknown inside str2obj unless
+the calling code&#8217;s globals and locals are provided).
+Here is an example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="mi">1</span><span class="o">+</span><span class="n">x</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="s">&#39;myf&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>   <span class="c"># now s is simply the string &#39;myf&#39;</span>
+<span class="go">myf &lt;type &#39;str&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># provide locals and globals such that we get the function myf:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="s">&#39;myf&#39;</span><span class="p">,</span> <span class="nb">locals</span><span class="p">(),</span> <span class="nb">globals</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">&lt;function myf at 0xb70ffe2c&gt; &lt;type &#39;function&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">str2obj</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="nb">locals</span><span class="p">(),</span> <span class="nb">globals</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">&lt;__main__.A instance at 0xb70f6fcc&gt; &lt;type &#39;instance&#39;&gt;</span>
+</pre></div>
+</div>
+<p>With debug=True, the function will print out the exception
+encountered when doing eval(s, <a href="#id13"><span class="problematic" id="id14">globals_</span></a>, <a href="#id15"><span class="problematic" id="id16">locals_</span></a>), and this may
+point out problems with, e.g., imports in the calling code
+(insufficient variables in <a href="#id17"><span class="problematic" id="id18">globals_</span></a>).</p>
+<p>Note: if the string argument is the name of a valid Python
+class (type), that class will be returned. For example,
+&gt;&gt;&gt; str2obj(&#8216;list&#8217;)  # returns class list
+&lt;type &#8216;list&#8217;&gt;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.str2type">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">str2type</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#str2type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.str2type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a function that can take a string and convert it to
+a Python object of the same type as value.</p>
+<p>This function is useful when turning input from GUIs or the
+command line into Python objects. Given a default value for the
+input (with the right object type), str2type will return the right
+conversion function.  (str2obj can do the thing, but will often
+return eval, which turns any string into a Python object - this is
+less safe than str2type, which never returns eval. That principle
+helps to detect wrong input.)</p>
+<p>Method: If value is bool, we use scitools.misc.str2bool, which
+is capable of converting strings like &#8220;on&#8221;, &#8220;off&#8221;,&#8221;yes&#8221;, &#8220;no&#8221;,
+&#8220;true&#8221; and &#8220;false&#8221; to boolean values. Otherwise, we use
+type(value) as the conversion function. However, there is one
+problem with type(value) when value is an int while the user
+intended a general real number - in that case one may get
+wrong answers because of wrong (int) round off. Another problem
+concerns user-defined types. For those (which str2type knows
+nothing about) the str function is returned, implying that the
+conversion from a string to the right user-defined type cannot
+be done by the function returned from str2type.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">str2type</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;tuple&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">str2type</span><span class="p">(</span><span class="n">MySpecialClass</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;str&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">str2type</span><span class="p">(</span><span class="s">&#39;some string&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;str&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">str2type</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;str2bool&#39;</span>
+</pre></div>
+</div>
+<p>(Note that we could return eval if value is not a string or a boolean,
+but eval is never returned from this function to avoid conversion
+to an unintended type.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.subst">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">subst</tt><big>(</big><em>patterns</em>, <em>replacements</em>, <em>filenames</em>, <em>pattern_matching_modifiers=0</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#subst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.subst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a set of patterns by a set of replacement strings (regular
+expressions) in a series of files.
+The function essentially performs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+    <span class="n">file_string</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">replacements</span><span class="p">):</span>
+        <span class="n">file_string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">file_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A copy of the original file is taken, with extension <cite>.old~</cite>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>patterns</td>
+<td>string or list of strings (regex)</td>
+</tr>
+<tr class="row-odd"><td>replacements</td>
+<td>string or list of strings (regex)</td>
+</tr>
+<tr class="row-even"><td>filenames</td>
+<td>string or list of strings</td>
+</tr>
+<tr class="row-odd"><td>pattern_matching_modifiers</td>
+<td>re.DOTALL, re.MULTILINE, etc., same
+syntax as for re.compile</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.system">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">system</tt><big>(</big><em>command</em>, <em>verbose=True</em>, <em>failure_handling='exit'</em>, <em>fake=False</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.system" title="Permalink to this definition">¶</a></dt>
+<dd><p>User-friendly wrapping of the os.system/os.popen commands.
+Actually, the commands.getstatusoutput function is used on Unix
+systems, and the output from the system command is fetched.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>command</td>
+<td>operating system command to be executed</td>
+</tr>
+<tr class="row-odd"><td>verbose</td>
+<td>False: no output, True: print command prior to execution</td>
+</tr>
+<tr class="row-even"><td>failure_handling</td>
+<td>one of &#8216;exit&#8217;, &#8216;warning&#8217;, &#8216;exception&#8217;, or &#8216;silent&#8217;
+(in case of failure, the output from the command is
+always displayed)</td>
+</tr>
+<tr class="row-odd"><td>fake</td>
+<td>if True, the command is printed but not run (for testing)</td>
+</tr>
+<tr class="row-even"><td>return value</td>
+<td>the same as commands.getstatusoutput, i.e., a boolean
+failure variable and the output from the command as a
+string object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.test_if_module_exists">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">test_if_module_exists</tt><big>(</big><em>modulename</em>, <em>msg=''</em>, <em>raise_exception=False</em>, <em>abort=True</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#test_if_module_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.test_if_module_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if modulename can be imported, and if not, write
+an error message and (optionally) raise an exception, continue or
+abort with sys.exit(1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.timer">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">timer</tt><big>(</big><em>func</em>, <em>args=</em><span class="optional">[</span><span class="optional">]</span>, <em>kwargs={}</em>, <em>repetitions=10</em>, <em>comment=''</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a function func, with arguments given by the tuple
+args and keyword arguments given by the dictionary kwargs,
+a specified number of times (repetitions) and
+write out the elapsed time and the CPU time together.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.timer_system">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">timer_system</tt><big>(</big><em>command</em>, <em>comment=''</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#timer_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.timer_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run an os.system(command) statement and measure the CPU time.
+With os.system, the CPU time is registered as the user and
+system time of child processes.</p>
+<p>Note: there might be some overhead in the timing compared to
+running time in the OS instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.misc.wrap">
+<tt class="descclassname">scitools.misc.</tt><tt class="descname">wrap</tt><big>(</big><em>infile</em>, <em>outfile</em>, <em>linewidth=70</em><big>)</big><a class="reference internal" href="_modules/scitools/misc.html#wrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.misc.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read infile (filename) and format the text such that each line is
+not longer than linewidth. Write result to outfile (filename).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/misc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

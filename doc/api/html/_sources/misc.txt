@@ -1,0 +1,10 @@
+
+:mod:`scitools.misc`
+====================
+
+.. automodule:: scitools.misc
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

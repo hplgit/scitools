@@ -1,0 +1,10 @@
+
+:mod:`scitools.easyviz.template_`
+=================================
+
+.. automodule:: scitools.easyviz.template_
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

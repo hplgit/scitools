@@ -1,0 +1,231 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.filetable &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.globaldata" href="globaldata.html" />
+    <link rel="prev" title="scitools.errorcheck" href="errorcheck.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="globaldata.html" title="scitools.globaldata"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="errorcheck.html" title="scitools.errorcheck"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.filetable">
+<span id="scitools-filetable"></span><h1><a class="reference internal" href="#module-scitools.filetable" title="scitools.filetable"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.filetable</span></tt></a><a class="headerlink" href="#module-scitools.filetable" title="Permalink to this headline">¶</a></h1>
+<p>Read tabular data from file into NumPy arrays and vice versa.</p>
+<p>This module provides functions for
+1) reading row-column table data from file into NumPy arrays, and
+2) writing two-dimensional NumPy arrays to file in a table fashion.</p>
+<blockquote>
+<div><ul class="simple">
+<li>read: Load a table with numbers into a two-dim. NumPy array.</li>
+<li>write: Write a two-dim. NumPy array a in tabular form.</li>
+<li>read_columns:
+As read, but the columns are returned as separate arrays instead
+of a two-dimensional array.</li>
+<li>write_columns:
+As write, but the arguments are comma-separated one-dimensional
+arrays, one for each column, instead of a two-dimensional array.</li>
+</ul>
+</div></blockquote>
+<p>The file format requires the same number of &#8220;words&#8221; (numbers)
+on each line. Comment lines are allowed, but a blank line
+indicates a delimiter in the data set, and lines after the blank
+line will not be read.</p>
+<p>Example: Assume we have a data file <cite>tmp.dat</cite> with the numbers:</p>
+<div class="highlight-python"><pre>0        0.0        0.0        1.0
+1        1.0        1.0        2.0
+2        4.0        8.0       17.0
+3        9.0       27.0       82.0
+4       16.0       64.0      257.0
+5       25.0      125.0      626.0</pre>
+</div>
+<p>The following session demonstrates key functions in this module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scitools.filetable</span> <span class="kn">as</span> <span class="nn">ft</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">table</span>
+<span class="go">[[   0.    0.    0.    1.]</span>
+<span class="go"> [   1.    1.    1.    2.]</span>
+<span class="go"> [   2.    4.    8.   17.]</span>
+<span class="go"> [   3.    9.   27.   82.]</span>
+<span class="go"> [   4.   16.   64.  257.]</span>
+<span class="go"> [   5.   25.  125.  626.]]</span>
+
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y3</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">read_columns</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">x</span>
+<span class="go">[ 0.  1.  2.  3.  4.  5.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y1</span>
+<span class="go">[  0.   1.   4.   9.  16.  25.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y2</span>
+<span class="go">[   0.    1.    8.   27.   64.  125.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y3</span>
+<span class="go">[   1.    2.   17.   82.  257.  626.]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp2.dat&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ft</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <cite>tmp2.dat</cite> file looks as follows:</p>
+<div class="highlight-python"><pre>0       0       0       1
+1       1       1       2
+2       4       8       17
+3       9       27      82
+4       16      64      257
+5       25      125     626</pre>
+</div>
+<dl class="function">
+<dt id="scitools.filetable.read">
+<tt class="descclassname">scitools.filetable.</tt><tt class="descname">read</tt><big>(</big><em>fileobj</em>, <em>commentchar='#'</em><big>)</big><a class="reference internal" href="_modules/scitools/filetable.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.filetable.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a table with numbers into a two-dim. NumPy array.
+&#64;param fileobj: open file object.
+&#64;param commentchar: lines starting with commentchar are skipped
+(a blank line is an array data delimiter and stops reading).
+&#64;return: two-dimensional (row-column) NumPy array.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.filetable.read_columns">
+<tt class="descclassname">scitools.filetable.</tt><tt class="descname">read_columns</tt><big>(</big><em>fileobj</em>, <em>commentchar='#'</em><big>)</big><a class="reference internal" href="_modules/scitools/filetable.html#read_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.filetable.read_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>As read. Return columns as separate arrays.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.filetable.readfile">
+<tt class="descclassname">scitools.filetable.</tt><tt class="descname">readfile</tt><big>(</big><em>filename</em>, <em>commentchar='#'</em><big>)</big><a class="reference internal" href="_modules/scitools/filetable.html#readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.filetable.readfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>As read, but a filename (and not a file object) can be given.
+Return: columns as separate arrays.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.filetable.write">
+<tt class="descclassname">scitools.filetable.</tt><tt class="descname">write</tt><big>(</big><em>fileobj</em>, <em>a</em><big>)</big><a class="reference internal" href="_modules/scitools/filetable.html#write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.filetable.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a two-dim. NumPy array a in tabular form to fileobj.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.filetable.write_columns">
+<tt class="descclassname">scitools.filetable.</tt><tt class="descname">write_columns</tt><big>(</big><em>fileobj</em>, <em>*columns</em><big>)</big><a class="reference internal" href="_modules/scitools/filetable.html#write_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.filetable.write_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>As write, but the column data are represented as one-dimensional
+arrays.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="errorcheck.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.errorcheck</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="globaldata.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.globaldata</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/filetable.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="globaldata.html" title="scitools.globaldata"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="errorcheck.html" title="scitools.errorcheck"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

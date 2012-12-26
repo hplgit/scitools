@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.MovingPlotWindow &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" />
+    <link rel="prev" title="scitools.modulecheck" href="modulecheck.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modulecheck.html" title="scitools.modulecheck"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.MovingPlotWindow">
+<span id="scitools-movingplotwindow"></span><h1><a class="reference internal" href="#module-scitools.MovingPlotWindow" title="scitools.MovingPlotWindow"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.MovingPlotWindow</span></tt></a><a class="headerlink" href="#module-scitools.MovingPlotWindow" title="Permalink to this headline">¶</a></h1>
+<p>Manage a moving plot window for displaying very long time series.</p>
+<dl class="class">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow">
+<em class="property">class </em><tt class="descclassname">scitools.MovingPlotWindow.</tt><tt class="descname">MovingPlotWindow</tt><big>(</big><em>window_width, dt, yaxis=[-1, 1], mode='continuous movement', pause=1.5</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a plot window that follows the tip (end) of a very long
+time series.</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>def demo(I, k, dt, T, mode='continuous movement'):
+    """
+    Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+    method with time steps dt, from t=0 to t=T.
+    """
+    if dt &gt; 2./k:
+        print 'Unstable scheme'
+    N = int(round(T/float(dt)))
+    u = zeros(N+1)
+    t = linspace(0, T, N+1)
+
+    umin = -1.2*I
+    umax = -umin
+    period = 2*pi/k  # period of the oscillations
+    window_width =
+    plot_manager = MovingPlotWindow(
+                     window_width, dt, yaxis=[umin, umax],
+                     mode=mode)
+    u[0] = I
+    u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+    for n in range(1,N):
+        u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+
+        if plot_manager.plot(n):
+            s = plot_manager.first_index_in_plot
+            plot(t[s:n+2], u[s:n+2], 'r-',
+                 t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                 axis=plot_manager.axis(),
+                 title="Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)" % (t[n+1], mode))
+        plot_manager.update(n)</pre>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.axis" title="scitools.MovingPlotWindow.MovingPlotWindow.axis"><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt></a>()</td>
+<td>Return the axis limits as a list <tt class="docutils literal"><span class="pre">[xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax]</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.plot" title="scitools.MovingPlotWindow.MovingPlotWindow.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(n)</td>
+<td>Return True if a plot is to be drawn at time step number <tt class="docutils literal"><span class="pre">n</span></tt>,</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.MovingPlotWindow.MovingPlotWindow.update" title="scitools.MovingPlotWindow.MovingPlotWindow.update"><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt></a>(n)</td>
+<td>Update the plot manager (<tt class="docutils literal"><span class="pre">MovingPlotWindow</span></tt>) at time step <tt class="docutils literal"><span class="pre">n</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>window_width, dt, yaxis=[-1, 1], mode='continuous movement', pause=1.5</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>window_width</td>
+<td>tmax-tmin in a plot window</td>
+</tr>
+<tr class="row-odd"><td>dt</td>
+<td>time step (constant)</td>
+</tr>
+<tr class="row-even"><td>yaxis</td>
+<td>extent of y axis</td>
+</tr>
+<tr class="row-odd"><td>mode</td>
+<td>method for moving the plot window,
+see below.</td>
+</tr>
+</tbody>
+</table>
+<p>The mode parameter has three values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">'continuous</span> <span class="pre">movement'</span></tt>:
+the plot window moves one time step for each plot.</li>
+<li><tt class="docutils literal"><span class="pre">'continuous</span> <span class="pre">drawing'</span></tt>: the curves are drawn from left
+to right, one step at a time, and plot window jumps
+when the curve reaches the end.</li>
+<li><tt class="docutils literal"><span class="pre">'jumps'</span></tt>: the curves are shown in a window for a time
+equal to the pause argument, then the axis jumps
+to a new time window of the same length</li>
+</ul>
+</div></blockquote>
+<p>See also the test block of the module for
+testing out the three different modes of this class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.MovingPlotWindow'</em><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.axis">
+<tt class="descname">axis</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the axis limits as a list <tt class="docutils literal"><span class="pre">[xmin,</span> <span class="pre">xmax,</span> <span class="pre">ymin,</span> <span class="pre">ymax]</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.plot">
+<tt class="descname">plot</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if a plot is to be drawn at time step number <tt class="docutils literal"><span class="pre">n</span></tt>,
+otherwise return False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.MovingPlotWindow.MovingPlotWindow.update">
+<tt class="descname">update</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/scitools/MovingPlotWindow.html#MovingPlotWindow.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.MovingPlotWindow.MovingPlotWindow.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the plot manager (<tt class="docutils literal"><span class="pre">MovingPlotWindow</span></tt>) at time step <tt class="docutils literal"><span class="pre">n</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modulecheck.html"
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">scitools.modulecheck</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/MovingPlotWindow.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modulecheck.html" title="scitools.modulecheck"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

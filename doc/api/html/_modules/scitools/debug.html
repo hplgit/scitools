@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.debug &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.debug</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Debugging tools.</span>
+
+<span class="sd">  - watch(var): print out the name, type, and value of a variable and</span>
+<span class="sd">    where in a program this output was requested (used to monitor variables).</span>
+
+<span class="sd">  - trace(message): print a message and where in the program this</span>
+<span class="sd">    message was requested (used to trace the execution).</span>
+
+<span class="sd">  - dump(obj, hide_underscore=True): print a dump of the object obj</span>
+<span class="sd">    (attributes, methods, etc.).</span>
+
+<span class="sd">  - debugregex(pattern, string): print match, groups, etc. when the</span>
+<span class="sd">    regular expression pattern is applied to string.</span>
+
+<span class="sd">watch and trace prints information only if the module variable</span>
+<span class="sd">DEBUG has a true value. DEBUG can be initialized from an environment</span>
+<span class="sd">variable PYDEBUG, otherwise it is set to 1 by default. Other</span>
+<span class="sd">modules can monitor their debugging by setting debug.DEBUG = 0</span>
+<span class="sd">or debug.DEBUG = 1 (note that a single such setting has a &quot;global&quot; effect;</span>
+<span class="sd">it turns off debugging everywhere).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">string</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">inspect</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;watch&#39;</span><span class="p">,</span> <span class="s">&#39;trace&#39;</span><span class="p">,</span> <span class="s">&#39;dump&#39;</span><span class="p">,</span> <span class="s">&#39;debugregex&#39;</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="s">&#39;PYDEBUG&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PYDEBUG&#39;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># import user?</span>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">__debug__</span><span class="p">:</span>  <span class="c"># python -O</span>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">0</span>      <span class="c"># turn off debugging</span>
+    
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">errorcheck</span>
+
+<div class="viewcode-block" id="watch"><a class="viewcode-back" href="../../debug.html#scitools.debug.watch">[docs]</a><span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">output_medium</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print out the name, type, and value of a variable and</span>
+<span class="sd">    where in a program this output was requested.</span>
+<span class="sd">    Used to monitor variables during debugging.</span>
+<span class="sd">    As an example, watch(myprm) may lead to this output::</span>
+
+<span class="sd">      myprm &lt;int&gt; in ./myscript.py(56): myfunction</span>
+<span class="sd">        = 3</span>
+
+<span class="sd">    The variable is returned to the caller, thus it can be used</span>
+<span class="sd">    inside expressions:</span>
+<span class="sd">      myobj.setCallback(lambda self: self.setstate(watch(self.mystate)))</span>
+<span class="sd">    or</span>
+<span class="sd">      dosomething(*watch((arg1, arg2, arg3)))</span>
+
+<span class="sd">    (This function is a modified version of a function taken</span>
+<span class="sd">    from the online Python Cookbook::</span>
+
+<span class="sd">      http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52314/index_txt</span>
+<span class="sd">      </span>
+<span class="sd">    The original code was written by Olivier Dagenais).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">variable</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_stack</span><span class="p">()[</span><span class="o">-</span><span class="mi">2</span><span class="p">:][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">actual_call</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">actual_call</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">actual_call</span> <span class="o">=</span> <span class="s">&quot;watch([unknown])&quot;</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">actual_call</span><span class="p">,</span> <span class="s">&#39;(&#39;</span> <span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="n">actual_call</span><span class="p">,</span> <span class="s">&#39;)&#39;</span><span class="p">)</span>
+    <span class="n">prm</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c"># variable name is extracted from actual_call:</span>
+    <span class="c"># everything between &#39;(&#39; and &#39;)&#39;</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;variable_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">actual_call</span><span class="p">[</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">right</span><span class="p">])</span>  
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;variable_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">errorcheck</span><span class="o">.</span><span class="n">get_type</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>  <span class="c"># str(type(variable))[7:-2]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">print_variable</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">print_variable</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;value&quot;</span><span class="p">]</span>       <span class="o">=</span> <span class="n">print_variable</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;method_name&quot;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;line_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;shortfile&quot;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">shorten_path</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prm</span><span class="p">[</span><span class="s">&quot;method_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
+        <span class="n">prm</span><span class="p">[</span><span class="s">&quot;method_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;main&#39;</span>
+        <span class="c">#outstr = &#39;watch: %(shortfile)s(%(line_number)d): &#39;\</span>
+        <span class="c">#     &#39;%(method_name)s\n  %(variable_name)s &#39;\</span>
+        <span class="c">#     &#39;&lt;%(variable_type)s&gt; = %(value)s\n&#39;</span>
+    <span class="n">outstr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(variable_name)s</span><span class="s"> &lt;</span><span class="si">%(variable_type)s</span><span class="s">&gt;&#39;</span>\
+             <span class="s">&#39; in </span><span class="si">%(shortfile)s</span><span class="s">(</span><span class="si">%(line_number)d</span><span class="s">): </span><span class="si">%(method_name)s</span><span class="se">\n</span><span class="s">&#39;</span>\
+             <span class="s">&#39;  = </span><span class="si">%(value)s</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="n">output_medium</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outstr</span> <span class="o">%</span> <span class="n">prm</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">variable</span>
+</div>
+<span class="k">def</span> <span class="nf">shorten_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">abb_len</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Shorten a path to relative (./rel_path) or abbreviated (...rest_of_path)</span>
+<span class="sd">    form. abb_len=0 for no abbreviation of the second form.&quot;&quot;&quot;</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;PWD&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cwd</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;.&quot;</span><span class="o">+</span><span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">cwd</span><span class="p">):]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="n">abb_len</span><span class="p">:]</span>
+
+
+<div class="viewcode-block" id="trace"><a class="viewcode-back" href="../../debug.html#scitools.debug.trace">[docs]</a><span class="k">def</span> <span class="nf">trace</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">output_medium</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">frameno</span><span class="o">=-</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print a message and where in the program this</span>
+<span class="sd">    message was requested (as in the function watch).</span>
+<span class="sd">    Used to trace the program flow during debugging.</span>
+
+<span class="sd">    If called from constructors, and sometimes also other class</span>
+<span class="sd">    methods with &quot;generic&quot; names, it may be smart to let the message</span>
+<span class="sd">    be the classname::</span>
+
+<span class="sd">      class A:</span>
+<span class="sd">        def __init__(self):</span>
+<span class="sd">          debug.trace(self.__class__.__name__)</span>
+
+<span class="sd">        def write(self):</span>
+<span class="sd">          debug.trace(self.__class__.__name__)</span>
+
+<span class="sd">    With frameno=-2 the place where this debug.trace function is called is</span>
+<span class="sd">    printed, while smaller values gives printout of previous calls on the call</span>
+<span class="sd">    stack. In the previous example, we could look further back to say:</span>
+
+<span class="sd">      class A:</span>
+<span class="sd">        def __init__(self):</span>
+<span class="sd">            debug.trace(&#39;Instantiation of &#39;+self.__class__.__name__, frameno=-3)</span>
+
+<span class="sd">        def write(self):</span>
+<span class="sd">            debug.trace(&#39;A.write() call&#39;, frameno=-3)</span>
+
+<span class="sd">    Setting frameno=-4 may also be useful in some particular cases, for example</span>
+<span class="sd">    in a baseclass __init__ which is usually overridden. But there is danger</span>
+<span class="sd">    that we then look too far back in the call stack.</span>
+
+<span class="sd">    (This function is a modified version of one taken from the</span>
+<span class="sd">     Python Cookbook, see the watch function.)</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_stack</span><span class="p">()[</span><span class="n">frameno</span><span class="p">:][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">prm</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;method_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;line_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;shortfile&quot;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">shorten_path</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">prm</span><span class="p">[</span><span class="s">&quot;message&quot;</span><span class="p">]</span>     <span class="o">=</span> <span class="n">message</span>
+    <span class="n">outstr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(shortfile)s</span><span class="s">(</span><span class="si">%(line_number)d</span><span class="s">) </span><span class="si">%(method_name)s</span><span class="s">: </span><span class="si">%(message)s</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="n">output_medium</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outstr</span> <span class="o">%</span> <span class="n">prm</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../debug.html#scitools.debug.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">hide_nonpublic</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inspect an object obj by the dir function.</span>
+<span class="sd">    This dump function first prints the repr(obj) of the object,</span>
+<span class="sd">    then all data attributes and their values are</span>
+<span class="sd">    listed, and finally a line listing all functions/methods</span>
+<span class="sd">    is printed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="k">try</span><span class="p">:</span>  <span class="c"># dump class name if it exists</span>
+        <span class="k">print</span> <span class="s">&#39;object of class&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;object with name </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">obj</span><span class="o">.</span><span class="n">__name__</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="p">[];</span>  <span class="n">attrs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">hide_nonpublic</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="s">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39; method &#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> \
+                   <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;function &#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> \
+                   <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;method-wrapper &#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> \
+                   <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;ufunc &#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c"># add argument list (args, varargs, kwargs, defaults)</span>
+                        <span class="n">a</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%-15s%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">formatargspec</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">attr</span><span class="p">)))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="n">methods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c"># skip function addresses</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;  (&#39;</span> <span class="o">+</span> <span class="n">errorcheck</span><span class="o">.</span><span class="n">get_type</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+                    <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c"># variable=value</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="k">print</span> <span class="s">&#39;******** data attributes:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">******** methods:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;*&#39;</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n\n\n</span><span class="s">&#39;</span><span class="p">,</span> 
+
+</div>
+<div class="viewcode-block" id="debugregex"><a class="viewcode-back" href="../../debug.html#scitools.debug.debugregex">[docs]</a><span class="k">def</span> <span class="nf">debugregex</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="s">&quot;debugging of regular expressions: write the match and the groups&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;does &#39;&quot;</span> <span class="o">+</span> <span class="n">pattern</span> <span class="o">+</span> <span class="s">&quot;&#39; match &#39;&quot;</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&quot;&#39;?</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">string</span><span class="p">[:</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()]</span> <span class="o">+</span> <span class="s">&#39;[&#39;</span> <span class="o">+</span> \
+             <span class="n">string</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">():</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()]</span> <span class="o">+</span> \
+             <span class="s">&#39;]&#39;</span> <span class="o">+</span> <span class="n">string</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">())):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">group </span><span class="si">%d</span><span class="s">: [</span><span class="si">%s</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;No match&#39;</span>
+    <span class="k">return</span> <span class="n">s</span>
+</div>
+<span class="k">def</span> <span class="nf">setprofile</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print a message on method call/return/exception.</span>
+
+<span class="sd">    @param include: A regular expression for output filtering. The regular</span>
+<span class="sd">    expression is applied to the output string, which is on the format &#39;event</span>
+<span class="sd">    filename(line): classname.methodname&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    For example, setprofile(os.getcwd()) prints only methods that are defined</span>
+<span class="sd">    in python files in this directory and subdirectories. setprofile(&#39;^c_&#39;)</span>
+<span class="sd">    prints only C invocations. And so on.</span>
+
+<span class="sd">    @param exclude: Another regular expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">include</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">prof</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="n">meth</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cls</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span><span class="p">[</span><span class="s">&#39;self&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+                <span class="n">cls</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__class__</span>
+            <span class="n">meth</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">meth</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">): </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span><span class="p">,</span>
+                                  <span class="n">frame</span><span class="o">.</span><span class="n">f_lineno</span><span class="p">,</span> <span class="n">meth</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">include</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">exclude</span> <span class="ow">and</span> <span class="n">exclude</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">setprofile</span><span class="p">(</span><span class="n">prof</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

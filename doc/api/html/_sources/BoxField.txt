@@ -1,0 +1,10 @@
+
+:mod:`scitools.BoxField`
+========================
+
+.. automodule:: scitools.BoxField
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

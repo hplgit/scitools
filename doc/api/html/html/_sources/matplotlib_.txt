@@ -1,0 +1,8 @@
+
+:mod:`scitools.easyviz.matplotlib_`
+===================================
+
+.. automodule:: scitools.easyviz.matplotlib_
+   :members:
+   :undoc-members:
+   :show-inheritance:

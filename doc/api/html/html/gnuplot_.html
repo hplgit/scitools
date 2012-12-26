@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.gnuplot_ &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="prev" title="scitools.easyviz.dx_" href="dx_.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dx_.html" title="scitools.easyviz.dx_"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.gnuplot_">
+<span id="scitools-easyviz-gnuplot"></span><h1><a class="reference internal" href="#module-scitools.easyviz.gnuplot_" title="scitools.easyviz.gnuplot_"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.easyviz.gnuplot_</span></tt></a><a class="headerlink" href="#module-scitools.easyviz.gnuplot_" title="Permalink to this headline">¶</a></h1>
+<p>This backend uses the Gnuplot plotting program together with the
+Gnuplot.py Python module. One can specify this backend by</p>
+<blockquote>
+<div>python somefile.py &#8211;SCITOOLS_easyviz_backend gnuplot</div></blockquote>
+<p>or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section</p>
+<blockquote>
+<div>[easyviz]
+backend = gnuplot</div></blockquote>
+<p>and then</p>
+<blockquote>
+<div>from scitools.std import *</div></blockquote>
+<p>or if just easyviz is needed</p>
+<blockquote>
+<div>from scitools.easyviz import *</div></blockquote>
+<p>REQUIREMENTS:</p>
+<p>Gnuplot &gt;= 4.0
+Gnuplot.py</p>
+<p>Tip:</p>
+<blockquote>
+<div>To close a figure window, press &lt;q&gt; when active</div></blockquote>
+<dl class="class">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.gnuplot_.</tt><tt class="descname">GnuplotBackend</tt><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="common.html#scitools.easyviz.common.BaseClass" title="scitools.easyviz.common.BaseClass"><tt class="xref py py-class docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.autumn" title="scitools.easyviz.gnuplot_.GnuplotBackend.autumn"><tt class="xref py py-obj docutils literal"><span class="pre">autumn</span></tt></a>([m])</td>
+<td>Shades of red and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">axes</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in specified positions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Choose the axis limits and appearance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bar</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a bar graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.bone" title="scitools.easyviz.gnuplot_.GnuplotBackend.bone"><tt class="xref py py-obj docutils literal"><span class="pre">bone</span></tt></a>([m])</td>
+<td>Gray-scale with a tinge of blue color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">box</span></tt>(*args)</td>
+<td>Display a box around the boundaries of the current axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">brighten</span></tt>(*args)</td>
+<td>Brighten or darken the color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camdolly</span></tt>(*args)</td>
+<td>Dolly camera.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlight</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create or set position of a light.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlookat</span></tt>(*args)</td>
+<td>Move camera and target to view specified objects.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">campos</span></tt>(*args)</td>
+<td>Camera position.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camproj</span></tt>(*args)</td>
+<td>Camera projection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camroll</span></tt>(*args)</td>
+<td>Roll camera.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camtarget</span></tt>(*args)</td>
+<td>Camera target.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camup</span></tt>(*args)</td>
+<td>Camera up vector.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camva</span></tt>(*args)</td>
+<td>Camera view angle.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camzoom</span></tt>(*args)</td>
+<td>Zoom camera.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">caxis</span></tt>(*args)</td>
+<td>Set the limits for the color axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">cla</span></tt>(*args)</td>
+<td>Clear the current axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clabel</span></tt>(*args)</td>
+<td>Control labeling of contours.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.cleanup" title="scitools.easyviz.gnuplot_.GnuplotBackend.cleanup"><tt class="xref py py-obj docutils literal"><span class="pre">cleanup</span></tt></a>()</td>
+<td>Clean up data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.clf" title="scitools.easyviz.gnuplot_.GnuplotBackend.clf"><tt class="xref py py-obj docutils literal"><span class="pre">clf</span></tt></a>()</td>
+<td>Clear the current figure.Clear current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt>(*args)</td>
+<td>Close figure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.closefig" title="scitools.easyviz.gnuplot_.GnuplotBackend.closefig"><tt class="xref py py-obj docutils literal"><span class="pre">closefig</span></tt></a>([num])</td>
+<td>Close figure window.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.closefigs" title="scitools.easyviz.gnuplot_.GnuplotBackend.closefigs"><tt class="xref py py-obj docutils literal"><span class="pre">closefigs</span></tt></a>()</td>
+<td>Close all figure windows.Close figure windows and stop gnuplot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colorbar</span></tt>(*args)</td>
+<td>Display a color bar.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.colorcube" title="scitools.easyviz.gnuplot_.GnuplotBackend.colorcube"><tt class="xref py py-obj docutils literal"><span class="pre">colorcube</span></tt></a>([m])</td>
+<td>Enhanced color-cube color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormap</span></tt>(*args)</td>
+<td>Specify colormap.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">coneplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D cone plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D contour plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw 3D contour plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled contour plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw contour lines in slice planes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.cool" title="scitools.easyviz.gnuplot_.GnuplotBackend.cool"><tt class="xref py py-obj docutils literal"><span class="pre">cool</span></tt></a>([m])</td>
+<td>Shades of cyan and magenta color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.copper" title="scitools.easyviz.gnuplot_.GnuplotBackend.copper"><tt class="xref py py-obj docutils literal"><span class="pre">copper</span></tt></a>([m])</td>
+<td>Linear copper-tone color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">daspect</span></tt>(*args)</td>
+<td>Change the data aspect ratio.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.figure" title="scitools.easyviz.gnuplot_.GnuplotBackend.figure"><tt class="xref py py-obj docutils literal"><span class="pre">figure</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create a new figure or switch between figures and return Figure object.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled 2D polygons.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill3</span></tt>()</td>
+<td>Draw filled 3D polygons.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.flag" title="scitools.easyviz.gnuplot_.GnuplotBackend.flag"><tt class="xref py py-obj docutils literal"><span class="pre">flag</span></tt></a>([m])</td>
+<td>Alternating red, white, blue, and black color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">gca</span></tt>()</td>
+<td>Return the current axis in the current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gcf</span></tt>()</td>
+<td>Return current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getp</span></tt>(*args)</td>
+<td>Get object properties or an attribute in this backend instance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.gray" title="scitools.easyviz.gnuplot_.GnuplotBackend.gray"><tt class="xref py py-obj docutils literal"><span class="pre">gray</span></tt></a>([m])</td>
+<td>Linear gray-scale color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt>(*args)</td>
+<td>Toggle the display of grid lines.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy" title="scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy"><tt class="xref py py-obj docutils literal"><span class="pre">hardcopy</span></tt></a>(filename,&nbsp;**kwargs)</td>
+<td>Save a hardcopy of the current figure to file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy_old" title="scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy_old"><tt class="xref py py-obj docutils literal"><span class="pre">hardcopy_old</span></tt></a>(filename,&nbsp;**kwargs)</td>
+<td>Currently supported extensions in Gnuplot backend:</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">hidden</span></tt>(*args)</td>
+<td>Toggle hidden line removal in the current axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">hold</span></tt>(*args)</td>
+<td>Change the hold state of the current axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hot" title="scitools.easyviz.gnuplot_.GnuplotBackend.hot"><tt class="xref py py-obj docutils literal"><span class="pre">hot</span></tt></a>([m])</td>
+<td>Black-red-yellow-white color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hsv" title="scitools.easyviz.gnuplot_.GnuplotBackend.hsv"><tt class="xref py py-obj docutils literal"><span class="pre">hsv</span></tt></a>([m])</td>
+<td>Hue-saturation-value color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">init</span></tt>()</td>
+<td>Initialize internal data structures.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ishold</span></tt>()</td>
+<td>Return the hold state (True if hold is on, and False if it is off).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isocaps</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurface end caps.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isosurface</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurfaces from 3D scalar fields.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.jet" title="scitools.easyviz.gnuplot_.GnuplotBackend.jet"><tt class="xref py py-obj docutils literal"><span class="pre">jet</span></tt></a>([m])</td>
+<td>Variant of hsv.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">legend</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Add legend(s) to the current plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">light</span></tt>(**kwargs)</td>
+<td>Add a light to the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.lines" title="scitools.easyviz.gnuplot_.GnuplotBackend.lines"><tt class="xref py py-obj docutils literal"><span class="pre">lines</span></tt></a>([m])</td>
+<td>Color map with the line colors.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">loglog</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a loglog plot with logarithmic scaling on x- and y-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.m1" title="scitools.easyviz.gnuplot_.GnuplotBackend.m1"><tt class="xref py py-obj docutils literal"><span class="pre">m1</span></tt></a>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.m2" title="scitools.easyviz.gnuplot_.GnuplotBackend.m2"><tt class="xref py py-obj docutils literal"><span class="pre">m2</span></tt></a>([m])</td>
+<td>Shades of blue and green color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">material</span></tt>(*args)</td>
+<td>Set the material reflectance mode.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">mesh</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D mesh surface.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">meshc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a mesh with a contour plot beneath.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">openfig</span></tt>([filename])</td>
+<td>Load figures saved in a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pcolor</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D pseudocolor plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.pink" title="scitools.easyviz.gnuplot_.GnuplotBackend.pink"><tt class="xref py py-obj docutils literal"><span class="pre">pink</span></tt></a>([m])</td>
+<td>Pastel shades of pink color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw line and scatter plots.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw lines and points in 3D space.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.prism" title="scitools.easyviz.gnuplot_.GnuplotBackend.prism"><tt class="xref py py-obj docutils literal"><span class="pre">prism</span></tt></a>([m])</td>
+<td>Prism color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw arrows from a 2D vector field.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw velocity vectors in 3D space.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">savefig</span></tt>([filename])</td>
+<td>Save all current figures to a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogx</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on x-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogy</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on y-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setp</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Set object properties or attributes in this backend instance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">shading</span></tt>(*args)</td>
+<td>Control the color shading of surfaces.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt>()</td>
+<td>Redraw the current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice_</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw volumetric slice plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.spring" title="scitools.easyviz.gnuplot_.GnuplotBackend.spring"><tt class="xref py py-obj docutils literal"><span class="pre">spring</span></tt></a>([m])</td>
+<td>Shades of magenta and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">stem</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a stem plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamline</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines from 2D or 3D vector data.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamribbon</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream ribbons from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines in axis aligned slice planes.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamtube</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream tubes from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">subplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in tiled positions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.summer" title="scitools.easyviz.gnuplot_.GnuplotBackend.summer"><tt class="xref py py-obj docutils literal"><span class="pre">summer</span></tt></a>([m])</td>
+<td>Shades of green and yellow color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">surf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D solid surface.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a solid surface with contours beneath.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfl</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>3D shaded surface with lighting.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.text" title="scitools.easyviz.gnuplot_.GnuplotBackend.text"><tt class="xref py py-obj docutils literal"><span class="pre">text</span></tt></a>(x,&nbsp;y,&nbsp;text[,&nbsp;fontname,&nbsp;fontsize])</td>
+<td>Write text at position (x,y) in a curveplot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">title</span></tt>(*args)</td>
+<td>Add title to the current plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.vga" title="scitools.easyviz.gnuplot_.GnuplotBackend.vga"><tt class="xref py py-obj docutils literal"><span class="pre">vga</span></tt></a>([m])</td>
+<td>Windows colormap for 16 colors.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">view</span></tt>(*args)</td>
+<td>Specify viewpoint.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.white" title="scitools.easyviz.gnuplot_.GnuplotBackend.white"><tt class="xref py py-obj docutils literal"><span class="pre">white</span></tt></a>([m])</td>
+<td>All white color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.gnuplot_.GnuplotBackend.winter" title="scitools.easyviz.gnuplot_.GnuplotBackend.winter"><tt class="xref py py-obj docutils literal"><span class="pre">winter</span></tt></a>([m])</td>
+<td>Shades of blue and green color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlabel</span></tt>(*args)</td>
+<td>Add a label to the x-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlim</span></tt>(*args)</td>
+<td>Set or get limits on x axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylabel</span></tt>(*args)</td>
+<td>Add a label to the y-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylim</span></tt>(*args)</td>
+<td>Set or get limits on y axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlabel</span></tt>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlim</span></tt>(*args)</td>
+<td>Set or get limits on z axis.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.autumn">
+<tt class="descname">autumn</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.autumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.autumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of red and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.bone">
+<tt class="descname">bone</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.bone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.bone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray-scale with a tinge of blue color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.cleanup">
+<tt class="descname">cleanup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.clf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the current figure.Clear current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>num=None</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.closefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close figure window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.closefigs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all figure windows.Close figure windows and stop gnuplot.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.cmd">
+<tt class="descname">cmd</tt><em class="property"> = 'zlabel'</em><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.colorcube">
+<tt class="descname">colorcube</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.colorcube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.colorcube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced color-cube color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.cool">
+<tt class="descname">cool</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.cool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.cool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of cyan and magenta color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.copper">
+<tt class="descname">copper</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.copper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.copper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear copper-tone color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new figure or switch between figures and return Figure object.
+num is the figure number of the new or existing figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.flag">
+<tt class="descname">flag</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.flag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternating red, white, blue, and black color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.gray">
+<tt class="descname">gray</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.gray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.gray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear gray-scale color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.hardcopy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Currently supported extensions in Gnuplot backend:</p>
+<blockquote>
+<div>&#8216;.ps&#8217;  (PostScript)
+&#8216;.eps&#8217; (Encapsualted PostScript)
+&#8216;.png&#8217; (Portable Network Graphics)
+&#8216;.pdf&#8217; (Portable Document Format)</div></blockquote>
+<p>Optional arguments for PostScript output:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>color</td>
+<td>If True, create a plot with colors. If False
+(default),  create a plot in black and white.</td>
+</tr>
+<tr class="row-odd"><td>enhanced</td>
+<td>If True (default), enable enhanced text mode features
+like subscripts, superscripts, and mixed fonts.</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>Set orientation to &#8216;portrait&#8217; or &#8216;landscape&#8217;. Default
+is to leave this unchanged. This option has no effect
+on EPS or PDF output.</td>
+</tr>
+<tr class="row-odd"><td>solid</td>
+<td>If True, force lines to become solid (i.e., not
+dashed). Default is False.</td>
+</tr>
+<tr class="row-even"><td>fontname</td>
+<td>Set the font to be used for titles, labels, etc.
+Must be a valid PostScript font or an oblique version
+of the Symbol font (called &#8220;Symbol-Oblique&#8221;) which is
+useful for mathematics. Default font is &#8220;Helvetica&#8221;.</td>
+</tr>
+<tr class="row-odd"><td>fontsize</td>
+<td>Set the size of the font in points. Default is 20 for
+for PostScript output and 8 for PDF output.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy_old">
+<tt class="descname">hardcopy_old</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.hardcopy_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hardcopy_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently supported extensions in Gnuplot backend:</p>
+<blockquote>
+<div>&#8216;.ps&#8217;  (PostScript)
+&#8216;.eps&#8217; (Encapsualted PostScript)
+&#8216;.png&#8217; (Portable Network Graphics)</div></blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+<div><p>color       &#8211; True (colors) or False (black and white).
+fontname    &#8211; default is Helvetica.
+fontsize    &#8211; default is 16.
+orientation &#8211; &#8216;portrait&#8217; or &#8216;landscape&#8217; (default). Only available</p>
+<blockquote>
+<div>for PostScript output.</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.hot">
+<tt class="descname">hot</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.hot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Black-red-yellow-white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.hsv">
+<tt class="descname">hsv</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.hsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hue-saturation-value color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.jet">
+<tt class="descname">jet</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.jet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.jet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variant of hsv.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.lines">
+<tt class="descname">lines</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color map with the line colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.m1">
+<tt class="descname">m1</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.m1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.m2">
+<tt class="descname">m2</tt><big>(</big><em>m=0</em><big>)</big><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.m2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of blue and green color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.pink">
+<tt class="descname">pink</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.pink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.pink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastel shades of pink color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.prism">
+<tt class="descname">prism</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.prism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.prism" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prism color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.spring">
+<tt class="descname">spring</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.spring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.spring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of magenta and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.summer">
+<tt class="descname">summer</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.summer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.summer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of green and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.text">
+<tt class="descname">text</tt><big>(</big><em>x</em>, <em>y</em>, <em>text</em>, <em>fontname='Helvetica'</em>, <em>fontsize=12</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write text at position (x,y) in a curveplot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.vga">
+<tt class="descname">vga</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.vga"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.vga" title="Permalink to this definition">¶</a></dt>
+<dd><p>Windows colormap for 16 colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.white">
+<tt class="descname">white</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.white"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.white" title="Permalink to this definition">¶</a></dt>
+<dd><p>All white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.gnuplot_.GnuplotBackend.winter">
+<tt class="descname">winter</tt><big>(</big><em>m=0</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#GnuplotBackend.winter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.GnuplotBackend.winter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of blue and green color map.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.easyviz.gnuplot_.arrayconverter">
+<tt class="descclassname">scitools.easyviz.gnuplot_.</tt><tt class="descname">arrayconverter</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#arrayconverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.arrayconverter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.easyviz.gnuplot_.get_gnuplot_version">
+<tt class="descclassname">scitools.easyviz.gnuplot_.</tt><tt class="descname">get_gnuplot_version</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#get_gnuplot_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.get_gnuplot_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Gnuplot version used in Gnuplot.py.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.easyviz.gnuplot_.write_array">
+<tt class="descclassname">scitools.easyviz.gnuplot_.</tt><tt class="descname">write_array</tt><big>(</big><em>f</em>, <em>set</em>, <em>item_sep=' '</em>, <em>nest_prefix=''</em>, <em>nest_suffix='\n'</em>, <em>nest_sep=''</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/gnuplot_.html#write_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.gnuplot_.write_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write an array of arbitrary dimension to a file.</p>
+<blockquote>
+<div>A general recursive array writer.  The last four parameters allow
+a great deal of freedom in choosing the output format of the
+array.  The defaults for those parameters give output that is
+gnuplot-readable.  But using &#8216;(&#8221;,&#8221;, &#8220;{&#8221;, &#8220;}&#8221;, &#8221;,</div></blockquote>
+<dl class="docutils">
+<dt>&#8221;)&#8217; would output</dt>
+<dd><p class="first">an array in a format that Mathematica could read.  &#8216;item_sep&#8217;
+should not contain &#8216;%&#8217; (or if it does, it should be escaped to
+&#8216;%%&#8217;) since it is put into a format string.</p>
+<p>The default 2-d file organization:</p>
+<div class="highlight-python"><pre>set[0,0] set[0,1] ...
+set[1,0] set[1,1] ...</pre>
+</div>
+<p>The 3-d format:</p>
+<div class="last highlight-python"><pre>set[0,0,0] set[0,0,1] ...
+set[0,1,0] set[0,1,1] ...
+
+set[1,0,0] set[1,0,1] ...
+set[1,1,0] set[1,1,1] ...</pre>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dx_.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.easyviz.dx_</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gnuplot_.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dx_.html" title="scitools.easyviz.dx_"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

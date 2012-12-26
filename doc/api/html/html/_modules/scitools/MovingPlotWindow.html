@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.MovingPlotWindow &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.MovingPlotWindow</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Manag a moving plot window to display very long time series.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="MovingPlotWindow"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">MovingPlotWindow</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">mode</span><span class="o">=</span><span class="s">&#39;continuous movement&#39;</span><span class="p">,</span>
+                 <span class="n">pause</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ====================  ====================================</span>
+<span class="sd">        window_width          tmax-tmin in a plot window</span>
+<span class="sd">        dt                    time step (constant)</span>
+<span class="sd">        yaxis                 extent of y axis</span>
+<span class="sd">        mode                  method for moving the plot window,</span>
+<span class="sd">                              see below.</span>
+<span class="sd">        ====================  ====================================</span>
+
+<span class="sd">        The mode parameter has three values:</span>
+
+<span class="sd">          * continuous movement:</span>
+<span class="sd">            the plot window moves one time step for each plot.</span>
+<span class="sd">          * continuous drawing: the curves are drawn from left</span>
+<span class="sd">            to right, one step at a time, and plot window jumps</span>
+<span class="sd">            when the curve reaches the end.</span>
+<span class="sd">          * jumps: the curves are shown in a window for a time</span>
+<span class="sd">            equal to the pause argument, then the axis jumps</span>
+<span class="sd">            to a new time window of the same length</span>
+<span class="sd">            </span>
+<span class="sd">        See the _demo function for how to use this class to</span>
+<span class="sd">        simulate long time series. See also the test block for</span>
+<span class="sd">        testing out the three different modes of this class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">window_width</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">dt</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_index_in_plot</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span> <span class="o">=</span> <span class="n">yaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause</span> <span class="o">=</span> <span class="n">pause</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_prev</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="MovingPlotWindow.axis"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow.axis">[docs]</a>    <span class="k">def</span> <span class="nf">axis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+</div>
+<div class="viewcode-block" id="MovingPlotWindow.plot"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given time step number n in the time series,</span>
+<span class="sd">        return True if the plot is to be drawn, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;continuous movement&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;continuous drawing&#39;</span><span class="p">:</span>
+            <span class="c"># Update self.first_index_in_plot and self.taxis_min</span>
+            <span class="c"># every self.taxis_length_in_steps time step</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">first_index_in_plot</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span>
+            <span class="c"># Always plot the curves in continuous drawing</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Plot every self.taxis_length_in_steps time step only</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MovingPlotWindow.update"><a class="viewcode-back" href="../../MovingPlotWindow.html#scitools.MovingPlotWindow.MovingPlotWindow.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;continuous movement&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">first_index_in_plot</span> <span class="o">+=</span> <span class="n">n</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_prev</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_prev</span> <span class="o">=</span> <span class="n">n</span>
+             
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;jumps&#39;</span> <span class="ow">and</span> \
+               <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># After plot is shown, sleep and then update plot</span>
+            <span class="c"># window parameters</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pause</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">taxis_min</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_index_in_plot</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxis_length_in_steps</span>
+</div></div>
+<span class="k">def</span> <span class="nf">_demo</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;continuous movement&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve u&#39; = -k**2*u, u(0)=I, u&#39;(0)=0 by a finite difference</span>
+<span class="sd">    method with time steps dt, from t=0 to t=T.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dt</span> <span class="o">&gt;</span> <span class="mf">2.</span><span class="o">/</span><span class="n">k</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Unstable scheme&#39;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">dt</span><span class="p">)))</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">umin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.2</span><span class="o">*</span><span class="n">I</span>
+    <span class="n">umax</span> <span class="o">=</span> <span class="o">-</span><span class="n">umin</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">k</span>  <span class="c"># period of the oscillations</span>
+    <span class="n">plot_manager</span> <span class="o">=</span> <span class="n">MovingPlotWindow</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">period</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="p">[</span><span class="n">umin</span><span class="p">,</span> <span class="n">umax</span><span class="p">],</span>
+                                    <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span>
+    <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">dt</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">plot_manager</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">plot_manager</span><span class="o">.</span><span class="n">first_index_in_plot</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span>
+                 <span class="n">t</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="n">I</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">t</span><span class="p">)[</span><span class="n">s</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#39;b-&#39;</span><span class="p">,</span>
+                 <span class="n">axis</span><span class="o">=</span><span class="n">plot_manager</span><span class="o">.</span><span class="n">axis</span><span class="p">(),</span>
+                 <span class="n">title</span><span class="o">=</span><span class="s">&quot;Solution of u&#39;&#39; + k^2 u = 0 for t=</span><span class="si">%6.3f</span><span class="s"> (mode: </span><span class="si">%s</span><span class="s">)&quot;</span> \
+                 <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="p">))</span>
+        <span class="n">plot_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">scitools.std</span> <span class="kn">import</span> <span class="o">*</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">_demo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;continuous movement&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">_demo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;continuous drawing&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">_demo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;jumps&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.debug &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.errorcheck" href="errorcheck.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errorcheck.html" title="scitools.errorcheck"
+             accesskey="N">next</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.debug">
+<span id="scitools-debug"></span><h1><a class="reference internal" href="#module-scitools.debug" title="scitools.debug"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.debug</span></tt></a><a class="headerlink" href="#module-scitools.debug" title="Permalink to this headline">¶</a></h1>
+<p>Debugging tools.</p>
+<blockquote>
+<div><ul class="simple">
+<li>watch(var): print out the name, type, and value of a variable and
+where in a program this output was requested (used to monitor variables).</li>
+<li>trace(message): print a message and where in the program this
+message was requested (used to trace the execution).</li>
+<li>dump(obj, hide_underscore=True): print a dump of the object obj
+(attributes, methods, etc.).</li>
+<li>debugregex(pattern, string): print match, groups, etc. when the
+regular expression pattern is applied to string.</li>
+</ul>
+</div></blockquote>
+<p>watch and trace prints information only if the module variable
+DEBUG has a true value. DEBUG can be initialized from an environment
+variable PYDEBUG, otherwise it is set to 1 by default. Other
+modules can monitor their debugging by setting debug.DEBUG = 0
+or debug.DEBUG = 1 (note that a single such setting has a &#8220;global&#8221; effect;
+it turns off debugging everywhere).</p>
+<dl class="function">
+<dt id="scitools.debug.watch">
+<tt class="descclassname">scitools.debug.</tt><tt class="descname">watch</tt><big>(</big><em>variable</em>, <em>output_medium=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x2b7c3422b1e0&gt;</em><big>)</big><a class="reference internal" href="_modules/scitools/debug.html#watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.debug.watch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out the name, type, and value of a variable and
+where in a program this output was requested.
+Used to monitor variables during debugging.
+As an example, watch(myprm) may lead to this output:</p>
+<div class="highlight-python"><pre>myprm &lt;int&gt; in ./myscript.py(56): myfunction
+  = 3</pre>
+</div>
+<p>The variable is returned to the caller, thus it can be used
+inside expressions:</p>
+<blockquote>
+<div>myobj.setCallback(lambda self: self.setstate(watch(self.mystate)))</div></blockquote>
+<dl class="docutils">
+<dt>or</dt>
+<dd>dosomething(<a href="#id1"><span class="problematic" id="id2">*</span></a>watch((arg1, arg2, arg3)))</dd>
+</dl>
+<p>(This function is a modified version of a function taken
+from the online Python Cookbook:</p>
+<div class="highlight-python"><pre>http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52314/index_txt</pre>
+</div>
+<p>The original code was written by Olivier Dagenais).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.debug.trace">
+<tt class="descclassname">scitools.debug.</tt><tt class="descname">trace</tt><big>(</big><em>message=''</em>, <em>output_medium=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x2b7c3422b1e0&gt;</em>, <em>frameno=-2</em><big>)</big><a class="reference internal" href="_modules/scitools/debug.html#trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.debug.trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a message and where in the program this
+message was requested (as in the function watch).
+Used to trace the program flow during debugging.</p>
+<p>If called from constructors, and sometimes also other class
+methods with &#8220;generic&#8221; names, it may be smart to let the message
+be the classname:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">debug</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">debug</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With frameno=-2 the place where this debug.trace function is called is
+printed, while smaller values gives printout of previous calls on the call
+stack. In the previous example, we could look further back to say:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>class A:</dt>
+<dd><dl class="first last docutils">
+<dt>def __init__(self):</dt>
+<dd>debug.trace(&#8216;Instantiation of &#8216;+self.__class__.__name__, frameno=-3)</dd>
+<dt>def write(self):</dt>
+<dd>debug.trace(&#8216;A.write() call&#8217;, frameno=-3)</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>Setting frameno=-4 may also be useful in some particular cases, for example
+in a baseclass __init__ which is usually overridden. But there is danger
+that we then look too far back in the call stack.</p>
+<dl class="docutils">
+<dt>(This function is a modified version of one taken from the</dt>
+<dd>Python Cookbook, see the watch function.)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.debug.dump">
+<tt class="descclassname">scitools.debug.</tt><tt class="descname">dump</tt><big>(</big><em>obj</em>, <em>hide_nonpublic=True</em><big>)</big><a class="reference internal" href="_modules/scitools/debug.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.debug.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspect an object obj by the dir function.
+This dump function first prints the repr(obj) of the object,
+then all data attributes and their values are
+listed, and finally a line listing all functions/methods
+is printed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.debug.debugregex">
+<tt class="descclassname">scitools.debug.</tt><tt class="descname">debugregex</tt><big>(</big><em>pattern</em>, <em>string</em><big>)</big><a class="reference internal" href="_modules/scitools/debug.html#debugregex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.debug.debugregex" title="Permalink to this definition">¶</a></dt>
+<dd><p>debugging of regular expressions: write the match and the groups</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="errorcheck.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.errorcheck</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/debug.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errorcheck.html" title="scitools.errorcheck"
+             >next</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

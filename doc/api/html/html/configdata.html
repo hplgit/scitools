@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.configdata &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.convergencerate" href="convergencerate.html" />
+    <link rel="prev" title="scitools.basics" href="basics.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convergencerate.html" title="scitools.convergencerate"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="scitools.basics"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.configdata">
+<span id="scitools-configdata"></span><h1><a class="reference internal" href="#module-scitools.configdata" title="scitools.configdata"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.configdata</span></tt></a><a class="headerlink" href="#module-scitools.configdata" title="Permalink to this headline">¶</a></h1>
+<p>The Python module ConfigParser supports configuration files with the
+usual Windows .INI file syntax. The present configdata module extends
+the syntax of configuration files and provides a more easy-to-use
+interface to such files. Variables can also be defined on the
+command-line and through environment variables in addition to the
+configuration file.</p>
+<p>User-friendly reading of configuration files with an extended
+Windows .INI syntax.</p>
+<p>The configuration file has sections in square brackets
+(e.g., [modes]) and option=value assignments in each section.
+The extended syntax offers type specification of the options.
+After the = sign the type appears in &lt;&gt; brackets followed by
+the value, e.g.:</p>
+<div class="highlight-python"><pre>[my section]
+my first option = &lt;bool&gt; off   # can be on, off, yes, no, 1, 0
+my second option = &lt;float&gt; 3.2
+my third option = &lt;eval&gt; [1, 4, 'tmp.ps']  # a list as option value
+my fourth option = MyClass     # no type specification here
+my fifth option = &lt;eval&gt; StringFunction('sin(x)*cos(x)')</pre>
+</div>
+<p>The type must be bool, int, float, str, or eval.
+As an example, the &#8216;my second option&#8217; value will be a Python
+float object with the value 3.2 (without this type facility,
+the value would be the string &#8220;3.2&#8221;). In case of eval,
+the value is processed as eval(value) such that values can become
+lists, dictionaries, or other user-defined objects. In the latter
+case, the <a href="#id1"><span class="problematic" id="id2">globals_</span></a> keyword must be set explicitly so that this
+function has access to the user&#8217;s classes (eval(value, <a href="#id3"><span class="problematic" id="id4">globals_</span></a>)).
+For example, &#8216;my fifth option&#8217; will evaluate to StringFunction
+object, but this requires supply of <a href="#id5"><span class="problematic" id="id6">globals_</span></a> with the user&#8217;s
+imported modules (from StringFunction and math).</p>
+<p>There is also a syntax for marking options to be read-only, i.e.,
+these options are meant to be set in configuration files and
+not changed later in the program. Preceeding the type specification
+by an r or R indicates the read-only property, e.g.:</p>
+<div class="highlight-python"><pre>my first option = r&lt;bool&gt; off</pre>
+</div>
+<p>Options set in the configuration file can be overridden by
+associated environment variables whose names are on the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prefix_section_option</span>
+</pre></div>
+</div>
+<p>For example, an option &#8216;DEBUG&#8217; in section &#8216;globals&#8217; can have
+an associated environment variable MYPACK_globals_DEBUG,
+if the prefix is MYPACK. The prefix is set in a special section
+called &#8216;modes&#8217; (see below).</p>
+<p>Options can also be overridden by command-line arguments. The
+command-line options have the same names as the associated
+environment variable names, but additionally prefixed by a double
+hyphen, e.g. &#8211;MYPACK_globals_DEBUG.
+The &#8216;command line arguments&#8217; option in the &#8216;modes&#8217; section
+must have a true value for this functionality to be active.</p>
+<p>Here is an example of the &#8216;modes&#8217; section:</p>
+<div class="highlight-python"><pre>[modes]
+envir prefix = MATHPACK
+command line arguments = yes</pre>
+</div>
+<p>If section or option names contain space(s), the corresponding
+environment variable name and command-line option have the space(s)
+replaced by underscore(s), e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">MATHPACK_my_section_my_first_option</span>
+<span class="o">--</span><span class="n">MATHPACK_my_section_my_first_option</span>
+</pre></div>
+</div>
+<p>Such command-line options and values are removed from sys.argv after
+being read.</p>
+<p>A convenient feature of configuration files is that variable interpolation
+is possible(see the documentation of ConfigParser in the Python
+Library Reference). Here is an example:</p>
+<div class="highlight-python"><pre>[DEFAULT]
+path = /my/home/dir/
+
+[storage]
+datapath = %(path)s/data
+input = %(path)s/%(datapath)s/input</pre>
+</div>
+<p>One can also provide variables for being used in variable interpolation
+throught the default_dict4intpl argument to this function.</p>
+<p>A configuration file is searched for and read in as follows
+(in the listed order):</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>basename.cfg in the default_file_location directory,</li>
+</ol>
+<p>2. basename.cfg files for each directory in other_locations list,
+4. .basename.cfg in the user&#8217;s home directory,
+3. .basename.cfg in the directory where the main script is running.</p>
+</div></blockquote>
+<p>This priority implies that the a config file in the current working
+directory will override any user or any other system settings.</p>
+<dl class="function">
+<dt id="scitools.configdata.tobool">
+<tt class="descclassname">scitools.configdata.</tt><tt class="descname">tobool</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/scitools/configdata.html#tobool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.configdata.tobool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert value (1, &#8216;1&#8217;, 0, &#8216;0&#8217;, &#8216;yes&#8217;, &#8216;true&#8217;, &#8216;no&#8217;, &#8216;false&#8217;, &#8216;on&#8217;,
+&#8216;off&#8217;, or any integer) to a bool object. The string values are
+treated in a case-insensitive way.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.configdata.config_parser_frontend">
+<tt class="descclassname">scitools.configdata.</tt><tt class="descname">config_parser_frontend</tt><big>(</big><em>basename</em>, <em>default_file_location</em>, <em>extension='.cfg'</em>, <em>other_locations=</em><span class="optional">[</span><span class="optional">]</span>, <em>default_dict4intpl={}</em>, <em>globals_=None</em><big>)</big><a class="reference internal" href="_modules/scitools/configdata.html#config_parser_frontend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.configdata.config_parser_frontend" title="Permalink to this definition">¶</a></dt>
+<dd><p>User-friendly reading of configuration files with an extended
+Windows .INI syntax.</p>
+<p>The configuration file has sections in square brackets
+(e.g., [modes]) and option=value assignments in each section.
+The extended syntax offers type specification of the options.
+After the = sign the type appears in &lt;&gt; brackets followed by
+the value, e.g.:</p>
+<div class="highlight-python"><pre>[my section]
+my first option = &lt;bool&gt; off   # can be on, off, yes, no, 1, 0
+my second option = &lt;float&gt; 3.2
+my third option = &lt;eval&gt; [1, 4, 'tmp.ps']  # a list as option value
+my fourth option = MyClass     # no type specification here
+my fifth option = &lt;eval&gt; StringFunction('sin(x)*cos(x)')</pre>
+</div>
+<p>The type must be bool, int, float, str, or eval.
+As an example, the &#8216;my second option&#8217; value will be a Python
+float object with the value 3.2 (without this type facility,
+the value would be the string &#8220;3.2&#8221;). In case of eval,
+the value is processed as eval(value) such that values can become
+lists, dictionaries, or other user-defined objects. In the latter
+case, the <a href="#id7"><span class="problematic" id="id8">globals_</span></a> keyword must be set explicitly so that this
+function has access to the user&#8217;s classes (eval(value, <a href="#id9"><span class="problematic" id="id10">globals_</span></a>)).
+For example, &#8216;my fifth option&#8217; will evaluate to StringFunction
+object, but this requires supply of <a href="#id11"><span class="problematic" id="id12">globals_</span></a> with the user&#8217;s
+imported modules (from StringFunction and math).</p>
+<p>There is also a syntax for marking options to be read-only, i.e.,
+these options are meant to be set in configuration files and
+not changed later in the program. Preceeding the type specification
+by an r or R indicates the read-only property, e.g.:</p>
+<div class="highlight-python"><pre>my first option = r&lt;bool&gt; off</pre>
+</div>
+<p>Options set in the configuration file can be overridden by
+associated environment variables whose names are on the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prefix_section_option</span>
+</pre></div>
+</div>
+<p>For example, an option &#8216;DEBUG&#8217; in section &#8216;globals&#8217; can have
+an associated environment variable MYPACK_globals_DEBUG,
+if the prefix is MYPACK. The prefix is set in a special section
+called &#8216;modes&#8217; (see below).</p>
+<p>Options can also be overridden by command-line arguments. The
+command-line options have the same names as the associated
+environment variable names, but additionally prefixed by a double
+hyphen, e.g. &#8211;MYPACK_globals_DEBUG.
+The &#8216;command line arguments&#8217; option in the &#8216;modes&#8217; section
+must have a true value for this functionality to be active.</p>
+<p>Here is an example of the &#8216;modes&#8217; section:</p>
+<div class="highlight-python"><pre>[modes]
+envir prefix = MATHPACK
+command line arguments = yes</pre>
+</div>
+<p>If section or option names contain space(s), the corresponding
+environment variable name and command-line option have the space(s)
+replaced by underscore(s), e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">MATHPACK_my_section_my_first_option</span>
+<span class="o">--</span><span class="n">MATHPACK_my_section_my_first_option</span>
+</pre></div>
+</div>
+<p>Such command-line options and values are removed from sys.argv after
+being read.</p>
+<p>A convenient feature of configuration files is that variable interpolation
+is possible(see the documentation of ConfigParser in the Python
+Library Reference). Here is an example:</p>
+<div class="highlight-python"><pre>[DEFAULT]
+path = /my/home/dir/
+
+[storage]
+datapath = %(path)s/data
+input = %(path)s/%(datapath)s/input</pre>
+</div>
+<p>One can also provide variables for being used in variable interpolation
+throught the default_dict4intpl argument to this function.</p>
+<p>A configuration file is searched for and read in as follows
+(in the listed order):</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>basename.cfg in the default_file_location directory,</li>
+</ol>
+<p>2. basename.cfg files for each directory in other_locations list,
+4. .basename.cfg in the user&#8217;s home directory,
+3. .basename.cfg in the directory where the main script is running.</p>
+</div></blockquote>
+<p>This priority implies that the a config file in the current working
+directory will override any user or any other system settings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.configdata.values_only">
+<tt class="descclassname">scitools.configdata.</tt><tt class="descname">values_only</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/scitools/configdata.html#values_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.configdata.values_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strip the three-tuple (value, str2type, readonly) in the dictionary
+returned from config_parser_frontend to a dictionary with option
+values only.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.configdata.dict2xml">
+<tt class="descclassname">scitools.configdata.</tt><tt class="descname">dict2xml</tt><big>(</big><em>data</em>, <em>syntax='gnosis'</em>, <em>section_name='section'</em>, <em>option_name='option'</em><big>)</big><a class="reference internal" href="_modules/scitools/configdata.html#dict2xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.configdata.dict2xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a data dictionary, as output from the config_parser_frontend
+function, and stores in a string with XML syntax.</p>
+<p>&#64;param data: dictionary of the form data[section][option] = (v, s2t, ro),
+where v is a Python object (value), s2t is a callable, and ro is
+a bool.
+&#64;param syntax: &#8216;gnosis&#8217; gives gnosis XML_Pickler syntax, &#8216;plain&#8217; gives
+a simpler to read syntax.
+&#64;param section_name: the name of sections (highest key level) in the
+data dictionary to be used as XML tagname. (&#8220;section&#8221; and &#8220;option&#8221; are
+the terms used by the Python ConfigParser tool.)
+&#64;param option_name: the name of options (lowest key level) in the
+data dictionary to be used as XML tagname.
+&#64;return: a string with XML syntax.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="basics.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.basics</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="convergencerate.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.convergencerate</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/configdata.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convergencerate.html" title="scitools.convergencerate"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="scitools.basics"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
