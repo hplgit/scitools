@@ -32,9 +32,9 @@ else:
 
 if not __debug__:  # python -O
     DEBUG = 0      # turn off debugging
-    
+
 import traceback
-import errorcheck
+from . import errorcheck
 
 def watch(variable, output_medium=sys.stdout):
     """
@@ -56,7 +56,7 @@ def watch(variable, output_medium=sys.stdout):
     from the online Python Cookbook::
 
       http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52314/index_txt
-      
+
     The original code was written by Olivier Dagenais).
     """
     if not DEBUG:
@@ -70,9 +70,9 @@ def watch(variable, output_medium=sys.stdout):
     prm = {}
     # variable name is extracted from actual_call:
     # everything between '(' and ')'
-    prm["variable_name"] = string.strip(actual_call[left+1:right])  
+    prm["variable_name"] = string.strip(actual_call[left+1:right])
     prm["variable_type"] = errorcheck.get_type(variable)  # str(type(variable))[7:-2]
-    if isinstance(variable, basestring):
+    if isinstance(variable, str):
         print_variable = str(variable)
     else:
         print_variable = repr(variable)
@@ -191,7 +191,7 @@ def dump(obj, hide_nonpublic=True):
                 pass
     print '******** data attributes:\n', '\n'.join(attrs)
     print '\n******** methods:\n', '\n'.join(methods)
-    print '*'*60, '\n\n\n', 
+    print '*'*60, '\n\n\n',
 
 
 def debugregex(pattern, string):
@@ -216,7 +216,7 @@ def setprofile(include='', exclude=None, output=sys.stdout):
     @param include: A regular expression for output filtering. The regular
     expression is applied to the output string, which is on the format 'event
     filename(line): classname.methodname'.
-    
+
     For example, setprofile(os.getcwd()) prints only methods that are defined
     in python files in this directory and subdirectories. setprofile('^c_')
     prints only C invocations. And so on.

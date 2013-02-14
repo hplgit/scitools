@@ -79,7 +79,7 @@ Global data:
 
 import sys as _sys
 
-from cStringIO import StringIO as _StringIO
+from io import cStringIO _StringIO
 
 __all__ = ["pprint","pformat","isreadable","isrecursive","saferepr",
            "PrettyPrinter"]

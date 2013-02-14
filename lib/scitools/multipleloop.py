@@ -330,7 +330,7 @@ def input2values(s):
             0.99999999999999989, 1.0999999999999999, 1.2, 1.3])]
 
     """
-    if not isinstance(s, basestring):
+    if not isinstance(s, str):
         return s
 
     items = s.split('&')
@@ -383,7 +383,7 @@ def _outer(a, b):
     all = []
     if not isinstance(a, list):
         raise TypeError('a must be a list')
-    if isinstance(b, (float,int,complex,basestring)):  b = [b]  # scalar?
+    if isinstance(b, (float,int,complex,str)):  b = [b]  # scalar?
 
     if len(a) == 0:
         # first call:

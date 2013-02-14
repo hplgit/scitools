@@ -6,6 +6,8 @@ setp(interactive=False)
 
 t = linspace(0,10*pi,201)
 plot3(sin(t),cos(t),t,title='A Helix')
+savefig('tmp1.eps')
+savefig('tmp1.png')
 show()
 
 figure()
@@ -19,6 +21,8 @@ xlabel('x(t)')
 ylabel('y(t)')
 zlabel('z(t)')
 title('plot3 example')
+savefig('tmp2.eps')
+savefig('tmp2.png')
 show()
 
 figure()

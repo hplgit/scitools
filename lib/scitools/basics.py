@@ -80,9 +80,9 @@ import os
 __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 # Load configuration file through import of the globaldata module
-from globaldata import *   # read-only import of global variables
+from .globaldata import *   # read-only import of global variables
 _import_list.append("from globaldata import *")
-import globaldata as _globaldata
+from . import globaldata as _globaldata
 #import pprint; pprint.pprint(_globaldata._config_data)
 
 _t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
@@ -93,7 +93,7 @@ _t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
 has_scipy = False   # indicates for all application scripts if one has scipy
 if _globaldata._load_scipy:
     try:
-        from numpyutils import *   # loads numpy too
+        from .numpyutils import *   # loads numpy too
         from math import factorial # override
         _import_list.append("from numpy import *")
         _import_list.append("from numpyutils import *")
@@ -111,14 +111,14 @@ if _globaldata._load_scipy:
 # didn't want, or couldn't load, scipy:
 if not has_scipy:
     if _globaldata._load_numpytools:
-        from numpytools import *
+        from .numpytools import *
         _t2 = _time.clock(); _import_times += 'numpytools=%g ' % (_t2 - _t1)
-        _import_list.append("from numpytools import *")
+        _import_list.append("from .numpytools import *")
     else:
         # load numpy and numpyutils
         try:
-            from numpyutils import *   # loads numpy too
-            _import_list.append("from numpy import *\nfrom numpyutils import *")
+            from .numpyutils import *   # loads numpy too
+            _import_list.append("from numpy import *\nfrom .numpyutils import *")
             from numpy.lib.scimath import *   # more general sin, cos etc
 
         except ImportError:
@@ -138,9 +138,9 @@ asin = arcsin
 acos = arccos
 atan = arctan
 
-import debug
+from . import debug
 debug.DEBUG = DEBUG
-from debug import watch, trace
+from .debug import watch, trace
 _import_list.append("from debug import watch, trace")
 
 if VERBOSE >= 2:

@@ -31,12 +31,13 @@ Tip:
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists , system
-from misc import arrayconverter, _update_from_config_file, _check_type
+from .misc import arrayconverter, _update_from_config_file, _check_type
+import collections
 
 check_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
 import Gnuplot
@@ -187,6 +188,7 @@ Gnuplot.utils.write_array = write_array
 # lines with the plot (or plot3) command. In Gnuplot we start with red since
 # this gives a solid line in black and white hardcopies:
 Axis._local_prop['colororder'] = 'r b g c m y'.split()
+# sequence in other backends: b r g m c y k
 
 class GnuplotBackend(BaseClass):
     def __init__(self):
@@ -525,7 +527,7 @@ class GnuplotBackend(BaseClass):
                  isinstance(cmap[1], int) and \
                  isinstance(cmap[2], int):
             self._g('set palette rgbformulae %d,%d,%d' % cmap) # model RGB?
-        elif operator.isSequenceType(cmap) and rank(cmap) == 2:
+        elif isinstance(cmap, collections.Sequence) and rank(cmap) == 2:
             m, n = shape(cmap)
             assert n==3, "colormap must be %dx3, not %dx%d." % (m,m,n)
             tmpf = tempfile.mktemp(suffix='.map')
@@ -1190,11 +1192,11 @@ class GnuplotBackend(BaseClass):
 
         self._set_figure_size(fig)
 
-        if len(fig.getp('axes').items()) > 1:
+        if len(list(fig.getp('axes').items())) > 1:
             # multiple axes (subplot)
             self._g('set multiplot')
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             gdata = []
             self._use_splot = False
             if nrows != 1 or ncolumns != 1:
@@ -1416,7 +1418,7 @@ class GnuplotBackend(BaseClass):
             filename += ext
         elif ext not in ext2term:
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2term.keys(), ext))
+                             (list(ext2term.keys()), ext))
         terminal = ext2term.get(ext, 'postscript')
 
         self.setp(**kwargs)
@@ -1528,7 +1530,7 @@ class GnuplotBackend(BaseClass):
             filename += ext
         elif ext not in ext2term:
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2term.keys(), ext))
+                             (list(ext2term.keys()), ext))
         terminal = ext2term.get(ext, 'postscript')
 
         self.setp(**kwargs)
@@ -1587,7 +1589,7 @@ class GnuplotBackend(BaseClass):
         """Close figure window."""
         if not num:
             pass
-        elif num in self._figs.keys():
+        elif num in self._figs:
             pass
         else:
             pass
@@ -1595,7 +1597,7 @@ class GnuplotBackend(BaseClass):
 
     def closefigs(self):
         """Close figure windows and stop gnuplot."""
-        for key in self._figs.keys():
+        for key in self._figs:
             self._figs[key]._g('quit')
         del self._g
         self._figs = {1:Figure()}

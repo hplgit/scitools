@@ -398,7 +398,7 @@ def dict2xml(data, syntax='gnosis',
         return datawrap
     else:
         # simpler XML syntax:
-        from errorcheck import get_type
+        from .errorcheck import get_type
         s = '<data dictionary>\n'
         indent = 4
         for section in data:

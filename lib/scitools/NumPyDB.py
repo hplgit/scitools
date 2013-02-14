@@ -153,7 +153,7 @@ class NumPyDB_pickle (NumPyDB):
         fd.close()
         return a, id
 
-import cPickle[[[
+import cPickle
 
 class NumPyDB_cPickle (NumPyDB):
     """Use basic cPickle class."""

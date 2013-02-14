@@ -26,11 +26,11 @@ Matplotlib
 """
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists
-from misc import _update_from_config_file
+from .misc import _update_from_config_file
 
 check_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
 
@@ -611,10 +611,11 @@ class MatplotlibBackend(BaseClass):
 
         hold_state = self._g.ishold()
         self._g.hold(True)
-        colors = PlotProperties._colors + matplotlib.colors.cnames.values()
+        colors = PlotProperties._colors + \
+                 list(matplotlib.colors.cnames.values())
         for j in range(ny):
             y_ = y[:,j]
-            x_ = array(range(nx)) + a[j] - barwidth/2
+            x_ = array(list(range(nx))) + a[j] - barwidth/2
             if not facecolor:
                 c = colors[j]
             else:
@@ -627,9 +628,9 @@ class MatplotlibBackend(BaseClass):
         if barticks is None:
             barticks = x
         if item.getp('rotated_barticks'):
-            self._g.xticks(range(len(x)), barticks, rotation=90)
+            self._g.xticks(list(range(len(x))), barticks, rotation=90)
         else:
-            self._g.xticks(range(len(x)), barticks)
+            self._g.xticks(list(range(len(x))), barticks)
 
     def _add_surface(self, item, shading='faceted', colormap=None,
                      showcolorbar=False, zmin=None, zmax=None):
@@ -943,7 +944,7 @@ class MatplotlibBackend(BaseClass):
         self._set_figure_size(fig)
 
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             if ax.getp('numberofitems') == 0:
                 continue
             if nrows != 1 or ncolumns != 1:
@@ -1073,10 +1074,10 @@ class MatplotlibBackend(BaseClass):
     def closefig(self, arg=None):
         if arg is None:
             num = self.getp('curfig')  # close current figure
-        elif arg in self._figs.keys():
+        elif arg in self._figs:
             num = arg
-        elif arg in self._figs.values():
-            for fignr, fig in self._figs.items():
+        elif arg in list(self._figs.values()):
+            for fignr, fig in list(self._figs.items()):
                 if fig == arg:
                     num = fignr
                     break
@@ -1087,7 +1088,7 @@ class MatplotlibBackend(BaseClass):
         #del self._figs[num]
 
     def closefigs(self):
-        for key in self._figs.keys():
+        for key in self._figs:
             self.closefig(key)
         del self._g
         BaseClass.closefigs(self)

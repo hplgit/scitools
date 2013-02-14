@@ -63,8 +63,11 @@ if __name__.find('numpyutils') != -1:
 # modules (Numeric, numpy, numarray)
 
 import operator
-from FloatComparison import float_eq, float_ne, float_lt, float_le, \
+from .FloatComparison import float_eq, float_ne, float_lt, float_le, \
      float_gt, float_ge
+import collections
+from functools import reduce
+from io import StringIO
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
@@ -193,7 +196,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
     import types
     def fixed(coor):
-        return isinstance(coor, (float, complex, int, types.NoneType))
+        return isinstance(coor, (float, complex, int, type(None)))
 
     if not fixed(x):
         x = asarray(x)
@@ -1286,7 +1289,7 @@ def NumPy_array_iterator(a, **kwargs):
     # build the code of the generator function in a text string
     # (since the number of nested loops needed to iterate over all
     # elements are parameterized through len(a.shape))
-    dims = range(len(a.shape))
+    dims = list(range(len(a.shape)))
     offset_code1 = ['offset%d_start=0' % d for d in dims]
     offset_code2 = ['offset%d_stop=0'  % d for d in dims]
     for d in range(len(a.shape)):
@@ -1308,9 +1311,9 @@ def NumPy_array_iterator(a, **kwargs):
     no_value = kwargs.get('no_value', False)
 
     for line in offset_code1:
-        exec line
+        exec(line)
     for line in offset_code2:
-        exec line
+        exec(line)
     code = 'def nested_loops(a):\n'
     indentation = ' '*4
     indent = '' + indentation
@@ -1325,7 +1328,7 @@ def NumPy_array_iterator(a, **kwargs):
         code += indent + 'yield ' + index
     else:
         code += indent + 'yield ' + 'a[%s]' % index + ', (' + index + ')'
-    exec code
+    exec(code)
     return nested_loops, code
 
 def compute_histogram(samples, nbins=50, piecewise_constant=True):
@@ -1381,7 +1384,7 @@ def _test_factorial(n=80):
 
 def factorial(n, method='math'):
     """
-    Compute the factorial n! using long integers (and pure Python code).
+    Compute the factorial n!.
     Different implementations are available (see source code for
     implementation details).
 
@@ -1408,9 +1411,8 @@ def factorial(n, method='math'):
     ==========================   =====================
 
     """
-    if not isinstance(n, (int, long, float)):
+    if not isinstance(n, (int, float)):
         raise TypeError('factorial(n): n must be integer not %s' % type(n))
-    n = long(n)
 
     if n == 0 or n == 1:
         return 1
@@ -1425,7 +1427,7 @@ def factorial(n, method='math'):
         except ImportError:
             print 'numpyutils.factorial: scipy is not available'
             print 'default method="reduce" is used instead'
-            return reduce(operator.mul, xrange(2, n+1))
+            return reduce(operator.mul, range(2, n+1))
             # or return factorial(n)
     elif method == 'plain iterative':
         f = 1
@@ -1438,18 +1440,18 @@ def factorial(n, method='math'):
         else:
             return n*factorial(n-1, method)
     elif method == 'lambda recursive':
-        fc = lambda n: n and fc(n-1)*long(n) or 1
+        fc = lambda n: n and fc(n-1)*n or 1
         return fc(n)
     elif method == 'lambda functional':
         fc = lambda n: n<=0 or \
-             reduce(lambda a,b: long(a)*long(b), xrange(1,n+1))
+             reduce(lambda a,b: a*b, range(1,n+1))
         return fc(n)
     elif method == 'lambda list comprehension':
         fc = lambda n: [j for j in [1] for i in range(2,n+1) \
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        return reduce(operator.mul, xrange(2, n+1))
+        return reduce(operator.mul, range(2, n+1))
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
 
@@ -1595,7 +1597,7 @@ def arr(shape=None, element_type=float,
 
     if data is not None:
 
-        if not operator.isSequenceType(data):
+        if not isinstance(data, collections.Sequence):
             raise TypeError('arr: data argument is not a sequence type')
 
         if isinstance(shape, (list,tuple)):
@@ -1618,11 +1620,6 @@ def arr(shape=None, element_type=float,
             raise TypeError(
                 'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
-        if not isinstance(file_, (basestring, file, StringIO)):
-            raise TypeError(
-                'file_ argument must be a string (filename) or '\
-                'open file object, not %s' % type(file_))
-
         if isinstance(file_, basestring):
             file_ = open(file_, 'r')
         # skip blank lines:
@@ -1691,7 +1688,7 @@ def arr(shape=None, element_type=float,
 def _test():
     _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:
-    a = array(range(27))
+    a = array(list(range(27)))
     a.shape = (3,3,3)
     functions = [norm_l2, norm_L2, norm_l1, norm_L1, norm_inf]
     results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]

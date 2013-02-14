@@ -58,7 +58,9 @@ def _check_xyzv(*args, **kwargs):
     if x is None and y is None and z is None:
         if indexing == 'ij':
             ny, nx = nx, nz  # swap
-        x, y, z = meshgrid(range(ny), range(nx), range(nz), indexing=indexing)
+        x, y, z = meshgrid(list(range(ny)),
+                           list(range(nx)),
+                           list(range(nz)), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x)==(nx,ny,nz) or shape(x)==(nx,1,1) or \
@@ -137,7 +139,7 @@ def _check_xyz(*args, **kwargs):
     if x is None and y is None:
         if indexing == 'ij':
             nx, ny = ny, nx  # swap
-        x, y = meshgrid(range(ny), range(nx), indexing=indexing)
+        x, y = meshgrid(list(range(ny)), list(range(nx)), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
@@ -175,8 +177,8 @@ def _check_xyuv(*args, **kwargs):
 
     if len(us) == 1:
         if x is None and y is None:
-            x = range(us[0])
-            y = range(us[0])
+            x = list(range(us[0]))
+            y = list(range(us[0]))
         else:
             assert shape(x) == us, \
                    "_check_xyuv: x has shape %s, expected %s" % (shape(x), us)

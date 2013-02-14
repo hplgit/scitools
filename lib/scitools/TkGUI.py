@@ -576,7 +576,7 @@ def commandline2dict(argv, parameters):
     # p[key] holds all command-line args, we are only interested
     # in those keys corresponding to parameters.keys()
     for key in p.keys():
-        if key in parameters.keys():
+        if key in list(parameters.keys()):
             parameters[key].set(p[key])
 
 
@@ -974,7 +974,7 @@ class Parameters:
         Return parameter names. With this method Parameter objects p
         can be used in dictionary update functions: somedict.update(p).
         """
-        return self.dict.keys()
+        return list(self.dict.keys())
 
     def __iter__(self):
         """Iterate over keys in self.dict."""
@@ -1141,7 +1141,7 @@ class AutoSimVizGUI:
     """
 
     def __init__(self):
-        import modulecheck
+        from . import modulecheck
         modulecheck.exception("Class AutoSimVizGUI", 'Pmw', 'Tkinter')
         return
 
@@ -1454,7 +1454,7 @@ class AutoSimVizGUI:
         for i in range(len(self.data[graph][counter]['x'])):
             self.data[graph][counter]['x'][i], \
             self.data[graph][counter]['y'][i] = \
-                                      map(float, lines[i].split())
+                                      list(map(float, lines[i].split()))
         f.close()
 
     def _quit(self, event=None):
@@ -1698,12 +1698,12 @@ class FuncSpec:
                 type(self.independent_variables))
 
         if self.formula is not None:
-            if not isinstance(self.formula, basestring):
+            if not isinstance(self.formula, str):
                 raise TypeError(
                     'formula must be string, not %s' % type(self.formula))
 
         if self.image is not None:
-            if not isinstance(self.image, basestring):
+            if not isinstance(self.image, str):
                 raise TypeError(
                     'image must be string (filename), not %s' % \
                     type(self.image))

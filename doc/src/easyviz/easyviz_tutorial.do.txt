@@ -468,9 +468,9 @@ show()
 savefig('tmp3.eps')   # or hardcopy
 savefig('tmp3.png')   # or hardcopy
 !ec
-The plot is shown in Figure ref{fig:plot3}.
+The plot is shown in Figure ref{fig:plot2p}.
 
-FIGURE:[figs/plot3, width=400] A plot with three curves.  label{fig:plot3}
+FIGURE:[figs/plot2p, width=400] A plot with three curves.  label{fig:plot2p}
 
 __Minimalistic Typing.__
 When exploring mathematics in the interactive Python shell, most of us
@@ -534,6 +534,41 @@ parameters in the plot:
 Such output is mostly of interest to advanced users.
 
 
+===== Curves in 3D Space =====
+label{easyviz:plot3}
+
+Easyviz also supports curves in 3D space through the `plot3` function.
+It works as `plot`, except that it accepts three coordinates:
+`plot3(x, y, z, 'b-')`. Here is an example of how to
+plot the parametric curve
+
+!bt
+\begin{align*}
+x(t) &= (2t+2)\sin(10t),\\
+y(t) &= (2t+2)\cos(10t),\\
+z(t) &= t,
+\end{align*}
+!et
+for $t\in [-5,5]$. The corresponding code reads
+
+!bc pypro
+from scitools.std import *
+t = linspace(-5, 5, 501)
+x = (2+t**2)*sin(10*t)
+y = (2+t**2)*cos(10*t)
+z = t
+plot3(x, y, z, 'r-')
+grid('on')
+xlabel('x(t)')
+ylabel('y(t)')
+zlabel('z(t)')
+title('plot3 example')
+!et
+Figure ref{fig:plot3} shows the resulting plot.
+The file `examples/plot3_demo.py` contains this and more examples.
+
+FIGURE: [figs/plot3_demo, width=400] Example of curve in 3D space. label{fig:plot3}
+
 ===== Making Animations =====
 label{easyviz:movie}
 
@@ -547,12 +582,12 @@ $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large $s$ and "peak-formed" for small $s$, see Figure
-ref{fig:plot4}. The function is symmetric around $x=m$ ($m=0$ in the
+ref{fig:plot2q}. The function is symmetric around $x=m$ ($m=0$ in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as $s$ is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
 
-FIGURE:[figs/plot4, width=400] Different shapes of a Gaussian function. label{fig:plot4}
+FIGURE:[figs/plot2q, width=400] Different shapes of a Gaussian function. label{fig:plot2q}
 
 The animation is created by varying $s$ in a loop and for each $s$
 issue a `plot` command. A moving curve is then visible on the screen.

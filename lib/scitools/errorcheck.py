@@ -301,7 +301,7 @@ def wrong_type(a, comment=''):
 
 _SAFECODE = True
 try:
-    from globaldata import SAFECODE as _SAFECODE
+    from .globaldata import SAFECODE as _SAFECODE
 except ImportError:
     pass
 if not _SAFECODE:
@@ -309,7 +309,7 @@ if not _SAFECODE:
     # comprehensive and expensive functions above:
     for func in __all__:
         efficient_version = 'def %s(*args): return True' % func
-        exec efficient_version
+        exec(efficient_version)
 
 def _test():
     def myfunc(a, b, c):

@@ -6,7 +6,6 @@ Example usage:
 
 Redirect stderr using the 'with'-statement:
 
->>> from __future__ import with_statement
 >>> from redirect_io import *
 >>> with hidden_stderr():
 ...     print >> sys.stderr, 'Divide By Cucumber Error'
@@ -31,20 +30,19 @@ Optinal usage without 'with'-statement:
 
 Fetch previous error messages:
 
->>> print _tmp_err.getvalue() 
+>>> print _tmp_err.getvalue()
 Divide By Cucumber Error
  +++ Divide by Cucumber Error, Please ReInstall Universe And Reboot +++
 <BLANKLINE>
->>> 
+>>>
 """
-from __future__ import with_statement # Comment to run _test_with_statement
 __author__ = 'Rolv Erlend Bredesen <rolv@simula.no>'
 __all__ = ['sys', '_tmp_err', 'hidden_stderr', '_redirect_err', '_return_err']
 
 import __future__
-import StringIO 
+from io import StringIO
 import sys
-from contextlib import contextmanager  
+from contextlib import contextmanager
 
 if float(sys.version[:3]) < 2.5:
     raise ImportError("This module requires version >= 2.5 of python")
@@ -64,11 +62,11 @@ def hidden_stderr(stream=_tmp_err):
 # For error stream with python version < 2.5
 def _redirect_err():
     sys.stderr = _tmp_err
-        
+
 def _return_err():
     sys.stderr = _std_err
-    
-        
+
+
 def _test_with_statement():
     """
     If the word 'with', which is a reserved keyword from python version 2.6,
@@ -86,22 +84,22 @@ def _test_with_statement():
                     __future__.with_statement.compiler_flag)
     except SyntaxError:
         print "Success: '%s' did not compile" %statement
-    else: 
+    else:
         raise Exception("Statement: '%s' should not have been compiled" \
                         % statement)
-    
-    # Setup error redirection 
+
+    # Setup error redirection
     std_err = sys.stderr
     tmp_err = StringIO.StringIO()
     if float(sys.version[:3]) < 2.5:
         raise ImportError, "This module requires version 2.5 of python"
-        
+
     # Compile with error redirection
     statement1 = 'with=3'
     statement2 = 'print "with>>", with'
     print '>>>', statement1
     print '>>>', statement2
-    
+
     # Test compilation of code using the reserved keyword with
     # Redirection standard error under compilation to prevent warning
     _redirect_err()
@@ -111,12 +109,12 @@ def _test_with_statement():
         _return_err()
 
     # No warning here
-    exec c in {}, locals()
+    exec(c, {}, locals())
 
     _redirect_err()
     try:
         # This one will give a warning
-        exec statement2     
+        exec(statement2)
     finally:
         _return_err()
     print "Here is the redirected error stream:\n",  tmp_err.getvalue()
@@ -125,7 +123,7 @@ def _test_with_statement():
     print "Testing the use of the 'with'-statement"
     c = compile(
         r"""'''In this example we test the use of the 'with'-statement'''
-        
+
 #from __future__ import with_statement # using proper compile flag instead
 from contextlib import contextmanager  # 'with' requires __enter__ and __exit__
 
@@ -148,22 +146,17 @@ with stderr_redirected(err_):
 
 
 """, '/dev/null', 'exec', __future__.with_statement.compiler_flag)
-    exec c
+    exec(c)
 
     print "\nIt appears the with_statement worked."
     print "Here is the redirected error stream:\n",  err_.getvalue()
-    
-    
+
+
 if __name__ == '__main__':
-    if 'with_statement' in globals(): 
-        import doctest
-        import unittest
-        suite = unittest.TestSuite()
-        suite.addTest(doctest.DocTestSuite())
-        runner = unittest.TextTestRunner(sys.stdout, verbosity=1)
-        runner.run(suite)
-    else:
-        # To run you must comment    
-        # 'from __future__ import with_statement ' at start of file
-        _test_with_statement()
-        
+    import doctest
+    import unittest
+    suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite())
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=1)
+    runner.run(suite)
+

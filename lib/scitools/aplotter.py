@@ -197,7 +197,7 @@ EPSILON = 0.000001
 
 def transposed(mat):
 	result = []
-	for i in xrange(len(mat[0])):
+	for i in range(len(mat[0])):
 		result.append([x[i] for x in mat])
 	return result
 
@@ -514,13 +514,13 @@ class Plotter(object):
 		if plot_data.min_x <= 0 and plot_data.max_x > 0:
 			draw_y = True
 			zero_x = self.get_coord(0, plot_data.min_x, plot_data.x_step)
-			for y in xrange(plot_data.y_size):
+			for y in range(plot_data.y_size):
 				output_buffer[zero_x][y] = "|"
 
 		if plot_data.min_y <= 0 and plot_data.max_y > 0:
 			draw_x = True
 			zero_y = self.get_coord(0, plot_data.min_y, plot_data.y_step)
-			for x in xrange(plot_data.x_size):
+			for x in range(plot_data.x_size):
 				output_buffer[x][zero_y] = "-"
 
 		if draw_x and draw_y:

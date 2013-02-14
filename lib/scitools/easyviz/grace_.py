@@ -44,7 +44,7 @@ Tip:
 - One way to create axes at arbitrary positions is to use the axes command
   together with the viewport optional argument. In the Grace backend this
   argument should be given as the list [xmin,ymin,xmax,ymax] where (xmin,ymin)
-  is the lower-left corner and (xmax,ymax) is the upper-right corner. An 
+  is the lower-left corner and (xmax,ymax) is the upper-right corner. An
   example is provided next.
 
     >>> x = seq(-3,3,0.1)
@@ -61,9 +61,9 @@ Tip:
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 if check_if_module_exists('pygrace', msg='You need to install the pygrace package from http://www.cacr.caltech.edu/~mmckerns/pygrace.html (Not PyGrace from sourceforge!) and the grace program.', abort=False):
     from pygrace import grace_np
@@ -75,14 +75,14 @@ class GraceBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
-        
-        
+
+
         self.figure(self.getp('curfig'))
 
         # conversion tables for format strings:
@@ -102,7 +102,7 @@ class GraceBackend(BaseClass):
             'p': 2,  # pentagram --> square
             'h': 3,  # hexagram --> diamond
             }
-                        
+
         self._colors = {
             '': 4,   # no color --> blue
             'r': 2,  # red
@@ -114,9 +114,9 @@ class GraceBackend(BaseClass):
             'k': 1,  # black
             'w': 0,  # white
             }
-        
+
         self._line_styles = {
-            '': None, # no line 
+            '': None, # no line
             '-': 1,   # solid line
             ':': 2,   # dotted line
             '-.': 6,  # dash-dot line
@@ -175,14 +175,14 @@ class GraceBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
         title = self._fix_latex(ax.getp('title'))
         self._g('subtitle "%s"' % title)  # set title
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -266,7 +266,7 @@ class GraceBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -291,7 +291,7 @@ class GraceBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -311,12 +311,12 @@ class GraceBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             pass
         else:
             # do not display box
             pass
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -401,7 +401,7 @@ class GraceBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -459,7 +459,7 @@ class GraceBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
+
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -470,7 +470,7 @@ class GraceBackend(BaseClass):
         """Remove latex syntax a la $, \, {, } etc."""
         legend = legend.strip()
         # General fix of latex syntax (more readable)
-        legend = legend.replace('**', '^')  
+        legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         legend = legend.replace('{', '')
@@ -488,7 +488,7 @@ class GraceBackend(BaseClass):
         z = item.getp('zdata')
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
- 
+
         self._g('s%s on' % name)
         self._g('s%s symbol %s' % (name,marker))
         self._g('s%s symbol fill pattern 0' % name)
@@ -516,7 +516,7 @@ class GraceBackend(BaseClass):
 
         legend = self._fix_latex(item.getp('legend'))
         self._g('s%s legend "%s"' % (name,legend))
-           
+
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
             print "Adding a surface"
@@ -524,7 +524,7 @@ class GraceBackend(BaseClass):
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -573,7 +573,7 @@ class GraceBackend(BaseClass):
         if item.getp('clabels'):
             # add labels on the contour curves
             pass
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -694,7 +694,7 @@ class GraceBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        fig = BaseClass.figure(self, *args, **kwargs) 
+        fig = BaseClass.figure(self, *args, **kwargs)
         try:
             fig._g
         except:
@@ -706,23 +706,23 @@ class GraceBackend(BaseClass):
 
             fig._g = grace_np.GraceProcess()
             fig._g._no_lines_in_graph = []
-            
+
         self._g = fig._g  # link for faster access
         return fig
-        
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         # add Grace attributes to current figure (if not already added):
         try:
             fig._g
-        except: 
+        except:
             self.figure(self.getp('curfig'))
-            
+
         # reset the plotting package instance in fig._g:
         no_lines = fig._g._no_lines_in_graph
         no_graphs = len(no_lines)
@@ -732,16 +732,16 @@ class GraceBackend(BaseClass):
                 fig._g('kill g%s.s%s' % (g,i))
         no_graphs = len(fig.getp('axes'))
         fig._g._no_lines_in_graph = [0]*no_graphs
-        
+
         self._set_figure_size(fig)
-        
+
         hgap = 0.5
         vgap = 0.6
         offset = 0.1
         nrows, ncolumns = fig.getp('axshape')
         fig._g('arrange(%s, %s, %s, %s, %s)' % \
                (nrows, ncolumns, offset, hgap, vgap))
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             curr_graph = axnr-1
             numberofitems = ax.getp('numberofitems')
             pth = ax.getp('pth')
@@ -785,7 +785,7 @@ class GraceBackend(BaseClass):
                     # add legend to plot
                     legends.append(legend)
                 i += 1
-                
+
             if numberofitems > 0:
                 self._g('autoscale')
                 self._set_axis_props(ax)
@@ -802,7 +802,7 @@ class GraceBackend(BaseClass):
 
     def hardcopy(self, filename, **kwargs):
         """
-        Supported extensions in the Grace backend: 
+        Supported extensions in the Grace backend:
 
           '.ps'  (PostScript)
           '.eps' (Encapsualted PostScript)
@@ -853,7 +853,7 @@ class GraceBackend(BaseClass):
             filename += ext
         elif ext not in ext2dev:
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2dev.keys(), ext))
+                             (list(ext2dev.keys()), ext))
 
         device = ext2dev[ext]
         if ext == '.agr':
@@ -892,9 +892,9 @@ class GraceBackend(BaseClass):
     def _close(self, fig):
         try:
             fig._g.exit()
-        except OSError, msg:
+        except OSError as msg:
             print msg
-    
+
     def clf(self):
         fig = gcf()
         self._close(fig)
@@ -909,7 +909,7 @@ class GraceBackend(BaseClass):
         del fig._g
 
     def closefigs(self):
-        for num in self._figs.keys():
+        for num in self._figs:
             self.closefig(num)
         BaseClass.closefigs(self)
 
@@ -917,7 +917,7 @@ class GraceBackend(BaseClass):
     #def jet(self, m=None):
     #    """Variant of hsv."""
     #    pass
-    
+
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:

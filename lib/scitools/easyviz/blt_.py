@@ -1,6 +1,6 @@
 """
 This backend uses Blt through Pmw (Python Mega Widgets). One can use this
-backend by 
+backend by
 
   python somefile.py --SCITOOLS_easyviz_backend blt
 
@@ -38,9 +38,9 @@ TODO:
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 from scitools.numpyutils import floor, linspace, array
 
 check_if_module_exists('Pmw', msg='You need to install the Pmw package.', abort=False)
@@ -52,13 +52,13 @@ class BltBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
-        
+
 
         self._master = Tkinter.Tk()
         self._master.withdraw()
@@ -93,9 +93,9 @@ class BltBackend(BaseClass):
             'k': 'black',   # black
             'w': 'white',   # white
             }
-        
+
         self._line_styles = {
-            '': None,        # no line 
+            '': None,        # no line
             '-': '',         # solid line
             ':': [1,5],      # dotted line
             '-.': [5,5,1,5], # dash-dot line
@@ -159,14 +159,14 @@ class BltBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
             print "Setting title"
         title = ax.getp('title')
         self._g.configure(title=title)
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -186,7 +186,7 @@ class BltBackend(BaseClass):
             xmin = ax.getp('xmin')
             xmax = ax.getp('xmax')
             if xmin is not None and xmax is not None:
-                # set x-axis limits    
+                # set x-axis limits
                 self._g.axis_configure('x', min=xmin, max=xmax)
             else:
                 # let plotting package set x-axis limits or use
@@ -243,7 +243,7 @@ class BltBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -268,7 +268,7 @@ class BltBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -288,12 +288,12 @@ class BltBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             pass
         else:
             # do not display box
             pass
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -372,7 +372,7 @@ class BltBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -474,14 +474,14 @@ class BltBackend(BaseClass):
         y = item.getp('ydata')
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
-        
+
         if rank(y) == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
 
         barticks = item.getp('barticks')
         if barticks is None:
-            barticks = range(nx)
+            barticks = list(range(nx))
         xtics = ', '.join(['"%s" %d' % (m,i) \
                            for i,m in enumerate(barticks)])
         if item.getp('rotated_barticks'):
@@ -494,7 +494,7 @@ class BltBackend(BaseClass):
             # FIXME: edgecolor should be same as ax.getp('fgcolor') by default
         else:
             edgecolor = self._colors.get(edgecolor, 'black')
-            
+
         if shading == 'faceted':
             pass
         else:
@@ -539,7 +539,7 @@ class BltBackend(BaseClass):
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -588,7 +588,7 @@ class BltBackend(BaseClass):
         if item.getp('clabels'):
             # add labels on the contour curves
             pass
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -710,7 +710,7 @@ class BltBackend(BaseClass):
         # Extension of BaseClass.figure:
         # add a plotting package figure instance as fig._g and create a
         # link to it as self._g
-        fig = BaseClass.figure(self, *args, **kwargs) 
+        fig = BaseClass.figure(self, *args, **kwargs)
         name = 'Fig ' + str(fig.getp('number'))
         try:
             fig._g
@@ -719,7 +719,7 @@ class BltBackend(BaseClass):
             # as fig._g
             if DEBUG:
                 print "creating figure %s in backend" % name
-                
+
             fig._root = Tkinter.Toplevel(self._master)
             fig._root.title(name)
             def _close_fig(event=None):
@@ -738,7 +738,7 @@ class BltBackend(BaseClass):
             frame.pack(side='top', fill='both', expand=1)
             fig._g = Pmw.Blt.Graph(frame)
             fig._g.pack(expand=1, fill='both')
-            
+
         self._g = fig._g  # link for faster access
         return fig
 
@@ -747,15 +747,15 @@ class BltBackend(BaseClass):
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
         for elm in self._g.element_names():
             if self._g.element_exists(elm):
                 self._g.element_delete(elm)
-        
+
         self._set_figure_size(fig)
-        
+
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
             if nrows != 1 or ncolumns != 1:
@@ -797,7 +797,7 @@ class BltBackend(BaseClass):
 
             self._set_axis_props(ax)
             self._g.update()
-                    
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -873,7 +873,7 @@ class BltBackend(BaseClass):
     #def jet(self, m=None):
     #    """Variant of hsv."""
     #    pass
-    
+
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:
@@ -890,7 +890,7 @@ class BltBackend(BaseClass):
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = BltBackend()   # create backend instance
 use(plt, globals())  # export public namespace of plt to globals()
 backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

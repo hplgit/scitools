@@ -146,6 +146,8 @@ Some frequently standard modules like sys, os, and operator are
 imported into the namespace of the present module.
 """
 import sys, os
+import collections
+import numbers
 
 # The first task to accomplish in this module is to determine
 # whether to use Numeric, numarray, or numpy
@@ -180,7 +182,7 @@ if basic_NumPy is None:
 
 # check the environment variable NUMPYARRAY:
 if basic_NumPy is None:
-    if os.environ.has_key('NUMPYARRAY'):
+    if 'NUMPYARRAY' in os.environ:
         if   os.environ['NUMPYARRAY'] == 'numpy':
             basic_NumPy = 'numpy'
         elif os.environ['NUMPYARRAY'] == 'numarray':
@@ -221,15 +223,15 @@ if basic_NumPy == 'numpy':
 	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
 	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
 		n, module = _numpy_name.split('.')
-		exec "from %s import %s as %s" %(n, module, _Numeric_name)
+		exec("from %s import %s as %s" %(n, module, _Numeric_name))
 	    elif oldversion and (_Numeric_name == 'MLab'):
 		from numpy.lib import mlab as MLab
             elif (oldversion or (majorversion == 1 and minorversion < 1)) \
                      and (_Numeric_name == 'MA'):
                 import numpy.core.ma; MA = numpy.core.ma
 	    elif _numpy_name != '':
-		exec 'import %s; %s = %s' % \
-		(_numpy_name, _Numeric_name, _numpy_name)
+		exec('import %s; %s = %s' %
+                     (_numpy_name, _Numeric_name, _numpy_name))
 
 	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
@@ -261,9 +263,9 @@ if basic_NumPy == 'numpy':
             return a.max()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return max(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -274,9 +276,9 @@ if basic_NumPy == 'numpy':
             return a.min()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return min(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -287,8 +289,8 @@ if basic_NumPy == 'numarray':
     try:
         for _Numeric_name, _numarray_name, _dummy1 in _NumPy_modules[1:]:
             if _numarray_name:
-                exec 'import %s; %s = %s' % \
-                     (_numarray_name, _Numeric_name, _numarray_name)
+                exec('import %s; %s = %s' %
+                     (_numarray_name, _Numeric_name, _numarray_name))
 
         # RNG is not supported, make an object that gives an error message:
         class __Dummy:
@@ -315,9 +317,9 @@ if basic_NumPy == 'numarray':
             return a.max()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return max(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -328,9 +330,9 @@ if basic_NumPy == 'numarray':
             return a.min()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return min(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -341,7 +343,7 @@ if basic_NumPy == 'Numeric':
     try:
         for _Numeric_name, _dummy1, _dummy2 in _NumPy_modules[1:]:
             if _Numeric_name != 'MA':  # exclude MA, see comment above
-                exec 'import %s' % _Numeric_name
+                exec('import %s' % _Numeric_name)
         del _Numeric_name, _dummy1, _dummy2, _NumPy_modules
 
         from Numeric import *
@@ -419,9 +421,9 @@ if basic_NumPy == 'Numeric':
             return max(a.flat)  # use Python's list min
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return max(a)
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -433,9 +435,9 @@ if basic_NumPy == 'Numeric':
             return min(a.flat)
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.Sequence):
                 return min(a)
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -489,7 +491,7 @@ def NumPy_type(a):
 	return "tuple"
     elif isinstance(a, list):
 	return "list"
-    exec "import %s" % basic_NumPy # Why isn't basic_NumPy imported?
+    exec("import %s" % basic_NumPy) # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy
 

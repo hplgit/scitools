@@ -11,7 +11,7 @@ math_functions = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos',
                   'cosh', 'exp', 'fabs', 'floor', 'log', 'log10',
                   'pi', 'pow', 'sin', 'sinh', 'sqrt', 'tan', 'tanh']
 s = 'from math import ' + ', '.join(math_functions)
-exec s
+exec(s)
 # Problem: vectorized expressions require NumPy versions
 # of the math functions. We try to detect errors arising from
 # such lacking imports.
@@ -273,11 +273,11 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
 
         except NameError as e:
             prm = str(e).split()[1]
-            raise NameError, 'name "%s" is not defined - if it is '\
+            raise NameError('name "%s" is not defined - if it is '\
                   'a parameter,\nset it in the constructor or the '\
                   'set_parameters method, or provide\nglobals=globals() '\
                   'in the constructor if "%s" is a global name in the '\
-                  'calling code.' % (prm, prm)
+                  'calling code.' % (prm, prm))
 
 
     def set_parameters(self, **kwargs):
@@ -353,7 +353,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
         # Substitute parameter names by their numerical values.
         # Start with the most complicated parameter names
         # (this algorithm may fail).
-        prm_names = self._prms.keys()
+        prm_names = list(self._prms.keys())
         prm_names.sort(lambda a, b: cmp(len(a), len(b)))
         prm_names.reverse()
         for name in prm_names:
@@ -531,9 +531,9 @@ C     note: it cannot be int
         in the string formula.
         """
         if self._f.find('**') != -1:
-            raise SyntaxError, \
+            raise SyntaxError(
                   'use pow(a,b) instead of a**b in the expression'\
-                  '\n%s\n(since you demand translation to C/C++)' % self._f
+                  '\n%s\n(since you demand translation to C/C++)' % self._f)
 
 def _doctest():
     import doctest, StringFunction
@@ -588,7 +588,7 @@ class StringFunction_v3:
 
     def __call__(self, x):
         # assign value to independent variable:
-        exec '%s = %g' % (self._var, x)
+        exec('%s = %g' % (self._var, x))
         # execute some user code (defining parameters etc.):
         if self._code:  exec(self._code)
         return eval(self._f_compiled)
@@ -623,10 +623,10 @@ class StringFunction_v4:
             return True
         except NameError as e:
             prm = str(e).split()[2]
-            raise NameError, 'Parameter "%s" is not defined,\nneither in '\
+            raise NameError('Parameter "%s" is not defined,\nneither in '\
                   'the constructor nor set_parameters.\n'\
                   'Update the constructor call or call set_parameters'\
-                  '(%s=...)' % (prm, prm)
+                  '(%s=...)' % (prm, prm))
         else:
             return True  # accept other errors
 
@@ -642,7 +642,7 @@ class StringFunction_v4:
             del self._prms[self._var]
         except:
             pass
-        prm_names = self._prms.keys()
+        prm_names = list(self._prms.keys())
         prm_names.sort(lambda a, b: cmp(len(a), len(b)))
         prm_names.reverse()
         for name in prm_names:
@@ -721,7 +721,7 @@ def _efficiency():
     s7 = s6.__call__
     x = 0.9
     # verification first:
-    values = [s(x) for s in s0, s1, s2, s3, s4, s5, s6, s7]
+    values = [s(x) for s in (s0, s1, s2, s3, s4, s5, s6, s7)]
     print 'values of %s for x=%s: %s' % (formula, x, values)
 
     n = 400000

@@ -3,7 +3,7 @@
 import os, glob, re
 
 from scitools.misc import findprograms
-from misc import _check_type
+from .misc import _check_type
 
 class MovieEncoder(object):
     """
@@ -383,8 +383,8 @@ class MovieEncoder(object):
         aspect = self._prop['aspect']
         if aspect is not None:
             if aspect not in legal_aspects:
-                raise(ValueError, \
-                      "%s only supports the following aspect ratios: %s" % \
+                raise(ValueError,
+                      "%s only supports the following aspect ratios: %s" %
                       (encoder, legal_aspects))
         else:
             aspect = 1.0
@@ -553,7 +553,7 @@ FORCE_ENCODE_LAST_FRAME
         cmd += ' -I p'  # interlacing mode: p = none / progressive
         cmd += ' -j "%s"' % files # set image files
         # find start image:
-        for i in xrange(9999):
+        for i in range(9999):
             if os.path.isfile(files % i):
                 cmd += ' -b %d' % i
                 break
@@ -594,7 +594,7 @@ FORCE_ENCODE_LAST_FRAME
         fps = str(self._prop['fps'])
         if not fps in legal_fps:
             raise ValueError("fps must be %s, not %s" % \
-                             (fps_convert.keys(), fps))
+                             (list(fps_convert.keys()), fps))
         cmd += ' -F %s' % legal_fps[fps]
         #cmd += ' --cbr' # constant bit rate
         gop_size = self._prop['gop_size']
@@ -606,13 +606,13 @@ FORCE_ENCODE_LAST_FRAME
         legal_aspects = {'1.0': 1, '1.3': 2, '1.7': 3, '2.21': 4}
         aspect = self._get_aspect_ratio()
         if aspect is not None:
-            if aspect not in legal_aspects.values():
+            if aspect not in list(legal_aspects.values()):
                 aspect = str(aspect)
-                for key in legal_aspects.keys():
+                for key in legal_aspects:
                     if aspect.startswith(key):
                         aspect = legal_aspects[key]
                         break
-                if aspect not in legal_aspects.values():
+                if aspect not in list(legal_aspects.values()):
                     raise ValueError(
                         "aspect must be either 1:1, 4:3, 16:9, or 2.21:1," \
                         " not '%s'" % aspect)

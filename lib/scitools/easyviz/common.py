@@ -5,10 +5,11 @@ from scitools.numpyutils import seq, iseq, asarray, ones, zeros, sqrt, shape, \
 from scitools.numpytools import arrmin, arrmax, NumPyArray
 from scitools.globaldata import backend
 
-from misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
+from .misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
 
 from warnings import warn
+import collections
 
 
 def docadd(comment, *lists, **kwargs):
@@ -21,12 +22,12 @@ def docadd(comment, *lists, **kwargs):
 
     Example on usage:
     # add to the class doc string:
-    __doc__ += docadd('Keywords for the setp method', _local_attrs.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_attrs.keys()))
 
     # add to a method (get) doc string:
     get.__doc__ += docadd('Keywords for the setp method',
-                          BaseClass._local_attrs.keys(),
-                          SomeSubClass._local_attrs.keys())
+                          list(BaseClass._local_attrs.keys()),
+                          list(SomeSubClass._local_attrs.keys()))
     """
     lst = []
     for l in lists:
@@ -57,7 +58,7 @@ class MaterialProperties(object):
         'specularpower': None,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -68,7 +69,7 @@ class MaterialProperties(object):
         return pprint.pformat(self._prop)
 
     def setp(self, **kwargs):
-        for key in self._prop.keys():
+        for key in self._prop:
             if key in kwargs:
                 _check_type(kwargs[key], key, (int,float))
                 self._prop[key] = float(kwargs[key])
@@ -91,9 +92,7 @@ class PlotProperties(object):
     All properties are stored in the dictionary self._prop.
 
     """
-    #_colors  = "b g r m c y k w".split()
-    _colors  = "b r g m c y k w".split()
-    #_markers = "o + x * s d v ^ < > p h .".split()
+    _colors  = "b r g m c y k w".split()  # colororder determines unset colors
     _markers = "o s v + ^ x d * < > p h .".split()
     _colors2markers = dict([(color, marker)
                       for color, marker in zip(_colors, _markers)])
@@ -149,7 +148,7 @@ class PlotProperties(object):
         'default_lines': 'with_markers'  # 'plain'
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -158,7 +157,7 @@ class PlotProperties(object):
 
     def __str__(self):
         props = {}
-        for key in self._prop.keys():
+        for key in self._prop:
             prop = self._prop[key]
             if isinstance(prop, (list,tuple,NumPyArray)) and \
                    len(ravel(prop)) > 3:
@@ -368,8 +367,8 @@ class Line(PlotProperties):
         'zdata': None,
         }
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -389,7 +388,7 @@ class Line(PlotProperties):
         # The proper casting should be in the backends plotroutine
 
         if 'z' in kwargs:
-            if not operator.isSequenceType(kwargs['z']):
+            if not not isinstance(kwargs['z'], collections.Sequence):
                 raise TypeError("Can only plot sequence types, "\
                                 "z is %s" % type(kwargs['z']))
             z = kwargs['z']
@@ -399,9 +398,9 @@ class Line(PlotProperties):
                 if isinstance(kwargs['y'], basestring) \
                        and kwargs['y'] == 'auto':
                     # now y is the indicies of z
-                    y = range(len(z))
+                    y = list(range(len(z)))
                 else:
-                    if not operator.isSequenceType(kwargs['y']):
+                    if not isinstance(kwargs['y'], collections.Sequence):
                         raise TypeError("Can only plot sequence types, "\
                                         "y is %s" % type(kwargs['y']))
                     y = kwargs['y']
@@ -409,9 +408,9 @@ class Line(PlotProperties):
                 if isinstance(kwargs['x'], basestring) \
                        and kwargs['x'] == 'auto':
                     # now x is the indicies of y
-                    x = range(len(y))
+                    x = list(range(len(y)))
                 else:
-                    if not operator.isSequenceType(kwargs['x']):
+                    if not isinstance(kwargs['x'], collections.Sequence):
                         raise TypeError("Can only plot sequence types, "\
                                         "x is %s" % type(kwargs['x']))
                     x = kwargs['x']
@@ -437,7 +436,7 @@ class Line(PlotProperties):
                 if isinstance(kwargs['x'], basestring) \
                        and kwargs['x'] == 'auto':
                     # now x is the indicies of y
-                    x = range(len(y))
+                    x = list(range(len(y)))
                 else:
                     if not operator.isSequenceType(kwargs['x']):
                         raise TypeError("Can only plot sequence types, "\
@@ -477,8 +476,8 @@ class Bars(PlotProperties):
         'rotated_barticks': False,
         }
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -520,13 +519,13 @@ class Bars(PlotProperties):
             y = args[0]
             if isinstance(y, dict):
                 a = []
-                keys = y.keys()
+                keys = list(y.keys())
                 keys.sort()
                 for key in keys:
-                    a.append(y[key].values())
+                    a.append(list(y[key].values()))
                 self._prop['barticks'] = keys
                 y = asarray(a)
-            x = range(len(y))
+            x = list(range(len(y)))
         else:
             raise TypeError("Bars._parseargs: wrong number of arguments")
 
@@ -557,8 +556,8 @@ class Surface(PlotProperties):
         'zdata': None,
         }
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -623,8 +622,8 @@ class Contours(PlotProperties):
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -704,8 +703,8 @@ class VelocityVectors(PlotProperties):
         'udata': None, 'vdata': None, 'wdata': None, # vector components
         }
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -827,8 +826,8 @@ class Streams(PlotProperties):
         'startx': None, 'starty': None, 'startz': None, # starting points
         }
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -967,8 +966,8 @@ class Volume(PlotProperties):
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
     __doc__ += docadd('Keywords for the setp method',
-                      PlotProperties._local_prop.keys(),
-                      _local_prop.keys())
+                      list(PlotProperties._local_prop.keys()),
+                      list(_local_prop.keys()))
 
     def __init__(self, *args, **kwargs):
         PlotProperties.__init__(self, **kwargs)
@@ -1085,7 +1084,7 @@ class Colorbar(object):
         'visible': False,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     _locations = 'North South East West NorthOutside SouthOutside ' \
                  'EastOutside WestOutside'.split()
@@ -1139,7 +1138,7 @@ class Light(object):
         'visible': True,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -1201,7 +1200,7 @@ class Camera(object):
         'camproj': 'orthographic'
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     _modes = ['auto', 'manual']
     _camprojs = ['orthographic', 'perspective']
@@ -1335,11 +1334,11 @@ class Axis(object):
         'diffusecolor': None,
         'speculartcolor': None,
         'pth': None, # this is the p-th axis in subplot(m,n,p)
-        'colororder': 'b g r c m y k'.split(),
+        'colororder': 'b r g m c y k'.split(),
         'curcolor': 0,
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     _directions = "ij xy".split()
     _methods = "equal image square normal vis3d".split()
@@ -1722,7 +1721,7 @@ class Figure(object):
         'number': 1,      # this figures number
         }
     _update_from_config_file(_local_prop)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_prop.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_prop.keys()))
 
     def __init__(self, **kwargs):
         self._prop = {}
@@ -1818,16 +1817,16 @@ class Figure(object):
             self._prop['curax'] = 1
 
     def _set_current_axis(self, ax):
-        if isinstance(ax, int) and ax in self._prop['axes'].keys():
+        if isinstance(ax, int) and ax in self._prop['axes']:
             self._prop['curax'] = ax
         elif isinstance(ax, Axis):
-            if ax in self._prop['axes'].values():
-                for i in self._prop['axes'].keys():
+            if ax in list(self._prop['axes'].values()):
+                for i in self._prop['axes']:
                     if ax == self._prop['axes'][i]:
                         self._prop['curax'] = i
                         break
             else:
-                n = max(self._prop['axes'].keys()) + 1
+                n = max(list(self._prop['axes'])) + 1
                 self._prop['axes'][n] = ax
                 self._prop['curax'] = n
 
@@ -1876,7 +1875,7 @@ class BaseClass(object):
         'color': False,      # hardcopy with color?
         }
     _update_from_config_file(_local_attrs)  # get defaults from scitools.cfg
-    __doc__ += docadd('Keywords for the setp method', _local_attrs.keys())
+    __doc__ += docadd('Keywords for the setp method', list(_local_attrs.keys()))
 
     # Dictionary of functions testing legal types
     _attrs_type = {'curfig': lambda arg: isinstance(arg, (int)),
@@ -1943,8 +1942,8 @@ class BaseClass(object):
 
         # subclasses should extend the doc string like this:
         #set.__doc__ += docadd('Keywords for the setp method',
-        #                      BaseClass._local_attrs.keys(),
-        #                      SomeSubClass._local_attrs.keys())
+        #                      list(BaseClass._local_attrs.keys()),
+        #                      list(SomeSubClass._local_attrs.keys()))
 
     def getp(self, *args):
         """
@@ -1987,11 +1986,6 @@ class BaseClass(object):
                                    (self.__class__.__name__, prm_name))
         else:
             raise TypeError("getp: wrong number of arguments")
-
-        # subclasses should extend the doc string like this:
-        #getp.__doc__ += docadd('Keywords for the getp method',
-        #                       BaseClass._local_attrs.keys(),
-        #                       SomeSubClass._local_attrs.keys())
 
     #def __getitem__(self, name):  self.getp(name)
 
@@ -2317,7 +2311,7 @@ class BaseClass(object):
             if len(self._figs) == 0: # No figures left
                 num = 1
             else:
-                num = max(self._figs.keys())+1
+                num = max(list(self._figs.keys()))+1
                 #print "Active figure is %d." % num
 
         if not num in self._figs:
@@ -5193,7 +5187,7 @@ class BaseClass(object):
             if isinstance(args[0], (tuple,list)):
                 args = args[0]
                 nargs = len(args)
-            elif args[0] in modes.keys():
+            elif args[0] in modes:
                 ka, kd, ks, n, sc = modes[args[0]]
 
         if nargs >= 3:
@@ -5354,7 +5348,7 @@ def use(plt, namespace=globals(), neutralize=False):
     except:
         __all__ = ['plt']
     try:
-        for item in plt_dict.keys():
+        for item in plt_dict:
             __all__.append(item)
     except:
         pass
@@ -5378,7 +5372,7 @@ def debug(plt, level=10):
 
             if level > 1:
                 axes_ = fig.getp('axes')
-                for axnr in axes_.keys():
+                for axnr in axes_:
                     print_("\nAx %d:" % axnr, 4)
                     ax = axes_[axnr]
                     print_(ax, 8)
