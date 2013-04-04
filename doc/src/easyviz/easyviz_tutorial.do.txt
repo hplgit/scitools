@@ -59,6 +59,7 @@ command produces files with images in various formats:
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
 savefig('tmp1.pdf') # produce PDF
+savefig('tmp1.svg') # produce SVG (not supported in all backends)
 !ec
 An alternative name for `savefig` is `hardcopy`:
 !bc pycod
@@ -67,7 +68,7 @@ hardcopy('tmp1.png') # produce PNG
 hardcopy('tmp1.pdf') # produce PDF
 !ec
 The filename extension determines the format: `.ps` or
-`.eps` for PostScript, `.png` for PNG, and `.pdf` for PDF.
+`.eps` for PostScript, `.png` for PNG, `.pdf` for PDF, and `.svg` for SVG.
 Figures ref{fig:plot1a:g} and ref{fig:plot1a:m} display the resulting
 image file with the plot, as generated
 with the Gnuplot and Matplotlib plotting packages, respectively.
@@ -990,6 +991,49 @@ import scitools.easyviz as ev
 import numpy as np
 !ec
 
+=== Embedding Plots in HTML without Using Files ===
+
+Web applications may prefer to get the plot as a string from the
+plotting software and embed this string directly in HTML. This is
+easy: if the filename for the `savefig` command contains just the
+extension, say `.png`, and the backend supports storing the plot
+in a string in PNG format, the string is returned. Otherwise, just
+`None` is returned. Any any case, a filename of `.png` implies
+that the plot is also store in the file `tmp.png`. The only
+backend that can return the plot as a string is `matplotlib`.
+
+Here is a recipe on how to create a plot as a string in PNG and SVG
+format and embed the strings directly in HTML:
+
+!bc pycod
+from scitools.std import plot, savefig, linspace
+
+x = linspace(0, 1, 10)
+plot(x, y)
+figdata_svg = savefig('.svg')  # create tmp.svg anyway
+figdata_png = savefig('.png')  # create tmp.ong anyway
+if figdata_svg is not None and figdata_png is not None:
+    # Turn PNG data to base64 format
+    import base64
+    figdata_png = base64.b64encode(figdata_png)
+    f = open('tmp.html', 'w')
+    f.write("""
+Embedded SVG XML code:<br>
+%(figdata_svg)s
+<br>
+Embedded PNG data:<br>
+<img src="data:image/png;base64,%(figdata_png)s" width=500><br>
+Using img tag for SVG file:<br>
+<img alt="Embedded SVG image" src="tmp.svg" width=500><br>
+Using img tag for PNG file:<br>
+<img alt="Embedded PNG image" src="tmp.png" width=500><br>
+Using object embedding:<br>
+<object data="tmp.svg" type="image/svg+xml"></object>
+""" % vars())
+    f.close()
+!ec
+The `examples/plot2r.py` file contains a demo of this kind where the
+HTML page can be viewed in a browser.
 
 === Setting Parameters in the Configuration File ===
 

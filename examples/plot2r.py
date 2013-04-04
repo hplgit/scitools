@@ -20,6 +20,8 @@ plot(t, y1, 'r-', t, y2, 'b-',
      savefig='.png')  # just .png implies tmp.png
 
 # Return data (if possible, otherwise None) AND save to tmp.svg/tmp.png
+# (just giving the extension implies returning the file data if the
+# backend supports this - only matplotlib does)
 figdata_svg = savefig('.svg')
 figdata_png = savefig('.png')
 if figdata_svg is not None and figdata_png is not None:
@@ -29,26 +31,18 @@ if figdata_svg is not None and figdata_png is not None:
     f.write("""
 <h1>Demo of
 <a href="http://msdn.microsoft.com/en-us/library/gg589526(v=vs.85).aspx">
-SVG file in HTML</a> (plot made by %s)</h1>
-Embedded SVG XML code:
+SVG file in HTML</a> (plot made by %(backend)s)</h1>
+Embedded SVG XML code:<br>
+%(figdata_svg)s
 <br>
-%s
-<br>
-Embedded PNG data:
-<br>
-<img src="data:image/png;base64,%s" width=500>
-<br>
-Using img tag for SVG file:
-<br>
-<img alt="Embedded SVG image" src="tmp.svg" width=500>
-<br>
-Using img tag for PNG file:
-<br>
-<img alt="Embedded PNG image" src="tmp.png" width=500>
-<br>
-Using object embedding:
-<br>
+Embedded PNG data:<br>
+<img src="data:image/png;base64,%(figdata_png)s" width=500><br>
+Using img tag for SVG file:<br>
+<img alt="Embedded SVG image" src="tmp.svg" width=500><br>
+Using img tag for PNG file:<br>
+<img alt="Embedded PNG image" src="tmp.png" width=500><br>
+Using object embedding:<br>
 <object data="tmp.svg" type="image/svg+xml"></object>
-""" % (backend, figdata_svg, figdata_png))
+""" % vars())
     f.close()
 raw_input('Press Return key to quit: ')
