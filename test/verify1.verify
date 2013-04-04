@@ -1,0 +1,28 @@
+#!/bin/sh
+# test scitools regression|floatdiff|subst|file2interactive|ps2mpeg|profiler
+
+rm -f *.ppm *.eps *.png
+
+# run a scitools regression test in test1.verify:
+cp _test1.verify-test test1.verify
+scitools regression verify test1.verify
+cat verify_log_details.htm >> verify1.v
+rm -f test1.verify # don't use this for a general scitools regression .
+# test1.verify tests scitools subst :-)
+
+scitools floatdiff test1.vd test1.rd &
+
+scitools ps2mpeg tmp_*.eps >> verify1.v
+cat tmp_.mpeg_encode-input >> verify1.v
+
+scitools profiler _cpu.py | python -c '
+import sys
+for line in sys.stdin.read().splitlines():
+    print line.split(":")[-1]
+' >> verify1.v
+
+bash scitools_demo >> verify1.v
+
+# clean up:
+rm -f tmp.* tmp_*.eps movie.mpeg *~ verify_* tmp_.mpeg_encode-input test1.r* test1.v*
+

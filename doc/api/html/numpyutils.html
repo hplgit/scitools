@@ -1,0 +1,1491 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.numpyutils &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.numpyutils">
+<span id="scitools-numpyutils"></span><h1><a class="reference internal" href="#module-scitools.numpyutils" title="scitools.numpyutils"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.numpyutils</span></tt></a><a class="headerlink" href="#module-scitools.numpyutils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="functionality-of-this-module-that-extends-numerical-python">
+<h2>Functionality of this module that extends Numerical Python<a class="headerlink" href="#functionality-of-this-module-that-extends-numerical-python" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>solve_tridiag_linear_system:</dt>
+<dd><p class="first last">returns the solution of a tridiagonal linear system</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>wrap2callable:</dt>
+<dd><p class="first last">tool for turning constants, discrete data, string
+formulas, function objects, or plain functions
+into an object that behaves as a function</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>NumPy_array_iterator:</dt>
+<dd><p class="first last">allows iterating over all array elements using
+a single, standard for loop (for value, index in iterator),
+has some additional features compared with numpy.ndenumerate</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>asarray_cpwarn:</dt>
+<dd><p class="first last">as <tt class="docutils literal"><span class="pre">numpy.asarray(a)</span></tt>, but a warning or exception is issued if
+the array a is copied</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>meshgrid:</dt>
+<dd><p class="first last">extended version of <tt class="docutils literal"><span class="pre">numpy.meshgrid</span></tt> to 1D, 2D and 3D grids,
+with sparse or dense coordinate arrays and matrix or grid
+indexing</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>ndgrid:</dt>
+<dd><p class="first last">same as calling <tt class="docutils literal"><span class="pre">meshgrid</span></tt> with indexing=&#8217;ij&#8217; (matrix indexing)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>float_eq:</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">operator</span> <span class="pre">==</span></tt> for float operands with tolerance,
+<tt class="docutils literal"><span class="pre">float_eq(a,b,tol)</span></tt> means <tt class="docutils literal"><span class="pre">abs(a-b)</span> <span class="pre">&lt;</span> <span class="pre">tol</span></tt>
+works for both scalar and array arguments
+(similar functions for other operations exists:
+<tt class="docutils literal"><span class="pre">float_le</span></tt>, <tt class="docutils literal"><span class="pre">float_lt</span></tt>, <tt class="docutils literal"><span class="pre">float_ge</span></tt>, <tt class="docutils literal"><span class="pre">float_gt</span></tt>,
+<tt class="docutils literal"><span class="pre">float_ne</span></tt>)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>cut_noise:</dt>
+<dd><p class="first last">set all small (noise) elements of an array to zero</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>matrix_rank:</dt>
+<dd><p class="first last">compute the rank of a matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>orth:</dt>
+<dd><p class="first last">compute an orthonormal basis from a matrix (taken from
+<tt class="docutils literal"><span class="pre">scipy.linalg</span></tt> to avoid <tt class="docutils literal"><span class="pre">scipy</span></tt> dependence)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>null:</dt>
+<dd><p class="first last">compute the null space of a matrix</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>norm_L2, norm_l2, norm_L1, norm_l1, norm_inf:</dt>
+<dd><p class="first last">discrete and continuous norms for multi-dimensional arrays
+viewed as vectors</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>compute_historgram:</dt>
+<dd><p class="first last">return x and y arrays of a histogram, given a vector of samples</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>seq:</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">seq(a,b,s,</span> <span class="pre">[type])</span></tt> computes numbers from <tt class="docutils literal"><span class="pre">a</span></tt> up to and
+including <tt class="docutils literal"><span class="pre">b</span></tt> in steps of s and (default) type <tt class="docutils literal"><span class="pre">float_</span></tt>;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>iseq:</dt>
+<dd><p class="first last">as <tt class="docutils literal"><span class="pre">seq</span></tt>, but integer counters are computed
+(<tt class="docutils literal"><span class="pre">iseq</span></tt> is an alternative to range where the
+upper limit is included in the sequence - this can
+be important for direct mapping of indices between
+mathematics and Python code);</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="class">
+<dt id="scitools.numpyutils.DiracDelta">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">DiracDelta</tt><big>(</big><em>eps</em>, <em>vectorized=False</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#DiracDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.DiracDelta" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Smoothed Dirac delta function:
+$</div></blockquote>
+<dl class="docutils">
+<dt>rac{1}{2epsilon}(1 + cos(pi x/epsilon)$ when</dt>
+<dd>$xin [-epsilon, epsilon]$ and 0 elsewhere.</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.DiracDelta.__call__" title="scitools.numpyutils.DiracDelta.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.DiracDelta.plot" title="scitools.numpyutils.DiracDelta.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>([center,&nbsp;xmin,&nbsp;xmax])</td>
+<td>Return arrays x, y for plotting the DiracDelta function</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.DiracDelta.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#DiracDelta.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.DiracDelta.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.DiracDelta.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>eps</em>, <em>vectorized=False</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#DiracDelta.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.DiracDelta.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.DiracDelta.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.DiracDelta.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.DiracDelta.plot">
+<tt class="descname">plot</tt><big>(</big><em>center=0</em>, <em>xmin=-1</em>, <em>xmax=1</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#DiracDelta.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.DiracDelta.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return arrays x, y for plotting the DiracDelta function
+centered in <cite>center</cite> on the interval [<cite>xmin</cite>, <cite>xmax</cite>].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.Gram_Schmidt">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">Gram_Schmidt</tt><big>(</big><em>vecs</em>, <em>row_wise_storage=True</em>, <em>tol=1e-10</em>, <em>normalize=False</em>, <em>remove_null_vectors=False</em>, <em>remove_noise=False</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Gram_Schmidt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Gram_Schmidt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the Gram-Schmidt orthogonalization algorithm to a set
+of vectors. vecs is a two-dimensional array where the vectors
+are stored row-wise, or vecs may be a list of vectors, where
+each vector can be a list or a one-dimensional array.</p>
+<p>The argument tol is a tolerance for null vectors (the absolute
+value of all elements must be less than tol to have a null
+vector).</p>
+<p>If normalize is True, the orthogonal vectors are normalized to form
+an orthonormal basis.</p>
+<p>If remove_null_vectors is True, all null vectors are removed from
+the resulting basis.</p>
+<p>If remove_noise is True, all elements whose absolute values are
+less than tol are set to zero.</p>
+<p>An array basis is returned, where basis[i,:] (row_wise_storage
+is True) or basis[:,i] (row_wise_storage is False) is the i-th
+orthogonal vector in the basis.</p>
+<p>This function handles null vectors, see Gram_Schmidt1
+for a (faster) function that does not.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.Gram_Schmidt1">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">Gram_Schmidt1</tt><big>(</big><em>vecs</em>, <em>row_wise_storage=True</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Gram_Schmidt1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Gram_Schmidt1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the Gram-Schmidt orthogonalization algorithm to a set
+of vectors. vecs is a two-dimensional array where the vectors
+are stored row-wise, or vecs may be a list of vectors, where
+each vector can be a list or a one-dimensional array.
+An array basis is returned, where basis[i,:] (row_wise_storage
+is True) or basis[:,i] (row_wise_storage is False) is the i-th
+orthonormal vector in the basis.</p>
+<p>This function does not handle null vectors, see Gram_Schmidt
+for a (slower) function that does.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.Heaviside">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">Heaviside</tt><big>(</big><em>eps=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Heaviside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Heaviside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard and smoothed Heaviside function.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.Heaviside.__call__" title="scitools.numpyutils.Heaviside.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.Heaviside.plot" title="scitools.numpyutils.Heaviside.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>([center,&nbsp;xmin,&nbsp;xmax])</td>
+<td>Return arrays x, y for plotting the Heaviside function</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.Heaviside.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Heaviside.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Heaviside.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.Heaviside.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>eps=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Heaviside.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Heaviside.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.Heaviside.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.Heaviside.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.Heaviside.plot">
+<tt class="descname">plot</tt><big>(</big><em>center=0</em>, <em>xmin=-1</em>, <em>xmax=1</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#Heaviside.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.Heaviside.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return arrays x, y for plotting the Heaviside function
+H(x-<cite>center</cite>) on [<cite>xmin</cite>, <cite>xmax</cite>]. For the exact
+Heaviside function,
+<tt class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">[xmin,</span> <span class="pre">center,</span> <span class="pre">center,</span> <span class="pre">xmax];</span> <span class="pre">y</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">1]</span></tt>,
+while for the smoothed version, the <tt class="docutils literal"><span class="pre">x</span></tt> array
+is computed on basis of the <cite>eps</cite> parameter.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.IndicatorFunction">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">IndicatorFunction</tt><big>(</big><em>interval</em>, <em>eps_L=0</em>, <em>eps_R=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicator function $I(x; L, R)$, which is 1 in $[L, R]$, and 0
+outside. Two parameters <tt class="docutils literal"><span class="pre">eps_L</span></tt> and <tt class="docutils literal"><span class="pre">eps_R</span></tt> can be set
+to provide smoothing of the left and/or right discontinuity
+in the indicator function. The indicator function is
+defined in terms of the Heaviside function (using class
+<a class="reference internal" href="#scitools.numpyutils.Heaviside" title="scitools.numpyutils.Heaviside"><tt class="xref py py-class docutils literal"><span class="pre">Heaviside</span></tt></a>): $I(x; R, L) = H(x-L)H(R-x)$.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.IndicatorFunction.__call__" title="scitools.numpyutils.IndicatorFunction.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.IndicatorFunction.plot" title="scitools.numpyutils.IndicatorFunction.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>([xmin,&nbsp;xmax])</td>
+<td>Return arrays x, y for plotting IndicatorFunction</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.IndicatorFunction.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.IndicatorFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>interval</em>, <em>eps_L=0</em>, <em>eps_R=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>interval</cite> is a 2-tuple/list defining the interval [L, R] where
+the indicator function is 1.
+<cite>eps</cite> is a smoothing parameter: <tt class="docutils literal"><span class="pre">eps=0</span></tt> gives the standard
+discontinuous indicator function, while a value different
+from 0 gives rapid change from 0 to 1 over an interval of
+length 2*`eps`.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.IndicatorFunction.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.IndicatorFunction.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.IndicatorFunction.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.IndicatorFunction.plot">
+<tt class="descname">plot</tt><big>(</big><em>xmin=-1</em>, <em>xmax=1</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#IndicatorFunction.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.IndicatorFunction.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return arrays x, y for plotting IndicatorFunction
+on [<cite>xmin</cite>, <cite>xmax</cite>]. For the exact discontinuous
+indicator function, we typically have
+<tt class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">[xmin,</span> <span class="pre">L,</span> <span class="pre">L,</span> <span class="pre">R,</span> <span class="pre">R,</span> <span class="pre">xmax];</span> <span class="pre">y</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0]</span></tt>,
+while for the smoothed version, the densities of
+coordinates in the <tt class="docutils literal"><span class="pre">x</span></tt> array is computed on basis of the
+<cite>eps</cite> parameter.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.NumPy2BltVector">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">NumPy2BltVector</tt><big>(</big><em>array</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#NumPy2BltVector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">_Pmw.Pmw_1_3.lib.PmwBlt.Vector</span></tt></p>
+<p>Copy a numpy array to a BLT vector:
+# a: some numpy array
+b = NumPy2BltVector(a)  # b is BLT vector
+g = Pmw.Blt.Graph(someframe)
+# send b to g for plotting</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.append" title="scitools.numpyutils.NumPy2BltVector.append"><tt class="xref py py-obj docutils literal"><span class="pre">append</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.blt_sort" title="scitools.numpyutils.NumPy2BltVector.blt_sort"><tt class="xref py py-obj docutils literal"><span class="pre">blt_sort</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.blt_sort_reverse" title="scitools.numpyutils.NumPy2BltVector.blt_sort_reverse"><tt class="xref py py-obj docutils literal"><span class="pre">blt_sort_reverse</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.clear" title="scitools.numpyutils.NumPy2BltVector.clear"><tt class="xref py py-obj docutils literal"><span class="pre">clear</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.count" title="scitools.numpyutils.NumPy2BltVector.count"><tt class="xref py py-obj docutils literal"><span class="pre">count</span></tt></a>(obj)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.delete" title="scitools.numpyutils.NumPy2BltVector.delete"><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.expr" title="scitools.numpyutils.NumPy2BltVector.expr"><tt class="xref py py-obj docutils literal"><span class="pre">expr</span></tt></a>(expression)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.get" title="scitools.numpyutils.NumPy2BltVector.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.index" title="scitools.numpyutils.NumPy2BltVector.index"><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt></a>(value)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.insert" title="scitools.numpyutils.NumPy2BltVector.insert"><tt class="xref py py-obj docutils literal"><span class="pre">insert</span></tt></a>(index,&nbsp;value)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.length" title="scitools.numpyutils.NumPy2BltVector.length"><tt class="xref py py-obj docutils literal"><span class="pre">length</span></tt></a>([newSize])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.max" title="scitools.numpyutils.NumPy2BltVector.max"><tt class="xref py py-obj docutils literal"><span class="pre">max</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.min" title="scitools.numpyutils.NumPy2BltVector.min"><tt class="xref py py-obj docutils literal"><span class="pre">min</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.range" title="scitools.numpyutils.NumPy2BltVector.range"><tt class="xref py py-obj docutils literal"><span class="pre">range</span></tt></a>(first[,&nbsp;last])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.remove" title="scitools.numpyutils.NumPy2BltVector.remove"><tt class="xref py py-obj docutils literal"><span class="pre">remove</span></tt></a>(value)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.reverse" title="scitools.numpyutils.NumPy2BltVector.reverse"><tt class="xref py py-obj docutils literal"><span class="pre">reverse</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.search" title="scitools.numpyutils.NumPy2BltVector.search"><tt class="xref py py-obj docutils literal"><span class="pre">search</span></tt></a>(start[,&nbsp;end])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.set" title="scitools.numpyutils.NumPy2BltVector.set"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>(list)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.NumPy2BltVector.sort" title="scitools.numpyutils.NumPy2BltVector.sort"><tt class="xref py py-obj docutils literal"><span class="pre">sort</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__add__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__cmp__">
+<tt class="descname">__cmp__</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__cmp__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__del__">
+<tt class="descname">__del__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__del__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__delitem__">
+<tt class="descname">__delitem__</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__delslice__">
+<tt class="descname">__delslice__</tt><big>(</big><em>start</em>, <em>end</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__delslice__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__getslice__">
+<tt class="descname">__getslice__</tt><big>(</big><em>start</em>, <em>end</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__getslice__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>array</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#NumPy2BltVector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__len__">
+<tt class="descname">__len__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__len__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.NumPy2BltVector.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__mul__">
+<tt class="descname">__mul__</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__radd__">
+<tt class="descname">__radd__</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__radd__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__repr__">
+<tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__rmul__">
+<tt class="descname">__rmul__</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__rmul__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__setitem__">
+<tt class="descname">__setitem__</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__setslice__">
+<tt class="descname">__setslice__</tt><big>(</big><em>start</em>, <em>end</em>, <em>list</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__setslice__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.append">
+<tt class="descname">append</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.append" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.blt_sort">
+<tt class="descname">blt_sort</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.blt_sort" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.blt_sort_reverse">
+<tt class="descname">blt_sort_reverse</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.blt_sort_reverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.count">
+<tt class="descname">count</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.expr">
+<tt class="descname">expr</tt><big>(</big><em>expression</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.expr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.index">
+<tt class="descname">index</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.insert">
+<tt class="descname">insert</tt><big>(</big><em>index</em>, <em>value</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.length">
+<tt class="descname">length</tt><big>(</big><em>newSize=None</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.max">
+<tt class="descname">max</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.min">
+<tt class="descname">min</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.range">
+<tt class="descname">range</tt><big>(</big><em>first</em>, <em>last=None</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.remove">
+<tt class="descname">remove</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.reverse">
+<tt class="descname">reverse</tt><big>(</big><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.reverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.search">
+<tt class="descname">search</tt><big>(</big><em>start</em>, <em>end=None</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.set">
+<tt class="descname">set</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.NumPy2BltVector.sort">
+<tt class="descname">sort</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.NumPy2BltVector.sort" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.NumPy_array_iterator">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">NumPy_array_iterator</tt><big>(</big><em>a</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#NumPy_array_iterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.NumPy_array_iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all elements in a numpy array a.
+Two return values: a generator function and the code of this function.
+The <tt class="docutils literal"><span class="pre">numpy.ndenumerate</span></tt> iterator performs the same iteration over
+an array, but <tt class="docutils literal"><span class="pre">NumPy_array_iterator</span></tt> has some additional features
+(especially handy for coding finite difference stencils, see next
+paragraph).</p>
+<p>The keyword arguments specify offsets in the start and stop value
+of the index in each dimension. Legal argument names are
+<tt class="docutils literal"><span class="pre">offset0_start</span></tt>, <tt class="docutils literal"><span class="pre">offset0_stop</span></tt>, <tt class="docutils literal"><span class="pre">offset1_start</span></tt>,
+<tt class="docutils literal"><span class="pre">offset1_stop</span></tt>, etc.  Also <tt class="docutils literal"><span class="pre">offset_start</span></tt> and <tt class="docutils literal"><span class="pre">offset_stop</span></tt>
+are legal keyword arguments, these imply the same offset value for
+all dimensions.</p>
+<p>Another keyword argument is <tt class="docutils literal"><span class="pre">no_value</span></tt>, which can be True or False.
+If the value is True, the iterator returns the indices as a tuple,
+otherwise (default) the iterator returns a two-tuple consisting of
+the value of the array and the corresponding indices (as a tuple).</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>  <span class="n">q</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="n">NumPy_array_iterator</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">code</span>  <span class="c"># generator function with 3 nested loops:</span>
+<span class="go">def nested_loops(a):</span>
+<span class="go">    for i0 in xrange(0, a.shape[0]-0):</span>
+<span class="go">        for i1 in xrange(0, a.shape[1]-0):</span>
+<span class="go">            for i2 in xrange(0, a.shape[2]-0):</span>
+<span class="go">                yield a[i0, i1, i2], (i0, i1, i2)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+<span class="go">&lt;type &#39;function&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">it</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;a</span><span class="si">%s</span><span class="s"> = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">a(0, 0, 0) = 1</span>
+<span class="go">a(0, 0, 1) = 2</span>
+<span class="go">a(0, 0, 2) = 3</span>
+<span class="go">a(0, 0, 3) = 4</span>
+<span class="go">a(0, 1, 0) = 5</span>
+<span class="go">a(0, 1, 1) = 6</span>
+<span class="go">a(0, 1, 2) = 7</span>
+<span class="go">a(0, 1, 3) = 8</span>
+<span class="go">a(0, 2, 0) = 9</span>
+<span class="go">a(0, 2, 1) = 10</span>
+<span class="go">a(0, 2, 2) = 11</span>
+<span class="go">a(0, 2, 3) = 12</span>
+<span class="go">a(1, 0, 0) = 13</span>
+<span class="go">a(1, 0, 1) = 14</span>
+<span class="go">a(1, 0, 2) = 15</span>
+<span class="go">a(1, 0, 3) = 16</span>
+<span class="go">a(1, 1, 0) = 17</span>
+<span class="go">a(1, 1, 1) = 18</span>
+<span class="go">a(1, 1, 2) = 19</span>
+<span class="go">a(1, 1, 3) = 20</span>
+<span class="go">a(1, 2, 0) = 21</span>
+<span class="go">a(1, 2, 1) = 22</span>
+<span class="go">a(1, 2, 2) = 23</span>
+<span class="go">a(1, 2, 3) = 24</span>
+</pre></div>
+</div>
+<p>Here is the version where only the indices and no the values
+are returned by the iterator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>  <span class="n">q</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">it</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="n">NumPy_array_iterator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">no_value</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">code</span>
+<span class="go">def nested_loops(a):</span>
+<span class="go">    for i0 in xrange(0, a.shape[0]-0):</span>
+<span class="go">        for i1 in xrange(0, a.shape[1]-0):</span>
+<span class="go">            yield i0, i1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="n">it</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">print</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="go">0 0</span>
+<span class="go">0 1</span>
+<span class="go">0 2</span>
+</pre></div>
+</div>
+<p>Now let us try some offsets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">it</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="n">NumPy_array_iterator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">offset1_stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset_start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">code</span>
+<span class="go">def nested_loops(a):</span>
+<span class="go">    for i0 in xrange(1, a.shape[0]-0):</span>
+<span class="go">        for i1 in xrange(1, a.shape[1]-1):</span>
+<span class="go">            for i2 in xrange(1, a.shape[2]-0):</span>
+<span class="go">                yield a[i0, i1, i2], (i0, i1, i2)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># note: the offsets appear in the xrange arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">it</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;a</span><span class="si">%s</span><span class="s"> = </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">a(1, 1, 1) = 18</span>
+<span class="go">a(1, 1, 2) = 19</span>
+<span class="go">a(1, 1, 3) = 20</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.PiecewiseConstant">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">PiecewiseConstant</tt><big>(</big><em>domain</em>, <em>data</em>, <em>eps=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#PiecewiseConstant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a piecewise constant function.
+The discontinuities can be smoothed out.
+In this latter case the piecewise constant function is represented
+as a sum of indicator functions (<a class="reference internal" href="#scitools.numpyutils.IndicatorFunction" title="scitools.numpyutils.IndicatorFunction"><tt class="xref py py-class docutils literal"><span class="pre">IndicatorFunction</span></tt></a>)
+times corresponding values.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.PiecewiseConstant.__call__" title="scitools.numpyutils.PiecewiseConstant.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(x)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.numpyutils.PiecewiseConstant.plot" title="scitools.numpyutils.PiecewiseConstant.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.PiecewiseConstant.value" title="scitools.numpyutils.PiecewiseConstant.value"><tt class="xref py py-obj docutils literal"><span class="pre">value</span></tt></a>(x)</td>
+<td>Alternative implementation to __call__.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.PiecewiseConstant.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#PiecewiseConstant.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.PiecewiseConstant.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>domain</em>, <em>data</em>, <em>eps=0</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#PiecewiseConstant.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.PiecewiseConstant.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.PiecewiseConstant.plot">
+<tt class="descname">plot</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#PiecewiseConstant.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.PiecewiseConstant.value">
+<tt class="descname">value</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#PiecewiseConstant.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.PiecewiseConstant.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternative implementation to __call__.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.WrapDiscreteData2Callable">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">WrapDiscreteData2Callable</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapDiscreteData2Callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapDiscreteData2Callable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn discrete data on a uniform grid into a callable function,
+i.e., equip the data with an interpolation function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">WrapDiscreteData2Callable</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># or just use the wrap2callable generic function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>   <span class="c"># evaluate f(x) by interpolation</span>
+<span class="go">1.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>  <span class="c"># discrete data with extra time prm: f(x,t)</span>
+<span class="go">1.5</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.WrapDiscreteData2Callable.__call__" title="scitools.numpyutils.WrapDiscreteData2Callable.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(*args)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.WrapDiscreteData2Callable.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapDiscreteData2Callable.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapDiscreteData2Callable.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.WrapDiscreteData2Callable.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapDiscreteData2Callable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapDiscreteData2Callable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.WrapDiscreteData2Callable.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.WrapDiscreteData2Callable.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.numpyutils.WrapNo2Callable">
+<em class="property">class </em><tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">WrapNo2Callable</tt><big>(</big><em>constant</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapNo2Callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapNo2Callable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a number (constant) into a callable function.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.numpyutils.WrapNo2Callable.__call__" title="scitools.numpyutils.WrapNo2Callable.__call__"><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt></a>(*args)</td>
+<td><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">WrapNo2Callable</span><span class="p">(</span><span class="mf">4.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.numpyutils.WrapNo2Callable.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapNo2Callable.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapNo2Callable.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">WrapNo2Callable</span><span class="p">(</span><span class="mf">4.4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+<span class="go">4.4000000000000004</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># try vectorized computations:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span><span class="n">NewAxis</span><span class="p">];</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">NewAxis</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span> <span class="o">+</span> <span class="n">yv</span>
+<span class="go">array([[ 2.,  3.],</span>
+<span class="go">       [ 3.,  4.],</span>
+<span class="go">       [ 4.,  5.],</span>
+<span class="go">       [ 5.,  6.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">)</span>
+<span class="go">array([[ 4.4,  4.4],</span>
+<span class="go">       [ 4.4,  4.4],</span>
+<span class="go">       [ 4.4,  4.4],</span>
+<span class="go">       [ 4.4,  4.4]])</span>
+</pre></div>
+</div>
+<p>If you want to call such a function object with space-time
+arguments and vectorized expressions, make sure the time
+argument is not the first argument. That is,
+w(xv, yv, t) is fine, but w(t, xv, yv) will return 4.4,
+not the desired array!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.numpyutils.WrapNo2Callable.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>constant</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#WrapNo2Callable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.WrapNo2Callable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.numpyutils.WrapNo2Callable.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.numpyutils'</em><a class="headerlink" href="#scitools.numpyutils.WrapNo2Callable.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.arr">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">arr</tt><big>(</big><em>shape=None</em>, <em>element_type=&lt;type 'float'&gt;</em>, <em>interval=None</em>, <em>data=None</em>, <em>copy=True</em>, <em>file_=None</em>, <em>order='C'</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#arr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.arr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compact and flexible interface for creating numpy arrays,
+including several consistency and error checks.</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>shape</em>: length of each dimension, tuple or int</li>
+<li><em>data</em>: list, tuple, or numpy array with data elements</li>
+<li><em>copy</em>: copy data if true, share data if false, boolean</li>
+<li><em>element_type</em>: float, int, int16, float64, bool, etc.</li>
+<li><em>interval</em>: make elements from a to b (shape gives no of elms), tuple or list</li>
+<li><em>file_</em>: filename or file object containing array data, string</li>
+<li><em>order</em>: &#8216;Fortran&#8217; or &#8216;C&#8217; storage, string</li>
+<li>return value: created Numerical Python array</li>
+</ul>
+</div></blockquote>
+<p>The array can be created in four ways:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>as zeros (just shape specified),</li>
+<li>as uniformly spaced coordinates in an interval [a,b]</li>
+<li>as a copy of or reference to (depending on copy=True,False resp.)
+a list, tuple, or numpy array (provided as the data argument),</li>
+<li>from data in a file (for one- or two-dimensional real-valued arrays).</li>
+</ol>
+</div></blockquote>
+<p>The function calls the underlying numpy functions zeros, array and
+linspace (see the numpy manual for the functionality of these
+functions).  In case of data in a file, the first line determines
+the number of columns in the array. The file format is just rows
+and columns with numbers, no decorations (square brackets, commas,
+etc.) are allowed.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="go">array([[ 0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span>  <span class="c"># integer array</span>
+<span class="go">array([4, 4, 4, 4])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">array([ 0.,  1.,  2.])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">somelist</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">somelist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>  <span class="c"># a has always float elements by default</span>
+<span class="go">array([[ 0.,  1.],</span>
+<span class="go">       [ 5.,  5.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">somelist</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([[0, 1],</span>
+<span class="go">       [5, 5]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">arr</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c"># let c share data with b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="ow">is</span> <span class="n">c</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># make a file with array data:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&#39;&#39;    ... 1 3</span>
+<span class="gp">... </span><span class="s">2 6</span>
+<span class="gp">... </span><span class="s">3 12</span>
+<span class="gp">... </span><span class="s">3.5 20</span>
+<span class="gp">... </span><span class="s">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># read array data from file:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="p">(</span><span class="n">file_</span><span class="o">=</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([[  1. ,   3. ],</span>
+<span class="go">       [  2. ,   6. ],</span>
+<span class="go">       [  3. ,  12. ],</span>
+<span class="go">       [  3.5,  20. ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.asarray_cpwarn">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">asarray_cpwarn</tt><big>(</big><em>a</em>, <em>dtype=None</em>, <em>message='warning'</em>, <em>comment=''</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#asarray_cpwarn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.asarray_cpwarn" title="Permalink to this definition">¶</a></dt>
+<dd><p>As asarray, but a warning or exception is issued if the
+a array is copied.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.compute_histogram">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">compute_histogram</tt><big>(</big><em>samples</em>, <em>nbins=50</em>, <em>piecewise_constant=True</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#compute_histogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.compute_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a numpy array samples with random samples, this function
+returns the (x,y) arrays in a plot-ready version of the histogram.
+If piecewise_constant is True, the (x,y) arrays gives a piecewise
+constant curve when plotted, otherwise the (x,y) arrays gives a
+piecewise linear curve where the x coordinates coincide with the
+center points in each bin. The function makes use of
+numpy.lib.function_base.histogram with some additional code
+(for a piecewise curve or displaced x values to the centes of
+the bins).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.cut_noise">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">cut_noise</tt><big>(</big><em>a</em>, <em>tol=1e-10</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#cut_noise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.cut_noise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set elements in array a to zero if the absolute value is
+less than tol.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.factorial">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">factorial</tt><big>(</big><em>n</em>, <em>method='reduce'</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#factorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.factorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the factorial n! using long integers (and pure Python code).
+Different implementations are available (see source code for
+implementation details).</p>
+<p>Note: The math module in Python 2.6 features a factorial
+function, making the present function redundant (except that
+the various pure Python implementations can be of interest
+for comparison).</p>
+<p>Here is an efficiency comparison of the methods (computing 80!):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Normalized CPU time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>reduce</td>
+<td>1.00</td>
+</tr>
+<tr class="row-odd"><td>lambda list comprehension</td>
+<td>1.70</td>
+</tr>
+<tr class="row-even"><td>lambda functional</td>
+<td>3.08</td>
+</tr>
+<tr class="row-odd"><td>plain recursive</td>
+<td>5.83</td>
+</tr>
+<tr class="row-even"><td>lambda recursive</td>
+<td>21.73</td>
+</tr>
+<tr class="row-odd"><td>scipy</td>
+<td>131.18</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.factorize_tridiag_matrix">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">factorize_tridiag_matrix</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#factorize_tridiag_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.factorize_tridiag_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the factorization step only in solving a tridiagonal
+linear system. See the function solve_tridiag_linear_system
+for how the matrix <em>A</em> is stored.
+Two arrays, <em>c</em> and <em>d</em>, are returned, and these represent,
+together with superdiagonal <em>A[:-1,2]</em>, the factorized form of
+<em>A</em>. To solve a system with <tt class="docutils literal"><span class="pre">solve_tridiag_factored_system</span></tt>,
+<em>A</em>, <em>c</em>, and <em>d</em> must be passed as arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.iseq">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">iseq</tt><big>(</big><em>start=0</em>, <em>stop=None</em>, <em>inc=1</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#iseq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.iseq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate integers from start to (and including) stop,
+with increment of inc. Alternative to range/xrange.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.isequence">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">isequence</tt><big>(</big><em>start=0</em>, <em>stop=None</em>, <em>inc=1</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.isequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate integers from start to (and including) stop,
+with increment of inc. Alternative to range/xrange.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.length">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">length</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the largest dimension of array a.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.matrix_rank">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">matrix_rank</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#matrix_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.matrix_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rank of a matrix A (rank means an estimate of
+the number of linearly independent rows or columns).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.meshgrid">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">meshgrid</tt><big>(</big><em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>sparse=False</em>, <em>indexing='xy'</em>, <em>memoryorder=None</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#meshgrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.meshgrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extension of <tt class="docutils literal"><span class="pre">numpy.meshgrid</span></tt> to 1D, 2D and 3D problems, and also
+support of both &#8220;matrix&#8221; and &#8220;grid&#8221; numbering.</p>
+<p>This extended version makes 1D/2D/3D coordinate arrays for
+vectorized evaluations of 1D/2D/3D scalar/vector fields over
+1D/2D/3D grids, given one-dimensional coordinate arrays x, y,
+and/or, z.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">=</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>        <span class="c"># coordinates along x axis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">=</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>        <span class="c"># coordinates along y axis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>   <span class="c"># extend x and y for a 2D xy grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span>
+<span class="go">array([[ 0. ,  0.5,  1. ],</span>
+<span class="go">       [ 0. ,  0.5,  1. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span>
+<span class="go">array([[ 0.,  0.,  0.],</span>
+<span class="go">       [ 1.,  1.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># make sparse output arrays</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span>
+<span class="go">array([[ 0. ,  0.5,  1. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span>
+<span class="go">array([[ 0.],</span>
+<span class="go">       [ 1.]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># 2D slice of a 3D grid, with z=const:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">zc</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span>
+<span class="go">array([[ 0. ,  0.5,  1. ],</span>
+<span class="go">       [ 0. ,  0.5,  1. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span>
+<span class="go">array([[ 0.,  0.,  0.],</span>
+<span class="go">       [ 1.,  1.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zc</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># 2D slice of a 3D grid, with x=const:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meshgrid</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<span class="go">(2, array([[ 0.,  1.],</span>
+<span class="go">       [ 0.,  1.],</span>
+<span class="go">       [ 0.,  1.]]), array([[ 0. ,  0. ],</span>
+<span class="go">       [ 0.5,  0.5],</span>
+<span class="go">       [ 1. ,  1. ]]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meshgrid</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># just a 3D point</span>
+<span class="go">(0, 1, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meshgrid</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>      <span class="c"># 1D grid; y is just returned</span>
+<span class="go">array([ 0.,  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s">&#39;ij&#39;</span><span class="p">)</span>  <span class="c"># change to matrix indexing</span>
+<span class="go">(array([[ 0. ,  0. ],</span>
+<span class="go">       [ 0.5,  0.5],</span>
+<span class="go">       [ 1. ,  1. ]]), array([[ 0.,  1.],</span>
+<span class="go">       [ 0.,  1.],</span>
+<span class="go">       [ 0.,  1.]]))</span>
+</pre></div>
+</div>
+<p>Why does SciTools has its own meshgrid function when numpy has
+three similar functions, <tt class="docutils literal"><span class="pre">mgrid</span></tt>, <tt class="docutils literal"><span class="pre">ogrid</span></tt>, and <tt class="docutils literal"><span class="pre">meshgrid</span></tt>?
+The <tt class="docutils literal"><span class="pre">meshgrid</span></tt> function in numpy is limited to two dimensions
+only, while the SciTools version can also work with 3D and 1D
+grids. In addition, the numpy version of <tt class="docutils literal"><span class="pre">meshgrid</span></tt> has no
+option for generating sparse grids to conserve memory, like we
+have in SciTools by specifying the <tt class="docutils literal"><span class="pre">sparse</span></tt> argument.</p>
+<p>Moreover, the numpy functions <tt class="docutils literal"><span class="pre">mgrid</span></tt> and <tt class="docutils literal"><span class="pre">ogrid</span></tt> does provide
+support for, respectively, full and sparse n-dimensional
+meshgrids, however, these functions uses slices to generate the
+meshgrids rather than one-dimensional coordinate arrays such as in
+Matlab. With slices, the user does not have the option to generate
+meshgrid with, e.g., irregular spacings, like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span>
+<span class="go">array([[-1. , -0.5,  1. ,  4. ,  5. ],</span>
+<span class="go">       [-1. , -0.5,  1. ,  4. ,  5. ],</span>
+<span class="go">       [-1. , -0.5,  1. ,  4. ,  5. ]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span>
+<span class="go">array([[ 0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [-2., -2., -2., -2., -2.],</span>
+<span class="go">       [-5., -5., -5., -5., -5.]])</span>
+</pre></div>
+</div>
+<p>In addition to the reasons mentioned above, the <tt class="docutils literal"><span class="pre">meshgrid</span></tt>
+function in numpy supports only Cartesian indexing, i.e., x and y,
+not matrix indexing, i.e., rows and columns (on the other hand,
+<tt class="docutils literal"><span class="pre">mgrid</span></tt> and <tt class="docutils literal"><span class="pre">ogrid</span></tt> supports only matrix indexing). The
+<tt class="docutils literal"><span class="pre">meshgrid</span></tt> function in SciTools supports both indexing
+conventions through the <tt class="docutils literal"><span class="pre">indexing</span></tt> keyword argument. Giving the
+string <tt class="docutils literal"><span class="pre">'ij'</span></tt> returns a meshgrid with matrix indexing, while
+<tt class="docutils literal"><span class="pre">'xy'</span></tt> returns a meshgrid with Cartesian indexing. The
+difference is illustrated by the following code snippet:</p>
+<div class="highlight-python"><pre>nx = 10
+ny = 15
+
+x = linspace(-2,2,nx)
+y = linspace(-2,2,ny)
+
+xv, yv = meshgrid(x, y, sparse=False, indexing='ij')
+for i in range(nx):
+    for j in range(ny):
+        # treat xv[i,j], yv[i,j]
+
+xv, yv = meshgrid(x, y, sparse=False, indexing='xy')
+for i in range(nx):
+    for j in range(ny):
+        # treat xv[j,i], yv[j,i]</pre>
+</div>
+<p>It is not entirely true that matrix indexing is not supported by the
+<tt class="docutils literal"><span class="pre">meshgrid</span></tt> function in numpy because we can just switch the order of
+the first two input and output arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span><span class="p">,</span> <span class="n">xv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># same as:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s">&#39;ij&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, we think it is clearer to have the logical &#8220;x, y&#8221;
+sequence on the left-hand side and instead adjust a keyword argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.ndgrid">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">ndgrid</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#ndgrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.ndgrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as calling <tt class="docutils literal"><span class="pre">meshgrid</span></tt> with <em>indexing</em> = <tt class="docutils literal"><span class="pre">'ij'</span></tt> (see
+<tt class="docutils literal"><span class="pre">meshgrid</span></tt> for documentation).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.norm_L1">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">norm_L1</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#norm_L1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.norm_L1" title="Permalink to this definition">¶</a></dt>
+<dd><p>L1 norm of a multi-dimensional array u viewed as a vector:
+<tt class="docutils literal"><span class="pre">norm_l1(u)/float(u.size)</span></tt>.</p>
+<p>If <em>u</em> holds function values and the norm of u is supposed to
+approximate an integral (L1 norm) of the function, this (and
+not norm_l1) is the right norm function to use.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.norm_L2">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">norm_L2</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#norm_L2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.norm_L2" title="Permalink to this definition">¶</a></dt>
+<dd><p>L2 norm of a multi-dimensional array u viewed as a vector
+(norm is norm_l2/n, where n is length of u (no of elements)).</p>
+<p>If u holds function values and the norm of u is supposed to
+approximate an integral (L2 norm) of the function, this (and
+not norm_l2) is the right norm function to use.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.norm_inf">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">norm_inf</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#norm_inf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.norm_inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinity/max norm of a multi-dimensional array u viewed as a vector.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.norm_l1">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">norm_l1</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#norm_l1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.norm_l1" title="Permalink to this definition">¶</a></dt>
+<dd><p>l1 norm of a multi-dimensional array u viewed as a vector:
+<tt class="docutils literal"><span class="pre">linalg.norm(u.ravel(),1)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.norm_l2">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">norm_l2</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#norm_l2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.norm_l2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard l2 norm of a multi-dimensional array u viewed as a vector.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.null">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">null</tt><big>(</big><em>A</em>, <em>tol=1e-10</em>, <em>row_wise_storage=True</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#null"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.null" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the null space of a matrix A.
+If row_wise_storage is True, a two-dimensional array where the
+vectors that span the null space are stored as rows, otherwise
+they are stored as columns.</p>
+<p>Code by Bastian Weber based on code by Robert Kern and Ryan Krauss.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.orth">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">orth</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#orth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.orth" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Plain copy from scipy.linalg.orth - this one here applies numpy.svd
+and avoids the need for having scipy installed.)</p>
+<p>Construct an orthonormal basis for the range of A using SVD.</p>
+<p>&#64;param A: array, shape (M, N)
+&#64;return:</p>
+<blockquote>
+<div>Q : array, shape (M, K)
+Orthonormal basis for the range of A.
+K = effective rank of A, as determined by automatic cutoff</div></blockquote>
+<p>see also svd (singular value decomposition of a matrix in scipy.linalg)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.seq">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">seq</tt><big>(</big><em>min=0.0</em>, <em>max=None</em>, <em>inc=1.0</em>, <em>type=&lt;type 'float'&gt;</em>, <em>return_type='NumPyArray'</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#seq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate numbers from min to (and including!) max,
+with increment of inc. Safe alternative to arange.
+The return_type string governs the type of the returned
+sequence of numbers (&#8216;NumPyArray&#8217;, &#8216;list&#8217;, or &#8216;tuple&#8217;).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.sequence">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">sequence</tt><big>(</big><em>min=0.0</em>, <em>max=None</em>, <em>inc=1.0</em>, <em>type=&lt;type 'float'&gt;</em>, <em>return_type='NumPyArray'</em><big>)</big><a class="headerlink" href="#scitools.numpyutils.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate numbers from min to (and including!) max,
+with increment of inc. Safe alternative to arange.
+The return_type string governs the type of the returned
+sequence of numbers (&#8216;NumPyArray&#8217;, &#8216;list&#8217;, or &#8216;tuple&#8217;).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.solve_tridiag_factored_system">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">solve_tridiag_factored_system</tt><big>(</big><em>b</em>, <em>A</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#solve_tridiag_factored_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.solve_tridiag_factored_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>The backsubsitution part of solving a tridiagonal linear system.
+The right-hand side is b, while <em>A</em>, <em>c</em>, and <em>d</em> represent the
+factored matrix (see the factorize_tridiag_matrix function).
+The solution x to A*x=b is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.solve_tridiag_linear_system">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">solve_tridiag_linear_system</tt><big>(</big><em>A</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#solve_tridiag_linear_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.solve_tridiag_linear_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve an n times n tridiagonal linear system of the form:</p>
+<div class="highlight-python"><pre>A[0,1]*x[0] + A[0,2]*x[1]                                        = 0
+A[1,0]*x[0] + A[1,1]*x[1] + A[1,2]*x[2]                          = 0
+...
+...
+         A[k,0]*x[k-1] + A[k,1]*x[k] + A[k,2]*x[k+1]             = 0
+...
+             A[n-2,0]*x[n-3] + A[n-2,1]*x[n-2] + A[n-2,2]*x[n-1] = 0
+...
+                               A[n-1,0]*x[n-2] + A[n-1,1]*x[n-1] = 0</pre>
+</div>
+<p>The diagonal of the coefficent matrix is stored in A[:,1],
+the subdiagonal is stored in A[1:,0], and the superdiagonal
+is stored in A[:-1,2].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.numpyutils.wrap2callable">
+<tt class="descclassname">scitools.numpyutils.</tt><tt class="descname">wrap2callable</tt><big>(</big><em>f</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/numpyutils.html#wrap2callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.numpyutils.wrap2callable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow constants, string formulas, discrete data points,
+user-defined functions and (callable) classes to be wrapped
+in a new callable function. That is, all the mentioned data
+structures can be used as a function, usually of space and/or
+time.
+(kwargs is used for string formulas)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="s">&#39;1+2*x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="s">&#39;1+2*t&#39;</span><span class="p">,</span> <span class="n">independent_variable</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f4</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="s">&#39;a+b*t&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f4</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;a&#39; is not defined</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f4</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="s">&#39;a+b*t&#39;</span><span class="p">,</span> <span class="n">independent_variable</span><span class="o">=</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f4</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f5</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f5</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>  <span class="k">return</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f6</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f6</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f7</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f7</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+<span class="go">        &#39;Representation of a function f(x; a, b) =a + b*x&#39;</span>
+<span class="go">        def __init__(self, a=1, b=1):</span>
+<span class="go">            self.a = a;  self.b = b</span>
+<span class="go">        def __call__(self, x):</span>
+<span class="go">            return self.a + self.b*x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myclass</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f8</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="n">myclass</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f8</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># 3D functions:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f9</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="s">&#39;1+2*x+3*y+4*z&#39;</span><span class="p">,</span> <span class="n">independent_variables</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f9</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># discrete 3D data:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="n">z</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xv</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yv</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zv</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>  <span class="k">return</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">y</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">z</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">myfunc3</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">zv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f10</span> <span class="o">=</span> <span class="n">wrap2callable</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f10</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
+<p>One can also check what the object is wrapped as and do more
+specific operations, e.g.,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f9</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;StringFunction&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">f9</span><span class="p">)</span>     <span class="c"># look at function formula</span>
+<span class="go">&#39;1+2*x+3*y+4*z&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f8</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+<span class="go">&#39;MyClass&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f8</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">f8</span><span class="o">.</span><span class="n">b</span>  <span class="c"># access MyClass-specific data</span>
+<span class="go">(1, 2)</span>
+</pre></div>
+</div>
+<p>Troubleshooting regarding string functions:
+If you use a string formula with a numpy array, you typically get
+error messages like:</p>
+<div class="highlight-python"><pre>TypeError: only rank-0 arrays can be converted to Python scalars.</pre>
+</div>
+<p>You must then make the right import (numpy is recommended):</p>
+<div class="highlight-python"><pre>from Numeric/numarray/numpy/scitools.numpytools import *</pre>
+</div>
+<p>in the calling code and supply the keyword argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>to wrap2callable. See also the documentation of class StringFunction
+for more information.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">scitools.numpyutils</span></tt></a><ul>
+<li><a class="reference internal" href="#functionality-of-this-module-that-extends-numerical-python">Functionality of this module that extends Numerical Python</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/numpyutils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+
+:mod:`scitools.errorcheck`
+==========================
+
+.. automodule:: scitools.errorcheck
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

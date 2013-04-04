@@ -1,0 +1,208 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.globaldata &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.misc" href="misc.html" />
+    <link rel="prev" title="scitools.filetable" href="filetable.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="scitools.misc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filetable.html" title="scitools.filetable"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.globaldata">
+<span id="scitools-globaldata"></span><h1><a class="reference internal" href="#module-scitools.globaldata" title="scitools.globaldata"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.globaldata</span></tt></a><a class="headerlink" href="#module-scitools.globaldata" title="Permalink to this headline">¶</a></h1>
+<p>Holds global data SAFECODE, VERBOSE, DEBUG, OPTIMIZATION, backend
+in the scitools package, loaded from a configuration file.
+(This module also demonstrate how to work with global parameters
+accross a package in Python.)</p>
+<p>The default configuration file looks like this:</p>
+<p>; Default configuration file scitools.cfg
+;
+; Items in this default file can be overridden by 
+;   .scitools.cfg in the directory where the Python program is started
+;   .scitools.cfg in the user&#8217;s home directory</p>
+<p>; Some variables in this file can also be overridden by environment
+; variables. The name of the environment variable is 
+; prefix_section_option, where section and option are the section and
+; option names as given below and prefix is set below.
+; Examples: SCITOOLS_globals_VERBOSE, SCITOOLS_easyviz_backend</p>
+<p>[modes]
+; Enable setting variables by environment variables with
+; prefix_variablename, e.g., SCITOOLS_globals_DEBUG
+envir prefix = SCITOOLS</p>
+<p>; Enable reading from command line through &#8211;variablename option, 
+; e.g., &#8211;SCITOOLS_globals_DEBUG
+; (such command-line options and values are removed from sys.argv
+; after being read such that the rest of the code is not affected)
+command line arguments = on</p>
+<p>[globals]
+SAFECODE     = &lt;bool&gt; on    ; boolean: safety checks or not
+OPTIMIZATION = &lt;str&gt;  off   ; &#8216;F77&#8217;, &#8216;C&#8217;, &#8216;vectorization&#8217;, &#8216;on&#8217;, etc.
+VERBOSE      = &lt;int&gt;  0     ; an int for the level of verbosity in output
+DEBUG        = &lt;int&gt;  0     ; debug level (0=off)
+; python -O implies that DEBUG is set to 0</p>
+<p>[scipy]
+;load = &lt;bool&gt; yes           ; yes: from scipy import * (may have side effects)
+load = &lt;bool&gt; no         ; yes: from scipy import * (may have side effects)</p>
+<p>[numpy]              
+numpytools = &lt;bool&gt; no   ; no: load numpy and numpyutils, yes: load numpytools</p>
+<p>; Configuration of SciPy/NumPy: see documentation of scitools.basics</p>
+<p>[easyviz]
+backend     = matplotlib  ; default backend
+; backends are gnuplot, matplotlib, matlab, veusz, grace, dx, pyx, vtk
+show        = &lt;bool&gt; yes  ; screenplot after each plot command
+interactive = &lt;bool&gt; yes  ; update backend after each change
+color       = &lt;bool&gt; no   ; hardcopy with color?
+linestyleorder = &lt;eval&gt; [&#8216;-&#8216;] ; line styles for plots with multiple lines
+colororder  = &lt;eval&gt; [&#8216;b&#8217;,&#8217;g&#8217;,&#8217;r&#8217;,&#8217;c&#8217;,&#8217;m&#8217;,&#8217;y&#8217;,&#8217;k&#8217;] ; same for colors
+clevels     = &lt;int&gt; 8     ; default number of contour levels in a contour plot
+hold        = &lt;bool&gt; off  ; hold or clear plot between plotting commands
+grid        = &lt;bool&gt; off  ; turn grid on or off by default
+box         = &lt;bool&gt; off  ; box around boundaries of the axes
+hidden      = &lt;bool&gt; on   ; use hidden line removal on meshes
+colormap    = &lt;eval&gt; None ; default colormap
+fontsize    = &lt;int&gt; 12    ; font size used in titles, labels, ...
+fontname    = &lt;str&gt; Helvetica  ; font used for titles, labels, ...
+fgcolor     = &lt;eval&gt; (0,0,0)   ; foreground color (titles, labels, axes, ...)
+bgcolor     = &lt;eval&gt; (1,1,1)   ; axis background color 
+cblocation  = &lt;str&gt; EastOutside  ; default location for a color bar
+size        = &lt;eval&gt; [None,None] ; default figure size</p>
+<p>[gnuplot]
+; See gp_unix.py in the Gnuplot.py source for details about the meaning
+; of these options.
+;gnuplot_command            = &lt;str&gt; gnuplot
+;recognizes_persist         = &lt;eval&gt; None
+prefer_persist             = &lt;int&gt; 1
+;recognizes_binary_splot    = &lt;int&gt; 1
+;prefer_inline_data         = &lt;int&gt; 0
+;support_fifo               = &lt;int&gt; 1
+;prefer_fifo_data           = &lt;int&gt; 1
+;default_term               = &lt;str&gt; x11
+;default_term               = &lt;str&gt; wxt   ; wxWidgets
+;default_lpr                = &lt;str&gt; | lpr
+;prefer_enhanced_postscript = &lt;int&gt; 1</p>
+<p>[matplotlib]
+; Override values from the matplotlib configuration file
+backend     = TkAgg  ; default backend
+; other backends are ps, Qt4Agg, GTK, GTKAgg, svg, agg, cairo, MacOSX, GTKCairo, WXAgg, TkAgg, QtAgg, FltkAgg, pdf, CocoaAgg, emf, gdk, template, WX
+;font.size   = &lt;int&gt; 10
+;axes.labelsize = &lt;int&gt; 10
+;text.fontsize = &lt;int&gt; 10
+;xtick.labelsize = &lt;int&gt; 8
+;ytick.labelsize = &lt;int&gt; 8
+text.usetex = &lt;bool&gt; false  ; use LaTeX or not</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filetable.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.filetable</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="misc.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.misc</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/globaldata.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="scitools.misc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filetable.html" title="scitools.filetable"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

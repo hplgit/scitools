@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.vtk_ &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="prev" title="scitools.easyviz.visit_" href="visit_.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visit_.html" title="scitools.easyviz.visit_"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.vtk_">
+<span id="scitools-easyviz-vtk"></span><h1><a class="reference internal" href="#module-scitools.easyviz.vtk_" title="scitools.easyviz.vtk_"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.easyviz.vtk_</span></tt></a><a class="headerlink" href="#module-scitools.easyviz.vtk_" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="scitools.easyviz.vtk_.VtkBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.vtk_.</tt><tt class="descname">VtkBackend</tt><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="common.html#scitools.easyviz.common.BaseClass" title="scitools.easyviz.common.BaseClass"><tt class="xref py py-class docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<p>Backend using VTK.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.autumn" title="scitools.easyviz.vtk_.VtkBackend.autumn"><tt class="xref py py-obj docutils literal"><span class="pre">autumn</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">axes</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in specified positions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Choose the axis limits and appearance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bar</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a bar graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.blue_to_yellow" title="scitools.easyviz.vtk_.VtkBackend.blue_to_yellow"><tt class="xref py py-obj docutils literal"><span class="pre">blue_to_yellow</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bone</span></tt>([m])</td>
+<td>Gray-scale with a tinge of blue color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">box</span></tt>(*args)</td>
+<td>Display a box around the boundaries of the current axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.brighten" title="scitools.easyviz.vtk_.VtkBackend.brighten"><tt class="xref py py-obj docutils literal"><span class="pre">brighten</span></tt></a>(*args)</td>
+<td>Brighten or darken color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camdolly</span></tt>(*args)</td>
+<td>Dolly camera.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlight</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create or set position of a light.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlookat</span></tt>(*args)</td>
+<td>Move camera and target to view specified objects.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">campos</span></tt>(*args)</td>
+<td>Camera position.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camproj</span></tt>(*args)</td>
+<td>Camera projection.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camroll</span></tt>(*args)</td>
+<td>Roll camera.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camtarget</span></tt>(*args)</td>
+<td>Camera target.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camup</span></tt>(*args)</td>
+<td>Camera up vector.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camva</span></tt>(*args)</td>
+<td>Camera view angle.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camzoom</span></tt>(*args)</td>
+<td>Zoom camera.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">caxis</span></tt>(*args)</td>
+<td>Set the limits for the color axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">cla</span></tt>(*args)</td>
+<td>Clear the current axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">clabel</span></tt>(*args)</td>
+<td>Control labeling of contours.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.clf" title="scitools.easyviz.vtk_.VtkBackend.clf"><tt class="xref py py-obj docutils literal"><span class="pre">clf</span></tt></a>()</td>
+<td>Clear current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt>(*args)</td>
+<td>Close figure.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.closefig" title="scitools.easyviz.vtk_.VtkBackend.closefig"><tt class="xref py py-obj docutils literal"><span class="pre">closefig</span></tt></a>(num)</td>
+<td>Close figure window with number &#8216;num&#8217;.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.closefigs" title="scitools.easyviz.vtk_.VtkBackend.closefigs"><tt class="xref py py-obj docutils literal"><span class="pre">closefigs</span></tt></a>()</td>
+<td>Close all figure windows.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colorbar</span></tt>(*args)</td>
+<td>Display a color bar.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">colorcube</span></tt>([m])</td>
+<td>Enhanced color-cube color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormap</span></tt>(*args)</td>
+<td>Specify colormap.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">coneplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D cone plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D contour plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw 3D contour plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled contour plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw contour lines in slice planes.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">cool</span></tt>([m])</td>
+<td>Shades of cyan and magenta color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">copper</span></tt>([m])</td>
+<td>Linear copper-tone color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">daspect</span></tt>(*args)</td>
+<td>Change the data aspect ratio.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.figure" title="scitools.easyviz.vtk_.VtkBackend.figure"><tt class="xref py py-obj docutils literal"><span class="pre">figure</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Extension of BaseClass.figure</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled 2D polygons.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill3</span></tt>()</td>
+<td>Draw filled 3D polygons.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.flag" title="scitools.easyviz.vtk_.VtkBackend.flag"><tt class="xref py py-obj docutils literal"><span class="pre">flag</span></tt></a>([m])</td>
+<td>Alternating red, white, blue, and black color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">gca</span></tt>()</td>
+<td>Return the current axis in the current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gcf</span></tt>()</td>
+<td>Return current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getp</span></tt>(*args)</td>
+<td>Get object properties or an attribute in this backend instance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.gray" title="scitools.easyviz.vtk_.VtkBackend.gray"><tt class="xref py py-obj docutils literal"><span class="pre">gray</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt>(*args)</td>
+<td>Toggle the display of grid lines.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.hardcopy" title="scitools.easyviz.vtk_.VtkBackend.hardcopy"><tt class="xref py py-obj docutils literal"><span class="pre">hardcopy</span></tt></a>([filename,&nbsp;quality,&nbsp;progressive,&nbsp;...])</td>
+<td>Save a hardcopy of the current figure to file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">hidden</span></tt>(*args)</td>
+<td>Toggle hidden line removal in the current axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">hold</span></tt>(*args)</td>
+<td>Change the hold state of the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.hot" title="scitools.easyviz.vtk_.VtkBackend.hot"><tt class="xref py py-obj docutils literal"><span class="pre">hot</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.hsv" title="scitools.easyviz.vtk_.VtkBackend.hsv"><tt class="xref py py-obj docutils literal"><span class="pre">hsv</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.init" title="scitools.easyviz.vtk_.VtkBackend.init"><tt class="xref py py-obj docutils literal"><span class="pre">init</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ishold</span></tt>()</td>
+<td>Return the hold state (True if hold is on, and False if it is off).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isocaps</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurface end caps.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isosurface</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurfaces from 3D scalar fields.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.jet" title="scitools.easyviz.vtk_.VtkBackend.jet"><tt class="xref py py-obj docutils literal"><span class="pre">jet</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">legend</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Add legend(s) to the current plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">light</span></tt>(**kwargs)</td>
+<td>Add a light to the current axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">lines</span></tt>([m])</td>
+<td>Color map with the line colors.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">loglog</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a loglog plot with logarithmic scaling on x- and y-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">material</span></tt>(*args)</td>
+<td>Set the material reflectance mode.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">mesh</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D mesh surface.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">meshc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a mesh with a contour plot beneath.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">openfig</span></tt>([filename])</td>
+<td>Load figures saved in a file (with the given filename).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pcolor</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D pseudocolor plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pink</span></tt>([m])</td>
+<td>Pastel shades of pink color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw line and scatter plots.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw lines and points in 3D space.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">prism</span></tt>([m])</td>
+<td>Prism color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw arrows from a 2D vector field.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw velocity vectors in 3D space.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">savefig</span></tt>([filename])</td>
+<td>Save all current figures to a file (with the given filename).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogx</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on x-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogy</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on y-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setp</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Set object properties or attributes in this backend instance.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">shading</span></tt>(*args)</td>
+<td>Control the color shading of surfaces.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt>()</td>
+<td>Redraw the current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice_</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw volumetric slice plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.spring" title="scitools.easyviz.vtk_.VtkBackend.spring"><tt class="xref py py-obj docutils literal"><span class="pre">spring</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">stem</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a stem plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamline</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines from 2D or 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamribbon</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream ribbons from 3D vector data.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines in axis aligned slice planes.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamtube</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream tubes from 3D vector data.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">subplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in tiled positions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.summer" title="scitools.easyviz.vtk_.VtkBackend.summer"><tt class="xref py py-obj docutils literal"><span class="pre">summer</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">surf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D solid surface.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a solid surface with contours beneath.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfl</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>3D shaded surface with lighting.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">title</span></tt>(*args)</td>
+<td>Add title to the current plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">vga</span></tt>([m])</td>
+<td>Windows colormap for 16 colors.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">view</span></tt>(*args)</td>
+<td>Specify viewpoint.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">white</span></tt>([m])</td>
+<td>All white color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.vtk_.VtkBackend.winter" title="scitools.easyviz.vtk_.VtkBackend.winter"><tt class="xref py py-obj docutils literal"><span class="pre">winter</span></tt></a>([m])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlabel</span></tt>(*args)</td>
+<td>Add a label to the x-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlim</span></tt>(*args)</td>
+<td>Set or get limits on x axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylabel</span></tt>(*args)</td>
+<td>Add a label to the y-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylim</span></tt>(*args)</td>
+<td>Set or get limits on y axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlabel</span></tt>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlim</span></tt>(*args)</td>
+<td>Set or get limits on z axis.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.autumn">
+<tt class="descname">autumn</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.autumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.autumn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.blue_to_yellow">
+<tt class="descname">blue_to_yellow</tt><big>(</big><em>m=200</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.blue_to_yellow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.blue_to_yellow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.brighten">
+<tt class="descname">brighten</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.brighten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.brighten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Brighten or darken color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.clf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>num</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.closefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close figure window with number &#8216;num&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.closefigs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all figure windows.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extension of BaseClass.figure</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.flag">
+<tt class="descname">flag</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.flag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternating red, white, blue, and black color map.</p>
+<ul class="simple">
+<li>flag(m)
+&#8216;m&#8217; must be a multiple of 4</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.gray">
+<tt class="descname">gray</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.gray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.gray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename=''</em>, <em>quality=100</em>, <em>progressive=False</em>, <em>vector_file=True</em>, <em>landscape=False</em>, <em>raster3d=False</em>, <em>compress=False</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.hardcopy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.
+The figure can be stored in either a vector PostScript (PS/EPS) or
+PDF file using GL2PS or a image file (PNG/PNM/JPEG/TIFF/BMP) using
+a corresponding vtkWriter instance. PostScript output can also be
+generated using vtkPostScriptWriter if vector_file is set to False.
+TeX output is also available, but only the text output will be saved
+to the file.</p>
+<p>If the given filename has no extension, then EPS output will be used.</p>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>quality     &#8211; Sets the quality of the resulting image. Affects only</dt>
+<dd>JPEG images. Given as an integer between 0 and 100
+where 100 results in the best quality (but also
+the largest file). The default is quality=100.</dd>
+<dt>progressive &#8211; Sets whether to use progressive JPEG generation or</dt>
+<dd>not. Defaults to False.</dd>
+<dt>vector_file &#8211; If True (default), the figure will be stored as a</dt>
+<dd>vector file. This is only true if either PS, EPS,
+or PDF are choosen as the output file format.</dd>
+</dl>
+</div></blockquote>
+<p>Additional keyword arguments (only in affect if the vector_file
+argument is set to True and the file format is either PS, EPS or PDF):</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>landscape &#8211; Sets whether to use landscape or portrait orientation.</dt>
+<dd>A True value result in landscape orientation. Defaults
+to False.</dd>
+<dt>raster3d  &#8211; If True, this will write 3D props as raster images</dt>
+<dd>while 2D props are rendered using vector graphic
+primitives. Defaults to False.</dd>
+<dt>compress  &#8211; Compression when generating PostScript or PDF output.</dt>
+<dd>The default is False (no compression).</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.hot">
+<tt class="descname">hot</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.hot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.hot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.hsv">
+<tt class="descname">hsv</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.hsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.hsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.jet">
+<tt class="descname">jet</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.jet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.jet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.spring">
+<tt class="descname">spring</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.spring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.spring" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.summer">
+<tt class="descname">summer</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.summer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.summer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.vtk_.VtkBackend.winter">
+<tt class="descname">winter</tt><big>(</big><em>m=256</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/vtk_.html#VtkBackend.winter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.vtk_.VtkBackend.winter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="visit_.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.easyviz.visit_</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/vtk_.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visit_.html" title="scitools.easyviz.visit_"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

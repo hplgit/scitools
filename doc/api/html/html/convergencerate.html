@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.convergencerate &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="prev" title="scitools.configdata" href="configdata.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configdata.html" title="scitools.configdata"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.convergencerate">
+<span id="scitools-convergencerate"></span><h1><a class="reference internal" href="#module-scitools.convergencerate" title="scitools.convergencerate"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.convergencerate</span></tt></a><a class="headerlink" href="#module-scitools.convergencerate" title="Permalink to this headline">¶</a></h1>
+<p>Module for estimating convergence rate of numerical algorithms,
+based on data from a set of experiments.</p>
+<p>Recommended usage:
+Vary only discretization parameter (h in spatial problems, h/dt**q for
+some q so that h/dt**q=const, in time-dependent problems with time step dt).
+Use class OneDiscretizationPrm, or the function convergence_rate,
+or the analyze_filedata convenience function. Start with reading
+the convergence_rate function (too see an easily adapted example).</p>
+<p>(There is support for fitting more general error models, like
+C1*h**r1 + C2*h*dt**r2, with nonlinear least squares, but sound
+fits are more challenging to obtain.)</p>
+<dl class="class">
+<dt id="scitools.convergencerate.ManyDiscretizationPrm">
+<em class="property">class </em><tt class="descclassname">scitools.convergencerate.</tt><tt class="descname">ManyDiscretizationPrm</tt><a class="reference internal" href="_modules/scitools/convergencerate.html#ManyDiscretizationPrm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.ManyDiscretizationPrm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>General tool for fitting an error model containing an
+arbitrary number of discretization parameters.
+The error is a weighted sum of each discretization parameter
+raised to a real expoenent. The weights and exponents are
+the unknown parameters to be fitted by a nonlinear
+least squares procedure.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.convergencerate.ManyDiscretizationPrm.error_model" title="scitools.convergencerate.ManyDiscretizationPrm.error_model"><tt class="xref py py-obj docutils literal"><span class="pre">error_model</span></tt></a>(p,&nbsp;d)</td>
+<td>Evaluate the theoretical error model (sum of C*h^r terms):</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.convergencerate.ManyDiscretizationPrm.nonlinear_fit" title="scitools.convergencerate.ManyDiscretizationPrm.nonlinear_fit"><tt class="xref py py-obj docutils literal"><span class="pre">nonlinear_fit</span></tt></a>(d,&nbsp;e,&nbsp;initial_guess)</td>
+<td>&#64;param d: list of values of the set of discretization</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.ManyDiscretizationPrm.error_model">
+<em class="property">static </em><tt class="descname">error_model</tt><big>(</big><em>p</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#ManyDiscretizationPrm.error_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.ManyDiscretizationPrm.error_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the theoretical error model (sum of C*h^r terms):
+sum_i p[2*i]*d[i]**p[2*i+1]</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>p</td>
+<td>sequence ofvalues of  parameters (estimated)</td>
+</tr>
+<tr class="row-odd"><td>d</td>
+<td>sequence of values of (known) discretization parameters</td>
+</tr>
+<tr class="row-even"><td>return</td>
+<td>error evaluated</td>
+</tr>
+</tbody>
+</table>
+<p>Note that <tt class="docutils literal"><span class="pre">len(p)</span></tt> must be <tt class="docutils literal"><span class="pre">2*len(d)</span></tt> in this model since
+there are two parameters (constant and exponent) for each
+discretization parameter.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.ManyDiscretizationPrm.nonlinear_fit">
+<em class="property">static </em><tt class="descname">nonlinear_fit</tt><big>(</big><em>d</em>, <em>e</em>, <em>initial_guess</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#ManyDiscretizationPrm.nonlinear_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.ManyDiscretizationPrm.nonlinear_fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>&#64;param d: list of values of the set of discretization</dt>
+<dd>parameters in each experiment:
+d = ((d_1,d_2,d_3),(d_1,d_2,d_3,),...);
+d[i] provides the values of the discretization
+parameters in experiement no. i.</dd>
+<dt>&#64;param e: list of error values; e = (e_1, e_2, ...):</dt>
+<dd>e[i] is the error associated with the parameters
+d[i].</dd>
+</dl>
+<p>&#64;param initial_guess: the starting value for the unknown
+parameters vector.
+&#64;return: list of fitted paramters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.convergencerate.OneDiscretizationPrm">
+<em class="property">class </em><tt class="descclassname">scitools.convergencerate.</tt><tt class="descname">OneDiscretizationPrm</tt><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Tools for fitting an error model with only one discretization
+parameter: e = C*h^2.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.analyze" title="scitools.convergencerate.OneDiscretizationPrm.analyze"><tt class="xref py py-obj docutils literal"><span class="pre">analyze</span></tt></a>(d,&nbsp;e[,&nbsp;initial_guess,&nbsp;plot_title,&nbsp;...])</td>
+<td>Run linear, nonlinear and successive rates models.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.error_model" title="scitools.convergencerate.OneDiscretizationPrm.error_model"><tt class="xref py py-obj docutils literal"><span class="pre">error_model</span></tt></a>(p,&nbsp;d)</td>
+<td>Return e = C*h**a, where p=[C, a] and h=d[0].</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.linear_loglog_fit" title="scitools.convergencerate.OneDiscretizationPrm.linear_loglog_fit"><tt class="xref py py-obj docutils literal"><span class="pre">linear_loglog_fit</span></tt></a>(d,&nbsp;e)</td>
+<td>Linear least squares algorithm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.loglog_error_model" title="scitools.convergencerate.OneDiscretizationPrm.loglog_error_model"><tt class="xref py py-obj docutils literal"><span class="pre">loglog_error_model</span></tt></a>(p,&nbsp;d)</td>
+<td>As error_model if log-log data was used in the estimation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.nonlinear_fit" title="scitools.convergencerate.OneDiscretizationPrm.nonlinear_fit"><tt class="xref py py-obj docutils literal"><span class="pre">nonlinear_fit</span></tt></a>(d,&nbsp;e,&nbsp;p0)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.convergencerate.OneDiscretizationPrm.pairwise_rates" title="scitools.convergencerate.OneDiscretizationPrm.pairwise_rates"><tt class="xref py py-obj docutils literal"><span class="pre">pairwise_rates</span></tt></a>(d,&nbsp;e)</td>
+<td>Compare convergence rates, where each rate is based on</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.analyze">
+<em class="property">static </em><tt class="descname">analyze</tt><big>(</big><em>d</em>, <em>e</em>, <em>initial_guess=None</em>, <em>plot_title=''</em>, <em>filename='tmp.ps'</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run linear, nonlinear and successive rates models.
+d: list/array of discretization parameter.
+e: errors corresponding to d.
+Plot results for comparison of the three approaches.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.error_model">
+<em class="property">static </em><tt class="descname">error_model</tt><big>(</big><em>p</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.error_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.error_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return e = C*h**a, where p=[C, a] and h=d[0].</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.linear_loglog_fit">
+<em class="property">static </em><tt class="descname">linear_loglog_fit</tt><big>(</big><em>d</em>, <em>e</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.linear_loglog_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.linear_loglog_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear least squares algorithm.
+Suitable for problems with only one distinct
+discretization parameter.
+<em>d</em> is the sequence of discretization parameter values, and
+<em>e</em> is the sequence of corresponding error values.</p>
+<p>The error model the data is supposed to fit reads
+<tt class="docutils literal"><span class="pre">log(e[i])</span> <span class="pre">=</span> <span class="pre">log(C[i])</span> <span class="pre">+</span> <span class="pre">a*log(d[i])</span></tt>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.loglog_error_model">
+<em class="property">static </em><tt class="descname">loglog_error_model</tt><big>(</big><em>p</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.loglog_error_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.loglog_error_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>As error_model if log-log data was used in the estimation.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.nonlinear_fit">
+<em class="property">static </em><tt class="descname">nonlinear_fit</tt><big>(</big><em>d</em>, <em>e</em>, <em>p0</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.nonlinear_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.nonlinear_fit" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>d</td>
+<td>list of values of the (single) discretization
+parameter in each experiment:
+d[i] provides the values of the discretization,
+parameter in experiement no. i.</td>
+</tr>
+<tr class="row-odd"><td>e</td>
+<td>list of error values; e = (e_1, e_2, ...),
+e[i] is the error associated with the parameters d[i]</td>
+</tr>
+<tr class="row-even"><td>p0</td>
+<td>starting values for the unknown parameters vector</td>
+</tr>
+<tr class="row-odd"><td>return</td>
+<td>a, C; a is the exponent, C is the factor in front.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.convergencerate.OneDiscretizationPrm.pairwise_rates">
+<em class="property">static </em><tt class="descname">pairwise_rates</tt><big>(</big><em>d</em>, <em>e</em><big>)</big><a class="reference internal" href="_modules/scitools/convergencerate.html#OneDiscretizationPrm.pairwise_rates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.convergencerate.OneDiscretizationPrm.pairwise_rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare convergence rates, where each rate is based on
+a formula for two successive experiments.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configdata.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">scitools.configdata</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/convergencerate.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configdata.html" title="scitools.configdata"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

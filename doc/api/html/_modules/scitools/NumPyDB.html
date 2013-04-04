@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.NumPyDB &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.NumPyDB</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Efficient database for NumPy objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">scitools.numpytools</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="NumPyDB"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB">[docs]</a><span class="k">class</span> <span class="nc">NumPyDB</span><span class="p">:</span>
+<div class="viewcode-block" id="NumPyDB.__init__"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">database_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.dat&#39;</span> <span class="c"># NumPy array data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.map&#39;</span> <span class="c"># positions &amp; identifiers</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;store&#39;</span><span class="p">:</span>
+            <span class="c"># bring files into existence:</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">);</span>  <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">);</span>  <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;load&#39;</span><span class="p">:</span>
+            <span class="c"># check if files are there:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">)</span> <span class="ow">or</span> \
+               <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Could not find the files </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span>\
+                              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">))</span>
+            <span class="c"># load mapfile into list of tuples:</span>
+            <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                <span class="c"># first column contains file positions in the</span>
+                <span class="c"># file .dat for direct access, the rest of the</span>
+                <span class="c"># line is an identifier</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="c"># append tuple (position, identifier):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                       <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="NumPyDB.locate"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB.locate">[docs]</a>    <span class="k">def</span> <span class="nf">locate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span> <span class="c"># base class</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find position in files where data corresponding</span>
+<span class="sd">        to identifier are stored.</span>
+<span class="sd">        bestapprox is a user-defined function for computing</span>
+<span class="sd">        the distance between two identifiers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c"># first search for an exact identifier match:</span>
+        <span class="n">selected_pos</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">selected_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="nb">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="n">identifier</span><span class="p">:</span>
+                <span class="n">selected_pos</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>  <span class="n">selected_id</span> <span class="o">=</span> <span class="nb">id</span><span class="p">;</span> <span class="k">break</span>
+        <span class="k">if</span> <span class="n">selected_pos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c"># &#39;identifier&#39; not found?</span>
+            <span class="k">if</span> <span class="n">bestapprox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># find the best approximation to &#39;identifier&#39;:</span>
+                <span class="n">min_dist</span> <span class="o">=</span> \
+                    <span class="n">bestapprox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">identifier</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="nb">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">bestapprox</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="n">min_dist</span><span class="p">:</span>
+                        <span class="n">selected_pos</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>  <span class="n">selected_id</span> <span class="o">=</span> <span class="nb">id</span>
+                        <span class="n">min_dist</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="n">selected_pos</span><span class="p">,</span> <span class="n">selected_id</span>
+</div>
+<div class="viewcode-block" id="NumPyDB.dump"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>  <span class="c"># empty base class func.</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&quot;dump is not implemented; must be impl. in subclass&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NumPyDB.load"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load NumPy array with identifier or find best approx.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&quot;load is not implemented; must be impl. in subclass&quot;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="NumPyDB_text"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_text">[docs]</a><span class="k">class</span> <span class="nc">NumPyDB_text</span><span class="p">(</span><span class="n">NumPyDB</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use plain ASCII string representation.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NumPyDB_text.__init__"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_text.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">):</span>
+        <span class="n">NumPyDB</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="c"># simple dump:</span></div>
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">);</span>  <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">fm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="se">\t\t</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">tell</span><span class="p">(),</span> <span class="n">identifier</span><span class="p">))</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>  <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># more efficient dump (due to Mario Pernici &lt;Mario.Pernici@mi.infn.it&gt;)</span>
+<div class="viewcode-block" id="NumPyDB_text.dump"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_text.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">);</span>  <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">fm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="se">\t\t</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">tell</span><span class="p">(),</span> <span class="n">identifier</span><span class="p">))</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s">&#39;array([&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">,&#39;</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">])</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fmt</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ravel</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>  <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="NumPyDB_text.load"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_text.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load NumPy array with a given identifier. In case the</span>
+<span class="sd">        identifier is not found, bestapprox != None means that</span>
+<span class="sd">        an approximation is sought. The bestapprox argument is</span>
+<span class="sd">        then taken as a function that can be used for computing</span>
+<span class="sd">        the distance between two identifiers id1 and id2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;not found&quot;</span><span class="p">]</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="c"># load the correct number of bytes; look at the next pos</span>
+        <span class="c"># value in self.positions (impossible if a dictionary is</span>
+        <span class="c"># used for self.positions - we need the order of the items!)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">pos</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                    <span class="c"># last self.positions entry reached,</span>
+                    <span class="c"># just read the rest of the file:</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">break</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="nb">id</span><span class="p">]</span>
+
+</div></div>
+<div class="viewcode-block" id="NumPyDB_pickle"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_pickle">[docs]</a><span class="k">class</span> <span class="nc">NumPyDB_pickle</span> <span class="p">(</span><span class="n">NumPyDB</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use basic Pickle class.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NumPyDB_pickle.__init__"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_pickle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">):</span>
+        <span class="n">NumPyDB</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_pickle.dump"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_pickle.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">);</span>  <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">fm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="se">\t\t</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">tell</span><span class="p">(),</span> <span class="n">identifier</span><span class="p">))</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># 1: binary storage</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>  <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_pickle.load"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_pickle.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load NumPy array with a given identifier. In case the</span>
+<span class="sd">        identifier is not found, bestapprox != None means that</span>
+<span class="sd">        an approximation is sought. The bestapprox argument is</span>
+<span class="sd">        then taken as a function that can be used for computing</span>
+<span class="sd">        the distance between two identifiers id1 and id2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;not found&quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="nb">id</span>
+</div></div>
+<span class="kn">import</span> <span class="nn">cPickle</span>
+
+<div class="viewcode-block" id="NumPyDB_cPickle"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_cPickle">[docs]</a><span class="k">class</span> <span class="nc">NumPyDB_cPickle</span> <span class="p">(</span><span class="n">NumPyDB</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use basic cPickle class.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NumPyDB_cPickle.__init__"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_cPickle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">):</span>
+        <span class="n">NumPyDB</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_cPickle.dump"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_cPickle.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="c"># fd: datafile, fm: mapfile</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">);</span>  <span class="n">fm</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pn</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="c"># fd.tell(): return current position in datafile</span>
+        <span class="n">fm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="se">\t\t</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">tell</span><span class="p">(),</span> <span class="n">identifier</span><span class="p">))</span>
+        <span class="n">cPickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># 1: binary storage</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>  <span class="n">fm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_cPickle.load"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_cPickle.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load NumPy array with a given identifier. In case the</span>
+<span class="sd">        identifier is not found, bestapprox != None means that</span>
+<span class="sd">        an approximation is sought. The bestapprox argument is</span>
+<span class="sd">        then taken as a function that can be used for computing</span>
+<span class="sd">        the distance between two identifiers id1 and id2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;not found&quot;</span><span class="p">]</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dn</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="nb">id</span><span class="p">]</span>
+
+</div></div>
+<span class="kn">import</span> <span class="nn">shelve</span>
+
+<div class="viewcode-block" id="NumPyDB_shelve"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_shelve">[docs]</a><span class="k">class</span> <span class="nc">NumPyDB_shelve</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Implement the database via shelving.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NumPyDB_shelve.__init__"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_shelve.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">database_name</span> <span class="c"># no suffix, only one file</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;load&#39;</span><span class="p">:</span>
+            <span class="c"># since the keys() function in a shelf object</span>
+            <span class="c"># is slow, we store the keys:</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_shelve.dump"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_shelve.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump NumPy array a with identifier.&quot;&quot;&quot;</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">fd</span><span class="p">[</span><span class="n">identifier</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_shelve.locate"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_shelve.locate">[docs]</a>    <span class="k">def</span> <span class="nf">locate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return identifier key in shelf.&quot;&quot;&quot;</span>
+        <span class="n">selected_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">:</span>
+            <span class="n">selected_id</span> <span class="o">=</span> <span class="n">identifier</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bestapprox</span><span class="p">:</span>
+                <span class="c"># find the best approximation to &#39;identifier&#39;:</span>
+                <span class="n">min_dist</span> <span class="o">=</span> <span class="n">bestapprox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">identifier</span><span class="p">)</span>
+                <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">bestapprox</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="n">min_dist</span><span class="p">:</span>
+                        <span class="n">selected_id</span> <span class="o">=</span> <span class="nb">id</span>
+                        <span class="n">min_dist</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="n">selected_id</span>
+</div>
+<div class="viewcode-block" id="NumPyDB_shelve.load"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.NumPyDB_shelve.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load NumPy array with a given identifier. In case the</span>
+<span class="sd">        identifier is not found, bestapprox != None means that</span>
+<span class="sd">        an approximation is sought. The bestapprox argument is</span>
+<span class="sd">        then taken as a function that can be used for computing</span>
+<span class="sd">        the distance between two identifiers id1 and id2.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">bestapprox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">id</span><span class="p">:</span> <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;not found&quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">fd</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="nb">id</span>
+
+<span class="c"># np.load/dump</span>
+<span class="c"># joblib.load/dump</span>
+</div></div>
+<div class="viewcode-block" id="float_dist"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.float_dist">[docs]</a><span class="k">def</span> <span class="nf">float_dist</span><span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute distance between two identities for NumPyDB.</span>
+<span class="sd">    Assumption: id1 and id2 are real numbers (but always sent</span>
+<span class="sd">    as strings).</span>
+<span class="sd">    This function is typically used when time values are</span>
+<span class="sd">    used as identifiers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">id1</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">id2</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="test_dist"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.test_dist">[docs]</a><span class="k">def</span> <span class="nf">test_dist</span><span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return distance between identifiers id1 and id2.</span>
+<span class="sd">    The identifiers are of the form &#39;time=some number&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># extract the numbers using regex:</span>
+    <span class="c">#t1 = re.search(r&quot;time=(.*)&quot;, id1).group(1)</span>
+    <span class="c">#t2 = re.search(r&quot;time=(.*)&quot;, id2).group(1)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">id1</span><span class="p">[</span><span class="mi">5</span><span class="p">:];</span>  <span class="n">t2</span> <span class="o">=</span> <span class="n">id2</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">t2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">d</span>
+</div>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../NumPyDB.html#scitools.NumPyDB.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="s">&quot;dumping/loading </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s">-arrays data with the </span><span class="si">%s</span><span class="s"> method took&quot;</span> \
+          <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;pickle&quot;</span><span class="p">:</span>
+        <span class="n">dataout</span> <span class="o">=</span> <span class="n">NumPyDB_pickle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;store&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;cPickle&quot;</span><span class="p">:</span>
+        <span class="n">dataout</span> <span class="o">=</span> <span class="n">NumPyDB_cPickle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;store&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;shelve&quot;</span><span class="p">:</span>
+        <span class="n">dataout</span> <span class="o">=</span> <span class="n">NumPyDB_shelve</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;store&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;text&quot;</span><span class="p">:</span>
+        <span class="n">dataout</span> <span class="o">=</span> <span class="n">NumPyDB_text</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;store&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;illegal method name=&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">length</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">i</span><span class="p">,</span> <span class="mf">0.4999999</span><span class="p">)</span>
+        <span class="c"># (generate numbers with many digits so repr(u) has</span>
+        <span class="c"># a representative size (not just integers, for instance))</span>
+
+        <span class="n">dataout</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="s">&#39;time=</span><span class="si">%e</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;pickle&quot;</span><span class="p">:</span>
+        <span class="n">datain</span> <span class="o">=</span> <span class="n">NumPyDB_pickle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;load&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;cPickle&quot;</span><span class="p">:</span>
+        <span class="n">datain</span> <span class="o">=</span> <span class="n">NumPyDB_cPickle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;load&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;shelve&quot;</span><span class="p">:</span>
+        <span class="n">datain</span> <span class="o">=</span> <span class="n">NumPyDB_shelve</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;load&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&quot;text&quot;</span><span class="p">:</span>
+        <span class="n">datain</span> <span class="o">=</span> <span class="n">NumPyDB_text</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;load&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;illegal method name=&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="n">datain</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;time=4&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;identifier=&#39;time=4&#39;:&quot;</span><span class="p">,</span> <span class="n">w</span>
+    <span class="c"># not found, no exact match for &#39;t=4&#39;, should have</span>
+    <span class="c"># &#39;time=4.000000e+00&#39;</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">datain</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;time=4.000000e+00&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;identifier=&#39;time=4.000000e+00&#39;: found&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span> <span class="k">print</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="n">datain</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;time=5&#39;</span><span class="p">,</span> <span class="n">bestapprox</span><span class="o">=</span><span class="n">test_dist</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;identifier=&#39;time=5&#39; and bestapprox=test_dest found&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span> <span class="k">print</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> </span><span class="si">%.2f</span><span class="s"> s&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;.dat&#39;</span><span class="p">):</span>
+        <span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;.dat&#39;</span><span class="p">)</span><span class="o">/</span><span class="mf">1000000.0</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>  <span class="c"># shelve technique leads to no extension</span>
+        <span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">/</span><span class="mf">1000000.0</span>
+    <span class="k">print</span> <span class="s">&quot;filesize=</span><span class="si">%.2f</span><span class="s">Mb</span><span class="se">\n\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">filesize</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s">&#39;.dat&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">+</span><span class="s">&#39;.map&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>     <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>  <span class="n">n</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="k">try</span><span class="p">:</span>     <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>  <span class="n">length</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">try</span><span class="p">:</span>     <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="k">except</span><span class="p">:</span>  <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pickle&#39;</span><span class="p">,</span><span class="s">&#39;cPickle&#39;</span><span class="p">,</span><span class="s">&#39;shelve&#39;</span><span class="p">,</span><span class="s">&#39;text&#39;</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;NumPy array type:&#39;</span><span class="p">,</span> <span class="n">basic_NumPy</span>
+    <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+        <span class="n">main</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="s">&quot;tmpdata_&quot;</span> <span class="o">+</span> <span class="n">method</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

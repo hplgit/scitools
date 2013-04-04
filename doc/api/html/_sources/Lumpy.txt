@@ -1,0 +1,10 @@
+
+:mod:`scitools.Lumpy`
+=====================
+
+.. automodule:: scitools.Lumpy
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

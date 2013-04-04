@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.errorcheck &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" />
+    <link rel="next" title="scitools.filetable" href="filetable.html" />
+    <link rel="prev" title="scitools.debug" href="debug.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filetable.html" title="scitools.filetable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="scitools.debug"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.errorcheck">
+<span id="scitools-errorcheck"></span><h1><a class="reference internal" href="#module-scitools.errorcheck" title="scitools.errorcheck"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.errorcheck</span></tt></a><a class="headerlink" href="#module-scitools.errorcheck" title="Permalink to this headline">¶</a></h1>
+<p>Functions for checking compatibility of data structures,
+right type of data etc.</p>
+<p>Example: given a program &#8220;check.py&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">right_length</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">right_size1</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+<span class="k">try</span><span class="p">:</span>    
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">right_size2</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">right_type</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">wrong_type</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">e</span>
+</pre></div>
+</div>
+<p>Here is the output (each call triggers the exception):</p>
+<div class="highlight-python"><pre>ValueError file "check.py", line 5, main program
+q1 has length 5, which is not compatible with assumed length 2
+ValueError file "check.py", line 9, main program
+q1 has size (5,), which is not compatible with assumed size (2, 2)
+ValueError file "check.py", line 17, main program
+q1 has size (5,), which is not compatible with size (6,) of q2
+TypeError file "check.py", line 21, main program
+q2 is of type ndarray, while we expected &lt;type 'list'&gt;
+TypeError q1 is of wrong type (ndarray).</pre>
+</div>
+<dl class="function">
+<dt id="scitools.errorcheck.right_length">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">right_length</tt><big>(</big><em>a</em>, <em>length</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#right_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.right_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that len(a) == length.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>a</td>
+<td>any variable for which len(a) is meaningful</td>
+</tr>
+<tr class="row-even"><td>length</td>
+<td>the expected length of a (integer).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.errorcheck.right_size1">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">right_size1</tt><big>(</big><em>a</em>, <em>shape</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#right_size1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.right_size1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that a has correct shape.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>a</td>
+<td>NumPy array</td>
+</tr>
+<tr class="row-even"><td>shape</td>
+<td>the expected shape of a (int or tuple)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.errorcheck.right_size2">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">right_size2</tt><big>(</big><em>a1</em>, <em>a2</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#right_size2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.right_size2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that a1 and a2 have equal shapes.
+a1 and a2 are NumPy arrays.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.errorcheck.get_type">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">get_type</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a&#8217;s type. First, try to extract a&#8217;s class name. If this
+is unsuccessful, return type(a).</p>
+<p>The session below illustrates differences between type(a) nad
+get_type(a) for standard classes, instances of user-defined classes,
+and class objects (new style and classic classes).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># standard built-in types:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="s">&#39;my string&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">&lt;type &#39;list&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">&#39;list&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">&lt;type &#39;str&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="go">&#39;str&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># user-defined classes and instances:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>          <span class="c"># classic class</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">... </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c"># new style class</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">... </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">&lt;type &#39;instance&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">&#39;A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">&lt;class &#39;__main__.B&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">&#39;B&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># class objects A and B:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="go">&lt;type &#39;classobj&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="go">&#39;classobj (i.e. a class object)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="go">&lt;type &#39;type&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_type</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="go">&#39;type (i.e. a class object)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.errorcheck.right_type">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">right_type</tt><big>(</big><em>a</em>, <em>expected_types</em>, <em>raise_exception=True</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#right_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.right_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that variable a is of the type(s) specified by expected_types,
+which is a list/tuple of built-in types (class names), user-defined
+class names, or one of the functions callable or numpy.iterable.</p>
+<p>return: True if the type is right. Otherwise, raise a TypeError exception
+if raise_exception is True. If this value is False,
+return False and place a message string explaining what is wrong
+in the module variable errorcheck.message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.errorcheck.wrong_type">
+<tt class="descclassname">scitools.errorcheck.</tt><tt class="descname">wrong_type</tt><big>(</big><em>a</em>, <em>comment=''</em><big>)</big><a class="reference internal" href="_modules/scitools/errorcheck.html#wrong_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.errorcheck.wrong_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a TypeError exception expressing the type of variable a
+and that this type is wrong.</p>
+<p>a is any variable of any type, and comment is a text that can be
+appended to the exception string.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="debug.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.debug</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="filetable.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">scitools.filetable</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/errorcheck.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filetable.html" title="scitools.filetable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="scitools.debug"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

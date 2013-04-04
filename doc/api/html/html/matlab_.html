@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.easyviz.matlab_ &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.easyviz.matlab_">
+<span id="scitools-easyviz-matlab"></span><h1><a class="reference internal" href="#module-scitools.easyviz.matlab_" title="scitools.easyviz.matlab_"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.easyviz.matlab_</span></tt></a><a class="headerlink" href="#module-scitools.easyviz.matlab_" title="Permalink to this headline">¶</a></h1>
+<p>This backend uses the Matlab package for plotting and mlabwrap (available at
+<a class="reference external" href="http://sourceforge.net/projects/mlabwrap">http://sourceforge.net/projects/mlabwrap</a>) for the connection between Python
+and Matlab. To use this backend, one can run a script somefile.py like</p>
+<blockquote>
+<div>python somefile.py &#8211;SCITOOLS_easyviz_backend matlab</div></blockquote>
+<p>or one can specify the backend in the SciTools configuration file
+scitools.cfg under the [easyviz] section</p>
+<blockquote>
+<div>[easyviz]
+backend = matlab</div></blockquote>
+<p>and then</p>
+<blockquote>
+<div>from scitools.std import *</div></blockquote>
+<p>or if just easyviz is needed</p>
+<blockquote>
+<div>from scitools.easyviz import *</div></blockquote>
+<p>REQUIREMENTS:</p>
+<p>Matlab
+mlabwrap (<a class="reference external" href="http://www.scipy.org/MlabWrap">http://www.scipy.org/MlabWrap</a>)</p>
+<p>Tip:</p>
+<ul class="simple">
+<li>To run this backend in batch mode, set the -nodisplay option in the</li>
+</ul>
+<p>environment variable MLABRAW_CMD_STR. This might give unexpected results
+when using the hardcopy command (or the print command directly in Matlab).
+However, this seems to be fixed by closing the figure window between each
+call to hardcopy. A short example follows next (see also
+<a class="reference external" href="http://www.mathworks.com/support/solutions/data/1-1A62W.html">http://www.mathworks.com/support/solutions/data/1-1A62W.html</a>).</p>
+<blockquote>
+<div><p>from scitools.std import *
+x = linspace(0,5,31)
+for i in range(10):</p>
+<blockquote>
+<div>plot(x,cos(-0.1*i+x),ymin=-1.1,ymax=1.1)
+hardcopy(&#8216;/tmp/img_%02d.eps&#8217; % i)
+close()</div></blockquote>
+<p>movie(&#8216;/tmp/img_%02d.eps&#8217;)</p>
+</div></blockquote>
+<dl class="class">
+<dt id="scitools.easyviz.matlab_.MatlabBackend">
+<em class="property">class </em><tt class="descclassname">scitools.easyviz.matlab_.</tt><tt class="descname">MatlabBackend</tt><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="common.html#scitools.easyviz.common.BaseClass" title="scitools.easyviz.common.BaseClass"><tt class="xref py py-class docutils literal"><span class="pre">scitools.easyviz.common.BaseClass</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.autumn" title="scitools.easyviz.matlab_.MatlabBackend.autumn"><tt class="xref py py-obj docutils literal"><span class="pre">autumn</span></tt></a>([m])</td>
+<td>Shades of red and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">axes</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in specified positions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">axis</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Choose the axis limits and appearance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bar</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a bar graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.bone" title="scitools.easyviz.matlab_.MatlabBackend.bone"><tt class="xref py py-obj docutils literal"><span class="pre">bone</span></tt></a>([m])</td>
+<td>Gray-scale with a tinge of blue color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">box</span></tt>(*args)</td>
+<td>Display a box around the boundaries of the current axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">brighten</span></tt>(*args)</td>
+<td>Brighten or darken the color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camdolly</span></tt>(*args)</td>
+<td>Dolly camera.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlight</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create or set position of a light.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camlookat</span></tt>(*args)</td>
+<td>Move camera and target to view specified objects.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">campos</span></tt>(*args)</td>
+<td>Camera position.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camproj</span></tt>(*args)</td>
+<td>Camera projection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camroll</span></tt>(*args)</td>
+<td>Roll camera.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camtarget</span></tt>(*args)</td>
+<td>Camera target.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camup</span></tt>(*args)</td>
+<td>Camera up vector.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">camva</span></tt>(*args)</td>
+<td>Camera view angle.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">camzoom</span></tt>(*args)</td>
+<td>Zoom camera.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">caxis</span></tt>(*args)</td>
+<td>Set the limits for the color axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">cla</span></tt>(*args)</td>
+<td>Clear the current axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clabel</span></tt>(*args)</td>
+<td>Control labeling of contours.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.clf" title="scitools.easyviz.matlab_.MatlabBackend.clf"><tt class="xref py py-obj docutils literal"><span class="pre">clf</span></tt></a>()</td>
+<td>Clear the current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt>(*args)</td>
+<td>Close figure.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.closefig" title="scitools.easyviz.matlab_.MatlabBackend.closefig"><tt class="xref py py-obj docutils literal"><span class="pre">closefig</span></tt></a>([arg])</td>
+<td>Close figure window.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.closefigs" title="scitools.easyviz.matlab_.MatlabBackend.closefigs"><tt class="xref py py-obj docutils literal"><span class="pre">closefigs</span></tt></a>()</td>
+<td>Close all figure windows.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">colorbar</span></tt>(*args)</td>
+<td>Display a color bar.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.colorcube" title="scitools.easyviz.matlab_.MatlabBackend.colorcube"><tt class="xref py py-obj docutils literal"><span class="pre">colorcube</span></tt></a>([m])</td>
+<td>Enhanced color-cube color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormap</span></tt>(*args)</td>
+<td>Specify colormap.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">coneplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D cone plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D contour plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contour3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw 3D contour plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled contour plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">contourslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw contour lines in slice planes.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.cool" title="scitools.easyviz.matlab_.MatlabBackend.cool"><tt class="xref py py-obj docutils literal"><span class="pre">cool</span></tt></a>([m])</td>
+<td>Shades of cyan and magenta color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.copper" title="scitools.easyviz.matlab_.MatlabBackend.copper"><tt class="xref py py-obj docutils literal"><span class="pre">copper</span></tt></a>([m])</td>
+<td>Linear copper-tone color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">daspect</span></tt>(*args)</td>
+<td>Change the data aspect ratio.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.figure" title="scitools.easyviz.matlab_.MatlabBackend.figure"><tt class="xref py py-obj docutils literal"><span class="pre">figure</span></tt></a>(*args,&nbsp;**kwargs)</td>
+<td>Create a new figure or switch between figures and return Figure object.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw filled 2D polygons.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">fill3</span></tt>()</td>
+<td>Draw filled 3D polygons.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.flag" title="scitools.easyviz.matlab_.MatlabBackend.flag"><tt class="xref py py-obj docutils literal"><span class="pre">flag</span></tt></a>([m])</td>
+<td>Alternating red, white, blue, and black color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gca</span></tt>()</td>
+<td>Return the current axis in the current figure.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">gcf</span></tt>()</td>
+<td>Return current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getp</span></tt>(*args)</td>
+<td>Get object properties or an attribute in this backend instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.gray" title="scitools.easyviz.matlab_.MatlabBackend.gray"><tt class="xref py py-obj docutils literal"><span class="pre">gray</span></tt></a>([m])</td>
+<td>Linear gray-scale color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt>(*args)</td>
+<td>Toggle the display of grid lines.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.hardcopy" title="scitools.easyviz.matlab_.MatlabBackend.hardcopy"><tt class="xref py py-obj docutils literal"><span class="pre">hardcopy</span></tt></a>(filename,&nbsp;**kwargs)</td>
+<td>Save a hardcopy of the current figure to file (with the given filename).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">hidden</span></tt>(*args)</td>
+<td>Toggle hidden line removal in the current axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">hold</span></tt>(*args)</td>
+<td>Change the hold state of the current axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.hot" title="scitools.easyviz.matlab_.MatlabBackend.hot"><tt class="xref py py-obj docutils literal"><span class="pre">hot</span></tt></a>([m])</td>
+<td>Black-red-yellow-white color map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.hsv" title="scitools.easyviz.matlab_.MatlabBackend.hsv"><tt class="xref py py-obj docutils literal"><span class="pre">hsv</span></tt></a>([m])</td>
+<td>Hue-saturation-value color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">init</span></tt>()</td>
+<td>Initialize internal data structures.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ishold</span></tt>()</td>
+<td>Return the hold state (True if hold is on, and False if it is off).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isocaps</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurface end caps.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isosurface</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw isosurfaces from 3D scalar fields.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.jet" title="scitools.easyviz.matlab_.MatlabBackend.jet"><tt class="xref py py-obj docutils literal"><span class="pre">jet</span></tt></a>([m])</td>
+<td>Variant of hsv.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">legend</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Add legend(s) to the current plot.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">light</span></tt>(**kwargs)</td>
+<td>Add a light to the current axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.lines" title="scitools.easyviz.matlab_.MatlabBackend.lines"><tt class="xref py py-obj docutils literal"><span class="pre">lines</span></tt></a>([m])</td>
+<td>Color map with the line colors.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">loglog</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a loglog plot with logarithmic scaling on x- and y-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.m1" title="scitools.easyviz.matlab_.MatlabBackend.m1"><tt class="xref py py-obj docutils literal"><span class="pre">m1</span></tt></a>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.m2" title="scitools.easyviz.matlab_.MatlabBackend.m2"><tt class="xref py py-obj docutils literal"><span class="pre">m2</span></tt></a>([m])</td>
+<td>Shades of blue and green color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">material</span></tt>(*args)</td>
+<td>Set the material reflectance mode.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">mesh</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D mesh surface.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">meshc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a mesh with a contour plot beneath.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">openfig</span></tt>([filename])</td>
+<td>Load figures saved in a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pcolor</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 2D pseudocolor plot.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.pink" title="scitools.easyviz.matlab_.MatlabBackend.pink"><tt class="xref py py-obj docutils literal"><span class="pre">pink</span></tt></a>([m])</td>
+<td>Pastel shades of pink color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw line and scatter plots.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw lines and points in 3D space.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.prism" title="scitools.easyviz.matlab_.MatlabBackend.prism"><tt class="xref py py-obj docutils literal"><span class="pre">prism</span></tt></a>([m])</td>
+<td>Prism color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw arrows from a 2D vector field.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">quiver3</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw velocity vectors in 3D space.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">savefig</span></tt>([filename])</td>
+<td>Save all current figures to a file (with the given filename).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogx</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on x-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">semilogy</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a semilog plot with logarithmic scaling on y-axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setp</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Set object properties or attributes in this backend instance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">shading</span></tt>(*args)</td>
+<td>Control the color shading of surfaces.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt>()</td>
+<td>Redraw the current figure.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice_</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw volumetric slice plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.spring" title="scitools.easyviz.matlab_.MatlabBackend.spring"><tt class="xref py py-obj docutils literal"><span class="pre">spring</span></tt></a>([m])</td>
+<td>Shades of magenta and yellow color map.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">stem</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a stem plot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamline</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines from 2D or 3D vector data.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamribbon</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream ribbons from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamslice</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw streamlines in axis aligned slice planes.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">streamtube</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw stream tubes from 3D vector data.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">subplot</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Create axes in tiled positions.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.summer" title="scitools.easyviz.matlab_.MatlabBackend.summer"><tt class="xref py py-obj docutils literal"><span class="pre">summer</span></tt></a>([m])</td>
+<td>Shades of green and yellow color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">surf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a 3D solid surface.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfc</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>Draw a solid surface with contours beneath.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">surfl</span></tt>(*args,&nbsp;**kwargs)</td>
+<td>3D shaded surface with lighting.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">title</span></tt>(*args)</td>
+<td>Add title to the current plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.vga" title="scitools.easyviz.matlab_.MatlabBackend.vga"><tt class="xref py py-obj docutils literal"><span class="pre">vga</span></tt></a>([m])</td>
+<td>Windows colormap for 16 colors.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">view</span></tt>(*args)</td>
+<td>Specify viewpoint.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.white" title="scitools.easyviz.matlab_.MatlabBackend.white"><tt class="xref py py-obj docutils literal"><span class="pre">white</span></tt></a>([m])</td>
+<td>All white color map.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.easyviz.matlab_.MatlabBackend.winter" title="scitools.easyviz.matlab_.MatlabBackend.winter"><tt class="xref py py-obj docutils literal"><span class="pre">winter</span></tt></a>([m])</td>
+<td>Shades of blue and green color map.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlabel</span></tt>(*args)</td>
+<td>Add a label to the x-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">xlim</span></tt>(*args)</td>
+<td>Set or get limits on x axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylabel</span></tt>(*args)</td>
+<td>Add a label to the y-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ylim</span></tt>(*args)</td>
+<td>Set or get limits on y axis.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlabel</span></tt>(*args)</td>
+<td>Add a label to the z-axis.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">zlim</span></tt>(*args)</td>
+<td>Set or get limits on z axis.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.autumn">
+<tt class="descname">autumn</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.autumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.autumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of red and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.bone">
+<tt class="descname">bone</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.bone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.bone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray-scale with a tinge of blue color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.clf">
+<tt class="descname">clf</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.clf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.clf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the current figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.closefig">
+<tt class="descname">closefig</tt><big>(</big><em>arg=None</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.closefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.closefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close figure window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.closefigs">
+<tt class="descname">closefigs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.closefigs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.closefigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all figure windows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.cmd">
+<tt class="descname">cmd</tt><em class="property"> = 'zlabel'</em><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.colorcube">
+<tt class="descname">colorcube</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.colorcube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.colorcube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced color-cube color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.cool">
+<tt class="descname">cool</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.cool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.cool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of cyan and magenta color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.copper">
+<tt class="descname">copper</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.copper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.copper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear copper-tone color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.figure">
+<tt class="descname">figure</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new figure or switch between figures and return Figure object.
+num is the figure number of the new or existing figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.flag">
+<tt class="descname">flag</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.flag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternating red, white, blue, and black color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.gray">
+<tt class="descname">gray</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.gray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.gray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear gray-scale color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.hardcopy">
+<tt class="descname">hardcopy</tt><big>(</big><em>filename</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.hardcopy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.hardcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a hardcopy of the current figure to file (with the given
+filename). The file format (image type) is determined from the
+extension of the filename. If any changes have been made by working
+directly on the backend instance, set the keyword argument replot
+to False to stop Easyviz from replotting the current figure and
+destroying those changes.</p>
+<p>Supported extensions:</p>
+<blockquote>
+<div>&#8216;.ps&#8217;  (PostScript)
+&#8216;.eps&#8217; (Encapsualted PostScript)
+&#8216;.jpg&#8217; (Joint Photographic Experts Group)
+&#8216;.png&#8217; (Portable Network Graphics)
+&#8216;.pdf&#8217; (Portable Document Format)
+&#8216;.pbm&#8217; (Portable Bitmap)
+&#8216;.pgm&#8217; (Portable Graymap)
+&#8216;.ppm&#8217; (Portable Pixmap)
+&#8216;.tif&#8217; (Tagged Image File Format)
+&#8216;.hgl&#8217; (Hewlett-Packard Graphics Language)
+&#8216;.ai&#8217;  (Adobe Illustrator file)
+&#8216;.pcx&#8217; (Paintbrush 24-bit file)
+&#8216;.bmp&#8217; (Bitmap Image)</div></blockquote>
+<p>Optional arguments:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>renderer    &#8211; Specify which renderer to use. Available renderers</dt>
+<dd>are &#8216;painters&#8217;, &#8216;zbuffer&#8217;, and &#8216;opengl&#8217;. If not
+specified, the default renderer in Matlab is chosen.
+(This option is not available when running Matlab
+with the -nodisplay argument.)</dd>
+<dt>color       &#8211; If True, create a plot with colors. If False</dt>
+<dd>(default), create a plot in black and white. This
+option is only available for PostScript output.</dd>
+<dt>pslevel     &#8211; Set the PostScript level to be used. By default,</dt>
+<dd>level 1 PostScript is used, while pslevel=2 will use
+PostScript level 2 instead.</dd>
+<dt>raw         &#8211; If True, this will use raw format on PBM, PGM,</dt>
+<dd>and PPM files. If False (default), a plain text
+format is used.</dd>
+<dt>quality     &#8211; Set the quality level of a JPEG image. Must be an</dt>
+<dd>integer between 0 and 100, where 100 gives the best
+quality but also the lowest compression. The default
+quality level is 75.</dd>
+<dt>tiffcompression &#8211; Set whether to use compression or no compression</dt>
+<dd>(default) on a TIFF file.</dd>
+</dl>
+</div></blockquote>
+<p>Example on how to use the backend directly to save a hardcopy of
+the current figure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">print_</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">gcf</span><span class="p">(),</span> <span class="s">&#39;-deps&#39;</span><span class="p">,</span> <span class="s">&#39;foo.eps&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.hot">
+<tt class="descname">hot</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.hot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.hot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Black-red-yellow-white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.hsv">
+<tt class="descname">hsv</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.hsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hue-saturation-value color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.jet">
+<tt class="descname">jet</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.jet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.jet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variant of hsv.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.lines">
+<tt class="descname">lines</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color map with the line colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.m1">
+<tt class="descname">m1</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.m1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a label to the z-axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the text given in s beside the z-axis on the current axis.</p>
+<p>Calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zlabel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds the zlabel to the Axis object ax instead of the current axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.m2">
+<tt class="descname">m2</tt><big>(</big><em>m=64</em><big>)</big><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.m2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of blue and green color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.pink">
+<tt class="descname">pink</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.pink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.pink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastel shades of pink color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.prism">
+<tt class="descname">prism</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.prism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.prism" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prism color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.spring">
+<tt class="descname">spring</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.spring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.spring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of magenta and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.summer">
+<tt class="descname">summer</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.summer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.summer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of green and yellow color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.vga">
+<tt class="descname">vga</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.vga"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.vga" title="Permalink to this definition">¶</a></dt>
+<dd><p>Windows colormap for 16 colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.white">
+<tt class="descname">white</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.white"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.white" title="Permalink to this definition">¶</a></dt>
+<dd><p>All white color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.easyviz.matlab_.MatlabBackend.winter">
+<tt class="descname">winter</tt><big>(</big><em>m=64</em><big>)</big><a class="reference internal" href="_modules/scitools/easyviz/matlab_.html#MatlabBackend.winter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.easyviz.matlab_.MatlabBackend.winter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shades of blue and green color map.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/matlab_.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

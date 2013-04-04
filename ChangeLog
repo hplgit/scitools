@@ -1,0 +1,235 @@
+Version 0.9:
+* LaTeX support in legends and titles in Easyviz. The output is reasonable
+  in most formats.
+
+* Updated movie module with a new encoder "HTML": javascript code for
+  displaying PNG/JPG/GIF files as a movie in a webbrowser.
+
+* Gnuplot postscript plots has linewidth 4 instead of 1.2 for clearer
+  line in hardcopy plots.
+
+* New commands in the scitools script:
+
+	* replace for textual replacement (subst is the counterpart for
+	  regular expression replacements)
+	* pyreport for a version of pyreport that works with both
+	  scitools.easyviz and matplotlib
+
+* Added misc.function_UI function for autogenerating a user interface
+  to a module such that a range of functions can be called from the
+  command line with arguments also given on the command
+  line. Autogeneration of help too.
+
+* Added Recorder class for recording what happens with an
+  object. Can be used to see how Easyviz actually works with the
+  underlying module. In this way, it becomes apparent what Easyviz
+  actually performs, and if desired, the actions can be done
+  (manually) outside Easyviz.
+
+* Rewritten the scitools simplified profiler to take advantage of new
+  profiling tools in Python.
+
+* Added a numpyutils.PiecewiseConstant class for piecewise constant
+  functions.
+
+* Added the avplotter module for making vertical plots in the terminal
+  window. Handy when experimenting with very long time series that can
+  be plotted vertically, line by line.
+
+* Updated documentation.
+
+
+Version 0.8:
+* The syntax of Easyviz is extended to become more equal to
+  Matplotlib (Pylab or basic Pyplot) such that one can switch between
+  Easyviz and Matplolib just by the import statement in the top of the
+  file.
+
+  The extended syntax consists of 1) a savefig function, which
+  is just a nickname for hardcopy, 2) the legend function can take a
+  list of curve names, 3) new keywords loc and fancybox for the legend
+  function allows steering where the legends appear in the figure and if
+  a frame is written around the box with curve names.
+
+  One can now write scripts that employ a syntax very close to Matlab
+  where it is not necessary to make a specific choice between
+  matplotlib.pylab or scitools.std import. (This has proved valuable
+  in courses where students are familiar with Matlab, matplotlib.pylab
+  or scitools.std).
+
+* New MovingPlotWindow.py tool for viewing (very) long time series.
+  The tool enables three different types of a moving window.
+
+* A pause (time.sleep) is inserted when plotting many curves with the
+  Gnuplot backend. This should fix the common problems with "thread error"
+  in that backend.
+
+* Changed default settings for hardcopies made by Gnuplot so that the
+  black-and-white figures look better in professional publications.
+  Lines are not thicker, dashes are longer, and fonts are bigger.
+  These new settings make the Gnuplot backend a very good backend when
+  creating figures for scientific papers and thesis.
+
+* Updates for newer version of Gnuplot.
+
+* The Matplotlib backend now employs pyplot instead of pylab, which means
+  that grabbing the backend by get_backend() returns matplotlib.pyplot.
+  This is more in line with the recommendation by Matplotlib developers
+  to use Pyplot and not Pylab.
+
+* Easyviz example files are updated and adjusted.
+
+* New option: scitools rename --no-backup implies no copying of old
+  file before being renamed. Useful when changing names of big files.
+
+* FloatComparison (float_eq, float_lt, etc.): made rtol and atol static
+  attributes such that all FloatComparison objects share the same tolerances.
+
+* The Grace backend in Easyviz now requires pygrace and not only grace_np.
+
+* Turned off the default use of LaTeX in the Matplotlib backend.
+
+* A lot of updates in the Easyviz documentation.
+
+* Switched to Sphinx for documentation.
+
+
+Version 0.7:
+
+* The most significant change for existing users is that Matplotlib is
+  now the default plotting engine if you install SciTools manually
+  via setup.py and if you have Matplotlib installed. Using Gnuplot (or
+  another backend) as the default backend is achieved by the command
+
+	python setup.py install --easyviz_backend gnuplot
+
+  Existing users may want to still use Gnuplot as the default backend,
+  especially if they have many programs with visualization of 2D
+  scalar and vector fields (utilizing the surf and mesh commands).
+  Easyviz does not yet support Matplotlib's recent functionality
+  for elevated, colored surfaces in 3D.
+
+  Binaries for Debian/Ubuntu still use Gnuplot as the default
+  plotting engine since we face problems building SciTools with
+  Matplotlib on some versions of Ubuntu.
+
+  The particular plotting engine to be used can be controlled in
+  several ways (config file, command-line option, explicit import),
+  see the Easyviz tutorial.
+
+* Numerous bugfixes have been performed. Some documentation and code
+  have been cleaned up. More examples are included.
+
+* The scitools script has a new option "rename" for renaming a bunch
+  of files using regular expressions. Run scitools rename to see a
+  powerful example.
+
+* A new module FloatComparison has been made for comparing floating-point
+  numbers and arrays in a unified way (replacements of ==, !=, <, etc.).
+  The old unified float_eq(a, b, atol=..., rtol=...) is still there and
+  the main tool for doing a == b with a tolerance.
+
+* A new DoNothing class in misc.py is handy when you want to remove
+  some actions in your code, but not change the code. See the doc string.
+  A new function turn_off_plotting applies DoNothing to effectively
+  make all plotting statements inactive (this is often desired during
+  heavy debugging of the non-plotting parts of a program). Just write
+
+     turn_off_plotting(globals())
+
+  before the first plot call.
+
+* The BoxGrid and BoxField classes for structured grids and associated
+  scalar and vector fields are updated and applied more by the developers.
+
+* The old numpytools module is no longer supported, and we recommend to
+  use plain numpy or numpyutils (=numpy + some utility functions).
+  There is no longer (in general) support of Numeric and numarray in SciTools.
+
+
+Version 0.6:
+
+* Numerous bugfixes have been performed.
+
+* The all module is renamed to std, i.e.,
+
+	from scitools.all import *
+
+  should now read
+
+	from scitools.std import *
+
+  The old name "all" is still available as a synonym for std, implying
+  that old programs will work. (The "all" name is misleading as only
+  a small portion of scitools is actually imported.)
+
+* Removed all the separate scripts subst.py, regression.py, etc. in the
+  bin directory. Now there is only one scitools executable in bin,
+  called scitools. The old scripts are recovered by giving their name
+  (except the .py extension) to scitools. That is, the old subst.py,
+  regression.py, ps2mpeg.py, file2interactive.py scripts are now run as
+
+	scitools subst ...
+	scitools regression ...
+	scitools ps2mpeg ...
+	scitools file2interactive ...
+
+  and so forth for the other scripts. Type scitools --help to see more.
+  The old script names subst.py, regression.py will be available if
+  one installs the software associated with the book [1] (e.g., the
+  subst.py script in that software package is just an execution of
+  scitools subst).
+
+* Added ppmtompeg as alternative to mpeg_encode in ps2mpeg.
+
+* Renamed the save function in the matlab2 backend to save_m.
+
+* Changed all raise statements to function calls (preparation for Py 3.0).
+
+* Added support for more open commands in sound.play
+  in order to support more Linux distributions.
+
+* Added (preliminary) support for a text function in easyviz.
+
+* Updated the Easyviz documentation.
+
+* Made an available_backends function for listing the backends for Easyviz.
+
+* Added some Matlab-style functions in numpyutils.py: orth, matrix_rank,
+  null. Reworked all norm* functions.
+
+* Merged the modules DrawFunction.py, FuncDependenceViz.py,
+  FunctionSelector.py, ParameterInterface.py and CanvasCoords.py
+  into TkGUI.py to store all modules with Tk and Pmw graphics in
+  one place (these modules are mostly used in the book [1]).
+  For backward compatibility,  __init__.py defines the old names.
+  That is, from ParameterInterface import * will still work, but
+  actually this means from TkGUI import *.
+
+* Improved bar plots in Easyviz.
+
+* The old plotdemo* files are moved to examples/old.
+
+* Removed hgtools.py as it was too specialized for qualifying for scitools.
+
+* Removed timer.py as this name is likely to clash with other scripts on
+  a computer system.
+
+* Removed immature subpackages odeiface and pyPDE.
+
+* Removed the DocWriter module. It is now in the Doconce package (to be
+  released - until then, send mail to hpl@simula.no to obtain that package).
+
+* Reimplemented the misc.str2type function in a smarter way.
+
+* New str2bool function in misc.py. Takes on, off, false, true, False, True,
+  yes, no, etc. as input and turns the string to a bool. For user interfaces.
+
+* Removed the functions guesstype (not used) and findvalue.
+  scitools.misc.str2obj now solves the problem in a better way.
+
+* Calling figure(...) in Easyviz now returns a Figure object.
+
+
+[1] H. P. Langtangen: Python Scripting for Computational Science.
+3rd edition, 2nd printing, Springer, 2009.

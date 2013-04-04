@@ -1,0 +1,183 @@
+Contents
+
+    1. Introduction
+    2. Dependencies
+    3. Installation
+    4. Configuration file
+    5. License
+    6. Credits
+    7. Contact
+
+-------------------------------------------------------------------------------
+1. Introduction
+
+SciTools is a Python package containing many useful tools for scientific 
+computing in Python. The package is built on top of other widely used 
+packages such as NumPy, SciPy, ScientificPython, Gnuplot, etc.
+
+-------------------------------------------------------------------------------
+2. Dependencies
+
+SciTools only requirements are Python (see http://python.org)
+and Numerical Python (see http://numpy.org). In the past, SciTools
+worked transparently with NumPy, Numeric, and Numarray, through its
+numpytools module. Although this module still works, we recommend
+users to use NumPy only.
+
+-------------------------------------------------------------------------------
+3. Installation
+
+There are several different ways of installing SciTools:
+
+ - Normal install ([, ... ] means optional)
+  
+     python setup.py install [,--prefix=$PREFIX]
+
+   This install makes SciTools use Matplotlib as plotting engine, if a
+   a working Matplotlib is found. Otherwise Gnuplot is used (which requires
+   both the Gnuplot program in C and the Python interface Gnuplot.py to
+   be installed). If neither Matplotlib nor Gnuplot is found, Matplotlib
+   is still used as default plotting engine. (The rest of SciTools will
+   work well, of course.)
+
+   Installing Matplotlib is easy on most platforms: just download the
+   tarball, pack it out, and run python setup.py install.
+
+   You can explicitly specify the desired plotting engine on the command line,
+   using the --easyviz_backend option:
+
+     python setup.py install --easyviz_backend gnuplot [,--prefix=$PREFIX]
+
+   The default plotting engine is specified in the file scitools.cfg in the
+   scitools package directory, and the --easyviz_backend option leads to
+   an automatic edit of the "backend" line in the [easyviz] section of 
+   that configuration file.
+
+   Don't edit the scitools.cfg file manually before installation (use
+   the --easyviz_backend option) because setup.py will override your
+   edits of the easyviz backend.  However, all other edits of the
+   configuration file can be edited.  For example, the Matplotlib GUI
+   is set to TkAgg (i.e., using Tkinter, which is standard in most
+   Python installations). The GUI can be set to other values, such as
+   Qt4Agg (provided you have Qt4 and a Python interface to it).
+
+   After SciTools is installed, you may edit the installed version of
+   scitools.cfg, or (better) have your own .scitools.cfg file in your
+   home directory.
+
+ - Setuptools using eggs
+
+   First build the egg with the following command	
+    
+     python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg
+
+   The --easyviz_backend option can be used, as described above, to
+   change the default plotting engine.
+
+   Then install the created egg using easy_install
+
+     easy_install [, --prefix=$PREFIX] dist/Scitools-0.7-py2.6.egg 
+
+   (Version numbers of SciTools and Python in this filename may vary.)
+
+ - Manual installation
+
+   Put the lib subdirectory in a directory contained in PYTHONPATH,
+   and the bin subdirectory in a directory contained in PATH.
+   (This gives access to the directories for scitools, easyviz, etc.)
+   Edit the scitools.cfg file to set the desired default plotting engine
+   (look for the "backend =" line in the [easyviz] section).
+
+ - Debian/Ubuntu packages
+
+   If you have Debian, or a Debian based platform like Ubuntu, you can
+   do 
+
+     sudo apt-get install python-scitools
+
+   as SciTools is now a part of Debian. You can also find newer Debian 
+   packages for SciTools at googlecode.com.
+
+
+ - Extended (not supported anymore)
+
+   Run build_scitools++.py. This makes a new directory build/scitools++
+   that you can move to any convenient place. scitools++ contains
+   scitools plus some standard Python modules like Gnuplot, IPython,
+   epydoc, etc. Put scitools++/lib in PYTHONPATH and scitools++/bin in
+   PATH. Or you may run scitools++/setup.py to install scitools++ in the
+   official installation directories on your system. 
+
+-------------------------------------------------------------------------------
+4. Configuration File
+
+The behavior of many parts of SciTools and in particular the
+subpackage Easyviz (for plotting) can be controlled in a configuration
+file.  Please read the subsection "Setting Parameters in the
+Configuration File" under the section "Advanced Easyviz Topics" in the
+Easyviz tutorial (pydoc scitools.easyviz will show the tutorial). In
+particular, if you use Matplotlib as the default plotting engine, you
+may want to turn on the use of LaTeX for rendering legends, titles,
+and numbers.  By default, LaTeX is turned off when SciTools is
+installed. It is easy to change this by locating the scitools.cfg file
+in the folder where the SciTools package is installed and edit the
+line with text.usetex in the [matplotlib] section of this file. A
+better solution is to copy the system scitools.cfg file to
+.scitools.cfg in your home folder and edit that file. You can also
+change the GUI used by Matplotlib. Users who do not apply Matplotlib
+for plotting will seldom need to edit the configuration file.
+
+-------------------------------------------------------------------------------
+5. License
+
+SciTools is licensed under the new BSD license, see the LICENSE file.
+
+Lumpy.py and Gui.py are licensed under GPL, however, permission is
+granted by Allen Downey to include these under a BSD license.
+
+-------------------------------------------------------------------------------
+6. Credits
+
+SciTools was initially mainly developed by Hans Petter Langtangen
+<hpl@simula.no> for his book "Python Scripting for Computational
+Science" (Springer, 1st edition 2003, 3rd edition 2009). 
+The Easyviz package was mainly developed by Johannes H. Ring 
+<johannr@simula.no>. Johannes H. Ring has been the principal
+maintainer of SciTools.
+
+Some modules included in SciTools are written by others:
+
+Allen B. Downey <downey@allendowney.com> wrote Lumpy.py and Gui.py
+Imri Goldberg <lorgandon@gmail.com> wrote aplotter.py
+Fred L. Drake, Jr. <fdrake@acm.org> wrote pprint2.py
+Gael Varoquaux <gael.varoquaux@normalesup.org> wrote pyreport
+
+Code contributors include:
+
+Rolv E. Bredesen <rolveb@simula.no>
+Joachim B. Haga <jobh@simula.no>
+Mario Pernici <Mario.Pernici@mi.infn.it>
+Ilmar Wilbers <ilmarw@simula.no>
+Arve Knudsen <arvenk@simula.no>
+
+-------------------------------------------------------------------------------
+7. Contact
+
+Comments, suggestions, bug fixes should be sent to
+
+    scitools@googlegroups.com
+
+The latest release of SciTools can be obtained from
+
+    http://scitools.googlecode.com
+
+while the latest Subversion revision can be obtained either anonymously 
+(for non-members) by
+
+    svn co http://scitools.googlecode.com/svn/trunk/ scitools
+
+while SciTools members should use
+
+    svn co https://scitools.googlecode.com/svn/trunk/ scitools --username USERNAME
+
+See http://code.google.com/p/scitools/source/checkout for details.

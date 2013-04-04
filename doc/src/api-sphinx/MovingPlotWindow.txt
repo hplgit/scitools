@@ -1,0 +1,10 @@
+
+:mod:`scitools.MovingPlotWindow`
+================================
+
+.. automodule:: scitools.MovingPlotWindow
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

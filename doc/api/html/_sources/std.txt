@@ -1,0 +1,10 @@
+
+:mod:`scitools.std`
+===================
+
+.. automodule:: scitools.std
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

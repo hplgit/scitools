@@ -1,0 +1,8 @@
+
+:mod:`scitools.easyviz.movie`
+=============================
+
+.. automodule:: scitools.easyviz.movie
+   :members:
+   :undoc-members:
+   :show-inheritance:

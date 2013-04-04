@@ -1,0 +1,10 @@
+
+:mod:`scitools.modulecheck`
+===========================
+
+.. automodule:: scitools.modulecheck
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

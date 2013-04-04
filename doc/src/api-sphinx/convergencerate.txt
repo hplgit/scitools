@@ -1,0 +1,10 @@
+
+:mod:`scitools.convergencerate`
+===============================
+
+.. automodule:: scitools.convergencerate
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

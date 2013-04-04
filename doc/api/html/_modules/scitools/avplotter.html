@@ -1,0 +1,1817 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.avplotter &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.avplotter</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">avplotter (&quot;ascii vertical plotter&quot;) is a simple ASCII plotter for</span>
+<span class="sd">curve plots, where the x axis points downward and the y axis</span>
+<span class="sd">is horizontal. The plot is realized by printing it line by line.</span>
+<span class="sd">There are two main applications: 1) very long time series, and</span>
+<span class="sd">2) plots that would be convenient to have as pure text.</span>
+
+<span class="sd">See the documentation of class Plotter for examples of various</span>
+<span class="sd">types of plots.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Plotter"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.Plotter">[docs]</a><span class="k">class</span> <span class="nc">Plotter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ASCII plotter with x axis downwards and y axis horizontal.</span>
+<span class="sd">    Can make a plot by writing out new x values line by line in a</span>
+<span class="sd">    terminal window or a file.</span>
+<span class="sd">    Very suited for long time series.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; a = 0.2</span>
+<span class="sd">    &gt;&gt;&gt; p = Plotter(-1-a, 1+a, width=50)</span>
+<span class="sd">    &gt;&gt;&gt; from math import sin, pi</span>
+<span class="sd">    &gt;&gt;&gt; from numpy import linspace</span>
+<span class="sd">    &gt;&gt;&gt; num_periods = 2</span>
+<span class="sd">    &gt;&gt;&gt; resolution_per_period = 22</span>
+<span class="sd">    &gt;&gt;&gt; tp = linspace(0, num_periods*2*pi,</span>
+<span class="sd">    ...               num_periods*resolution_per_period + 1)</span>
+<span class="sd">    &gt;&gt;&gt; for t in tp:</span>
+<span class="sd">    ...     y = (1 + a*sin(0.5*t))*sin(t)</span>
+<span class="sd">    ...     print &#39;t=%5.2f&#39; % t, p.plot(t, y), &#39;%5.2f&#39; % y</span>
+<span class="sd">    ...</span>
+<span class="sd">    t= 0.00                          |                           0.00</span>
+<span class="sd">    t= 0.29                          |     *                     0.29</span>
+<span class="sd">    t= 0.57                          |           *               0.57</span>
+<span class="sd">    t= 0.86                          |                *          0.82</span>
+<span class="sd">    t= 1.14                          |                    *      1.01</span>
+<span class="sd">    t= 1.43                          |                      *    1.12</span>
+<span class="sd">    t= 1.71                          |                       *   1.14</span>
+<span class="sd">    t= 2.00                          |                     *     1.06</span>
+<span class="sd">    t= 2.28                          |                  *        0.89</span>
+<span class="sd">    t= 2.57                          |            *              0.64</span>
+<span class="sd">    t= 2.86                          |      *                    0.34</span>
+<span class="sd">    t= 3.14                          |                           0.00</span>
+<span class="sd">    t= 3.43                   *      |                          -0.34</span>
+<span class="sd">    t= 3.71             *            |                          -0.64</span>
+<span class="sd">    t= 4.00       *                  |                          -0.89</span>
+<span class="sd">    t= 4.28    *                     |                          -1.06</span>
+<span class="sd">    t= 4.57  *                       |                          -1.14</span>
+<span class="sd">    t= 4.86   *                      |                          -1.12</span>
+<span class="sd">    t= 5.14     *                    |                          -1.01</span>
+<span class="sd">    t= 5.43         *                |                          -0.82</span>
+<span class="sd">    t= 5.71              *           |                          -0.57</span>
+<span class="sd">    t= 6.00                    *     |                          -0.29</span>
+<span class="sd">    t= 6.28                          |                          -0.00</span>
+<span class="sd">    t= 6.57                          |     *                     0.27</span>
+<span class="sd">    t= 6.85                          |          *                0.51</span>
+<span class="sd">    t= 7.14                          |             *             0.69</span>
+<span class="sd">    t= 7.43                          |                *          0.81</span>
+<span class="sd">    t= 7.71                          |                 *         0.86</span>
+<span class="sd">    t= 8.00                          |                 *         0.84</span>
+<span class="sd">    t= 8.28                          |               *           0.76</span>
+<span class="sd">    t= 8.57                          |            *              0.62</span>
+<span class="sd">    t= 8.85                          |        *                  0.44</span>
+<span class="sd">    t= 9.14                          |    *                      0.23</span>
+<span class="sd">    t= 9.42                          |                           0.00</span>
+<span class="sd">    t= 9.71                     *    |                          -0.23</span>
+<span class="sd">    t=10.00                 *        |                          -0.44</span>
+<span class="sd">    t=10.28             *            |                          -0.62</span>
+<span class="sd">    t=10.57          *               |                          -0.76</span>
+<span class="sd">    t=10.85        *                 |                          -0.84</span>
+<span class="sd">    t=11.14        *                 |                          -0.86</span>
+<span class="sd">    t=11.42         *                |                          -0.81</span>
+<span class="sd">    t=11.71            *             |                          -0.69</span>
+<span class="sd">    t=12.00               *          |                          -0.51</span>
+<span class="sd">    t=12.28                    *     |                          -0.27</span>
+<span class="sd">    t=12.57                          |                          -0.00</span>
+
+<span class="sd">    Here is a one-dimensional random walk example::</span>
+
+<span class="sd">        import time, numpy as np</span>
+<span class="sd">        p = Plotter(-1, 1, width=75)</span>
+<span class="sd">        np.random.seed(10)</span>
+<span class="sd">        y = 0</span>
+<span class="sd">        while True:</span>
+<span class="sd">            random_step = 1 if np.random.random() &gt; 0.5 else -1</span>
+<span class="sd">            y = y + 0.05*random_step</span>
+<span class="sd">            if y &lt; -1:</span>
+<span class="sd">                print &#39;HOME!!!!!!!!!&#39;</span>
+<span class="sd">                break</span>
+<span class="sd">            print p.plot(0, y)</span>
+<span class="sd">            try:</span>
+<span class="sd">                time.sleep(0.1)</span>
+<span class="sd">            except KeyboardInterrupt:</span>
+<span class="sd">                print &#39;Interrupted by Ctrl-C&#39;</span>
+<span class="sd">                break</span>
+
+<span class="sd">    One can easily plot two or more curves side by side. Here we</span>
+<span class="sd">    plot two curves (sine and cosine), each with a width of 25</span>
+<span class="sd">    characters::</span>
+
+<span class="sd">        p_sin = Plotter(-1, 1, width=25, symbols=&#39;s&#39;)</span>
+<span class="sd">        p_cos = Plotter(-1, 1, width=25, symbols=&#39;c&#39;)</span>
+<span class="sd">        from math import sin, cos, pi</span>
+<span class="sd">        from numpy import linspace</span>
+<span class="sd">        tp = linspace(0, 6*pi, 6*8+1)</span>
+<span class="sd">        for t in tp:</span>
+<span class="sd">            print p_sin.plot(t, sin(t)), p_cos.plot(t, cos(t))</span>
+
+<span class="sd">    The output reads::</span>
+
+<span class="sd">                     |                          |           c</span>
+<span class="sd">                     |   s                      |          c</span>
+<span class="sd">                     |       s                  |       c</span>
+<span class="sd">                     |          s               |   c</span>
+<span class="sd">                     |           s              |</span>
+<span class="sd">                     |          s          c    |</span>
+<span class="sd">                     |       s         c        |</span>
+<span class="sd">                     |   s          c           |</span>
+<span class="sd">                     |             c            |</span>
+<span class="sd">                s    |              c           |</span>
+<span class="sd">            s        |                 c        |</span>
+<span class="sd">         s           |                     c    |</span>
+<span class="sd">        s            |                         c|</span>
+<span class="sd">         s           |                          |   c</span>
+<span class="sd">            s        |                          |       c</span>
+<span class="sd">                s    |                          |          c</span>
+<span class="sd">                    s|                          |           c</span>
+<span class="sd">                     |   s                      |          c</span>
+<span class="sd">                     |       s                  |       c</span>
+<span class="sd">                     |          s               |   c</span>
+<span class="sd">                     |           s              |</span>
+<span class="sd">                     |          s          c    |</span>
+<span class="sd">                     |       s         c        |</span>
+<span class="sd">                     |   s          c           |</span>
+<span class="sd">                     |             c            |</span>
+<span class="sd">                s    |              c           |</span>
+<span class="sd">            s        |                 c        |</span>
+<span class="sd">         s           |                     c    |</span>
+<span class="sd">        s            |                         c|</span>
+<span class="sd">         s           |                          |   c</span>
+<span class="sd">            s        |                          |       c</span>
+<span class="sd">                s    |                          |          c</span>
+<span class="sd">                    s|                          |           c</span>
+<span class="sd">                     |   s                      |          c</span>
+<span class="sd">                     |       s                  |       c</span>
+<span class="sd">                     |          s               |   c</span>
+<span class="sd">                     |           s              |</span>
+<span class="sd">                     |          s          c    |</span>
+<span class="sd">                     |       s         c        |</span>
+<span class="sd">                     |   s          c           |</span>
+<span class="sd">                     |             c            |</span>
+<span class="sd">                s    |              c           |</span>
+<span class="sd">            s        |                 c        |</span>
+<span class="sd">         s           |                     c    |</span>
+<span class="sd">        s            |                         c|</span>
+<span class="sd">         s           |                          |   c</span>
+<span class="sd">            s        |                          |       c</span>
+<span class="sd">                s    |                          |          c</span>
+<span class="sd">                    s|                          |           c</span>
+
+<span class="sd">    Alternatively, two curves (here sine and cosine) can be</span>
+<span class="sd">    plotted in the same coordinate system::</span>
+
+<span class="sd">        p = Plotter(-1, 1, width=50, symbols=&#39;sc&#39;)</span>
+<span class="sd">        from math import sin, cos, pi</span>
+<span class="sd">        from numpy import linspace</span>
+<span class="sd">        tp = linspace(0, 6*pi, 6*8+1)</span>
+<span class="sd">        for t in tp:</span>
+<span class="sd">            print p.plot(t, sin(t), cos(t))</span>
+
+<span class="sd">    The output from this code becomes::</span>
+
+<span class="sd">                                 |                        c</span>
+<span class="sd">                                 |         s            c</span>
+<span class="sd">                                 |                 c</span>
+<span class="sd">                                 |         c            s</span>
+<span class="sd">                                 |                        s</span>
+<span class="sd">                       c         |                      s</span>
+<span class="sd">               c                 |                 s</span>
+<span class="sd">          c                      |         s</span>
+<span class="sd">        c                        |</span>
+<span class="sd">          c            s         |</span>
+<span class="sd">               c                 |</span>
+<span class="sd">          s            c         |</span>
+<span class="sd">        s                        |</span>
+<span class="sd">          s                      |         c</span>
+<span class="sd">               s                 |                 c</span>
+<span class="sd">                       s         |                      c</span>
+<span class="sd">                                 |                        c</span>
+<span class="sd">                                 |         s            c</span>
+<span class="sd">                                 |                 c</span>
+<span class="sd">                                 |         c            s</span>
+<span class="sd">                                 |                        s</span>
+<span class="sd">                       c         |                      s</span>
+<span class="sd">               c                 |                 s</span>
+<span class="sd">          c                      |         s</span>
+<span class="sd">        c                        |</span>
+<span class="sd">          c            s         |</span>
+<span class="sd">               c                 |</span>
+<span class="sd">          s            c         |</span>
+<span class="sd">        s                        |</span>
+<span class="sd">          s                      |         c</span>
+<span class="sd">               s                 |                 c</span>
+<span class="sd">                       s         |                      c</span>
+<span class="sd">                                 |                        c</span>
+<span class="sd">                                 |         s            c</span>
+<span class="sd">                                 |                 c</span>
+<span class="sd">                                 |         c            s</span>
+<span class="sd">                                 |                        s</span>
+<span class="sd">                       c         |                      s</span>
+<span class="sd">               c                 |                 s</span>
+<span class="sd">          c                      |         s</span>
+<span class="sd">        c                        |</span>
+<span class="sd">          c            s         |</span>
+<span class="sd">               c                 |</span>
+<span class="sd">          s            c         |</span>
+<span class="sd">        s                        |</span>
+<span class="sd">          s                      |         c</span>
+<span class="sd">               s                 |                 c</span>
+<span class="sd">                       s         |                      c</span>
+<span class="sd">                                 |                        c</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Plotter.__init__"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.Plotter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">68</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;*o+x@&#39;</span><span class="p">,</span>
+                 <span class="n">vertical_line</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a line by line plotter with the x axis pointing</span>
+<span class="sd">        downward. The `ymin` and `ymax` variables define the</span>
+<span class="sd">        extent of the y axis. The `width` parameter is the number</span>
+<span class="sd">        of characters used for the y domain (axis). The symbols</span>
+<span class="sd">        used for curves are given by the `symbols` string</span>
+<span class="sd">        (first symbol, by default is ``*``, next is ``o``).</span>
+<span class="sd">        The `vertical_line` parameter specifies for which y value</span>
+<span class="sd">        where the x axis is drawn (y=0 by default).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ymin</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ymax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbols</span> <span class="o">=</span> <span class="n">symbols</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertical_line</span> <span class="o">=</span> <span class="n">vertical_line</span>
+</div>
+    <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the column no. corresponding to y.&quot;&quot;&quot;</span>
+        <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span>
+
+        <span class="k">if</span>   <span class="n">y</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">too_small</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">too_large</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="n">ymax</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">too_small</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">too_large</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">too_small</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">too_large</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">y_in_01</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">y_in_01</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">c</span>
+
+<div class="viewcode-block" id="Plotter.plot"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.Plotter.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return next line in plot, given x and some y values.</span>
+
+<span class="sd">        Supported kwargs:</span>
+<span class="sd">        print_out_of_range_value: if True, print the value if it</span>
+<span class="sd">        is out of range.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">print_out_of_range_value</span> <span class="o">=</span> \
+              <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;print_out_of_range_value&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39; &#39;</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">yi</span><span class="p">,</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">too_small</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">too_large</span><span class="p">:</span>
+                <span class="n">symbol</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span>
+                <span class="k">if</span> <span class="n">print_out_of_range_value</span><span class="p">:</span>
+                    <span class="n">y_value</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%.1E</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">yi</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbol</span>
+
+        <span class="c"># Mark &#39;x&#39; axis</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertical_line</span> <span class="ow">and</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertical_line</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">line</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_value</span>
+
+</div></div>
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Easyviz-style plot command.</span>
+<span class="sd">    args holds x1, y1, x2, y2, ...::</span>
+
+<span class="sd">      plot(t, u1, t, u2, axis=[0, 10, -1, 1])</span>
+
+<span class="sd">    No other keyword arguments has any effect.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s">&#39;axis&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;axis&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="mf">1E+20</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="o">-</span><span class="n">ymin</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ymax</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+    <span class="n">num_curves</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="n">num_curves</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;avplotter.plot: cannot plot more than 4 curves&#39;</span><span class="p">)</span>
+
+    <span class="n">x_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">x_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;avplotter.plot: all x coordinates for all curves must have the same length (</span><span class="si">%d</span><span class="s"> vs </span><span class="si">%d</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">x_length</span><span class="p">))</span>
+
+    <span class="n">x_array</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_array</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;index </span><span class="si">%d</span><span class="s"> in x_array is illegal in args[</span><span class="si">%d</span><span class="s">] (length=</span><span class="si">%d</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">j</span><span class="p">])))</span>
+
+        <span class="k">print</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_array</span><span class="p">,</span> <span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="test_sin"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.test_sin">[docs]</a><span class="k">def</span> <span class="nf">test_sin</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+    <span class="n">num_periods</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">resolution_per_period</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_periods</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span>
+                  <span class="n">num_periods</span><span class="o">*</span><span class="n">resolution_per_period</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">t</span><span class="p">))</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;t=</span><span class="si">%5.2f</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%5.2f</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">ans</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">t= 0.00                          |                           0.00</span>
+<span class="s">t= 0.29                          |     *                     0.29</span>
+<span class="s">t= 0.57                          |           *               0.57</span>
+<span class="s">t= 0.86                          |                *          0.82</span>
+<span class="s">t= 1.14                          |                    *      1.01</span>
+<span class="s">t= 1.43                          |                      *    1.12</span>
+<span class="s">t= 1.71                          |                       *   1.14</span>
+<span class="s">t= 2.00                          |                     *     1.06</span>
+<span class="s">t= 2.28                          |                  *        0.89</span>
+<span class="s">t= 2.57                          |            *              0.64</span>
+<span class="s">t= 2.86                          |      *                    0.34</span>
+<span class="s">t= 3.14                          |                           0.00</span>
+<span class="s">t= 3.43                   *      |                          -0.34</span>
+<span class="s">t= 3.71             *            |                          -0.64</span>
+<span class="s">t= 4.00       *                  |                          -0.89</span>
+<span class="s">t= 4.28    *                     |                          -1.06</span>
+<span class="s">t= 4.57  *                       |                          -1.14</span>
+<span class="s">t= 4.86   *                      |                          -1.12</span>
+<span class="s">t= 5.14     *                    |                          -1.01</span>
+<span class="s">t= 5.43         *                |                          -0.82</span>
+<span class="s">t= 5.71              *           |                          -0.57</span>
+<span class="s">t= 6.00                    *     |                          -0.29</span>
+<span class="s">t= 6.28                          |                          -0.00</span>
+<span class="s">t= 6.57                          |     *                     0.27</span>
+<span class="s">t= 6.85                          |          *                0.51</span>
+<span class="s">t= 7.14                          |             *             0.69</span>
+<span class="s">t= 7.43                          |                *          0.81</span>
+<span class="s">t= 7.71                          |                 *         0.86</span>
+<span class="s">t= 8.00                          |                 *         0.84</span>
+<span class="s">t= 8.28                          |               *           0.76</span>
+<span class="s">t= 8.57                          |            *              0.62</span>
+<span class="s">t= 8.85                          |        *                  0.44</span>
+<span class="s">t= 9.14                          |    *                      0.23</span>
+<span class="s">t= 9.42                          |                           0.00</span>
+<span class="s">t= 9.71                     *    |                          -0.23</span>
+<span class="s">t=10.00                 *        |                          -0.44</span>
+<span class="s">t=10.28             *            |                          -0.62</span>
+<span class="s">t=10.57          *               |                          -0.76</span>
+<span class="s">t=10.85        *                 |                          -0.84</span>
+<span class="s">t=11.14        *                 |                          -0.86</span>
+<span class="s">t=11.42         *                |                          -0.81</span>
+<span class="s">t=11.71            *             |                          -0.69</span>
+<span class="s">t=12.00               *          |                          -0.51</span>
+<span class="s">t=12.28                    *     |                          -0.27</span>
+<span class="s">t=12.57                          |                          -0.00</span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">_compare</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="test_2_curves_v1"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.test_2_curves_v1">[docs]</a><span class="k">def</span> <span class="nf">test_2_curves_v1</span><span class="p">():</span>
+    <span class="n">p_sin</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+    <span class="n">p_cos</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span> <span class="n">p_cos</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">             |                          |           c</span>
+<span class="s">             |   s                      |          c</span>
+<span class="s">             |       s                  |       c</span>
+<span class="s">             |          s               |   c</span>
+<span class="s">             |           s              |</span>
+<span class="s">             |          s          c    |</span>
+<span class="s">             |       s         c        |</span>
+<span class="s">             |   s          c           |</span>
+<span class="s">             |             c            |</span>
+<span class="s">        s    |              c           |</span>
+<span class="s">    s        |                 c        |</span>
+<span class="s"> s           |                     c    |</span>
+<span class="s">s            |                         c|</span>
+<span class="s"> s           |                          |   c</span>
+<span class="s">    s        |                          |       c</span>
+<span class="s">        s    |                          |          c</span>
+<span class="s">            s|                          |           c</span>
+<span class="s">             |   s                      |          c</span>
+<span class="s">             |       s                  |       c</span>
+<span class="s">             |          s               |   c</span>
+<span class="s">             |           s              |</span>
+<span class="s">             |          s          c    |</span>
+<span class="s">             |       s         c        |</span>
+<span class="s">             |   s          c           |</span>
+<span class="s">             |             c            |</span>
+<span class="s">        s    |              c           |</span>
+<span class="s">    s        |                 c        |</span>
+<span class="s"> s           |                     c    |</span>
+<span class="s">s            |                         c|</span>
+<span class="s"> s           |                          |   c</span>
+<span class="s">    s        |                          |       c</span>
+<span class="s">        s    |                          |          c</span>
+<span class="s">            s|                          |           c</span>
+<span class="s">             |   s                      |          c</span>
+<span class="s">             |       s                  |       c</span>
+<span class="s">             |          s               |   c</span>
+<span class="s">             |           s              |</span>
+<span class="s">             |          s          c    |</span>
+<span class="s">             |       s         c        |</span>
+<span class="s">             |   s          c           |</span>
+<span class="s">             |             c            |</span>
+<span class="s">        s    |              c           |</span>
+<span class="s">    s        |                 c        |</span>
+<span class="s"> s           |                     c    |</span>
+<span class="s">s            |                         c|</span>
+<span class="s"> s           |                          |   c</span>
+<span class="s">    s        |                          |       c</span>
+<span class="s">        s    |                          |          c</span>
+<span class="s">            s|                          |           c</span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">_compare</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="test_2_curves_v2"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.test_2_curves_v2">[docs]</a><span class="k">def</span> <span class="nf">test_2_curves_v2</span><span class="p">():</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;sc&#39;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">                         |                        c</span>
+<span class="s">                         |         s            c</span>
+<span class="s">                         |                 c</span>
+<span class="s">                         |         c            s</span>
+<span class="s">                         |                        s</span>
+<span class="s">               c         |                      s</span>
+<span class="s">       c                 |                 s</span>
+<span class="s">  c                      |         s</span>
+<span class="s">c                        |</span>
+<span class="s">  c            s         |</span>
+<span class="s">       c                 |</span>
+<span class="s">  s            c         |</span>
+<span class="s">s                        |</span>
+<span class="s">  s                      |         c</span>
+<span class="s">       s                 |                 c</span>
+<span class="s">               s         |                      c</span>
+<span class="s">                         |                        c</span>
+<span class="s">                         |         s            c</span>
+<span class="s">                         |                 c</span>
+<span class="s">                         |         c            s</span>
+<span class="s">                         |                        s</span>
+<span class="s">               c         |                      s</span>
+<span class="s">       c                 |                 s</span>
+<span class="s">  c                      |         s</span>
+<span class="s">c                        |</span>
+<span class="s">  c            s         |</span>
+<span class="s">       c                 |</span>
+<span class="s">  s            c         |</span>
+<span class="s">s                        |</span>
+<span class="s">  s                      |         c</span>
+<span class="s">       s                 |                 c</span>
+<span class="s">               s         |                      c</span>
+<span class="s">                         |                        c</span>
+<span class="s">                         |         s            c</span>
+<span class="s">                         |                 c</span>
+<span class="s">                         |         c            s</span>
+<span class="s">                         |                        s</span>
+<span class="s">               c         |                      s</span>
+<span class="s">       c                 |                 s</span>
+<span class="s">  c                      |         s</span>
+<span class="s">c                        |</span>
+<span class="s">  c            s         |</span>
+<span class="s">       c                 |</span>
+<span class="s">  s            c         |</span>
+<span class="s">s                        |</span>
+<span class="s">  s                      |         c</span>
+<span class="s">       s                 |                 c</span>
+<span class="s">               s         |                      c</span>
+<span class="s">                         |                        c</span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">_compare</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="test_random_walk"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.test_random_walk">[docs]</a><span class="k">def</span> <span class="nf">test_random_walk</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">random_step</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.05</span><span class="o">*</span><span class="n">random_step</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  <span class="c"># t is just dummy</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                       *              |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                     1.1E+00</span>
+<span class="s">                                      |                                     1.0E+00</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                                  *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                                *</span>
+<span class="s">                                      |                              *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                             *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                           *</span>
+<span class="s">                                      |                         *</span>
+<span class="s">                                      |                       *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                     *</span>
+<span class="s">                                      |                   *</span>
+<span class="s">                                      |                 *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |               *</span>
+<span class="s">                                      |              *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |            *</span>
+<span class="s">                                      |          *</span>
+<span class="s">                                      |        *</span>
+<span class="s">                                      |      *</span>
+<span class="s">                                      |    *</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                    * |</span>
+<span class="s">                                     *|</span>
+<span class="s">                                      |*</span>
+<span class="s">                                      |  *</span>
+<span class="s">                                      |*</span>
+<span class="s">                                     *|</span>
+<span class="s">                                    * |</span>
+<span class="s">                                  *   |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                        *             |</span>
+<span class="s">                          *           |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                              *       |</span>
+<span class="s">                                *     |</span>
+<span class="s">                              *       |</span>
+<span class="s">                            *         |</span>
+<span class="s">                          *           |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                        *             |</span>
+<span class="s">                      *               |</span>
+<span class="s">                     *                |</span>
+<span class="s">                   *                  |</span>
+<span class="s">                 *                    |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">  *                                   |</span>
+<span class="s">    *                                 |</span>
+<span class="s">      *                               |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">  *                                   |</span>
+<span class="s">    *                                 |</span>
+<span class="s">      *                               |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">  *                                   |</span>
+<span class="s">    *                                 |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">      *                               |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">                 *                    |</span>
+<span class="s">                   *                  |</span>
+<span class="s">                 *                    |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">                 *                    |</span>
+<span class="s">               *                      |</span>
+<span class="s">                 *                    |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">               *                      |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">             *                        |</span>
+<span class="s">           *                          |</span>
+<span class="s">         *                            |</span>
+<span class="s">       *                              |</span>
+<span class="s">      *                               |</span>
+<span class="s">    *                                 |</span>
+<span class="s">  *                                   |</span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">_compare</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="run_random_walk"><a class="viewcode-back" href="../../avplotter.html#scitools.avplotter.run_random_walk">[docs]</a><span class="k">def</span> <span class="nf">run_random_walk</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">random_step</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.05</span><span class="o">*</span><span class="n">random_step</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;HOME!!!&#39;</span>
+            <span class="k">break</span>
+        <span class="k">print</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Interrupted by Ctrl-C&#39;</span>
+            <span class="k">break</span>
+</div>
+<span class="k">def</span> <span class="nf">_compare</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">line1</span><span class="p">,</span> <span class="n">line2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ans</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">line1</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">line2</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_sin</span><span class="p">();</span> <span class="n">test_2_curves_v1</span><span class="p">();</span> <span class="n">test_2_curves_v2</span><span class="p">();</span> <span class="n">test_random_walk</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;random_walk&#39;</span><span class="p">:</span>
+            <span class="n">run_random_walk</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

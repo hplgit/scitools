@@ -1,0 +1,132 @@
+Easyviz comes with the SciTools package, so to install Easyviz, you
+must install SciTools, which is available from
+"Google code": "http://code.google.com/p/scitools".
+
+If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:
+!bc sys
+Unix> sudo apt-get install python-scitools
+!ec
+because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:
+!bc sys
+Unix> sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+!ec
+
+
+Otherwise, you download the tarball with the SciTools software, pack it out,
+go the `scitools` folder, and run the standard command
+!bc
+Unix/DOS> python setup.py install
+!ec
+Easyviz is reached as the package `scitools.easyviz` and can be
+imported in several ways (see the paragraph heading
+"Importing Just Easyviz" in the Tutorial).
+
+Easyviz will not work unless you have one or more plotting programs
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an `apt-get
+install python-scitools` all necessary plotting programs are
+automatically installed for you.)
+
+Please check your plotting program independently of Easyviz, as
+described in the *Check Your Backends!* section of the *Troubleshooting*
+chapter, if you encounter strange errors during Easyviz plotting.
+
+===== Installing Gnuplot =====
+
+===== Linux/Unix =====
+
+__Compile from Source.__
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+easily on most Unix systems. You also need the `Gnuplot` Python
+module, which can be obtained from `gnuplot-py.sourceforge.net`.
+
+__Debian/Ubuntu.__
+Prebuilt versions are available for Debian/Ubuntu:
+run
+!bc
+apt-get install gnuplot gnuplot-x11 python-gnuplot
+!ec
+but running these commands are not necessary since on Debian/Ubuntu you
+will install `python-scitools` which effectively installs all the
+software that SciTools depend on.
+
+===== Windows =====
+
+On Windows, one can either use Gnuplot under Cygwin or use a precompiled
+binary from sourgeforce.net.
+
+__Using the Gnuplot Cygwin package.__
+In this case there are two things that needs to be changed in the
+`gp_cygwin.py` file in the top-level directory of the `Gnuplot.py`
+source tree. First you need to change the `gnuplot_command` variable
+to `gnuplot` instead of `pgnuplot.exe`. Then you should change the
+`default_term` variable to `x11` instead of `windows` since the
+Gnuplot Cygwin package is not compiled with the Windows
+terminal. Finally, install `Gnuplot.py` (`python setup.py install`)
+and launch X11 by running `startx` from a Cygwin prompt. Try to run
+the `test.py` script that comes with `Gnuplot.py`. If everything
+works, Easyviz can use Gnuplot.
+
+__Using Gnuplot Binaries.__
+
+First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+A possible URL is
+!bc
+http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
+!ec
+The zip file may have another name for a newer version of Gnuplot on
+Windows.
+
+Then unzip the `gp424win32.zip` file to the folder
+!bc
+C:\gnuplot
+!ec
+Add the folder name
+!bc
+C:\gnuplot\bin
+!ec
+to the `PATH` environment variable (this is done in a graphical interface for
+setting environment variables).
+
+Check out the latest SVN revision of the Python interface to
+Gnuplot, which is the Python module file `Gnuplot.py`:
+!bc
+svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
+!ec
+
+Install `Gnuplot.py`:
+!bc
+cd gnuplot-py
+python setup.py bdist_wininst
+dist\gnuplot-py-1.8+.win32.exe
+!ec
+
+Check out the latest SVN revision of SciTools:
+!bc
+svn co http://scitools.googlecode.com/svn/trunk/ scitools
+!ec
+
+Install SciTools:
+!bc
+cd scitools
+python setup.py bdist_wininst
+dist\SciTools-0.4.win32.exe
+!ec
+(The SciTools version number differs.)
+
+===== Installing Matplotlib =====
+
+This is normally just a matter of
+!bc
+python setup.py install
+!ec
+in the root directory of the Matplotlib code.
+
+__Windows.__
+You can download prebuilt binaries from the Matplotlib home page.

@@ -1,0 +1,10 @@
+
+:mod:`scitools.TkGUI`
+=====================
+
+.. automodule:: scitools.TkGUI
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

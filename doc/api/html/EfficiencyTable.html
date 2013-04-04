@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.EfficiencyTable &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.EfficiencyTable">
+<span id="scitools-efficiencytable"></span><h1><a class="reference internal" href="#module-scitools.EfficiencyTable" title="scitools.EfficiencyTable"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.EfficiencyTable</span></tt></a><a class="headerlink" href="#module-scitools.EfficiencyTable" title="Permalink to this headline">¶</a></h1>
+<p>This module contains a class for managing efficiency/performance
+experiments.</p>
+<dl class="class">
+<dt id="scitools.EfficiencyTable.EfficiencyTable">
+<em class="property">class </em><tt class="descclassname">scitools.EfficiencyTable.</tt><tt class="descname">EfficiencyTable</tt><big>(</big><em>description</em>, <em>normalization_time=None</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage the CPU times of efficiency experiments and make
+tabular reports with sorted results.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EfficiencyTable</span><span class="p">(</span><span class="s">&#39;some description of the experiments&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;about an experiment&#39;</span><span class="p">,</span> <span class="n">cpu_time</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;about another experiment&#39;</span><span class="p">,</span> <span class="n">cpu_time</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;about a third experiment&#39;</span><span class="p">,</span> <span class="n">cpu_time</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e</span>  <span class="c"># prints a sorted table with scaled CPU times</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">+=</span> <span class="n">e2</span>  <span class="c"># add experiments from EfficiencyTable e2 to e</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.EfficiencyTable.EfficiencyTable.add" title="scitools.EfficiencyTable.EfficiencyTable.add"><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt></a>(description,&nbsp;CPU_time[,&nbsp;function_name])</td>
+<td>Add the CPU time of an experiment, together with a description</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.EfficiencyTable.EfficiencyTable.set_normalization_time" title="scitools.EfficiencyTable.EfficiencyTable.set_normalization_time"><tt class="xref py py-obj docutils literal"><span class="pre">set_normalization_time</span></tt></a>(t)</td>
+<td>Set the CPU time by which all other CPU times will be divided.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>As e += table (see __iadd__).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.__iadd__">
+<tt class="descname">__iadd__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.__iadd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add results in other to present results.
+New items (descriptions) are simply registered, while
+identical items (descriptions) will have a list of CPU times,
+corresponding to the different EfficiencyTable instances.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>description</em>, <em>normalization_time=None</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param description: a string acting as headline for this test.
+&#64;param normalization_time: all CPU times will be divided by this value
+(if not set, the class will find the smallest (best) CPU
+time and divide all others by this value.</p>
+<p>The best_time parameter can also be set in the
+set_normalization_time method. The normalization time is not
+used before an instance is printed (str method).)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.EfficiencyTable'</em><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out a sorted list (with respect to CPU times) of the experiments.
+In case of multiple CPU times per description of an experiment,
+the table is sorted with respect to the first CPU time entry of each
+multiple CPU times list. All CPU times are divided by a normalization
+time, which is given to the constructor or to the
+set_normalization_time method, or if not prescribed, this class
+finds the smallest reliable CPU time (neglecting very small
+CPU time).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.add">
+<tt class="descname">add</tt><big>(</big><em>description</em>, <em>CPU_time</em>, <em>function_name=None</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the CPU time of an experiment, together with a description
+and an optional function_name (which is appended to the
+description string).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.EfficiencyTable.EfficiencyTable.set_normalization_time">
+<tt class="descname">set_normalization_time</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#EfficiencyTable.set_normalization_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.EfficiencyTable.set_normalization_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the CPU time by which all other CPU times will be divided.
+By default, this is the maximum CPU time encountered in the data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.EfficiencyTable.plot">
+<tt class="descclassname">scitools.EfficiencyTable.</tt><tt class="descname">plot</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/scitools/EfficiencyTable.html#plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.EfficiencyTable.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/EfficiencyTable.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

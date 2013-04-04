@@ -1,0 +1,60 @@
+#!/bin/bash
+# Demo of the bin/scitools script.
+# See test/verify1.verify for a more complete regression test of bin/scitools.
+
+
+# subst:
+
+# first make a file where we can perform a substitution:
+cat > tmp1.py <<EOF
+# some comment
+def f(x):
+    return 2
+
+compute_formula1(x, y, z)
+if not first:
+    compute_formula2(a, b)
+EOF
+
+echo
+echo 'test of subst in the following file:'
+cat tmp1.py
+scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' tmp1.py
+echo 'after substitution:'
+cat tmp1.py
+
+echo
+echo "test of rename:"
+RANDOM=1  # set seed of random generator in Bash
+names="oslo trondheim bergen stavanger"
+for i in $names; do
+    touch tmp_${i}_set${RANDOM}.dat
+done
+echo "files:"
+/bin/ls -1 tmp_*.dat
+echo 'rename: change name from (e.g.) tmp_oslo_set143 set_143_oslo.dat'
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+echo "new names:"
+/bin/ls -1 set_*
+echo "copies of old files:"
+/bin/ls -1 tmp_*
+scitools rename dat data set*.dat
+/bin/ls -1 set_*.data
+rm -f set_*.dat* tmp_*.dat*
+
+echo
+echo "test of file2interactive:"
+
+# first make a file with statements:
+cat > tmp2.py <<EOF
+import os
+origdir = os.getcwd()
+os.chdir(os.pardir)
+os.getcwd()
+origdir
+EOF
+
+scitools file2interactive tmp2.py
+
+# fake interactive typing (needs manual Return at each line):
+#scitools file2interactive tmp2.py human

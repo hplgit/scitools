@@ -1,0 +1,10 @@
+
+:mod:`scitools.easyviz.matlab_`
+===============================
+
+.. automodule:: scitools.easyviz.matlab_
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

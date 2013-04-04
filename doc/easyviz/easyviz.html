@@ -1,0 +1,3843 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Automatically generated HTML file from Doconce source
+(http://code.google.com/p/doconce/)
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Doconce: http://code.google.com/p/doconce/" />
+
+<!--
+Color definitions:  http://www.december.com/html/spec/color0.html
+CSS examples:       http://www.w3schools.com/css/css_examples.asp
+-->
+
+<style type="text/css">
+    body {
+      margin-top: 1.0em;
+      background-color: #ffffff;
+      font-family: Helvetica, Arial, FreeSans, san-serif;
+      color: #000000;
+    }
+    h1 { font-size: 1.8em; color: #1e36ce; }
+    h2 { font-size: 1.5em; color: #1e36ce; }
+    h3 { color: #1e36ce; }
+    a { color: #1e36ce; text-decoration:none; }
+    tt { font-family: "Courier New", Courier; }
+    pre { background: #ededed; color: #000; padding: 15px;}
+    p { text-indent: 0px; }
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    p.caption { width: 80%; font-style: normal; text-align: left; }
+    hr.figure { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+</style>
+
+<!-- Use MathJax to render mathematics -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "AMS"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+ src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- Fix slow MathJax rendering in IE8 -->
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+
+</head>
+
+<body>
+    
+
+<!-- ---------------------------- main content ------------------------>
+
+<title>Easyviz Documentation</title>
+
+<center><h1>Easyviz Documentation</h1></center>  <! -- document title -->
+
+<! -- author(s) -->
+
+<center>
+<b>H. P. Langtangen</b> [1, 2]
+</center>
+
+<center>
+<b>J. H. Ring</b> [1, 2]
+</center>
+
+
+<p>
+<!-- institution(s) -->
+
+<center>[1] <b>Simula Research Laboratory</b></center>
+<center>[2] <b>Univ. of Oslo</b></center>
+
+
+<center><h4>Aug 31, 2012</h4></center> <!-- date -->
+<p>
+<h2>Table of contents</h2>
+
+<p>
+
+<p>
+<a href="#___sec0"> Easyviz </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec1"> Easyviz Documentation </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec2"> Guiding Principles </a><br>
+<a href="#___sec3"> Tutorial </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec4"> A Note on Import Statements </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec5"> Plotting a Single Curve </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec6"> Controlling Line Styles </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec7"> Decorating the Plot </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec8"> Using Logarithmic Scales </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec9"> Plotting Multiple Curves </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec10"> Making Multiple Figures </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec11"> Math Syntax in Legends and Titles </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec12"> Interactive Plotting Sessions </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec13"> Making Animations </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec14"> Controlling the Aspect Ratio of Axes </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec15"> Moving Plot Window </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec16"> Advanced Easyviz Topics </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec17"> Controlling the Backend </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec18"> Importing Just Easyviz </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec19"> Setting Parameters in the Configuration File </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec20"> Working with the Plotting Program Directly </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec21"> Working with Axis and Figure Objects </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec22"> Mathematics and LaTeX in Legends, Title, and Axis Labels </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec23"> Turning Off All Plotting </a><br>
+<a href="#___sec24"> Visualization of Scalar Fields </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec25"> Elevated Surface Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec26"> Contour Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec27"> Pseudocolor Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec28"> Isosurface Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec29"> Volumetric Slice Plot </a><br>
+<a href="#___sec30"> Visualization of Vector Fields </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec31"> Quiver Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec32"> Stream Plots </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec33"> Bar Charts </a><br>
+<a href="#___sec34"> Backends </a><br>
+<a href="#___sec35"> Design </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec36"> Main Objects </a><br>
+<a href="#___sec37"> Installation </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec38"> Installing Gnuplot </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec39"> Linux/Unix </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec40"> Windows </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec41"> Installing Matplotlib </a><br>
+<a href="#___sec42"> Troubleshooting </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec43"> Suddenly my old plots have thick lines and large markers </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec44"> Can I Perform a Diagnostic Test of Easyviz? </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec45"> The Plot Window Disappears Immediately </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec46"> I Get Thread Errors While Plotting </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec47"> I Get Strange Errors Saying Something About LaTeX </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec48"> Old Programs with 2D Scalar/Vector Field Plotting Do Not Work </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec49"> Check Your Backends! </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec50"> Gnuplot </a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#___sec51"> Matplotlib </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec52"> Can I Easily Turn Off All Plotting? </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec53"> How Can I Change the Type of Gnuplot Window? </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec54"> How Can The Aspect Ratio of The Axes Be Controlled? </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec55"> Trouble with Gnuplot and Threads </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec56"> Trouble with Movie Making </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec57"> I Get Thread Errors with Gnuplot </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec58"> Where Can I Find Easyviz Documentation? </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec59"> Grace Gives Error Messages When Calling Savefig/Hardcopy </a><br>
+&nbsp; &nbsp; &nbsp; <a href="#___sec60"> I Cannot Find Out How My Plot Can Be Created </a><br>
+
+<p>
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<h2>Easyviz  <a name="___sec0"></a></h2>
+<p>
+Easyviz is a unified interface to various packages for scientific
+visualization and plotting.  The Easyviz interface is written in
+Python with the purpose of making it very easy to visualize data in
+Python scripts. Both curve plots and more advanced 2D/3D visualization
+of scalar and vector fields are supported.  The Easyviz interface was
+designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
+a unified interface to lots of visualization engines (called backends
+later): Gnuplot, Matplotlib, Grace, Veusz, Pmw.Blt.Graph, PyX,
+Matlab, VTK, VisIt, OpenDX; and 3) a minimalistic interface which
+offers only basic control of plots: curves, linestyles, legends,
+title, axis extent and names.  More fine-tuning of plots can be done
+by invoking backend-specific commands.
+
+<p>
+Easyviz was made so that one can postpone the choice of a particular
+visualization package (and its special associated syntax). This is
+often useful when you quickly need to visualize curves or 2D/3D fields
+in your Python program, but haven't really decided which plotting tool
+to go for. As Python is gaining popularity at universities, students
+are often forced to continuously switch between Matlab and Python,
+which is straightforward for array computing, but (previously)
+annoying for plotting. Easyviz was therefore also made to ease the
+switch between Python and Matlab.
+
+<p>
+If you encounter problems with using Easyviz, please visit the
+<em>Troubleshooting</em> chapter and the <em>Installation</em> chapter at the
+end of the documentation.
+
+<p>
+
+<p>
+
+<h3>Easyviz Documentation  <a name="___sec1"></a></h3>
+<p>
+The present documentation is available in a number of formats:
+
+<p>
+
+<ul>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf">PDF</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html">Plain HTML</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt">Plain text</a>
+  <li> <a href="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</a>
+  <li> <a href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt">Doconce source</a>
+</ul>
+
+The documentation is written in the
+<a href="http://code.google.com/p/doconce">Doconce</a>
+format and can be translated into a
+number of different formats (reST, Sphinx, LaTeX, HTML, XML,
+OpenOffice, RTF, Word, and plain untagged ASCII).
+
+<p>
+
+<p>
+
+<h3>Guiding Principles  <a name="___sec2"></a></h3>
+<p>
+<b>First principle.</b> Array data can be plotted with a minimal
+set of keystrokes using a Matlab-like syntax. A simple
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)    <span style="color: #008800; font-style: italic"># 51 points between 0 and 3</span>
+y <span style="color: #666666">=</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+plot(t, y)
+</pre></div>
+<p>
+plots the data in (the NumPy array) <tt>t</tt> versus the data in (the NumPy
+array) <tt>y</tt>. If you need legends, control of the axis, as well as
+additional curves, all this is obtained by the standard Matlab-style
+commands
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">y2 <span style="color: #666666">=</span> t<span style="color: #666666">**4*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+<span style="color: #008800; font-style: italic"># pick out each 4 points and add random noise:</span>
+t3 <span style="color: #666666">=</span> t[::<span style="color: #666666">4</span>]
+y3 <span style="color: #666666">=</span> y2[::<span style="color: #666666">4</span>] <span style="color: #666666">+</span> random<span style="color: #666666">.</span>normal(loc<span style="color: #666666">=0</span>, scale<span style="color: #666666">=0.02</span>, size<span style="color: #666666">=</span><span style="color: #AA22FF">len</span>(t3))
+
+plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+plot(t, y2, <span style="color: #BB4444">&#39;b-&#39;</span>)
+plot(t3, y3, <span style="color: #BB4444">&#39;bo&#39;</span>)
+legend(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;data&#39;</span>)
+title(<span style="color: #BB4444">&#39;Simple Plot Demo&#39;</span>)
+axis([<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-0.05</span>, <span style="color: #666666">0.6</span>])
+xlabel(<span style="color: #BB4444">&#39;t&#39;</span>)
+ylabel(<span style="color: #BB4444">&#39;y&#39;</span>)
+show()
+
+hardcopy(<span style="color: #BB4444">&#39;tmp0.eps&#39;</span>)  <span style="color: #008800; font-style: italic"># this one can be included in LaTeX</span>
+hardcopy(<span style="color: #BB4444">&#39;tmp0.png&#39;</span>)  <span style="color: #008800; font-style: italic"># this one can be included in HTML</span>
+</pre></div>
+<p>
+Easyviz also allows these additional function calls to be executed
+as a part of the <tt>plot</tt> call:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>, t, y2, <span style="color: #BB4444">&#39;b-&#39;</span>, t3, y3, <span style="color: #BB4444">&#39;bo&#39;</span>,
+     legend<span style="color: #666666">=</span>(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;data&#39;</span>),
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Simple Plot Demo&#39;</span>,
+     axis<span style="color: #666666">=</span>(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-0.05</span>, <span style="color: #666666">0.6</span>),
+     xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     hardcopy<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp1.eps&#39;</span>,
+     show<span style="color: #666666">=</span><span style="color: #AA22FF">True</span>)
+
+hardcopy(<span style="color: #BB4444">&#39;tmp0.png&#39;</span>)
+</pre></div>
+<p>
+A scalar function \( f(x,y) \) may be visualized
+as an elevated surface with colors using these commands:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x <span style="color: #666666">=</span> linspace(<span style="color: #666666">-2</span>, <span style="color: #666666">2</span>, <span style="color: #666666">41</span>)  <span style="color: #008800; font-style: italic"># 41 point on [-2, 2]</span>
+xv, yv <span style="color: #666666">=</span> ndgrid(x, x)    <span style="color: #008800; font-style: italic"># define a 2D grid with points (xv,yv)</span>
+values <span style="color: #666666">=</span> f(xv, yv)       <span style="color: #008800; font-style: italic"># function values</span>
+surfc(xv, yv, values,
+      shading<span style="color: #666666">=</span><span style="color: #BB4444">&#39;interp&#39;</span>,
+      clevels<span style="color: #666666">=15</span>,
+      clabels<span style="color: #666666">=</span><span style="color: #BB4444">&#39;on&#39;</span>,
+      hidden<span style="color: #666666">=</span><span style="color: #BB4444">&#39;on&#39;</span>,
+      show<span style="color: #666666">=</span><span style="color: #AA22FF">True</span>)
+</pre></div>
+<p>
+
+<p>
+<b>Second princple.</b> Easyviz is just a unified interface to other
+plotting packages that can be called from Python. Such plotting
+packages are referred to as backends. Several backends are supported:
+Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
+VTK, VisIt, OpenDX. In other words, scripts that use Easyviz commands
+only, can work with a variety of backends, depending on what you have
+installed on the machine in question and what quality of the plots you
+demand. For example, switching from Gnuplot to Matplotlib is trivial.
+
+<p>
+Scripts with Easyviz commands will most probably run anywhere since at
+least the Gnuplot package can always be installed right away on any
+platform. In practice this means that when you write a script to
+automate investigation of a scientific problem, you can always quickly
+plot your data with Easyviz (i.e., Matlab-like) commands and postpone
+to marry any specific plotting tool. Most likely, the choice of
+plotting backend can remain flexible. This will also allow old scripts
+to work with new fancy plotting packages in the future if Easyviz
+backends are written for those packages.
+
+<p>
+<b>Third principle.</b> The Easyviz interface is minimalistic, aimed at
+rapid prototyping of plots. This makes the Easyviz code easy to read
+and extend (e.g., with new backends). If you need more sophisticated
+plotting, like controlling tickmarks, inserting annotations, etc., you
+must grab the backend object and use the backend-specific syntax to
+fine-tune the plot. The idea is that you can get away with Easyviz and
+a plotting package-independent script "95 percent" of the time - only
+now and then there will be demand for package-dependent code for
+fine-tuning and customization of figures.
+
+<p>
+These three principles and the Easyviz implementation make simple things
+simple and unified, and complicated things are not more complicated than
+they would otherwise be. You can always start out with the simple
+commands - and jump to complicated fine-tuning only when strictly needed.
+
+<p>
+
+<p>
+
+<h2>Tutorial  <a name="___sec3"></a></h2>
+<p>
+This tutorial starts with plotting a single curve with a simple
+<tt>plot(x,y)</tt> command. Then we add a legend, axis labels, a title, etc.
+Thereafter we show how multiple curves are plotted together. We also
+explain how line styles and axis range can be controlled. The
+next topic deals with animations and making movie files. More advanced
+subjects, such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects, close the curve
+plotting part of the tutorial.
+
+<p>
+Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.
+
+<p>
+
+<h3>A Note on Import Statements  <a name="___sec4"></a></h3>
+<p>
+The recommended standard import of <tt>numpy</tt>
+and <tt>matplotlib</tt> in programs reads:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #AA22FF; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">np</span>
+<span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pyplot</span> <span style="color: #AA22FF; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">plt</span>
+</pre></div>
+<p>
+This import ensures that all functionality from different packages are
+prefixed by a short form of the package name. This convention has,
+from a computer science perspective, many advantages as one sees
+clearly where functionality comes from.  However, convincing
+scientists with extensive Matlab, Fortran, or C++ experience to switch
+to Python can be hard when mathematical formulas are full of <tt>np.</tt>
+prefixes and all plotting commands are decorated with an "extra"
+<tt>plt.</tt> The developers of Easyviz think it is a major point to have
+Python code as close to Matlab and standard mathematical syntax as
+possible.  Therefore, examples in this manual employ the "star
+import":
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+</pre></div>
+<p>
+This statement imports the Easyviz plotting commands and also performs
+<tt>from numpy import *</tt>. Hence, mathematical functions like <tt>sin</tt> and
+<tt>log</tt> are available and work for arrays, as in Matlab, and the plotting
+commands are the same as those in Matlab. This type of import statement
+is similar to the popular
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">matplotlib.pylab</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+</pre></div>
+<p>
+among Matplotlib users (although not promoted by Matplotlib developers).
+The primary additional feature of the
+<tt>scitools.std</tt> import is the possibility to choose among many different
+backends for plotting, where Matplotlib is one of the options.
+
+<p>
+
+<h3>Plotting a Single Curve  <a name="___sec5"></a></h3>
+<p>
+
+<p>
+Let us plot the curve \( y = t^2\exp(-t^2) \) for
+\( t \) values between 0 and 3.  First we generate equally spaced
+coordinates for \( t \), say 31 values (30 intervals). Then we compute the
+corresponding \( y \) values at these points, before we call the
+<tt>plot(t,y)</tt> command to make the curve plot.  Here is the complete
+program:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">31</span>)    <span style="color: #008800; font-style: italic"># 31 points between 0 and 3</span>
+y <span style="color: #666666">=</span> zeros(<span style="color: #AA22FF">len</span>(t))         <span style="color: #008800; font-style: italic"># allocate y with float elements</span>
+<span style="color: #AA22FF; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #AA22FF">xrange</span>(<span style="color: #AA22FF">len</span>(t)):
+    y[i] <span style="color: #666666">=</span> f(t[i])
+
+plot(t, y)
+show()  <span style="color: #008800; font-style: italic"># optional</span>
+</pre></div>
+<p>
+If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see the chapter <a href="#ev:tut:install">Installation</a>.
+
+<p>
+The first line imports all of SciTools and Easyviz that can be handy
+to have when doing scientific computations. This includes everything
+from <tt>numpy</tt> (from <tt>numpy import *</tt>),
+all Easyviz plotting commands, some modules (<tt>sys</tt>, <tt>math</tt>), and
+all of SciPy (<tt>from scipy import *</tt>) if SciPy is installed.
+In the program above, we first
+pre-allocate the <tt>y</tt> array and fill it with values, element by
+element, in a Python loop. Alternatively, we may operate
+on the whole <tt>t</tt> array at once, which yields faster and shorter code:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">31</span>)    <span style="color: #008800; font-style: italic"># 31 points between 0 and 3</span>
+y <span style="color: #666666">=</span> f(t)                  <span style="color: #008800; font-style: italic"># compute all f values at once</span>
+plot(t, y)
+show()                    <span style="color: #008800; font-style: italic"># optional</span>
+</pre></div>
+<p>
+The <tt>f</tt> function can also be skipped, if desired, so that we can write
+directly
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">y <span style="color: #666666">=</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+</pre></div>
+<p>
+
+<p>
+To include the plot in electronic documents, we need a hardcopy of the
+figure in PostScript, PNG, or another image format.  The <tt>savefig</tt>
+command produces files with images in various formats:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">savefig(<span style="color: #BB4444">&#39;tmp1.eps&#39;</span>) <span style="color: #008800; font-style: italic"># produce PostScript</span>
+savefig(<span style="color: #BB4444">&#39;tmp1.png&#39;</span>) <span style="color: #008800; font-style: italic"># produce PNG</span>
+</pre></div>
+<p>
+An alternative name for <tt>savefig</tt> is <tt>hardcopy</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">hardcopy(<span style="color: #BB4444">&#39;tmp1.eps&#39;</span>) <span style="color: #008800; font-style: italic"># produce PostScript</span>
+hardcopy(<span style="color: #BB4444">&#39;tmp1.png&#39;</span>) <span style="color: #008800; font-style: italic"># produce PNG</span>
+</pre></div>
+<p>
+The filename extension determines the format: <tt>.ps</tt> or
+<tt>.eps</tt> for PostScript, and <tt>.png</tt> for PNG.
+Figures <a href="fig:plot1a:g">1</a> and <a href="fig:plot1a:m">2</a> display the resulting
+image file with the plot, as generated
+with the Gnuplot and Matplotlib plotting packages, respectively.
+With <tt>show(False)</tt>
+we can suppress the plot from being shown at the screen, which is
+useful when creating a large number of figure files in programs.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 1:  Default plot generated by Gnuplot. <a name="fig:plot1a:g"></a> </p></center>
+<p><img src="figs/plot1a_g.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 2:  Default plot generated by Matplotlib. <a name="fig:plot1a:m"></a> </p></center>
+<p><img src="figs/plot1a_m.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+On some platforms, some backends may result in a plot that is shown in
+just a fraction of a second on the screen before the plot window disappears
+(using the Gnuplot backend on Windows machines or using the Matplotlib
+backend constitute two examples). To make the window stay on the screen,
+add
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF">raw_input</span>(<span style="color: #BB4444">&#39;Press the Return key to quit: &#39;</span>)
+</pre></div>
+<p>
+at the end of the program. The plot window is killed when the program
+terminates, and this satement postpones the termination until the user
+hits the Return key.
+
+<p>
+
+<h3>Controlling Line Styles  <a name="___sec6"></a></h3>
+<p>
+By default, Easyviz plots a curve with a solid line of thickness 2 and
+markers of size 2 at each data point. This default behavior is
+inspired by the usual needs to include thicker lines and markers to
+distinguish multiple curves plots, especially if image files are to
+appear in black and white in printed reports.  However, the line style
+can easily be controlled by adding a string <tt>s</tt> after the <tt>y</tt>
+argument: <tt>plot(x, y, s)</tt>. The syntax of the string <tt>s</tt> is inspired by
+Matlab. For example, <tt>r-</tt> means a red solid line of unit thickness
+(see Figure <a href="fig:plot1a:rs">3</a>), <tt>r--</tt> means a red dashed line, <tt>r-o</tt>
+means a red solid line with circles as markers at each data point,
+<tt>r--o</tt> is the same except that the line is dashed. In general, if <tt>s</tt>
+is <tt>clms</tt>, the first character <tt>c</tt> is the color, <tt>l</tt> is the line type,
+<tt>m</tt> is the marker type, and <tt>s</tt> is the size of the line and marker. A
+blue line with thickness 6 and cross symbols as markers of size 6 is
+specified by <tt>b-x6</tt>.  The effect of the given line thickness and
+symbol size depends on the underlying plotting program.  One can omit
+the line type or color: <tt>yo</tt> specifies yellow circles and <tt>-</tt> gives
+solid line of thickness 1 and default color .
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 3:  Red solid line. <a name="fig:plot1a:rs"></a> </p></center>
+<p><img src="figs/plot1a2.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+The different available line colors include
+
+<ul>
+  <li> yellow:   <tt>'y'</tt>
+  <li> magenta:  <tt>'m'</tt>
+  <li> cyan:     <tt>'c'</tt>
+  <li> red:      <tt>'r'</tt>
+  <li> green:    <tt>'g'</tt>
+  <li> blue:     <tt>'b'</tt>
+  <li> white:    <tt>'w'</tt>
+  <li> black:    <tt>'k'</tt>
+</ul>
+
+The different available line types are
+
+<ul>
+  <li> solid line:      <tt>'-'</tt>
+  <li> dashed line:     <tt>'--'</tt>
+  <li> dotted line:     <tt>':'</tt>
+  <li> dash-dot line:   <tt>'-.'</tt>
+</ul>
+
+Lots of markers at data points are available:
+
+<ul>
+  <li> plus sign:                     <tt>'+'</tt>
+  <li> circle:                        <tt>'o'</tt>
+  <li> asterisk:                      <tt>'*'</tt>
+  <li> point:                         <tt>'.'</tt>
+  <li> cross:                         <tt>'x'</tt>
+  <li> square:                        <tt>'s'</tt>
+  <li> diamond:                       <tt>'d'</tt>
+  <li> upward-pointing triangle:      <tt>'^'</tt>
+  <li> downward-pointing triangle:    <tt>'v'</tt>
+  <li> right-pointing triangle:       <tt>'>'</tt>
+  <li> left-pointing triangle:        <tt>'<'</tt>
+  <li> five-point star (pentagram):   <tt>'p'</tt>
+  <li> six-point star (hexagram):     <tt>'h'</tt>
+  <li> no marker (default): <tt>None</tt>
+</ul>
+
+During programming, you can find all these details in the
+documentation of the <tt>plot</tt> function. Just type <tt>help(plot)</tt>
+in an interactive Python shell or invoke <tt>pydoc</tt> with
+<tt>scitools.easyviz.plot</tt>. This tutorial is available
+through <tt>pydoc scitools.easyviz</tt>.
+
+<p>
+We remark that in the Gnuplot program all the different line types are
+drawn as solid lines on the screen. The hardcopy chooses automatically
+different line types (solid, dashed, etc.) and not in accordance with
+the line type specification.
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Decorating the Plot  <a name="___sec7"></a></h3>
+<p>
+The \( x \) and \( y \) axes in curve plots should have labels, here \( t \) and
+\( y \), respectively. Also, the curve should be identified with a label,
+or legend as it is often called.  A title above the plot is also
+common.  In addition, we may want to control the extent of the axes (although
+most plotting programs will automatically adjust the axes to the range of the
+data).
+All such things are easily added after the <tt>plot</tt> command:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(x, y, <span style="color: #BB4444">&#39;r-&#39;</span>)
+xlabel(<span style="color: #BB4444">&#39;t&#39;</span>)
+ylabel(<span style="color: #BB4444">&#39;y&#39;</span>)
+legend(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>)
+axis([<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-0.05</span>, <span style="color: #666666">0.6</span>])   <span style="color: #008800; font-style: italic"># [tmin, tmax, ymin, ymax]</span>
+title(<span style="color: #BB4444">&#39;My First Easyviz Demo&#39;</span>)
+</pre></div>
+<p>
+This syntax is inspired by Matlab to make the switch between
+Easyviz and Matlab almost trivial.
+Easyviz has also introduced a more "Pythonic" <tt>plot</tt> command where
+all the plot properties can be set at once:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y, <span style="color: #BB4444">&#39;r-&#39;</span>,
+     xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>,
+     ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     legend<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>,
+     axis<span style="color: #666666">=</span>[<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-0.05</span>, <span style="color: #666666">0.6</span>],
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;My First Easyviz Demo&#39;</span>,
+     savefig<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp1.eps&#39;</span>,  <span style="color: #008800; font-style: italic"># or hardcopy=&#39;tmp1.eps&#39;</span>
+     show<span style="color: #666666">=</span><span style="color: #AA22FF">True</span>)
+</pre></div>
+<p>
+
+<p>
+With <tt>show=False</tt> one can avoid the plot window on the screen and
+just make the hardcopy. This feature is particularly useful if
+one generates a large number of separate figures in the program.
+The keyword <tt>savefig</tt> can be replaced by <tt>hardcopy</tt> if desired.
+
+<p>
+Note that we in the curve legend write <tt>t</tt> square as <tt>t^2</tt> (LaTeX style)
+rather than <tt>t**2</tt> (program style). Whichever form you choose is up to
+you, but the LaTeX form sometimes looks better in some plotting
+programs (Matplotlib and Gnuplot are two examples).
+See Figure <a href="fig:plot1c">4</a> for what the modified
+plot looks like and how <tt>t^2</tt> is typeset in Gnuplot.
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 4:  A single curve with label, title, and axes adjusted. <a name="fig:plot1c"></a> </p></center>
+<p><img src="figs/plot1c.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Using Logarithmic Scales  <a name="___sec8"></a></h3>
+<p>
+Sometimes logarithmic scales are need on the \( x \) or \( y \) axis. This is
+easily specified by replacing <tt>plot(x,y)</tt> by <tt>loglog(x,y)</tt>, <tt>semilogx(x,y)</tt>,
+or <tt>semilogy(x,y)</tt> for the three cases of logarithmic scales on both axes,
+on the \( x \) axis only, or on the \( y \) axis only. A complete
+example, displayed in Figure <a href="fig:plot1d">5</a>, reads
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)    <span style="color: #008800; font-style: italic"># 51 points between 0 and 3</span>
+y <span style="color: #666666">=</span> f(t)
+semilogy(t, y, <span style="color: #BB4444">&#39;r-2&#39;</span>)
+
+xlabel(<span style="color: #BB4444">&#39;t&#39;</span>)
+ylabel(<span style="color: #BB4444">&#39;y&#39;</span>)
+legend(<span style="color: #BB4444">&#39;exp(-t^2)&#39;</span>)
+title(<span style="color: #BB4444">&#39;Logarithmic scale on the y axis&#39;</span>)
+</pre></div>
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 5:  Logarithmic scale on one axis. <a name="fig:plot1d"></a> </p></center>
+<p><img src="figs/plot1d.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+The specification of
+logarithmic scales can also be done through keyword arguments to the
+<tt>plot</tt> function: <tt>log='xy'</tt>, <tt>log='x'</tt>, or <tt>log='y'</tt>, which should
+be self-explaining syntax. The following call produces the same plot
+as above.
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y, <span style="color: #BB4444">&#39;r-2&#39;</span>,
+     log<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>,
+     ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     legend<span style="color: #666666">=</span><span style="color: #BB4444">&#39;exp(-t^2)&#39;</span>,
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Logarithmic scale on the y axis&#39;</span>,
+     savefig<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp1.png&#39;</span>,
+     show<span style="color: #666666">=</span><span style="color: #AA22FF">True</span>)
+</pre></div>
+<p>
+
+<p>
+
+<h3>Plotting Multiple Curves  <a name="___sec9"></a></h3>
+<p>
+A common plotting task is to compare two or more curves, which
+requires multiple curves to be drawn in the same plot.
+Suppose we want to plot the two functions \( f_1(t)=t^2\exp(-t^2) \)
+and \( f_2(t)=t^4\exp(-t^2) \). If we write two <tt>plot</tt> commands after
+each other, two separate plots will be made. To make the second
+<tt>plot</tt> command draw the curve in the first plot, we need to
+issue a <tt>hold('on')</tt> command. Alternatively, we can provide all
+data in a single <tt>plot</tt> command. A complete program illustrates the
+different approaches:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>   <span style="color: #008800; font-style: italic"># for curve plotting</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f1</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f2</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>f1(t)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)
+y1 <span style="color: #666666">=</span> f1(t)
+y2 <span style="color: #666666">=</span> f2(t)
+
+<span style="color: #008800; font-style: italic"># Matlab-style syntax</span>
+plot(t, y1)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+plot(t, y2)
+
+xlabel(<span style="color: #BB4444">&#39;t&#39;</span>)
+ylabel(<span style="color: #BB4444">&#39;y&#39;</span>)
+legend(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>)
+title(<span style="color: #BB4444">&#39;Plotting two curves in the same plot&#39;</span>)
+savefig(<span style="color: #BB4444">&#39;tmp2.eps&#39;</span>)  <span style="color: #008800; font-style: italic"># or hardcopy(&#39;tmp2.eps&#39;)</span>
+
+<span style="color: #008800; font-style: italic"># Alternative &quot;Pythonic&quot; style</span>
+plot(t, y1, t, y2, xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     legend<span style="color: #666666">=</span>(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>),
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Plotting two curves in the same plot&#39;</span>,
+     savefig<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp2.eps&#39;</span>)
+</pre></div>
+<p>
+The sequence of the multiple legends is such that the first legend
+corresponds to the first curve, the second legend to the second curve,
+and so on. The visual result appears in Figures <a href="fig:plot2a">6</a>
+and <a href="fig:plot2a:gp">7</a>.
+
+<p>
+Doing a <tt>hold('off')</tt> makes the next <tt>plot</tt> command create a new
+plot in the same window. This new plot just erases the previous curves.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 6:  Two curves in the same plot, PNG file produced by Gnuplot. <a name="fig:plot2a"></a> </p></center>
+<p><img src="figs/plot2a.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 7:  Two curves in the same plot, PostScript file produced by Gnuplot. <a name="fig:plot2a:gp"></a> </p></center>
+<p><img src="figs/plot2a_gp.png" align="bottom" width=350></p>
+</center>
+
+<p>
+
+<p>
+With the keyword argrument <tt>grid=True</tt> to <tt>plot</tt> we can add a
+grid, which is frequently used when plotting curves (see
+Figure <a href="fig:plot2f">8</a>).
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 8:  Curves with a grid. <a name="fig:plot2f"></a> </p></center>
+<p><img src="figs/plot2f.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the <tt>loc</tt> keyword to the <tt>legend</tt> function, e.g.,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">legend(&#39;t^2*exp(-t^2)&#39;, &#39;t^4*exp(-t^2)&#39;, loc=&#39;upper left&#39;)
+</pre></div>
+<p>
+The most popular values are upper right, upper left, lower left,
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument <tt>fancybox</tt> draws a box around
+the legends if <tt>True</tt>, otherwise no box is drawn. The corresponding
+keywords for the <tt>plot</tt> function are <tt>legend_loc</tt> and <tt>legend_fancybox</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y1, t, y2, xlabel=&#39;t&#39;, ylabel=&#39;y&#39;,
+     legend=(&#39;t^2*exp(-t^2)&#39;, &#39;t^4*exp(-t^2)&#39;),
+     legend_loc=`upper left`, legend_fancybox=True,
+     axis=[0, 4, -0.1, 0.8],
+     title=&#39;Plotting two curves in the same plot&#39;,
+     savefig=&#39;tmp2.eps&#39;)
+</pre></div>
+<p>
+The <tt>loc</tt> and <tt>fancybox</tt> specifications work (at present)
+with Gnuplot and Matplotlib only.
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 9:  A figure with legends placed to the upper left with a box frame. </p></center>
+<p><img src="figs/plot2l.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+The <tt>legend</tt> function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib's keywords to
+<tt>plot</tt>, like <tt>label</tt> and <tt>linewidth</tt>, are not recognized so not all
+syntax is interchangable).
+
+<p>
+
+<p>
+
+<h3>Making Multiple Figures  <a name="___sec10"></a></h3>
+<p>
+The <tt>hold</tt> command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The <tt>figure()</tt> command
+creates a new figure:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x <span style="color: #666666">=</span> linspace(<span style="color: #666666">-2</span>, <span style="color: #666666">2</span>, <span style="color: #666666">81</span>)
+y1 <span style="color: #666666">=</span> sin(pi<span style="color: #666666">*</span>x)<span style="color: #666666">*</span>exp(<span style="color: #666666">-0.5*</span>x<span style="color: #666666">**2</span>)
+plot(x, y1)
+
+figure()  <span style="color: #008800; font-style: italic"># separate plot window</span>
+y2 <span style="color: #666666">=</span> sin(pi<span style="color: #666666">*</span>x<span style="color: #666666">/2</span>)<span style="color: #666666">*</span>exp(<span style="color: #666666">-0.5*</span>x<span style="color: #666666">**2</span>)
+plot(x, y2)
+
+figure()  <span style="color: #008800; font-style: italic"># yet another plot window</span>
+y3 <span style="color: #666666">=</span> sin(pi<span style="color: #666666">*</span>x<span style="color: #666666">/4</span>)<span style="color: #666666">*</span>exp(<span style="color: #666666">-0.5*</span>x<span style="color: #666666">**2</span>)
+plot(x, y3)
+</pre></div>
+<p>
+More information in the <tt>figure</tt> command is found later on under the
+heading <em>Working with Axis and Figure Objects</em>.
+
+<p>
+When plotting multiple curves in the same plot, the individual curves
+get distinct default line styles, depending on the program that is
+used to produce the curve (and the settings for this program). It
+might well happen that you get a green and a red curve (which is bad
+for a significant portion of the male population).  Therefore,
+we often want to control the line style in detail when plotting
+multiple curves.
+
+<p>
+Say we want the first curve (<tt>t</tt> and <tt>y1</tt>) to be drawn as a red solid
+line (<tt>r-</tt>) and the second curve (<tt>t</tt> and <tt>y2</tt>) as blue circles (<tt>bo</tt>) at the
+discrete data points:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+plot(t, y2, <span style="color: #BB4444">&#39;bo&#39;</span>)
+
+<span style="color: #008800; font-style: italic"># or</span>
+plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>, t, y2, <span style="color: #BB4444">&#39;bo&#39;</span>)
+</pre></div>
+<p>
+The resulting effect can be seen in Figure <a href="fig:plot2c">10</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 10:  Two curves in the same plot, with controlled line styles. <a name="fig:plot2c"></a> </p></center>
+<p><img src="figs/plot2c.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+Assume now that we want to plot the blue circles at every 4 points only.
+We can grab every 4 points out of the <tt>t</tt> array by using an appropriate
+slice: <tt>t2 = t[::4]</tt>. Note that the first colon means the range from the
+first to the last data point, while the second colon separates this
+range from the stride, i.e., how many points we should "jump over"
+when we pick out a set of values of the array.
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f1</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f2</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>f1(t)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)
+y1 <span style="color: #666666">=</span> f1(t)
+t2 <span style="color: #666666">=</span> t[::<span style="color: #666666">4</span>]
+y2 <span style="color: #666666">=</span> f2(t2)
+
+plot(t, y1, <span style="color: #BB4444">&#39;r-6&#39;</span>, t2, y2, <span style="color: #BB4444">&#39;bo3&#39;</span>,
+     xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     axis<span style="color: #666666">=</span>[<span style="color: #666666">0</span>, <span style="color: #666666">4</span>, <span style="color: #666666">-0.1</span>, <span style="color: #666666">0.6</span>],
+     legend<span style="color: #666666">=</span>(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>),
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Plotting two curves in the same plot&#39;</span>,
+     hardcopy<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp2.eps&#39;</span>)
+</pre></div>
+<p>
+
+<p>
+In this plot we also adjust the size of the line and the circles by
+adding an integer: <tt>r-6</tt> means a red line with thickness 6 and <tt>bo5</tt>
+means red circles with size 5. The effect of the given line thickness
+and symbol size depends on the underlying plotting program. For
+the Gnuplot program one can view the effect in Figure <a href="fig:plot2g">11</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 11:  Circles at every 4 points and extended line thickness (6) and circle size (3). <a name="fig:plot2g"></a> </p></center>
+<p><img src="figs/plot2g.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+<b>Another Example.</b> Let us extend the previous example with a third
+curve where the data points are slightly randomly distributed around
+the \( f_2(t) \) curve:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f1</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>)
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f2</span>(t):
+    <span style="color: #AA22FF; font-weight: bold">return</span> t<span style="color: #666666">**2*</span>f1(t)
+
+t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)
+y1 <span style="color: #666666">=</span> f1(t)
+y2 <span style="color: #666666">=</span> f2(t)
+
+<span style="color: #008800; font-style: italic"># Pick out each 4 points and add random noise</span>
+t3 <span style="color: #666666">=</span> t[::<span style="color: #666666">4</span>]      <span style="color: #008800; font-style: italic"># slice, stride 4</span>
+random<span style="color: #666666">.</span>seed(<span style="color: #666666">11</span>)  <span style="color: #008800; font-style: italic"># fix random sequence</span>
+noise <span style="color: #666666">=</span> random<span style="color: #666666">.</span>normal(loc<span style="color: #666666">=0</span>, scale<span style="color: #666666">=0.02</span>, size<span style="color: #666666">=</span><span style="color: #AA22FF">len</span>(t3))
+y3 <span style="color: #666666">=</span> y2[::<span style="color: #666666">4</span>] <span style="color: #666666">+</span> noise
+
+plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+plot(t, y2, <span style="color: #BB4444">&#39;ks-&#39;</span>)   <span style="color: #008800; font-style: italic"># black solid line with squares at data points</span>
+plot(t3, y3, <span style="color: #BB4444">&#39;bo&#39;</span>)
+
+legend(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;data&#39;</span>)
+title(<span style="color: #BB4444">&#39;Simple Plot Demo&#39;</span>)
+axis([<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-0.05</span>, <span style="color: #666666">0.6</span>])
+xlabel(<span style="color: #BB4444">&#39;t&#39;</span>)
+ylabel(<span style="color: #BB4444">&#39;y&#39;</span>)
+show()
+savefig(<span style="color: #BB4444">&#39;tmp3.eps&#39;</span>)   <span style="color: #008800; font-style: italic"># or hardcopy</span>
+savefig(<span style="color: #BB4444">&#39;tmp3.png&#39;</span>)   <span style="color: #008800; font-style: italic"># or hardcopy</span>
+</pre></div>
+<p>
+The plot is shown in Figure <a href="fig:plot3">12</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 12:  A plot with three curves.  <a name="fig:plot3"></a> </p></center>
+<p><img src="figs/plot3.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+<b>Minimalistic Typing.</b> When exploring mathematics in the interactive Python shell, most of us
+are interested in the quickest possible commands.
+Here is an example of minimalistic syntax for
+comparing the two sample functions we have used in the previous examples:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)
+plot(t, t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>), t, t<span style="color: #666666">**4*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>))
+</pre></div>
+<p>
+
+<p>
+<b>Text.</b> A text can be placed at a point \( (x,y) \) using the call
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">text(x, y, &#39;Some text&#39;)
+</pre></div>
+<p>
+
+<p>
+<b>More Examples.</b> The examples in this tutorial, as well as
+additional examples, can be found in the <tt>examples</tt> directory in the
+root directory of the SciTools source code tree.
+
+<p>
+
+<h3>Math Syntax in Legends and Titles  <a name="___sec11"></a></h3>
+<p>
+Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.
+
+<p>
+
+<h3>Interactive Plotting Sessions  <a name="___sec12"></a></h3>
+<p>
+All the Easyviz commands can of course be issued in an interactive
+Python session. The only thing to comment is that the <tt>plot</tt> command
+returns a result:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #666666">&gt;&gt;&gt;</span> t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, <span style="color: #666666">3</span>, <span style="color: #666666">51</span>)
+<span style="color: #666666">&gt;&gt;&gt;</span> plot(t, t<span style="color: #666666">**2*</span>exp(<span style="color: #666666">-</span>t<span style="color: #666666">**2</span>))
+[<span style="color: #666666">&lt;</span>scitools<span style="color: #666666">.</span>easyviz<span style="color: #666666">.</span>common<span style="color: #666666">.</span>Line <span style="color: #AA22FF">object</span> at <span style="color: #666666">0xb5727f6c&gt;</span>]
+</pre></div>
+<p>
+Most users will just ignore this output line.
+
+<p>
+All Easyviz commands that produce a plot return an object reflecting the
+particular type of plot. The <tt>plot</tt> command returns a list of
+<tt>Line</tt> objects, one for each curve in the plot. These <tt>Line</tt>
+objects can be invoked to see, for instance, the value of different
+parameters in the plot:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #666666">&gt;&gt;&gt;</span> line, <span style="color: #666666">=</span> plot(x, y, <span style="color: #BB4444">&#39;b&#39;</span>)
+<span style="color: #666666">&gt;&gt;&gt;</span> getp(line)
+{<span style="color: #BB4444">&#39;description&#39;</span>: <span style="color: #BB4444">&#39;&#39;</span>,
+ <span style="color: #BB4444">&#39;dims&#39;</span>: (<span style="color: #666666">4</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>),
+ <span style="color: #BB4444">&#39;legend&#39;</span>: <span style="color: #BB4444">&#39;&#39;</span>,
+ <span style="color: #BB4444">&#39;linecolor&#39;</span>: <span style="color: #BB4444">&#39;b&#39;</span>,
+ <span style="color: #BB4444">&#39;pointsize&#39;</span>: <span style="color: #666666">1.0</span>,
+ <span style="color: #666666">...</span>
+</pre></div>
+<p>
+Such output is mostly of interest to advanced users.
+
+<p>
+
+<p>
+
+<h3>Making Animations <a name="easyviz:movie"></a>  <a name="___sec13"></a></h3>
+<p>
+
+<p>
+A sequence of plots can be combined into an animation and stored in a
+movie file. First we need to generate a series of hardcopies, i.e.,
+plots stored in files.  Thereafter we must use a tool to combine the
+individual plot files into a movie file.
+
+<p>
+<b>Example.</b> The function
+\( f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]} \)
+is known as the Gaussian function or the probability density function
+of the normal (or Gaussian) distribution.  This bell-shaped function is
+"wide" for large \( s \) and "peak-formed" for small \( s \), see Figure
+<a href="fig:plot4">13</a>. The function is symmetric around \( x=m \) (\( m=0 \) in the
+figure).  Our goal is to make an animation where we see how this
+function evolves as \( s \) is decreased. In Python we implement the
+formula above as a function <tt>f(x, m, s)</tt>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 13:  Different shapes of a Gaussian function. <a name="fig:plot4"></a> </p></center>
+<p><img src="figs/plot4.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+The animation is created by varying \( s \) in a loop and for each \( s \)
+issue a <tt>plot</tt> command. A moving curve is then visible on the screen.
+One can also make a movie file that can be played as any other
+computer movie using a standard movie player. To this end, each plot
+is saved to a file, and all the files are combined together using some
+suitable tool, which is reached through the <tt>movie</tt> function in
+Easyviz. All necessary steps will be apparent in the complete program
+below, but before diving into the code we need to comment upon a
+couple of issues with setting up the <tt>plot</tt> command for animations.
+
+<p>
+The underlying plotting program will normally adjust the \( y \) axis to the
+maximum and minimum values of the curve if we do not specify the axis
+ranges explicitly. For an animation such automatic axis adjustment is
+misleading - the axis ranges must be fixed to avoid a jumping
+axis. The relevant values for the axis range is the minimum and
+maximum value of \( f \). The minimum value is zero, while the maximum
+value appears for \( x=m \) and increases with decreasing \( s \). The range
+of the \( y \) axis must therefore be \( [0,f(m; m, \min s)] \).
+
+<p>
+The function \( f \) is defined for all \( -\infty < x < \infty \), but the
+function value is very small already \( 3s \) away from \( x=m \). We may therefore
+limit the \( x \) coordinates to \( [m-3s,m+3s] \).
+
+<p>
+Now we are ready to take a look at the complete code
+for animating how the Gaussian function evolves as the \( s \) parameter
+is decreased from 2 to 0.2:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">time</span>
+
+<span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">f</span>(x, m, s):
+    <span style="color: #AA22FF; font-weight: bold">return</span> (<span style="color: #666666">1.0/</span>(sqrt(<span style="color: #666666">2*</span>pi)<span style="color: #666666">*</span>s))<span style="color: #666666">*</span>exp(<span style="color: #666666">-0.5*</span>((x<span style="color: #666666">-</span>m)<span style="color: #666666">/</span>s)<span style="color: #666666">**2</span>)
+
+m <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+s_start <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+s_stop <span style="color: #666666">=</span> <span style="color: #666666">0.2</span>
+s_values <span style="color: #666666">=</span> linspace(s_start, s_stop, <span style="color: #666666">30</span>)
+x <span style="color: #666666">=</span> linspace(m <span style="color: #666666">-3*</span>s_start, m <span style="color: #666666">+</span> <span style="color: #666666">3*</span>s_start, <span style="color: #666666">1000</span>)
+<span style="color: #008800; font-style: italic"># f is max for x=m; smaller s gives larger max value</span>
+max_f <span style="color: #666666">=</span> f(m, m, s_stop)
+
+<span style="color: #008800; font-style: italic"># Show the movie on the screen</span>
+<span style="color: #008800; font-style: italic"># and make hardcopies of frames simultaneously</span>
+counter <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #AA22FF; font-weight: bold">for</span> s <span style="color: #AA22FF; font-weight: bold">in</span> s_values:
+    y <span style="color: #666666">=</span> f(x, m, s)
+    plot(x, y, axis<span style="color: #666666">=</span>[x[<span style="color: #666666">0</span>], x[<span style="color: #666666">-1</span>], <span style="color: #666666">-0.1</span>, max_f],
+         xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;x&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;f&#39;</span>, legend<span style="color: #666666">=</span><span style="color: #BB4444">&#39;s=</span><span style="color: #BB6688; font-weight: bold">%4.2f</span><span style="color: #BB4444">&#39;</span> <span style="color: #666666">%</span> s,
+         hardcopy<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp</span><span style="color: #BB6688; font-weight: bold">%04d</span><span style="color: #BB4444">.png&#39;</span> <span style="color: #666666">%</span> counter)
+    counter <span style="color: #666666">+=</span> <span style="color: #666666">1</span>
+    <span style="color: #008800; font-style: italic">#time.sleep(0.2)  # can insert a pause to control movie speed</span>
+
+<span style="color: #008800; font-style: italic"># Make movie file the simplest possible way</span>
+movie(<span style="color: #BB4444">&#39;tmp*.png&#39;</span>)
+</pre></div>
+<p>
+
+<p>
+Note that the \( s \) values are decreasing (<tt>linspace</tt> handles this
+automatically if the start value is greater than the stop value).
+Also note that we, simply because we think it is visually more
+attractive, let the \( y \) axis go from -0.1 although the \( f \) function is
+always greater than zero.
+
+<p>
+<b>Remarks on Filenames.</b> For each frame (plot) in the movie we store the plot in a file.  The
+different files need different names and an easy way of referring to
+the set of files in right order. We therefore suggest to use filenames
+of the form <tt>tmp0001.png</tt>, <tt>tmp0002.png</tt>, <tt>tmp0003.png</tt>, etc.  The
+printf format <tt>04d</tt> pads the integers with zeros such that <tt>1</tt> becomes
+<tt>0001</tt>, <tt>13</tt> becomes <tt>0013</tt> and so on.  The expression <tt>tmp*.png</tt> will
+now expand (by an alphabetic sort) to a list of all files in proper
+order. Without the padding with zeros, i.e., names of the form
+<tt>tmp1.png</tt>, <tt>tmp2.png</tt>, ..., <tt>tmp12.png</tt>, etc., the alphabetic order
+will give a wrong sequence of frames in the movie. For instance,
+<tt>tmp12.png</tt> will appear before <tt>tmp2.png</tt>.
+
+<p>
+Note that the names of plot files specified when making hardopies must
+be consistent with the specification of names in the call to <tt>movie</tt>.
+Typically, one applies a Unix wildcard notation in the call to
+<tt>movie</tt>, say <tt>plotfile*.png</tt>, where the asterisk will match any set of
+characters. When specifying hardcopies, we must then use a filename
+that is consistent with <tt>plotfile*.png</tt>, that is, the filename must
+start with <tt>plotfile</tt> and end with <tt>.png</tt>, but in between
+these two parts we are free to construct (e.g.) a frame number padded
+with zeros.
+
+<p>
+We recommend to always remove previously generated plot files before
+a new set of files is made. Otherwise, the movie may get old and new
+files mixed up. The following Python code removes all files
+of the form <tt>tmp*.png</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">glob</span><span style="color: #666666">,</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #AA22FF; font-weight: bold">for</span> filename <span style="color: #AA22FF; font-weight: bold">in</span> glob<span style="color: #666666">.</span>glob(<span style="color: #BB4444">&#39;tmp*.png&#39;</span>):
+    os<span style="color: #666666">.</span>remove(filename)
+</pre></div>
+<p>
+These code lines should be inserted at the beginning of the code example
+above. Alternatively, one may store all plotfiles in a subfolder
+and later delete the subfolder. Here is a suitable code segment:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">shutil</span><span style="color: #666666">,</span> <span style="color: #0000FF; font-weight: bold">os</span>
+subdir <span style="color: #666666">=</span> <span style="color: #BB4444">&#39;temp&#39;</span>            <span style="color: #008800; font-style: italic"># name of subfolder for plot files</span>
+<span style="color: #AA22FF; font-weight: bold">if</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>isdir(subdir):  <span style="color: #008800; font-style: italic"># does the subfolder already exist?</span>
+    shutil<span style="color: #666666">.</span>rmtree(subdir)  <span style="color: #008800; font-style: italic"># delete the whole folder</span>
+os<span style="color: #666666">.</span>mkdir(subdir)           <span style="color: #008800; font-style: italic"># make new subfolder</span>
+os<span style="color: #666666">.</span>chdir(subdir)           <span style="color: #008800; font-style: italic"># move to subfolder</span>
+<span style="color: #008800; font-style: italic"># ...perform all the plotting...</span>
+<span style="color: #008800; font-style: italic"># ...make movie...</span>
+os<span style="color: #666666">.</span>chdir(os<span style="color: #666666">.</span>pardir)        <span style="color: #008800; font-style: italic"># optional: move up to parent folder</span>
+</pre></div>
+<p>
+
+<p>
+<b>Movie Formats.</b> Having a set of (e.g.) <tt>tmp*.png</tt> files, one can simply generate a movie by
+a <tt>movie('tmp*.png')</tt> call. The format of the movie is determined by
+which video encoders that are installed on the computer. The <tt>movie</tt>
+function runs through a list of encoders (<tt>convert</tt>, <tt>mencoder</tt>,
+<tt>ffmpeg mpeg_encode</tt>, <tt>ppmtompeg</tt>, <tt>mpeg2enc</tt>, <tt>html</tt>) and choses the
+first one which is installed. The fall back encoder <tt>html</tt> actually
+does not create a video file, but makes insetad an HTML file that can
+play the series of hardcopies made (<tt>tmp*.png</tt>, for instance).
+When no filename is given to the <tt>movie</tt> function, the output file
+with the movie has filestem <tt>movie</tt> and extension depending on the
+video format and the encoder used. For example, if <tt>convert</tt> was used
+to create an animated GIF file, the default output file is <tt>movie.gif</tt>.
+Similarly, <tt>movie.avi</tt> is in AVI format, <tt>movie.mpeg</tt> is in MPEG format,
+and so forth.
+
+<p>
+You can get complete control of the movie format and the name of the
+movie file by supplying the <tt>encoder</tt> and <tt>output_file</tt> arguments to
+the <tt>movie</tt> function. This is the recommended use. Here is an
+example on generating an animated GIF file <tt>tmpmovie.gif</tt> with
+the <tt>convert</tt> program from the ImageMagick software suite:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(<span style="color: #BB4444">&#39;tmp_*.png&#39;</span>, encoder<span style="color: #666666">=</span><span style="color: #BB4444">&#39;convert&#39;</span>, fps<span style="color: #666666">=2</span>,
+      output_file<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmpmovie.gif&#39;</span>)
+</pre></div>
+<p>
+This call requires ImageMagick to be installed on the machine. The
+argument <tt>fps</tt> stands for frames per second so here the speed of the
+movie is slow in that there is a delay of half a second between each
+frame (image file).  To view the animated GIF file, one can use the
+<tt>animate</tt> program (also from ImageMagick) and give the movie file as
+command-line argument. One can alternatively put the GIF file in a web
+page in an IMG tag such that a browser automatically displays the
+movie.
+
+<p>
+Making an HTML file that can play the movie in a web browser
+is carried out by the call
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(<span style="color: #BB4444">&#39;tmp_*.png&#39;</span>, encoder<span style="color: #666666">=</span><span style="color: #BB4444">&#39;html&#39;</span>, fps<span style="color: #666666">=10</span>,
+      output_file<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmpmovie.html&#39;</span>)
+</pre></div>
+<p>
+Just load <tt>tmpmovie.html</tt> into a browser (e.g., run <tt>firefox tmpmovie.html</tt>
+from the command line).
+
+<p>
+An AVI movie can be generated by the call
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(<span style="color: #BB4444">&#39;tmp_*.png&#39;</span>, encoder<span style="color: #666666">=</span><span style="color: #BB4444">&#39;ffmpeg&#39;</span>, fps<span style="color: #666666">=4</span>,
+      output_file<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmpmovie.avi&#39;</span>,
+</pre></div>
+<p>
+Alternatively, we may generate an MPEG movie using
+the <tt>ppmtompeg</tt> encoder from the Netpbm suite of
+image manipulation tools:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(<span style="color: #BB4444">&#39;tmp_*.png&#39;</span>, encoder<span style="color: #666666">=</span><span style="color: #BB4444">&#39;ppmtompeg&#39;</span>, fps<span style="color: #666666">=24</span>,
+      output_file<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmpmovie.mpeg&#39;</span>,
+</pre></div>
+<p>
+The <tt>ppmtompeg</tt> supports only a few (high) frame rates.
+
+<p>
+The next sample call to <tt>movie</tt> uses the Mencoder tool and specifies
+some additional arguments (video codec, video bitrate, and the
+quantization scale):
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(<span style="color: #BB4444">&#39;tmp_*.png&#39;</span>, encoder<span style="color: #666666">=</span><span style="color: #BB4444">&#39;mencoder&#39;</span>, fps<span style="color: #666666">=24</span>,
+      output_file<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmpmovie.mpeg&#39;</span>,
+      vcodec<span style="color: #666666">=</span><span style="color: #BB4444">&#39;mpeg2video&#39;</span>, vbitrate<span style="color: #666666">=2400</span>, qscale<span style="color: #666666">=4</span>)
+</pre></div>
+<p>
+Here is yet another example:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">movie(&#39;tmp_*.png&#39;, encoder=&#39;ffmpeg&#39;,
+      output_file=&#39;tmpmovie1c.mpeg&#39;, vodec=&#39;mpeg2video&#39;)
+</pre></div>
+<p>
+The file <tt>examples/movie_demo1.py</tt> that comes with the SciTools source
+code generates frames in a movie and creates movie files in many formats.
+
+<p>
+Playing movie files can be done by a lot of programs. Windows Media
+Player is a default choice on Windows machines. On Unix, a variety
+of tools can be used. For animated GIF files the <tt>animate</tt> program
+from the ImageMagick suite is suitable, or one can simply
+show the file in a web page with the HTML command
+<tt><img src="tmpmovie.gif"></tt>. AVI and MPEG files can be played by,
+for example, the
+<tt>myplayer</tt>, <tt>vlc</tt>, or <tt>totem</tt> programs.
+
+<p>
+<b>Making Movies in Batch.</b> Sometimes it is desired to carry out
+large numbers of computer experiments and create movies in each
+individual experiments. Then one probably does not want to have
+the screen full of movie windows. To turn off showing the movie
+on the screen while creating the individual frames, just
+give the <tt>show=False</tt> keyword argument to the <tt>plot</tt> function.
+All hardcopies and the movies are then made in batch, which also
+might speed up the program since rendering graphics on the screen
+is avoided.
+
+<p>
+
+<h3>Controlling the Aspect Ratio of Axes  <a name="___sec14"></a></h3>
+<p>
+By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.
+
+<p>
+In the <tt>gnuplot</tt> and <tt>matplotlib</tt>
+backends, we set <tt>daspectmode=manual</tt> and
+<tt>daspect=[r,1,1]</tt>, where <tt>r</tt> is the ratio of the y-axis length to
+the x-axis length
+(<tt>r</tt> equal to <tt>1</tt> gives a square plot area). For example,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(x, y, <span style="color: #BB4444">&#39;r-&#39;</span>,
+     axis<span style="color: #666666">=</span>[<span style="color: #666666">0</span>, <span style="color: #666666">1</span>, <span style="color: #666666">0</span>, <span style="color: #666666">1</span>],
+     daspect<span style="color: #666666">=</span>[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>],
+     daspectmode<span style="color: #666666">=</span><span style="color: #BB4444">&#39;manual&#39;</span>)
+</pre></div>
+<p>
+Note that one should always use <tt>axis</tt> and set axes limits explicitly
+when prescribing the aspect ratio.
+
+<p>
+Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by <tt>daspect=[0.2,1,1])</tt>.
+Alternatively, one can apply <tt>daspectmode='equal'</tt> (which means
+equal physical units on the axis).
+
+<p>
+Here is an example which demonstrates various aspects of setting
+the aspect ratio:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+n <span style="color: #666666">=</span> <span style="color: #666666">20</span>  <span style="color: #008800; font-style: italic"># no of periods of a sine function</span>
+r <span style="color: #666666">=</span> <span style="color: #666666">80</span>  <span style="color: #008800; font-style: italic"># resolution of each period</span>
+x <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, n, r<span style="color: #666666">*</span>n <span style="color: #666666">+</span> <span style="color: #666666">1</span>)
+amplitude <span style="color: #666666">=</span> <span style="color: #666666">1</span> <span style="color: #666666">+</span> sin(<span style="color: #666666">2*</span>pi<span style="color: #666666">*0.05*</span>x)
+y <span style="color: #666666">=</span> amplitude<span style="color: #666666">*</span>sin(<span style="color: #666666">2*</span>pi<span style="color: #666666">*</span>x)
+
+<span style="color: #008800; font-style: italic"># x-axis goes from 0 to 20, y-axis from -2 to 2.</span>
+
+subplot(<span style="color: #666666">2</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>)
+plot(x, y,
+     axis<span style="color: #666666">=</span>[x[<span style="color: #666666">0</span>], x[<span style="color: #666666">-1</span>], y<span style="color: #666666">.</span>min(), y<span style="color: #666666">.</span>max()],
+     daspectmode<span style="color: #666666">=</span><span style="color: #BB4444">&#39;equal&#39;</span>,
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;daspectmode=equal&#39;</span>,
+     )
+subplot(<span style="color: #666666">2</span>, <span style="color: #666666">1</span>, <span style="color: #666666">2</span>)
+plot(x, y,
+     axis<span style="color: #666666">=</span>[x[<span style="color: #666666">0</span>], x[<span style="color: #666666">-1</span>], y<span style="color: #666666">.</span>min(), y<span style="color: #666666">.</span>max()],
+     daspect<span style="color: #666666">=</span>[<span style="color: #666666">0.5</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>],
+     daspectmode<span style="color: #666666">=</span><span style="color: #BB4444">&#39;manual&#39;</span>,
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;daspectmode=manual, daspect=[0.5,1,1]&#39;</span>,
+     )
+
+figure()
+plot(x, y,
+     axis<span style="color: #666666">=</span>[x[<span style="color: #666666">0</span>], x[<span style="color: #666666">-1</span>], y<span style="color: #666666">.</span>min(), y<span style="color: #666666">.</span>max()],
+     daspect<span style="color: #666666">=</span>[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>],
+     daspectmode<span style="color: #666666">=</span><span style="color: #BB4444">&#39;manual&#39;</span>,
+     title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;daspectmode=manual, daspect=[1,1,1]&#39;</span>,
+     )
+
+show()
+<span style="color: #AA22FF">raw_input</span>()
+</pre></div>
+<p>
+
+<p>
+
+<h3>Moving Plot Window  <a name="___sec15"></a></h3>
+<p>
+When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+<tt>MovingPlotWindow</tt> was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With <tt>mode</tt> set as <tt>continuous movement</tt>,
+the plot window moves with the curves continuously.
+With <tt>mode</tt> set as <tt>continuous drawing</tt>, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With <tt>mode</tt> set as <tt>jumps</tt> the curves are plotted directly
+in the window and shown for a specified period of time (the <tt>pause</tt>
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The <tt>jumps</tt> mode is
+well suited for quickly browsing a time series. The <tt>continuous
+drawing</tt> mode is aimed at studing the "tip" of the time series
+as they are computed, and <tt>continuous movement</tt> is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.
+
+<p>
+Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate.
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">def</span> <span style="color: #00A000">_demo</span>(I, k, dt, T, mode<span style="color: #666666">=</span><span style="color: #BB4444">&#39;continuous movement&#39;</span>):
+    <span style="color: #BB4444; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BB4444; font-style: italic">    Solve u&#39; = -k**2*u, u(0)=I, u&#39;(0)=0 by a finite difference</span>
+<span style="color: #BB4444; font-style: italic">    method with time steps dt, from t=0 to t=T.</span>
+<span style="color: #BB4444; font-style: italic">    &quot;&quot;&quot;</span>
+    <span style="color: #AA22FF; font-weight: bold">if</span> dt <span style="color: #666666">&gt;</span> <span style="color: #666666">2./</span>k:
+        <span style="color: #AA22FF; font-weight: bold">print</span> <span style="color: #BB4444">&#39;Unstable scheme&#39;</span>
+    N <span style="color: #666666">=</span> <span style="color: #AA22FF">int</span>(<span style="color: #AA22FF">round</span>(T<span style="color: #666666">/</span><span style="color: #AA22FF">float</span>(dt)))
+    u <span style="color: #666666">=</span> zeros(N<span style="color: #666666">+1</span>)
+    t <span style="color: #666666">=</span> linspace(<span style="color: #666666">0</span>, T, N<span style="color: #666666">+1</span>)
+
+    umin <span style="color: #666666">=</span> <span style="color: #666666">-1.2*</span>I
+    umax <span style="color: #666666">=</span> <span style="color: #666666">-</span>umin
+    period <span style="color: #666666">=</span> <span style="color: #666666">2*</span>pi<span style="color: #666666">/</span>k  <span style="color: #008800; font-style: italic"># period of the oscillations</span>
+    plot_manager <span style="color: #666666">=</span> MovingPlotWindow(<span style="color: #666666">8*</span>period, dt, yaxis<span style="color: #666666">=</span>[umin, umax],
+                                    mode<span style="color: #666666">=</span>mode)
+    u[<span style="color: #666666">0</span>] <span style="color: #666666">=</span> I
+    u[<span style="color: #666666">1</span>] <span style="color: #666666">=</span> u[<span style="color: #666666">0</span>] <span style="color: #666666">-</span> <span style="color: #666666">0.5*</span>dt<span style="color: #666666">**2*</span>k<span style="color: #666666">**2*</span>u[<span style="color: #666666">0</span>]
+    <span style="color: #AA22FF; font-weight: bold">for</span> n <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #AA22FF">range</span>(<span style="color: #666666">1</span>,N):
+        u[n<span style="color: #666666">+1</span>] <span style="color: #666666">=</span> <span style="color: #666666">2*</span>u[n] <span style="color: #666666">-</span> u[n<span style="color: #666666">-1</span>] <span style="color: #666666">-</span> dt<span style="color: #666666">**2*</span>k<span style="color: #666666">**2*</span>u[n]
+
+        <span style="color: #AA22FF; font-weight: bold">if</span> plot_manager<span style="color: #666666">.</span>plot(n):
+            s <span style="color: #666666">=</span> plot_manager<span style="color: #666666">.</span>first_index_in_plot
+            plot(t[s:n<span style="color: #666666">+2</span>], u[s:n<span style="color: #666666">+2</span>], <span style="color: #BB4444">&#39;r-&#39;</span>,
+                 t[s:n<span style="color: #666666">+2</span>], I<span style="color: #666666">*</span>cos(k<span style="color: #666666">*</span>t)[s:n<span style="color: #666666">+2</span>], <span style="color: #BB4444">&#39;b-&#39;</span>,
+                 axis<span style="color: #666666">=</span>plot_manager<span style="color: #666666">.</span>axis(),
+                 title<span style="color: #666666">=</span><span style="color: #BB4444">&quot;Solution of u&#39;&#39; + k^2 u = 0 for t=</span><span style="color: #BB6688; font-weight: bold">%6.3f</span><span style="color: #BB4444"> (mode: </span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BB4444">)&quot;</span> \ 
+                 <span style="color: #666666">%</span> (t[n<span style="color: #666666">+1</span>], mode))
+        plot_manager<span style="color: #666666">.</span>update(n)
+</pre></div>
+<p>
+
+<p>
+An appropriate import statement is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">from scitools.MovingPlotWindow import MovingPlotWindow
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h3>Advanced Easyviz Topics  <a name="___sec16"></a></h3>
+<p>
+The information in the previous sections aims at being sufficient for
+the daily work with plotting curves. Sometimes, however, one wants to
+fine-control the plot or how Easyviz behaves. First, we explain how to
+set the backend. Second, we tell how to speed up the
+<tt>from scitools.std import *</tt> statement.  Third, we show how to operate with
+the plotting program directly and using plotting program-specific
+advanced features. Fourth, we explain how the user can grab <tt>Figure</tt>
+and <tt>Axis</tt> objects that Easyviz produces "behind the curtain".
+
+<p>
+
+<h4>Controlling the Backend  <a name="___sec17"></a></h4>
+<p>
+The Easyviz backend can either be set in a configuration file (see
+"Setting Parameters in the Configuration File" below), by
+importing a special backend in the program, or by adding a
+command-line option
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"> --SCITOOLS_easyviz_backend name
+</pre></div>
+<p>
+where <tt>name</tt> is the name of the backend: <tt>gnuplot</tt>, <tt>vtk</tt>,
+<tt>matplotlib</tt>, etc. Which backend you choose depends on what you have
+available on your computer system and what kind of plotting
+functionality you want.
+
+<p>
+An alternative method is to import a specific backend in a program. Instead
+of the <tt>from scitools.std import *</tt> statement one writes
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.easyviz.gnuplot_</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>  <span style="color: #008800; font-style: italic"># work with Gnuplot</span>
+<span style="color: #008800; font-style: italic"># or</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.easyviz.vtk_</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>      <span style="color: #008800; font-style: italic"># work with VTK</span>
+</pre></div>
+<p>
+Note the trailing underscore in the module names for the various backends.
+
+<p>
+The following program prints a list of the names of the
+available backends on your computer system:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+backends <span style="color: #666666">=</span> available_backends()
+<span style="color: #AA22FF; font-weight: bold">print</span> <span style="color: #BB4444">&#39;Available backends:&#39;</span>, backends
+</pre></div>
+<p>
+There will be quite some output explaining the missing backends and
+what must be installed to use these backends. Be prepared for exceptions
+and error messages too.
+
+<p>
+
+<p>
+
+<h4>Importing Just Easyviz <a name="easyviz:imports"></a>  <a name="___sec18"></a></h4>
+<p>
+
+<p>
+The <tt>from scitools.std import *</tt> statement imports many modules and packages:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.numpyutils</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>  <span style="color: #008800; font-style: italic"># some convenience functions</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">numpy.lib.scimath</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scipy</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>                <span style="color: #008800; font-style: italic"># if scipy is installed</span>
+<span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span><span style="color: #666666">,</span> <span style="color: #0000FF; font-weight: bold">operator</span><span style="color: #666666">,</span> <span style="color: #0000FF; font-weight: bold">math</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.StringFunction</span> <span style="color: #AA22FF; font-weight: bold">import</span> StringFunction
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">glob</span> <span style="color: #AA22FF; font-weight: bold">import</span> glob
+</pre></div>
+<p>
+The <tt>scipy</tt> import can take some time and lead to slow start-up of plot
+scripts. A more minimalistic import for curve plotting is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.easyviz</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">numpy</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+</pre></div>
+<p>
+Alternatively, one can edit the SciTools configuration file as
+explained below in the section "Setting Parameters in the
+Configuration File".
+
+<p>
+Many discourage the use of "star import" as shown above. For example,
+the standard import of Numerical Python in all of its documentation is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">import numpy as np
+</pre></div>
+<p>
+A similar import for SciTools and Easyviz is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">import scitools.std as st
+import numpy as np
+</pre></div>
+<p>
+Although <tt>np</tt> functions are important into the namespace of <tt>st</tt> in
+this case, we recommend to distinguish the packages when using a prefix.
+A typical plotting example will then read
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x = np.linspace(0, 3, 51)
+y = x**2*np.exp(-x)
+st.plot(x, y, &#39;r-&#39;, title=&quot;Plot&quot;)
+</pre></div>
+<p>
+
+<p>
+The corresponding syntax for the
+minimalistic import of <tt>scitools.easyviz</tt> and <tt>numpy</tt> reads
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">import scitools.easyviz as ev
+import numpy as np
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h4>Setting Parameters in the Configuration File  <a name="___sec19"></a></h4>
+<p>
+Easyviz is a subpackage of SciTools, and the the SciTools
+configuration file, called <tt>scitools.cfg</tt> has several sections
+(<tt>[easyviz]</tt>, <tt>[gnuplot]</tt>, and <tt>[matplotlib]</tt>) where parameters
+controlling the behavior of plotting can be set. For example, the
+backend for Easyviz can be controlled with the <tt>backend</tt> parameter:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">[easyviz]
+backend = vtk
+</pre></div>
+<p>
+Similarly, Matplotlib's use of LaTeX can be controlled by a boolean
+parameter:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">[matplotlib]
+text.usetex = &lt;bool&gt; false
+</pre></div>
+<p>
+The text <tt><bool></tt> indicates that this is a parameter with a boolean
+
+<p>
+A configuration file with name <tt>.scitools.cfg</tt> file can be placed in
+the current working folder, thereby affecting plots made in this
+folder, or it can be located in the user's home folder, which will
+affect all plotting sessions for the user in question. There is also a
+common SciTools config file <tt>scitools.cfg</tt> for the whole site, located
+in the directory where the <tt>scitools</tt> package is installed. It is
+recommended to copy the <tt>scitools.cfg</tt>, either from installation or
+the SciTools source folder <tt>lib/scitools</tt>, to <tt>.scitools.cfg</tt>
+in your home folder. Then you can easily control the Easyviz backend
+and other paramteres by editing your local <tt>.scitools.cfg</tt> file.
+
+<p>
+Parameters set in the configuration file can also be set directly
+on the command line when running a program. The name of the
+command-line option is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">--SCITOOLS_sectionname_parametername
+</pre></div>
+<p>
+where <tt>sectionname</tt> is the name of the section in the file
+and <tt>parametername</tt> is the name of the
+parameter. For example, setting the <tt>backend</tt> parameter in the
+<tt>[easyviz]</tt> section by
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">--SCITOOLS_easyviz_backend gnuplot
+</pre></div>
+<p>
+Here is an example where we use Matplotlib as backend, turn on
+the use of LaTeX in Matplotlib, and avoid the potentially slow import
+of SciPy:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
+    --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h4>Working with the Plotting Program Directly  <a name="___sec20"></a></h4>
+<p>
+Easyviz supports just the most common plotting commands, typically the
+commands you use "95 percent" of the time when exploring curves.
+Various plotting packages have lots of additional commands for
+diverse advanced features.  When Easyviz does not have a command
+that supports a particular feature, one can grab the Python object
+that communicates with the underlying plotting program (the
+"backend") and work with this object directly, using plotting
+program-specific command syntax.  Let us illustrate this principle
+with an example where we add a text and an arrow in the plot, see
+Figure <a href="fig:plot2i">14</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 14:  Illustration of a text and an arrow using Gnuplot-specific commands. <a name="fig:plot2i"></a> </p></center>
+<p><img src="figs/plot2i.png" align="bottom" width=400></p>
+</center>
+
+<p>
+
+<p>
+Easyviz does not support arrows at arbitrary places inside the plot,
+but Gnuplot does. If we use Gnuplot as backend, we may grab the
+<tt>Gnuplot</tt> object and issue Gnuplot commands to this object
+directly. Here is an example of the typical recipe, written after the
+core of the plot is made in the ordinary (plotting
+program-independent) way:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">if</span> backend <span style="color: #666666">==</span> <span style="color: #BB4444">&#39;gnuplot&#39;</span>:
+    g <span style="color: #666666">=</span> get_backend()
+    <span style="color: #008800; font-style: italic"># g is a Gnuplot object, work with Gnuplot commands directly:</span>
+    g(<span style="color: #BB4444">&#39;set label &quot;global maximum&quot; at 0.1,0.5 font &quot;Times,18&quot;&#39;</span>)
+    g(<span style="color: #BB4444">&#39;set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2&#39;</span>)
+    g<span style="color: #666666">.</span>refresh()
+    g<span style="color: #666666">.</span>hardcopy(<span style="color: #BB4444">&#39;tmp2.eps&#39;</span>)  <span style="color: #008800; font-style: italic"># make new hardcopy</span>
+
+    g<span style="color: #666666">.</span>reset()               <span style="color: #008800; font-style: italic"># new plot</span>
+    data <span style="color: #666666">=</span> Gnuplot<span style="color: #666666">.</span>Data(t, t<span style="color: #666666">**3*</span>exp(<span style="color: #666666">-</span>t), with_<span style="color: #666666">=</span><span style="color: #BB4444">&#39;points 3 3&#39;</span>,
+                        title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t**3*exp(-t)&#39;</span>)
+    func <span style="color: #666666">=</span> Gnuplot<span style="color: #666666">.</span>Func(<span style="color: #BB4444">&#39;t**4*exp(-t)&#39;</span>, title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t**4*exp(-t)&#39;</span>)
+    g(<span style="color: #BB4444">&#39;set tics border font &quot;Courier,14&quot;&#39;</span>)
+    g<span style="color: #666666">.</span>plot(func, data)
+</pre></div>
+<p>
+For the available features and the syntax of commands, we refer to
+the Gnuplot manual and the <tt>demo.py</tt> program in Python interface to
+Gnuplot. Note that one must call <tt>g.hardcopy</tt> to save the figure
+to file. A call to <tt>savefig</tt> or <tt>hardcopy</tt> remakes the plot, but
+without the special calls <tt>g('...')</tt> so the label and arrow are
+left out of the hardcopy in the example above.
+
+<p>
+Here is an example with Matplotlib:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">if</span> backend <span style="color: #666666">==</span> <span style="color: #BB4444">&#39;matplotlib&#39;</span>:
+    pyplot <span style="color: #666666">=</span> get_backend()
+    <span style="color: #008800; font-style: italic"># Work with standard matplotlib.pyplot functions</span>
+</pre></div>
+<p>
+The files <tt>grab_backend*.py</tt> in the <tt>examples</tt> folder of the SciTools
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the <tt>pyplot</tt> object, one must apply <tt>pyplot.savefig</tt> to
+correctly save the plot (a plain <tt>savefig</tt> or <tt>hardcopy</tt> remakes the
+plot without the features inserted by the <tt>pyplot</tt> object).
+
+<p>
+Here are some useful links to documentation of various plotting packages:
+
+<p>
+
+<ul>
+ <li> <a href="http://matplotlib.sourceforge.net/contents.html">Matplotlib Documentation</a>
+ <li> <a href="http://www.gnuplot.info/documentation.html">Gnuplot Documentation</a>
+ <li> <a href="http://t16web.lanl.gov/Kawano/gnuplot/index-e.html">Gnuplot Tips (Not So Frequently Asked Questions)</a>
+ <li> <a href="http://matplotlib.sourceforge.net/contents.html">Grace User's Guide</a>
+ <li> <a href="http://pyx.sourceforge.net/documentation.html">PyX Documentation</a>
+ <li> <a href="http://alumni.cs.ucr.edu/~titus/pyxTutorial/">PyX Tutorial for Gnuplot Users</a>
+</ul>
+
+The idea advocated by Easyviz goes as follows. You can quickly generate
+plots with Easyviz using standard commands that are independent of
+the underlying plotting package. However, when you need advanced
+features, you must add plotting package-specific code as shown
+above. This principle makes Easyviz a light-weight interface, but
+without limiting the available functionality of various plotting programs.
+
+<p>
+
+<p>
+
+<h4>Working with Axis and Figure Objects  <a name="___sec21"></a></h4>
+<p>
+Easyviz supports the concept of Axis objects, as in Matlab.
+The Axis object represents a set of axes, with curves drawn in the
+associated coordinate system. A figure is the complete physical plot.
+One may have several axes in one figure, each axis representing a subplot.
+One may also have several figures, represented by different
+windows on the screen or separate hardcopies.
+
+<p>
+Users with Matlab experience may prefer to set axis
+labels, ranges, and the title using an Axis object instead of
+providing the information in separate commands or as part of a <tt>plot</tt>
+command. The <tt>gca</tt> (get current axis) command returns an <tt>Axis</tt>
+object, whose <tt>set</tt> method can be used to set axis properties:
+
+<p>
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>, t, y2, <span style="color: #BB4444">&#39;bo&#39;</span>,
+     legend<span style="color: #666666">=</span>(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>, <span style="color: #BB4444">&#39;t^4*exp(-t^2)&#39;</span>),
+     savefig<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp2.eps&#39;</span>)
+
+ax <span style="color: #666666">=</span> gca()   <span style="color: #008800; font-style: italic"># get current Axis object</span>
+ax<span style="color: #666666">.</span>setp(xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+        axis<span style="color: #666666">=</span>[<span style="color: #666666">0</span>, <span style="color: #666666">4</span>, <span style="color: #666666">-0.1</span>, <span style="color: #666666">0.6</span>],
+        title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Plotting two curves in the same plot&#39;</span>)
+show()  <span style="color: #008800; font-style: italic"># show the plot again after ax.setp actions</span>
+</pre></div>
+<p>
+
+<p>
+The <tt>figure()</tt> call makes a new figure, i.e., a
+new window with curve plots. Figures are numbered as 1, 2, and so on.
+The command <tt>figure(3)</tt> sets the current figure object to figure number
+3.
+
+<p>
+Suppose we want to plot our <tt>y1</tt> and <tt>y2</tt> data in two separate windows.
+We need in this case to work with two <tt>Figure</tt> objects:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, y1, <span style="color: #BB4444">&#39;r-&#39;</span>, xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>,
+     axis<span style="color: #666666">=</span>[<span style="color: #666666">0</span>, <span style="color: #666666">4</span>, <span style="color: #666666">-0.1</span>, <span style="color: #666666">0.6</span>])
+
+figure()  <span style="color: #008800; font-style: italic"># new figure</span>
+
+plot(t, y2, <span style="color: #BB4444">&#39;bo&#39;</span>, xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>)
+</pre></div>
+<p>
+We may now go back to the first figure (with the <tt>y1</tt> data) and
+set a title and legends in this plot, show the plot, and make a PostScript
+version of the plot:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">figure(<span style="color: #666666">1</span>)  <span style="color: #008800; font-style: italic"># go back to first figure</span>
+title(<span style="color: #BB4444">&#39;One curve&#39;</span>)
+legend(<span style="color: #BB4444">&#39;t^2*exp(-t^2)&#39;</span>)
+show()
+savefig(<span style="color: #BB4444">&#39;tmp2_1.eps&#39;</span>)
+</pre></div>
+<p>
+We can also adjust figure 2:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">figure(2)  # go to second figure
+title(&#39;Another curve&#39;)
+savefig(&#39;tmp2_2.eps&#39;)
+show()
+</pre></div>
+<p>
+The current <tt>Figure</tt> object is reached by <tt>gcf</tt> (get current figure),
+and the <tt>dump</tt> method dumps the internal parameters in the <tt>Figure</tt>
+object:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">fig <span style="color: #666666">=</span> gcf(); <span style="color: #AA22FF; font-weight: bold">print</span> fig<span style="color: #666666">.</span>dump()
+</pre></div>
+<p>
+These parameters may be of interest for troubleshooting when Easyviz
+does not produce what you expect.
+
+<p>
+Let us then make a third figure with two plots, or more precisely, two
+axes: one with <tt>y1</tt> data and one with <tt>y2</tt> data.
+Easyviz has a command <tt>subplot(r,c,a)</tt> for creating <tt>r</tt>
+rows and <tt>c</tt> columns and set the current axis to axis number <tt>a</tt>.
+In the present case <tt>subplot(2,1,1)</tt> sets the current axis to
+the first set of axis in a "table" with two rows and one column.
+Here is the code for this third figure:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">figure()  <span style="color: #008800; font-style: italic"># new, third figure</span>
+<span style="color: #008800; font-style: italic"># Plot y1 and y2 as two axis in the same figure</span>
+subplot(<span style="color: #666666">2</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>)
+plot(t, y1, xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>)
+subplot(<span style="color: #666666">2</span>, <span style="color: #666666">1</span>, <span style="color: #666666">2</span>)
+plot(t, y2, xlabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;t&#39;</span>, ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;y&#39;</span>)
+title(<span style="color: #BB4444">&#39;A figure with two plots&#39;</span>)
+show()
+savefig(<span style="color: #BB4444">&#39;tmp2_3.eps&#39;</span>)
+</pre></div>
+<p>
+
+<p>
+Note: The Gnuplot backend will overwrite the tickmarks on the \( y \) axis
+if two or more curves in the same subplot have significantly different
+variations in \( y \) direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.
+
+<p>
+If we need to place an axis at an arbitrary position in the figure, we
+must use the command
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">ax <span style="color: #666666">=</span> axes(viewport<span style="color: #666666">=</span>[left, bottom, width, height])
+</pre></div>
+<p>
+The four parameteres <tt>left</tt>, <tt>bottom</tt>, <tt>width</tt>, <tt>height</tt>
+are location values between 0 and 1 ((0,0) is the lower-left corner
+and (1,1) is the upper-right corner). However, this might be a bit
+different in the different backends (see the documentation for the
+backend in question).
+
+<p>
+
+<h4>Mathematics and LaTeX in Legends, Title, and Axis Labels  <a name="___sec22"></a></h4>
+<p>
+Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.
+
+<p>
+
+<ul>
+  <li> With Matplotlib we recommend to use standard LaTeX.
+  <li> With Gnuplot we recommend plain text when plotting on
+    the screen, and greek letters preceded with a backslash
+    when saving to file. Gnuplot suports LaTeX syntax for
+    sub- and super-scripts (underscore and hat, resp.).
+    Other types of mathematics should be expressed in plain text.
+</ul>
+
+The file <tt>examples/math_text.py</tt> tests different syntax in legends,
+axis labels, and titles. Running this script with
+<tt>--SCITOOLS_easyviz_backend X</tt> for different values of <tt>X</tt>
+(<tt>gnuplot</tt>, <tt>matplotlib</tt>, <tt>grace</tt>, <tt>pyx</tt>, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.
+
+<p>
+If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<span style="color: #666666">...</span>
+<span style="color: #AA22FF; font-weight: bold">if</span> backend <span style="color: #666666">==</span> <span style="color: #BB4444">&#39;gnuplot&#39;</span>:
+    title_screen <span style="color: #666666">=</span> <span style="color: #BB4444">&#39;mu=0.5, alpha=sum(i=1 to n) tau_i^2&#39;</span>
+    title_eps <span style="color: #666666">=</span> <span style="color: #BB4444">r&#39;\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2&#39;</span>
+<span style="color: #AA22FF; font-weight: bold">elif</span> backend <span style="color: #666666">==</span> <span style="color: #BB4444">&#39;matplotlib&#39;</span>:
+    title_screen <span style="color: #666666">=</span> title_eps <span style="color: #666666">=</span> \
+          <span style="color: #BB4444">r&#39;$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$&#39;</span>
+<span style="color: #AA22FF; font-weight: bold">else</span>:
+    title_screen <span style="color: #666666">=</span> title_eps <span style="color: #666666">=</span> <span style="color: #BB4444">&#39;mu=0.5, alpha=sum(i=1 to n) tau_i^2&#39;</span>
+
+plot(<span style="color: #666666">...</span>)
+<span style="color: #666666">...</span>
+title(title_screen)
+show()
+title(title_eps)
+savefig(<span style="color: #BB4444">&#39;myplot.eps&#39;</span>)
+</pre></div>
+<p>
+
+<p>
+
+<h4>Turning Off All Plotting  <a name="___sec23"></a></h4>
+<p>
+Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">turn_off_plotting(<span style="color: #AA22FF">globals</span>())
+</pre></div>
+<p>
+All the plot functions now "do nothing" (actually they are <tt>DoNothing</tt>
+objects from <tt>scitools.misc</tt>).
+
+<p>
+
+<h2>Visualization of Scalar Fields  <a name="___sec24"></a></h2>
+<p>
+A scalar field is a function from space or space-time to a real value.
+This real value typically reflects a scalar physical parameter at every
+point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.  In a
+visualization context, we work with discrete scalar fields that are
+defined on a grid. Each point in the grid is then associated with a
+scalar value.
+
+<p>
+There are several ways to visualize a scalar field in Easyviz. Both
+two- and three-dimensional scalar fields are supported. In two
+dimensions (2D) we can create elevated surface plots, contour plots,
+and pseudocolor plots, while in three dimensions (3D) we can create
+isosurface plots, volumetric slice plots, and contour slice plots.
+
+<p>
+
+<h3>Elevated Surface Plots  <a name="___sec25"></a></h3>
+<p>
+To create elevated surface plots we can use either the <tt>surf</tt> or the
+<tt>mesh</tt> command. Both commands have the same syntax, but the <tt>mesh</tt>
+command creates a wireframe mesh while the <tt>surf</tt> command creates a
+solid colored surface.
+
+<p>
+Our examples will make use of the scalar field
+\( f(x,y) = \sin r \),
+where \( r \) is the distance in the plane from the origin, i.e.,
+\( r=\sqrt{x^2+y^2} \).
+The \( x \) and \( y \) values in our 2D domain lie between -5 and 5.
+
+<p>
+The example first creates the necessary data arrays for 2D scalar
+field plotting: the coordinates in each direction, extensions of these
+arrays to form a <em>ndgrid</em>, and the function values. The latter array
+is computed in a vectorized operation which requires the extended
+coordinate arrays from the <tt>ndgrid</tt> function.  The <tt>mesh</tt> command
+can then produce the plot with a syntax that mirrors the simplicity of
+the <tt>plot</tt> command for curves:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x <span style="color: #666666">=</span> y <span style="color: #666666">=</span> linspace(<span style="color: #666666">-5</span>, <span style="color: #666666">5</span>, <span style="color: #666666">21</span>)
+xv, yv <span style="color: #666666">=</span> ndgrid(x, y)
+values <span style="color: #666666">=</span> sin(sqrt(xv<span style="color: #666666">**2</span> <span style="color: #666666">+</span> yv<span style="color: #666666">**2</span>))
+h <span style="color: #666666">=</span> mesh(xv, yv, values)
+</pre></div>
+<p>
+The <tt>mesh</tt> command returns a reference to a new <tt>Surface</tt> object, here
+stored in a variable h. This reference can be used to set or get
+properties in the object at a later stage if needed.  The resulting
+plot can be seen in Figure <a href="fig:mesh_ex1">15</a>.
+
+<p>
+We remark that the computations in the previous example are vectorized.
+The corresponding scalar computations using a double loop read
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">values <span style="color: #666666">=</span> zeros(x<span style="color: #666666">.</span>size, y<span style="color: #666666">.</span>size)
+<span style="color: #AA22FF; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #AA22FF">xrange</span>(x<span style="color: #666666">.</span>size):
+    <span style="color: #AA22FF; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #AA22FF">xrange</span>(y<span style="color: #666666">.</span>size):
+        values[i,j] <span style="color: #666666">=</span> sin(sqrt(x[i]<span style="color: #666666">**2</span> <span style="color: #666666">+</span> y[j]<span style="color: #666666">**2</span>))
+</pre></div>
+<p>
+However, for the <tt>mesh</tt> command to work, we need the vectorized
+extensions <tt>xv</tt> and <tt>yv</tt> of <tt>x</tt> and <tt>y</tt>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 15:  Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). <a name="fig:mesh_ex1"></a> </p></center>
+<p><img src="figs/mesh_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The <tt>surf</tt> command employs the same syntax, but results in a different
+plot (see Figure <a href="fig:surf_ex1">16</a>):
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">surf(xv, yv, values)
+</pre></div>
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 16:  Result of the surf command (Gnuplot backend). <a name="fig:surf_ex1"></a> </p></center>
+<p><img src="figs/surf_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The <tt>surf</tt> command offers many possibilities to adjust the resulting plot:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">setp(interactive<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+surf(xv, yv, values)
+shading(<span style="color: #BB4444">&#39;flat&#39;</span>)
+colorbar()
+colormap(hot())
+axis([<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-1.5</span>,<span style="color: #666666">1.5</span>])
+view(<span style="color: #666666">35</span>,<span style="color: #666666">45</span>)
+show()
+</pre></div>
+<p>
+Here we have specified a flat shading model, added a color bar, changed
+the color map to <tt>hot</tt>, set some suitable axis values, and changed the
+view point (the view takes two arguments: the azimuthal rotation and
+the elevation, both given in degrees).
+The same plot can also be accomplished with one single, compound
+statement (just as Easyviz offers for the <tt>plot</tt> command):
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">surf(xv, yv, values,
+     shading<span style="color: #666666">=</span><span style="color: #BB4444">&#39;flat&#39;</span>,
+     colorbar<span style="color: #666666">=</span><span style="color: #BB4444">&#39;on&#39;</span>,
+     colormap<span style="color: #666666">=</span>hot(),
+     axis<span style="color: #666666">=</span>[<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-1.5</span>,<span style="color: #666666">1.5</span>],
+     view<span style="color: #666666">=</span>[<span style="color: #666666">35</span>,<span style="color: #666666">45</span>])
+</pre></div>
+<p>
+Figure <a href="fig:surf_ex2">17</a> displays the result.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 17:  Result of an extended surf command (Gnuplot backend). <a name="fig:surf_ex2"></a> </p></center>
+<p><img src="figs/surf_ex2.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Contour Plots  <a name="___sec26"></a></h3>
+<p>
+A contour plot is another useful technique for visualizing scalar
+fields. The primary examples on contour plots from everyday life is
+the level curves on geographical maps, reflecting the height of the
+terrain. Mathematically, a contour line, also called an isoline, is
+defined as the implicit curve \( f(x,y)=c \). The contour levels \( c \) are
+normally uniformly distributed between the extreme values of the
+function \( f \) (this is the case in a map: the height difference between
+two contour lines is constant), but in scientific visualization it is
+sometimes useful to use a few carefully selected \( c \) values to
+illustrate particular features of a scalar field.
+
+<p>
+In Easyviz, there are several commands for creating different kinds of
+contour plots:
+
+<p>
+
+<ul>
+  <li> <tt>contour</tt>: Draw a standard contour plot, i.e., lines in the plane.
+  <li> <tt>contourf</tt>: Draw a filled 2D contour plot, where the space between
+    the contour lines is filled with colors.
+  <li> <tt>contour3</tt>: Same as <tt>contour</tt>, but the curves are drawn at their
+    corresponding height levels in 3D space.
+  <li> <tt>meshc</tt>: Works in the same way as <tt>mesh</tt> except that a
+     contour plot is drawn in the plane beneath the mesh.
+  <li> <tt>surfc</tt>: Same as <tt>meshc</tt> except that a solid surface is
+    drawn instead of a wireframe mesh.
+</ul>
+
+We start with illustrating the plain <tt>contour</tt> command, assuming that
+we already have computed the <tt>xv</tt>, <tt>yv</tt>, and <tt>values</tt>
+arrays as shown in our first example on scalar field plotting.
+The basic syntax follows that of <tt>mesh</tt> and <tt>surf</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">contour(xv, yv, values)
+</pre></div>
+<p>
+By default, five uniformly spaced contour level curves are drawn, see
+Figure <a href="fig:contour_ex1">18</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 18:  Result of the simplest possible contour command (Gnuplot backend). <a name="fig:contour_ex1"></a> </p></center>
+<p><img src="figs/contour_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The number of levels in a contour plot can be specified with an additional
+argument:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">n <span style="color: #666666">=</span> <span style="color: #666666">15</span>   <span style="color: #008800; font-style: italic"># number of desired contour levels</span>
+contour(xv, yv, values, n)
+</pre></div>
+<p>
+The result can be seen in Figure <a href="fig:contour_ex2">19</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 19:  A contour plot with 15 contour levels (Gnuplot backend). <a name="fig:contour_ex2"></a> </p></center>
+<p><img src="figs/contour_ex2.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Sometimes one wants contour levels that are not equidistant or not
+distributed throughout the range of the scalar field. Individual
+contour levels to be drawn can easily be specified as a list:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">levels <span style="color: #666666">=</span> [<span style="color: #666666">-0.5</span>, <span style="color: #666666">0.1</span>, <span style="color: #666666">0.3</span>, <span style="color: #666666">0.9</span>]
+contour(xv, yv, values, levels, clabels<span style="color: #666666">=</span><span style="color: #BB4444">&#39;on&#39;</span>)
+</pre></div>
+<p>
+Now, the <tt>levels</tt> list specify the values of the contour levels, and
+the <tt>clabel</tt> keyword allows labeling of the level values in the plot.
+Figure <a href="fig:contour_ex3">20</a> shows the result. We remark that the
+Gnuplot backend colors the contour lines and places the contour values
+and corresponding colors beside the plot. Figures that are reproduced
+in black and white only can then be hard to analyze. Other backends
+may draw the contour lines in black and annotate each line with the
+corresponding contour level value.  Such plots are better suited for
+being displayed in black and white.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 20:  Four individually specified contour levels (Gnuplot backend). <a name="fig:contour_ex3"></a> </p></center>
+<p><img src="figs/contour_ex3.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The <tt>contourf</tt> command,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">contourf(xv, yv, values)
+</pre></div>
+<p>
+gives a filled contour plot as shown in Figure <a href="fig:contourf_ex1">21</a>.
+Only the Matplotlib and VTK backends currently supports filled
+contour plots.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 21:  Filled contour plot created by the contourf command (VTK backend). <a name="fig:contourf_ex1"></a> </p></center>
+<p><img src="figs/contourf_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The contour lines can be "lifted up" in 3D space, as shown in Figure
+<a href="fig:contour3_ex1">22</a>, using the <tt>contour3</tt> command:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">contour3(xv, yv, values, <span style="color: #666666">15</span>)
+</pre></div>
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 22:  Example on the contour3 command for elevated contour levels (Gnuplot backend). <a name="fig:contour3_ex1"></a> </p></center>
+<p><img src="figs/contour3_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Finally, we show a simple example illustrating the <tt>meshc</tt> and <tt>surfc</tt>
+commands:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">meshc(xv, yv, values,
+      clevels<span style="color: #666666">=10</span>,
+      colormap<span style="color: #666666">=</span>hot(),
+      grid<span style="color: #666666">=</span><span style="color: #BB4444">&#39;off&#39;</span>)
+figure()
+surfc(xv, yv, values,
+      clevels<span style="color: #666666">=15</span>,
+      colormap<span style="color: #666666">=</span>hsv(),
+      grid<span style="color: #666666">=</span><span style="color: #BB4444">&#39;off&#39;</span>,
+      view<span style="color: #666666">=</span>(<span style="color: #666666">30</span>,<span style="color: #666666">40</span>))
+</pre></div>
+<p>
+The resulting plots are displayed in Figures <a href="fig:meshc_ex1">23</a> and
+<a href="fig:surfc_ex1">24</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 23:  Wireframe mesh with contours at the bottom (Gnuplot backend). <a name="fig:meshc_ex1"></a> </p></center>
+<p><img src="figs/meshc_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 24:  Surface plot with contours (Gnuplot backend). <a name="fig:surfc_ex1"></a> </p></center>
+<p><img src="figs/surfc_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Pseudocolor Plots  <a name="___sec27"></a></h3>
+<p>
+Another way of visualizing a 2D scalar field in Easyviz is the
+<tt>pcolor</tt> command. This command creates a pseudocolor plot, which is a
+flat surface viewed from above. The simplest form of this command
+follows the syntax of the other commands:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">pcolor(xv, yv, values)
+</pre></div>
+<p>
+We can set the color shading in a pseudocolor plot either by giving
+the <tt>shading</tt> keyword argument to <tt>pcolor</tt> or by calling the <tt>shading</tt>
+command. The color shading is specified by a string that can be either
+<tt>'faceted'</tt> (default), <tt>'flat'</tt>, or <tt>'interp'</tt> (interpolated). The Gnuplot and
+Matplotlib backends support <tt>'faceted'</tt> and <tt>'flat'</tt> only, while the
+VTK backend supports all of them.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 25:  Pseudocolor plot (Gnuplot backend). </p></center>
+<p><img src="figs/pcolor_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Isosurface Plots  <a name="___sec28"></a></h3>
+<p>
+For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
+lines or isolines for 2D scalar fields. An isosurface connects points in
+a scalar field with (approximately) the same scalar value and is
+mathematically defined by the implicit equation \( f(x,y,z)=c \). In Easyviz,
+isosurfaces are created with the <tt>isosurface</tt> command. We will
+demonstrate this command using 3D scalar field data from the <tt>flow</tt>
+function. This function, also found in Matlab,
+generates fluid flow data. Our first isosurface visualization example
+then looks as follows:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x, y, z, v <span style="color: #666666">=</span> flow()  <span style="color: #008800; font-style: italic"># generate fluid-flow data</span>
+setp(interactive<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+h <span style="color: #666666">=</span> isosurface(x,y,z,v,<span style="color: #666666">-3</span>)
+h<span style="color: #666666">.</span>setp(opacity<span style="color: #666666">=0.5</span>)
+shading(<span style="color: #BB4444">&#39;interp&#39;</span>)
+daspect([<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>])
+view(<span style="color: #666666">3</span>)
+axis(<span style="color: #BB4444">&#39;tight&#39;</span>)
+show()
+</pre></div>
+<p>
+After creating some scalar volume data with the <tt>flow</tt> function, we
+create an isosurface with the isovalue \( -3 \). The isosurface is then
+set a bit transparent (<tt>opacity=0.5</tt>) before we specify the shading
+model and the view point. We also set the data aspect ratio to be
+equal in all directions with the <tt>daspect</tt> command.  The resulting
+plot is shown in Figure <a href="fig:isosurface1">26</a>. We remark that the
+Gnuplot backend does not support 3D scalar fields and hence not
+isosurfaces.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 26:  Isosurface plot (VTK backend). <a name="fig:isosurface1"></a> </p></center>
+<p><img src="figs/isosurface1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Here is another example that demonstrates the <tt>isosurface</tt> command
+(again using the <tt>flow</tt> function):
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x, y, z, v <span style="color: #666666">=</span> flow()
+setp(interactive<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+h <span style="color: #666666">=</span> isosurface(x,y,z,v,<span style="color: #666666">0</span>)
+shading(<span style="color: #BB4444">&#39;interp&#39;</span>)
+daspect([<span style="color: #666666">1</span>,<span style="color: #666666">4</span>,<span style="color: #666666">4</span>])
+view([<span style="color: #666666">-65</span>,<span style="color: #666666">20</span>])
+axis(<span style="color: #BB4444">&#39;tight&#39;</span>)
+show()
+</pre></div>
+<p>
+Figure <a href="fig:isosurface2">27</a> shows the resulting plot.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 27:  Another isosurface plot (VTK backend). <a name="fig:isosurface2"></a> </p></center>
+<p><img src="figs/isosurface2.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Volumetric Slice Plot  <a name="___sec29"></a></h3>
+<p>
+Another way of visualizing scalar volume data is by using the <tt>slice_</tt>
+command (since the name <tt>slice</tt> is already taken by a built-in
+function in Python for array slicing, we have followed the standard
+Python convention and added a trailing underscore to the name in
+Easyviz - <tt>slice_</tt> is thus the counterpart to the Matlab function
+<tt>slice</tt>.). This command draws orthogonal slice planes through a
+given volumetric data set. Here is an example on how to use the
+<tt>slice_</tt> command:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x, y, z <span style="color: #666666">=</span> ndgrid(seq(<span style="color: #666666">-2</span>,<span style="color: #666666">2</span>,<span style="color: #666666">.2</span>), seq(<span style="color: #666666">-2</span>,<span style="color: #666666">2</span>,<span style="color: #666666">.25</span>), seq(<span style="color: #666666">-2</span>,<span style="color: #666666">2</span>,<span style="color: #666666">.16</span>),
+                   sparse<span style="color: #666666">=</span><span style="color: #AA22FF">True</span>)
+v <span style="color: #666666">=</span> x<span style="color: #666666">*</span>exp(<span style="color: #666666">-</span>x<span style="color: #666666">**2</span> <span style="color: #666666">-</span> y<span style="color: #666666">**2</span> <span style="color: #666666">-</span> z<span style="color: #666666">**2</span>)
+xslice <span style="color: #666666">=</span> [<span style="color: #666666">-1.2</span>, <span style="color: #666666">.8</span>, <span style="color: #666666">2</span>]
+yslice <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+zslice <span style="color: #666666">=</span> [<span style="color: #666666">-2</span>, <span style="color: #666666">0</span>]
+slice_(x, y, z, v, xslice, yslice, zslice,
+       colormap<span style="color: #666666">=</span>hsv(), grid<span style="color: #666666">=</span><span style="color: #BB4444">&#39;off&#39;</span>)
+</pre></div>
+<p>
+Note that we here use the SciTools function <tt>seq</tt> for specifying a
+uniform partitioning of an interval - the <tt>linspace</tt> function from
+<tt>numpy</tt> could equally well be used.  The first three arguments in the
+<tt>slice_</tt> call are the grid points in the \( x \), \( y \), and \( z \)
+directions. The fourth argument is the scalar field defined on-top of
+the grid. The next three arguments defines either slice planes in the
+three space directions or a surface plane (currently not working). In
+this example we have created 6 slice planes: Three at the \( x \) axis (at
+\( x=-1.2 \), \( x=0.8 \), and \( x=2 \)), one at the \( y \) axis (at \( y=2 \)), and two
+at the \( z \) axis (at \( z=-2 \) and \( z=0.0 \)). The result is presented in
+Figure <a href="fig:slice1">28</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 28:  Slice plot where the \( x \) axis is sliced at -1.2, 0.8, and 2, the \( y \) axis is sliced at 2, and the \( z \) axis is sliced at -2 and 0.0 (VTK backend). <a name="fig:slice1"></a> </p></center>
+<p><img src="figs/slice1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+<!-- OBS: -->
+<!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
+
+<p>
+<b>Contours in Slice Planes.</b> <p>
+With the <tt>contourslice</tt> command we can create contour plots
+in planes aligned with the coordinate axes. Here is an example
+using 3D scalar field data from the <tt>flow</tt> function:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x, y, z, v <span style="color: #666666">=</span> flow()
+setp(interactive<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+h <span style="color: #666666">=</span> contourslice(x, y, z, v, seq(<span style="color: #666666">1</span>,<span style="color: #666666">9</span>), [], [<span style="color: #666666">0</span>], linspace(<span style="color: #666666">-8</span>,<span style="color: #666666">2</span>,<span style="color: #666666">10</span>))
+axis([<span style="color: #666666">0</span>, <span style="color: #666666">10</span>, <span style="color: #666666">-3</span>, <span style="color: #666666">3</span>, <span style="color: #666666">-3</span>, <span style="color: #666666">3</span>])
+daspect([<span style="color: #666666">1</span>, <span style="color: #666666">1</span>, <span style="color: #666666">1</span>])
+ax <span style="color: #666666">=</span> gca()
+ax<span style="color: #666666">.</span>setp(fgcolor<span style="color: #666666">=</span>(<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>), bgcolor<span style="color: #666666">=</span>(<span style="color: #666666">0</span>,<span style="color: #666666">0</span>,<span style="color: #666666">0</span>))
+box(<span style="color: #BB4444">&#39;on&#39;</span>)
+view(<span style="color: #666666">3</span>)
+show()
+</pre></div>
+<p>
+The first four arguments given to <tt>contourslice</tt> in this example are
+the extended coordinates of the grid (<tt>x</tt>, <tt>y</tt>, <tt>z</tt>) and the 3D scalar
+field values in the volume (<tt>v</tt>). The next three arguments defines the
+slice planes in which we want to draw contour lines. In this
+particular example we have specified two contour plots in the planes
+\( x=1,2,\dots,9 \), none in \( y=\hbox{const} \) planes (empty
+list) , and one contour plot in the plane \( z=0 \). The last argument to
+<tt>contourslice</tt> is optional, it can be either an integer specifying the
+number of contour lines (the default is five) or, as in the current
+example, a list specifying the level curves. Running the set of
+commands results in the plot shown in Figure <a href="fig:contourslice1">29</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 29:  Contours in slice planes (VTK backend). <a name="fig:contourslice1"></a> </p></center>
+<p><img src="figs/contourslice1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Here is another example where we draw contour slices from a
+three-dimensional MRI data set:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">scipy.io</span>
+mri <span style="color: #666666">=</span> scipy<span style="color: #666666">.</span>io<span style="color: #666666">.</span>loadmat(<span style="color: #BB4444">&#39;mri_matlab_v6.mat&#39;</span>)
+D <span style="color: #666666">=</span> mri[<span style="color: #BB4444">&#39;D&#39;</span>]
+image_num <span style="color: #666666">=</span> <span style="color: #666666">8</span>
+
+<span style="color: #008800; font-style: italic"># Displaying a 2D Contour Slice</span>
+contourslice(D, [], [], image_num, daspect<span style="color: #666666">=</span>[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>], indexing<span style="color: #666666">=</span><span style="color: #BB4444">&#39;xy&#39;</span>)
+</pre></div>
+<p>
+The MRI data set is loaded from the file <tt>mri_matlab_v6.mat</tt> with the
+aid from the <tt>loadmat</tt> function available in the <tt>io</tt> module in the
+SciPy package. We then create a 2D contour slice plot with one slice
+in the plane \( z=8 \). Figure <a href="fig:contourslice3">30</a> displays the result.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 30:  Contour slice plot of a 3D MRI data set (VTK backend). <a name="fig:contourslice3"></a> </p></center>
+<p><img src="figs/contourslice3.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h2>Visualization of Vector Fields  <a name="___sec30"></a></h2>
+<p>
+A vector field is a function from space or space-time to a vector
+value, where the number of components in the vector corresponds to
+the number of space dimensions. Primary examples on vector fields
+are the gradient of a scalar field; or velocity, displacement, or
+force in continuum physics.
+
+<p>
+In Easyviz, a vector field can be visualized either by a quiver
+(arrow) plot or by various kinds of stream plots like stream lines,
+stream ribbons, and stream tubes. Below we will look closer at each of
+these visualization techniques.
+
+<p>
+
+<h3>Quiver Plots  <a name="___sec31"></a></h3>
+<p>
+The <tt>quiver</tt> and <tt>quiver3</tt> commands draw arrows to illustrate vector
+values (length and direction) at discrete points.  As the names
+indicate, <tt>quiver</tt> is for 2D vector fields in the plane and <tt>quiver3</tt>
+plots vectors in 3D space.  The basic usage of the <tt>quiver</tt> command
+goes as follows:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x <span style="color: #666666">=</span> y <span style="color: #666666">=</span> linspace(<span style="color: #666666">-5</span>, <span style="color: #666666">5</span>, <span style="color: #666666">21</span>)
+xv, yv <span style="color: #666666">=</span> ndgrid(x, y, sparse<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+values <span style="color: #666666">=</span> sin(sqrt(xv<span style="color: #666666">**2</span> <span style="color: #666666">+</span> yv<span style="color: #666666">**2</span>))
+uv, vv <span style="color: #666666">=</span> gradient(values)
+quiver(xv, yv, uv, vv)
+</pre></div>
+<p>
+Our vector field in this example is simply the gradient of the scalar
+field used to illustrate the commands for 2D scalar field plotting.
+The <tt>gradient</tt> function computes the gradient using finite difference
+approximations.  The result is a vector field with components <tt>uv</tt> and
+<tt>vv</tt> in the \( x \) and \( y \) directions, respectively.  The grid points and
+the vector components are passed as arguments to <tt>quiver</tt>, which in
+turn produces the plot in Figure <a href="fig:quiver_ex1">31</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 31:  Velocity vector plot (Gnuplot backend). <a name="fig:quiver_ex1"></a> </p></center>
+<p><img src="figs/quiver_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The arrows in a quiver plot are automatically scaled to fit within the
+grid. If we want to control the length of the arrows, we can pass an
+additional argument to scale the default lengths:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">scale <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+quiver(xv, yv, uv, vv, scale)
+</pre></div>
+<p>
+This value of <tt>scale</tt> will thus stretch the vectors to their double length.
+To turn off the automatic scaling, we can set the scale value to zero.
+
+<p>
+Quiver plots are often used in combination with other plotting
+commands such as pseudocolor plots or contour plots, since this may
+help to get a better perception of a given set of data. Here is an
+example demonstrating this principle for a simple scalar field, where
+we plot the field values as colors and add vectors to illustrate the
+associated gradient field:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">xv, yv <span style="color: #666666">=</span> ndgrid(linspace(<span style="color: #666666">-5</span>,<span style="color: #666666">5</span>,<span style="color: #666666">101</span>), linspace(<span style="color: #666666">-5</span>,<span style="color: #666666">5</span>,<span style="color: #666666">101</span>))
+values <span style="color: #666666">=</span> sin(sqrt(xv<span style="color: #666666">**2</span> <span style="color: #666666">+</span> yv<span style="color: #666666">**2</span>))
+pcolor(xv, yv, values, shading<span style="color: #666666">=</span><span style="color: #BB4444">&#39;interp&#39;</span>)
+
+<span style="color: #008800; font-style: italic"># Create a coarser grid for the gradient field</span>
+xv, yv <span style="color: #666666">=</span> ndgrid(linspace(<span style="color: #666666">-5</span>,<span style="color: #666666">5</span>,<span style="color: #666666">21</span>), linspace(<span style="color: #666666">-5</span>,<span style="color: #666666">5</span>,<span style="color: #666666">21</span>))
+values <span style="color: #666666">=</span> sin(sqrt(xv<span style="color: #666666">**2</span> <span style="color: #666666">+</span> yv<span style="color: #666666">**2</span>))
+uv, vv <span style="color: #666666">=</span> gradient(values)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+quiver(xv, yv, uv, vv, <span style="color: #BB4444">&#39;filled&#39;</span>, <span style="color: #BB4444">&#39;k&#39;</span>, axis<span style="color: #666666">=</span>[<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>])
+figure(<span style="color: #666666">2</span>)
+contour(xv, yv, values, <span style="color: #666666">15</span>)
+hold(<span style="color: #BB4444">&#39;on&#39;</span>)
+quiver(xv, yv, uv, vv, axis<span style="color: #666666">=</span>[<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>,<span style="color: #666666">-6</span>,<span style="color: #666666">6</span>])
+</pre></div>
+<p>
+The resulting plots can be seen in Figure <a href="fig:quiver_ex2">32</a> and
+<a href="fig:quiver_ex3">33</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 32:  Combined quiver and pseudocolor plot (VTK backend). <a name="fig:quiver_ex2"></a> </p></center>
+<p><img src="figs/quiver_ex2.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 33:  Combined quiver and pseudocolor plot (VTK backend). <a name="fig:quiver_ex3"></a> </p></center>
+<p><img src="figs/quiver_ex3.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Visualization of 3D vector fields by arrows at grid points can be done
+with the <tt>quiver3</tt> command. At the time of this writing, only the VTK
+backend supports 3D quiver plots. A simple example of plotting the
+"radius vector field" \( \vec v = (x,y,z) \) is given next:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">x <span style="color: #666666">=</span> y <span style="color: #666666">=</span> z <span style="color: #666666">=</span> linspace(<span style="color: #666666">-3</span>,<span style="color: #666666">3</span>,<span style="color: #666666">4</span>)
+xv, yv, zv <span style="color: #666666">=</span> ndgrid(x, y, z, sparse<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+uv <span style="color: #666666">=</span> xv
+vv <span style="color: #666666">=</span> yv
+wv <span style="color: #666666">=</span> zv
+quiver3(xv, yv, zv, uv, vv, wv, <span style="color: #BB4444">&#39;filled&#39;</span>, <span style="color: #BB4444">&#39;r&#39;</span>, axis<span style="color: #666666">=</span>[<span style="color: #666666">-7</span>,<span style="color: #666666">7</span>,<span style="color: #666666">-7</span>,<span style="color: #666666">7</span>,<span style="color: #666666">-7</span>,<span style="color: #666666">7</span>])
+</pre></div>
+<p>
+The strings <tt>'filled'</tt> and <tt>'r'</tt> are optional and makes the arrows
+become filled
+and red, respectively. The resulting plot is presented in Figure
+<a href="fig:quiver3_ex1">34</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 34:  3D quiver plot (VTK backend). <a name="fig:quiver3_ex1"></a> </p></center>
+<p><img src="figs/quiver3_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Stream Plots  <a name="___sec32"></a></h3>
+<p>
+Stream plots constitute an alternative to arrow plots for visualizing
+vector fields.  The stream plot commands currently available in
+Easyviz are <tt>streamline</tt>, <tt>streamtube</tt>, and <tt>streamribbon</tt>.  Stream
+lines are lines aligned with the vector field, i.e., the vectors are
+tangents to the streamlines. Stream tubes are similar, but now the
+surfaces of thin tubes are aligned with the vectors.  Stream ribbons
+are also similar: thin sheets are aligned with the vectors. The latter
+type of visualization is also known as stream or flow sheets.  In the
+near future, Matlab commands such as <tt>streamslice</tt> and
+<tt>streamparticles</tt> might also be implemented.
+
+<p>
+We start with an example on how to use the <tt>streamline</tt> command. In
+this example (and in the following examples) we will use the <tt>wind</tt>
+data set that is included with Matlab. This data set represents air
+currents over a region of North America and is suitable for testing
+the different stream plot commands. The following commands will load
+the <tt>wind</tt> data set and then draw some stream lines from it:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">scipy.io</span>  <span style="color: #008800; font-style: italic"># needed to load binary .mat-files</span>
+
+<span style="color: #008800; font-style: italic"># Load the wind data set and create variables</span>
+wind <span style="color: #666666">=</span> scipy<span style="color: #666666">.</span>io<span style="color: #666666">.</span>loadmat(<span style="color: #BB4444">&#39;wind.mat&#39;</span>)
+x <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;x&#39;</span>]
+y <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;y&#39;</span>]
+z <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;z&#39;</span>]
+u <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;u&#39;</span>]
+v <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;v&#39;</span>]
+w <span style="color: #666666">=</span> wind[<span style="color: #BB4444">&#39;w&#39;</span>]
+
+<span style="color: #008800; font-style: italic"># Create starting points for the stream lines</span>
+sx, sy, sz <span style="color: #666666">=</span> ndgrid([<span style="color: #666666">80</span>]<span style="color: #666666">*4</span>, seq(<span style="color: #666666">20</span>,<span style="color: #666666">50</span>,<span style="color: #666666">10</span>), seq(<span style="color: #666666">0</span>,<span style="color: #666666">15</span>,<span style="color: #666666">5</span>),
+                    sparse<span style="color: #666666">=</span><span style="color: #AA22FF">False</span>)
+
+<span style="color: #008800; font-style: italic"># Draw stream lines</span>
+streamline(x, y, z, u, v, w, sx, sy, sz,
+           view<span style="color: #666666">=3</span>, axis<span style="color: #666666">=</span>[<span style="color: #666666">60</span>,<span style="color: #666666">140</span>,<span style="color: #666666">10</span>,<span style="color: #666666">60</span>,<span style="color: #666666">-5</span>,<span style="color: #666666">20</span>])
+</pre></div>
+<p>
+The <tt>wind</tt> data set is stored in a binary <tt>.mat</tt>-file called
+<tt>wind.mat</tt>. To load the data in this file into Python, we can use the
+<tt>loadmat</tt> function which is available through the <tt>io</tt> module in
+SciPy. Using the <tt>loadmat</tt> function on the <tt>wind.mat</tt>-file returns a
+Python dictionary (called <tt>wind</tt> in the current example) containing the NumPy
+arrays <tt>x</tt>, <tt>y</tt>, <tt>z</tt>, <tt>u</tt>, <tt>v</tt>, and <tt>w</tt>. The arrays <tt>u</tt>, <tt>v</tt>, and <tt>w</tt>
+are the 3D vector data, while the arrays <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> defines the
+(3D extended) coordinates for the associated grid. The data arrays in
+the dictionary <tt>wind</tt> are then stored in seperate variables for easier
+access later.
+
+<p>
+Before we call the <tt>streamline</tt> command we must set up some starting
+point coordinates for the stream lines. In this example, we have used
+the <tt>ndgrid</tt> command to define the starting points with the line:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">sx, sy, sz <span style="color: #666666">=</span> ndgrid([<span style="color: #666666">80</span>]<span style="color: #666666">*4</span>, seq(<span style="color: #666666">20</span>,<span style="color: #666666">50</span>,<span style="color: #666666">10</span>), seq(<span style="color: #666666">0</span>,<span style="color: #666666">15</span>,<span style="color: #666666">5</span>))
+</pre></div>
+<p>
+This command defines starting points which all lie on \( x=80 \),
+\( y=20,30,40,50 \), and \( z=0,5,10,15 \). We now have all the data we need
+for calling the <tt>streamline</tt> command. The first six arguments to the
+<tt>streamline</tt> command are the grid coordinates <tt>(x,y,z)</tt> and the 3D
+vector data <tt>(u,v,w)</tt>, while the next three arguments are the starting
+points which we defined with the <tt>ndgrid</tt> command above. The
+resulting plot is presented in Figure <a href="fig:streamline_ex1">35</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 35:  Stream line plot (Vtk backend). <a name="fig:streamline_ex1"></a> </p></center>
+<p><img src="figs/streamline_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+The next example demonstrates the <tt>streamtube</tt> command applied to the
+same <tt>wind</tt> data set:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">streamtube(x, y, z, u, v, w, sx, sy, sz,
+           daspect<span style="color: #666666">=</span>[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>],
+	   view<span style="color: #666666">=3</span>,
+	   axis<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tight&#39;</span>,
+	   shading<span style="color: #666666">=</span><span style="color: #BB4444">&#39;interp&#39;</span>)
+</pre></div>
+<p>
+The arrays <tt>sx</tt>, <tt>sy</tt>, and <tt>sz</tt> are the same as in the previous
+example and defines the starting positions for the center lines of the
+tubes. The resulting plot is presented in Figure
+<a href="fig:streamtube_ex1">36</a>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 36:  Stream tubes (Vtk backend). <a name="fig:streamtube_ex1"></a> </p></center>
+<p><img src="figs/streamtube_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+Finally, we illustrate the <tt>streamribbon</tt> command:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">streamribbon(x, y, z, u, v, w, sx, sy, sz,
+             ribbonwidth<span style="color: #666666">=5</span>,
+             daspect<span style="color: #666666">=</span>[<span style="color: #666666">1</span>,<span style="color: #666666">1</span>,<span style="color: #666666">1</span>],
+             view<span style="color: #666666">=3</span>,
+             axis<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tight&#39;</span>,
+             shading<span style="color: #666666">=</span><span style="color: #BB4444">&#39;interp&#39;</span>)
+</pre></div>
+<p>
+Figure <a href="fig:streamribbon_ex1">37</a> shows the resulting stream ribbons.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 37:  Stream ribbons (VTK backend). <a name="fig:streamribbon_ex1"></a> </p></center>
+<p><img src="figs/streamribbon_ex1.png" align="bottom" width=500></p>
+</center>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<h3>Bar Charts  <a name="___sec33"></a></h3>
+<p>
+Easyviz also supports a unified interface to simple bar charts.
+Here is a simple example for displaying tabular values, with one
+bar for each data point:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">scitools.std</span> <span style="color: #AA22FF; font-weight: bold">import</span> <span style="color: #666666">*</span>
+languages <span style="color: #666666">=</span> [<span style="color: #BB4444">&#39;C&#39;</span>, <span style="color: #BB4444">&#39;Java&#39;</span>, <span style="color: #BB4444">&#39;C++&#39;</span>, <span style="color: #BB4444">&#39;PHP&#39;</span>, <span style="color: #BB4444">&#39;VB&#39;</span>, <span style="color: #BB4444">&#39;C#&#39;</span>, <span style="color: #BB4444">&#39;Python&#39;</span>,
+             <span style="color: #BB4444">&#39;Perl&#39;</span>, <span style="color: #BB4444">&#39;JavaScript&#39;</span>]
+ratings <span style="color: #666666">=</span> [<span style="color: #666666">18</span>, <span style="color: #666666">18</span>, <span style="color: #666666">9.7</span>, <span style="color: #666666">9.7</span>, <span style="color: #666666">6.4</span>, <span style="color: #666666">4.4</span>, <span style="color: #666666">4.2</span>, <span style="color: #666666">3.6</span>, <span style="color: #666666">2.5</span>]
+bar(ratings, <span style="color: #BB4444">&#39;r&#39;</span>,
+    barticks<span style="color: #666666">=</span>languages,
+    ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Ratings in percent (TIOBE Index, April 2010)&#39;</span>,
+    axis<span style="color: #666666">=</span>[<span style="color: #666666">-1</span>, <span style="color: #AA22FF">len</span>(languages), <span style="color: #666666">0</span>, <span style="color: #666666">20</span>],
+    hardcopy<span style="color: #666666">=</span><span style="color: #BB4444">&#39;tmp.eps&#39;</span>)
+</pre></div>
+<p>
+The bar chart illustrates the data in the <tt>ratings</tt> list. These data
+correspond to the names in <tt>languages</tt>.
+
+<p>
+
+<p>
+<center> <! -- figure -->
+<hr class="figure">
+<center><p class="caption">Figure 38:  A simple bar chart illustrating the popularity of common programming languages. </p></center>
+<p><img src="figs/pyranking.png" align="bottom" ></p>
+</center>
+
+<p>
+
+<p>
+One may display groups of bars. The data can then be put in a matrix,
+where rows (1st index) correspond to the groups the columns to the
+data within one group:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">data <span style="color: #666666">=</span> [[ <span style="color: #666666">0.15416284</span>  <span style="color: #666666">0.7400497</span>   <span style="color: #666666">0.26331502</span>]
+        [ <span style="color: #666666">0.53373939</span>  <span style="color: #666666">0.01457496</span>  <span style="color: #666666">0.91874701</span>]
+        [ <span style="color: #666666">0.90071485</span>  <span style="color: #666666">0.03342143</span>  <span style="color: #666666">0.95694934</span>]
+        [ <span style="color: #666666">0.13720932</span>  <span style="color: #666666">0.28382835</span>  <span style="color: #666666">0.60608318</span>]]
+bar(data,
+    barticks<span style="color: #666666">=</span>[<span style="color: #BB4444">&#39;group 1&#39;</span>, <span style="color: #BB4444">&#39;group 2&#39;</span>, <span style="color: #BB4444">&#39;group 3&#39;</span>, <span style="color: #BB4444">&#39;group 4&#39;</span>],
+    legend<span style="color: #666666">=</span>[<span style="color: #BB4444">&#39;bar 1&#39;</span>, <span style="color: #BB4444">&#39;bar 2&#39;</span>, <span style="color: #BB4444">&#39;bar 3&#39;</span>],
+    axis<span style="color: #666666">=</span>[<span style="color: #666666">-1</span>, data<span style="color: #666666">.</span>shape[<span style="color: #666666">0</span>], <span style="color: #666666">0</span>, <span style="color: #666666">1.3</span>],
+    ylabel<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Normalized CPU time&#39;</span>,
+    title<span style="color: #666666">=</span><span style="color: #BB4444">&#39;Bars from a matrix, now with more annotations&#39;</span>)
+</pre></div>
+<p>
+When the names of the groups (barticks) are quite long, rotating them
+90 degrees is preferable, and this is done by the keyword
+argument <tt>rotated_barticks=True</tt>.
+
+<p>
+The demo program in <tt>examples/bar_demo.py</tt> contains additional examples
+and features.
+
+<p>
+
+<p>
+
+<h2>Backends  <a name="___sec34"></a></h2>
+<p>
+As we have mentioned earlier, Easyviz is just a unified interface to
+other plotting packages, which we refer to as backends. We have
+currently implemented backends for Gnuplot, Grace, OpenDX, Matlab,
+Matplotlib, Pmw.Blt, Veusz, VisIt, and VTK. Some are more early in
+developement than others, like the backends for OpenDx and VisIt.
+
+<p>
+Because of limitations in many of the plotting packages, not all
+features in Easyviz are supported by each of the backends.  Gnuplot
+has (at the time of this writing) no support for visualization of 3D
+vector fields, so this is of course not available in the Gnuplot
+backend either.
+
+<p>
+Some supported visualization programs are commented on below.
+
+<p>
+<b>Gnuplot.</b> Gnuplot is a command-driven interactive or scripted
+plotting utility that works on a wide variety of platforms. Gnuplot
+supports many types of plots in both 2D and 3D, including curve plots,
+contour plots, vector plots, and surface plots.  3D scalar and vector
+fields are not supported. To access Gnuplot from Python and send NumPy
+arrays to Gnuplot, we use the Python module <tt>Gnuplot</tt>.
+
+<p>
+
+<p>
+<b>Matlab.</b> Many view Matlab as the de facto standard for making curves
+and plots of 2D scalar/vector fields.
+
+<p>
+
+<p>
+<b>Matplotlib.</b> Matplotlib is now quickly gaining wide popularity in
+the scientific Python community and has established itself as the de
+facto standard for curve plotting and 2D contour and (recently) surface
+plotting. The interface to Matplotlib is Matlab-insipired, and
+different backends are used to create the plots: Gtk, Tk, WxWidgets
+and many more.  (Since Easyviz and Matplotlib haver very similar
+Matlab-style syntax, Easyviz is just a thin layer on top of Matplotlib
+to enable Matplotlib to be used with the Easyviz unified syntax.)
+Matplotlib is now a comprehensive package with lots of tuning
+possibilities that Easyviz does not support - but one can fetch the
+underlying Matplotlib from Easyviz and call all the functionality of
+Matplotlib directly.
+
+<p>
+
+<p>
+<b>Grace.</b> Grace is a highly interactive curve plotting program on the
+Unix/X11 platform which has been popular for many years. It does not
+support 2D or 3D scalar or vector fields. However, it has a lot of
+functionality for computing with curves and adjusting/fine-tuning
+plots interactively.
+
+<p>
+
+<p>
+<b>PyX.</b> PyX is a Python package for the creation of PostScript and
+PDF files. It combines an abstraction of the PostScript drawing model
+with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
+publication-ready quality are built out of these primitives.
+
+<p>
+
+<p>
+<b>Pmw.Blt.Graph.</b> Pmw (Python Mega Widgets) extends the Tkinter
+package with more sophisticated widgets, included an interactive
+widget for curve plotting. This widget is based on the BLT package
+(an extension of Tk written in C).
+The BLT backend offers currenlty only basic plotting functionality.
+
+<p>
+
+<p>
+<b>Veusz.</b> From http://home.gna.org/veusz<Veusz homepage>: Veusz is a
+GUI scientific plotting and graphing package. It is designed to
+produce publication-ready Postscript or PDF output. SVG, EMF and
+bitmap formats export are also supported. Veusz has a comprehensive
+GUI and produces really high-quality plots.
+
+<p>
+
+<p>
+<b>VTK.</b> VTK (Visualization ToolKit) is a package primarily aimed at
+visualizing 2D and 3D scalar and vector fields by a range of techniques.
+VTK is used to achieve 2D and 3D visualizations of the same type as 
+Matlab offers. However, VTK can do much more (although the Easyviz 
+commands are restricted to what is typically offered by Matlab).
+
+<p>
+
+<h2>Design  <a name="___sec35"></a></h2>
+<p>
+
+<h3>Main Objects  <a name="___sec36"></a></h3>
+<p>
+All code that is common to all backends is gathered together in a file
+called <tt>common.py</tt>. For each backend there is a separate file where
+the backend dependent code is stored. For example, code that are
+specific for the Gnuplot backend, are stored in a file called
+<tt>gnuplot_.py</tt> and code specific for the VTK backend are stored in
+<tt>vtk_.py</tt> (note the final underscore in the stem of the filename - all
+backend files have this underscore). 
+
+<p>
+Each backend is a subclass of class <tt>BaseClass</tt>. The <tt>BaseClass</tt> code
+is found in <tt>common.py</tt> and contains all common code for the backends.
+Basically, a backend class extends <tt>BaseClass</tt> with
+rendering capabilities and backend-specific functionality. 
+
+<p>
+The most important method that needs to be implemented in the backend
+is the <tt>_replot</tt> method, which updates the backend and the plot after a
+change in the data. Another important method for the backend class is
+the <tt>hardcopy</tt> method, which stores an image of the data in the current
+figure to a file.
+
+<p>
+Inspired by Matlab, the Easyviz interface is organized around figures and
+axes. A figure contains an arbitrary number of axes, and the axes can
+be placed in arbitrary positions in the figure window. Each figure appears
+in a separate window on the screen. The current figure is accessed by
+the <tt>gcf()</tt> call. Similarly, the current axes are accessed by calling
+<tt>gca()</tt>.
+
+<p>
+It is
+natural to have one class for figures and one for axes. Class <tt>Figure</tt>
+contains a dictionary with one (default) or more <tt>Axis</tt> objects in
+addition to several properties such as figure width and height. Class <tt>Axis</tt>
+has another dictionary with the plot data as well as lots of
+parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
+For example, when adding an
+elevated surface to the current figure, this surface will be
+appended to a list in the current <tt>Axis</tt> object. 
+Optionally one can add the surface to another <tt>Axis</tt>
+object by specifying the <tt>Axis</tt> instance as an argument. 
+
+<p>
+
+<p>
+All the objects that are to be plotted in a figure such as curves,
+surfaces, vectors, and so on, are stored in repsectively classes.  An
+elevated surface, for instance, is represented as an instance of class
+<tt>Surface</tt>.  All such classes are subclasses of
+<tt>PlotProperties</tt>. Besides being the base class of all objects that can
+be plotted in a figure
+(<tt>Line</tt>, 
+<tt>Surface</tt>, 
+<tt>Contours</tt>, 
+<tt>VelocityVectors</tt>, 
+<tt>Streams</tt>, 
+<tt>Volume</tt>), 
+class <tt>PlotProperties</tt> also stores various properties that are common
+to all objects in a figure. Examples include line properties, material
+properties, storage arrays for x and y values for <tt>Line</tt> objects,
+and x, y, and z values for 3D objects such as <tt>Volume</tt>.
+
+<p>
+The classes mentioned above, i.e., <tt>BaseClass</tt> with subclasses, class
+<tt>PlotProperties</tt> with subclasses, as well as class <tt>Figure</tt> and class
+<tt>Axis</tt> constitute the most important classes in the Easyviz interface.
+Other less important classes are <tt>Camera</tt>, <tt>Light</tt>, <tt>Colorbar</tt>, and
+<tt>MaterialProperties</tt>.
+
+<p>
+All the classes in <tt>common.py</tt> follows a convention where class parameters
+are set by a <tt>setp</tt> method and read by a <tt>getp</tt> method. For
+example, we can set the limits on the \( x \) axis by using the <tt>setp</tt>
+method in a <tt>Axis</tt> instance:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">ax = gca()                  # get current axis
+ax.setp(xmin=-2, xmax=2)
+</pre></div>
+<p>
+To extract the values of these limits we can write
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">xmin = ax.getp(&#39;xmin&#39;)
+xmax = ax.getp(&#39;xmax&#39;)
+</pre></div>
+<p>
+Normal use will seldom involve <tt>setp</tt> and <tt>getp</tt> functions, since most
+users will apply the Matlab-inspired interface and set, e.g., the
+limits by
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">xlim([-2,2])
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<p>
+
+<h2>Installation <a name="ev:tut:install"></a>  <a name="___sec37"></a></h2>
+<p>
+
+<p>
+Easyviz comes with the SciTools package, so to install Easyviz, you
+must install SciTools, which is available from
+<a href="http://code.google.com/p/scitools">Google code</a>.
+
+<p>
+If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Unix&gt; sudo apt-get install python-scitools
+</pre></div>
+<p>
+because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Unix&gt; sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+</pre></div>
+<p>
+
+<p>
+
+<p>
+Otherwise, you download the tarball with the SciTools software, pack it out,
+go the <tt>scitools</tt> folder, and run the standard command
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Unix/DOS&gt; python setup.py install
+</pre></div>
+<p>
+Easyviz is reached as the package <tt>scitools.easyviz</tt> and can be
+imported in several ways (see the paragraph heading
+"Importing Just Easyviz" in the Tutorial).
+
+<p>
+Easyviz will not work unless you have one or more plotting programs
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an <tt>apt-get
+install python-scitools</tt> all necessary plotting programs are
+automatically installed for you.)
+
+<p>
+Please check your plotting program independently of Easyviz, as
+described in the <em>Check Your Backends!</em> section of the <em>Troubleshooting</em>
+chapter, if you encounter strange errors during Easyviz plotting.
+
+<p>
+
+<h3>Installing Gnuplot  <a name="___sec38"></a></h3>
+<p>
+
+<h3>Linux/Unix  <a name="___sec39"></a></h3>
+<p>
+<b>Compile from Source.</b> Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+easily on most Unix systems. You also need the <tt>Gnuplot</tt> Python
+module, which can be obtained from <tt>gnuplot-py.sourceforge.net</tt>.
+
+<p>
+<b>Debian/Ubuntu.</b> Prebuilt versions are available for Debian/Ubuntu:
+run
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">apt-get install gnuplot gnuplot-x11 python-gnuplot
+</pre></div>
+<p>
+but running these commands are not necessary since on Debian/Ubuntu you
+will install <tt>python-scitools</tt> which effectively installs all the
+software that SciTools depend on.
+
+<p>
+
+<h3>Windows  <a name="___sec40"></a></h3>
+<p>
+On Windows, one can either use Gnuplot under Cygwin or use a precompiled
+binary from sourgeforce.net.
+
+<p>
+<b>Using the Gnuplot Cygwin package.</b> In this case there are two things that needs to be changed in the
+<tt>gp_cygwin.py</tt> file in the top-level directory of the <tt>Gnuplot.py</tt>
+source tree. First you need to change the <tt>gnuplot_command</tt> variable
+to <tt>gnuplot</tt> instead of <tt>pgnuplot.exe</tt>. Then you should change the
+<tt>default_term</tt> variable to <tt>x11</tt> instead of <tt>windows</tt> since the
+Gnuplot Cygwin package is not compiled with the Windows
+terminal. Finally, install <tt>Gnuplot.py</tt> (<tt>python setup.py install</tt>)
+and launch X11 by running <tt>startx</tt> from a Cygwin prompt. Try to run
+the <tt>test.py</tt> script that comes with <tt>Gnuplot.py</tt>. If everything
+works, Easyviz can use Gnuplot.
+
+<p>
+<b>Using Gnuplot Binaries.</b> <p>
+First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+A possible URL is
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
+</pre></div>
+<p>
+The zip file may have another name for a newer version of Gnuplot on
+Windows.
+
+<p>
+Then unzip the <tt>gp424win32.zip</tt> file to the folder
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">C:\gnuplot
+</pre></div>
+<p>
+Add the folder name
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">C:\gnuplot\bin
+</pre></div>
+<p>
+to the <tt>PATH</tt> environment variable (this is done in a graphical interface for
+setting environment variables).
+
+<p>
+Check out the latest SVN revision of the Python interface to
+Gnuplot, which is the Python module file <tt>Gnuplot.py</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
+</pre></div>
+<p>
+
+<p>
+Install <tt>Gnuplot.py</tt>:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">cd gnuplot-py
+python setup.py bdist_wininst
+dist\gnuplot-py-1.8+.win32.exe
+</pre></div>
+<p>
+
+<p>
+Check out the latest SVN revision of SciTools:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">svn co http://scitools.googlecode.com/svn/trunk/ scitools
+</pre></div>
+<p>
+
+<p>
+Install SciTools:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">cd scitools
+python setup.py bdist_wininst
+dist\SciTools-0.4.win32.exe
+</pre></div>
+<p>
+(The SciTools version number differs.)
+
+<p>
+
+<h3>Installing Matplotlib  <a name="___sec41"></a></h3>
+<p>
+This is normally just a matter of
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">python setup.py install
+</pre></div>
+<p>
+in the root directory of the Matplotlib code.
+
+<p>
+<b>Windows.</b> You can download prebuilt binaries from the Matplotlib home page.
+
+<p>
+
+<h2>Troubleshooting  <a name="___sec42"></a></h2>
+<p>
+
+<h3>Suddenly my old plots have thick lines and large markers  <a name="___sec43"></a></h3>
+<p>
+The default behavior of <tt>plot(x,y)</tt> was changed in August, 2012, such
+that the line thickness is 2 and markers are inserted at the data
+points.  The reason is that curves in PNG files printed in black and
+white (typically in reports) were hard to distinguish with the old
+default behavior (line of thickness 1). The new default behavior is
+better suited for increased use of PNG as file format.
+
+<p>
+To get the old default behavior, replace <tt>plot(x,y)</tt> by
+<tt>plot(x,y,'-')</tt>, or <tt>plot(x,y,-2)</tt> if thick lines are desired.
+
+<p>
+
+<h3>Can I Perform a Diagnostic Test of Easyviz?  <a name="___sec44"></a></h3>
+<p>
+Yes. It is wise to perform a diagnostic test before reporting any error
+or trouble to the SciTools maintainers. Find the source folder of SciTools
+and go to the <tt>misc</tt> subfolder. Run
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">python diagonstic.py
+</pre></div>
+<p>
+On the screen, you can see what you have of working software that Easyviz
+may use. You do not need to see "ok" after each test, but at least
+one plotting program must be properly installed. Include the detailed
+diagonstics in the <tt>scitools_diagnostic.log</tt> file as attachment in any
+mail to the SciTools developers.
+
+<p>
+
+<h3>The Plot Window Disappears Immediately  <a name="___sec45"></a></h3>
+<p>
+Depending on the backend used for plotting with Easyviz, the plot
+window may be killed when the program terminates. Adding a statement
+that makes the program halt provides a remedy:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF">raw_input</span>(<span style="color: #BB4444">&#39;Press Return key to quit: &#39;</span>)
+</pre></div>
+<p>
+The plot window will now stay on the screen until hitting the Enter/Return key.
+
+<p>
+Another remedy can be to add a <tt>show()</tt> call at the end of the plotting:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">show()
+</pre></div>
+<p>
+<!-- test on Windows! -->
+
+<p>
+
+<h3>I Get Thread Errors While Plotting  <a name="___sec46"></a></h3>
+<p>
+With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do <tt>import time</tt> and insert
+a <tt>time.sleep(0.2)</tt> (pause the program for 0.2 sec) between each call
+to the <tt>plot</tt> command.
+
+<p>
+Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.
+
+<p>
+
+<h3>I Get Strange Errors Saying Something About LaTeX  <a name="___sec47"></a></h3>
+<p>
+You probably run Easyviz with Matplotlib as backend, and you do not
+have a working LaTeX installation. Matplotlib applies LaTeX for
+improved rendering of legends, titles, and numbers.  The fix is to
+turn off the use of LaTeX, which is done by the <tt>text.usetex</tt>
+parameter in the <tt>matplotlib</tt> section of the configuration file.  Set
+this parameter to <tt>false</tt>. See the subsection "Setting Parameters in
+the Configuration File" in the section "Advanced Easyviz Topics" in
+the Easyviz tutorial. The tutorial can be reached from the code.google.com
+site or by running pydoc scitools.easyviz. If you use Matplotlib as
+default plotting engine, we recommend to have a <tt>.scitools.cfg</tt>
+configuration file in your home folder and that use control the use
+of Matplotlib parameters in this file.
+
+<p>
+Another fix of LaTeX-related problems is to switch to another backend
+than Matplotlib.
+
+<p>
+
+<p>
+
+<h3>Old Programs with 2D Scalar/Vector Field Plotting Do Not Work  <a name="___sec48"></a></h3>
+<p>
+SciTools version 0.7 changed the default backend for plotting to
+Matplotlib instead of Gnuplot (provided you have Matplotlib and you
+run <tt>setup.py</tt> to install SciTools - binaries for Debian still has
+Gnuplot as the plotting engine). Some functionality in Gnuplot, especially
+regarding 2D vector/scalar fields, is not yet present in Matplotlib
+and/or supported by the Easyviz interface to Matplotlib.
+You then need to explicitly run the script with Gnuplot as plottin
+engine:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">python myprogram.py --SCITOOLS_easyviz_backend gnuplot
+</pre></div>
+<p>
+or you must import gnuplot explicitly in the program:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">from scitools.std import *
+from scitools.easyviz.gnuplot_ import *
+</pre></div>
+<p>
+or you can edit the installed <tt>scitools.cfg</tt> file ("backend" keyword
+in the "easyviz" section), or your local version <tt>.scitools.cfg</tt> in
+your home folder, or maybe the simplest solution is to reinstall
+SciTools with Gnuplot as plotting engine:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">python setup.py install --easyviz_backend gnuplot
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h3>Check Your Backends!  <a name="___sec49"></a></h3>
+<p>
+When you encounter a problem with Easyviz plotting, make sure that the
+backend works correctly on its own (there may, e.g., be installation
+problems with the backend - Easyviz just calls the backend to do the
+plotting).
+
+<p>
+
+<h4>Gnuplot  <a name="___sec50"></a></h4>
+<p>
+For the Gnuplot backend you can try the following commands in a
+terminal window:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Unix/DOS&gt; gnuplot
+gnuplot&gt; plot sin(x)
+</pre></div>
+<p>
+This should result in a plot of the sine function on the screen.
+If this command does not work, Easyviz will not work with the Gnuplot
+backend. A common problem is that Gnuplot is installed, but the path
+to the Gnuplot executable is not registered in the <tt>PATH</tt> environment
+variable. See the section <em>Installing Gnuplot</em> if you need help with
+installing the Gnuplot program and its Python interface.
+
+<p>
+
+<h4>Matplotlib  <a name="___sec51"></a></h4>
+<p>
+The following code tests if you have installed Matplotlib correctly:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">import matplotlib.pyplot as plt
+import numpy as np
+x = np.linspace(0, 2*np.pi, 101)
+y = np.sin(x)
+plt.plot(x, y)
+plt.show()
+</pre></div>
+<p>
+In case of problems, go to the Matplotlib source directory, remove the
+<tt>build</tt> subdirectory, and try a new install with <tt>python setup.py install</tt>.
+
+<p>
+
+<p>
+
+<h3>Can I Easily Turn Off All Plotting?  <a name="___sec52"></a></h3>
+<p>
+Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">from scitools.std import *
+turn_off_plotting(globals())
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h3>How Can I Change the Type of Gnuplot Window?  <a name="___sec53"></a></h3>
+<p>
+The configuration file (<tt>.scitools.cfg</tt> in your home directory or a
+local directory, copied from <tt>scitools.cfg</tt> in the SciTools source
+code distribution) has an item for controlling the type of <em>terminal</em>
+used by Gnuplot:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">[gnuplot]
+...
+default_term               = &lt;str&gt; wxt
+</pre></div>
+<p>
+Here, the <tt>wxt</tt> terminal, based on wxWidgets, is chosen. Other
+choices are <tt>x11</tt> on systems supporting X11 graphics, or <tt>aqua</tt> on
+Mac. The <tt>wxt</tt> value is an allround choice since wxWidgets work, in theory,
+on all platforms.
+
+<p>
+
+<h3>How Can The Aspect Ratio of The Axes Be Controlled?  <a name="___sec54"></a></h3>
+<p>
+See the section "Controlling the Aspect Ratio of Axes" in the
+tutorial.
+
+<p>
+
+<h3>Trouble with Gnuplot and Threads  <a name="___sec55"></a></h3>
+<p>
+When using the Gnuplot backend, the following error may be encountered:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">thread.error: can&#39;t start new thread
+</pre></div>
+<p>
+A remedy is to create fewer plots, and for animations, update the plot
+window less frequently. For example,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #AA22FF; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #AA22FF">range</span>(number_of_frames_in_animation):
+    <span style="color: #666666">&lt;</span>prepare data<span style="color: #666666">&gt;</span>
+    <span style="color: #AA22FF; font-weight: bold">if</span> i <span style="color: #666666">%</span> <span style="color: #666666">==</span> <span style="color: #666666">100</span>:     <span style="color: #008800; font-style: italic"># plot every 100 frames</span>
+        <span style="color: #666666">&lt;</span>make plot<span style="color: #666666">&gt;</span>
+</pre></div>
+<p>
+
+<p>
+
+<h3>Trouble with Movie Making  <a name="___sec56"></a></h3>
+<p>
+The call to <tt>movie</tt> demands that you have video encoders installed.
+The legal encoders are <tt>mencoder</tt>, <tt>ffmpeg</tt>, <tt>mpeg_encode</tt>, <tt>ppmtompeg</tt>,
+<tt>mpeg2enc</tt>, and <tt>convert</tt>. Some of these also require additional
+software to be installed.
+
+<p>
+To install (e.g.) <tt>convert</tt>, you need to install the ImageMagick
+software suite, since <tt>convert</tt> is a part of that package. ImageMagick
+is easy to install on most platforms. The <tt>ppmtompeg</tt> encoder is a part
+of the Netpbm software, while <tt>mpeg2enc</tt> is a part of <tt>mjpegtools</tt>.
+
+<p>
+On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the <tt>movie</tt> function:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Unix&gt; sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
+</pre></div>
+<p>
+
+<p>
+When something goes wrong with the movie making, check the output in
+the terminal window. By default, Easyviz prints the command that makes
+the movie. You can manually copy this command and run it again to start
+finding out what can be wrong. Just switching to a different encoder can be
+a quick remedy. The switch is done with the <tt>encoder</tt> keyword argument
+to <tt>movie</tt>, e.g.,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"># Make animated GIF movie in the file tmpmovie.gif
+movie(&#39;tmp_*.png&#39;, encoder=&#39;convert&#39;, fps=2,
+      output_file=&#39;tmpmovie.gif&#39;)
+</pre></div>
+<p>
+
+<p>
+
+<h3>I Get Thread Errors with Gnuplot  <a name="___sec57"></a></h3>
+<p>
+When plotting inside a loop, e.g.,
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">for i in some_values:
+    ...
+    plot(t, X0, &#39;r-6&#39;, axis=(0, 1, -2, 2),
+         xlabel=&#39;t&#39;, ylabel=&#39;Xt&#39;, title=&#39;My Title&#39;)
+</pre></div>
+<p>
+Gnuplot may lead to thread errors. A remedy is to do some plotting
+outside the loop and then only update the data inside the loop:
+<p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">plot(t, X0, &#39;r-6&#39;, axis=(0, 1, -2, 2),
+     xlabel=&#39;t&#39;, ylabel=&#39;Xt&#39;, title=&#39;My Title&#39;)
+for i in some_values:
+    ...
+    plot(t, X0)
+</pre></div>
+<p>
+
+<p>
+
+<p>
+
+<h3>Where Can I Find Easyviz Documentation?  <a name="___sec58"></a></h3>
+<p>
+There is a verbose Easyviz documentation that mainly focuses on an
+introduction to Easyviz (what you read now is a part of that
+documentation).
+
+<p>
+Another useful source of information is the many examples that come
+with the SciTools/Easyviz source code. The examples are located in
+the <tt>examples</tt> subfolder of the source.
+
+<p>
+
+<p>
+
+<h3>Grace Gives Error Messages When Calling Savefig/Hardcopy  <a name="___sec59"></a></h3>
+<p>
+Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.
+
+<p>
+
+<h3>I Cannot Find Out How My Plot Can Be Created  <a name="___sec60"></a></h3>
+<p>
+Note that Easyviz only support the most basic types of plots:
+
+<p>
+
+<ul>
+  <li> y=f(x) curves
+  <li> bar plots
+  <li> contour plots of 2D scalar fields
+  <li> elevated 3D surfaces of 2D scalar fields
+  <li> 3D isosurfaces of 3D scalar fields
+  <li> arrows reflecting 2D/3D vector fields
+  <li> streamlines, streamtubes, and streamribbon for 3D vector fields.
+</ul>
+
+For such standard plots you can use Easyviz, otherwise you have to
+use a plotting package like Matplotlib, Gnuplot, or VTK directly
+from your Python program.
+
+<p>
+The following Matlab-like commands (functions) are available (but not
+supported by all backends):
+
+<p>
+
+<ul>
+  <li> autumn,
+  <li> axes,
+  <li> axis,
+  <li> bone,
+  <li> box,
+  <li> brighten,
+  <li> camdolly,
+  <li> camlight,
+  <li> camlookat,
+  <li> campos,
+  <li> camproj,
+  <li> camroll,
+  <li> camtarget,
+  <li> camup,
+  <li> camva,
+  <li> camzoom,
+  <li> caxis,
+  <li> cla,
+  <li> clabel,
+  <li> clf,
+  <li> close,
+  <li> closefig,
+  <li> closefigs,
+  <li> colorbar,
+  <li> colorcube,
+  <li> colormap,
+  <li> coneplot,
+  <li> contour,
+  <li> contour3,
+  <li> contourf,
+  <li> contourslice,
+  <li> cool,
+  <li> copper,
+  <li> daspect,
+  <li> figure,
+  <li> fill,
+  <li> fill3,
+  <li> flag,
+  <li> gca,
+  <li> gcf,
+  <li> get,
+  <li> gray,
+  <li> grid,
+  <li> hardcopy,
+  <li> hidden,
+  <li> hold,
+  <li> hot,
+  <li> hsv,
+  <li> ishold,
+  <li> isocaps,
+  <li> isosurface,
+  <li> jet,
+  <li> legend,
+  <li> light,
+  <li> lines,
+  <li> loglog,
+  <li> material,
+  <li> mesh,
+  <li> meshc,
+  <li> openfig,
+  <li> pcolor,
+  <li> pink,
+  <li> plot,
+  <li> plot3,
+  <li> prism,
+  <li> quiver,
+  <li> quiver3,
+  <li> reducevolum,
+  <li> savefig,
+  <li> semilogx,
+  <li> semilogy,
+  <li> set,
+  <li> shading,
+  <li> show,
+  <li> slice_,
+  <li> spring,
+  <li> streamline,
+  <li> streamribbon,
+  <li> streamslice,
+  <li> streamtube,
+  <li> subplot,
+  <li> subvolume,
+  <li> summer,
+  <li> surf,
+  <li> surfc,
+  <li> surfl,
+  <li> title,
+  <li> vga,
+  <li> view,
+  <li> white,
+  <li> winter,
+  <li> xlabel,
+  <li> ylabel,
+  <li> zlabel
+</ul>
+
+
+<!-- ---------------------------- end of main content ----------------->
+</body>
+</html>
+    
+
