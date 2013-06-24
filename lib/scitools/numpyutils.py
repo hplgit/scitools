@@ -41,6 +41,9 @@ Functionality of this module that extends Numerical Python
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf:
            discrete and continuous norms for multi-dimensional arrays
            viewed as vectors
+ - approximate_Jacobian:
+           compute finite difference approximation of the Jacobian
+           of a nonlinear vector function
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
  - seq:
@@ -333,6 +336,21 @@ def ndgrid(*args,**kwargs):
     """
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
+
+def approximate_Jacobian(f, x, f_args, h=1.0E-4):
+    """
+    Compute approximate Jacobian of f(x, *f_args) at x.
+    Method: forward finite difference approximation with step h.
+    """
+    x = np.asarray(x)
+    f0 = np.asarray(f(x, *f_args))  # f may return list/tuple
+    J = np.zeros((len(x), len(f0)))
+    dx = np.zeros_like(x)
+    for i in range(len(x)):
+       dx[i] = h
+       J[i] = (np.asarray(f(x+dx, *f_args)) - f0)/h
+       dx[i] = 0.0
+    return J.transpose()
 
 def length(a):
     """Return the length of the largest dimension of array a."""

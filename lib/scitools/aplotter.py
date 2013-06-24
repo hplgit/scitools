@@ -328,11 +328,10 @@ class Plotter(object):
 
 		y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)
 
-		#if plot_data.min_x < 0 and plot_data.max_x > 0:
-		x_zero_coord = self.get_coord(0, plot_data.min_x, plot_data.x_step)
-		#else:
-
-		#pass
+		if plot_data.min_x < 0 and plot_data.max_x > 0:
+			x_zero_coord = self.get_coord(0, plot_data.min_x, plot_data.x_step)
+		else:
+			x_zero_coord = self.get_coord(plot_data.min_x, plot_data.min_x, plot_data.x_step)
 
 		output_buffer[x_zero_coord][min_y_coord] = "+"
 		output_buffer[x_zero_coord][max_y_coord] = "+"

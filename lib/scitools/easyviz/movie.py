@@ -328,12 +328,15 @@ class MovieEncoder(object):
         if vbitrate is None:
             vbitrate = "800k"
         cmd += ' -b %s' % vbitrate
-        cmd += ' -r %s' % self._prop['fps']
+        cmd += ' keyint=%s -r %s' % (self._prop['fps'], self._prop['fps'])
         size = self._get_size()
         if size is not None:
             cmd += ' -s %sx%s' % size
-        if self._prop['vcodec'] is not None:
-            cmd += ' -vcodec %s' % self._prop['vcodec']
+        if self._prop['vcodec'] is None:
+            self._prop['vcodec'] = 'libx264'
+        cmd += ' -vcodec %s' % self._prop['vcodec']
+        if self._prop['vcodec'] == 'libx264':
+            cmd += ' -x264opts'
         if self._prop['overwrite_output']:
             cmd += ' -y'
         if self._prop['aspect'] is not None:
@@ -348,9 +351,9 @@ class MovieEncoder(object):
         if self._prop['gop_size'] is not None:
             cmd += ' -g %d' % int(self._prop['gop_size'])
         #cmd += ' -target dvd'
-        # if no output file is given, use 'movie.avi' as default:
+        # if no output file is given, use 'movie.mp4' as default:
         if self._prop['output_file'] is None:
-            self._prop['output_file'] = 'movie.avi'
+            self._prop['output_file'] = 'movie.mp4'
         cmd += ' ' + self._prop['output_file']
         if self._prop['quiet']:
             cmd += ' > /dev/null 2>&1'
@@ -763,6 +766,8 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600,
     This function is based on code written by R. J. LeVeque, based on
     a template from Alan McIntyre.
     """
+    # Alternative method:
+    # http://stackoverflow.com/questions/9486961/animated-image-with-javascript
     import os
     if not isinstance(plotfiles, (tuple,list)):
         raise TypeError('html_movie: plotfiles=%s of wrong type %s' %
