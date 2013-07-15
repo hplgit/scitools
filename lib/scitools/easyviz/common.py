@@ -343,12 +343,16 @@ class PlotProperties(object):
         return self._prop['xlim']+self._prop['ylim']+self._prop['zlim']
 
     def _set_lim(self, a, name, adj_step=0.03):
-        try:
-            amin = a.min()
-            amax = a.max()
-        except ValueError:
-            amin = min(ravel(a))
-            amax = max(ravel(a))
+        if isinstance(a, ndarray):
+            try:
+                amin = a.min()
+                amax = a.max()
+            except ValueError:
+                amin = min(ravel(a))
+                amax = max(ravel(a))
+        elif isinstance(a, (tuple,list)):
+            amin = min(a)
+            amax = max(a)
         if (amax - amin) == 0:
             #print 'empty %s-range [%g,%g], adjusting to [%g,%g]' % \
             #      (name[0], amin, amax, amin-adj_step, amax+adj_step)
