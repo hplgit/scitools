@@ -1,7 +1,7 @@
 import os
 
-from scitools.numpytools import asarray, ones, seq, shape, reshape, meshgrid, \
-     NumPyArray, NumPy_type
+from scitools.numpyutils import asarray, ones, seq, shape, reshape, meshgrid, \
+     ndarray
 import scitools.globaldata
 
 def _update_from_config_file(d, section='easyviz'):
@@ -281,18 +281,6 @@ def _check_xyzuvw(*args, **kwargs):
             "_check_xyzuvw: u must be 1D, 2D, or 3D, not %dD" % len(us))
 
     return x, y, z, u, v, w
-
-def arrayconverter(a):
-    """Convert the numpy array a with type 'numpy.ndarray' into a
-    Numeric.array object (type 'array'). This is useful when a
-    'numpy.ndarray' object is not accepted, which is the case in the
-    gnuplot module.
-    """
-    if NumPy_type(a) == 'numpy':
-        import Numeric
-        return Numeric.array(a.tolist())
-    else:
-        return a
 
 def _cmpPlotProperties(a,b):
     """Sort cmp-function for PlotProperties"""

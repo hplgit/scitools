@@ -36,7 +36,7 @@ from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists , system
-from .misc import arrayconverter, _update_from_config_file, _check_type
+from .misc import _update_from_config_file, _check_type
 import collections
 
 check_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
@@ -104,10 +104,6 @@ if _gnuplotpy_major == 1 and _gnuplotpy_minor <= 7:
         print ("Warning: Gnuplot.py version %s is not support on 64 bits " \
                "platform. Please upgrade to Gnuplot.py 1.8 or newer.") % \
                Gnuplot.__version__
-else:
-    # The arrayconverter function is only necessary for Gnuplot.py <= 1.7:
-    def arrayconverter(a):
-        return a
 
 def get_gnuplot_version():
     """Return Gnuplot version used in Gnuplot.py."""
@@ -722,10 +718,7 @@ class GnuplotBackend(BaseClass):
             kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring,
                       'using': '1:2:($3)'}
-            data = Gnuplot.Data(arrayconverter(x),
-                                arrayconverter(y),
-                                arrayconverter(squeeze(z)),
-                                **kwargs)
+            data = Gnuplot.Data(x, y, squeeze(z), **kwargs)
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
@@ -742,9 +735,7 @@ class GnuplotBackend(BaseClass):
                       'with': withstring,
                       'using': '1:($2)'}
 
-            data = Gnuplot.Data(arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+            data = Gnuplot.Data(x, y, **kwargs)
         return data
 
 
@@ -920,10 +911,7 @@ class GnuplotBackend(BaseClass):
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'with': withstring,
                   'binary': 0}
-        data = Gnuplot.GridData(arrayconverter(z),
-                                arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+        data = Gnuplot.GridData(z, x, y, **kwargs)
         return data
 
     def _add_contours(self, item, placement=None):
@@ -985,10 +973,7 @@ class GnuplotBackend(BaseClass):
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'binary': 0,
                   'with': 'l palette'}
-        data = Gnuplot.GridData(arrayconverter(z),
-                                arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+        data = Gnuplot.GridData(z, x, y, **kwargs)
         return data
 
     def _add_vectors(self, item):
@@ -1044,10 +1029,8 @@ class GnuplotBackend(BaseClass):
                         y = y[newaxis,:]*ones(shape(u))
             kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring}
-            data = Gnuplot.Data(arrayconverter(ravel(x)),
-                                arrayconverter(ravel(y)),
-                                arrayconverter(ravel(u)),
-                                arrayconverter(ravel(v)),
+            data = Gnuplot.Data(ravel(x), ravel(y),
+                                ravel(u), ravel(v),
                                 **kwargs)
         return data
 

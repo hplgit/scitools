@@ -1,8 +1,7 @@
 import pickle, os, operator, pprint
 
 from scitools.numpyutils import seq, iseq, asarray, ones, zeros, sqrt, shape, \
-     ravel, meshgrid, rank, squeeze, reshape, ndgrid, size
-from scitools.numpytools import arrmin, arrmax, NumPyArray
+     ravel, meshgrid, rank, squeeze, reshape, ndgrid, size, ndarray
 from scitools.globaldata import backend
 
 from .misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
@@ -159,7 +158,7 @@ class PlotProperties(object):
         props = {}
         for key in self._prop:
             prop = self._prop[key]
-            if isinstance(prop, (list,tuple,NumPyArray)) and \
+            if isinstance(prop, (list,tuple,ndarray)) and \
                    len(ravel(prop)) > 3:
                 props[key] = '%s with shape %s' % (type(prop), shape(prop))
             else:
@@ -345,8 +344,8 @@ class PlotProperties(object):
 
     def _set_lim(self, a, name, adj_step=0.03):
         try:
-            amin = arrmin(a)
-            amax = arrmax(a)
+            amin = a.min()
+            amax = a.max()
         except ValueError:
             amin = min(ravel(a))
             amax = max(ravel(a))
@@ -635,7 +634,7 @@ class Contours(PlotProperties):
         PlotProperties.setp(self, **kwargs)
 
         if 'cvector' in kwargs:
-            _check_type(kwargs['cvector'], 'cvector', (tuple,list,NumPyArray))
+            _check_type(kwargs['cvector'], 'cvector', (tuple,list,ndarray))
             self._prop['cvector'] = kwargs['cvector']
             self._prop['clevels'] = len(kwargs['cvector'])
 
@@ -2505,7 +2504,7 @@ class BaseClass(object):
             return xmin, xmax
         elif nargs == 1:
             arg = args[0]
-            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+            if isinstance(arg, (list,tuple,ndarray)) and len(arg) == 2:
                 ax.setp(xmin=arg[0], xmax=arg[1])
             elif isinstance(arg, str):
                 raise NotImplementedError()
@@ -2556,7 +2555,7 @@ class BaseClass(object):
             return ymin, ymax
         elif nargs == 1:
             arg = args[0]
-            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+            if isinstance(arg, (list,tuple,ndarray)) and len(arg) == 2:
                 ax.setp(ymin=arg[0], ymax=arg[1])
             elif isinstance(arg, str):
                 raise NotImplementedError()
@@ -2607,7 +2606,7 @@ class BaseClass(object):
             return zmin, zmax
         elif nargs == 1:
             arg = args[0]
-            if isinstance(arg, (list,tuple,NumPyArray)) and len(arg) == 2:
+            if isinstance(arg, (list,tuple,ndarray)) and len(arg) == 2:
                 ax.setp(zmin=arg[0], zmax=arg[1])
             elif isinstance(arg, str):
                 raise NotImplementedError()

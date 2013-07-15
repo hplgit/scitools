@@ -2,7 +2,7 @@ from common import *
 from scitools.numpyutils import ravel, zeros, array, allclose, rank, \
      meshgrid, newaxis
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.numpytools import NumPy_dtype
+from scitools.numpyutils import NumPy_dtype
 from scitools.misc import check_if_module_exists
 
 check_if_module_exists('vtk', msg='You need to install the VTK package.', abort=False)
