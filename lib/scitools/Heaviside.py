@@ -13,6 +13,18 @@ utilizing constantness or linearity in the formulas. The smoothed
 versions are expressed in terms of the smoothed Heaviside function,
 meaning that indicator functions are combinations of Heaviside functions,
 and piecewise constant functions are combinations of indicator functions.
+
+Some of the functionality here for piecewisely defined functions
+may be easier accessible in ``numpy.piecewise``:
+
+>>> import numpy as np
+>>> x = np.linspace(0,10,11)
+>>> x
+array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.])
+>>> np.piecewise(x, [np.logical_and(0<=x, x<4), np.logical_and(4<=x, x<8), x>=8], [-1, -2, lambda x: 2*x])
+array([ -1.,  -1.,  -1.,  -1.,  -2.,  -2.,  -2.,  -2.,  16.,  18.,  20.])
+
+
 """
 import numpy as np
 import math

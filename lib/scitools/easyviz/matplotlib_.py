@@ -41,8 +41,8 @@ import matplotlib.colors
 _update_from_config_file(matplotlib.rcParams, section='matplotlib')
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
-#import pylab
 import matplotlib.pyplot as pylab
+from mpl_toolkits.mplot3d import axes3d, Axes3D
 import re
 
 
@@ -664,7 +664,8 @@ class MatplotlibBackend(BaseClass):
         if item.getp('wireframe'):
             # wireframe mesh (as produced by mesh or meshc)
             fig = self._g.gcf()
-            ax = fig.gca(projection='3d')
+            #ax = fig.gca(projection='3d') # old syntax
+            ax = Axes3D(fig)
             h = ax.plot_wireframe(x, y, z)
             if legend:
                 h.set_label(legend)
@@ -677,9 +678,9 @@ class MatplotlibBackend(BaseClass):
                                    cmap=colormap, alpha=opacity)
             else:
                 # This is really a hack to use 3D surfaces in matplotlib...
-                from mpl_toolkits.mplot3d import Axes3D
                 fig = self._g.gcf()
-                ax = fig.gca(projection='3d')
+                #ax = fig.gca(projection='3d')
+                ax = Axes3D(fig)
                 if self._mplsurf is not None:
                     ax.collections.remove(self._mplsurf)
                 self._mplsurf = ax.plot_surface(x, y, z, rstride=1, cstride=1,

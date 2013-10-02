@@ -350,7 +350,7 @@ class PlotProperties(object):
             except ValueError:
                 amin = min(ravel(a))
                 amax = max(ravel(a))
-        elif isinstance(a, (tuple,list)):
+        else:
             amin = min(a)
             amax = max(a)
         if (amax - amin) == 0:

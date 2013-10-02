@@ -46,7 +46,7 @@ The present documentation is available in a number of formats:
   * "Doconce source": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
 The documentation is written in the
-"Doconce": "http://code.google.com/p/doconce"
+"Doconce": "https://github.com/hplgit/doconce"
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).

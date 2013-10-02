@@ -145,7 +145,7 @@ class StringFunction:
     in the calling code and supply globals=globals() as argument to
     the constructor::
 
-       f = StringFunction('1+x*y', independent_variables=('x', 'y'),
+       f = StringFunction('cos(x)*sin(y)', independent_variables=('x', 'y'),
                           globals=globals())
        # f(p,q) will now work for NumPy arrays p and q.
 
