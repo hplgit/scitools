@@ -665,7 +665,8 @@ class MatplotlibBackend(BaseClass):
             # wireframe mesh (as produced by mesh or meshc)
             fig = self._g.gcf()
             #ax = fig.gca(projection='3d') # old syntax
-            ax = Axes3D(fig)
+            #ax = Axes3D(fig)
+            ax = fig.add_subplot(111, projection='3d')
             h = ax.plot_wireframe(x, y, z)
             if legend:
                 h.set_label(legend)
@@ -680,7 +681,8 @@ class MatplotlibBackend(BaseClass):
                 # This is really a hack to use 3D surfaces in matplotlib...
                 fig = self._g.gcf()
                 #ax = fig.gca(projection='3d')
-                ax = Axes3D(fig)
+                #ax = Axes3D(fig)
+                ax = fig.add_subplot(111, projection='3d')
                 if self._mplsurf is not None:
                     ax.collections.remove(self._mplsurf)
                 self._mplsurf = ax.plot_surface(x, y, z, rstride=1, cstride=1,
