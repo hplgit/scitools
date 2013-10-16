@@ -352,12 +352,12 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
 
         # Substitute parameter names by their numerical values.
         # Start with the most complicated parameter names
-        # (this algorithm may fail).
+        # Improvement by Eigil Skjaelveland <eigilhs@student.matnat.uio.no>.
         prm_names = list(self._prms.keys())
-        prm_names.sort(lambda a, b: cmp(len(a), len(b)))
-        prm_names.reverse()
+        prm_names.sort(key=len, reverse=1)
         for name in prm_names:
-            s = s.replace(name, str(self._prms[name]))
+            s = re.sub(r'([^a-z_])' + name + '([^a-z_])',
+                       r'\1{0}\2', s).format(str(self._prms[name]))
         return s
 
     def __repr__(self):
@@ -633,8 +633,8 @@ class StringFunction_v4:
     def __str__(self):
         s = self._f
         # Substitute parameter names by their numerical values.
-        # Start with the most complicated parameter names
-        # (this algorithm may fail).
+        # Start with the most complicated parameter names.
+        # Improvements by Eigil Skjaelveland.
 
         # first remove indep. variables possibly inserted in self._prms
         # by the self.__call__ method:
@@ -643,10 +643,10 @@ class StringFunction_v4:
         except:
             pass
         prm_names = list(self._prms.keys())
-        prm_names.sort(lambda a, b: cmp(len(a), len(b)))
-        prm_names.reverse()
+        prm_names.sort(key=len, reverse=1)
         for name in prm_names:
-            s = s.replace(name, str(self._prms[name]))
+            s = re.sub(r'([^a-z_])' + name + '([^a-z_])',
+                       r'\1{0}\2', s).format(str(self._prms[name]))
         return s
 
     def __repr__(self):
