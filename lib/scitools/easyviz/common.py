@@ -271,8 +271,9 @@ class PlotProperties(object):
             try:
                 return self._prop[prm_name]
             except:
-                raise KeyError('%s.getp: no parameter with name "%s"' % \
-                               (self.__class__.__name__, prm_name))
+                #raise KeyError('%s.getp: no parameter with name "%s"' % \
+                #               (self.__class__.__name__, prm_name))
+                return None
 
     def setformat(self, format):
         """

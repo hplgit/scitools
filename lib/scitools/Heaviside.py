@@ -45,7 +45,7 @@ class Heaviside:
     """
 
     def __init__(self, eps=0):
-        """`eps` is the smoothing parameter (0: exact Heaviside function."""
+        """`eps` is the smoothing parameter (0: exact Heaviside function)."""
         self.eps = eps
 
     def __call__(self, x):

@@ -658,8 +658,12 @@ class GnuplotBackend(BaseClass):
             # Add marker (if not too many points) so that curves in
             # png/eps can be distinguised in black-and-white
             #if len(item.getp('xdata')) <= 61:  # fixed in _add_line
-            marker = self._markers[PlotProperties._colors2markers[
-                item.getp('linecolor')]]
+
+            if item.getp('linecolor'):
+                marker = self._markers[PlotProperties._colors2markers[
+                    item.getp('linecolor')]]
+            else:
+                marker = None
             style = 'lines'
             width = 1  # only PNG needs thicker lines and that is set in hardcopy (savefig)
 

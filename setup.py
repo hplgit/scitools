@@ -25,7 +25,6 @@ if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
     scripts.extend(batch_files)
 
 # NOTE: now we force matplotlib as default backend if it is installed:
-# (previously gnuplot was always default)
 try:
     import matplotlib
     default_easyviz_backend = 'matplotlib'
