@@ -627,7 +627,10 @@ class IntegratedPiecewiseConstant(PiecewiseConstant):
                 y = self(x)
                 return x, y
 
-import nose.tools as nt
+try:
+    import nose.tools as nt
+except ImportError:
+    pass
 
 def test_Heaviside():
     a = 3

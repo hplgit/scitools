@@ -4,7 +4,11 @@ Install scitools with easyviz
 
 Usage:
 
-python setup.py install [, --prefix=$PREFIX --easyviz_backend backendname]
+sudo python setup.py install
+
+python setup.py install --prefix=$PREFIX --easyviz_backend gnuplot
+
+python setup.py install --prefix=$PREFIX --easyviz_backend matplotlib
 """
 
 import os, sys, socket, re, glob, platform
