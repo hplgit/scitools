@@ -1,6 +1,6 @@
 TITLE: Easyviz Documentation
-AUTHOR: H. P. Langtangen at Simula Research Laboratory and Univ. of Oslo
-AUTHOR: J. H. Ring at Simula Research Laboratory and Univ. of Oslo
+AUTHOR: H. P. Langtangen at Simula Research Laboratory & Univ. of Oslo
+AUTHOR: J. H. Ring at Simula Research Laboratory & Univ. of Oslo
 DATE: today
 TOC: on
 
