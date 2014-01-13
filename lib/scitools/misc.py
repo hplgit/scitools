@@ -3,8 +3,9 @@ A collection of Python utilities originally developed for the
 "Python for Computational Science" book.
 """
 
-import time, sys, os, re, getopt, math, threading, shutil, commands
-from errorcheck import right_type
+import time, sys, os, re, getopt, math, threading, shutil, collections
+import commands
+from .errorcheck import right_type
 from scitools.StringFunction import StringFunction
 
 def import_module(package, module=None):
@@ -44,7 +45,7 @@ def check_if_module_exists(modulename, msg='',
         __import__(modulename)
         return True
     except ImportError:
-        import debug
+        from . import debug
         message = 'Could not import module "%s" - it is '\
                   'not installed on your system. %s\n' % \
                   (modulename, msg)
@@ -193,7 +194,7 @@ def str2bool(s):
             raise ValueError('"%s" is not a boolean value %s' % \
                              (s, true_values+false_values))
     else:
-        raise TypeError('%s %s cannot be converted to bool' % \
+        raise TypeError('%s %s (not string!) cannot be converted to bool' % \
                         (s, type(s)))
 
 
@@ -358,12 +359,29 @@ def str2type(value):
     """
     if isinstance(value, bool):
         return str2bool
-    elif isinstance(value, (basestring,int,float,complex,list,tuple,dict)):
+    elif isinstance(value, (basestr,int,float,complex,list,tuple,dict)):
         return type(value)
     else:
         # the type of value is probably defined in some unknown module
         return str
 
+def str2type_name(str2type_function):
+    """
+    Return the function name of the function returned from
+    str2type, or any function obtained by the type() operation.
+    Useful when reporting conversion str-to-value errors.
+    """
+    import inspect
+    s2t = str2type_function
+    if "<type '" in str(s2t):
+        name = str(s2t).split("'")[1]  # <type 'int'>
+    elif inspect.isclass(s2t):
+        name = s2t.__class__.__name__
+    elif inspect.isfunction(s2t):
+        name = s2t.__name__
+    else:
+        name = str(s2t)
+    return name
 
 def interpret_as_callable_or_StringFunction(
     s, iv, globals_, **named_parameters):
@@ -806,7 +824,7 @@ def timer(func, args=[], kwargs={}, repetitions=10, comment=''):
     cpu_time = time.clock()-c0
     elapsed_time = time.time()-t0
     try:    # instance method?
-        name = func.im_class.__name__ + '.' + func.__name__
+        name = func.__self__.__class__.__name__ + '.' + func.__name__
     except: # ordinary function
         try:
             name = func.__name__
@@ -921,8 +939,8 @@ def findprograms(programs, searchlibs=[], write_message=False):
 
     elif isinstance(programs, dict):
         # initialize with None:
-        for program in programs.keys():  fullpaths[program] = None
-        for program in programs.keys():
+        for program in programs:  fullpaths[program] = None
+        for program in programs:
             for dir in paths:
                 if os.path.isdir(dir): # skip non-existing directories
                     fullpath = os.path.join(dir,program)
@@ -932,7 +950,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
 
     if write_message:
         missing = False
-        for program in fullpaths.keys():
+        for program in fullpaths:
             if not fullpaths[program]:
                 if isinstance(program, dict):
                     print "program '%s' (%s) not found" % \
@@ -1237,7 +1255,7 @@ def movefiles(files, destdir, confirm=True, verbose=True, copy=True):
                 print s, file, 'to', newpath
 
 # backward compatibility:
-from debug import debugregex, dump
+from .debug import debugregex, dump
 
 
 
@@ -1427,7 +1445,7 @@ def primes(n):
     if n < 2:  return [1]
     if n == 2: return [1, 2]
     # do only odd numbers starting at 3
-    s = range(3, n+1, 2)
+    s = list(range(3, n+1, 2))
     mroot = n**0.5
     half = len(s)
     i = 0
@@ -1500,7 +1518,7 @@ def _cmldict_demo():
     # option keys are defined)
 
     # take action:
-    for option in p.keys():
+    for option in p:
         if option == "m":
             print "option is m", p[option]
         elif option == "b":
@@ -1664,6 +1682,21 @@ class _RecordHelper:
             raise AttributeError('%s has no attribute %s', (self.obj, name))
 
 
+def which(program):
+    """
+    Mimic the Unix which command and return the full path of
+    a program whose name is in the `program` argument.
+    Return None if the program is not found in any of the
+    directories in the user's ``PATH`` variable.
+    """
+    pathdirs = os.environ['PATH'].split(os.pathsep)
+    program_path = None
+    for d in pathdirs:
+        if os.path.isdir(d):
+            if os.path.isfile(os.path.join(d, program)):
+                program_path = d
+                break
+    return program_path
 
 def fix_latex_command_regex(pattern, application='match'):
     """

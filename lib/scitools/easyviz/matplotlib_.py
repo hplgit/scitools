@@ -26,11 +26,11 @@ Matplotlib
 """
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.numpyutils import floor, linspace, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists
-from misc import _update_from_config_file
+from .misc import _update_from_config_file
 
 check_if_module_exists('matplotlib', msg='You need to install the Matplotlib package.', abort=False)
 
@@ -41,8 +41,8 @@ import matplotlib.colors
 _update_from_config_file(matplotlib.rcParams, section='matplotlib')
 matplotlib.interactive(True)
 from matplotlib.font_manager import fontManager, FontProperties
-#import pylab
 import matplotlib.pyplot as pylab
+from mpl_toolkits.mplot3d import axes3d, Axes3D
 import re
 
 
@@ -611,10 +611,11 @@ class MatplotlibBackend(BaseClass):
 
         hold_state = self._g.ishold()
         self._g.hold(True)
-        colors = PlotProperties._colors + matplotlib.colors.cnames.values()
+        colors = PlotProperties._colors + \
+                 list(matplotlib.colors.cnames.values())
         for j in range(ny):
             y_ = y[:,j]
-            x_ = array(range(nx)) + a[j] - barwidth/2
+            x_ = array(list(range(nx))) + a[j] - barwidth/2
             if not facecolor:
                 c = colors[j]
             else:
@@ -627,9 +628,9 @@ class MatplotlibBackend(BaseClass):
         if barticks is None:
             barticks = x
         if item.getp('rotated_barticks'):
-            self._g.xticks(range(len(x)), barticks, rotation=90)
+            self._g.xticks(list(range(len(x))), barticks, rotation=90)
         else:
-            self._g.xticks(range(len(x)), barticks)
+            self._g.xticks(list(range(len(x))), barticks)
 
     def _add_surface(self, item, shading='faceted', colormap=None,
                      showcolorbar=False, zmin=None, zmax=None):
@@ -663,7 +664,9 @@ class MatplotlibBackend(BaseClass):
         if item.getp('wireframe'):
             # wireframe mesh (as produced by mesh or meshc)
             fig = self._g.gcf()
-            ax = fig.gca(projection='3d')
+            #ax = fig.gca(projection='3d') # old syntax
+            #ax = Axes3D(fig)
+            ax = fig.add_subplot(111, projection='3d')
             h = ax.plot_wireframe(x, y, z)
             if legend:
                 h.set_label(legend)
@@ -676,9 +679,10 @@ class MatplotlibBackend(BaseClass):
                                    cmap=colormap, alpha=opacity)
             else:
                 # This is really a hack to use 3D surfaces in matplotlib...
-                from mpl_toolkits.mplot3d import Axes3D
                 fig = self._g.gcf()
-                ax = fig.gca(projection='3d')
+                #ax = fig.gca(projection='3d')
+                #ax = Axes3D(fig)
+                ax = fig.add_subplot(111, projection='3d')
                 if self._mplsurf is not None:
                     ax.collections.remove(self._mplsurf)
                 self._mplsurf = ax.plot_surface(x, y, z, rstride=1, cstride=1,
@@ -943,7 +947,7 @@ class MatplotlibBackend(BaseClass):
         self._set_figure_size(fig)
 
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             if ax.getp('numberofitems') == 0:
                 continue
             if nrows != 1 or ncolumns != 1:
@@ -1047,6 +1051,9 @@ class MatplotlibBackend(BaseClass):
           orientation -- 'portrait' (default) or 'landscape'. Only available
                          for PostScript output.
 
+        Note: if `filename` is just the file extension, such as ``.svg``,
+        the file content is returned as a string *and* saved to
+        ``tmp.svg``.
         """
         self.setp(**kwargs)
         color = self.getp('color')
@@ -1060,11 +1067,34 @@ class MatplotlibBackend(BaseClass):
         dpi = kwargs.get('dpi', 100)
         orientation = kwargs.get('orientation', 'portrait')
 
+        imgdata = None
+        if filename.startswith('.'):
+            from StringIO import StringIO
+            imgdata = StringIO()
+            self._g.savefig(imgdata,
+                            format=filename[1:],
+                            dpi=dpi,
+                            facecolor='w',
+                            edgecolor='w',
+                            orientation=orientation)
+            imgdata.seek(0)
+            filename = 'tmp' + filename  # dump to file too
+
         self._g.savefig(filename,
                         dpi=dpi,
                         facecolor='w',
                         edgecolor='w',
                         orientation=orientation)
+
+        if imgdata is None:
+            return None
+        else:
+            if filename.endswith('.svg'):
+                # Strip off the initial XML lines
+                figdata = '<svg' + imgdata.buf.split('<svg')[1]
+            else:
+                figdata = imgdata.buf
+            return figdata
 
     def clf(self):
         self._g.clf()
@@ -1073,10 +1103,10 @@ class MatplotlibBackend(BaseClass):
     def closefig(self, arg=None):
         if arg is None:
             num = self.getp('curfig')  # close current figure
-        elif arg in self._figs.keys():
+        elif arg in self._figs:
             num = arg
-        elif arg in self._figs.values():
-            for fignr, fig in self._figs.items():
+        elif arg in list(self._figs.values()):
+            for fignr, fig in list(self._figs.items()):
                 if fig == arg:
                     num = fignr
                     break
@@ -1087,7 +1117,7 @@ class MatplotlibBackend(BaseClass):
         #del self._figs[num]
 
     def closefigs(self):
-        for key in self._figs.keys():
+        for key in self._figs:
             self.closefig(key)
         del self._g
         BaseClass.closefigs(self)

@@ -20,8 +20,9 @@ plot2l.py:  as plot2e.py, but with legend location and legend fancybox.
 plot2m.py:  as plot2b.py, but with latex syntax in legends and title.
 plot2n.py:  as plot2b.py, but with a text in the plot.
 plot2o.py:  demo of how to set the aspect ratio of axis.
-plot3.py:  demo of plotting three curves of different length
-plot4.py:   three Gaussian bell functions (for illustrating movie_demo1 frames).
+plot2p.py:  demo of plotting three curves of different length.
+plot2q.py:  three Gaussian bell functions (for illustrating movie_demo1 frames).
+plot2r.py:  as plot2b.py, but with a PNG and SVG figure strings in HTML file.
 movie_demo1.py:  primary animation example.
 movie_demo2.py:  another animation example.
 plot_ascii.py: demo of the ASCII plotter (for inclusion in verbatim text).
@@ -48,6 +49,7 @@ mesh_demo.py
 quiver_demo2.py
 quiver_demo1.py
 rotate_vector.py
+rows_of_matrix.py
 slice_demo1.py
 slice_demo2.py
 streamline_demo1.py

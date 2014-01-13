@@ -31,12 +31,13 @@ Tip:
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists , system
-from misc import arrayconverter, _update_from_config_file, _check_type
+from .misc import _update_from_config_file, _check_type
+import collections
 
 check_if_module_exists('Gnuplot', msg='You need to install the Gnuplot.py package.', abort=False)
 import Gnuplot
@@ -103,10 +104,6 @@ if _gnuplotpy_major == 1 and _gnuplotpy_minor <= 7:
         print ("Warning: Gnuplot.py version %s is not support on 64 bits " \
                "platform. Please upgrade to Gnuplot.py 1.8 or newer.") % \
                Gnuplot.__version__
-else:
-    # The arrayconverter function is only necessary for Gnuplot.py <= 1.7:
-    def arrayconverter(a):
-        return a
 
 def get_gnuplot_version():
     """Return Gnuplot version used in Gnuplot.py."""
@@ -187,6 +184,7 @@ Gnuplot.utils.write_array = write_array
 # lines with the plot (or plot3) command. In Gnuplot we start with red since
 # this gives a solid line in black and white hardcopies:
 Axis._local_prop['colororder'] = 'r b g c m y'.split()
+# sequence in other backends: b r g m c y k
 
 class GnuplotBackend(BaseClass):
     def __init__(self):
@@ -525,7 +523,7 @@ class GnuplotBackend(BaseClass):
                  isinstance(cmap[1], int) and \
                  isinstance(cmap[2], int):
             self._g('set palette rgbformulae %d,%d,%d' % cmap) # model RGB?
-        elif operator.isSequenceType(cmap) and rank(cmap) == 2:
+        elif isinstance(cmap, collections.Sequence) and rank(cmap) == 2:
             m, n = shape(cmap)
             assert n==3, "colormap must be %dx3, not %dx%d." % (m,m,n)
             tmpf = tempfile.mktemp(suffix='.map')
@@ -660,10 +658,14 @@ class GnuplotBackend(BaseClass):
             # Add marker (if not too many points) so that curves in
             # png/eps can be distinguised in black-and-white
             #if len(item.getp('xdata')) <= 61:  # fixed in _add_line
-            marker = self._markers[PlotProperties._colors2markers[
-                item.getp('linecolor')]]
+
+            if item.getp('linecolor'):
+                marker = self._markers[PlotProperties._colors2markers[
+                    item.getp('linecolor')]]
+            else:
+                marker = None
             style = 'lines'
-            width = 1  # only PNG needs thicker lines and that is set in savefig
+            width = 1  # only PNG needs thicker lines and that is set in hardcopy (savefig)
 
         return marker, color, style, width
 
@@ -720,10 +722,7 @@ class GnuplotBackend(BaseClass):
             kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring,
                       'using': '1:2:($3)'}
-            data = Gnuplot.Data(arrayconverter(x),
-                                arrayconverter(y),
-                                arrayconverter(squeeze(z)),
-                                **kwargs)
+            data = Gnuplot.Data(x, y, squeeze(z), **kwargs)
             self._g('set parametric')
         else:
             # no zdata, add a 2D curve:
@@ -740,9 +739,7 @@ class GnuplotBackend(BaseClass):
                       'with': withstring,
                       'using': '1:($2)'}
 
-            data = Gnuplot.Data(arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+            data = Gnuplot.Data(x, y, **kwargs)
         return data
 
 
@@ -918,10 +915,7 @@ class GnuplotBackend(BaseClass):
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'with': withstring,
                   'binary': 0}
-        data = Gnuplot.GridData(arrayconverter(z),
-                                arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+        data = Gnuplot.GridData(z, x, y, **kwargs)
         return data
 
     def _add_contours(self, item, placement=None):
@@ -983,10 +977,7 @@ class GnuplotBackend(BaseClass):
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'binary': 0,
                   'with': 'l palette'}
-        data = Gnuplot.GridData(arrayconverter(z),
-                                arrayconverter(x),
-                                arrayconverter(y),
-                                **kwargs)
+        data = Gnuplot.GridData(z, x, y, **kwargs)
         return data
 
     def _add_vectors(self, item):
@@ -1042,10 +1033,8 @@ class GnuplotBackend(BaseClass):
                         y = y[newaxis,:]*ones(shape(u))
             kwargs = {'title': self._fix_latex(item.getp('legend')),
                       'with': withstring}
-            data = Gnuplot.Data(arrayconverter(ravel(x)),
-                                arrayconverter(ravel(y)),
-                                arrayconverter(ravel(u)),
-                                arrayconverter(ravel(v)),
+            data = Gnuplot.Data(ravel(x), ravel(y),
+                                ravel(u), ravel(v),
                                 **kwargs)
         return data
 
@@ -1190,11 +1179,11 @@ class GnuplotBackend(BaseClass):
 
         self._set_figure_size(fig)
 
-        if len(fig.getp('axes').items()) > 1:
+        if len(list(fig.getp('axes').items())) > 1:
             # multiple axes (subplot)
             self._g('set multiplot')
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             gdata = []
             self._use_splot = False
             if nrows != 1 or ncolumns != 1:
@@ -1349,11 +1338,10 @@ class GnuplotBackend(BaseClass):
     def hardcopy(self, filename, **kwargs):
         """
         Currently supported extensions in Gnuplot backend:
-
-          '.ps'  (PostScript)
-          '.eps' (Encapsualted PostScript)
-          '.png' (Portable Network Graphics)
-          '.pdf' (Portable Document Format)
+        .ps,  .eps,  .png,  .pdf, and  .svg.
+        The PDF file is generated from EPS (for better quality).
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
 
         Optional arguments for PostScript output:
 
@@ -1377,6 +1365,9 @@ class GnuplotBackend(BaseClass):
                        for PostScript output and 8 for PDF output.
         ===========    =====================================================
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         if DEBUG:
             print "Hardcopy to %s" % filename
 
@@ -1385,6 +1376,7 @@ class GnuplotBackend(BaseClass):
                     '.png': 'png',
                     #'.pdf': 'pdfcairo', does not work well
                     '.pdf': 'postscript',
+                    '.svg': 'svg',
                     }
 
         # check if we have a PDF terminal
@@ -1416,7 +1408,7 @@ class GnuplotBackend(BaseClass):
             filename += ext
         elif ext not in ext2term:
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2term.keys(), ext))
+                             (list(ext2term.keys()), ext))
         terminal = ext2term.get(ext, 'postscript')
 
         self.setp(**kwargs)
@@ -1453,7 +1445,7 @@ class GnuplotBackend(BaseClass):
             # Setting fontsizes etc is not successful with Gnuplot.hardcopy
             # Instead: use ps2pdf to convert to pdf
             fontsize = kwargs.get('fontsize', 20)
-            fontsize = kwargs.get('fontname', 'Helvetica')
+            fontname = kwargs.get('fontname', 'Helvetica')
             setterm.append(color and 'color' or 'monochrome')
             setterm.append(enhanced and 'enhanced' or 'noenhanced')
             setterm.append('font "%s,%s"' % (fontname, fontsize))
@@ -1465,11 +1457,16 @@ class GnuplotBackend(BaseClass):
             self._doing_PS = True
             keyw.update({'color': color, 'solid': solid})
         elif terminal == 'png':
+            # Options are ' background "#ffffff" fontscale 1.0 size 640, 480 '
             fontsize = kwargs.get('fontsize', 14)
-            fontname = kwargs.get('fontname', 'Helvetica')
-            setterm.append('linewidth 5')
-            setterm.append('font %s %s' % (fontname, fontsize))
+            fontscale = fontsize/14.0
+            # no support: setterm.append('linewidth 5')
+            setterm.append('fontscale %s' % fontscale)
             keyw.update({'color': color})
+        elif terminal == 'svg':
+            fontsize = kwargs.get('fontsize', 12)
+            fontname = kwargs.get('fontname', 'Arial')
+            setterm.append("fname '%s' fsize %s" % (fontname, fontsize))
         self._g(' '.join(setterm))
         self._g('set output "%s"' % filename)
         self._replot()
@@ -1528,7 +1525,7 @@ class GnuplotBackend(BaseClass):
             filename += ext
         elif ext not in ext2term:
             raise ValueError("hardcopy: extension must be %s, not '%s'" % \
-                             (ext2term.keys(), ext))
+                             (list(ext2term.keys()), ext))
         terminal = ext2term.get(ext, 'postscript')
 
         self.setp(**kwargs)
@@ -1587,7 +1584,7 @@ class GnuplotBackend(BaseClass):
         """Close figure window."""
         if not num:
             pass
-        elif num in self._figs.keys():
+        elif num in self._figs:
             pass
         else:
             pass
@@ -1595,7 +1592,7 @@ class GnuplotBackend(BaseClass):
 
     def closefigs(self):
         """Close figure windows and stop gnuplot."""
-        for key in self._figs.keys():
+        for key in self._figs:
             self._figs[key]._g('quit')
         del self._g
         self._figs = {1:Figure()}

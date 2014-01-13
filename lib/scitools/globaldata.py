@@ -22,7 +22,7 @@ if hasattr(__name__, 'VERBOSE'):  # test if we have global data present...
 else:
     # initialize global data from file - this is only done once
 
-    from configdata import config_parser_frontend
+    from .configdata import config_parser_frontend
     _config_data, _files = config_parser_frontend(
         'scitools', default_file_location=os.path.dirname(__file__))
     # None implies the directory where configdata.py resides

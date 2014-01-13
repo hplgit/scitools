@@ -22,8 +22,8 @@ exec(cmd)
 _t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
 _import_list.append(cmd)
 
-from utils import *
-from movie import movie
+from .utils import *
+from .movie import movie
 _import_list.append('from utils import *\nfrom movie import movie')
 
 _t3 = _time.clock(); _import_times += 'utils: %s ' % (_t3 - _t2)

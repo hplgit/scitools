@@ -38,7 +38,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 from scitools.numpyutils import allclose
 from misc import _update_from_config_file
 
@@ -143,20 +143,20 @@ class _VTKFigure(object):
     def set_size(self, width, height):
         self.root.geometry('%sx%s' % (width,height))
         self.root.update()
-        
+
 
 class VTKBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-                
+
         self._master = Tkinter.Tk()
         self._master.withdraw()
         self.figure(self.getp('curfig'))
-        
+
         # conversion tables for format strings:
         self._markers = {
             '': None,   # no marker
@@ -174,7 +174,7 @@ class VTKBackend(BaseClass):
             'p': None,  # pentagram
             'h': None,  # hexagram
             }
-        
+
         self._arrow_types = {
             # tuple: (type,rotation)
             '':  (9,0),   # arrow
@@ -185,9 +185,9 @@ class VTKBackend(BaseClass):
             '*': (3,0),   # star --> plus
             's': (6,0),   # square
             'd': (8,0),   # diamond
-            'v': (5,180), # triangle (down) 
+            'v': (5,180), # triangle (down)
             '^': (5,0),   # triangle (up)
-            '<': (5,90),  # triangle (left) 
+            '<': (5,90),  # triangle (left)
             '>': (5,270), # triangle (right)
             'p': (6,0),   # pentagram --> square
             'h': (6,0),   # hexagram --> square
@@ -204,9 +204,9 @@ class VTKBackend(BaseClass):
             'k': (0,0,0),  # black
             'w': (1,1,1),  # white
             }
-        
+
         self._line_styles = {
-            '': None,    # no line 
+            '': None,    # no line
             '-': None,   # solid line
             ':': None,   # dotted line
             '-.': None,  # dash-dot line
@@ -271,7 +271,7 @@ class VTKBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
@@ -293,7 +293,7 @@ class VTKBackend(BaseClass):
             tactor.GetPositionCoordinate().SetCoordinateSystemToView()
             tactor.GetPositionCoordinate().SetValue(0.0, 0.95)
             ax._renderer.AddActor(tactor)
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -364,7 +364,7 @@ class VTKBackend(BaseClass):
         l[2] /= dar[1];  l[3] /= dar[1]
         l[4] /= dar[2];  l[5] /= dar[2]
         ax._scaled_limits = tuple(l)
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -389,7 +389,7 @@ class VTKBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -409,12 +409,12 @@ class VTKBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             pass
         else:
             # do not display box
             pass
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -504,8 +504,8 @@ class VTKBackend(BaseClass):
                 el = 30
             # set a 3D view according to az and el
             camera.Azimuth(az)
-            camera.Elevation(el)                
-            
+            camera.Elevation(el)
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -520,7 +520,7 @@ class VTKBackend(BaseClass):
                     camera.ParallelProjectionOff()
                 else:
                     camera.ParallelProjectionOn()
-            
+
 
         self._ax._renderer.SetActiveCamera(camera)
         self._ax._camera = camera
@@ -531,7 +531,7 @@ class VTKBackend(BaseClass):
         #if self._ax.getp('camera').getp('view') == 2:
         #    ren.GetActiveCamera().Zoom(1.5)
         camera.Zoom(cam.getp('camzoom'))
-       
+
         # set the camera in the vtkCubeAxesActor2D object:
         #self._ax._vtk_axes.SetCamera(camera)
 
@@ -558,7 +558,7 @@ class VTKBackend(BaseClass):
         else:
             # turn off all axis labeling, tickmarks, and background
             pass
-        
+
     def _is_inside_limits(self, data):
         """Return True if data limits is inside axis limits."""
         slim = self._ax._scaled_limits
@@ -660,17 +660,17 @@ class VTKBackend(BaseClass):
         else:
             c = asarray(c)
         assert shape(c) == shape(z)
-        
+
         if shape(x) != shape(z) and shape(y) != shape(z):
             assert rank(x) == 1 and rank(y) == 1
             x, y = meshgrid(x,y,sparse=False,indexing=item.getp('indexing'))
             # FIXME: use ndgrid instead of meshgrid
         assert shape(x) == shape(z) and shape(y) == shape(z)
-        
+
         # scale x, y, and z according to data aspect ratio:
         dx, dy, dz = self._ax.getp('daspect')
         x = x/dx;  y = y/dy;  z = z/dz
-        
+
         function = item.getp('function')
         if function in ['contour', 'contourf', 'pcolor']:
             z *= 0
@@ -679,7 +679,7 @@ class VTKBackend(BaseClass):
             # a meshc or surfc plot.
             z *= 0
             z += self._ax._scaled_limits[4]
-        
+
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(item.getp('numberofpoints'))
         scalars = vtk.vtkFloatArray()
@@ -724,7 +724,7 @@ for (int j=0; j<ny; j++) {
         u = asarray(item.getp('udata'))
         v = asarray(item.getp('vdata'))
         w = item.getp('wdata')
-        
+
         if z is None:
             z = zeros(shape(u))
         else:
@@ -737,7 +737,7 @@ for (int j=0; j<ny; j++) {
         # scale x, y, and z according to data aspect ratio:
         dx, dy, dz = self._ax.getp('daspect')
         x = x/dx;  y = y/dy;  z = z/dz
-        
+
         if shape(x) != shape(u) and shape(y) != shape(u):
             assert rank(x) == 1 and rank(y) == 1
             x, y = meshgrid(x,y,sparse=False,indexing=item.getp('indexing'))
@@ -792,7 +792,7 @@ for (int j=0; j<ny; j++) {
         v = asarray(item.getp('vdata'))  # scalar data
         c = item.getp('cdata')           # pseudocolor data
         # FIXME: What about pseudocolor data?
-        
+
         if shape(x) != shape(v) and shape(y) != shape(v) \
                and shape(z) != shape(v):
             assert rank(x) == 1 and rank(y) == 1 and rank(z) == 1
@@ -800,11 +800,11 @@ for (int j=0; j<ny; j++) {
             # FIXME: use ndgrid instead of meshgrid
         assert shape(x) == shape(v) and shape(y) == shape(v) \
                and shape(z) == shape(v)
-        
+
         # scale x, y, and z according to data aspect ratio:
         dx, dy, dz = self._ax.getp('daspect')
         x = x/dx;  y = y/dy;  z = z/dz
-        
+
         points = vtk.vtkPoints()
         points.SetNumberOfPoints(item.getp('numberofpoints'))
         scalars = vtk.vtkFloatArray()
@@ -852,11 +852,11 @@ for (int k=0; k<nz; k++) {
         u = asarray(item.getp('udata'))
         v = asarray(item.getp('vdata'))
         w = asarray(item.getp('wdata'))
-        
+
         # scale x, y, and z according to data aspect ratio:
         dx, dy, dz = self._ax.getp('daspect')
         x = x/dx;  y = y/dy;  z = z/dz
-        
+
         if shape(x) != shape(u) and shape(y) != shape(u) \
                and shape(z) != shape(u):
             assert rank(x) == 1 and rank(y) == 1 and rank(z) == 1
@@ -942,7 +942,7 @@ for (int k=0; k<nz; k++) {
             print "Adding a surface"
 
         sgrid = self._create_2D_scalar_data(item)
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -989,7 +989,7 @@ for (int k=0; k<nz; k++) {
         # bottom (as in meshc or surfc).
         if DEBUG:
             print "Adding contours"
-            
+
         sgrid = self._create_2D_scalar_data(item)
         plane = vtk.vtkStructuredGridGeometryFilter()
         plane.SetInput(sgrid)
@@ -1005,7 +1005,7 @@ for (int k=0; k<nz; k++) {
         else:
             iso = vtk.vtkContourFilter()
         iso.SetInput(data.GetOutput())
-        
+
         cvector = item.getp('cvector')
         clevels = item.getp('clevels')  # number of contour levels
         if cvector is None:
@@ -1109,7 +1109,7 @@ for (int k=0; k<nz; k++) {
             arrow.DashOn()
             arrow.SetCenter(.75,0,0)
         else:
-            arrow.SetCenter(.5,0,0)        
+            arrow.SetCenter(.5,0,0)
         arrow.SetColor(self._get_color(item.getp('linecolor'), (1,0,0)))
 
         plane = vtk.vtkStructuredGridGeometryFilter()
@@ -1117,7 +1117,7 @@ for (int k=0; k<nz; k++) {
         plane.Update()
         data = self._cut_data(plane)
         glyph = vtk.vtkGlyph3D()
-        glyph.SetInput(data.GetOutput()) 
+        glyph.SetInput(data.GetOutput())
         glyph.SetSource(arrow.GetOutput())
         glyph.SetColorModeToColorByVector()
         glyph.SetRange(data.GetOutput().GetScalarRange())
@@ -1142,8 +1142,8 @@ for (int k=0; k<nz; k++) {
     def _add_streams(self, item):
         if DEBUG:
             print "Adding streams"
-            
-        if rank(item.getp('udata')) == 3: 
+
+        if rank(item.getp('udata')) == 3:
             sgrid = self._create_3D_vector_data(item)
         else:
             sgrid = self._create_2D_vector_data(item)
@@ -1151,7 +1151,7 @@ for (int k=0; k<nz; k++) {
         length = sgrid.GetLength()
         max_velocity = sgrid.GetPointData().GetVectors().GetMaxNorm()
         max_time = 35.0*length/max_velocity
-        
+
         dx, dy, dz = self._ax.getp('daspect')
         sx = ravel(item.getp('startx'))/dx
         sy = ravel(item.getp('starty'))/dy
@@ -1176,7 +1176,7 @@ for (int k=0; k<nz; k++) {
 
             if item.getp('tubes'):
                 # draw stream tubes:
-                ncirc = item.getp('n') 
+                ncirc = item.getp('n')
                 scale = item.getp('tubescale')
                 streamtube = vtk.vtkTubeFilter()
                 streamtube.SetInput(data.GetOutput())
@@ -1186,7 +1186,7 @@ for (int k=0; k<nz; k++) {
                 streamtube.Update()
                 output = streamtube.GetOutput()
             elif item.getp('ribbons'):
-                # draw stream ribbons: 
+                # draw stream ribbons:
                 width = item.getp('ribbonwidth')
                 streamribbon = vtk.vtkRibbonFilter()
                 streamribbon.SetInput(data.GetOutput())
@@ -1380,7 +1380,7 @@ for (int k=0; k<nz; k++) {
                 print "creating figure %s in backend" % name
 
             fig._g = _VTKFigure(self, title=name)
-            
+
         self._g = fig._g  # link for faster access
         return fig
 
@@ -1394,16 +1394,16 @@ for (int k=0; k<nz; k++) {
         # figures renderer window:
         ax._renderer = vtk.vtkRenderer()
         self._g.renwin.AddRenderer(ax._renderer)
-        
+
         # Set the renderers background color:
         bgcolor = self._colors.get(ax.getp('bgcolor'), (1,1,1))
         ax._renderer.SetBackground(bgcolor)
-        
+
         rect = ax.getp('viewport')
         if not rect:
             rect = (0,0,1,1)
         ax._renderer.SetViewport(rect)
-        
+
         ax._renderer.RemoveAllViewProps()  # clear current scene
         #axshape = self.gcf().getp('axshape')
         #ax._renderer.SetPixelAspect(axshape[1], axshape[0])
@@ -1414,7 +1414,7 @@ for (int k=0; k<nz; k++) {
         """Remove latex syntax a la $, \, {, } etc."""
         legend = legend.strip()
         # General fix of latex syntax (more readable)
-        legend = legend.replace('**', '^')  
+        legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         legend = legend.replace('{', '')
@@ -1427,13 +1427,13 @@ for (int k=0; k<nz; k++) {
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
         self._g.reset()
-        
+
         self._set_figure_size(fig)
-        
+
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
             if ax.getp('numberofitems') == 0:
@@ -1471,7 +1471,7 @@ for (int k=0; k<nz; k++) {
                     pass
 
             self._set_axis_props(ax)
-                    
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -1484,14 +1484,14 @@ for (int k=0; k<nz; k++) {
         """
         Supported extensions in VTK backend:
 
-          '.ps'  (PostScript)
-          '.eps' (Encapsualted PostScript)
-          '.pdf' (Portable Document Format)
-          '.jpg' (Joint Photographic Experts Group)
-          '.png' (Portable Network Graphics)
-          '.pnm' (Portable Any Map)
-          '.tif' (Tagged Image File Format)
-          '.bmp' (Bitmap Image)
+          * '.ps'  (PostScript)
+          * '.eps' (Encapsualted PostScript)
+          * '.pdf' (Portable Document Format)
+          * '.jpg' (Joint Photographic Experts Group)
+          * '.png' (Portable Network Graphics)
+          * '.pnm' (Portable Any Map)
+          * '.tif' (Tagged Image File Format)
+          * '.bmp' (Bitmap Image)
 
         Optional arguments for JPEG output:
 
@@ -1511,25 +1511,28 @@ for (int k=0; k<nz; k++) {
                          with GL2PS support). GL2PS gives much better
                          results, but at a cost of longer generation times
                          and larger files.
-                         
+
           orientation -- Set the orientation to either 'portrait' (default)
                          or 'landscape'. This option only has effect when
                          vector_file is True.
-                         
+
           raster3d    -- If True, this will write 3D props as raster images
                          while 2D props are rendered using vector graphic
                          primitives. Default is False. This option only has
                          effect when vector_file is True.
-                         
+
           compression -- If True, compression will be used when generating
                          PostScript or PDF output. Default is False (no
                          compression). This option only has effect when
                          vector_file is True.
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
-        
+
         if not self.getp('show'):  # don't render to screen
             self._g.renwin.OffScreenRenderingOn()
 
@@ -1551,11 +1554,11 @@ for (int k=0; k<nz; k++) {
         orientation = kwargs.get('orientation', 'portrait')
         raster3d = bool(kwargs.get('raster3d', False))
         compression = bool(kwargs.get('compression', False))
-        
+
         landscape = False
         if orientation.lower() == 'landscape':
             landscape = True
-            
+
         vector_file_formats = {'.ps': 0, '.eps': 1, '.pdf': 2, '.tex': 3}
         if vector_file and ext.lower() in vector_file_formats:
             exp = vtk.vtkGL2PSExporter()
@@ -1670,7 +1673,7 @@ for (int k=0; k<nz; k++) {
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.0, 0.17)
-        lut.SetSaturationRange(0.5, 1.0) 
+        lut.SetSaturationRange(0.5, 1.0)
         lut.SetValueRange(1.0, 1.0)
         lut.Build()
         return lut
@@ -1679,7 +1682,7 @@ for (int k=0; k<nz; k++) {
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.47, 0.17)
-        lut.SetSaturationRange(1.0, 0.6) 
+        lut.SetSaturationRange(1.0, 0.6)
         lut.SetValueRange(0.5, 1.0)
         lut.Build()
         return lut
@@ -1688,7 +1691,7 @@ for (int k=0; k<nz; k++) {
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.8, 0.42)
-        lut.SetSaturationRange(1.0, 1.0) 
+        lut.SetSaturationRange(1.0, 1.0)
         lut.SetValueRange(0.6, 1.0)
         lut.Build()
         return lut
@@ -1697,7 +1700,7 @@ for (int k=0; k<nz; k++) {
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.0, 0.15)
-        lut.SetSaturationRange(1.0, 1.0) 
+        lut.SetSaturationRange(1.0, 1.0)
         lut.SetValueRange(1.0, 1.0)
         lut.Build()
         return lut

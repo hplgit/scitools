@@ -134,7 +134,7 @@ class MovingPlotWindow:
                 return False
 
     def update(self, n):
-        """Update the plot manager (``MovingPlotWindow``) at time step ``n``."""
+        """Update the plot manager (``MovingPlotWindow``) at time step `n`."""
         if self.mode == 'continuous movement':
             if n > self.taxis_length_in_steps:
                 self.taxis_min += self.dt

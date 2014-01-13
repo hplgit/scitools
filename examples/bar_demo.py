@@ -11,13 +11,13 @@ bar(data)
 title('Bars from a matrix: 4 groups of 3 bars each')
 # alternative:
 figure()
-bar(data, 
+bar(data,
     barticks=['group 1', 'group 2', 'group 3', 'group 4'],
     legend=['bar 1', 'bar 2', 'bar 3'],
     axis=[-1, data.shape[0], 0, 1.3],
     ylabel='Normalized CPU time',
     title='Bars from a matrix, now with more annotations')
-    
+
 
 # example with a vector:
 figure()
@@ -35,7 +35,7 @@ figure()
 data = {'method1': {'thing1': 3, 'thing2': 2, 'thing3': 4},
         'method2': {'thing1': 4, 'thing2': 4.5, 'thing3': 2},
         'method3': {'thing1': 1, 'thing2': 4, 'thing3': 2},}
-bar(data, 
+bar(data,
     rotated_barticks=True,
     hardcopy='tmp_bar1a.eps', color=True,
     ylabel='response',
@@ -44,7 +44,7 @@ bar(data,
 
 # red bars with borders turned off:
 figure()
-bar(rand(5,4), 'r', shading='interp', 
+bar(rand(5,4), 'r', shading='interp',
     title='Red bars with borders turned off')
 
 # specify face and edge color:

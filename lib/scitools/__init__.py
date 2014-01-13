@@ -79,7 +79,7 @@ try:
     import sys, std
     sys.modules['scitools.all'] = std
     try:
-        import TkGUI
+        from . import TkGUI
         sys.modules['scitools.CanvasCoords'] = TkGUI
         sys.modules['scitools.DrawFunction'] = TkGUI
         sys.modules['scitools.FuncDependenceViz'] = TkGUI

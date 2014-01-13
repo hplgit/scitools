@@ -24,8 +24,8 @@ or if just easyviz is needed
 
 REQUIREMENTS:
 
-OpenDX 
-py2dx 
+OpenDX
+py2dx
 
 Tips:
 
@@ -81,7 +81,7 @@ TODO:
 
   Problem: Not only isocaps but also complete isosurface.
 
-* How can we treat NaNs? 
+* How can we treat NaNs?
   (see http://www.opendx.org/cgi-bin/forum/YaBB.pl?num=1155198504)
 
 * Let _DXFigure be based on DXServer rather than just DX.
@@ -94,9 +94,9 @@ TODO:
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 check_if_module_exists('DX', msg='You need to install the py2dx package.', abort=False)
 import DX
@@ -140,7 +140,7 @@ class _DXFigure(object):
                            os.path.join(DXMACROS, "CappedIsoMacro.net"))
 
         self.script = ''
-                
+
     def __call__(self, cmd):
         self.send(cmd)
 
@@ -180,10 +180,10 @@ class DXBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         self._master = Tkinter.Tk()
         self._master.withdraw()
         self.figure(self.getp('curfig'))
@@ -205,7 +205,7 @@ class DXBackend(BaseClass):
             'p': None,  # pentagram
             'h': None,  # hexagram
             }
-                        
+
         self._colors = {
             '': None,       # no color --> blue
             'r': "red",     # red
@@ -217,9 +217,9 @@ class DXBackend(BaseClass):
             'k': "black",   # black
             'w': "white",   # white
             }
-        
+
         self._line_styles = {
-            '': None,    # no line 
+            '': None,    # no line
             '-': None,   # solid line
             ':': None,   # dotted line
             '-.': None,  # dash-dot line
@@ -269,7 +269,7 @@ class DXBackend(BaseClass):
         ylabel = ax.getp('ylabel')
         zlabel = ax.getp('zlabel')
         self._g('labels = {"%s","%s","%s"};' % (xlabel,ylabel,zlabel))
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
@@ -278,7 +278,7 @@ class DXBackend(BaseClass):
         self._g('title = "%s";' % title)
         self._g('caption = Caption(title,[0.5,0.98],font="fixed");')
         self._g('collected = Append(collected,caption);')
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -357,7 +357,7 @@ class DXBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -382,7 +382,7 @@ class DXBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -402,12 +402,12 @@ class DXBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             self._g('show_box = 1;')
         else:
             # do not display box
             self._g('show_box = 0;')
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -462,7 +462,7 @@ class DXBackend(BaseClass):
             pass
 
     def _set_colormap(self, ax):
-        """Set the colormap.""" 
+        """Set the colormap."""
         if DEBUG:
             print "Setting colormap"
         cmap = ax.getp('colormap')
@@ -474,7 +474,7 @@ class DXBackend(BaseClass):
             print "Setting view"
         cam = ax.getp('camera')
         view = cam.getp('view')
-        
+
         width = self._g.width
         height = self._g.height
         self._g('resolution = %s;' % width)
@@ -499,7 +499,7 @@ class DXBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 self._g('campos = Direction(%s, %s, 10);' % (az,el))
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -562,9 +562,9 @@ class DXBackend(BaseClass):
                       ('"rendering approximation", "%s"' % hw_render_approx)
         options = options + ', "interaction mode", iact_mode'
         self._g('collected = Options(collected, %s);' % options)
-        
+
         self._set_view(ax)
-                        
+
         if ax.getp('visible'):
             self._set_labels(ax)
             self._set_box(ax)
@@ -729,7 +729,7 @@ end
             x, y = ndgrid(x,y,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
-        # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 
+        # 'z0 z1 z2 ... zn' where n=nx*ny*nz:
         z = ravel(z).tolist()
         scalar_field = ' '.join([str(i) for i in z])
 
@@ -766,7 +766,7 @@ end
             x, y, z = ndgrid(x,y,z,sparse=False,indexing=indexing)
 
         # the scalar field should be a string on the form
-        # 'z0 z1 z2 ... zn' where n=nx*ny*nz: 
+        # 'z0 z1 z2 ... zn' where n=nx*ny*nz:
         v = ravel(v).tolist()
         scalar_field = ' '.join([str(i) for i in v])
 
@@ -803,7 +803,7 @@ end
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
+
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -836,7 +836,7 @@ end
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
         indexing = item.getp('indexing')
-        
+
         #general_file = self._create_2D_scalar_data_file(x, y, z,
         #                                                regular_grid=False,
         #                                                indexing=indexing)
@@ -851,7 +851,7 @@ end
         dar = self._ax.getp('daspect')
         self._g('rubbersheet%s = Scale(rubbersheet%s,[%s %s %s]);' % \
                 (id,id,dar[0],dar[1],dar[2]))
-                
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -919,7 +919,7 @@ end
             cvector = '{' + ','.join([str(c) for c in cvector]) + '}'
             self._g('cvector = %s;' % cvector)
         self._g('clevels = %s;' % clevels)
-        
+
         location = item.getp('clocation')
         if location == 'surface':
             # place the contours at the corresponding z level (contour3)
@@ -950,7 +950,7 @@ end
             self._g('obj%s = Options(obj%s, "line width", %s);' % \
                     (id,id,linewidth))
         self._g('collected = Append(collected, obj%s);' % id)
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -1018,7 +1018,7 @@ end
         isovalue = item.getp('isovalue')
         indexing = item.getp('indexing')
         dar = self._ax.getp('daspect')
-        
+
         #general_file = self._create_3D_scalar_data_file(x, y, z, v)
         #self._g('data%s = Import("%s",format="general");' \
         #        % (id,general_file))
@@ -1032,7 +1032,7 @@ end
                 (id,id,dar[0],dar[1],dar[2]))
 
         self._g('collected = Append(collected, obj%s);' % id)
-    
+
     def _add_slices(self, item, id, shading='faceted'):
         if DEBUG:
             print "Adding slices in a volume"
@@ -1048,9 +1048,9 @@ end
                                                   regular_grid=False,
                                                   indexing=indexing)
         self._g('colored%s = AutoColor(%s);' % (id,data_field))
-        
+
         self._g('slices%s = Collect();' % id)
-        
+
         sx, sy, sz = item.getp('slices')
         if rank(sz) == 2:
             # sx, sy, and sz defines a surface
@@ -1143,7 +1143,7 @@ end
                 print "creating figure %s in backend" % name
 
             fig._g = _DXFigure(self, title=name)
-            
+
         self._g = fig._g  # link for faster access
         return fig
 
@@ -1151,34 +1151,34 @@ end
         """Remove latex syntax a la $, \, {, } etc."""
         legend = legend.strip()
         # General fix of latex syntax (more readable)
-        legend = legend.replace('**', '^')  
+        legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         legend = legend.replace('{', '')
         legend = legend.replace('}', '')
         legend = legend.replace('\\', '')
         return legend
-        
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
         fig._g.reset()
-        
+
         # include some useful macros:
         # (look at DXLLoadMacroFile)
         fig._g('//include "AutoScaleMacro.net"')
         fig._g('//include "ArrangeMemberMacro.net"')
         fig._g('//include "CappedIsoMacro.net"')
-        
+
         self._set_figure_size(fig)
 
         #DX.exDXLBeginMacroDefinition(self._g.conn, 'macro main()')
-                
+
         width = self._g.width
         height = self._g.height
         parent = self._g.frame.winfo_id()
@@ -1186,9 +1186,9 @@ end
         self._g(('where, size, events = SuperviseWindow("Easyviz", ' +
                  'display=NULL, size=[%d,%d], offset=NULL, ' +
                  'parent=%s, depth=%d);') % (width, height, parent, depth))
-        
+
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             self._ax = ax          # create link for easier access later
             self._axnr = axnr - 1  # same
             pth = ax.getp('pth')
@@ -1234,16 +1234,16 @@ end
 
             nr = self._axnr
             self._g(('object%s, cam%s, where%s = ArrangeMember(renderable, ' +
-                     'renderMode="%s", defaultCamera=camera, ' + 
-                     'interactionMode=%d, parentSize=size, parent=where, ' + 
-                     'title="image", totalSubimages={%d}, ' + 
+                     'renderMode="%s", defaultCamera=camera, ' +
+                     'interactionMode=%d, parentSize=size, parent=where, ' +
+                     'title="image", totalSubimages={%d}, ' +
                      'nHorizontal={%d}, which={%d});') % \
                     (nr,nr,nr,self._rendermode,self._interactionmode,
                      nrows*ncolumns,ncolumns,nr))
             #self._g('Display(renderable, camera, where=where);')
 
         #DX.exDXLEndMacroDefinition(self._g.conn)
-                    
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -1263,6 +1263,9 @@ end
           '.miff' (Magick Image File Format)
           FIXME: Add more formats like rgb, r+g+b, yuv, ...
 
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
+
         Optional arguments:
 
           color       -- True (colors) or False (black and white).
@@ -1270,10 +1273,10 @@ end
                          the image. The default is (8.5,11).
           dpi         -- Set the number of dots (pixels) per inch in the
                          hardcopy image. Use this only if you want to
-                         explicitly set the number of dots per inch. 
+                         explicitly set the number of dots per inch.
           orientation -- 'auto' (default), 'portrait', or 'landscape'. Only
                          available for PostScript output.
-          margin      -- Sets the desired margin around the image. The 
+          margin      -- Sets the desired margin around the image. The
                          default is 0.5 inch.
           width       -- FIXME ...
           height      -- FIXME ...
@@ -1286,6 +1289,9 @@ end
           frame       -- FIXME ...
 
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         if DEBUG:
             print "Hardcopy to %s" % filename
 
@@ -1378,7 +1384,7 @@ end
                     if m2.__doc__ is None:
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
-    
+
 
 plt = DXBackend()    # create backend instance
 use(plt, globals())  # export public namespace of plt to globals()

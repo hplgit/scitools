@@ -1,7 +1,7 @@
 import os
 
-from scitools.numpytools import asarray, ones, seq, shape, reshape, meshgrid, \
-     NumPyArray, NumPy_type
+from scitools.numpyutils import asarray, ones, seq, shape, reshape, meshgrid, \
+     ndarray
 import scitools.globaldata
 
 def _update_from_config_file(d, section='easyviz'):
@@ -58,7 +58,9 @@ def _check_xyzv(*args, **kwargs):
     if x is None and y is None and z is None:
         if indexing == 'ij':
             ny, nx = nx, nz  # swap
-        x, y, z = meshgrid(range(ny), range(nx), range(nz), indexing=indexing)
+        x, y, z = meshgrid(list(range(ny)),
+                           list(range(nx)),
+                           list(range(nz)), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x)==(nx,ny,nz) or shape(x)==(nx,1,1) or \
@@ -137,7 +139,7 @@ def _check_xyz(*args, **kwargs):
     if x is None and y is None:
         if indexing == 'ij':
             nx, ny = ny, nx  # swap
-        x, y = meshgrid(range(ny), range(nx), indexing=indexing)
+        x, y = meshgrid(list(range(ny)), list(range(nx)), indexing=indexing)
     else:
         if indexing == 'ij':
             assert shape(x) == (nx,ny) or shape(x) == (nx,1) or len(x) == nx, \
@@ -175,8 +177,8 @@ def _check_xyuv(*args, **kwargs):
 
     if len(us) == 1:
         if x is None and y is None:
-            x = range(us[0])
-            y = range(us[0])
+            x = list(range(us[0]))
+            y = list(range(us[0]))
         else:
             assert shape(x) == us, \
                    "_check_xyuv: x has shape %s, expected %s" % (shape(x), us)
@@ -279,18 +281,6 @@ def _check_xyzuvw(*args, **kwargs):
             "_check_xyzuvw: u must be 1D, 2D, or 3D, not %dD" % len(us))
 
     return x, y, z, u, v, w
-
-def arrayconverter(a):
-    """Convert the numpy array a with type 'numpy.ndarray' into a
-    Numeric.array object (type 'array'). This is useful when a
-    'numpy.ndarray' object is not accepted, which is the case in the
-    gnuplot module.
-    """
-    if NumPy_type(a) == 'numpy':
-        import Numeric
-        return Numeric.array(a.tolist())
-    else:
-        return a
 
 def _cmpPlotProperties(a,b):
     """Sort cmp-function for PlotProperties"""

@@ -45,9 +45,9 @@ http://www.mathworks.com/support/solutions/data/1-1A62W.html).
 
 from __future__ import division
 
-from common import *
+from .common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 try:
     from scikits.mlabwrap import mlab
@@ -63,10 +63,10 @@ class MatlabBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         #self.figure(self.getp('curfig'))
         pass
 
@@ -87,7 +87,7 @@ class MatlabBackend(BaseClass):
             # use linear scale on x-axis and logarithmic scale on y-axis
             xscale = 'lin'
             yscale = 'log'
-        else: 
+        else:
             # use linear scale on both x- and y-axis
             xscale = 'lin'
             yscale = 'lin'
@@ -114,7 +114,7 @@ class MatlabBackend(BaseClass):
         title = self._fix_latex(ax.getp('title'))
         if title:
             self._g.title(title)
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -193,7 +193,7 @@ class MatlabBackend(BaseClass):
         else:
             #self._axargs.extend(['DataAspectRatioMode', 'auto'])
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -247,12 +247,12 @@ class MatlabBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             self._axargs.extend(['Box', 'on'])
         else:
             # do not display box
             self._axargs.extend(['Box', 'off'])
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -341,7 +341,7 @@ class MatlabBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 self._axargs.extend(['View', [az,el]])
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -470,7 +470,7 @@ class MatlabBackend(BaseClass):
 
         kwargs = {'nout': 0}
         self._g.bar(*args, **kwargs)
-        
+
         barticks = item.getp('barticks')
         if barticks is not None:
             #self._g.set_(self._g.gca(), 'XTickLabel', barticks, nout=0)
@@ -491,7 +491,7 @@ class MatlabBackend(BaseClass):
         args = [x,y,z]
         if c is not None:
             args.append(c)
-            
+
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
         edgecolor = item.getp('edgecolor')
@@ -509,7 +509,7 @@ class MatlabBackend(BaseClass):
 
         if not shading == 'faceted' and not color:
             args.extend(['EdgeColor', 'none', 'FaceColor', shading])
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -548,7 +548,7 @@ class MatlabBackend(BaseClass):
                 self._g.set_(*extra_args, **kwargs)
         else:
             func(*args, **kwargs)
-        
+
     def _add_contours(self, item, placement=None):
         # The placement keyword can be either None or 'bottom'. The
         # latter specifies that the contours should be placed at the
@@ -593,7 +593,7 @@ class MatlabBackend(BaseClass):
             extra_args.extend(['LineStyle', style])
         if width:
             extra_args.extend(['LineWidth', float(width)])
-        
+
         kwargs = {'nout': 2}
         if item.getp('function') == 'contour3':
             # contour3 does not allow property-value pairs
@@ -615,7 +615,7 @@ class MatlabBackend(BaseClass):
         if item.getp('clabels'):
             # add labels on the contour curves
             self._g.clabel(cs, h, nout=0)
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -764,7 +764,7 @@ class MatlabBackend(BaseClass):
         else:
             # sx, sy, and sz is either numbers or vectors with numbers
             pass
-        
+
         if item.getp('indexing') == 'ij' and \
                (shape(x) != shape(v) and shape(y) != shape(v) and \
                 shape(z) != shape(v)):
@@ -818,7 +818,7 @@ class MatlabBackend(BaseClass):
         """Remove latex syntax a la $, \, {, } etc."""
         legend = legend.strip()
         # General fix of latex syntax (more readable)
-        legend = legend.replace('**', '^')  
+        legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         legend = legend.replace('{', '')
@@ -831,18 +831,18 @@ class MatlabBackend(BaseClass):
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         try:
             fig._g
-        except: 
+        except:
             self.figure(self.getp('curfig'))
         h = self._g.figure(self.getp('curfig'), nout=1)
         # reset the plotting package instance in fig._g now if needed
         self._g.clf('reset')
-        
+
         self._set_figure_size(fig)
-        
+
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
             if nrows != 1 or ncolumns != 1:
@@ -888,17 +888,17 @@ class MatlabBackend(BaseClass):
                     if ax.getp('numberofitems') > 1 and not hold_state:
                         self._g.hold(axhandle, 'on', nout=0)
                         hold_state = True
-                    
+
                 if legends:
                     self._g.legend(*legends)
-                    
+
                 if hold_state:
                     self._g.hold(axhandle, 'off', nout=0)
 
                 self._set_axis_props(ax)
             else:
                 self._g.set_(axhandle, 'Visible', 'off', nout=0)
-                
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -924,6 +924,9 @@ class MatlabBackend(BaseClass):
           '.ai'  (Adobe Illustrator file)
           '.pcx' (Paintbrush 24-bit file)
           '.bmp' (Bitmap Image)
+
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
 
         Optional arguments:
 
@@ -954,6 +957,9 @@ class MatlabBackend(BaseClass):
         >>> g = get_backend()
         >>> g.print_(g.gcf(), '-deps', 'foo.eps')
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
@@ -971,7 +977,7 @@ class MatlabBackend(BaseClass):
         tiffcompression = tiffcompression and '' or 'nocompression'
         raw = kwargs.get('raw', False)
         raw = raw and 'raw' or ''
-            
+
         # convert table (extension --> device):
         ext2dev = {
             '': '-dps%s%s' % (pscolor,pslevel),
@@ -995,7 +1001,7 @@ class MatlabBackend(BaseClass):
             }
         basename, ext = os.path.splitext(filename)
         device = ext2dev[ext]
-        
+
         h = self._g.gcf()
         args = [h,device,filename]
         if renderer is not None:
@@ -1010,13 +1016,13 @@ class MatlabBackend(BaseClass):
         self._g.clf()
         BaseClass.clf(self)
 
-    def closefig(self, arg=None): 
+    def closefig(self, arg=None):
         if arg is None:
             num = self.getp('curfig')  # close current figure
-        elif arg in self._figs.keys():
+        elif arg in self._figs:
             num = arg
-        elif arg in self._figs.values():
-            for fignr, fig in self._figs.items():
+        elif arg in list(self._figs.values()):
+            for fignr, fig in list(self._figs.items()):
                 if fig == arg:
                     num = fignr
                     break
@@ -1025,23 +1031,23 @@ class MatlabBackend(BaseClass):
         self._g.close(num)
         #del self._figs[num]._g
         #del self._figs[num]
-        
+
     def closefigs(self):
-        for key in self._figs.keys():
+        for key in self._figs:
             self.closefig(key)
         #del self._g
         BaseClass.closefigs(self)
-           
+
     # Colormap methods:
     def hsv(self, m=64):
         return mlab.hsv(m)
 
     def hot(self, m=64):
         return mlab.hot(m)
-    
+
     def gray(self, m=64):
         return mlab.gray(m)
-    
+
     def bone(self, m=64):
         return mlab.bone(m)
 
@@ -1050,40 +1056,40 @@ class MatlabBackend(BaseClass):
 
     def pink(self, m=64):
         return mlab.pink(m)
-    
+
     def white(self, m=64):
         return mlab.white(m)
-    
+
     def flag(self, m=64):
         return mlab.flag(m)
-        
+
     def lines(self, m=64):
         return mlab.lines(m)
-    
+
     def colorcube(self, m=64):
         return mlab.colorcube(m)
-    
+
     def vga(self, m=64):
         return mlab.vga(m)
-    
+
     def jet(self, m=64):
         return mlab.jet(m)
-    
+
     def prism(self, m=64):
         return mlab.prism(m)
-        
+
     def cool(self, m=64):
         return mlab.cool(m)
-    
+
     def autumn(self, m=64):
         return mlab.autumn(m)
-    
+
     def spring(self, m=64):
         return mlab.spring(m)
-    
+
     def winter(self, m=64):
         return mlab.winter(m)
-    
+
     def summer(self, m=64):
         return mlab.summer(m)
 
@@ -1103,7 +1109,7 @@ class MatlabBackend(BaseClass):
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = MatlabBackend()  # create backend instance
 use(plt, globals())      # export public namespace of plt to globals()
 backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

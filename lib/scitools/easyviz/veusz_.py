@@ -48,7 +48,7 @@ Tip:
     >>> ax = axes(viewport=['9cm','9cm','1cm','2cm'])
     >>> plot(ax, x, y2, 'b--')
     [<scitools.easyviz.common.Line object at 0xb2c36d0c>]
-    >>> 
+    >>>
 
   The optional argument viewport to the axes command must specify a list with
   four elements [left,bottom,right,top] where each of the elements defines
@@ -60,7 +60,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 check_if_module_exists('veusz', msg='You need to install the Veusz package.', abort=False)
 
@@ -72,13 +72,13 @@ class VeuszBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
-        
+
 
         # Calling figure method here makes the program halt.
         #self.figure(self.getp('curfig'))
@@ -94,13 +94,13 @@ class VeuszBackend(BaseClass):
             's': 'square',       # square
             'd': 'diamond',      # diamond
             '^': 'triangle',     # triangle (up)
-            'v': 'triangledown', # triangle (down) 
+            'v': 'triangledown', # triangle (down)
             '<': 'triangle',     # triangle (left) --> up
             '>': 'triangledown', # triangle (right) --> down
             'p': 'star',         # pentagram
             'h': 'cross',        # hexagram --> filled cross
             }
-                                 
+
         self._colors = {
             '': None,       # no color --> blue
             'r': 'red',     # red
@@ -114,7 +114,7 @@ class VeuszBackend(BaseClass):
             }
 
         self._line_styles = {
-            '': None,         # no line 
+            '': None,         # no line
             '-': 'solid',     # solid line
             ':': 'dotted',    # dotted line
             '-.': 'dash-dot', # dash-dot line
@@ -179,7 +179,7 @@ class VeuszBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
@@ -191,7 +191,7 @@ class VeuszBackend(BaseClass):
             self._g.Set('%s/label' % label, title)
             self._g.Set('%s/xPos' % label, 0.1)
             self._g.Set('%s/yPos' % label, 1.01)
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -282,7 +282,7 @@ class VeuszBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -307,7 +307,7 @@ class VeuszBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -327,12 +327,12 @@ class VeuszBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             pass
         else:
             # do not display box
             pass
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -413,7 +413,7 @@ class VeuszBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -466,7 +466,7 @@ class VeuszBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
+
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -510,7 +510,7 @@ class VeuszBackend(BaseClass):
    use {} around the arguments in power expressions with ^ (hat)
 '''
         # General fix of latex syntax (more readable)
-        #legend = legend.replace('**', '^')  
+        #legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         #legend = legend.replace('\\', '')
@@ -523,7 +523,7 @@ class VeuszBackend(BaseClass):
                 'sinh', 'cosh', 'tanh'
         for func in funcs:
             legend = _fix_func(func, func, legend)
-        funcs = [('atan', 'arctan'), ('asin', 'arcsin'), 
+        funcs = [('atan', 'arctan'), ('asin', 'arcsin'),
                  ('acos', 'arccos'),]
         for func, newfunc in funcs:
             legend = _fix_func(func, newfunc, legend)
@@ -559,7 +559,7 @@ class VeuszBackend(BaseClass):
         if not width:
             width = 0.5
         self._g.Set('%s/PlotLine/width' % xy, str(width)+'pt')
-        
+
         if z is not None:
             # zdata is given, add a 3D curve:
             pass
@@ -581,9 +581,9 @@ class VeuszBackend(BaseClass):
         y = item.getp('ydata')  # grid component in y-direction
         z = item.getp('zdata')  # scalar field
         c = item.getp('cdata')  # pseudocolor data (can be None)
-        
+
         img = self._g.Add('image')
-                    
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -603,7 +603,7 @@ class VeuszBackend(BaseClass):
         if cmap is None:
             cmap = 'spectrum'
         self._g.Set('%s/colorMap' % img, cmap)
-        
+
         legend = self._fix_latex(item.getp('legend'))
         if legend:
             self._g.Set('%s/key' % img, legend)
@@ -621,7 +621,7 @@ class VeuszBackend(BaseClass):
         marker, color, style, width = self._get_linespecs(item)
 
         filled = item.getp('filled')  # draw filled contour plot if True
-        
+
         cntr = self._g.Add('contour')
 
         # set line properties:
@@ -671,7 +671,7 @@ class VeuszBackend(BaseClass):
         legend = self._fix_latex(item.getp('legend'))
         if legend:
             self._g.Set('%s/key' % cntr, legend)
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -807,10 +807,10 @@ class VeuszBackend(BaseClass):
             fig._g = veusz.embed.Embedded(name)
             fig._g.EnableToolbar(enable=True)
             #fig._g.window.hide()
-            
+
         self._g = fig._g  # link for faster access
         return fig
-        
+
     def _replot(self):
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
@@ -821,18 +821,18 @@ class VeuszBackend(BaseClass):
         # add Veusz attributes to current figure (if not already added):
         try:
             fig._g
-        except: 
+        except:
             self.figure(self.getp('curfig'))
-        
+
         self._g.To('/') # make sure we are at root before we start
-        
+
         # reset the plotting package instance in fig._g now if needed
         try:
             self._g.Remove('/page1')
         except:
             pass
         self._g.To(self._g.Add('page'))
-        
+
         self._set_figure_size(fig)
 
         i = 1
@@ -891,7 +891,7 @@ class VeuszBackend(BaseClass):
                 self._g.Set('%s/vertPosn' % key, 'top')
                 self._g.Set('%s/Text/size' % key, str(ax.getp('fontsize')))
             self._set_axis_props(ax)
-                    
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -913,8 +913,11 @@ class VeuszBackend(BaseClass):
         Optional keyword arguments:
 
           color -- True (colors) or False (gray-scale).
-          
+
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
@@ -923,7 +926,7 @@ class VeuszBackend(BaseClass):
 
         if DEBUG:
             print "Hardcopy to %s" % filename
-            
+
         self._g.Export(filename, color=color)
 
     def clf(self):
@@ -959,7 +962,7 @@ class VeuszBackend(BaseClass):
 
     def gray(self, m=None):
         return 'grey'
-    
+
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:

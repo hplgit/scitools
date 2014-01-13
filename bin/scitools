@@ -293,7 +293,15 @@ Supply the command-line argument --no-backup to avoid backing up files
 (might increase speed when renaming large files).
 """
 
-def rename(from_regex, to_regex, filenames, backup=True):
+def rename(from_regex, to_regex, filenames, backup=True, vcs=None):
+    """
+    Rename a list of filenames in *filenames* by substuting
+    *from_regex* by *to_regex* in the filenames. If *backup* is
+    true, a copy of each file is taken (with extension ``.old~~``).
+    The *vcs* may hold the name of a version control system,
+    "git", "hg", "bzr", or "svn", and then the renaming is performed
+    with a version control system command.
+    """
     from_regex_c = re.compile(from_regex)
     for filename in filenames:
         if from_regex_c.search(filename):
@@ -304,8 +312,24 @@ def rename(from_regex, to_regex, filenames, backup=True):
                 elif os.path.isdir(filename):
                     shutil.copytree(filename, filename + '.old~~')
             if os.path.isfile(filename):
-                os.rename(filename, newname)
-                print '%s renamed to %s' % (filename, newname)
+                if vcs is None:
+                    os.rename(filename, newname)
+                    print '%s renamed to %s' % (filename, newname)
+                elif isinstance(vcs, str):
+                    vcs = vcs.lower()
+                    if vcs == 'git':
+                        cmd = 'git mv %s %s' % (filename, newname)
+                    elif vcs == 'hg' or vcs == 'mercurial':
+                        cmd = 'hg rename %s %s' % (filename, newname)
+                    elif vcs == 'bzr' or vcs == 'bazaar':
+                        cmd = 'bzr mv %s %s' % (filename, newname)
+                    elif vcs == 'svn' or vcs == 'subversion':
+                        cmd = 'svn move %s %s' % (filename, newname)
+                    failure = os.system(cmd)
+                    if failure:
+                        print '*** error: could not run\n', cmd
+                    else:
+                        print cmd
             else:
                 print 'No such file:', filename
 
@@ -322,9 +346,14 @@ def main_rename():
         sys.argv.remove('--no-backup')
     else:
         backup = True
+    vcs = None
+    for name in 'git', 'hg', 'bzr', 'svn':
+        if '--%s' % name in sys.argv:
+            vcs = name
+            sys.argv.remove('--%s' % name)
     from_regex, to_regex = sys.argv[2], sys.argv[3]
     files = wildcard_notation(sys.argv[4:])
-    rename(from_regex, to_regex, files, backup)
+    rename(from_regex, to_regex, files, backup, vcs)
 
 
 def usage_file2interactive():

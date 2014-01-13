@@ -6,6 +6,8 @@ Class for a scalar (or vector) field over a BoxGrid or UniformBoxGrid grid.
 from scitools.BoxGrid import BoxGrid, UniformBoxGrid, X, Y, Z
 from numpy import zeros, array, transpose
 
+import dolfin
+
 __all__ = ['BoxField', 'BoxGrid', 'UniformBoxGrid', 'X', 'Y', 'Z',
            'dolfin_function2BoxField', 'update_from_dolfin_array']
 
@@ -308,7 +310,12 @@ u2 = interpolate(u, V2)
 
 """ % (str(dolfin_function.ufl_element()), dolfin_function.ufl_element().degree()))
 
-    nodal_values = dolfin_function.vector().array().copy()
+    if dolfin.__version__[:3] == "1.0":
+        nodal_values = dolfin_function.vector().array().copy()
+    else:
+        map = dolfin_function.function_space().dofmap().vertex_to_dof_map(dolfin_mesh)
+        nodal_values = dolfin_function.vector().array().copy()
+        nodal_values[map] = dolfin_function.vector().array().copy()
 
     if uniform_mesh:
         grid = dolfin_mesh2UniformBoxGrid(dolfin_mesh, division)

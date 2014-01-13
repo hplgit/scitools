@@ -2,8 +2,8 @@ from common import *
 from scitools.numpyutils import ravel, zeros, array, allclose, rank, \
      meshgrid, newaxis
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.numpytools import NumPy_dtype
-from scitools.misc import check_if_module_exists 
+from scitools.numpyutils import NumPy_dtype
+from scitools.misc import check_if_module_exists
 
 check_if_module_exists('vtk', msg='You need to install the VTK package.', abort=False)
 import vtk
@@ -34,7 +34,7 @@ class VtkBackend(BaseClass):
         self._colors = {
             '':  (0,0,1), # No color-->Blue
             'k': (0,0,0), # Black
-            'r': (1,0,0), # Red 
+            'r': (1,0,0), # Red
             'g': (0,1,0), # Green
             'b': (0,0,1), # Blue
             'm': (1,0,1), # Magenta
@@ -52,9 +52,9 @@ class VtkBackend(BaseClass):
             '*': (3,0),  # star --> plus
             's': (6,0),  # square
             'd': (8,0),  # diamond
-            'v': (5,180),# triangle (down) 
+            'v': (5,180),# triangle (down)
             '^': (5,0),  # triangle (up)
-            '<': (5,90), # triangle (left) 
+            '<': (5,90), # triangle (left)
             '>': (5,270),# triangle (right)
             'p': (6,0),  # pentagram --> square
             'h': (6,0),  # hexagram --> square
@@ -214,12 +214,12 @@ class VtkBackend(BaseClass):
 
         if ax_cam.getp('camva') is not None:
             camera.SetViewAngle(ax_cam.getp('camva'))
- 
+
         if ax_cam.getp('camproj') == 'perspective':
             camera.ParallelProjectionOff()
         else:
             camera.ParallelProjectionOn()
-            
+
         self._axis._renderer.SetActiveCamera(camera)
         self._axis._vtk_camera = camera
 
@@ -229,7 +229,7 @@ class VtkBackend(BaseClass):
         #if self._axis.getp('camera').getp('view') == 2:
         #    ren.GetActiveCamera().Zoom(1.5)
         camera.Zoom(ax_cam.getp('camzoom'))
-       
+
         # set the camera in the vtkCubeAxesActor2D object:
         self._axis._vtk_axes.SetCamera(camera)
 
@@ -390,7 +390,7 @@ class VtkBackend(BaseClass):
         else:
             caxis = self._axis.getp('caxis')
         self._axis._vtk_caxis = caxis
-        
+
     def _data_inside_bounds(self, data):
         fb = self._axis._vtk_scaled_bounds
         bounds = data.GetBounds()
@@ -641,7 +641,7 @@ class VtkBackend(BaseClass):
             assert shape(x) == shape(y) == shape(z) == \
                    shape(u) == shape(v) == shape(w), \
                    "array dimensions must agree"
-                
+
             vectors = vtk.vtkFloatArray()
             vectors.SetNumberOfTuples(no_points)
             vectors.SetNumberOfComponents(3)
@@ -661,7 +661,7 @@ class VtkBackend(BaseClass):
             scalars = vtk.vtkFloatArray()
             scalars.SetNumberOfTuples(no_points)
             scalars.SetNumberOfComponents(1)
-            
+
             v = asarray(item.getp('vdata'))
             # TODO: what about pseudocolor data?
             #cdata = ravel(item.getp('cdata'))
@@ -683,7 +683,7 @@ class VtkBackend(BaseClass):
             points.Modified()
             sgrid.SetPoints(points)
             sgrid.GetPointData().SetScalars(scalars)
-            
+
         sgrid.Update()
         return sgrid
 
@@ -714,7 +714,7 @@ class VtkBackend(BaseClass):
         self._add_legend(item, normals.GetOutput())
         self._axis._renderer.AddActor(actor)
         self._axis._vtk_apd.AddInput(normals.GetOutput())
-        
+
     def _add_contours(self, item, sgrid):
         plane = vtk.vtkStructuredGridGeometryFilter()
         plane.SetInput(sgrid)
@@ -800,7 +800,7 @@ class VtkBackend(BaseClass):
             arrow.DashOn()
             arrow.SetCenter(.75,0,0)
         else:
-            arrow.SetCenter(.5,0,0)        
+            arrow.SetCenter(.5,0,0)
         arrow.SetColor(self._colors[item.getp('linecolor')])
 
         plane = vtk.vtkStructuredGridGeometryFilter()
@@ -808,7 +808,7 @@ class VtkBackend(BaseClass):
         plane.Update()
         data = self._cut_data(plane)
         glyph = vtk.vtkGlyph3D()
-        glyph.SetInput(data.GetOutput()) 
+        glyph.SetInput(data.GetOutput())
         glyph.SetSource(arrow.GetOutput())
         glyph.SetColorModeToColorByVector()
         glyph.SetRange(data.GetOutput().GetScalarRange())
@@ -834,7 +834,7 @@ class VtkBackend(BaseClass):
         length = sgrid.GetLength()
         max_velocity = sgrid.GetPointData().GetVectors().GetMaxNorm()
         max_time = 35.0*length/max_velocity
-        
+
         n = item.getp('numberofstreams')
         sx = ravel(item.getp('startx'))
         sy = ravel(item.getp('starty'))
@@ -899,12 +899,12 @@ class VtkBackend(BaseClass):
             self._add_legend(item, output)
             self._axis._renderer.AddActor(actor)
             self._axis._vtk_apd.AddInput(output)
-            
+
     def _add_line(self, item):
         dar = self._axis.getp('daspect')
         n = item.getp('numberofpoints')
         polydata = vtk.vtkPolyData()
-        polydata.SetLines(vtk.vtkCellArray()) 
+        polydata.SetLines(vtk.vtkCellArray())
         points = vtk.vtkPoints()
         #points.SetNumberOfPoints(n)
         x = ravel(item.getp('xdata'))/dar[0]
@@ -948,7 +948,7 @@ class VtkBackend(BaseClass):
         linewidth = item.getp('linewidth')
         if linewidth:
             actor.GetProperty().SetLineWidth(float(linewidth))
-        
+
         # set material properties:
         ax = self._axis
         mat = item.getp('material')
@@ -1025,7 +1025,7 @@ class VtkBackend(BaseClass):
                     sgrid = self._get_2d_structured_grid(item, vectors=True)
                 self._add_velocity_vectors(item, sgrid)
             elif isinstance(item, Streams):
-                if len(item.getp('udata').shape) == 3: 
+                if len(item.getp('udata').shape) == 3:
                     sgrid = self._get_3d_structured_grid(item, vectors=True)
                 else:
                     sgrid = self._get_2d_structured_grid(item, vectors=True)
@@ -1046,7 +1046,7 @@ class VtkBackend(BaseClass):
         """Remove latex syntax a la $, \, {, } etc."""
         legend = legend.strip()
         # General fix of latex syntax (more readable)
-        legend = legend.replace('**', '^')  
+        legend = legend.replace('**', '^')
         #legend = legend.replace('*', '')
         legend = legend.replace('$', '')
         legend = legend.replace('{', '')
@@ -1120,7 +1120,7 @@ class VtkBackend(BaseClass):
 ##             if ax._renderer in fig._renderers:
 ##                 fig._renderers.remove(ax._renderer)
 ##             del ax._renderer
-        
+
 ##         ax._renderer = vtk.vtkRenderer()
 ##         self._g.AddRenderer(ax._renderer)
 ##         # add this new renderer to the current figures list of renderers
@@ -1133,7 +1133,7 @@ class VtkBackend(BaseClass):
             # add this new renderer to the current figures list of renderers
             # so we can remove it later (e.g. when using clf()):
             gcf()._renderers.append(ax._renderer)
-            
+
         if hasattr(ax, '_vtk_legendbox'):
             ax._renderer.RemoveActor(ax._vtk_legendbox)
         ax._vtk_legendbox = vtk.vtkLegendBoxActor()
@@ -1157,7 +1157,7 @@ class VtkBackend(BaseClass):
 
     def _replot(self):
         self._axis = gca() # shortcut for fast access
-        
+
         fig = self.gcf()
         if fig.getp('axshape') != fig._axshape:
             # remove all current renderers:
@@ -1165,7 +1165,7 @@ class VtkBackend(BaseClass):
                 self._g.RemoveRenderer(ren)
             fig._renderers = []
             fig._axshape = fig.getp('axshape')
-            
+
         #if self._master is not None:
         #    fig._root.withdraw()
 
@@ -1189,10 +1189,10 @@ class VtkBackend(BaseClass):
         if self.getp('show') and hasattr(fig, '_root'):
             fig._root.deiconify() # raise window
             fig._root.update()
-            
+
         # render complete scene:
         self._g.Render()
-            
+
     def figure(self, *args, **kwargs):
         """Extension of BaseClass.figure"""
         fig = BaseClass.figure(self, *args, **kwargs)
@@ -1264,6 +1264,8 @@ class VtkBackend(BaseClass):
         to the file.
 
         If the given filename has no extension, then EPS output will be used.
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
 
         Keyword arguments:
 
@@ -1278,21 +1280,24 @@ class VtkBackend(BaseClass):
           vector_file -- If True (default), the figure will be stored as a
                          vector file. This is only true if either PS, EPS,
                          or PDF are choosen as the output file format.
-          
+
         Additional keyword arguments (only in affect if the vector_file
         argument is set to True and the file format is either PS, EPS or PDF):
 
           landscape -- Sets whether to use landscape or portrait orientation.
                        A True value result in landscape orientation. Defaults
                        to False.
-          
+
           raster3d  -- If True, this will write 3D props as raster images
                        while 2D props are rendered using vector graphic
                        primitives. Defaults to False.
-          
+
           compress  -- Compression when generating PostScript or PDF output.
                        The default is False (no compression).
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         if not filename:
             raise TypeError("hardcopy: No filename given, cannot save figure.")
 
@@ -1302,7 +1307,7 @@ class VtkBackend(BaseClass):
         if not ext:  # no extension given, use .eps
             ext = '.eps'
             filename += ext
-        
+
         if not self.getp('show'):  # don't display to screen
             self._g.OffScreenRenderingOn()
 
@@ -1311,7 +1316,7 @@ class VtkBackend(BaseClass):
             self._replot()
 
         color = self.getp('color')
-        
+
         vector_file_formats = {'.ps': 0, '.eps': 1, '.pdf': 2, '.tex': 3}
         if vector_file and ext.lower() in vector_file_formats:
             exp = vtk.vtkGL2PSExporter()
@@ -1377,7 +1382,7 @@ class VtkBackend(BaseClass):
         # all is OK, change colormap:
         hue = lut.GetHueRange()
         val = lut.GetValueRange()
- 
+
     # colormaps
     def hsv(self, m=256):
         lut = vtk.vtkLookupTable()
@@ -1466,7 +1471,7 @@ class VtkBackend(BaseClass):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.0, 0.17)
-        lut.SetSaturationRange(0.5, 1.0) 
+        lut.SetSaturationRange(0.5, 1.0)
         lut.SetValueRange(1.0, 1.0)
         lut.Build()
         return lut
@@ -1475,7 +1480,7 @@ class VtkBackend(BaseClass):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.47, 0.17)
-        lut.SetSaturationRange(1.0, 0.6) 
+        lut.SetSaturationRange(1.0, 0.6)
         lut.SetValueRange(0.5, 1.0)
         lut.Build()
         return lut
@@ -1484,20 +1489,20 @@ class VtkBackend(BaseClass):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.8, 0.42)
-        lut.SetSaturationRange(1.0, 1.0) 
+        lut.SetSaturationRange(1.0, 1.0)
         lut.SetValueRange(0.6, 1.0)
         lut.Build()
         return lut
-        
+
     def autumn(self, m=256):
         lut = vtk.vtkLookupTable()
         lut.SetNumberOfColors(m)
         lut.SetHueRange(0.0, 0.15)
-        lut.SetSaturationRange(1.0, 1.0) 
+        lut.SetSaturationRange(1.0, 1.0)
         lut.SetValueRange(1.0, 1.0)
         lut.Build()
         return lut
-    
+
 plt = VtkBackend() # Create backend instance
 use(plt, globals()) # Export public namespace of plt to globals()
 backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

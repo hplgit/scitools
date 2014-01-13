@@ -79,7 +79,7 @@ Global data:
 
 import sys as _sys
 
-from cStringIO import StringIO as _StringIO
+from StringIO import StringIO as _StringIO
 
 __all__ = ["pprint","pformat","isreadable","isrecursive","saferepr",
            "PrettyPrinter"]
@@ -186,7 +186,7 @@ class PrettyPrinter:
                 if length:
                     context[objid] = 1
                     indent = indent + self._indent_per_level
-                    items  = object.items()
+                    items  = list(object.items())
                     items.sort()
                     key, ent = items[0]
                     rep = self._repr(key, context, level)

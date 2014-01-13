@@ -33,10 +33,10 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 check_if_module_exists('pyx', msg='You need to install the PyX package.', abort=False)
-import pyx 
+import pyx
 import math
 
 
@@ -44,14 +44,14 @@ class PyXBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         # Set docstrings of all functions to the docstrings of BaseClass
         # The exception is if something is very different
-        
-        
+
+
         self.figure(self.getp('curfig'))
 
         # conversion tables for format strings:
@@ -71,7 +71,7 @@ class PyXBackend(BaseClass):
             'p': None,  # pentagram
             'h': None,  # hexagram
             }
-               
+
         self._colors = {
             '': None,   # no color --> blue
             'r': pyx.graph.style.color.cmyk.Red,      # red
@@ -83,7 +83,7 @@ class PyXBackend(BaseClass):
             'k': pyx.graph.style.color.cmyk.Black,    # black
             'w': pyx.graph.style.color.cmyk.White,    # white
             }
-        
+
         self._line_styles = {
             '': None,                              # no line
             '-': pyx.style.linestyle.solid,        # solid line
@@ -110,7 +110,7 @@ class PyXBackend(BaseClass):
                 print disp, eval(disp)
 
     def _get_scale(self, ax):
-        # return a linear or logarithmic (base 10) axis 
+        # return a linear or logarithmic (base 10) axis
         if DEBUG:
             print "Get axis scales"
         scale = ax.getp('scale')
@@ -131,7 +131,7 @@ class PyXBackend(BaseClass):
             xaxis = pyx.graph.axis.lin
             yaxis = pyx.graph.axis.lin
         return xaxis, yaxis
-    
+
     def _set_labels(self, ax):
         """Add text labels for x-, y-, and z-axis."""
         if DEBUG:
@@ -149,7 +149,7 @@ class PyXBackend(BaseClass):
         if zlabel:
             # add a text label on z-axis
             pass
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
@@ -158,11 +158,11 @@ class PyXBackend(BaseClass):
         if title:
             # set title
             g = self._g.items[-1]
-            g.text(g.width/2+g.xpos, g.height+0.2+g.ypos, title, 
+            g.text(g.width/2+g.xpos, g.height+0.2+g.ypos, title,
                    [pyx.text.halign.center,
                     pyx.text.valign.bottom,
                     pyx.text.size.Large])
-    
+
     def _get_limits(self, ax):
         # return axis limits in x, y, and z direction
         if DEBUG:
@@ -240,7 +240,7 @@ class PyXBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -265,7 +265,7 @@ class PyXBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -285,12 +285,12 @@ class PyXBackend(BaseClass):
         if DEBUG:
             print "Setting box"
         if ax.getp('box'):
-            # display box 
+            # display box
             pass
         else:
             # do not display box
             pass
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -369,7 +369,7 @@ class PyXBackend(BaseClass):
             else:
                 # set a 3D view according to az and el
                 pass
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -407,7 +407,7 @@ class PyXBackend(BaseClass):
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
+
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -437,7 +437,7 @@ class PyXBackend(BaseClass):
                 lineattrs.append(width)
             styles.append(pyx.graph.style.line(lineattrs=lineattrs))
         if marker:
-            if color: 
+            if color:
                 styles.append(pyx.graph.style.symbol(marker,
                                                      symbolattrs=[color]))
             else:
@@ -468,7 +468,7 @@ class PyXBackend(BaseClass):
         y = squeeze(item.getp('ydata'))  # grid component in y-direction
         z = item.getp('zdata')           # scalar field
         c = item.getp('cdata')           # pseudocolor data (can be None)
-        
+
         data = []
         m, n = shape(z)
         if shape(x) != (m,n) and shape(y) != (m,n):
@@ -476,7 +476,7 @@ class PyXBackend(BaseClass):
         for i in range(m):
             for j in range(n):
                 data.append([x[i,j], y[i,j], z[i,j]])
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -491,7 +491,7 @@ class PyXBackend(BaseClass):
             # colored surface (as produced by surf, surfc, or pcolor)
             # use keyword argument shading to set the color shading mode
             styles.append(pyx.graph.style.surface())
-            
+
         legend = item.getp('legend')
         if not legend:
             legend = None
@@ -534,7 +534,7 @@ class PyXBackend(BaseClass):
         if item.getp('clabels'):
             # add labels on the contour curves
             pass
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -666,7 +666,7 @@ class PyXBackend(BaseClass):
                 print "creating figure %s in backend" % name
 
             fig._g = pyx.canvas.canvas()
-            
+
         self._g = fig._g  # link for faster access
         return fig
 
@@ -675,11 +675,11 @@ class PyXBackend(BaseClass):
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
         self._g.items = []
-        
+
         width, height = self._get_figure_size(fig)
         xpos = 0;  ypos = 0
         tmp_xpos = 0;  tmp_ypos = 0
@@ -748,7 +748,7 @@ class PyXBackend(BaseClass):
 
             if legends:
                 graph.key = pyx.graph.key.key(pos="tr", dist=0.1)
-                    
+
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
@@ -758,8 +758,13 @@ class PyXBackend(BaseClass):
 
     def hardcopy(self, filename, **kwargs):
         """
-        Supported extensions: .pdf, .ps, .eps
+        Supported extensions: .pdf, .ps, .eps.
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
@@ -785,7 +790,7 @@ class PyXBackend(BaseClass):
     #def jet(self, m=None):
     #    """Variant of hsv."""
     #    pass
-    
+
 
     # Now we add the doc string from the methods in BaseClass to the
     # methods that are reimplemented in this backend:
@@ -802,7 +807,7 @@ class PyXBackend(BaseClass):
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = PyXBackend()   # create backend instance
 use(plt, globals())  # export public namespace of plt to globals()
 backend = os.path.splitext(os.path.basename(__file__))[0][:-1]

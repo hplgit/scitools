@@ -41,6 +41,9 @@ Functionality of this module that extends Numerical Python
  - norm_L2, norm_l2, norm_L1, norm_l1, norm_inf:
            discrete and continuous norms for multi-dimensional arrays
            viewed as vectors
+ - approximate_Jacobian:
+           compute finite difference approximation of the Jacobian
+           of a nonlinear vector function
  - compute_historgram:
            return x and y arrays of a histogram, given a vector of samples
  - seq:
@@ -63,8 +66,11 @@ if __name__.find('numpyutils') != -1:
 # modules (Numeric, numpy, numarray)
 
 import operator
-from FloatComparison import float_eq, float_ne, float_lt, float_le, \
+from .FloatComparison import float_eq, float_ne, float_lt, float_le, \
      float_gt, float_ge
+import collections
+from functools import reduce
+from Heaviside import *
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
@@ -193,7 +199,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
     import types
     def fixed(coor):
-        return isinstance(coor, (float, complex, int, types.NoneType))
+        return isinstance(coor, (float, complex, int, type(None)))
 
     if not fixed(x):
         x = asarray(x)
@@ -330,6 +336,21 @@ def ndgrid(*args,**kwargs):
     """
     kwargs['indexing'] = 'ij'
     return meshgrid(*args,**kwargs)
+
+def approximate_Jacobian(f, x, f_args, h=1.0E-4):
+    """
+    Compute approximate Jacobian of f(x, *f_args) at x.
+    Method: forward finite difference approximation with step h.
+    """
+    x = np.asarray(x)
+    f0 = np.asarray(f(x, *f_args))  # f may return list/tuple
+    J = np.zeros((len(x), len(f0)))
+    dx = np.zeros_like(x)
+    for i in range(len(x)):
+       dx[i] = h
+       J[i] = (np.asarray(f(x+dx, *f_args)) - f0)/h
+       dx[i] = 0.0
+    return J.transpose()
 
 def length(a):
     """Return the length of the largest dimension of array a."""
@@ -499,277 +520,6 @@ def null(A, tol=1e-10, row_wise_storage=True):
         return null_space
     else:
         return transpose(null_space)
-
-
-class Heaviside:
-    """Standard and smoothed Heaviside function."""
-
-    def __init__(self, eps=0):
-        self.eps = eps          # smoothing parameter
-
-    def __call__(self, x):
-        if self.eps == 0:
-            r = x >= 0
-            if isinstance(x, (int,float)):
-                return int(r)
-            elif isinstance(x, ndarray):
-                return asarray(r, dtype=int)
-        else:
-            if isinstance(x, (int,float)):
-                return self._smooth_scalar(x)
-            elif isinstance(x, ndarray):
-                return self._smooth_vec(x)
-
-    def _exact_scalar(self, x):
-        return 1 if x >= 0 else 0
-
-    def _exact_bool(self, x):
-        return x >= 0  # works for scalars and arrays, but returns bool
-
-    def _exact_vec1(self, x):
-        return where(x >= 0, 1, 0)
-
-    def _exact_vec2(self, x):
-        r = zeros_like(x)
-        r[x >= 0] = 1
-        return r
-
-    def _smooth_scalar(self, x):
-        eps = self.eps
-        if x < -eps:
-            return 0
-        elif x > eps:
-            return 1
-        else:
-            return 0.5 + x/(2*eps) + 1./(2*pi)*sin(pi*x/eps)
-
-    def _smooth_vec(self, x):
-        eps = self.eps
-        r = zeros_like(x)
-        condition1 = operator.and_(x >= -eps, x <= eps)
-        xc = x[condition1]
-        r[condition1] = 0.5 + xc/(2*eps) + 1./(2*pi)*sin(pi*xc/eps)
-        r[x > eps] = 1
-        return r
-
-    def plot(self, center=0, xmin=-1, xmax=1):
-        """
-        Return arrays x, y for plotting the Heaviside function
-        H(x-`center`) on [`xmin`, `xmax`]. For the exact
-        Heaviside function,
-        ``x = [xmin, center, center, xmax]; y = [0, 0, 1, 1]``,
-        while for the smoothed version, the ``x`` array
-        is computed on basis of the `eps` parameter.
-        """
-        if self.eps == 0:
-            return [xmin, center, center, xmax], [0, 0, 1, 1]
-        else:
-            n = 200./self.eps
-            x = concatenate(
-                linspace(xmin, center-self.eps, 21),
-                linspace(center-self.eps, center+self.eps, n+1),
-                linspace(center+self.eps, xmax, 21))
-            y = self(x)
-            return x, y
-
-
-class DiracDelta:
-    """
-    Smoothed Dirac delta function:
-    $\frac{1}{2\epsilon}(1 + \cos(\pi x/\epsilon)$ when
-    $x\in [-\epsilon, \epsilon]$ and 0 elsewhere.
-    """
-    def __init__(self, eps, vectorized=False):
-        self.eps = eps
-        if self.eps == 0:
-            raise ValueError('eps=0 is not allowed in class DiracDelta.')
-
-    def __call__(self, x):
-        if isinstance(x, (float, int)):
-            return _smooth(x)
-        elif isinstance(x, ndarray):
-            return _smooth_vec(x)
-        else:
-            raise TypeError('%s x is wrong' % type(x))
-
-    def _smooth(self, x):
-        eps = self.eps
-        if x < -eps or x > eps:
-            return 0
-        else:
-            return 1./(2*eps)*(1 + cos(pi*x/eps))
-
-    def _smooth_vec(self, x):
-        eps = self.eps
-        r = zeros_like(x)
-        condition1 - operator.and_(x >= -eps, x <= eps)
-        xc = x[condition1]
-        r[condition1] = 1./(2*eps)*(1 + cos(pi*xc/eps))
-        return r
-
-    def plot(self, center=0, xmin=-1, xmax=1):
-        """
-        Return arrays x, y for plotting the DiracDelta function
-        centered in `center` on the interval [`xmin`, `xmax`].
-        """
-        n = 200./self.eps
-        x = concatenate(
-            linspace(xmin, center-self.eps, 21),
-            linspace(center-self.eps, center+self.eps, n+1),
-            linspace(center+self.eps, xmax, 21))
-        y = self(x)
-        return x, y
-
-class IndicatorFunction:
-    """
-    Indicator function $I(x; L, R)$, which is 1 in $[L, R]$, and 0
-    outside. Two parameters ``eps_L`` and ``eps_R`` can be set
-    to provide smoothing of the left and/or right discontinuity
-    in the indicator function. The indicator function is
-    defined in terms of the Heaviside function (using class
-    :class:`Heaviside`): $I(x; R, L) = H(x-L)H(R-x)$.
-    """
-    def __init__(self, interval, eps_L=0, eps_R=0):
-        """
-        `interval` is a 2-tuple/list defining the interval [L, R] where
-        the indicator function is 1.
-        `eps` is a smoothing parameter: ``eps=0`` gives the standard
-        discontinuous indicator function, while a value different
-        from 0 gives rapid change from 0 to 1 over an interval of
-        length 2*`eps`.
-        """
-        self.L, self.R = interval
-        self.eps_L, self.eps_R = eps_L, eps_R
-        self.Heaviside_L = Heaviside(eps_L)
-        self.Heaviside_R = Heaviside(eps_R)
-
-    def __call__(self, x):
-        if self.eps_L == 0 and self.eps_R == 0:
-            # Avoid using Heaviside functions since we want 1
-            # as value for x in [L,R) (important when indicator
-            # functions are added)
-            tol = 1E-10
-            if isinstance(x, (float, int)):
-                #return 0 if x < self.L or x >= self.R else 1
-                return 0 if x < self.L or x > self.R else 1
-            elif isinstance(x, ndarray):
-                r = ones_like(x)
-                r[x < self.L] = 0
-                #r[x >= self.R] = 0
-                r[x > self.R] = 0
-                return r
-        else:
-            return self.Heaviside_L(x - self.L)*self.Heaviside_R(self.R - x)
-
-    def plot(self, xmin=-1, xmax=1):
-        """
-        Return arrays x, y for plotting IndicatorFunction
-        on [`xmin`, `xmax`]. For the exact discontinuous
-        indicator function, we typically have
-        ``x = [xmin, L, L, R, R, xmax]; y = [0, 0, 1, 1, 0, 0]``,
-        while for the smoothed version, the densities of
-        coordinates in the ``x`` array is computed on basis of the
-        `eps` parameter.
-        """
-        if xmin > self.L or xmax < self.R:
-            raise ValueError('xmin=%g > L=%g or xmax=%g < R=%g is meaningless for plot' % (xmin, self.L, xmax, self.R))
-
-        if self.eps == 0:
-            return [xmin, L, L, R, R, xmax], [0, 0, 1, 1, 0, 0]
-        else:
-            n = 200./self.eps
-            x = concatenate(
-                linspace(xmin, self.L-self.eps, 21),
-                linspace(self.L-self.eps, self.R+self.eps, n+1),
-                linspace(self.R+self.eps, xmax, 21))
-            y = self(x)
-            return x, y
-
-    def __str__(self):
-        e = 'eps=%g' % self.eps if self.eps else ''
-        return 'I(x)=1 on [%g, %g] %s' % (self.L, self.R, e)
-
-    def __repr__(self):
-        return 'IndicatorFunction([%g, %g], eps=%g)' % \
-               (self.L, self.R, self.eps)
-
-class PiecewiseConstant:
-    """
-    Representation of a piecewise constant function.
-    The discontinuities can be smoothed out.
-    In this latter case the piecewise constant function is represented
-    as a sum of indicator functions (:class:`IndicatorFunction`)
-    times corresponding values.
-    """
-    def __init__(self, domain, data, eps=0):
-        self.L, self.R = domain
-        self.data = data
-        self.eps = eps
-        if self.L != self.data[0][0]:
-            raise ValueError('domain starts at %g, while data[0][0]=%g' % \
-                             (self.L, self.data[0][0]))
-        self._boundaries = [x for x, value in data]
-        self._boundaries.append(self.R)
-        self._values = [value for x, value in data]
-        self._boundaries = array(self._boundaries, float)
-        self._values = array(self._values, float)
-
-        self._indicator_functions = []
-        # Ensure eps_L=0 at the left and eps_R=0 at the right,
-        # while both are eps at internal boundaries,
-        # i.e., the function is always discontinuous at the start and end
-        for i in range(len(self.data)):
-            if i == 0:
-                eps_L = 0; eps_R = eps  # left boundary
-            elif i == len(self.data)-1:
-                eps_R = 0; eps_L = eps  # right boundary
-            else:
-                eps_L = eps_R = eps     # internal boundary
-            self._indicator_functions.append(IndicatorFunction(
-                [self._boundaries[i], self._boundaries[i+1]],
-                 eps_L=eps_L, eps_R=eps_R))
-
-    def __call__(self, x):
-        if self.eps == 0:
-            return self.value(x)
-        else:
-            return sum(value*I(x) \
-                       for I, value in \
-                       zip(self._indicator_functions, self._values))
-
-    def value(self, x):
-        """Alternative implementation to __call__."""
-        if isinstance(x, (float,int)):
-            return self._values[x >= self._boundaries[:-1]][-1]
-        else:
-            a = array([self._values[xi >= self._boundaries[:-1]][-1]
-                       for xi in x])
-            return a
-
-    def plot(self):
-        if self.eps == 0:
-            x = []; y = []
-            for I, value in zip(self._indicator_functions, self._values):
-                x.append(I.L)
-                y.append(value)
-                x.append(I.R)
-                y.append(value)
-            return x, y
-        else:
-            n = 200/self.eps
-            if len(self.data) == 1:
-                return [self.L, self.R], [self._values[0], self._values[0]]
-            else:
-                x = [linspace(self.data[0][0], self.data[1][0]-self.eps, 21)]
-                # Iterate over all internal discontinuities
-                for I in self._indicator_functions[1:]:
-                    x.append(linspace(I.L-self.eps, I.L+self.eps, n+1))
-                    x.append(linspace(I.L+self.eps, I.R-self.eps, 21))
-                # Last part
-                x.append(linspace(I.R-self.eps, I.R, 3))
-                x = concatenate(x)
-                y = self(x)
-                return x, y
 
 
 # the norm_* functions also work for arrays with dimensions larger than 2,
@@ -1286,7 +1036,7 @@ def NumPy_array_iterator(a, **kwargs):
     # build the code of the generator function in a text string
     # (since the number of nested loops needed to iterate over all
     # elements are parameterized through len(a.shape))
-    dims = range(len(a.shape))
+    dims = list(range(len(a.shape)))
     offset_code1 = ['offset%d_start=0' % d for d in dims]
     offset_code2 = ['offset%d_stop=0'  % d for d in dims]
     for d in range(len(a.shape)):
@@ -1308,9 +1058,9 @@ def NumPy_array_iterator(a, **kwargs):
     no_value = kwargs.get('no_value', False)
 
     for line in offset_code1:
-        exec line
+        exec(line)
     for line in offset_code2:
-        exec line
+        exec(line)
     code = 'def nested_loops(a):\n'
     indentation = ' '*4
     indent = '' + indentation
@@ -1325,7 +1075,7 @@ def NumPy_array_iterator(a, **kwargs):
         code += indent + 'yield ' + index
     else:
         code += indent + 'yield ' + 'a[%s]' % index + ', (' + index + ')'
-    exec code
+    exec(code)
     return nested_loops, code
 
 def compute_histogram(samples, nbins=50, piecewise_constant=True):
@@ -1381,7 +1131,7 @@ def _test_factorial(n=80):
 
 def factorial(n, method='math'):
     """
-    Compute the factorial n! using long integers (and pure Python code).
+    Compute the factorial n!.
     Different implementations are available (see source code for
     implementation details).
 
@@ -1408,9 +1158,8 @@ def factorial(n, method='math'):
     ==========================   =====================
 
     """
-    if not isinstance(n, (int, long, float)):
+    if not isinstance(n, (int, float)):
         raise TypeError('factorial(n): n must be integer not %s' % type(n))
-    n = long(n)
 
     if n == 0 or n == 1:
         return 1
@@ -1425,7 +1174,7 @@ def factorial(n, method='math'):
         except ImportError:
             print 'numpyutils.factorial: scipy is not available'
             print 'default method="reduce" is used instead'
-            return reduce(operator.mul, xrange(2, n+1))
+            return reduce(operator.mul, range(2, n+1))
             # or return factorial(n)
     elif method == 'plain iterative':
         f = 1
@@ -1438,18 +1187,18 @@ def factorial(n, method='math'):
         else:
             return n*factorial(n-1, method)
     elif method == 'lambda recursive':
-        fc = lambda n: n and fc(n-1)*long(n) or 1
+        fc = lambda n: n and fc(n-1)*n or 1
         return fc(n)
     elif method == 'lambda functional':
         fc = lambda n: n<=0 or \
-             reduce(lambda a,b: long(a)*long(b), xrange(1,n+1))
+             reduce(lambda a,b: a*b, range(1,n+1))
         return fc(n)
     elif method == 'lambda list comprehension':
         fc = lambda n: [j for j in [1] for i in range(2,n+1) \
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        return reduce(operator.mul, xrange(2, n+1))
+        return reduce(operator.mul, range(2, n+1))
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
 
@@ -1595,7 +1344,7 @@ def arr(shape=None, element_type=float,
 
     if data is not None:
 
-        if not operator.isSequenceType(data):
+        if not isinstance(data, collections.Sequence):
             raise TypeError('arr: data argument is not a sequence type')
 
         if isinstance(shape, (list,tuple)):
@@ -1618,11 +1367,6 @@ def arr(shape=None, element_type=float,
             raise TypeError(
                 'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
-        if not isinstance(file_, (basestring, file, StringIO)):
-            raise TypeError(
-                'file_ argument must be a string (filename) or '\
-                'open file object, not %s' % type(file_))
-
         if isinstance(file_, basestring):
             file_ = open(file_, 'r')
         # skip blank lines:
@@ -1691,7 +1435,7 @@ def arr(shape=None, element_type=float,
 def _test():
     _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:
-    a = array(range(27))
+    a = array(list(range(27)))
     a.shape = (3,3,3)
     functions = [norm_l2, norm_L2, norm_l1, norm_L1, norm_inf]
     results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]

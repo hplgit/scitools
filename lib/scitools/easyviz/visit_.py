@@ -33,7 +33,7 @@ from __future__ import division
 
 from common import *
 from scitools.globaldata import DEBUG, VERBOSE
-from scitools.misc import check_if_module_exists 
+from scitools.misc import check_if_module_exists
 
 import os
 import tempfile
@@ -53,10 +53,10 @@ class VisitBackend(BaseClass):
     def __init__(self):
         BaseClass.__init__(self)
         self._init()
-        
+
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
-        
+
         self.figure(self.getp('curfig'))
         self._g.IconifyAllWindows()
 
@@ -77,7 +77,7 @@ class VisitBackend(BaseClass):
             'p': None,  # pentagram
             'h': None,  # hexagram
             }
-                        
+
         self._colors = {
             '': None,            # no color --> blue
             'r': (255,0,0),      # red
@@ -89,9 +89,9 @@ class VisitBackend(BaseClass):
             'k': (0,0,0),        # black
             'w': (255,255,255),  # white
             }
-        
+
         self._line_styles = {
-            '': None, # no line 
+            '': None, # no line
             '-': 0,   # solid line
             ':': 2,   # dotted line
             '-.': 3,  # dash-dot line
@@ -154,7 +154,7 @@ class VisitBackend(BaseClass):
         # add a text label on z-axis
         aa.SetZAxisUserTitleFlag(True)
         aa.SetZAxisUserTitle(zlabel)
-        
+
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
@@ -174,7 +174,7 @@ class VisitBackend(BaseClass):
         # FIXME: This is a problem:
         # surf(peaks(21),title='Simple plot')
         # contour(peaks(21))  # title is still present
-    
+
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
@@ -247,7 +247,7 @@ class VisitBackend(BaseClass):
             # daspectmode is 'auto'. Plotting package handles data
             # aspect ratio automatically.
             pass
-        
+
     def _set_axis_method(self, ax):
         method = ax.getp('method')
         if method == 'equal':
@@ -272,7 +272,7 @@ class VisitBackend(BaseClass):
         Use either the default Cartesian coordinate system or a
         matrix coordinate system.
         """
-        
+
         direction = ax.getp('direction')
         if direction == 'ij':
             # Use matrix coordinates. The origin of the coordinate
@@ -293,7 +293,7 @@ class VisitBackend(BaseClass):
             print "Setting box"
         state = ax.getp('box')
         self._aa.SetBboxFlag(state)
-        
+
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
@@ -381,7 +381,7 @@ class VisitBackend(BaseClass):
             v3D.SetViewUp(0,0,1)
             v3D.SetViewNormal(-0.5,-0.8,0.4)
             v3D.SetImageZoom(1.0)
-            
+
             if cam.getp('cammode') == 'manual':
                 # for advanced camera handling:
                 roll = cam.getp('camroll')
@@ -462,7 +462,7 @@ class VisitBackend(BaseClass):
 """# vtk DataFile Version 2.0
 vtk file written by scitools.easyviz
 ASCII
-           
+
 DATASET STRUCTURED_GRID
 DIMENSIONS %d %d 1
 POINTS %d float
@@ -470,7 +470,7 @@ POINTS %d float
         for j in range(ny):
             for i in range(nx):
                 f.write("%s %s %s\n" % (x[i,j],y[i,j],z[i,j]))
-   
+
         f.write("""
 POINT_DATA %d
 SCALARS scalars float
@@ -503,7 +503,7 @@ LOOKUP_TABLE default
         f.write("""# vtk DataFile Version 2.0
 vtk file written by scitools.easyviz
 ASCII
-           
+
 DATASET STRUCTURED_GRID
 DIMENSIONS %d %d %d
 POINTS %d float
@@ -512,7 +512,7 @@ POINTS %d float
             for j in range(ny):
                 for k in range(nz):
                     f.write("%s %s %s\n" % (x[i,j,k],y[i,j,k],z[i,j,k]))
-   
+
         f.write("""
 POINT_DATA %d
 SCALARS scalars float
@@ -530,7 +530,7 @@ LOOKUP_TABLE default
         Return the line marker, line color, line style, and
         line width of the item.
         """
-        
+
         marker = self._markers[item.getp('linemarker')]
         color = self._colors[item.getp('linecolor')]
         style = self._line_styles[item.getp('linetype')]
@@ -572,7 +572,7 @@ LOOKUP_TABLE default
             z = 0.0*z
         db = self._generate_2D_database(x,y,z,c,indexing=item.getp('indexing'))
         self._g.OpenDatabase(db)
-        
+
         contours = item.getp('contours')
         if contours:
             # the current item is produced by meshc or surfc and we
@@ -628,7 +628,7 @@ LOOKUP_TABLE default
             z = 0.0*z
         db = self._generate_2D_database(x,y,z,c)
         self._g.OpenDatabase(db)
-        
+
         filled = item.getp('filled')  # draw filled contour plot if True
 
         self._g.AddPlot("Contour", "scalars")
@@ -663,7 +663,7 @@ LOOKUP_TABLE default
         if item.getp('clabels'):
             # add labels on the contour curves
             pass
-    
+
     def _add_vectors(self, item):
         if DEBUG:
             print "Adding vectors"
@@ -735,7 +735,7 @@ LOOKUP_TABLE default
         db = self._generate_3D_database(x,y,z,v,c,
                                         indexing=item.getp('indexing'))
         self._g.OpenDatabase(db)
-        
+
         self._g.AddPlot("Contour", "scalars")
         ca = self._g.ContourAttributes()
         if DEBUG:
@@ -810,7 +810,7 @@ LOOKUP_TABLE default
 
             fig._g = visit
             fig._tmpfiles = []  # store all tmp files here
-            
+
         self._g = fig._g  # link for faster access
         return fig
 
@@ -819,7 +819,7 @@ LOOKUP_TABLE default
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
             print "Doing replot in backend"
-        
+
         fig = self.gcf()
         ok = self._g.SetActiveWindow(self.getp('curfig'))
         if not ok:
@@ -831,13 +831,13 @@ LOOKUP_TABLE default
             self._g.CloseDatabase(tmpfname)
             os.remove(tmpfname)
         fig._tmpfiles = []
-        
+
         self._set_figure_size(fig)
 
         # Prevent the active visualization window from being redrawn until
         # all plots and operators are added:
         self._g.DisableRedraw()
-        
+
         nrows, ncolumns = fig.getp('axshape')
         for axnr, ax in fig.getp('axes').items():
             self._ax = ax
@@ -884,7 +884,7 @@ LOOKUP_TABLE default
 
     def hardcopy(self, filename, **kwargs):
         """
-        Supported extensions: 
+        Supported extensions:
 
           '.ps'    (PostScript)
           '.jpeg'  (Joint Photographic Experts Group)
@@ -902,12 +902,14 @@ LOOKUP_TABLE default
 
         The first seven formats are image file formats, while the last six
         are geometry file formats.
+        If `filename` contains just the file extension, say ``.png``,
+        it is saved to ``tmp.png``.
 
         Optional arguments:
 
           maintain_aspect -- Set whether to maintain the aspect ratio for the
                          image at 1:1. If True (default), the image's width
-                         and height will be forced to be the same. 
+                         and height will be forced to be the same.
           size        -- Set the image size. This option must be given as a
                          tuple (width,height). Default is (1024,1024).
           orientation -- Use either 'portrait' (default) or 'landscape'
@@ -941,7 +943,7 @@ LOOKUP_TABLE default
                            * 'packbits' - Fast lossless method (default)
                            * 'jpeg'     - Lossy compression
                            * 'deflate'  - Lossless compression (zip)
-                           
+
           force_merge -- FIXME
 
         Example on how to use the backend directly to save a hardcopy of
@@ -955,6 +957,9 @@ LOOKUP_TABLE default
         >>> g.SetSaveWindowAttributes(swa)
         >>> g.SaveWindow()
         """
+        if filename.startswith('.'):
+            filename = 'tmp' + filename
+
         self.setp(**kwargs)
         color = self.getp('color')
         replot = kwargs.get('replot', True)
@@ -1012,7 +1017,7 @@ LOOKUP_TABLE default
 
         force_merge = kwargs.get('force_merge', False)
         swa.SetForceMerge(force_merge)
-        
+
         if DEBUG:
             print "\nSaveWindowAttributes:\n", swa
         self._g.SetSaveWindowAttributes(swa)
@@ -1024,7 +1029,7 @@ LOOKUP_TABLE default
         BaseClass.clf(self)
         self._g.ClearWindow()
 
-           
+
     # Colormap methods:
     def hsv(self, m=64):
         return 'rainbow'
@@ -1047,7 +1052,7 @@ LOOKUP_TABLE default
                         m2.__doc__ = ""
                     m2.__doc__ = m1.__doc__ + m2.__doc__
 
-    
+
 plt = VisitBackend()  # create backend instance
 use(plt, globals())   # export public namespace of plt to globals()
 backend = os.path.splitext(os.path.basename(__file__))[0][:-1]
