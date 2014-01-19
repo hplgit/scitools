@@ -69,6 +69,7 @@ for line in infile:
     else:
         outfile.write(line)
 infile.close();  outfile.close()
+os.remove(config_file + '.old~~')
 
 if  __file__ == 'setupegg.py':
     # http://peak.telecommunity.com/DevCenter/setuptools
