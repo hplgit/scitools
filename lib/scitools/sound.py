@@ -18,7 +18,7 @@ def write(data, filename, channels=1, sample_width=2, sample_rate=44100):
 def read(filename):
     """
     Read sound data in a file and return the data as an array
-    with data type numpy.int16.
+    with data type numpy.int16, together with the sampling rate and number of channels
     """
     ifile = wave.open(filename)
     channels = ifile.getnchannels()
@@ -27,7 +27,7 @@ def read(filename):
     frames = ifile.getnframes()
     data = ifile.readframes(frames)
     data = numpy.fromstring(data, dtype=numpy.uint16)
-    return data.astype(numpy.int16)
+    return data.astype(numpy.int16),sample_rate,channels
 
 def play(soundfile, player=None):
     """
