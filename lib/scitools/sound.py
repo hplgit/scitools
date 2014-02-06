@@ -1,37 +1,40 @@
-import math, numpy, wave, commands, sys, os
+iimport math, numpy, wave, commands, sys, os
 
 max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
-def write(data, filename, channels=1, sample_width=2, sample_rate=44100):
+def write(data, sample_rate, filename):
     """
-    Writes the array data to the specified file.
-    The array data type can be arbitrary as it will be
-    converted to numpy.int16 in this function.
-    """
+        Writes the array data to the specified filename.
+        The array data type can be arbitrary as it will be
+        converted to numpy.int16 in this function.
+        """
     ofile = wave.open(filename, 'w')
-    ofile.setnchannels(channels)
-    ofile.setsampwidth(sample_width)
+    m,n=numpy.shape(data)
+    ofile.setnchannels(n)
+    ofile.setsampwidth(2)
     ofile.setframerate(sample_rate)
-    ofile.writeframesraw(data.astype(numpy.int16).tostring())
+    newdata=data.flatten()
+    ofile.writeframesraw(newdata.astype(numpy.int16).tostring())
     ofile.close()
 
 def read(filename):
     """
-    Read sound data in a file and return the data as an array
-    with data type numpy.int16, together with the sampling rate and number of channels
-    """
+        Read sound data in a file and return the data as an array
+        with data type numpy.int16, together with the sampling rate.
+        Each sound channel will be a column in the array.
+        """
     ifile = wave.open(filename)
     channels = ifile.getnchannels()
-    sample_width = ifile.getsampwidth()
     sample_rate = ifile.getframerate()
     frames = ifile.getnframes()
     data = ifile.readframes(frames)
     data = numpy.fromstring(data, dtype=numpy.uint16)
-    return data.astype(numpy.int16),sample_rate,channels
+    sounddata=data.reshape((len(data)/channels,channels))
+    return sounddata.astype(numpy.int16),sample_rate
 
-def play(soundfile, player=None):
+def play(data, sample_rate, player=None):
     """
-    Play a file with name soundfile or an array soundfile.
+    Play a file with array data.
     (The array is first written to file using the write function
     so the data type can be arbitrary.)
     The player is chosen by the programs 'open' on Mac and 'start'
@@ -40,10 +43,7 @@ def play(soundfile, player=None):
     commands is run.
     """
     tmpfile = 'tmp.wav'
-    if isinstance(soundfile, numpy.ndarray):
-        write(soundfile, tmpfile)
-    elif isinstance(soundfile, str):
-        tmpfile = soundfile
+    write(data, sample_rate, tmpfile)
 
     if player:
         msg = 'Unable to open sound file with %s' %player
@@ -97,8 +97,8 @@ def _test1():
     tone2 = max_amplitude*note(293.66, 1, 1)
     tone3 = max_amplitude*note(440, 1, 0.8)
     data = numpy.concatenate((tone1, tone2, tone3))
-    write(data, filename)
-    data = read(filename)
+    write(data, 44100, filename)
+    data,fs = read(filename)
     play(filename)
 
 def Nothing_Else_Matters(echo=False):
