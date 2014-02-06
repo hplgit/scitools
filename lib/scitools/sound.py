@@ -72,6 +72,26 @@ def play(data, sample_rate, player=None):
         # assume windows
         os.system('start %s' %tmpfile)
 
+def playreverse():
+    """
+        Play the sound backwards
+       """
+    data,sample_rate=read('tmp.wav')
+    m,n=shape(data)
+    play(data[m:0:(-1),:],sample_rate)
+
+def playnoise(c):
+    """
+        Play the sound with noise added. c represens the noise level
+       """
+    data,sample_rate=read('tmp.wav')
+    m,n=numpy.shape(data)
+    data=data.astype(float)
+    data=data+c*(2**15-1)*(2*numpy.random.rand(m,n))
+    data=(2**15-1)*data/abs(data).max()
+    data=data.astype(numpy.int16)
+    play(data,sample_rate)
+
 def note(frequency, length, amplitude=1, sample_rate=44100):
     """
     Generate the sound of a note as an array if float elements.
@@ -98,8 +118,8 @@ def _test1():
     tone3 = max_amplitude*note(440, 1, 0.8)
     data = numpy.concatenate((tone1, tone2, tone3))
     write(data, 44100, filename)
-    data,fs = read(filename)
-    play(filename)
+    data,sample_rate = read(filename)
+    play(data,sample_rate)
 
 def Nothing_Else_Matters(echo=False):
     E1 = note(164.81, .5)
@@ -275,4 +295,4 @@ note2freq = {
 if __name__ == '__main__':
     #_test1()
     song = Nothing_Else_Matters(False)
-    play(song)
+    play(song,44100)
