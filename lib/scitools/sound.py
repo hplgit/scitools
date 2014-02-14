@@ -1,4 +1,4 @@
-iimport math, numpy, wave, commands, sys, os
+import math, numpy, wave, commands, sys, os
 
 max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
@@ -72,19 +72,17 @@ def play(data, sample_rate, player=None):
         # assume windows
         os.system('start %s' %tmpfile)
 
-def playreverse():
+def playreverse(data,sample_rate):
     """
-        Play the sound backwards
-       """
-    data,sample_rate=read('tmp.wav')
-    m,n=shape(data)
+    Play the sound backwards
+    """
+    m,n=numpy.shape(data)
     play(data[m:0:(-1),:],sample_rate)
 
-def playnoise(c):
+def playnoise(data,sample_rate,c=0.1):
     """
-        Play the sound with noise added. c represens the noise level
-       """
-    data,sample_rate=read('tmp.wav')
+    Play the sound with noise added. c represens the noise level, a number between 0 and 1
+    """
     m,n=numpy.shape(data)
     data=data.astype(float)
     data=data+c*(2**15-1)*(2*numpy.random.rand(m,n))
@@ -92,23 +90,28 @@ def playnoise(c):
     data=data.astype(numpy.int16)
     play(data,sample_rate)
 
-def note(frequency, length, amplitude=1, sample_rate=44100):
+def playwithecho(data,sample_rate,beta=0.8, delay=0.1):
     """
-    Generate the sound of a note as an array if float elements.
+    Play the sound with an echo added. beta represents the strength of the echo, delay the delay of the echo
     """
-    time_points = numpy.linspace(0, length, length*sample_rate)
-    data = numpy.sin(2*numpy.pi*frequency*time_points)
-    data = amplitude*data
-    return data
-
-def add_echo(data, beta=0.8, delay=0.1, sample_rate=44100):
     newdata = data.copy()
     shift = int(delay*sample_rate)  # b (math symbol)
     newdata[shift:] = beta*data[shift:] + \
                       (1-beta)*data[:len(data)-shift]
-    #for i in xrange(shift, len(data)):
-    #    newdata[i] = beta*data[i] + (1-beta)*data[i-shift]
-    return newdata
+    play(newdata,sample_rate)
+    
+def note(frequency, length, amplitude=1, sample_rate=44100):
+    """
+    Generate the sound of a note as an array of float elements.
+    """
+    time_points = numpy.linspace(0, length, length*sample_rate)
+    data = numpy.sin(2*numpy.pi*frequency*time_points)
+    data = amplitude*data
+    data=data.reshape((len(data),1))
+    return data
+
+
+
 
 def _test1():
     filename = 'tmp.wav'
@@ -121,7 +124,7 @@ def _test1():
     data,sample_rate = read(filename)
     play(data,sample_rate)
 
-def Nothing_Else_Matters(echo=False):
+def Nothing_Else_Matters():
     E1 = note(164.81, .5)
     G = note(392, .5)
     B = note(493.88, .5)
@@ -144,8 +147,6 @@ def Nothing_Else_Matters(echo=False):
        high3, high4_short, pause_short, high4_long, pause_short,
        high4_medium, high5, high4_short))
     song *= max_amplitude
-    if echo:
-        song = add_echo(song, 0.6)
     return song
 
 # equal-tempered scale:
@@ -294,5 +295,8 @@ note2freq = {
     
 if __name__ == '__main__':
     #_test1()
-    song = Nothing_Else_Matters(False)
+    song = Nothing_Else_Matters()
     play(song,44100)
+    playwithecho(song,44100,0.6,0.5)
+    playreverse(song,44100)
+    playnoise(song,44100,0.1)
