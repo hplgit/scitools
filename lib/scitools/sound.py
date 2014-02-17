@@ -4,43 +4,42 @@ max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
 def write(data, sample_rate, filename):
     """
-        Writes the array data to the specified filename.
-        The array data type can be arbitrary as it will be
-        converted to numpy.int16 in this function.
-        """
+    Writes the array data to the specified filename.
+    The array data type can be arbitrary as it will be
+    converted to numpy.int16 in this function.
+    """
     ofile = wave.open(filename, 'w')
-    m,n=numpy.shape(data)
+    m, n =numpy.shape(data)
     ofile.setnchannels(n)
     ofile.setsampwidth(2)
     ofile.setframerate(sample_rate)
-    newdata=data.flatten()
+    newdata = data.flatten()
     ofile.writeframesraw(newdata.astype(numpy.int16).tostring())
     ofile.close()
 
 def read(filename):
     """
-        Read sound data in a file and return the data as an array
-        with data type numpy.int16, together with the sampling rate.
-        Each sound channel will be a column in the array.
-        """
+    Read sound data in a file and return the data as an array
+    with data type numpy.int16, together with the sampling rate.
+    Each sound channel will be a column in the array.
+    """
     ifile = wave.open(filename)
     channels = ifile.getnchannels()
     sample_rate = ifile.getframerate()
     frames = ifile.getnframes()
     data = ifile.readframes(frames)
     data = numpy.fromstring(data, dtype=numpy.uint16)
-    sounddata=data.reshape((len(data)/channels,channels))
+    sounddata = data.reshape((len(data)/channels,channels))
     return sounddata.astype(numpy.int16),sample_rate
 
 def play(data, sample_rate, player=None):
     """
-    Play a file with array data.
-    (The array is first written to file using the write function
-    so the data type can be arbitrary.)
-    The player is chosen by the programs 'open' on Mac and 'start'
-    on Windows. On Linux, try different open programs for various
-    distributions. If keyword argument 'player' is given, only this spesific
-    commands is run.
+    Play a file with array data.  (The array is first written to file
+    using the write function so the data type can be arbitrary.)  The
+    player is chosen by the programs 'open' on Mac and 'start' on
+    Windows. On Linux, try different open programs for various
+    distributions. If keyword argument `player` is given, only this
+    spesific command is run.
     """
     tmpfile = 'tmp.wav'
     write(data, sample_rate, tmpfile)
@@ -72,34 +71,36 @@ def play(data, sample_rate, player=None):
         # assume windows
         os.system('start %s' %tmpfile)
 
-def playreverse(data,sample_rate):
+def play_reverse(data,sample_rate):
     """
-    Play the sound backwards
+    Play the sound backwards.
     """
-    m,n=numpy.shape(data)
-    play(data[m:0:(-1),:],sample_rate)
+    m,n = numpy.shape(data)
+    play(data[m:0:(-1),:], sample_rate)
 
-def playnoise(data,sample_rate,c=0.1):
+def play_with_noise(data, sample_rate, c=0.1):
     """
-    Play the sound with noise added. c represens the noise level, a number between 0 and 1
+    Play the sound with noise added. `c` represens the noise level,
+    a number between 0 and 1.
     """
-    m,n=numpy.shape(data)
-    data=data.astype(float)
-    data=data+c*(2**15-1)*(2*numpy.random.rand(m,n))
-    data=(2**15-1)*data/abs(data).max()
-    data=data.astype(numpy.int16)
-    play(data,sample_rate)
+    m, n = numpy.shape(data)
+    data = data.astype(float)
+    data = data+c*(2**15-1)*(2*numpy.random.rand(m,n))
+    data = (2**15-1)*data/abs(data).max()
+    data = data.astype(numpy.int16)
+    play(data, sample_rate)
 
-def playwithecho(data,sample_rate,beta=0.8, delay=0.1):
+def play_with_echo(data, sample_rate, beta=0.8, delay=0.1):
     """
-    Play the sound with an echo added. beta represents the strength of the echo, delay the delay of the echo
+    Play the sound with an echo added. `beta` represents the strength
+    of the echo, `delay` the delay of the echo.
     """
     newdata = data.copy()
     shift = int(delay*sample_rate)  # b (math symbol)
     newdata[shift:] = beta*data[shift:] + \
                       (1-beta)*data[:len(data)-shift]
-    play(newdata,sample_rate)
-    
+    play(newdata, sample_rate)
+
 def note(frequency, length, amplitude=1, sample_rate=44100):
     """
     Generate the sound of a note as an array of float elements.
@@ -109,8 +110,6 @@ def note(frequency, length, amplitude=1, sample_rate=44100):
     data = amplitude*data
     data=data.reshape((len(data),1))
     return data
-
-
 
 
 def _test1():
@@ -146,6 +145,26 @@ def Nothing_Else_Matters():
        high1_short, high2, high1_short, high3, high1_short,
        high3, high4_short, pause_short, high4_long, pause_short,
        high4_medium, high5, high4_short))
+    song *= max_amplitude
+    return song
+
+def Ja_vi_elsker():
+    base_freq = 440.0
+    l = .2  # basic duration unit
+    notes = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
+    notes2freq = {notes[i]: base_freq*2**(i/12.0) for i in range(len(notes))}
+
+
+    tones = [('E', 3*l), ('D', l), ('C#', 2*l), ('B', 2*l), ('A', 2*l),
+             ('B', 2*l), ('C#', 2*l), ('D', 2*l), ('E', 3*l),
+             ('F#', l), ('E', 2*l), ('D', 2*l), ('C#', 4*l)]
+
+    samples = []
+    for tone, duration in tones :
+        s = note(notes2freq[tone], duration)
+        samples.append(s)
+
+    song = numpy.concatenate(samples)
     song *= max_amplitude
     return song
 
@@ -292,11 +311,12 @@ note2freq = {
  'Gb5': 739.99,
  'Gb6': 1479.98,
  'Gb7': 2959.96}
-    
+
 if __name__ == '__main__':
     #_test1()
-    song = Nothing_Else_Matters()
-    play(song,44100)
-    playwithecho(song,44100,0.6,0.5)
-    playreverse(song,44100)
-    playnoise(song,44100,0.1)
+    #song = Nothing_Else_Matters()
+    song = Ja_vi_elsker()
+    play(song, 44100)
+    play_with_echo(song,44100, 0.6, 0.5)
+    play_reverse(song, 44100)
+    play_with_noise(song, 44100, 0.7)
