@@ -85,8 +85,8 @@ def play_with_noise(data, sample_rate, c=0.1):
     """
     m, n = numpy.shape(data)
     data = data.astype(float)
-    data = data+c*(2**15-1)*(2*numpy.random.rand(m,n))
-    data = (2**15-1)*data/abs(data).max()
+    data = data+c*max_amplitude*(2*numpy.random.rand(m,n))
+    data = max_amplitude*data/abs(data).max()
     data = data.astype(numpy.int16)
     play(data, sample_rate)
 
@@ -111,7 +111,52 @@ def note(frequency, length, amplitude=1, sample_rate=44100):
     data=data.reshape((len(data),1))
     return data
 
+def play_square(T, length):
+    sample_rate = 44100
+    samplesperperiod = sample_rate*T
+    oneperiod = numpy.hstack([numpy.ones((1, samplesperperiod/2)), -numpy.ones((1, samplesperperiod/2))])
+    oneperiod = max_amplitude*numpy.asarray(oneperiod)
+    data = numpy.tile(oneperiod,(1,length/T))
+    data = data.astype(numpy.int16)
+    m, n = numpy.shape(data)
+    data = data.reshape(n, 1)
+    play(data, sample_rate)
 
+def play_square_fourier(T, length, N):
+    sample_rate = 44100
+    t = numpy.linspace(0, length, sample_rate*length)
+    data = numpy.zeros(t.size)
+    for n in range(1,N+1,2):
+        data = data + numpy.sin(2*numpy.pi*n*t/T)/n
+    data = data*4/numpy.pi
+    data = max_amplitude*data/max(abs(data))
+    data = data.astype(numpy.int16)
+    data = data.reshape(len(data), 1)
+    play(data, sample_rate)
+
+def play_triangle(T, length):
+    sample_rate = 44100
+    samplesperperiod = sample_rate*T
+    oneperiod = numpy.hstack([numpy.linspace(-1, 1, samplesperperiod/2), numpy.linspace(1, -1, samplesperperiod/2)])
+    oneperiod = max_amplitude*numpy.asarray(oneperiod)
+    data = numpy.tile(oneperiod, (1, length/T))
+    data = data.astype(numpy.int16)
+    m, n = numpy.shape(data)
+    data = data.reshape(n, 1)
+    play(data, sample_rate)
+
+def play_triangle_fourier(T, length, N):
+    sample_rate = 44100
+    t = numpy.linspace(0, length, sample_rate*length)
+    data = numpy.zeros(t.size)
+    for n in range(1,N+1,2):
+        data = data - numpy.cos(2*numpy.pi*n*t/T)/n**2
+    data = data*8/(numpy.pi**2)
+    data = max_amplitude*data/max(abs(data))
+    data = data.astype(numpy.int16)
+    data = data.reshape(len(data), 1)
+    play(data,sample_rate)
+    
 def _test1():
     filename = 'tmp.wav'
 
@@ -320,3 +365,7 @@ if __name__ == '__main__':
     play_with_echo(song,44100, 0.6, 0.5)
     play_reverse(song, 44100)
     play_with_noise(song, 44100, 0.7)
+    play_square(1/440.0, 3)
+    play_square_fourier(1/440.0, 3, 9)
+    play_triangle(1/440.0, 3)
+    play_triangle_fourier(1/440.0, 3, 3)
