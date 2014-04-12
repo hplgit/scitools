@@ -1,12 +1,15 @@
 .. Automatically generated reST file from Doconce source
-   (http://code.google.com/p/doconce/)
+   (https://github.com/hplgit/doconce/)
+
+
+.. |nbsp| unicode:: 0xA0
+   :trim:
 
 Easyviz Documentation
 =====================
 
 :Author: H. P. Langtangen, J. H. Ring
-
-:Date: Aug 31, 2012
+:Date: Apr 12, 2014
 
 Easyviz
 =======
@@ -57,7 +60,7 @@ The present documentation is available in a number of formats:
   * `Doconce source <https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt>`_
 
 The documentation is written in the
-`Doconce <http://code.google.com/p/doconce>`_
+`Doconce <https://github.com/hplgit/doconce>`_
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
@@ -66,7 +69,8 @@ OpenOffice, RTF, Word, and plain untagged ASCII).
 Guiding Principles
 ------------------
 
-*First principle.* Array data can be plotted with a minimal
+**First principle.**
+Array data can be plotted with a minimal
 set of keystrokes using a Matlab-like syntax. A simple
 
 
@@ -133,7 +137,8 @@ as an elevated surface with colors using these commands:
               show=True)
 
 
-*Second princple.* Easyviz is just a unified interface to other
+**Second princple.**
+Easyviz is just a unified interface to other
 plotting packages that can be called from Python. Such plotting
 packages are referred to as backends. Several backends are supported:
 Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
@@ -152,7 +157,8 @@ plotting backend can remain flexible. This will also allow old scripts
 to work with new fancy plotting packages in the future if Easyviz
 backends are written for those packages.
 
-*Third principle.* The Easyviz interface is minimalistic, aimed at
+**Third principle.**
+The Easyviz interface is minimalistic, aimed at
 rapid prototyping of plots. This makes the Easyviz code easy to read
 and extend (e.g., with new backends). If you need more sophisticated
 plotting, like controlling tickmarks, inserting annotations, etc., you
@@ -294,6 +300,8 @@ command produces files with images in various formats:
 
         savefig('tmp1.eps') # produce PostScript
         savefig('tmp1.png') # produce PNG
+        savefig('tmp1.pdf') # produce PDF
+        savefig('tmp1.svg') # produce SVG (not supported in all backends)
 
 An alternative name for ``savefig`` is ``hardcopy``:
 
@@ -301,9 +309,10 @@ An alternative name for ``savefig`` is ``hardcopy``:
 
         hardcopy('tmp1.eps') # produce PostScript
         hardcopy('tmp1.png') # produce PNG
+        hardcopy('tmp1.pdf') # produce PDF
 
 The filename extension determines the format: ``.ps`` or
-``.eps`` for PostScript, and ``.png`` for PNG.
+``.eps`` for PostScript, ``.png`` for PNG, ``.pdf`` for PDF, and ``.svg`` for SVG.
 Figures :ref:`fig:plot1a:g` and :ref:`fig:plot1a:m` display the resulting
 image file with the plot, as generated
 with the Gnuplot and Matplotlib plotting packages, respectively.
@@ -340,20 +349,23 @@ add
         raw_input('Press the Return key to quit: ')
 
 at the end of the program. The plot window is killed when the program
-terminates, and this satement postpones the termination until the user
+terminates, and this statement postpones the termination until the user
 hits the Return key.
 
 Controlling Line Styles
 -----------------------
 
-By default, Easyviz plots a curve with a solid line of thickness 2 and
-markers of size 2 at each data point. This default behavior is
-inspired by the usual needs to include thicker lines and markers to
+By default, Easyviz plots a curve with a solid line of thickness 1 and
+markers at each data point. If the number of data points exceeds 61,
+just 15 equally spaced markers are drawn to avoid cluttering the plot.
+This default behavior is
+inspired by the usual needs to include markers to
 distinguish multiple curves plots, especially if image files are to
 appear in black and white in printed reports.  However, the line style
-can easily be controlled by adding a string ``s`` after the ``y``
+and markers can easily be controlled by adding a string ``s`` after the ``y``
 argument: ``plot(x, y, s)``. The syntax of the string ``s`` is inspired by
-Matlab. For example, ``r-`` means a red solid line of unit thickness
+Matlab. For example, ``r-`` means a red solid line of unit thickness and
+no markers
 (see Figure :ref:`fig:plot1a:rs`), ``r--`` means a red dashed line, ``r-o``
 means a red solid line with circles as markers at each data point,
 ``r--o`` is the same except that the line is dashed. In general, if ``s``
@@ -646,7 +658,7 @@ The default location of the legends is dependent on the backend
 the most optimal location, like Matplotlib). One can control
 the location by the ``loc`` keyword to the ``legend`` function, e.g.,
 
-.. code-block:: py
+.. code-block:: text
 
 
         legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
@@ -657,7 +669,7 @@ of the axes. The keyword argument ``fancybox`` draws a box around
 the legends if ``True``, otherwise no box is drawn. The corresponding
 keywords for the ``plot`` function are ``legend_loc`` and ``legend_fancybox``:
 
-.. code-block:: py
+.. code-block:: text
 
 
         plot(t, y1, t, y2, xlabel='t', ylabel='y',
@@ -791,7 +803,8 @@ the Gnuplot program one can view the effect in Figure :ref:`fig:plot2g`.
 
 
 
-*Another Example.* Let us extend the previous example with a third
+**Another Example.**
+Let us extend the previous example with a third
 curve where the data points are slightly randomly distributed around
 the :math:`f_2(t)` curve:
 
@@ -830,18 +843,19 @@ the :math:`f_2(t)` curve:
         savefig('tmp3.eps')   # or hardcopy
         savefig('tmp3.png')   # or hardcopy
 
-The plot is shown in Figure :ref:`fig:plot3`.
+The plot is shown in Figure :ref:`fig:plot2p`.
 
 
-.. _fig:plot3:
+.. _fig:plot2p:
 
-.. figure:: figs/plot3.png
+.. figure:: figs/plot2p.png
    :width: 400
 
    *A plot with three curves*
 
 
-*Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
+**Minimalistic Typing.**
+When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
@@ -853,15 +867,17 @@ comparing the two sample functions we have used in the previous examples:
         plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
 
 
-*Text.* A text can be placed at a point :math:`(x,y)` using the call
+**Text.**
+A text can be placed at a point :math:`(x,y)` using the call
 
-.. code-block:: py
+.. code-block:: text
 
 
         text(x, y, 'Some text')
 
 
-*More Examples.* The examples in this tutorial, as well as
+**More Examples.**
+The examples in this tutorial, as well as
 additional examples, can be found in the ``examples`` directory in the
 root directory of the SciTools source code tree.
 
@@ -885,7 +901,7 @@ All the Easyviz commands can of course be issued in an interactive
 Python session. The only thing to comment is that the ``plot`` command
 returns a result:
 
-.. code-block:: py
+.. code-block:: text
 
 
         >>> t = linspace(0, 3, 51)
@@ -900,7 +916,7 @@ particular type of plot. The ``plot`` command returns a list of
 objects can be invoked to see, for instance, the value of different
 parameters in the plot:
 
-.. code-block:: py
+.. code-block:: text
 
 
         >>> line, = plot(x, y, 'b')
@@ -915,65 +931,94 @@ parameters in the plot:
 Such output is mostly of interest to advanced users.
 
 
-.. _easyviz:movie:
+.. _easyviz:plot3:
 
-Making Animations
------------------
+Curves in 3D Space
+------------------
 
-A sequence of plots can be combined into an animation and stored in a
-movie file. First we need to generate a series of hardcopies, i.e.,
-plots stored in files.  Thereafter we must use a tool to combine the
-individual plot files into a movie file.
-
-*Example.* The function
-:math:`f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}`
-is known as the Gaussian function or the probability density function
-of the normal (or Gaussian) distribution.  This bell-shaped function is
-"wide" for large :math:`s` and "peak-formed" for small :math:`s`, see Figure
-:ref:`fig:plot4`. The function is symmetric around :math:`x=m` (:math:`m=0` in the
-figure).  Our goal is to make an animation where we see how this
-function evolves as :math:`s` is decreased. In Python we implement the
-formula above as a function ``f(x, m, s)``.
+Easyviz also supports curves in 3D space through the ``plot3`` function.
+It works as ``plot``, except that it accepts three coordinates:
+``plot3(x, y, z, 'b-')``. Here is an example of how to
+plot the parametric curve
 
 
-.. _fig:plot4:
+.. math::
+        
+        x(t) &= (2t+2)\sin(10t),\\
+        y(t) &= (2t+2)\cos(10t),\\
+        z(t) &= t,
+        
 
-.. figure:: figs/plot4.png
-   :width: 400
-
-   *Different shapes of a Gaussian function*
-
-
-The animation is created by varying :math:`s` in a loop and for each :math:`s`
-issue a ``plot`` command. A moving curve is then visible on the screen.
-One can also make a movie file that can be played as any other
-computer movie using a standard movie player. To this end, each plot
-is saved to a file, and all the files are combined together using some
-suitable tool, which is reached through the ``movie`` function in
-Easyviz. All necessary steps will be apparent in the complete program
-below, but before diving into the code we need to comment upon a
-couple of issues with setting up the ``plot`` command for animations.
-
-The underlying plotting program will normally adjust the :math:`y` axis to the
-maximum and minimum values of the curve if we do not specify the axis
-ranges explicitly. For an animation such automatic axis adjustment is
-misleading - the axis ranges must be fixed to avoid a jumping
-axis. The relevant values for the axis range is the minimum and
-maximum value of :math:`f`. The minimum value is zero, while the maximum
-value appears for :math:`x=m` and increases with decreasing :math:`s`. The range
-of the :math:`y` axis must therefore be :math:`[0,f(m; m, \min s)]`.
-
-The function :math:`f` is defined for all :math:`-\infty < x < \infty`, but the
-function value is very small already :math:`3s` away from :math:`x=m`. We may therefore
-limit the :math:`x` coordinates to :math:`[m-3s,m+3s]`.
-
-Now we are ready to take a look at the complete code
-for animating how the Gaussian function evolves as the :math:`s` parameter
-is decreased from 2 to 0.2:
+for :math:`t\in [-5,5]`. The corresponding code reads
 
 
 .. code-block:: python
 
+        from scitools.std import *
+        t = linspace(-5, 5, 501)
+        x = (2+t**2)*sin(10*t)
+        y = (2+t**2)*cos(10*t)
+        z = t
+        plot3(x, y, z, 'r-')
+        grid('on')
+        xlabel('x(t)')
+        ylabel('y(t)')
+        zlabel('z(t)')
+        title('plot3 example')
+        !et
+        Figure ref{fig:plot3} shows the resulting plot.
+        The file `examples/plot3_demo.py` contains this and more examples.
+        
+        FIGURE: [figs/plot3_demo, width=400] Example of curve in 3D space. label{fig:plot3}
+        
+        ===== Making Animations =====
+        label{easyviz:movie}
+        
+        A sequence of plots can be combined into an animation and stored in a
+        movie file. First we need to generate a series of hardcopies, i.e.,
+        plots stored in files.  Thereafter we must use a tool to combine the
+        individual plot files into a movie file.
+        
+        __Example.__ The function
+        $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$
+        is known as the Gaussian function or the probability density function
+        of the normal (or Gaussian) distribution.  This bell-shaped function is
+        "wide" for large $s$ and "peak-formed" for small $s$, see Figure
+        ref{fig:plot2q}. The function is symmetric around $x=m$ ($m=0$ in the
+        figure).  Our goal is to make an animation where we see how this
+        function evolves as $s$ is decreased. In Python we implement the
+        formula above as a function `f(x, m, s)`.
+        
+        FIGURE:[figs/plot2q, width=400] Different shapes of a Gaussian function. label{fig:plot2q}
+        
+        The animation is created by varying $s$ in a loop and for each $s$
+        issue a `plot` command. A moving curve is then visible on the screen.
+        One can also make a movie file that can be played as any other
+        computer movie using a standard movie player. To this end, each plot
+        is saved to a file, and all the files are combined together using some
+        suitable tool, which is reached through the `movie` function in
+        Easyviz. All necessary steps will be apparent in the complete program
+        below, but before diving into the code we need to comment upon a
+        couple of issues with setting up the `plot` command for animations.
+        
+        The underlying plotting program will normally adjust the $y$ axis to the
+        maximum and minimum values of the curve if we do not specify the axis
+        ranges explicitly. For an animation such automatic axis adjustment is
+        misleading - the axis ranges must be fixed to avoid a jumping
+        axis. The relevant values for the axis range is the minimum and
+        maximum value of $f$. The minimum value is zero, while the maximum
+        value appears for $x=m$ and increases with decreasing $s$. The range
+        of the $y$ axis must therefore be $[0,f(m; m, \min s)]$.
+        
+        The function $f$ is defined for all $-\infty < x < \infty$, but the
+        function value is very small already $3s$ away from $x=m$. We may therefore
+        limit the $x$ coordinates to $[m-3s,m+3s]$.
+        
+        Now we are ready to take a look at the complete code
+        for animating how the Gaussian function evolves as the $s$ parameter
+        is decreased from 2 to 0.2:
+        
+        !bc pypro
         from scitools.std import *
         import time
         
@@ -1009,7 +1054,8 @@ Also note that we, simply because we think it is visually more
 attractive, let the :math:`y` axis go from -0.1 although the :math:`f` function is
 always greater than zero.
 
-*Remarks on Filenames.* For each frame (plot) in the movie we store the plot in a file.  The
+**Remarks on Filenames.**
+For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
 of the form ``tmp0001.png``, ``tmp0002.png``, ``tmp0003.png``, etc.  The
@@ -1059,7 +1105,8 @@ and later delete the subfolder. Here is a suitable code segment:
         os.chdir(os.pardir)        # optional: move up to parent folder
 
 
-*Movie Formats.* Having a set of (e.g.) ``tmp*.png`` files, one can simply generate a movie by
+**Movie Formats.**
+Having a set of (e.g.) ``tmp*.png`` files, one can simply generate a movie by
 a ``movie('tmp*.png')`` call. The format of the movie is determined by
 which video encoders that are installed on the computer. The ``movie``
 function runs through a list of encoders (``convert``, ``mencoder``,
@@ -1135,7 +1182,7 @@ quantization scale):
 
 Here is yet another example:
 
-.. code-block:: py
+.. code-block:: text
 
 
         movie('tmp_*.png', encoder='ffmpeg',
@@ -1153,7 +1200,8 @@ show the file in a web page with the HTML command
 for example, the
 ``myplayer``, ``vlc``, or ``totem`` programs.
 
-*Making Movies in Batch.* Sometimes it is desired to carry out
+**Making Movies in Batch.**
+Sometimes it is desired to carry out
 large numbers of computer experiments and create movies in each
 individual experiments. Then one probably does not want to have
 the screen full of movie windows. To turn off showing the movie
@@ -1300,7 +1348,7 @@ to investigate.
 
 An appropriate import statement is
 
-.. code-block:: py
+.. code-block:: text
 
 
         from scitools.MovingPlotWindow import MovingPlotWindow
@@ -1327,7 +1375,7 @@ The Easyviz backend can either be set in a configuration file (see
 importing a special backend in the program, or by adding a
 command-line option
 
-.. code-block:: py
+.. code-block:: text
 
 
          --SCITOOLS_easyviz_backend name
@@ -1395,14 +1443,14 @@ Configuration File".
 Many discourage the use of "star import" as shown above. For example,
 the standard import of Numerical Python in all of its documentation is
 
-.. code-block:: py
+.. code-block:: text
 
 
         import numpy as np
 
 A similar import for SciTools and Easyviz is
 
-.. code-block:: py
+.. code-block:: text
 
 
         import scitools.std as st
@@ -1412,7 +1460,7 @@ Although ``np`` functions are important into the namespace of ``st`` in
 this case, we recommend to distinguish the packages when using a prefix.
 A typical plotting example will then read
 
-.. code-block:: py
+.. code-block:: text
 
 
         x = np.linspace(0, 3, 51)
@@ -1423,13 +1471,59 @@ A typical plotting example will then read
 The corresponding syntax for the
 minimalistic import of ``scitools.easyviz`` and ``numpy`` reads
 
-.. code-block:: py
+.. code-block:: text
 
 
         import scitools.easyviz as ev
         import numpy as np
 
 
+Embedding Plots in HTML without Using Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Web applications may prefer to get the plot as a string from the
+plotting software and embed this string directly in HTML. This is
+easy: if the filename for the ``savefig`` command contains just the
+extension, say ``.png``, and the backend supports storing the plot
+in a string in PNG format, the string is returned. Otherwise, just
+``None`` is returned. Any any case, a filename of ``.png`` implies
+that the plot is also store in the file ``tmp.png``. The only
+backend that can return the plot as a string is ``matplotlib``.
+
+Here is a recipe on how to create a plot as a string in PNG and SVG
+format and embed the strings directly in HTML:
+
+
+.. code-block:: python
+
+        from scitools.std import plot, savefig, linspace
+        
+        x = linspace(0, 1, 10)
+        plot(x, y)
+        figdata_svg = savefig('.svg')  # create tmp.svg anyway
+        figdata_png = savefig('.png')  # create tmp.ong anyway
+        if figdata_svg is not None and figdata_png is not None:
+            # Turn PNG data to base64 format
+            import base64
+            figdata_png = base64.b64encode(figdata_png)
+            f = open('tmp.html', 'w')
+            f.write("""
+        Embedded SVG XML code:<br>
+        %(figdata_svg)s
+        <br>
+        Embedded PNG data:<br>
+        <img src="data:image/png;base64,%(figdata_png)s" width=500><br>
+        Using img tag for SVG file:<br>
+        <img alt="Embedded SVG image" src="tmp.svg" width=500><br>
+        Using img tag for PNG file:<br>
+        <img alt="Embedded PNG image" src="tmp.png" width=500><br>
+        Using object embedding:<br>
+        <object data="tmp.svg" type="image/svg+xml"></object>
+        """ % vars())
+            f.close()
+
+The ``examples/plot2r.py`` file contains a demo of this kind where the
+HTML page can be viewed in a browser.
 
 Setting Parameters in the Configuration File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1440,7 +1534,7 @@ configuration file, called ``scitools.cfg`` has several sections
 controlling the behavior of plotting can be set. For example, the
 backend for Easyviz can be controlled with the ``backend`` parameter:
 
-.. code-block:: py
+.. code-block:: text
 
 
         [easyviz]
@@ -1449,7 +1543,7 @@ backend for Easyviz can be controlled with the ``backend`` parameter:
 Similarly, Matplotlib's use of LaTeX can be controlled by a boolean
 parameter:
 
-.. code-block:: py
+.. code-block:: text
 
 
         [matplotlib]
@@ -1472,7 +1566,7 @@ Parameters set in the configuration file can also be set directly
 on the command line when running a program. The name of the
 command-line option is
 
-.. code-block:: py
+.. code-block:: text
 
 
         --SCITOOLS_sectionname_parametername
@@ -1482,7 +1576,7 @@ and ``parametername`` is the name of the
 parameter. For example, setting the ``backend`` parameter in the
 ``[easyviz]`` section by
 
-.. code-block:: py
+.. code-block:: text
 
 
         --SCITOOLS_easyviz_backend gnuplot
@@ -1491,7 +1585,7 @@ Here is an example where we use Matplotlib as backend, turn on
 the use of LaTeX in Matplotlib, and avoid the potentially slow import
 of SciPy:
 
-.. code-block:: py
+.. code-block:: text
 
 
         python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
@@ -1652,7 +1746,7 @@ version of the plot:
 
 We can also adjust figure 2:
 
-.. code-block:: py
+.. code-block:: text
 
 
         figure(2)  # go to second figure
@@ -2223,7 +2317,8 @@ Figure :ref:`fig:slice1`.
 .. Slicing with a Surface-object does not work for JHR so far in VTK
 
 
-*Contours in Slice Planes.* With the ``contourslice`` command we can create contour plots
+**Contours in Slice Planes.**
+With the ``contourslice`` command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example
 using 3D scalar field data from the ``flow`` function:
 
@@ -2630,7 +2725,8 @@ backend either.
 
 Some supported visualization programs are commented on below.
 
-*Gnuplot.* Gnuplot is a command-driven interactive or scripted
+**Gnuplot.**
+Gnuplot is a command-driven interactive or scripted
 plotting utility that works on a wide variety of platforms. Gnuplot
 supports many types of plots in both 2D and 3D, including curve plots,
 contour plots, vector plots, and surface plots.  3D scalar and vector
@@ -2638,11 +2734,13 @@ fields are not supported. To access Gnuplot from Python and send NumPy
 arrays to Gnuplot, we use the Python module ``Gnuplot``.
 
 
-*Matlab.* Many view Matlab as the de facto standard for making curves
+**Matlab.**
+Many view Matlab as the de facto standard for making curves
 and plots of 2D scalar/vector fields.
 
 
-*Matplotlib.* Matplotlib is now quickly gaining wide popularity in
+**Matplotlib.**
+Matplotlib is now quickly gaining wide popularity in
 the scientific Python community and has established itself as the de
 facto standard for curve plotting and 2D contour and (recently) surface
 plotting. The interface to Matplotlib is Matlab-insipired, and
@@ -2656,34 +2754,39 @@ underlying Matplotlib from Easyviz and call all the functionality of
 Matplotlib directly.
 
 
-*Grace.* Grace is a highly interactive curve plotting program on the
+**Grace.**
+Grace is a highly interactive curve plotting program on the
 Unix/X11 platform which has been popular for many years. It does not
 support 2D or 3D scalar or vector fields. However, it has a lot of
 functionality for computing with curves and adjusting/fine-tuning
 plots interactively.
 
 
-*PyX.* PyX is a Python package for the creation of PostScript and
+**PyX.**
+PyX is a Python package for the creation of PostScript and
 PDF files. It combines an abstraction of the PostScript drawing model
 with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
 publication-ready quality are built out of these primitives.
 
 
-*Pmw.Blt.Graph.* Pmw (Python Mega Widgets) extends the Tkinter
+**Pmw.Blt.Graph.**
+Pmw (Python Mega Widgets) extends the Tkinter
 package with more sophisticated widgets, included an interactive
 widget for curve plotting. This widget is based on the BLT package
 (an extension of Tk written in C).
 The BLT backend offers currenlty only basic plotting functionality.
 
 
-*Veusz.* From http://home.gna.org/veusz<Veusz homepage>: Veusz is a
+**Veusz.**
+From `<http://home.gna.org/veusz<Veusz>`_ homepage>: Veusz is a
 GUI scientific plotting and graphing package. It is designed to
 produce publication-ready Postscript or PDF output. SVG, EMF and
 bitmap formats export are also supported. Veusz has a comprehensive
 GUI and produces really high-quality plots.
 
 
-*VTK.* VTK (Visualization ToolKit) is a package primarily aimed at
+**VTK.**
+VTK (Visualization ToolKit) is a package primarily aimed at
 visualizing 2D and 3D scalar and vector fields by a range of techniques.
 VTK is used to achieve 2D and 3D visualizations of the same type as 
 Matlab offers. However, VTK can do much more (although the Easyviz 
@@ -2762,7 +2865,7 @@ are set by a ``setp`` method and read by a ``getp`` method. For
 example, we can set the limits on the :math:`x` axis by using the ``setp``
 method in a ``Axis`` instance:
 
-.. code-block:: py
+.. code-block:: text
 
 
         ax = gca()                  # get current axis
@@ -2770,7 +2873,7 @@ method in a ``Axis`` instance:
 
 To extract the values of these limits we can write
 
-.. code-block:: py
+.. code-block:: text
 
 
         xmin = ax.getp('xmin')
@@ -2780,7 +2883,7 @@ Normal use will seldom involve ``setp`` and ``getp`` functions, since most
 users will apply the Matlab-inspired interface and set, e.g., the
 limits by
 
-.. code-block:: py
+.. code-block:: text
 
 
         xlim([-2,2])
@@ -2827,7 +2930,7 @@ list for installation on Debian systems:
 Otherwise, you download the tarball with the SciTools software, pack it out,
 go the ``scitools`` folder, and run the standard command
 
-.. code-block:: py
+.. code-block:: text
 
 
         Unix/DOS> python setup.py install
@@ -2852,14 +2955,16 @@ Installing Gnuplot
 Linux/Unix
 ----------
 
-*Compile from Source.* Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+**Compile from Source.**
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
 easily on most Unix systems. You also need the ``Gnuplot`` Python
 module, which can be obtained from ``gnuplot-py.sourceforge.net``.
 
-*Debian/Ubuntu.* Prebuilt versions are available for Debian/Ubuntu:
+**Debian/Ubuntu.**
+Prebuilt versions are available for Debian/Ubuntu:
 run
 
-.. code-block:: py
+.. code-block:: text
 
 
         apt-get install gnuplot gnuplot-x11 python-gnuplot
@@ -2874,7 +2979,8 @@ Windows
 On Windows, one can either use Gnuplot under Cygwin or use a precompiled
 binary from sourgeforce.net.
 
-*Using the Gnuplot Cygwin package.* In this case there are two things that needs to be changed in the
+**Using the Gnuplot Cygwin package.**
+In this case there are two things that needs to be changed in the
 ``gp_cygwin.py`` file in the top-level directory of the ``Gnuplot.py``
 source tree. First you need to change the ``gnuplot_command`` variable
 to ``gnuplot`` instead of ``pgnuplot.exe``. Then you should change the
@@ -2885,10 +2991,11 @@ and launch X11 by running ``startx`` from a Cygwin prompt. Try to run
 the ``test.py`` script that comes with ``Gnuplot.py``. If everything
 works, Easyviz can use Gnuplot.
 
-*Using Gnuplot Binaries.* First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+**Using Gnuplot Binaries.**
+First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
 A possible URL is
 
-.. code-block:: py
+.. code-block:: text
 
 
         http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
@@ -2898,14 +3005,14 @@ Windows.
 
 Then unzip the ``gp424win32.zip`` file to the folder
 
-.. code-block:: py
+.. code-block:: text
 
 
         C:\gnuplot
 
 Add the folder name
 
-.. code-block:: py
+.. code-block:: text
 
 
         C:\gnuplot\bin
@@ -2916,7 +3023,7 @@ setting environment variables).
 Check out the latest SVN revision of the Python interface to
 Gnuplot, which is the Python module file ``Gnuplot.py``:
 
-.. code-block:: py
+.. code-block:: text
 
 
         svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
@@ -2924,7 +3031,7 @@ Gnuplot, which is the Python module file ``Gnuplot.py``:
 
 Install ``Gnuplot.py``:
 
-.. code-block:: py
+.. code-block:: text
 
 
         cd gnuplot-py
@@ -2934,7 +3041,7 @@ Install ``Gnuplot.py``:
 
 Check out the latest SVN revision of SciTools:
 
-.. code-block:: py
+.. code-block:: text
 
 
         svn co http://scitools.googlecode.com/svn/trunk/ scitools
@@ -2942,7 +3049,7 @@ Check out the latest SVN revision of SciTools:
 
 Install SciTools:
 
-.. code-block:: py
+.. code-block:: text
 
 
         cd scitools
@@ -2956,30 +3063,38 @@ Installing Matplotlib
 
 This is normally just a matter of
 
-.. code-block:: py
+.. code-block:: text
 
 
         python setup.py install
 
 in the root directory of the Matplotlib code.
 
-*Windows.* You can download prebuilt binaries from the Matplotlib home page.
+**Windows.**
+You can download prebuilt binaries from the Matplotlib home page.
 
 Troubleshooting
 ===============
 
-Suddenly my old plots have thick lines and large markers
---------------------------------------------------------
+Suddenly my old plots have markers
+----------------------------------
 
 The default behavior of ``plot(x,y)`` was changed in August, 2012, such
-that the line thickness is 2 and markers are inserted at the data
-points.  The reason is that curves in PNG files printed in black and
+that markers are inserted at the data
+points (of at most 15 markers if the array length exceeds 61).
+The reason is that curves in image files printed in black and
 white (typically in reports) were hard to distinguish with the old
-default behavior (line of thickness 1). The new default behavior is
-better suited for increased use of PNG as file format.
+default behavior (line of thickness 1), especially color plots
+generated by Matplotlib in PNG, EPS, and PDF, and PNG plots generated
+by Gnuplot. The new default behavior is
+better suited for increased use of PNG as file format and Matplotlib
+as plotting engine.
 
 To get the old default behavior, replace ``plot(x,y)`` by
-``plot(x,y,'-')``, or ``plot(x,y,-2)`` if thick lines are desired.
+``plot(x,y,'-')``, or ``plot(x,y,-2)`` if thick lines are desired. The
+colors are automatically chosen so that distinct curves get distinct
+colors. Use ``plot(x, y)`` if you want both colors and markers to be
+automatically chosen.
 
 Can I Perform a Diagnostic Test of Easyviz?
 -------------------------------------------
@@ -2988,7 +3103,7 @@ Yes. It is wise to perform a diagnostic test before reporting any error
 or trouble to the SciTools maintainers. Find the source folder of SciTools
 and go to the ``misc`` subfolder. Run
 
-.. code-block:: py
+.. code-block:: text
 
 
         python diagonstic.py
@@ -3064,14 +3179,14 @@ and/or supported by the Easyviz interface to Matplotlib.
 You then need to explicitly run the script with Gnuplot as plottin
 engine:
 
-.. code-block:: py
+.. code-block:: text
 
 
         python myprogram.py --SCITOOLS_easyviz_backend gnuplot
 
 or you must import gnuplot explicitly in the program:
 
-.. code-block:: py
+.. code-block:: text
 
 
         from scitools.std import *
@@ -3082,7 +3197,7 @@ in the "easyviz" section), or your local version ``.scitools.cfg`` in
 your home folder, or maybe the simplest solution is to reinstall
 SciTools with Gnuplot as plotting engine:
 
-.. code-block:: py
+.. code-block:: text
 
 
         python setup.py install --easyviz_backend gnuplot
@@ -3103,7 +3218,7 @@ Gnuplot
 For the Gnuplot backend you can try the following commands in a
 terminal window:
 
-.. code-block:: py
+.. code-block:: text
 
 
         Unix/DOS> gnuplot
@@ -3121,7 +3236,7 @@ Matplotlib
 
 The following code tests if you have installed Matplotlib correctly:
 
-.. code-block:: py
+.. code-block:: text
 
 
         import matplotlib.pyplot as plt
@@ -3141,7 +3256,7 @@ Can I Easily Turn Off All Plotting?
 Yes, this is very convenient when debugging other (non-plotting) parts
 of a program. Just write
 
-.. code-block:: py
+.. code-block:: text
 
 
         from scitools.std import *
@@ -3157,7 +3272,7 @@ local directory, copied from ``scitools.cfg`` in the SciTools source
 code distribution) has an item for controlling the type of *terminal*
 used by Gnuplot:
 
-.. code-block:: py
+.. code-block:: text
 
 
         [gnuplot]
@@ -3180,7 +3295,7 @@ Trouble with Gnuplot and Threads
 
 When using the Gnuplot backend, the following error may be encountered:
 
-.. code-block:: py
+.. code-block:: text
 
 
         thread.error: can't start new thread
@@ -3211,7 +3326,7 @@ of the Netpbm software, while ``mpeg2enc`` is a part of ``mjpegtools``.
 
 On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the ``movie`` function:
 
-.. code-block:: py
+.. code-block:: text
 
 
         Unix> sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
@@ -3224,7 +3339,7 @@ finding out what can be wrong. Just switching to a different encoder can be
 a quick remedy. The switch is done with the ``encoder`` keyword argument
 to ``movie``, e.g.,
 
-.. code-block:: py
+.. code-block:: text
 
 
         # Make animated GIF movie in the file tmpmovie.gif
@@ -3237,7 +3352,7 @@ I Get Thread Errors with Gnuplot
 
 When plotting inside a loop, e.g.,
 
-.. code-block:: py
+.. code-block:: text
 
 
         for i in some_values:
@@ -3248,7 +3363,7 @@ When plotting inside a loop, e.g.,
 Gnuplot may lead to thread errors. A remedy is to do some plotting
 outside the loop and then only update the data inside the loop:
 
-.. code-block:: py
+.. code-block:: text
 
 
         plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
@@ -3372,6 +3487,8 @@ supported by all backends):
 
   * daspect,
 
+  * dumpfig,
+
   * figure,
 
   * fill,
@@ -3414,6 +3531,8 @@ supported by all backends):
 
   * lines,
 
+  * loadfig,
+
   * loglog,
 
   * material,
@@ -3421,8 +3540,6 @@ supported by all backends):
   * mesh,
 
   * meshc,
-
-  * openfig,
 
   * pcolor,
 
@@ -3491,4 +3608,3 @@ supported by all backends):
   * ylabel,
 
   * zlabel
-

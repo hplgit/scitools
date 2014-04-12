@@ -1,8 +1,7 @@
 #summary Easyviz Documentation
 
 By *H. P. Langtangen* and *J. H. Ring*
-
-==== Aug 31, 2012 ====
+==== Apr 12, 2014 ====
 
 <wiki: toc max_depth="2" />
 
@@ -37,6 +36,7 @@ If you encounter problems with using Easyviz, please visit the
 *Troubleshooting* chapter and the *Installation* chapter at the
 end of the documentation.
 
+
 ==== Easyviz Documentation ====
 
 The present documentation is available in a number of formats:
@@ -50,10 +50,11 @@ The present documentation is available in a number of formats:
   * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt Doconce source]
 
 The documentation is written in the
-[http://code.google.com/p/doconce Doconce]
+[https://github.com/hplgit/doconce Doconce]
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
+
 
 ==== Guiding Principles ====
 
@@ -149,7 +150,6 @@ These three principles and the Easyviz implementation make simple things
 simple and unified, and complicated things are not more complicated than
 they would otherwise be. You can always start out with the simple
 commands - and jump to complicated fine-tuning only when strictly needed.
-
 
 
 == Tutorial ==
@@ -260,14 +260,17 @@ command produces files with images in various formats:
 {{{
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
+savefig('tmp1.pdf') # produce PDF
+savefig('tmp1.svg') # produce SVG (not supported in all backends)
 }}}
 An alternative name for `savefig` is `hardcopy`:
 {{{
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
+hardcopy('tmp1.pdf') # produce PDF
 }}}
 The filename extension determines the format: `.ps` or
-`.eps` for PostScript, and `.png` for PNG.
+`.eps` for PostScript, `.png` for PNG, `.pdf` for PDF, and `.svg` for SVG.
 Figures fig:plot1a:g and fig:plot1a:m display the resulting
 image file with the plot, as generated
 with the Gnuplot and Matplotlib plotting packages, respectively.
@@ -310,19 +313,22 @@ add
 raw_input('Press the Return key to quit: ')
 }}}
 at the end of the program. The plot window is killed when the program
-terminates, and this satement postpones the termination until the user
+terminates, and this statement postpones the termination until the user
 hits the Return key.
 
 ==== Controlling Line Styles ====
 
-By default, Easyviz plots a curve with a solid line of thickness 2 and
-markers of size 2 at each data point. This default behavior is
-inspired by the usual needs to include thicker lines and markers to
+By default, Easyviz plots a curve with a solid line of thickness 1 and
+markers at each data point. If the number of data points exceeds 61,
+just 15 equally spaced markers are drawn to avoid cluttering the plot.
+This default behavior is
+inspired by the usual needs to include markers to
 distinguish multiple curves plots, especially if image files are to
 appear in black and white in printed reports.  However, the line style
-can easily be controlled by adding a string `s` after the `y`
+and markers can easily be controlled by adding a string `s` after the `y`
 argument: `plot(x, y, s)`. The syntax of the string `s` is inspired by
-Matlab. For example, `r-` means a red solid line of unit thickness
+Matlab. For example, `r-` means a red solid line of unit thickness and
+no markers
 (see Figure fig:plot1a:rs), `r--` means a red dashed line, `r-o`
 means a red solid line with circles as markers at each data point,
 `r--o` is the same except that the line is dashed. In general, if `s`
@@ -393,6 +399,8 @@ drawn as solid lines on the screen. The hardcopy chooses automatically
 different line types (solid, dashed, etc.) and not in accordance with
 the line type specification.
 
+
+
 ==== Decorating the Plot ====
 
 The `x` and `y` axes in curve plots should have labels, here `t` and
@@ -450,6 +458,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/plot1c.png
 
 
 ---------------------------------------------------------------
+
+
+
 
 ==== Using Logarithmic Scales ====
 
@@ -640,6 +651,7 @@ either of the packages (however, Matplotlib's keywords to
 `plot`, like `label` and `linewidth`, are not recognized so not all
 syntax is interchangable).
 
+
 ==== Making Multiple Figures ====
 
 The `hold` command either adds a new curve or replaces old curve(s) by
@@ -783,15 +795,15 @@ show()
 savefig('tmp3.eps')   # or hardcopy
 savefig('tmp3.png')   # or hardcopy
 }}}
-The plot is shown in Figure fig:plot3.
+The plot is shown in Figure fig:plot2p.
 
 
 
 ---------------------------------------------------------------
 
-Figure:  A plot with three curves.  (fig:plot3)
+Figure:  A plot with three curves.  (fig:plot2p)
 
-https://scitools.googlecode.com/hg/doc/easyviz/figs/plot3.png
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2p.png
 
 
 ---------------------------------------------------------------
@@ -858,37 +870,62 @@ parameters in the plot:
 }}}
 Such output is mostly of interest to advanced users.
 
-==== Making Animations ====
+
+==== Curves in 3D Space ====
+
+Easyviz also supports curves in 3D space through the `plot3` function.
+It works as `plot`, except that it accepts three coordinates:
+`plot3(x, y, z, 'b-')`. Here is an example of how to
+plot the parametric curve
+
+{{{
+\begin{align*}
+x(t) &= (2t+2)\sin(10t),\\
+y(t) &= (2t+2)\cos(10t),\\
+z(t) &= t,
+\end{align*}
+}}}
+for `t\in [-5,5]`. The corresponding code reads
+
+{{{
+from scitools.std import *
+t = linspace(-5, 5, 501)
+x = (2+t**2)*sin(10*t)
+y = (2+t**2)*cos(10*t)
+z = t
+plot3(x, y, z, 'r-')
+grid('on')
+xlabel('x(t)')
+ylabel('y(t)')
+zlabel('z(t)')
+title('plot3 example')
+}}}
+Figure ref{fig:plot3} shows the resulting plot.
+The file `examples/plot3_demo.py` contains this and more examples.
+
+FIGURE: [figs/plot3_demo, width=400] Example of curve in 3D space. label{fig:plot3}
+
+===== Making Animations =====
+label{easyviz:movie}
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,
 plots stored in files.  Thereafter we must use a tool to combine the
 individual plot files into a movie file.
 
-*Example.* The function
-`f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)`
+__Example.__ The function
+$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
-"wide" for large `s` and "peak-formed" for small `s`, see Figure
-fig:plot4. The function is symmetric around `x=m` (`m=0` in the
+"wide" for large $s$ and "peak-formed" for small $s$, see Figure
+ref{fig:plot2q}. The function is symmetric around $x=m$ ($m=0$ in the
 figure).  Our goal is to make an animation where we see how this
-function evolves as `s` is decreased. In Python we implement the
+function evolves as $s$ is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
 
+FIGURE:[figs/plot2q, width=400] Different shapes of a Gaussian function. label{fig:plot2q}
 
-
----------------------------------------------------------------
-
-Figure:  Different shapes of a Gaussian function. (fig:plot4)
-
-https://scitools.googlecode.com/hg/doc/easyviz/figs/plot4.png
-
-
----------------------------------------------------------------
-
-
-
-The animation is created by varying `s` in a loop and for each `s`
+The animation is created by varying $s$ in a loop and for each $s$
 issue a `plot` command. A moving curve is then visible on the screen.
 One can also make a movie file that can be played as any other
 computer movie using a standard movie player. To this end, each plot
@@ -898,21 +935,21 @@ Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
 couple of issues with setting up the `plot` command for animations.
 
-The underlying plotting program will normally adjust the `y` axis to the
+The underlying plotting program will normally adjust the $y$ axis to the
 maximum and minimum values of the curve if we do not specify the axis
 ranges explicitly. For an animation such automatic axis adjustment is
 misleading - the axis ranges must be fixed to avoid a jumping
 axis. The relevant values for the axis range is the minimum and
-maximum value of `f`. The minimum value is zero, while the maximum
-value appears for `x=m` and increases with decreasing `s`. The range
-of the `y` axis must therefore be `[0,f(m; m, \min s)]`.
+maximum value of $f$. The minimum value is zero, while the maximum
+value appears for $x=m$ and increases with decreasing $s$. The range
+of the $y$ axis must therefore be $[0,f(m; m, \min s)]$.
 
-The function `f` is defined for all `-\infty < x < \infty`, but the
-function value is very small already `3s` away from `x=m`. We may therefore
-limit the `x` coordinates to `[m-3s,m+3s]`.
+The function $f$ is defined for all $-\infty < x < \infty$, but the
+function value is very small already $3s$ away from $x=m$. We may therefore
+limit the $x$ coordinates to $[m-3s,m+3s]$.
 
 Now we are ready to take a look at the complete code
-for animating how the Gaussian function evolves as the `s` parameter
+for animating how the Gaussian function evolves as the $s$ parameter
 is decreased from 2 to 0.2:
 
 {{{
@@ -1220,6 +1257,7 @@ An appropriate import statement is
 from scitools.MovingPlotWindow import MovingPlotWindow
 }}}
 
+
 ==== Advanced Easyviz Topics ====
 
 The information in the previous sections aims at being sufficient for
@@ -1265,6 +1303,7 @@ print 'Available backends:', backends
 There will be quite some output explaining the missing backends and
 what must be installed to use these backends. Be prepared for exceptions
 and error messages too.
+
 
 ==== Importing Just Easyviz ====
 
@@ -1313,6 +1352,50 @@ minimalistic import of `scitools.easyviz` and `numpy` reads
 import scitools.easyviz as ev
 import numpy as np
 }}}
+
+==== Embedding Plots in HTML without Using Files ====
+
+Web applications may prefer to get the plot as a string from the
+plotting software and embed this string directly in HTML. This is
+easy: if the filename for the `savefig` command contains just the
+extension, say `.png`, and the backend supports storing the plot
+in a string in PNG format, the string is returned. Otherwise, just
+`None` is returned. Any any case, a filename of `.png` implies
+that the plot is also store in the file `tmp.png`. The only
+backend that can return the plot as a string is `matplotlib`.
+
+Here is a recipe on how to create a plot as a string in PNG and SVG
+format and embed the strings directly in HTML:
+
+{{{
+from scitools.std import plot, savefig, linspace
+
+x = linspace(0, 1, 10)
+plot(x, y)
+figdata_svg = savefig('.svg')  # create tmp.svg anyway
+figdata_png = savefig('.png')  # create tmp.ong anyway
+if figdata_svg is not None and figdata_png is not None:
+    # Turn PNG data to base64 format
+    import base64
+    figdata_png = base64.b64encode(figdata_png)
+    f = open('tmp.html', 'w')
+    f.write("""
+Embedded SVG XML code:<br>
+%(figdata_svg)s
+<br>
+Embedded PNG data:<br>
+<img src="data:image/png;base64,%(figdata_png)s" width=500><br>
+Using img tag for SVG file:<br>
+<img alt="Embedded SVG image" src="tmp.svg" width=500><br>
+Using img tag for PNG file:<br>
+<img alt="Embedded PNG image" src="tmp.png" width=500><br>
+Using object embedding:<br>
+<object data="tmp.svg" type="image/svg+xml"></object>
+""" % vars())
+    f.close()
+}}}
+The `examples/plot2r.py` file contains a demo of this kind where the
+HTML page can be viewed in a browser.
 
 ==== Setting Parameters in the Configuration File ====
 
@@ -1364,6 +1447,7 @@ of SciPy:
 python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 }}}
+
 
 ==== Working with the Plotting Program Directly ====
 
@@ -1450,6 +1534,7 @@ the underlying plotting package. However, when you need advanced
 features, you must add plotting package-specific code as shown
 above. This principle makes Easyviz a light-weight interface, but
 without limiting the available functionality of various plotting programs.
+
 
 ==== Working with Axis and Figure Objects ====
 
@@ -1608,8 +1693,6 @@ turn_off_plotting(globals())
 All the plot functions now "do nothing" (actually they are `DoNothing`
 objects from `scitools.misc`).
 
-
-
 == Visualization of Scalar Fields ==
 
 A scalar field is a function from space or space-time to a real value.
@@ -1737,6 +1820,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/surf_ex2.png
 
 
 ---------------------------------------------------------------
+
+
+
 
 ==== Contour Plots ====
 
@@ -1916,6 +2002,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/surfc_ex1.png
 
 ---------------------------------------------------------------
 
+
+
+
 ==== Pseudocolor Plots ====
 
 Another way of visualizing a 2D scalar field in Easyviz is the
@@ -1942,6 +2031,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/pcolor_ex1.png
 
 
 ---------------------------------------------------------------
+
+
+
 
 ==== Isosurface Plots ====
 
@@ -2011,6 +2103,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/isosurface2.png
 
 
 ---------------------------------------------------------------
+
+
+
 
 ==== Volumetric Slice Plot ====
 
@@ -2126,6 +2221,7 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/contourslice3.png
 
 
 ---------------------------------------------------------------
+
 
 
 
@@ -2267,6 +2363,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/quiver3_ex1.png
 
 ---------------------------------------------------------------
 
+
+
+
 ==== Stream Plots ====
 
 Stream plots constitute an alternative to arrow plots for visualizing
@@ -2393,6 +2492,18 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/streamribbon_ex1.png
 
 ---------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
 ==== Bar Charts ====
 
 Easyviz also supports a unified interface to simple bar charts.
@@ -2446,7 +2557,6 @@ argument `rotated_barticks=True`.
 
 The demo program in `examples/bar_demo.py` contains additional examples
 and features.
-
 
 
 == Backends ==
@@ -2523,8 +2633,6 @@ visualizing 2D and 3D scalar and vector fields by a range of techniques.
 VTK is used to achieve 2D and 3D visualizations of the same type as 
 Matlab offers. However, VTK can do much more (although the Easyviz 
 commands are restricted to what is typically offered by Matlab).
-
-
 
 == Design ==
 
@@ -2614,7 +2722,15 @@ xlim([-2,2])
 
 
 
+
+
+
+
+
+
+
 == Installation ==
+
 
 Easyviz comes with the SciTools package, so to install Easyviz, you
 must install SciTools, which is available from
@@ -2743,21 +2859,26 @@ in the root directory of the Matplotlib code.
 
 *Windows.* You can download prebuilt binaries from the Matplotlib home page.
 
-
-
 == Troubleshooting ==
 
-==== Suddenly my old plots have thick lines and large markers ====
+==== Suddenly my old plots have markers ====
 
 The default behavior of `plot(x,y)` was changed in August, 2012, such
-that the line thickness is 2 and markers are inserted at the data
-points.  The reason is that curves in PNG files printed in black and
+that markers are inserted at the data
+points (of at most 15 markers if the array length exceeds 61).
+The reason is that curves in image files printed in black and
 white (typically in reports) were hard to distinguish with the old
-default behavior (line of thickness 1). The new default behavior is
-better suited for increased use of PNG as file format.
+default behavior (line of thickness 1), especially color plots
+generated by Matplotlib in PNG, EPS, and PDF, and PNG plots generated
+by Gnuplot. The new default behavior is
+better suited for increased use of PNG as file format and Matplotlib
+as plotting engine.
 
 To get the old default behavior, replace `plot(x,y)` by
-`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired.
+`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired. The
+colors are automatically chosen so that distinct curves get distinct
+colors. Use `plot(x, y)` if you want both colors and markers to be
+automatically chosen.
 
 ==== Can I Perform a Diagnostic Test of Easyviz? ====
 
@@ -2817,6 +2938,7 @@ of Matplotlib parameters in this file.
 Another fix of LaTeX-related problems is to switch to another backend
 than Matplotlib.
 
+
 ==== Old Programs with 2D Scalar/Vector Field Plotting Do Not Work ====
 
 SciTools version 0.7 changed the default backend for plotting to
@@ -2842,6 +2964,7 @@ SciTools with Gnuplot as plotting engine:
 {{{
 python setup.py install --easyviz_backend gnuplot
 }}}
+
 
 ==== Check Your Backends! ====
 
@@ -2879,6 +3002,7 @@ plt.show()
 In case of problems, go to the Matplotlib source directory, remove the
 `build` subdirectory, and try a new install with `python setup.py install`.
 
+
 ==== Can I Easily Turn Off All Plotting? ====
 
 Yes, this is very convenient when debugging other (non-plotting) parts
@@ -2887,6 +3011,7 @@ of a program. Just write
 from scitools.std import *
 turn_off_plotting(globals())
 }}}
+
 
 ==== How Can I Change the Type of Gnuplot Window? ====
 
@@ -2972,6 +3097,7 @@ for i in some_values:
     plot(t, X0)
 }}}
 
+
 ==== Where Can I Find Easyviz Documentation? ====
 
 There is a verbose Easyviz documentation that mainly focuses on an
@@ -2981,6 +3107,7 @@ documentation).
 Another useful source of information is the many examples that come
 with the SciTools/Easyviz source code. The examples are located in
 the `examples` subfolder of the source.
+
 
 ==== Grace Gives Error Messages When Calling Savefig/Hardcopy ====
 
@@ -3043,6 +3170,7 @@ supported by all backends):
   * cool,
   * copper,
   * daspect,
+  * dumpfig,
   * figure,
   * fill,
   * fill3,
@@ -3064,11 +3192,11 @@ supported by all backends):
   * legend,
   * light,
   * lines,
+  * loadfig,
   * loglog,
   * material,
   * mesh,
   * meshc,
-  * openfig,
   * pcolor,
   * pink,
   * plot,
@@ -3103,4 +3231,5 @@ supported by all backends):
   * xlabel,
   * ylabel,
   * zlabel
+
 

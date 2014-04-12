@@ -89,7 +89,7 @@ add
 raw_input('Press the Return key to quit: ')
 !ec
 at the end of the program. The plot window is killed when the program
-terminates, and this satement postpones the termination until the user
+terminates, and this statement postpones the termination until the user
 hits the Return key.
 
 ===== Controlling Line Styles =====

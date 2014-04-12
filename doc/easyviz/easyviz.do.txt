@@ -257,14 +257,17 @@ command produces files with images in various formats:
 !bc pycod
 savefig('tmp1.eps') # produce PostScript
 savefig('tmp1.png') # produce PNG
+savefig('tmp1.pdf') # produce PDF
+savefig('tmp1.svg') # produce SVG (not supported in all backends)
 !ec
 An alternative name for `savefig` is `hardcopy`:
 !bc pycod
 hardcopy('tmp1.eps') # produce PostScript
 hardcopy('tmp1.png') # produce PNG
+hardcopy('tmp1.pdf') # produce PDF
 !ec
 The filename extension determines the format: `.ps` or
-`.eps` for PostScript, and `.png` for PNG.
+`.eps` for PostScript, `.png` for PNG, `.pdf` for PDF, and `.svg` for SVG.
 Figures ref{fig:plot1a:g} and ref{fig:plot1a:m} display the resulting
 image file with the plot, as generated
 with the Gnuplot and Matplotlib plotting packages, respectively.
@@ -285,19 +288,22 @@ add
 raw_input('Press the Return key to quit: ')
 !ec
 at the end of the program. The plot window is killed when the program
-terminates, and this satement postpones the termination until the user
+terminates, and this statement postpones the termination until the user
 hits the Return key.
 
 ===== Controlling Line Styles =====
 
-By default, Easyviz plots a curve with a solid line of thickness 2 and
-markers of size 2 at each data point. This default behavior is
-inspired by the usual needs to include thicker lines and markers to
+By default, Easyviz plots a curve with a solid line of thickness 1 and
+markers at each data point. If the number of data points exceeds 61,
+just 15 equally spaced markers are drawn to avoid cluttering the plot.
+This default behavior is
+inspired by the usual needs to include markers to
 distinguish multiple curves plots, especially if image files are to
 appear in black and white in printed reports.  However, the line style
-can easily be controlled by adding a string `s` after the `y`
+and markers can easily be controlled by adding a string `s` after the `y`
 argument: `plot(x, y, s)`. The syntax of the string `s` is inspired by
-Matlab. For example, `r-` means a red solid line of unit thickness
+Matlab. For example, `r-` means a red solid line of unit thickness and
+no markers
 (see Figure ref{fig:plot1a:rs}), `r--` means a red dashed line, `r-o`
 means a red solid line with circles as markers at each data point,
 `r--o` is the same except that the line is dashed. In general, if `s`
@@ -662,9 +668,9 @@ show()
 savefig('tmp3.eps')   # or hardcopy
 savefig('tmp3.png')   # or hardcopy
 !ec
-The plot is shown in Figure ref{fig:plot3}.
+The plot is shown in Figure ref{fig:plot2p}.
 
-FIGURE:[figs/plot3, width=400] A plot with three curves.  label{fig:plot3}
+FIGURE:[figs/plot2p, width=400] A plot with three curves.  label{fig:plot2p}
 
 __Minimalistic Typing.__
 When exploring mathematics in the interactive Python shell, most of us
@@ -728,6 +734,41 @@ parameters in the plot:
 Such output is mostly of interest to advanced users.
 
 
+===== Curves in 3D Space =====
+label{easyviz:plot3}
+
+Easyviz also supports curves in 3D space through the `plot3` function.
+It works as `plot`, except that it accepts three coordinates:
+`plot3(x, y, z, 'b-')`. Here is an example of how to
+plot the parametric curve
+
+!bt
+\begin{align*}
+x(t) &= (2t+2)\sin(10t),\\
+y(t) &= (2t+2)\cos(10t),\\
+z(t) &= t,
+\end{align*}
+!et
+for $t\in [-5,5]$. The corresponding code reads
+
+!bc pypro
+from scitools.std import *
+t = linspace(-5, 5, 501)
+x = (2+t**2)*sin(10*t)
+y = (2+t**2)*cos(10*t)
+z = t
+plot3(x, y, z, 'r-')
+grid('on')
+xlabel('x(t)')
+ylabel('y(t)')
+zlabel('z(t)')
+title('plot3 example')
+!et
+Figure ref{fig:plot3} shows the resulting plot.
+The file `examples/plot3_demo.py` contains this and more examples.
+
+FIGURE: [figs/plot3_demo, width=400] Example of curve in 3D space. label{fig:plot3}
+
 ===== Making Animations =====
 label{easyviz:movie}
 
@@ -741,12 +782,12 @@ $f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
 "wide" for large $s$ and "peak-formed" for small $s$, see Figure
-ref{fig:plot4}. The function is symmetric around $x=m$ ($m=0$ in the
+ref{fig:plot2q}. The function is symmetric around $x=m$ ($m=0$ in the
 figure).  Our goal is to make an animation where we see how this
 function evolves as $s$ is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
 
-FIGURE:[figs/plot4, width=400] Different shapes of a Gaussian function. label{fig:plot4}
+FIGURE:[figs/plot2q, width=400] Different shapes of a Gaussian function. label{fig:plot2q}
 
 The animation is created by varying $s$ in a loop and for each $s$
 issue a `plot` command. A moving curve is then visible on the screen.
@@ -1149,6 +1190,49 @@ import scitools.easyviz as ev
 import numpy as np
 !ec
 
+=== Embedding Plots in HTML without Using Files ===
+
+Web applications may prefer to get the plot as a string from the
+plotting software and embed this string directly in HTML. This is
+easy: if the filename for the `savefig` command contains just the
+extension, say `.png`, and the backend supports storing the plot
+in a string in PNG format, the string is returned. Otherwise, just
+`None` is returned. Any any case, a filename of `.png` implies
+that the plot is also store in the file `tmp.png`. The only
+backend that can return the plot as a string is `matplotlib`.
+
+Here is a recipe on how to create a plot as a string in PNG and SVG
+format and embed the strings directly in HTML:
+
+!bc pycod
+from scitools.std import plot, savefig, linspace
+
+x = linspace(0, 1, 10)
+plot(x, y)
+figdata_svg = savefig('.svg')  # create tmp.svg anyway
+figdata_png = savefig('.png')  # create tmp.ong anyway
+if figdata_svg is not None and figdata_png is not None:
+    # Turn PNG data to base64 format
+    import base64
+    figdata_png = base64.b64encode(figdata_png)
+    f = open('tmp.html', 'w')
+    f.write("""
+Embedded SVG XML code:<br>
+%(figdata_svg)s
+<br>
+Embedded PNG data:<br>
+<img src="data:image/png;base64,%(figdata_png)s" width=500><br>
+Using img tag for SVG file:<br>
+<img alt="Embedded SVG image" src="tmp.svg" width=500><br>
+Using img tag for PNG file:<br>
+<img alt="Embedded PNG image" src="tmp.png" width=500><br>
+Using object embedding:<br>
+<object data="tmp.svg" type="image/svg+xml"></object>
+""" % vars())
+    f.close()
+!ec
+The `examples/plot2r.py` file contains a demo of this kind where the
+HTML page can be viewed in a browser.
 
 === Setting Parameters in the Configuration File ===
 
@@ -2356,17 +2440,24 @@ You can download prebuilt binaries from the Matplotlib home page.
 
 ======= Troubleshooting =======
 
-===== Suddenly my old plots have thick lines and large markers =====
+===== Suddenly my old plots have markers =====
 
 The default behavior of `plot(x,y)` was changed in August, 2012, such
-that the line thickness is 2 and markers are inserted at the data
-points.  The reason is that curves in PNG files printed in black and
+that markers are inserted at the data
+points (of at most 15 markers if the array length exceeds 61).
+The reason is that curves in image files printed in black and
 white (typically in reports) were hard to distinguish with the old
-default behavior (line of thickness 1). The new default behavior is
-better suited for increased use of PNG as file format.
+default behavior (line of thickness 1), especially color plots
+generated by Matplotlib in PNG, EPS, and PDF, and PNG plots generated
+by Gnuplot. The new default behavior is
+better suited for increased use of PNG as file format and Matplotlib
+as plotting engine.
 
 To get the old default behavior, replace `plot(x,y)` by
-`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired.
+`plot(x,y,'-')`, or `plot(x,y,-2)` if thick lines are desired. The
+colors are automatically chosen so that distinct curves get distinct
+colors. Use `plot(x, y)` if you want both colors and markers to be
+automatically chosen.
 
 ===== Can I Perform a Diagnostic Test of Easyviz? =====
 
@@ -2656,6 +2747,7 @@ supported by all backends):
   * cool,
   * copper,
   * daspect,
+  * dumpfig,
   * figure,
   * fill,
   * fill3,
@@ -2677,11 +2769,11 @@ supported by all backends):
   * legend,
   * light,
   * lines,
+  * loadfig,
   * loglog,
   * material,
   * mesh,
   * meshc,
-  * openfig,
   * pcolor,
   * pink,
   * plot,

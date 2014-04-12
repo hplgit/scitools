@@ -9,10 +9,10 @@ rm -rf tmp_*
 # Prepare Doconce files and filter them to various formats:
 cp easyviz.do.txt tmp_easyviz.do.txt
 
-doconce format HTML tmp_easyviz.do.txt
+doconce format html tmp_easyviz.do.txt
 doconce format plain tmp_easyviz.do.txt
 
-doconce format LaTeX tmp_easyviz.do.txt
+doconce format latex tmp_easyviz.do.txt
 ptex2tex -DMINTED tmp_easyviz
 scitools subst slice_ 'slice\_' tmp_easyviz.tex   # _ fix
 latex -shell-escape tmp_easyviz
