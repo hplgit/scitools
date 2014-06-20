@@ -43,10 +43,10 @@ The present documentation is available in a number of formats:
   * "Sphinx HTML": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html"
   * "Plain text": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt"
   * "Wiki": "http://code.google.com/p/scitools/wiki/EasyvizDocumentation"
-  * "Doconce source": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
+  * "DocOnce source": "https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt"
 
 The documentation is written in the
-"Doconce": "https://github.com/hplgit/doconce"
+"DocOnce": "https://github.com/hplgit/doconce"
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
