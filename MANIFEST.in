@@ -1,0 +1,7 @@
+recursive-include examples *
+recursive-include lib *.cfg
+recursive-include lib/scitools/easyviz/doc *
+recursive-include lib/scitools/easyviz/tests *
+include LICENSE
+include README
+include ChangeLog

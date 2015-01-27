@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.sound &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" />
+    <link rel="next" title="scitools.std" href="std.html" />
+    <link rel="prev" title="scitools.redirect_io" href="redirect_io.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="std.html" title="scitools.std"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="redirect_io.html" title="scitools.redirect_io"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.sound">
+<span id="scitools-sound"></span><h1><a class="reference internal" href="#module-scitools.sound" title="scitools.sound"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.sound</span></tt></a><a class="headerlink" href="#module-scitools.sound" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="scitools.sound.Nothing_Else_Matters">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">Nothing_Else_Matters</tt><big>(</big><em>echo=False</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#Nothing_Else_Matters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.Nothing_Else_Matters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.sound.add_echo">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">add_echo</tt><big>(</big><em>data</em>, <em>beta=0.8</em>, <em>delay=0.1</em>, <em>sample_rate=44100</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#add_echo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.add_echo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.sound.note">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">note</tt><big>(</big><em>frequency</em>, <em>length</em>, <em>amplitude=1</em>, <em>sample_rate=44100</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the sound of a note as an array if float elements.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.sound.play">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">play</tt><big>(</big><em>soundfile</em>, <em>player=None</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a file with name soundfile or an array soundfile.
+(The array is first written to file using the write function
+so the data type can be arbitrary.)
+The player is chosen by the programs &#8216;open&#8217; on Mac and &#8216;start&#8217;
+on Windows. On Linux, try different open programs for various
+distributions. If keyword argument &#8216;player&#8217; is given, only this spesific
+commands is run.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.sound.read">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">read</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read sound data in a file and return the data as an array
+with data type numpy.int16.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.sound.write">
+<tt class="descclassname">scitools.sound.</tt><tt class="descname">write</tt><big>(</big><em>data</em>, <em>filename</em>, <em>channels=1</em>, <em>sample_width=2</em>, <em>sample_rate=44100</em><big>)</big><a class="reference internal" href="_modules/scitools/sound.html#write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.sound.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the array data to the specified file.
+The array data type can be arbitrary as it will be
+converted to numpy.int16 in this function.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="redirect_io.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.redirect_io</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="std.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">scitools.std</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/sound.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="std.html" title="scitools.std"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="redirect_io.html" title="scitools.redirect_io"
+             >previous</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

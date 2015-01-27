@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.pprint2 &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.pprint2">
+<span id="scitools-pprint2"></span><h1><a class="reference internal" href="#module-scitools.pprint2" title="scitools.pprint2"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.pprint2</span></tt></a><a class="headerlink" href="#module-scitools.pprint2" title="Permalink to this headline">¶</a></h1>
+<p>Support to pretty-print lists, tuples, &amp; dictionaries recursively.</p>
+<p>Very simple, but useful, especially in debugging data structures.</p>
+<p>Slight extension of the original pprint module in Python such that
+floating-point numbers can be written with a specificed format
+(float_format) and not by their repr string (which explicitly
+displays round-off errors).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">49</span><span class="o">*</span><span class="mi">49</span><span class="p">,</span> <span class="mf">84.6</span><span class="o">/</span><span class="mi">423</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[0.3333333333333333, 0.9999999999999999, 0.19999999999999998]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scitools.pprint2</span> <span class="kn">as</span> <span class="nn">pprint2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint2</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[0.333333, 1, 0.2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint2</span><span class="o">.</span><span class="n">float_format</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%.12E</span><span class="s">&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint2</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[3.333333333333E-01, 1.000000000000E+00, 2.000000000000E-01]</span>
+</pre></div>
+</div>
+<p>Classes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>PrettyPrinter():
+Handle pretty-printing operations onto a stream using a configured
+set of formatting parameters.</li>
+</ul>
+</div></blockquote>
+<p>Functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>pformat():
+Format a Python object into a pretty-printed representation.</li>
+<li>pprint():
+Pretty-print a Python object to a stream [default is sys.stdout].</li>
+<li>saferepr():
+Generate a &#8216;standard&#8217; repr()-like value, but protect against recursive
+data structures.</li>
+</ul>
+</div></blockquote>
+<p>Global data:</p>
+<blockquote>
+<div><ul class="simple">
+<li>float_format:
+String containing the printf format for formatting float objects.</li>
+</ul>
+</div></blockquote>
+<dl class="function">
+<dt id="scitools.pprint2.pprint">
+<tt class="descclassname">scitools.pprint2.</tt><tt class="descname">pprint</tt><big>(</big><em>object</em>, <em>stream=None</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#pprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.pprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty-print a Python object to a stream [default is sys.stdout].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.pprint2.pformat">
+<tt class="descclassname">scitools.pprint2.</tt><tt class="descname">pformat</tt><big>(</big><em>object</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#pformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.pformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a Python object into a pretty-printed representation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.pprint2.isreadable">
+<tt class="descclassname">scitools.pprint2.</tt><tt class="descname">isreadable</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#isreadable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.isreadable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if saferepr(object) is readable by eval().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.pprint2.isrecursive">
+<tt class="descclassname">scitools.pprint2.</tt><tt class="descname">isrecursive</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#isrecursive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.isrecursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if object requires a recursive representation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.pprint2.saferepr">
+<tt class="descclassname">scitools.pprint2.</tt><tt class="descname">saferepr</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#saferepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.saferepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version of repr() which can handle recursive data structures.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.pprint2.PrettyPrinter">
+<em class="property">class </em><tt class="descclassname">scitools.pprint2.</tt><tt class="descname">PrettyPrinter</tt><big>(</big><em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>stream=None</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.pprint2.PrettyPrinter.format" title="scitools.pprint2.PrettyPrinter.format"><tt class="xref py py-obj docutils literal"><span class="pre">format</span></tt></a>(object,&nbsp;context,&nbsp;maxlevels,&nbsp;level)</td>
+<td>Format object for a specific context, returning a string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.pprint2.PrettyPrinter.isreadable" title="scitools.pprint2.PrettyPrinter.isreadable"><tt class="xref py py-obj docutils literal"><span class="pre">isreadable</span></tt></a>(object)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.pprint2.PrettyPrinter.isrecursive" title="scitools.pprint2.PrettyPrinter.isrecursive"><tt class="xref py py-obj docutils literal"><span class="pre">isrecursive</span></tt></a>(object)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.pprint2.PrettyPrinter.pformat" title="scitools.pprint2.PrettyPrinter.pformat"><tt class="xref py py-obj docutils literal"><span class="pre">pformat</span></tt></a>(object)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.pprint2.PrettyPrinter.pprint" title="scitools.pprint2.PrettyPrinter.pprint"><tt class="xref py py-obj docutils literal"><span class="pre">pprint</span></tt></a>(object)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>stream=None</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle pretty printing operations onto a stream using a set of
+configured parameters.</p>
+<dl class="docutils">
+<dt>indent</dt>
+<dd>Number of spaces to indent for each level of nesting.</dd>
+<dt>width</dt>
+<dd>Attempted maximum number of columns in the output.</dd>
+<dt>depth</dt>
+<dd>The maximum depth to print out nested structures.</dd>
+<dt>stream</dt>
+<dd>The desired output stream.  If omitted (or false), the standard
+output stream available at construction will be used.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.pprint2.PrettyPrinter.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.pprint2'</em><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.format">
+<tt class="descname">format</tt><big>(</big><em>object</em>, <em>context</em>, <em>maxlevels</em>, <em>level</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format object for a specific context, returning a string
+and flags indicating whether the representation is &#8216;readable&#8217;
+and whether the object represents a recursive construct.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.isreadable">
+<tt class="descname">isreadable</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.isreadable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.isreadable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.isrecursive">
+<tt class="descname">isrecursive</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.isrecursive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.isrecursive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.pformat">
+<tt class="descname">pformat</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.pformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.pformat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.pprint2.PrettyPrinter.pprint">
+<tt class="descname">pprint</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/scitools/pprint2.html#PrettyPrinter.pprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.pprint2.PrettyPrinter.pprint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pprint2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

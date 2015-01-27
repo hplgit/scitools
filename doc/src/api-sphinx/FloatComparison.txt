@@ -1,0 +1,10 @@
+
+:mod:`scitools.FloatComparison`
+===============================
+
+.. automodule:: scitools.FloatComparison
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

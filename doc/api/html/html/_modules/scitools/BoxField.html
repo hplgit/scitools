@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.BoxField &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.BoxField</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class for a scalar (or vector) field over a BoxGrid or UniformBoxGrid grid.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">scitools.BoxGrid</span> <span class="kn">import</span> <span class="n">BoxGrid</span><span class="p">,</span> <span class="n">UniformBoxGrid</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">transpose</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;BoxField&#39;</span><span class="p">,</span> <span class="s">&#39;BoxGrid&#39;</span><span class="p">,</span> <span class="s">&#39;UniformBoxGrid&#39;</span><span class="p">,</span> <span class="s">&#39;X&#39;</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">,</span> <span class="s">&#39;Z&#39;</span><span class="p">,</span>
+           <span class="s">&#39;dolfin_function2BoxField&#39;</span><span class="p">,</span> <span class="s">&#39;update_from_dolfin_array&#39;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    General base class for all grids. Holds a connection to a</span>
+<span class="sd">    grid, a name of the field, and optionally a list of the</span>
+<span class="sd">    independent variables and a string with a description of the</span>
+<span class="sd">    field.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                 <span class="n">independent_variables</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">independent_variables</span> <span class="o">=</span> <span class="n">independent_variables</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">independent_variables</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># copy grid.dirnames as independent variables:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">independent_variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dirnames</span>
+
+        <span class="c"># metainformation:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c"># user can add more meta information</span>
+
+
+<div class="viewcode-block" id="BoxField"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField">[docs]</a><span class="k">class</span> <span class="nc">BoxField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Field over a BoxGrid or UniformBoxGrid grid.</span>
+
+<span class="sd">    =============      =============================================</span>
+<span class="sd">      Attributes                       Description</span>
+<span class="sd">    =============      =============================================</span>
+<span class="sd">    grid               reference to the underlying grid instance</span>
+<span class="sd">    values             array holding field values at the grid points</span>
+<span class="sd">    =============      =============================================</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize scalar or vector field over a BoxGrid/UniformBoxGrid.</span>
+
+<span class="sd">        =============      ===============================================</span>
+<span class="sd">          Arguments                          Description</span>
+<span class="sd">        =============      ===============================================</span>
+<span class="sd">        *grid*             grid instance</span>
+<span class="sd">        *name*             name of the field</span>
+<span class="sd">        *vector*           scalar field if 0, otherwise the no of vector</span>
+<span class="sd">                           components (spatial dimensions of vector field)</span>
+<span class="sd">        *values*           (*kwargs*) optional array with field values</span>
+<span class="sd">        =============      ===============================================</span>
+
+<span class="sd">        Here is an example::</span>
+
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(min=[0,0], max=[1.,1.], division=[3, 4])</span>
+
+<span class="sd">        &gt;&gt;&gt; print g</span>
+<span class="sd">        domain=[0,1]x[0,1]  indices=[0:3]x[0:4]</span>
+
+<span class="sd">        &gt;&gt;&gt; u = BoxField(g, &#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.values = u.grid.vectorized_eval(lambda x,y: x + y)</span>
+
+<span class="sd">        &gt;&gt;&gt; i = 1; j = 2</span>
+<span class="sd">        &gt;&gt;&gt; print &#39;u(%g, %g)=%g&#39; % (g.coor[X][i], g.coor[Y][j], u.values[i,j])</span>
+<span class="sd">        u(0.333333, 0.5)=0.833333</span>
+
+<span class="sd">        &gt;&gt;&gt; # visualize:</span>
+<span class="sd">        &gt;&gt;&gt; from scitools.std import surf</span>
+<span class="sd">        &gt;&gt;&gt; surf(u.grid.coorv[X], u.grid.coorv[Y], u.values)</span>
+
+<span class="sd">        ``u.grid.coorv`` is a list of coordinate arrays that are</span>
+<span class="sd">        suitable for Matlab-style visualization of 2D scalar fields.</span>
+<span class="sd">        Also note how one can access the coordinates and u value at</span>
+<span class="sd">        a point (i,j) in the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Field</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">vector</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># for a vector field we add a &quot;dimension&quot; in values for</span>
+            <span class="c"># the various vector components (first index):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">vector</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="k">if</span> <span class="s">&#39;values&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># create array of scalar field grid point values:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span><span class="p">)</span>
+
+        <span class="c"># doesn&#39;t  work: self.__getitem__ = self.values.__getitem__</span>
+        <span class="c">#self.__setitem__ = self.values.__setitem__</span>
+
+<div class="viewcode-block" id="BoxField.copy_values"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.copy_values">[docs]</a>    <span class="k">def</span> <span class="nf">copy_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take a copy of the values array and reshape it if necessary.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="BoxField.set_values"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.set_values">[docs]</a>    <span class="k">def</span> <span class="nf">set_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attach the values array to this BoxField object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span>  <span class="c"># field data are provided</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;values array are incompatible with grid size; &#39;</span>\
+                    <span class="s">&#39;shape is </span><span class="si">%s</span><span class="s"> while required shape is </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                    <span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_shape</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="BoxField.update"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the self.values array (if grid has been changed).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c"># these are slower than u_ = u.values; u_[i] since an additional</span>
+    <span class="c"># function call is required compared to NumPy array indexing:</span></div>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>  <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nsd</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Vector field with </span><span class="si">%d</span><span class="s"> components&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Scalar field&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;, over &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+<div class="viewcode-block" id="BoxField.gridline"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.gridline">[docs]</a>    <span class="k">def</span> <span class="nf">gridline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_coor</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_coor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">snap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a coordinate array and corresponding field values</span>
+<span class="sd">        along a line starting with start_coor, in the given</span>
+<span class="sd">        direction, and ending in end_coor (default: grid boundary).</span>
+<span class="sd">        Two more boolean values are also returned: fixed_coor</span>
+<span class="sd">        (the value of the fixed coordinates, which may be different</span>
+<span class="sd">        from those in start_coor if snap=True) and snapped (True if</span>
+<span class="sd">        the line really had to be snapped onto the grid, i.e.,</span>
+<span class="sd">        fixed_coor differs from coordinates in start_coor.</span>
+
+<span class="sd">        If snap is True, the line is snapped onto the grid, otherwise</span>
+<span class="sd">        values along the line must be interpolated (not yet implemented).</span>
+
+<span class="sd">        &gt;&gt;&gt; g2 = UniformBoxGrid.init_fromstring(&#39;[-1,1]x[-1,2] [0:3]x[0:4]&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print g2</span>
+<span class="sd">        UniformBoxGrid(min=[-1. -1.], max=[ 1.  2.],</span>
+<span class="sd">        division=[3, 4], dirnames=(&#39;x&#39;, &#39;y&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; print g2.coor</span>
+<span class="sd">        [array([-1.        , -0.33333333,  0.33333333,  1.        ]),</span>
+<span class="sd">        array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]</span>
+
+<span class="sd">        &gt;&gt;&gt; u = BoxField(g2, &#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.values = u.grid.vectorized_eval(lambda x,y: x + y)</span>
+<span class="sd">        &gt;&gt;&gt; xc, uc, fixed_coor, snapped = u.gridline((-1,0.5), 0)</span>
+<span class="sd">        &gt;&gt;&gt; print xc</span>
+<span class="sd">        [-1.         -0.33333333  0.33333333  1.        ]</span>
+<span class="sd">        &gt;&gt;&gt; print uc</span>
+<span class="sd">        [-0.5         0.16666667  0.83333333  1.5       ]</span>
+<span class="sd">        &gt;&gt;&gt; print fixed_coor, snapped</span>
+<span class="sd">        [0.5] False</span>
+<span class="sd">        &gt;&gt;&gt; #plot(xc, uc, title=&#39;u(x, y=%g)&#39; % fixed_coor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">snap</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Use snap=True, no interpolation impl.&#39;</span><span class="p">)</span>
+
+        <span class="n">slice_index</span><span class="p">,</span> <span class="n">snapped</span> <span class="o">=</span> \
+             <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">gridline_slice</span><span class="p">(</span><span class="n">start_coor</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">end_coor</span><span class="p">)</span>
+        <span class="n">fixed_coor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slice_index</span><span class="p">)</span> \
+                      <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fixed_coor</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fixed_coor</span> <span class="o">=</span> <span class="n">fixed_coor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># avoid returning list of length 1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">direction</span><span class="p">][</span><span class="n">slice_index</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>\
+                                         <span class="n">slice_index</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">],</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">slice_index</span><span class="p">],</span> <span class="n">fixed_coor</span><span class="p">,</span> <span class="n">snapped</span>
+</div>
+<div class="viewcode-block" id="BoxField.gridplane"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.BoxField.gridplane">[docs]</a>    <span class="k">def</span> <span class="nf">gridplane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">constant_coor</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">snap</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return two one-dimensional coordinate arrays and</span>
+<span class="sd">        corresponding field values over a plane where one coordinate,</span>
+<span class="sd">        constant_coor, is fixed at a value.</span>
+
+<span class="sd">        If snap is True, the plane is snapped onto a grid plane such</span>
+<span class="sd">        that the points in the plane coincide with the grid points.</span>
+<span class="sd">        Otherwise, the returned values must be interpolated (not yet impl.).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">snap</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Use snap=True, no interpolation impl.&#39;</span><span class="p">)</span>
+
+        <span class="n">slice_index</span><span class="p">,</span> <span class="n">snapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">gridplane_slice</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">constant_coor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">constant_coor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constant_coor</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constant_coor</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">fixed_coor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">][</span><span class="n">slice_index</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">slice_index</span><span class="p">],</span> <span class="n">fixed_coor</span><span class="p">,</span> <span class="n">snapped</span>
+</div></div>
+<span class="k">def</span> <span class="nf">_rank12rankd_mesh</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given rank 1 array a with values in a mesh with the no of points</span>
+<span class="sd">    described by shape, transform the array to the right &quot;mesh array&quot;</span>
+<span class="sd">    with the same shape.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">shape</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;array a cannot be multi-dimensional (not </span><span class="si">%s</span><span class="s">), &#39;</span> \
+                         <span class="s">&#39;break it up into one-dimensional components&#39;</span> \
+                         <span class="o">%</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dolfin_mesh2UniformBoxGrid</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="n">division</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn a regular, structured DOLFIN finite element mesh into</span>
+<span class="sd">    a UniformBoxGrid object. (Application: plotting with scitools.)</span>
+<span class="sd">    Standard DOLFIN numbering numbers the nodes along the x[0] axis,</span>
+<span class="sd">    then x[1] axis, and so on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="s">&#39;structured_data&#39;</span><span class="p">):</span>
+        <span class="n">coor</span> <span class="o">=</span> <span class="n">dolfin_mesh</span><span class="o">.</span><span class="n">structured_data</span>
+        <span class="n">min_coor</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">]</span>
+        <span class="n">max_coor</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">]</span>
+        <span class="n">division</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">division</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;division must be given when dolfin_mesh does not have a strutured_data attribute&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coor</span> <span class="o">=</span> <span class="n">dolfin_mesh</span><span class="o">.</span><span class="n">coordinates</span><span class="p">()</span> <span class="c"># numpy array</span>
+            <span class="n">min_coor</span> <span class="o">=</span> <span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">max_coor</span> <span class="o">=</span> <span class="n">coor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">min_coor</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">max_coor</span><span class="p">,</span>
+                          <span class="n">division</span><span class="o">=</span><span class="n">division</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dolfin_mesh2BoxGrid</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="n">division</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn a structured DOLFIN finite element mesh into</span>
+<span class="sd">    a BoxGrid object. (Mostly for ease of plotting with scitools.)</span>
+<span class="sd">    Standard DOLFIN numbering numbers the nodes along the x[0] axis,</span>
+<span class="sd">    then x[1] axis, and so on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="s">&#39;structured_data&#39;</span><span class="p">):</span>
+        <span class="n">coor</span> <span class="o">=</span> <span class="n">dolfin_mesh</span><span class="o">.</span><span class="n">structured_data</span>
+        <span class="k">return</span> <span class="n">BoxGrid</span><span class="p">(</span><span class="n">coor</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">division</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;division must be given when dolfin_mesh does not have a strutured_data attribute&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">dolfin_mesh</span><span class="o">.</span><span class="n">coordinates</span><span class="p">()</span> <span class="c"># numpy array</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">division</span><span class="p">]</span>  <span class="c"># shape for points in each dir.</span>
+
+            <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>  <span class="c"># split x,y,z components</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">c2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rank12rankd_mesh</span><span class="p">(</span><span class="n">c2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">shape</span><span class="p">)</span>
+            <span class="c"># extract coordinates in the different directions</span>
+            <span class="n">coor</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">coor</span> <span class="o">=</span> <span class="p">[</span><span class="n">c2</span><span class="p">[</span><span class="mi">0</span><span class="p">][:]]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">coor</span> <span class="o">=</span> <span class="p">[</span><span class="n">c2</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">c2</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">,:]]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">coor</span> <span class="o">=</span> <span class="p">[</span><span class="n">c2</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">c2</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">c2</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]]</span>
+            <span class="k">return</span> <span class="n">BoxGrid</span><span class="p">(</span><span class="n">coor</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="dolfin_function2BoxField"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.dolfin_function2BoxField">[docs]</a><span class="k">def</span> <span class="nf">dolfin_function2BoxField</span><span class="p">(</span><span class="n">dolfin_function</span><span class="p">,</span> <span class="n">dolfin_mesh</span><span class="p">,</span>
+                             <span class="n">division</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">uniform_mesh</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn a DOLFIN P1 finite element field over a structured mesh into</span>
+<span class="sd">    a BoxField object. (Mostly for ease of plotting with scitools.)</span>
+<span class="sd">    Standard DOLFIN numbering numbers the nodes along the x[0] axis,</span>
+<span class="sd">    then x[1] axis, and so on.</span>
+
+<span class="sd">    If the DOLFIN function employs elements of degree &gt; 1, one should</span>
+<span class="sd">    project or interpolate the field onto a field with elements of</span>
+<span class="sd">    degree=1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dolfin_function</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">The dolfin_function2BoxField function works with degree=1 elements</span>
+<span class="s">only. The DOLFIN function (dolfin_function) has finite elements of type</span>
+<span class="si">%s</span><span class="s"></span>
+<span class="s">i.e., the degree=</span><span class="si">%d</span><span class="s"> != 1. Project or interpolate this function</span>
+<span class="s">onto a space of P1 elements, i.e.,</span>
+
+<span class="s">V2 = FunctionSpace(mesh, &#39;CG&#39;, 1)</span>
+<span class="s">u2 = project(u, V2)</span>
+<span class="s"># or</span>
+<span class="s">u2 = interpolate(u, V2)</span>
+
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dolfin_function</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()),</span> <span class="n">dolfin_function</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()</span><span class="o">.</span><span class="n">degree</span><span class="p">()))</span>
+
+    <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">dolfin_function</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">array</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">uniform_mesh</span><span class="p">:</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">dolfin_mesh2UniformBoxGrid</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="n">division</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">dolfin_mesh2BoxGrid</span><span class="p">(</span><span class="n">dolfin_mesh</span><span class="p">,</span> <span class="n">division</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">nodal_values</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">grid</span><span class="o">.</span><span class="n">npoints</span><span class="p">:</span>
+        <span class="c"># vector field, treat each component separately</span>
+        <span class="n">ncomponents</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nodal_values</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="n">grid</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nodal_values</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">ncomponents</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Vector field (nodal_values) has length </span><span class="si">%d</span><span class="s">, there are </span><span class="si">%d</span><span class="s"> grid points, and this does not match with </span><span class="si">%d</span><span class="s"> components&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nodal_values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">npoints</span><span class="p">,</span> <span class="n">ncomponents</span><span class="p">))</span>
+        <span class="n">vector_field</span> <span class="o">=</span> <span class="p">[</span><span class="n">_rank12rankd_mesh</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                          <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> \
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomponents</span><span class="p">)]</span>
+        <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">vector_field</span><span class="p">)</span>
+        <span class="n">bf</span> <span class="o">=</span> <span class="n">BoxField</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">dolfin_function</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span>
+                      <span class="n">vector</span><span class="o">=</span><span class="n">ncomponents</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">nodal_values</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">_rank12rankd_mesh</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;DOLFIN function has vector of size </span><span class="si">%s</span><span class="s"> while the provided mesh has </span><span class="si">%d</span><span class="s"> points and shape </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nodal_values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">npoints</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">bf</span> <span class="o">=</span> <span class="n">BoxField</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">dolfin_function</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span>
+                      <span class="n">vector</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">nodal_values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bf</span>
+</div>
+<div class="viewcode-block" id="update_from_dolfin_array"><a class="viewcode-back" href="../../BoxField.html#scitools.BoxField.update_from_dolfin_array">[docs]</a><span class="k">def</span> <span class="nf">update_from_dolfin_array</span><span class="p">(</span><span class="n">dolfin_array</span><span class="p">,</span> <span class="n">box_field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the values in a BoxField object box_field with a new</span>
+<span class="sd">    DOLFIN array (dolfin_array). The array must be reshaped and</span>
+<span class="sd">    transposed in the right way</span>
+<span class="sd">    (therefore box_field.copy_values(dolfin_array) will not work).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">dolfin_array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodal_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span> <span class="c"># no support for vector valued functions yet</span>
+                                  <span class="c"># the problem is in _rank12rankd_mesh</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">_rank12rankd_mesh</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">,</span> <span class="n">box_field</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;DOLFIN function has vector of size </span><span class="si">%s</span><span class="s"> while the provided mesh demands </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nodal_values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">box_field</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">box_field</span>
+</div>
+<span class="k">def</span> <span class="nf">_test</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;grid: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">g</span>
+
+    <span class="c"># function: 1 + x + y + z</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="nb">sum</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">BoxField</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">BoxField</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">nsd</span><span class="p">)</span>
+
+    <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c"># fill field values</span>
+
+    <span class="k">if</span>   <span class="n">g</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">[:,</span><span class="n">X</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># 1st component</span>
+    <span class="k">elif</span> <span class="n">g</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">[:,:,</span><span class="n">X</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># 1st component</span>
+        <span class="n">v</span><span class="p">[:,:,</span><span class="n">Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c"># 2nd component</span>
+    <span class="k">elif</span> <span class="n">g</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">[:,:,:,</span><span class="n">X</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># 1st component</span>
+        <span class="n">v</span><span class="p">[:,:,:,</span><span class="n">Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c"># 2nd component</span>
+        <span class="n">v</span><span class="p">[:,:,:,</span><span class="n">Z</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">3</span>  <span class="c"># 3rd component</span>
+
+    <span class="c"># write out field values at the mid point of the grid</span>
+    <span class="c"># (convert g.shape to NumPy array and divide by 2 to find</span>
+    <span class="c"># approximately the mid point)</span>
+    <span class="n">midptindex</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="nb">int</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ptcoor</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">midptindex</span><span class="p">]</span>
+    <span class="c"># tuples with just one item does not work as indices</span>
+    <span class="k">print</span> <span class="s">&#39;mid point </span><span class="si">%s</span><span class="s"> has indices </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ptcoor</span><span class="p">,</span> <span class="n">midptindex</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;f</span><span class="si">%s</span><span class="s">=</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ptcoor</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">ptcoor</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&#39;u at </span><span class="si">%s</span><span class="s">: </span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">midptindex</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">midptindex</span><span class="p">])</span>
+    <span class="n">v_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">midptindex</span><span class="p">);</span> <span class="n">v_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nsd</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&#39;v at </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">midptindex</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="n">v_index</span><span class="p">])</span>
+
+    <span class="c"># test extraction of lines:</span>
+    <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nsd</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nsd</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">coor</span><span class="p">,</span> <span class="n">u_coor</span><span class="p">,</span> <span class="n">fixed_coor</span><span class="p">,</span> <span class="n">snapped</span> <span class="o">=</span> \
+              <span class="n">u</span><span class="o">.</span><span class="n">gridline</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">min_coor</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">snapped</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;Error: snapped line&#39;</span>
+        <span class="k">print</span> <span class="s">&#39;line in x[</span><span class="si">%d</span><span class="s">]-direction, starting at </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+              <span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">min_coor</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">coor</span>
+        <span class="k">print</span> <span class="n">u_coor</span>
+
+        <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">min_coor</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">point</span><span class="p">[</span><span class="n">direction</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">direction</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">coor</span><span class="p">,</span> <span class="n">u_coor</span><span class="p">,</span> <span class="n">fixed_coor</span><span class="p">,</span> <span class="n">snapped</span> <span class="o">=</span> \
+              <span class="n">u</span><span class="o">.</span><span class="n">gridline</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">min_coor</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">snapped</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;Error: snapped line&#39;</span>
+        <span class="k">print</span> <span class="s">&#39;line in x[</span><span class="si">%d</span><span class="s">]-direction, starting at </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+              <span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">coor</span>
+        <span class="k">print</span> <span class="n">u_coor</span>
+
+    <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">y_center</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">fixed_coor</span><span class="p">,</span> <span class="n">snapped</span> <span class="o">=</span> \
+            <span class="n">u</span><span class="o">.</span><span class="n">gridplane</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">y_center</span><span class="p">,</span> <span class="n">constant_coor</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;Plane y=</span><span class="si">%g</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="n">fixed_coor</span><span class="p">,</span>
+        <span class="k">if</span> <span class="n">snapped</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39; (snapped from y=</span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">y_center</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">print</span>
+        <span class="k">print</span> <span class="n">xc</span>
+        <span class="k">print</span> <span class="n">yc</span>
+        <span class="k">print</span> <span class="n">uc</span>
+
+<span class="k">def</span> <span class="nf">_test2</span><span class="p">():</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">division</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="s">&#39;[0,1]x[-1,2] with indices [0:4]x[0:3]&#39;</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">init_fromstring</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+    <span class="n">g3</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g3</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test2</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

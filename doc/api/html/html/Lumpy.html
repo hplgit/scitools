@@ -1,0 +1,3021 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.Lumpy &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.Lumpy">
+<span id="scitools-lumpy"></span><h1><a class="reference internal" href="#module-scitools.Lumpy" title="scitools.Lumpy"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.Lumpy</span></tt></a><a class="headerlink" href="#module-scitools.Lumpy" title="Permalink to this headline">¶</a></h1>
+<p>UML diagrams for Python</p>
+<p>Lumpy generates UML diagrams (currently object and class diagrams)
+from a running Python program. It is similar to a graphical debugger
+in the sense that it generates a visualization of the state of a
+running program, but it is different from a debugger in the sense that
+it tries to generate high-level visualizations that are compliant (at
+least in spirit) with standard UML.</p>
+<p>There are three target audiences for this module: teachers, students
+and software engineers. Teachers can use Lumpy to generate figures
+that demonstrate a model of the execution of a Python
+program. Students can use Lumpy to explore the behavior of the Python
+interpreter. Software engineers can use Lumpy to extract the structure
+of existing programs by diagramming the relationships among the
+classes, including classes defined in libraries and the Python
+interpreter.</p>
+<blockquote>
+<div><p>Copyright 2005 Allen B. Downey</p>
+<blockquote>
+<div><p>This file contains wrapper classes I use with tkinter.  It is
+mostly for my own use; I don&#8217;t support it, and it is not very
+well documented.</p>
+<p>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program; if not, see
+<a class="reference external" href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a> or write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+02110-1301 USA</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="class">
+<dt id="scitools.Lumpy.Binding">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Binding</tt><big>(</big><em>lumpy</em>, <em>key</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Binding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Binding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>the graphical representation of the binding between a
+key and a value.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Binding.draw_key" title="scitools.Lumpy.Binding.draw_key"><tt class="xref py py-obj docutils literal"><span class="pre">draw_key</span></tt></a>(diag,&nbsp;p,&nbsp;flip,&nbsp;tags)</td>
+<td>draw a reference to a previously-drawn key rather</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Binding.drawme" title="scitools.Lumpy.Binding.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Binding.rebind" title="scitools.Lumpy.Binding.rebind"><tt class="xref py py-obj docutils literal"><span class="pre">rebind</span></tt></a>(val)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Binding.draw_key">
+<tt class="descname">draw_key</tt><big>(</big><em>diag</em>, <em>p</em>, <em>flip</em>, <em>tags</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Binding.draw_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Binding.draw_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw a reference to a previously-drawn key rather
+than drawing the key inside the mapping.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Binding.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Binding.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Binding.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Binding.rebind">
+<tt class="descname">rebind</tt><big>(</big><em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Binding.rebind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Binding.rebind" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Class">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Class</tt><big>(</big><em>lumpy</em>, <em>classobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Instance" title="scitools.Lumpy.Instance"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Instance</span></tt></a></p>
+<p>a graphical representation of a Class.  It inherits
+from Instance, which controls how a Class appears in an
+object diagram, and contains a ClassDiagramClass, which
+controls how the Class appears in a class diagram.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Class.add_child" title="scitools.Lumpy.Class.add_child"><tt class="xref py py-obj docutils literal"><span class="pre">add_child</span></tt></a>(child)</td>
+<td>when a subclass is created, it notifies its parent</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Class.add_hasa" title="scitools.Lumpy.Class.add_hasa"><tt class="xref py py-obj docutils literal"><span class="pre">add_hasa</span></tt></a>(child[,&nbsp;n])</td>
+<td>increment the number of references we have found</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Class.add_ivar" title="scitools.Lumpy.Class.add_ivar"><tt class="xref py py-obj docutils literal"><span class="pre">add_ivar</span></tt></a>(var)</td>
+<td>add to the set of instance variables for this class</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>the bbox of a Mapping is the bbox of its box item.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>drawme is the middle part of the way objects are drawn.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_bindings</span></tt>(cls)</td>
+<td>scan the bindings in this Instance, looking for</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_val</span></tt>(cls,&nbsp;val)</td>
+<td>if we find a reference to an object type, make a note</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Class.set_depth" title="scitools.Lumpy.Class.set_depth"><tt class="xref py py-obj docutils literal"><span class="pre">set_depth</span></tt></a>()</td>
+<td>compute the maximum depth between this class and</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Class.set_height" title="scitools.Lumpy.Class.set_height"><tt class="xref py py-obj docutils literal"><span class="pre">set_height</span></tt></a>()</td>
+<td>compute the maximum height between this class and</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Class.add_child">
+<tt class="descname">add_child</tt><big>(</big><em>child</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class.add_child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class.add_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>when a subclass is created, it notifies its parent
+classes, who update their list of children</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Class.add_hasa">
+<tt class="descname">add_hasa</tt><big>(</big><em>child</em>, <em>n=1</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class.add_hasa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class.add_hasa" title="Permalink to this definition">¶</a></dt>
+<dd><p>increment the number of references we have found
+from this class to the given child class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Class.add_ivar">
+<tt class="descname">add_ivar</tt><big>(</big><em>var</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class.add_ivar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class.add_ivar" title="Permalink to this definition">¶</a></dt>
+<dd><p>add to the set of instance variables for this class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Class.set_depth">
+<tt class="descname">set_depth</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class.set_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class.set_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the maximum depth between this class and
+a root class (one with no parents)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Class.set_height">
+<tt class="descname">set_height</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Class.set_height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Class.set_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the maximum height between this class and
+a leaf class (one with no children)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ClassDiagram">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ClassDiagram</tt><big>(</big><em>lumpy</em>, <em>classes=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Diagram" title="scitools.Lumpy.Diagram"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Diagram</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_arrow</span></tt>(arrow)</td>
+<td>append a new arrow on the list</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ca</span></tt>(*args,&nbsp;**options)</td>
+<td>make a canvas for the diagram</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt>()</td>
+<td>close the window and exit</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ClassDiagram.draw" title="scitools.Lumpy.ClassDiagram.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>()</td>
+<td>draw the class diagram, including the classes in self.classes,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></tt>()</td>
+<td>draw all the arrows on the list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ClassDiagram.draw_classes" title="scitools.Lumpy.ClassDiagram.draw_classes"><tt class="xref py py-obj docutils literal"><span class="pre">draw_classes</span></tt></a>(classes,&nbsp;pos[,&nbsp;tags])</td>
+<td>draw this list of classes and all their subclasses,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">printfile</span></tt>()</td>
+<td>dump the contents of the canvas to the filename in the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setup</span></tt>()</td>
+<td>create the gui for the diagram</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">update_arrows</span></tt>([n])</td>
+<td>update up to n arrows (or all of them is n==None)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ClassDiagram.draw">
+<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagram.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagram.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw the class diagram, including the classes in self.classes,
+or if there are none, then all the classes Lumpy has seen.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ClassDiagram.draw_classes">
+<tt class="descname">draw_classes</tt><big>(</big><em>classes</em>, <em>pos</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagram.draw_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagram.draw_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw this list of classes and all their subclasses,
+starting at the given position.  Return a list of all
+classes drawn.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ClassDiagramClass">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ClassDiagramClass</tt><big>(</big><em>lumpy</em>, <em>classobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagramClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagramClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>a graphical representation of a Class as it appears
+in a Class Diagram (which is different from the way class
+objects appear in Object Diagrams).</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.ClassDiagramClass.arrow_head" title="scitools.Lumpy.ClassDiagramClass.arrow_head"><tt class="xref py py-obj docutils literal"><span class="pre">arrow_head</span></tt></a>(diag,&nbsp;bbox,&nbsp;tags[,&nbsp;size])</td>
+<td>draw the hollow arrow head that connects this class</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ClassDiagramClass.drawme" title="scitools.Lumpy.ClassDiagramClass.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ClassDiagramClass.arrow_head">
+<tt class="descname">arrow_head</tt><big>(</big><em>diag</em>, <em>bbox</em>, <em>tags</em>, <em>size=0.5</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagramClass.arrow_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagramClass.arrow_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw the hollow arrow head that connects this class
+to its children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ClassDiagramClass.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ClassDiagramClass.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ClassDiagramClass.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ContainsArrow">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ContainsArrow</tt><big>(</big><em>lumpy</em>, <em>parent</em>, <em>child</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ContainsArrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ContainsArrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>a contains arrow, which shows a has-a relationship between
+classes in a class diagram.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ContainsArrow.draw" title="scitools.Lumpy.ContainsArrow.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>(diag)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ContainsArrow.update" title="scitools.Lumpy.ContainsArrow.update"><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ContainsArrow.draw">
+<tt class="descname">draw</tt><big>(</big><em>diag</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ContainsArrow.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ContainsArrow.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ContainsArrow.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ContainsArrow.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ContainsArrow.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.DiagCanvas">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">DiagCanvas</tt><big>(</big><em>w</em>, <em>transforms=None</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">scitools._Gui.GuiCanvas</span></tt></p>
+<p>a Canvas for displaying Diagrams</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_transform</span></tt>(transform[,&nbsp;index])</td>
+<td>add the given transform at the given index in the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag</span></tt>(*args)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_above</span></tt>(newtag,&nbsp;tagOrId)</td>
+<td>Add tag NEWTAG to all items above TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_all</span></tt>(newtag)</td>
+<td>Add tag NEWTAG to all items.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_below</span></tt>(newtag,&nbsp;tagOrId)</td>
+<td>Add tag NEWTAG to all items below TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_closest</span></tt>(newtag,&nbsp;x,&nbsp;y[,&nbsp;halo,&nbsp;start])</td>
+<td>Add tag NEWTAG to item which is closest to pixel at X, Y.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_enclosed</span></tt>(newtag,&nbsp;x1,&nbsp;y1,&nbsp;x2,&nbsp;y2)</td>
+<td>Add tag NEWTAG to all items in the rectangle defined</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_overlapping</span></tt>(newtag,&nbsp;x1,&nbsp;y1,&nbsp;x2,&nbsp;y2)</td>
+<td>Add tag NEWTAG to all items which overlap the rectangle</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addtag_withtag</span></tt>(newtag,&nbsp;tagOrId)</td>
+<td>Add tag NEWTAG to all items with TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">after</span></tt>(ms[,&nbsp;func])</td>
+<td>Call function once after given time.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">after_cancel</span></tt>(id)</td>
+<td>Cancel scheduling of function identified with ID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">after_idle</span></tt>(func,&nbsp;*args)</td>
+<td>Call FUNC once if the Tcl main loop has no event to</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.DiagCanvas.arrow" title="scitools.Lumpy.DiagCanvas.arrow"><tt class="xref py py-obj docutils literal"><span class="pre">arrow</span></tt></a>(start,&nbsp;end,&nbsp;**options)</td>
+<td>draw an arrow: start and end can be a Pos object or</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>(item)</td>
+<td>compute the bounding box of the given item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bell</span></tt>([displayof])</td>
+<td>Ring a display&#8217;s bell.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to this widget at event SEQUENCE a call to function FUNC.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind_all</span></tt>([sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to all widgets at an event SEQUENCE a call to function FUNC.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind_class</span></tt>(className[,&nbsp;sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to widgets with bindtag CLASSNAME at event</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bindtags</span></tt>([tagList])</td>
+<td>Set or get the list of bindtags for this widget.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.DiagCanvas.box" title="scitools.Lumpy.DiagCanvas.box"><tt class="xref py py-obj docutils literal"><span class="pre">box</span></tt></a>(box[,&nbsp;padx,&nbsp;pady])</td>
+<td>draw a rectangle with the given bounding box, expanded</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">canvasx</span></tt>(screenx[,&nbsp;gridspacing])</td>
+<td>Return the canvas x coordinate of pixel position SCREENX rounded</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">canvasy</span></tt>(screeny[,&nbsp;gridspacing])</td>
+<td>Return the canvas y coordinate of pixel position SCREENY rounded</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">cget</span></tt>(key)</td>
+<td>Return the resource value for a KEY given as string.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">circle</span></tt>(x,&nbsp;y,&nbsp;r[,&nbsp;fill])</td>
+<td>make a circle with center at (x, y) and radius (r)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_append</span></tt>(string,&nbsp;**kw)</td>
+<td>Append STRING to the Tk clipboard.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_clear</span></tt>(**kw)</td>
+<td>Clear the data in the Tk clipboard.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_get</span></tt>(**kw)</td>
+<td>Retrieve data from the clipboard on window&#8217;s display.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormodel</span></tt>([value])</td>
+<td>Useless.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">columnconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure column INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">config</span></tt>([cnf])</td>
+<td>Configure resources of a widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">configure</span></tt>([cnf])</td>
+<td>Configure resources of a widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">coords</span></tt>(*args)</td>
+<td>Return a list of coordinates for the item given in ARGS.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_arc</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create arc shaped region with coordinates x1,y1,x2,y2.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_bitmap</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create bitmap with coordinates x1,y1.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_image</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create image item with coordinates x1,y1.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_line</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create line with coordinates x1,y1,...,xn,yn.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_oval</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create oval with coordinates x1,y1,x2,y2.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_polygon</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create polygon with coordinates x1,y1,...,xn,yn.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_rectangle</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create rectangle with coordinates x1,y1,x2,y2.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_text</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create text with coordinates x1,y1.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_window</span></tt>(*args,&nbsp;**kw)</td>
+<td>Create window with coordinates x1,y1,x2,y2.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">dchars</span></tt>(*args)</td>
+<td>Delete characters of text items identified by tag or id in ARGS (possibly</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt>(*args)</td>
+<td>Delete items identified by all tag or ids contained in ARGS.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">deletecommand</span></tt>(name)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">destroy</span></tt>()</td>
+<td>Destroy this and all descendants widgets.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.DiagCanvas.dot" title="scitools.Lumpy.DiagCanvas.dot"><tt class="xref py py-obj docutils literal"><span class="pre">dot</span></tt></a>(pos[,&nbsp;r])</td>
+<td>draw a dot at the given position with radius r</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">dtag</span></tt>(*args)</td>
+<td>Delete tag or id given as last arguments in ARGS from items</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">dump</span></tt>([filename])</td>
+<td>create a PostScipt file with the given name and dump</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_add</span></tt>(virtual,&nbsp;*sequences)</td>
+<td>Bind a virtual event VIRTUAL (of the form &lt;&lt;Name&gt;&gt;)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_delete</span></tt>(virtual,&nbsp;*sequences)</td>
+<td>Unbind a virtual event VIRTUAL from SEQUENCE.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_generate</span></tt>(sequence,&nbsp;**kw)</td>
+<td>Generate an event SEQUENCE. Additional</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_info</span></tt>([virtual])</td>
+<td>Return a list of all virtual events or the information</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">find</span></tt>(*args)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_above</span></tt>(tagOrId)</td>
+<td>Return items above TAGORID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_all</span></tt>()</td>
+<td>Return all items.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_below</span></tt>(tagOrId)</td>
+<td>Return all items below TAGORID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_closest</span></tt>(x,&nbsp;y[,&nbsp;halo,&nbsp;start])</td>
+<td>Return item which is closest to pixel at X, Y.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_enclosed</span></tt>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2)</td>
+<td>Return all items in rectangle defined</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_overlapping</span></tt>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2)</td>
+<td>Return all items which overlap the rectangle</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">find_withtag</span></tt>(tagOrId)</td>
+<td>Return all items with TAGORID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">flipx</span></tt>(item)</td>
+<td>warning: this works in pixel coordinates</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus</span></tt>(*args)</td>
+<td>Set focus to the first item specified in ARGS.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_displayof</span></tt>()</td>
+<td>Return the widget which has currently the focus on the display where this widget is located.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_force</span></tt>()</td>
+<td>Direct input focus to this widget even if the application does not have the focus.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_get</span></tt>()</td>
+<td>Return the widget which has currently the focus in the application.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_lastfor</span></tt>()</td>
+<td>Return the widget which would have the focus if top level</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_set</span></tt>()</td>
+<td>Direct input focus to this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">forget</span></tt>()</td>
+<td>Unmap this widget and do not use it for the packing order.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getboolean</span></tt>(s)</td>
+<td>Return a boolean value for Tcl boolean values true and false given as parameter.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getdouble</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getint</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gettags</span></tt>(*args)</td>
+<td>Return tags associated with the first item specified in ARGS.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getvar</span></tt>([name])</td>
+<td>Return value of Tcl variable NAME.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_current</span></tt>()</td>
+<td>Return widget which has currently the grab in this application</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_release</span></tt>()</td>
+<td>Release grab for this widget if currently set.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_set</span></tt>()</td>
+<td>Set grab for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_set_global</span></tt>()</td>
+<td>Set global grab for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_status</span></tt>()</td>
+<td>Return None, &#8220;local&#8221; or &#8220;global&#8221; if this widget has</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt>([cnf])</td>
+<td>Position a widget in the parent widget in a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_bbox</span></tt>([column,&nbsp;row,&nbsp;col2,&nbsp;row2])</td>
+<td>Return a tuple of integer coordinates for the bounding box of this widget controlled by the geometry manager grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_columnconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure column INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_configure</span></tt>([cnf])</td>
+<td>Position a widget in the parent widget in a grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_forget</span></tt>()</td>
+<td>Unmap this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_info</span></tt>()</td>
+<td>Return information about the options</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_location</span></tt>(x,&nbsp;y)</td>
+<td>Return a tuple of column and row which identify the cell</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_remove</span></tt>()</td>
+<td>Unmap this widget but remember the grid options.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_rowconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure row INDEX of a grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_size</span></tt>()</td>
+<td>Return a tuple of the number of column and rows in the grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_slaves</span></tt>([row,&nbsp;column])</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">icursor</span></tt>(*args)</td>
+<td>Set cursor at position POS in the item identified by TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">image</span></tt>(coord,&nbsp;image,&nbsp;**options)</td>
+<td>make an image item with the given image at the given position.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">image_names</span></tt>()</td>
+<td>Return a list of all existing image names.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">image_types</span></tt>()</td>
+<td>Return a list of all available image types (e.g.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt>(*args)</td>
+<td>Return position of cursor as integer in item specified in ARGS.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt>()</td>
+<td>Return information about the packing options</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">insert</span></tt>(*args)</td>
+<td>Insert TEXT in item TAGORID at position POS. ARGS must</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">invert</span></tt>(coords)</td>
+<td>apply the inverse of each of the transforms, in reverse</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">itemcget</span></tt>(tagOrId,&nbsp;option)</td>
+<td>Return the resource value for an OPTION for item TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">itemconfig</span></tt>(tagOrId[,&nbsp;cnf])</td>
+<td>Configure resources of an item TAGORID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">itemconfigure</span></tt>(tagOrId[,&nbsp;cnf])</td>
+<td>Configure resources of an item TAGORID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt>()</td>
+<td>Return a list of all resource names of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">lift</span></tt>(*args)</td>
+<td>Raise an item TAGORID given in ARGS</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">line</span></tt>(coords[,&nbsp;fill])</td>
+<td>make a polyline with vertices at each point in (coords)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">location</span></tt>(x,&nbsp;y)</td>
+<td>Return a tuple of column and row which identify the cell</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">lower</span></tt>(*args)</td>
+<td>Lower an item TAGORID given in ARGS</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">mainloop</span></tt>([n])</td>
+<td>Call the mainloop of Tk.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.DiagCanvas.measure" title="scitools.Lumpy.DiagCanvas.measure"><tt class="xref py py-obj docutils literal"><span class="pre">measure</span></tt></a>(t,&nbsp;**options)</td>
+<td>find the bounding box of the list of words by</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">move</span></tt>(*args)</td>
+<td>Move an item TAGORID given in ARGS.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">nametowidget</span></tt>(name)</td>
+<td>Return the Tkinter instance of a widget identified by</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_add</span></tt>(pattern,&nbsp;value[,&nbsp;priority])</td>
+<td>Set a VALUE (second parameter) for an option</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_clear</span></tt>()</td>
+<td>Clear the option database.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_get</span></tt>(name,&nbsp;className)</td>
+<td>Return the value for an option NAME for this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_readfile</span></tt>(fileName[,&nbsp;priority])</td>
+<td>Read file FILENAME into the option database.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">oval</span></tt>(coords[,&nbsp;fill])</td>
+<td>make an oval with bounding box (coords) and fill color (fill)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack</span></tt>([cnf])</td>
+<td>Pack a widget in the parent widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_configure</span></tt>([cnf])</td>
+<td>Pack a widget in the parent widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_forget</span></tt>()</td>
+<td>Unmap this widget and do not use it for the packing order.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_info</span></tt>()</td>
+<td>Return information about the packing options</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">place</span></tt>([cnf])</td>
+<td>Place a widget in the parent widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">place_configure</span></tt>([cnf])</td>
+<td>Place a widget in the parent widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">place_forget</span></tt>()</td>
+<td>Unmap this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">place_info</span></tt>()</td>
+<td>Return information about the placing options</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">place_slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">polygon</span></tt>(coords[,&nbsp;fill])</td>
+<td>make a close polygon with vertices at each point in (coords)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">postscript</span></tt>([cnf])</td>
+<td>Print the contents of the canvas to a postscript file.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">quit</span></tt>()</td>
+<td>Quit the Tcl interpreter. All widgets will be destroyed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">rectangle</span></tt>(coords[,&nbsp;fill])</td>
+<td>make an oval with bounding box (coords) and fill color (fill)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">register</span></tt>(func[,&nbsp;subst,&nbsp;needcleanup])</td>
+<td>Return a newly created Tcl function. If this</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">rowconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure row INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scale</span></tt>(*args)</td>
+<td>Scale item TAGORID with XORIGIN, YORIGIN, XSCALE, YSCALE.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_dragto</span></tt>(x,&nbsp;y[,&nbsp;gain])</td>
+<td>Adjust the view of the canvas to GAIN times the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_mark</span></tt>(x,&nbsp;y)</td>
+<td>Remember the current X, Y coordinates.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">select_adjust</span></tt>(tagOrId,&nbsp;index)</td>
+<td>Adjust the end of the selection near the cursor of an item TAGORID to index.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">select_clear</span></tt>()</td>
+<td>Clear the selection if it is in this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">select_from</span></tt>(tagOrId,&nbsp;index)</td>
+<td>Set the fixed end of a selection in item TAGORID to INDEX.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">select_item</span></tt>()</td>
+<td>Return the item which has the selection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">select_to</span></tt>(tagOrId,&nbsp;index)</td>
+<td>Set the variable end of a selection in item TAGORID to INDEX.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_clear</span></tt>(**kw)</td>
+<td>Clear the current X selection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_get</span></tt>(**kw)</td>
+<td>Return the contents of the current X selection.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_handle</span></tt>(command,&nbsp;**kw)</td>
+<td>Specify a function COMMAND to call if the X</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_own</span></tt>(**kw)</td>
+<td>Become owner of X selection.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_own_get</span></tt>(**kw)</td>
+<td>Return owner of X selection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">send</span></tt>(interp,&nbsp;cmd,&nbsp;*args)</td>
+<td>Send Tcl command CMD to different interpreter INTERP to be executed.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setvar</span></tt>([name,&nbsp;value])</td>
+<td>Set Tcl variable NAME to VALUE.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">size</span></tt>()</td>
+<td>Return a tuple of the number of column and rows in the grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.DiagCanvas.str" title="scitools.Lumpy.DiagCanvas.str"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>(pos,&nbsp;text[,&nbsp;dx,&nbsp;dy])</td>
+<td>draw the given text at the given position, with an offset</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tag_bind</span></tt>(tagOrId[,&nbsp;sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to all items with TAGORID at event SEQUENCE a call to function FUNC.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tag_lower</span></tt>(*args)</td>
+<td>Lower an item TAGORID given in ARGS</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tag_raise</span></tt>(*args)</td>
+<td>Raise an item TAGORID given in ARGS</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tag_unbind</span></tt>(tagOrId,&nbsp;sequence[,&nbsp;funcid])</td>
+<td>Unbind for all items with TAGORID for event SEQUENCE  the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tcoords</span></tt>(item[,&nbsp;coords])</td>
+<td>provides get and set access to item coordinates,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">text</span></tt>(coord[,&nbsp;text,&nbsp;fill])</td>
+<td>make a text item with the given text and fill color.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_bisque</span></tt>()</td>
+<td>Change the color scheme to light brown as used in Tk 3.6 and before.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusFollowsMouse</span></tt>()</td>
+<td>The widget under mouse will get automatically focus.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusNext</span></tt>()</td>
+<td>Return the next widget in the focus order which follows widget which has currently the focus.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusPrev</span></tt>()</td>
+<td>Return previous widget in the focus order.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_menuBar</span></tt>(*args)</td>
+<td>Do not use.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_setPalette</span></tt>(*args,&nbsp;**kw)</td>
+<td>Set a new color scheme for all widget elements.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_strictMotif</span></tt>([boolean])</td>
+<td>Set Tcl internal variable, whether the look and feel</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tkraise</span></tt>(*args)</td>
+<td>Raise an item TAGORID given in ARGS</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tmove</span></tt>(tags[,&nbsp;dx,&nbsp;dy])</td>
+<td>move all items with the given tags, with dx and dy</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">trans</span></tt>(coords)</td>
+<td>apply each of the transforms for this canvas, in order.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">type</span></tt>(tagOrId)</td>
+<td>Return the type of the item TAGORID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind</span></tt>(sequence[,&nbsp;funcid])</td>
+<td>Unbind for this widget for event SEQUENCE  the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind_all</span></tt>(sequence)</td>
+<td>Unbind for all widgets for event SEQUENCE all functions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind_class</span></tt>(className,&nbsp;sequence)</td>
+<td>Unbind for a all widgets with bindtag CLASSNAME for event SEQUENCE</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>()</td>
+<td>Enter event loop until all pending events have been processed by Tcl.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">update_idletasks</span></tt>()</td>
+<td>Enter event loop until all idle callbacks have been called.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_variable</span></tt>([name])</td>
+<td>Wait until the variable is modified.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_visibility</span></tt>([window])</td>
+<td>Wait until the visibility of a WIDGET changes</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_window</span></tt>([window])</td>
+<td>Wait until a WIDGET is destroyed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">waitvar</span></tt>([name])</td>
+<td>Wait until the variable is modified.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_atom</span></tt>(name[,&nbsp;displayof])</td>
+<td>Return integer which represents atom NAME.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_atomname</span></tt>(id[,&nbsp;displayof])</td>
+<td>Return name of atom with identifier ID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_cells</span></tt>()</td>
+<td>Return number of cells in the colormap for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_children</span></tt>()</td>
+<td>Return a list of all widgets which are children of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_class</span></tt>()</td>
+<td>Return window class name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_colormapfull</span></tt>()</td>
+<td>Return true if at the last color request the colormap was full.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_containing</span></tt>(rootX,&nbsp;rootY[,&nbsp;displayof])</td>
+<td>Return the widget which is at the root coordinates ROOTX, ROOTY.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_depth</span></tt>()</td>
+<td>Return the number of bits per pixel.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_exists</span></tt>()</td>
+<td>Return true if this widget exists.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_fpixels</span></tt>(number)</td>
+<td>Return the number of pixels for the given distance NUMBER</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_geometry</span></tt>()</td>
+<td>Return geometry string for this widget in the form &#8220;widthxheight+X+Y&#8221;.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_height</span></tt>()</td>
+<td>Return height of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_id</span></tt>()</td>
+<td>Return identifier ID for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_interps</span></tt>([displayof])</td>
+<td>Return the name of all Tcl interpreters for this display.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_ismapped</span></tt>()</td>
+<td>Return true if this widget is mapped.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_manager</span></tt>()</td>
+<td>Return the window mananger name for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_name</span></tt>()</td>
+<td>Return the name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_parent</span></tt>()</td>
+<td>Return the name of the parent of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pathname</span></tt>(id[,&nbsp;displayof])</td>
+<td>Return the pathname of the widget given by ID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pixels</span></tt>(number)</td>
+<td>Rounded integer value of winfo_fpixels.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointerx</span></tt>()</td>
+<td>Return the x coordinate of the pointer on the root window.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointerxy</span></tt>()</td>
+<td>Return a tuple of x and y coordinates of the pointer on the root window.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointery</span></tt>()</td>
+<td>Return the y coordinate of the pointer on the root window.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_reqheight</span></tt>()</td>
+<td>Return requested height of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_reqwidth</span></tt>()</td>
+<td>Return requested width of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rgb</span></tt>(color)</td>
+<td>Return tuple of decimal values for red, green, blue for</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rootx</span></tt>()</td>
+<td>Return x coordinate of upper left corner of this widget on the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rooty</span></tt>()</td>
+<td>Return y coordinate of upper left corner of this widget on the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screen</span></tt>()</td>
+<td>Return the screen name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screencells</span></tt>()</td>
+<td>Return the number of the cells in the colormap of the screen</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screendepth</span></tt>()</td>
+<td>Return the number of bits per pixel of the root window of the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenheight</span></tt>()</td>
+<td>Return the number of pixels of the height of the screen of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenmmheight</span></tt>()</td>
+<td>Return the number of pixels of the height of the screen of</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenmmwidth</span></tt>()</td>
+<td>Return the number of pixels of the width of the screen of</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenvisual</span></tt>()</td>
+<td>Return one of the strings directcolor, grayscale, pseudocolor,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenwidth</span></tt>()</td>
+<td>Return the number of pixels of the width of the screen of</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_server</span></tt>()</td>
+<td>Return information of the X-Server of the screen of this widget in</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_toplevel</span></tt>()</td>
+<td>Return the toplevel widget of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_viewable</span></tt>()</td>
+<td>Return true if the widget and all its higher ancestors are mapped.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visual</span></tt>()</td>
+<td>Return one of the strings directcolor, grayscale, pseudocolor,</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visualid</span></tt>()</td>
+<td>Return the X identifier for the visual for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visualsavailable</span></tt>([includeids])</td>
+<td>Return a list of all visuals available for the screen of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootheight</span></tt>()</td>
+<td>Return the height of the virtual root window associated with this widget in pixels.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootwidth</span></tt>()</td>
+<td>Return the width of the virtual root window associated with this widget in pixel.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootx</span></tt>()</td>
+<td>Return the x offset of the virtual root relative to the root</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrooty</span></tt>()</td>
+<td>Return the y offset of the virtual root relative to the root</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_width</span></tt>()</td>
+<td>Return the width of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_x</span></tt>()</td>
+<td>Return the x coordinate of the upper left corner of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_y</span></tt>()</td>
+<td>Return the y coordinate of the upper left corner of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">xview</span></tt>(*args)</td>
+<td>Query and change the horizontal position of the view.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">xview_moveto</span></tt>(fraction)</td>
+<td>Adjusts the view in the window so that FRACTION of the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">xview_scroll</span></tt>(number,&nbsp;what)</td>
+<td>Shift the x-view according to NUMBER which is measured in &#8220;units&#8221;</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">yview</span></tt>(*args)</td>
+<td>Query and change the vertical position of the view.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">yview_moveto</span></tt>(fraction)</td>
+<td>Adjusts the view in the window so that FRACTION of the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">yview_scroll</span></tt>(number,&nbsp;what)</td>
+<td>Shift the y-view according to NUMBER which is measured in</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.DiagCanvas.arrow">
+<tt class="descname">arrow</tt><big>(</big><em>start</em>, <em>end</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas.arrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas.arrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw an arrow: start and end can be a Pos object or
+a list of two coordinates</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.DiagCanvas.box">
+<tt class="descname">box</tt><big>(</big><em>box</em>, <em>padx=0.5</em>, <em>pady=0.3</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw a rectangle with the given bounding box, expanded
+by padx and pady.  box can be a Bbox object or a list of
+two coordinate pairs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.DiagCanvas.dot">
+<tt class="descname">dot</tt><big>(</big><em>pos</em>, <em>r=0.2</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas.dot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas.dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw a dot at the given position with radius r</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.DiagCanvas.measure">
+<tt class="descname">measure</tt><big>(</big><em>t</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas.measure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas.measure" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the bounding box of the list of words by
+drawing them, measuring them, and then deleting them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.DiagCanvas.str">
+<tt class="descname">str</tt><big>(</big><em>pos</em>, <em>text</em>, <em>dx=0</em>, <em>dy=0</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#DiagCanvas.str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.DiagCanvas.str" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw the given text at the given position, with an offset
+specified by dx and dy</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Diagram">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Diagram</tt><big>(</big><em>lumpy</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>the parent class for ClassDiagram and ObjectDiagram.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.add_arrow" title="scitools.Lumpy.Diagram.add_arrow"><tt class="xref py py-obj docutils literal"><span class="pre">add_arrow</span></tt></a>(arrow)</td>
+<td>append a new arrow on the list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.ca" title="scitools.Lumpy.Diagram.ca"><tt class="xref py py-obj docutils literal"><span class="pre">ca</span></tt></a>(*args,&nbsp;**options)</td>
+<td>make a canvas for the diagram</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.close" title="scitools.Lumpy.Diagram.close"><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt></a>()</td>
+<td>close the window and exit</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.draw_arrows" title="scitools.Lumpy.Diagram.draw_arrows"><tt class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></tt></a>()</td>
+<td>draw all the arrows on the list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.printfile" title="scitools.Lumpy.Diagram.printfile"><tt class="xref py py-obj docutils literal"><span class="pre">printfile</span></tt></a>()</td>
+<td>dump the contents of the canvas to the filename in the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.setup" title="scitools.Lumpy.Diagram.setup"><tt class="xref py py-obj docutils literal"><span class="pre">setup</span></tt></a>()</td>
+<td>create the gui for the diagram</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Diagram.update_arrows" title="scitools.Lumpy.Diagram.update_arrows"><tt class="xref py py-obj docutils literal"><span class="pre">update_arrows</span></tt></a>([n])</td>
+<td>update up to n arrows (or all of them is n==None)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.add_arrow">
+<tt class="descname">add_arrow</tt><big>(</big><em>arrow</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.add_arrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.add_arrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>append a new arrow on the list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.ca">
+<tt class="descname">ca</tt><big>(</big><em>*args</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.ca"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.ca" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a canvas for the diagram</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>close the window and exit</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.draw_arrows">
+<tt class="descname">draw_arrows</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.draw_arrows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.draw_arrows" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw all the arrows on the list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.printfile">
+<tt class="descname">printfile</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.printfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.printfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>dump the contents of the canvas to the filename in the
+filename entry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.setup">
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the gui for the diagram</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Diagram.update_arrows">
+<tt class="descname">update_arrows</tt><big>(</big><em>n=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Diagram.update_arrows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Diagram.update_arrows" title="Permalink to this definition">¶</a></dt>
+<dd><p>update up to n arrows (or all of them is n==None)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Dot">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Dot</tt><a class="reference internal" href="_modules/scitools/Lumpy.html#Dot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>the Thing that represents a dot in a diagram</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Dot.drawme" title="scitools.Lumpy.Dot.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Dot.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Dot.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Dot.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Frame">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Frame</tt><big>(</big><em>lumpy</em>, <em>frame</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Mapping" title="scitools.Lumpy.Mapping"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Mapping</span></tt></a></p>
+<p>The graphical representation of a frame,
+implemented as a list of Bindings</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>the bbox of a Mapping is the bbox of its box item.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>drawme is the middle part of the way objects are drawn.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_bindings</span></tt>(cls)</td>
+<td>scan the bindings in this mapping, looking for</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_val</span></tt>(cls,&nbsp;val)</td>
+<td>if we find a reference to an object type, make a note</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Index">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Index</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Simple" title="scitools.Lumpy.Simple"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Simple</span></tt></a></p>
+<p>the graphical representation of an index in a Sequence.
+An Index object does not register with lumpy, so that even
+in pedantic mode, it is always drawn, and it is never the
+target of a reference (since it is not really a value at
+run-time).</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Index.drawme" title="scitools.Lumpy.Index.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Index.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Index.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Index.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Instance">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Instance</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Mapping" title="scitools.Lumpy.Mapping"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Mapping</span></tt></a></p>
+<p>The graphical representation of an object (usually).
+Anything with a __dict__ is treated as an Instance.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>the bbox of a Mapping is the bbox of its box item.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>drawme is the middle part of the way objects are drawn.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Instance.scan_bindings" title="scitools.Lumpy.Instance.scan_bindings"><tt class="xref py py-obj docutils literal"><span class="pre">scan_bindings</span></tt></a>(cls)</td>
+<td>scan the bindings in this Instance, looking for</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_val</span></tt>(cls,&nbsp;val)</td>
+<td>if we find a reference to an object type, make a note</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Instance.scan_bindings">
+<tt class="descname">scan_bindings</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Instance.scan_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Instance.scan_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>scan the bindings in this Instance, looking for
+references to other object types; also, make a note
+of the names of the instance variables.
+cls is the Class object this instance belongs to.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Lumpy">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Lumpy</tt><big>(</big><em>debug=False</em>, <em>pedantic=False</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">scitools._Gui.Gui</span></tt></p>
+<p>the Lumpy object represents the GUI window.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ScrollableCanvas</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ScrollableText</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">after</span></tt>(ms[,&nbsp;func])</td>
+<td>Call function once after given time.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">after_cancel</span></tt>(id)</td>
+<td>Cancel scheduling of function identified with ID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">after_idle</span></tt>(func,&nbsp;*args)</td>
+<td>Call FUNC once if the Tcl main loop has no event to</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">aspect</span></tt>([minNumer,&nbsp;minDenom,&nbsp;maxNumer,&nbsp;maxDenom])</td>
+<td>Instruct the window manager to set the aspect ratio (width/height)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">attributes</span></tt>(*args)</td>
+<td>This subcommand returns or sets platform specific attributes</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>([column,&nbsp;row,&nbsp;col2,&nbsp;row2])</td>
+<td>Return a tuple of integer coordinates for the bounding box of this widget controlled by the geometry manager grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bell</span></tt>([displayof])</td>
+<td>Ring a display&#8217;s bell.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to this widget at event SEQUENCE a call to function FUNC.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind_all</span></tt>([sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to all widgets at an event SEQUENCE a call to function FUNC.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind_class</span></tt>(className[,&nbsp;sequence,&nbsp;func,&nbsp;add])</td>
+<td>Bind to widgets with bindtag CLASSNAME at event</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bindtags</span></tt>([tagList])</td>
+<td>Set or get the list of bindtags for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bu</span></tt>(*args,&nbsp;**options)</td>
+<td>make a button</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ca</span></tt>(*args,&nbsp;**options)</td>
+<td>make a canvas widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">cb</span></tt>(*args,&nbsp;**options)</td>
+<td>make a checkbutton.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">cget</span></tt>(key)</td>
+<td>Return the resource value for a KEY given as string.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.class_diagram" title="scitools.Lumpy.Lumpy.class_diagram"><tt class="xref py py-obj docutils literal"><span class="pre">class_diagram</span></tt></a>([classes])</td>
+<td>create a new object diagram based on the current state.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">client</span></tt>([name])</td>
+<td>Store NAME in WM_CLIENT_MACHINE property of this widget. Return</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_append</span></tt>(string,&nbsp;**kw)</td>
+<td>Append STRING to the Tk clipboard.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_clear</span></tt>(**kw)</td>
+<td>Clear the data in the Tk clipboard.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clipboard_get</span></tt>(**kw)</td>
+<td>Retrieve data from the clipboard on window&#8217;s display.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormapwindows</span></tt>(*wlist)</td>
+<td>Store list of window names (WLIST) into WM_COLORMAPWINDOWS property</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colormodel</span></tt>([value])</td>
+<td>Useless.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">columnconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure column INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">colweights</span></tt>(weights)</td>
+<td>attach weights to the columns of the current grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">command</span></tt>([value])</td>
+<td>Store VALUE in WM_COMMAND property. It is the command</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">config</span></tt>([cnf])</td>
+<td>Configure resources of a widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">configure</span></tt>([cnf])</td>
+<td>Configure resources of a widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">deiconify</span></tt>()</td>
+<td>Deiconify this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">deletecommand</span></tt>(name)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">destroy</span></tt>()</td>
+<td>Destroy this and all descendants widgets.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">en</span></tt>(*args,&nbsp;**options)</td>
+<td>make an entry widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">endfr</span></tt>()</td>
+<td>end the current frame (and return it)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">endgr</span></tt>()</td>
+<td>end the current frame (and return it)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_add</span></tt>(virtual,&nbsp;*sequences)</td>
+<td>Bind a virtual event VIRTUAL (of the form &lt;&lt;Name&gt;&gt;)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_delete</span></tt>(virtual,&nbsp;*sequences)</td>
+<td>Unbind a virtual event VIRTUAL from SEQUENCE.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_generate</span></tt>(sequence,&nbsp;**kw)</td>
+<td>Generate an event SEQUENCE. Additional</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">event_info</span></tt>([virtual])</td>
+<td>Return a list of all virtual events or the information</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus</span></tt>()</td>
+<td>Direct input focus to this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_displayof</span></tt>()</td>
+<td>Return the widget which has currently the focus on the display where this widget is located.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_force</span></tt>()</td>
+<td>Direct input focus to this widget even if the application does not have the focus.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_get</span></tt>()</td>
+<td>Return the widget which has currently the focus in the application.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_lastfor</span></tt>()</td>
+<td>Return the widget which would have the focus if top level</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">focus_set</span></tt>()</td>
+<td>Direct input focus to this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">focusmodel</span></tt>([model])</td>
+<td>Set focus model to MODEL. &#8220;active&#8221; means that this widget will claim</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fr</span></tt>(*args,&nbsp;**options)</td>
+<td>make a return a frame.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">geometry</span></tt>([newGeometry])</td>
+<td>Set geometry to NEWGEOMETRY of the form =widthxheight+x+y. Return</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.get_class_list" title="scitools.Lumpy.Lumpy.get_class_list"><tt class="xref py py-obj docutils literal"><span class="pre">get_class_list</span></tt></a>()</td>
+<td>return the list of classes that should be drawn in</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getboolean</span></tt>(s)</td>
+<td>Return a boolean value for Tcl boolean values true and false given as parameter.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getdouble</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">getint</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">getvar</span></tt>([name])</td>
+<td>Return value of Tcl variable NAME.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gr</span></tt>(cols[,&nbsp;cweights,&nbsp;rweights])</td>
+<td>create a frame and switch to grid mode.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_current</span></tt>()</td>
+<td>Return widget which has currently the grab in this application</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_release</span></tt>()</td>
+<td>Release grab for this widget if currently set.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_set</span></tt>()</td>
+<td>Set grab for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_set_global</span></tt>()</td>
+<td>Set global grab for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grab_status</span></tt>()</td>
+<td>Return None, &#8220;local&#8221; or &#8220;global&#8221; if this widget has</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid</span></tt>(widget[,&nbsp;i,&nbsp;j])</td>
+<td>pack the given widget in the current grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_bbox</span></tt>([column,&nbsp;row,&nbsp;col2,&nbsp;row2])</td>
+<td>Return a tuple of integer coordinates for the bounding box of this widget controlled by the geometry manager grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_columnconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure column INDEX of a grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_location</span></tt>(x,&nbsp;y)</td>
+<td>Return a tuple of column and row which identify the cell</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_rowconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure row INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_size</span></tt>()</td>
+<td>Return a tuple of the number of column and rows in the grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">grid_slaves</span></tt>([row,&nbsp;column])</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">group</span></tt>([pathName])</td>
+<td>Set the group leader widgets for related widgets to PATHNAME. Return</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconbitmap</span></tt>([bitmap,&nbsp;default])</td>
+<td>Set bitmap for the iconified widget to BITMAP. Return</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconify</span></tt>()</td>
+<td>Display widget as icon.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconmask</span></tt>([bitmap])</td>
+<td>Set mask for the icon bitmap of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconname</span></tt>([newName])</td>
+<td>Set the name of the icon for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconposition</span></tt>([x,&nbsp;y])</td>
+<td>Set the position of the icon of this widget to X and Y. Return</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">iconwindow</span></tt>([pathName])</td>
+<td>Set widget PATHNAME to be displayed instead of icon. Return the current</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">image_names</span></tt>()</td>
+<td>Return a list of all existing image names.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">image_types</span></tt>()</td>
+<td>Return a list of all available image types (e.g.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.is_opaque" title="scitools.Lumpy.Lumpy.is_opaque"><tt class="xref py py-obj docutils literal"><span class="pre">is_opaque</span></tt></a>(classobj)</td>
+<td>check whether this class is completely opaque</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt>()</td>
+<td>Return a list of all resource names of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">la</span></tt>(*args,&nbsp;**options)</td>
+<td>make a label widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt>(*args,&nbsp;**options)</td>
+<td>make a listbox.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">lift</span></tt>([aboveThis])</td>
+<td>Raise this widget in the stacking order.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">loadtk</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.lookup" title="scitools.Lumpy.Lumpy.lookup"><tt class="xref py py-obj docutils literal"><span class="pre">lookup</span></tt></a>(val)</td>
+<td>check to see whether the given value is already represented</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">lower</span></tt>([belowThis])</td>
+<td>Lower this widget in the stacking order.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">mainloop</span></tt>([n])</td>
+<td>Call the mainloop of Tk.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.make_reference" title="scitools.Lumpy.Lumpy.make_reference"><tt class="xref py py-obj docutils literal"><span class="pre">make_reference</span></tt></a>()</td>
+<td>make a reference point by taking a snapshot of the current</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.make_reference2" title="scitools.Lumpy.Lumpy.make_reference2"><tt class="xref py py-obj docutils literal"><span class="pre">make_reference2</span></tt></a>()</td>
+<td>this extra method call is here so that the reference</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.make_stack" title="scitools.Lumpy.Lumpy.make_stack"><tt class="xref py py-obj docutils literal"><span class="pre">make_stack</span></tt></a>()</td>
+<td>take a snapshot of the current state, subtract away the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">maxsize</span></tt>([width,&nbsp;height])</td>
+<td>Set max WIDTH and HEIGHT for this widget. If the window is gridded</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">mb</span></tt>(*args,&nbsp;**options)</td>
+<td>make a menubutton</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">mi</span></tt>(mb[,&nbsp;label])</td>
+<td>make a menu item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">minsize</span></tt>([width,&nbsp;height])</td>
+<td>Set min WIDTH and HEIGHT for this widget. If the window is gridded</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">nametowidget</span></tt>(name)</td>
+<td>Return the Tkinter instance of a widget identified by</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.object_diagram" title="scitools.Lumpy.Lumpy.object_diagram"><tt class="xref py py-obj docutils literal"><span class="pre">object_diagram</span></tt></a>([obj])</td>
+<td>create a new object diagram based on the current state.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.opaque_class" title="scitools.Lumpy.Lumpy.opaque_class"><tt class="xref py py-obj docutils literal"><span class="pre">opaque_class</span></tt></a>(classobj)</td>
+<td>restrict this class to no variables</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.opaque_module" title="scitools.Lumpy.Lumpy.opaque_module"><tt class="xref py py-obj docutils literal"><span class="pre">opaque_module</span></tt></a>(modobj)</td>
+<td>make all classes defined in this module opaque</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_add</span></tt>(pattern,&nbsp;value[,&nbsp;priority])</td>
+<td>Set a VALUE (second parameter) for an option</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_clear</span></tt>()</td>
+<td>Clear the option database.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_get</span></tt>(name,&nbsp;className)</td>
+<td>Return the value for an option NAME for this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">option_readfile</span></tt>(fileName[,&nbsp;priority])</td>
+<td>Read file FILENAME into the option database.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">overrideredirect</span></tt>([boolean])</td>
+<td>Instruct the window manager to ignore this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pack_slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">place_slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">popfr</span></tt>()</td>
+<td>end the current frame (and return it)</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">positionfrom</span></tt>([who])</td>
+<td>Instruct the window manager that the position of this widget shall</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">propagate</span></tt>([flag])</td>
+<td>Set or get the status for propagation of geometry information.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">protocol</span></tt>([name,&nbsp;func])</td>
+<td>Bind function FUNC to command NAME for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pushfr</span></tt>(frame)</td>
+<td>push a frame onto the frame stack</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">quit</span></tt>()</td>
+<td>Quit the Tcl interpreter. All widgets will be destroyed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">rb</span></tt>(*args,&nbsp;**options)</td>
+<td>make a radiobutton</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">readprofile</span></tt>(baseName,&nbsp;className)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.register" title="scitools.Lumpy.Lumpy.register"><tt class="xref py py-obj docutils literal"><span class="pre">register</span></tt></a>(thing,&nbsp;val)</td>
+<td>associate a value with the Thing that represents it,</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">report_callback_exception</span></tt>(exc,&nbsp;val,&nbsp;tb)</td>
+<td>Internal function.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">resizable</span></tt>([width,&nbsp;height])</td>
+<td>Instruct the window manager whether this width can be resized</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.restrict_class" title="scitools.Lumpy.Lumpy.restrict_class"><tt class="xref py py-obj docutils literal"><span class="pre">restrict_class</span></tt></a>(classobj[,&nbsp;vars])</td>
+<td>restrict this class so that when it is drawn, only</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">rowconfigure</span></tt>(index[,&nbsp;cnf])</td>
+<td>Configure row INDEX of a grid.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">rowweights</span></tt>(weights)</td>
+<td>attach weights to the rows of the current grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">sb</span></tt>(*args,&nbsp;**options)</td>
+<td>make a text scrollbar</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">sc</span></tt>(*args,&nbsp;**options)</td>
+<td>make a scrollable canvas.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_clear</span></tt>(**kw)</td>
+<td>Clear the current X selection.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_get</span></tt>(**kw)</td>
+<td>Return the contents of the current X selection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_handle</span></tt>(command,&nbsp;**kw)</td>
+<td>Specify a function COMMAND to call if the X</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_own</span></tt>(**kw)</td>
+<td>Become owner of X selection.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">selection_own_get</span></tt>(**kw)</td>
+<td>Return owner of X selection.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">send</span></tt>(interp,&nbsp;cmd,&nbsp;*args)</td>
+<td>Send Tcl command CMD to different interpreter INTERP to be executed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setvar</span></tt>([name,&nbsp;value])</td>
+<td>Set Tcl variable NAME to VALUE.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">size</span></tt>()</td>
+<td>Return a tuple of the number of column and rows in the grid.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">sizefrom</span></tt>([who])</td>
+<td>Instruct the window manager that the size of this widget shall</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slaves</span></tt>()</td>
+<td>Return a list of all slaves of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">st</span></tt>(*args,&nbsp;**options)</td>
+<td>make a scrollable text entry</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">state</span></tt>([newstate])</td>
+<td>Query or set the state of this widget as one of normal, icon,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">te</span></tt>(*args,&nbsp;**options)</td>
+<td>make a text entry</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">title</span></tt>([string])</td>
+<td>Set the title of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_bisque</span></tt>()</td>
+<td>Change the color scheme to light brown as used in Tk 3.6 and before.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusFollowsMouse</span></tt>()</td>
+<td>The widget under mouse will get automatically focus.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusNext</span></tt>()</td>
+<td>Return the next widget in the focus order which follows widget which has currently the focus.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_focusPrev</span></tt>()</td>
+<td>Return previous widget in the focus order.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_menuBar</span></tt>(*args)</td>
+<td>Do not use.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_setPalette</span></tt>(*args,&nbsp;**kw)</td>
+<td>Set a new color scheme for all widget elements.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tk_strictMotif</span></tt>([boolean])</td>
+<td>Set Tcl internal variable, whether the look and feel</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tkraise</span></tt>([aboveThis])</td>
+<td>Raise this widget in the stacking order.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tl</span></tt>(**options)</td>
+<td>make a return a top level window.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">transient</span></tt>([master])</td>
+<td>Instruct the window manager that this widget is transient</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Lumpy.transparent_class" title="scitools.Lumpy.Lumpy.transparent_class"><tt class="xref py py-obj docutils literal"><span class="pre">transparent_class</span></tt></a>(classobj)</td>
+<td>remove the given type or class from the dictionary, which</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind</span></tt>(sequence[,&nbsp;funcid])</td>
+<td>Unbind for this widget for event SEQUENCE  the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind_all</span></tt>(sequence)</td>
+<td>Unbind for all widgets for event SEQUENCE all functions.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">unbind_class</span></tt>(className,&nbsp;sequence)</td>
+<td>Unbind for a all widgets with bindtag CLASSNAME for event SEQUENCE</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>()</td>
+<td>Enter event loop until all pending events have been processed by Tcl.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update_idletasks</span></tt>()</td>
+<td>Enter event loop until all idle callbacks have been called.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_variable</span></tt>([name])</td>
+<td>Wait until the variable is modified.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_visibility</span></tt>([window])</td>
+<td>Wait until the visibility of a WIDGET changes</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wait_window</span></tt>([window])</td>
+<td>Wait until a WIDGET is destroyed.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">waitvar</span></tt>([name])</td>
+<td>Wait until the variable is modified.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">widget</span></tt>(constructor,&nbsp;*args,&nbsp;**options)</td>
+<td>this is the kernel of the widget constructors.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_atom</span></tt>(name[,&nbsp;displayof])</td>
+<td>Return integer which represents atom NAME.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_atomname</span></tt>(id[,&nbsp;displayof])</td>
+<td>Return name of atom with identifier ID.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_cells</span></tt>()</td>
+<td>Return number of cells in the colormap for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_children</span></tt>()</td>
+<td>Return a list of all widgets which are children of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_class</span></tt>()</td>
+<td>Return window class name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_colormapfull</span></tt>()</td>
+<td>Return true if at the last color request the colormap was full.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_containing</span></tt>(rootX,&nbsp;rootY[,&nbsp;displayof])</td>
+<td>Return the widget which is at the root coordinates ROOTX, ROOTY.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_depth</span></tt>()</td>
+<td>Return the number of bits per pixel.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_exists</span></tt>()</td>
+<td>Return true if this widget exists.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_fpixels</span></tt>(number)</td>
+<td>Return the number of pixels for the given distance NUMBER</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_geometry</span></tt>()</td>
+<td>Return geometry string for this widget in the form &#8220;widthxheight+X+Y&#8221;.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_height</span></tt>()</td>
+<td>Return height of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_id</span></tt>()</td>
+<td>Return identifier ID for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_interps</span></tt>([displayof])</td>
+<td>Return the name of all Tcl interpreters for this display.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_ismapped</span></tt>()</td>
+<td>Return true if this widget is mapped.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_manager</span></tt>()</td>
+<td>Return the window mananger name for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_name</span></tt>()</td>
+<td>Return the name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_parent</span></tt>()</td>
+<td>Return the name of the parent of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pathname</span></tt>(id[,&nbsp;displayof])</td>
+<td>Return the pathname of the widget given by ID.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pixels</span></tt>(number)</td>
+<td>Rounded integer value of winfo_fpixels.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointerx</span></tt>()</td>
+<td>Return the x coordinate of the pointer on the root window.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointerxy</span></tt>()</td>
+<td>Return a tuple of x and y coordinates of the pointer on the root window.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_pointery</span></tt>()</td>
+<td>Return the y coordinate of the pointer on the root window.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_reqheight</span></tt>()</td>
+<td>Return requested height of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_reqwidth</span></tt>()</td>
+<td>Return requested width of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rgb</span></tt>(color)</td>
+<td>Return tuple of decimal values for red, green, blue for</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rootx</span></tt>()</td>
+<td>Return x coordinate of upper left corner of this widget on the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_rooty</span></tt>()</td>
+<td>Return y coordinate of upper left corner of this widget on the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screen</span></tt>()</td>
+<td>Return the screen name of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screencells</span></tt>()</td>
+<td>Return the number of the cells in the colormap of the screen</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screendepth</span></tt>()</td>
+<td>Return the number of bits per pixel of the root window of the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenheight</span></tt>()</td>
+<td>Return the number of pixels of the height of the screen of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenmmheight</span></tt>()</td>
+<td>Return the number of pixels of the height of the screen of</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenmmwidth</span></tt>()</td>
+<td>Return the number of pixels of the width of the screen of</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenvisual</span></tt>()</td>
+<td>Return one of the strings directcolor, grayscale, pseudocolor,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_screenwidth</span></tt>()</td>
+<td>Return the number of pixels of the width of the screen of</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_server</span></tt>()</td>
+<td>Return information of the X-Server of the screen of this widget in</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_toplevel</span></tt>()</td>
+<td>Return the toplevel widget of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_viewable</span></tt>()</td>
+<td>Return true if the widget and all its higher ancestors are mapped.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visual</span></tt>()</td>
+<td>Return one of the strings directcolor, grayscale, pseudocolor,</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visualid</span></tt>()</td>
+<td>Return the X identifier for the visual for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_visualsavailable</span></tt>([includeids])</td>
+<td>Return a list of all visuals available for the screen of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootheight</span></tt>()</td>
+<td>Return the height of the virtual root window associated with this widget in pixels.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootwidth</span></tt>()</td>
+<td>Return the width of the virtual root window associated with this widget in pixel.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrootx</span></tt>()</td>
+<td>Return the x offset of the virtual root relative to the root</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_vrooty</span></tt>()</td>
+<td>Return the y offset of the virtual root relative to the root</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_width</span></tt>()</td>
+<td>Return the width of this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_x</span></tt>()</td>
+<td>Return the x coordinate of the upper left corner of this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">winfo_y</span></tt>()</td>
+<td>Return the y coordinate of the upper left corner of this widget</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">withdraw</span></tt>()</td>
+<td>Withdraw this widget from the screen such that it is unmapped and forgotten by the window manager.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_aspect</span></tt>([minNumer,&nbsp;minDenom,&nbsp;maxNumer,&nbsp;...])</td>
+<td>Instruct the window manager to set the aspect ratio (width/height)</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_attributes</span></tt>(*args)</td>
+<td>This subcommand returns or sets platform specific attributes</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_client</span></tt>([name])</td>
+<td>Store NAME in WM_CLIENT_MACHINE property of this widget. Return</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_colormapwindows</span></tt>(*wlist)</td>
+<td>Store list of window names (WLIST) into WM_COLORMAPWINDOWS property</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_command</span></tt>([value])</td>
+<td>Store VALUE in WM_COMMAND property. It is the command</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_deiconify</span></tt>()</td>
+<td>Deiconify this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_focusmodel</span></tt>([model])</td>
+<td>Set focus model to MODEL. &#8220;active&#8221; means that this widget will claim</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_frame</span></tt>()</td>
+<td>Return identifier for decorative frame of this widget if present.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_geometry</span></tt>([newGeometry])</td>
+<td>Set geometry to NEWGEOMETRY of the form =widthxheight+x+y. Return</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_grid</span></tt>([baseWidth,&nbsp;baseHeight,&nbsp;widthInc,&nbsp;...])</td>
+<td>Instruct the window manager that this widget shall only be resized on grid boundaries.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_group</span></tt>([pathName])</td>
+<td>Set the group leader widgets for related widgets to PATHNAME. Return</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconbitmap</span></tt>([bitmap,&nbsp;default])</td>
+<td>Set bitmap for the iconified widget to BITMAP. Return</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconify</span></tt>()</td>
+<td>Display widget as icon.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconmask</span></tt>([bitmap])</td>
+<td>Set mask for the icon bitmap of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconname</span></tt>([newName])</td>
+<td>Set the name of the icon for this widget.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconposition</span></tt>([x,&nbsp;y])</td>
+<td>Set the position of the icon of this widget to X and Y. Return</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_iconwindow</span></tt>([pathName])</td>
+<td>Set widget PATHNAME to be displayed instead of icon. Return the current</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_maxsize</span></tt>([width,&nbsp;height])</td>
+<td>Set max WIDTH and HEIGHT for this widget. If the window is gridded</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_minsize</span></tt>([width,&nbsp;height])</td>
+<td>Set min WIDTH and HEIGHT for this widget. If the window is gridded</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_overrideredirect</span></tt>([boolean])</td>
+<td>Instruct the window manager to ignore this widget</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_positionfrom</span></tt>([who])</td>
+<td>Instruct the window manager that the position of this widget shall</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_protocol</span></tt>([name,&nbsp;func])</td>
+<td>Bind function FUNC to command NAME for this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_resizable</span></tt>([width,&nbsp;height])</td>
+<td>Instruct the window manager whether this width can be resized</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_sizefrom</span></tt>([who])</td>
+<td>Instruct the window manager that the size of this widget shall</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_state</span></tt>([newstate])</td>
+<td>Query or set the state of this widget as one of normal, icon,</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_title</span></tt>([string])</td>
+<td>Set the title of this widget.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_transient</span></tt>([master])</td>
+<td>Instruct the window manager that this widget is transient</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">wm_withdraw</span></tt>()</td>
+<td>Withdraw this widget from the screen such that it is unmapped and forgotten by the window manager.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.class_diagram">
+<tt class="descname">class_diagram</tt><big>(</big><em>classes=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.class_diagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.class_diagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a new object diagram based on the current state.
+If a list of classes is provided, only those classes are
+shown.  Otherwise, all classes that Lumpy know about are shown.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.get_class_list">
+<tt class="descname">get_class_list</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.get_class_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.get_class_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the list of classes that should be drawn in
+a class diagram</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.is_opaque">
+<tt class="descname">is_opaque</tt><big>(</big><em>classobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.is_opaque"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.is_opaque" title="Permalink to this definition">¶</a></dt>
+<dd><p>check whether this class is completely opaque
+(restricted to _no_ instance variables)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.lookup">
+<tt class="descname">lookup</tt><big>(</big><em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>check to see whether the given value is already represented
+by a Thing, and if so, return it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.make_reference">
+<tt class="descname">make_reference</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.make_reference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.make_reference" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a reference point by taking a snapshot of the current
+state.  Subsequent diagrams will be relative to this reference.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.make_reference2">
+<tt class="descname">make_reference2</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.make_reference2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.make_reference2" title="Permalink to this definition">¶</a></dt>
+<dd><p>this extra method call is here so that the reference
+and the snapshot we take later have the same number of
+frames on the stack.  UGH.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.make_stack">
+<tt class="descname">make_stack</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.make_stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.make_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>take a snapshot of the current state, subtract away the
+frames and variables that existed in the previous reference,
+then make a Stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.object_diagram">
+<tt class="descname">object_diagram</tt><big>(</big><em>obj=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.object_diagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.object_diagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a new object diagram based on the current state.
+If an object is provided, draw the object.  Otherwise, draw
+the current run-time stack (relative to the last reference).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.opaque_class">
+<tt class="descname">opaque_class</tt><big>(</big><em>classobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.opaque_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.opaque_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>restrict this class to no variables</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.opaque_module">
+<tt class="descname">opaque_module</tt><big>(</big><em>modobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.opaque_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.opaque_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>make all classes defined in this module opaque</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.register">
+<tt class="descname">register</tt><big>(</big><em>thing</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>associate a value with the Thing that represents it,
+so that we can check later whether we have already created
+a Thing for a given value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.restrict_class">
+<tt class="descname">restrict_class</tt><big>(</big><em>classobj</em>, <em>vars=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.restrict_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.restrict_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>restrict this class so that when it is drawn, only
+the given vars are shown</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Lumpy.transparent_class">
+<tt class="descname">transparent_class</tt><big>(</big><em>classobj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Lumpy.transparent_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Lumpy.transparent_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove the given type or class from the dictionary, which
+means that it&#8217;s attributes will be shown.  If it is not in
+the dictionary, raise an exception.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Mapping">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Mapping</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>the graphical representation of a mapping type (usually a
+dictionary).  Sequence and Instance inherit from Mapping.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Mapping.bbox" title="scitools.Lumpy.Mapping.bbox"><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt></a>()</td>
+<td>the bbox of a Mapping is the bbox of its box item.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Mapping.drawme" title="scitools.Lumpy.Mapping.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>drawme is the middle part of the way objects are drawn.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Mapping.scan_bindings" title="scitools.Lumpy.Mapping.scan_bindings"><tt class="xref py py-obj docutils literal"><span class="pre">scan_bindings</span></tt></a>(cls)</td>
+<td>scan the bindings in this mapping, looking for</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Mapping.scan_val" title="scitools.Lumpy.Mapping.scan_val"><tt class="xref py py-obj docutils literal"><span class="pre">scan_val</span></tt></a>(cls,&nbsp;val)</td>
+<td>if we find a reference to an object type, make a note</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Mapping.bbox">
+<tt class="descname">bbox</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Mapping.bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Mapping.bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>the bbox of a Mapping is the bbox of its box item.
+This is different from other Things.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Mapping.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Mapping.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Mapping.drawme" title="Permalink to this definition">¶</a></dt>
+<dd><p>drawme is the middle part of the way objects are drawn.
+Thing.draw does some prep work, invokes drawme, and then
+does some cleanup.  draw and drawme are not allowed to
+modify pos.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Mapping.scan_bindings">
+<tt class="descname">scan_bindings</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Mapping.scan_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Mapping.scan_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>scan the bindings in this mapping, looking for
+references to other object types.  cls is the Class
+of the object that contains this mapping</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Mapping.scan_val">
+<tt class="descname">scan_val</tt><big>(</big><em>cls</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Mapping.scan_val"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Mapping.scan_val" title="Permalink to this definition">¶</a></dt>
+<dd><p>if we find a reference to an object type, make a note
+of the HAS-A relationship.  If we find a reference to a
+container type, scan it for references.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.NumPyArray">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">NumPyArray</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#NumPyArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.NumPyArray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ObjectDiagram">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ObjectDiagram</tt><big>(</big><em>lumpy=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ObjectDiagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ObjectDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Diagram" title="scitools.Lumpy.Diagram"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Diagram</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_arrow</span></tt>(arrow)</td>
+<td>append a new arrow on the list</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ca</span></tt>(*args,&nbsp;**options)</td>
+<td>make a canvas for the diagram</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.ObjectDiagram.clear" title="scitools.Lumpy.ObjectDiagram.clear"><tt class="xref py py-obj docutils literal"><span class="pre">clear</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">close</span></tt>()</td>
+<td>close the window and exit</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.ObjectDiagram.draw" title="scitools.Lumpy.ObjectDiagram.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>(thing)</td>
+<td>draw the given thing</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></tt>()</td>
+<td>draw all the arrows on the list</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">printfile</span></tt>()</td>
+<td>dump the contents of the canvas to the filename in the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setup</span></tt>()</td>
+<td>create the gui for the diagram</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">update_arrows</span></tt>([n])</td>
+<td>update up to n arrows (or all of them is n==None)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ObjectDiagram.update_snapshot" title="scitools.Lumpy.ObjectDiagram.update_snapshot"><tt class="xref py py-obj docutils literal"><span class="pre">update_snapshot</span></tt></a>(snapshot)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ObjectDiagram.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ObjectDiagram.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ObjectDiagram.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ObjectDiagram.draw">
+<tt class="descname">draw</tt><big>(</big><em>thing</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ObjectDiagram.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ObjectDiagram.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw the given thing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ObjectDiagram.update_snapshot">
+<tt class="descname">update_snapshot</tt><big>(</big><em>snapshot</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ObjectDiagram.update_snapshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ObjectDiagram.update_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ParentArrow">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ParentArrow</tt><big>(</big><em>lumpy</em>, <em>parent</em>, <em>child</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ParentArrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ParentArrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>an inheritance arrow, which shows an is-a relationship
+between classes in a class diagram.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ParentArrow.draw" title="scitools.Lumpy.ParentArrow.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>(diag)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ParentArrow.update" title="scitools.Lumpy.ParentArrow.update"><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ParentArrow.draw">
+<tt class="descname">draw</tt><big>(</big><em>diag</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ParentArrow.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ParentArrow.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ParentArrow.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ParentArrow.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ParentArrow.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.ReferenceArrow">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">ReferenceArrow</tt><big>(</big><em>lumpy</em>, <em>key</em>, <em>val</em>, <em>**options</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ReferenceArrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ReferenceArrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>a reference arrow, which show a reference in an object diagram</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ReferenceArrow.draw" title="scitools.Lumpy.ReferenceArrow.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>(diag)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.ReferenceArrow.update" title="scitools.Lumpy.ReferenceArrow.update"><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.ReferenceArrow.draw">
+<tt class="descname">draw</tt><big>(</big><em>diag</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ReferenceArrow.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ReferenceArrow.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.ReferenceArrow.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#ReferenceArrow.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.ReferenceArrow.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Sequence">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Sequence</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Mapping" title="scitools.Lumpy.Mapping"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Mapping</span></tt></a></p>
+<p>the graphical representation of a sequence type (mostly
+lists and tuples)</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>the bbox of a Mapping is the bbox of its box item.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>drawme is the middle part of the way objects are drawn.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_bindings</span></tt>(cls)</td>
+<td>scan the bindings in this mapping, looking for</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">scan_val</span></tt>(cls,&nbsp;val)</td>
+<td>if we find a reference to an object type, make a note</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Simple">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Simple</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Simple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Simple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>the graphical representation of a simple value like a number
+or a string</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Simple.drawme" title="scitools.Lumpy.Simple.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Simple.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Simple.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Simple.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Snapframe">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Snapframe</tt><big>(</big><em>tup</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Snapframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Snapframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>the data structure that represents a frame</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Snapframe.subtract" title="scitools.Lumpy.Snapframe.subtract"><tt class="xref py py-obj docutils literal"><span class="pre">subtract</span></tt></a>(other)</td>
+<td>delete all the keys in other from self</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Snapframe.subtract">
+<tt class="descname">subtract</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Snapframe.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Snapframe.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all the keys in other from self</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Snapshot">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Snapshot</tt><a class="reference internal" href="_modules/scitools/Lumpy.html#Snapshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>the data structure that represents a stack</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Snapshot.clean" title="scitools.Lumpy.Snapshot.clean"><tt class="xref py py-obj docutils literal"><span class="pre">clean</span></tt></a>(ref)</td>
+<td>Remove all the variables in the reference stack from self</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Snapshot.spew" title="scitools.Lumpy.Snapshot.spew"><tt class="xref py py-obj docutils literal"><span class="pre">spew</span></tt></a>()</td>
+<td>print the frames in this snapshot</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Snapshot.clean">
+<tt class="descname">clean</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Snapshot.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Snapshot.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all the variables in the reference stack from self</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Snapshot.spew">
+<tt class="descname">spew</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Snapshot.spew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Snapshot.spew" title="Permalink to this definition">¶</a></dt>
+<dd><p>print the frames in this snapshot</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Stack">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Stack</tt><big>(</big><em>lumpy</em>, <em>snapshot</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.Lumpy.Thing" title="scitools.Lumpy.Thing"><tt class="xref py py-class docutils literal"><span class="pre">scitools.Lumpy.Thing</span></tt></a></p>
+<p>The graphical representation of a stack.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Stack.drawme" title="scitools.Lumpy.Stack.drawme"><tt class="xref py py-obj docutils literal"><span class="pre">drawme</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Stack.drawme">
+<tt class="descname">drawme</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Stack.drawme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Stack.drawme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.Lumpy.Thing">
+<em class="property">class </em><tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">Thing</tt><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>the parent class for objects that have a graphical
+representation.  Each Thing object corresponds to an item
+or set of items in a diagram.  A Thing can only be drawn in
+one Diagram at a time.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Thing.bbox" title="scitools.Lumpy.Thing.bbox"><tt class="xref py py-obj docutils literal"><span class="pre">bbox</span></tt></a>()</td>
+<td>return the bounding box of this object if it is drawn</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Thing.bind" title="scitools.Lumpy.Thing.bind"><tt class="xref py py-obj docutils literal"><span class="pre">bind</span></tt></a>([tags])</td>
+<td>create bindings for each of the items with the given tags</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Thing.down" title="scitools.Lumpy.Thing.down"><tt class="xref py py-obj docutils literal"><span class="pre">down</span></tt></a>(event)</td>
+<td>this callback is invoked when the user clicks on an item</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Thing.draw" title="scitools.Lumpy.Thing.draw"><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt></a>(diag,&nbsp;pos,&nbsp;flip[,&nbsp;tags])</td>
+<td>draw this Thing at the given position on the given</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Thing.isdrawn" title="scitools.Lumpy.Thing.isdrawn"><tt class="xref py py-obj docutils literal"><span class="pre">isdrawn</span></tt></a>()</td>
+<td>return True if the object has been drawn</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Thing.motion" title="scitools.Lumpy.Thing.motion"><tt class="xref py py-obj docutils literal"><span class="pre">motion</span></tt></a>(event)</td>
+<td>this callback is invoked when the user drags an item</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Thing.pos" title="scitools.Lumpy.Thing.pos"><tt class="xref py py-obj docutils literal"><span class="pre">pos</span></tt></a>()</td>
+<td>Compute the nominal position of a Thing by getting the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.Lumpy.Thing.set_offset" title="scitools.Lumpy.Thing.set_offset"><tt class="xref py py-obj docutils literal"><span class="pre">set_offset</span></tt></a>(pos)</td>
+<td>the offset attribute keeps track of the offset between</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.Lumpy.Thing.up" title="scitools.Lumpy.Thing.up"><tt class="xref py py-obj docutils literal"><span class="pre">up</span></tt></a>(event)</td>
+<td>this callback is invoked when the user releases the button</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.bbox">
+<tt class="descname">bbox</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the bounding box of this object if it is drawn</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.bind">
+<tt class="descname">bind</tt><big>(</big><em>tags=None</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.bind" title="Permalink to this definition">¶</a></dt>
+<dd><p>create bindings for each of the items with the given tags</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.down">
+<tt class="descname">down</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.down" title="Permalink to this definition">¶</a></dt>
+<dd><p>this callback is invoked when the user clicks on an item</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.draw">
+<tt class="descname">draw</tt><big>(</big><em>diag</em>, <em>pos</em>, <em>flip</em>, <em>tags=()</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw this Thing at the given position on the given
+diagram with the given tags (in addition to the specific
+tag for this thing).  flip=1 means draw left to right;
+flip=-1 means right to left.  Return a list of Things
+that were drawn.</p>
+<p>draw and drawme are not allowed to mofify pos</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.isdrawn">
+<tt class="descname">isdrawn</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.isdrawn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.isdrawn" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True if the object has been drawn</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.motion">
+<tt class="descname">motion</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>this callback is invoked when the user drags an item</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.pos">
+<tt class="descname">pos</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the nominal position of a Thing by getting the
+current bounding box and adding the offset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.set_offset">
+<tt class="descname">set_offset</tt><big>(</big><em>pos</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.set_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.set_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>the offset attribute keeps track of the offset between
+the bounding box of the Thing and its nominal position, so
+that if the Thing is moved later, we can compute its new
+nominal position.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Lumpy.Thing.things_created">
+<tt class="descname">things_created</tt><em class="property"> = 0</em><a class="headerlink" href="#scitools.Lumpy.Thing.things_created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.Lumpy.Thing.things_drawn">
+<tt class="descname">things_drawn</tt><em class="property"> = 0</em><a class="headerlink" href="#scitools.Lumpy.Thing.things_drawn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.Lumpy.Thing.up">
+<tt class="descname">up</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#Thing.up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.Thing.up" title="Permalink to this definition">¶</a></dt>
+<dd><p>this callback is invoked when the user releases the button</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.hasclass">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">hasclass</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#hasclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.hasclass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.hasdiag">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">hasdiag</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#hasdiag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.hasdiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.hasdict">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">hasdict</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#hasdict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.hasdict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.hasname">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">hasname</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#hasname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.hasname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.hasslots">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">hasslots</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#hasslots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.hasslots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.iscallable">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">iscallable</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#iscallable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.iscallable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.main">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">main</tt><big>(</big><em>script</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.make_bindings">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">make_bindings</tt><big>(</big><em>lumpy</em>, <em>iterator</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#make_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.make_bindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of bindings, one for each key-value pair
+in iterator.  The keys are made into Index objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.make_kvps">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">make_kvps</tt><big>(</big><em>lumpy</em>, <em>iterator</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#make_kvps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.make_kvps" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of bindings, one for each key-value pair
+in iterator.  The keys are made into Thing objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.make_tags">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">make_tags</tt><big>(</big><em>prefix='Tag'</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#make_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.make_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a tuple with a single element: a tag string with
+with the given prefix and a unique id as a suffix</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.make_thing">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">make_thing</tt><big>(</big><em>lumpy</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#make_thing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.make_thing" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the Thing that represents this value, either
+by making a new one or looking up an existing one.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.Lumpy.union">
+<tt class="descclassname">scitools.Lumpy.</tt><tt class="descname">union</tt><big>(</big><em>one</em>, <em>other</em><big>)</big><a class="reference internal" href="_modules/scitools/Lumpy.html#union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.Lumpy.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a new bbox that covers one and other,
+assuming that the positive y direction is DOWN</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Lumpy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

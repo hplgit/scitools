@@ -1,0 +1,58 @@
+#!/bin/bash
+# This script creates a new release of SciTools
+
+# Make sure we have the current version
+echo '--- Synchronizing repository'
+sleep 1
+hg pull -u
+hg commit
+
+# Update version numbers
+echo '--- Update version number in ChangeLog'
+sleep 1
+emacs -nw ChangeLog
+echo '--- Update version number in lib/scitools/__init__.py'
+sleep 1
+emacs -nw lib/scitools/__init__.py
+
+# Commit changes
+echo '--- Committing changes to repository'
+sleep 1
+hg commit
+
+# Get the version number
+VERSION=`python -c "import sys;sys.path.insert(0, 'lib');import scitools;print scitools.__version__"`
+echo "--- Version number is $VERSION"
+
+# Tag repository and push changes
+hg tag -m "Tagging release $VERSION of SciTools." scitools-$VERSION
+hg push
+
+# Create archive (with and without documentation)
+echo "--- Creating release $VERSION of SciTools"
+rm -f dist/scitools-$VERSION.tar.gz
+mkdir -p dist
+hg archive --type tgz --exclude ".hg*" dist/scitools-$VERSION.tar.gz
+hg archive --prefix "scitools-$VERSION" --type tgz \
+    --exclude ".hg*" --exclude "doc/api" --exclude "doc/easyviz" \
+    --exclude "doc/src" dist/scitools-lite-$VERSION.tar.gz
+
+# Create Windows installer
+rm -f dist/SciTools-$VERSION.win32.exe
+python setup.py bdist_wininst --plat-name win32
+
+# Upload files to googlecode
+echo '--- Uploading files to googlecode'
+googlecode_upload.py \
+    -s "SciTools $VERSION - Source version (includes documentation)" \
+    -p scitools dist/scitools-$VERSION.tar.gz
+googlecode_upload.py \
+    -s "SciTools $VERSION - Source version (no documentation)" \
+    -p scitools dist/scitools-lite-$VERSION.tar.gz
+googlecode_upload.py \
+    -s "SciTools $VERSION - Windows Installer" \
+    -p scitools dist/SciTools-$VERSION.win32.exe
+
+# Edit web pages
+echo '--- Edit web pages'
+firefox http://code.google.com/p/scitools/

@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.aplotter &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.aplotter</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">aplotter is a Python module for drawing graphs in pure ASCII format.</span>
+<span class="sd">This allows graphs to be included in doc strings (Python programs)</span>
+<span class="sd">or as illustrations in programs in any computer language.</span>
+
+<span class="sd">The module offers a function</span>
+
+<span class="sd">plot(x, y, draw_axis=True, plot_slope=True, plot_labels=False, dot=&#39;*&#39;,</span>
+<span class="sd">     min_x=None, max_x=None, min_y=None, max_y=None,</span>
+<span class="sd">     output=sys.stdout)</span>
+
+<span class="sd">where x and y are sequences of x and y data for a curve.</span>
+<span class="sd">Axes are automatically calculated from the x and y data if not</span>
+<span class="sd">min_x, max_x, min_y or max_y are given.</span>
+
+<span class="sd">Multiple curves in the plot is not supported.</span>
+
+<span class="sd">Here are examples on various plot commands:</span>
+
+<span class="sd">&gt;&gt;&gt; from scitools.aplotter import plot</span>
+<span class="sd">&gt;&gt;&gt; from numpy import linspace, exp, cos, pi</span>
+<span class="sd">&gt;&gt;&gt; x = linspace(-2, 2, 81)</span>
+<span class="sd">&gt;&gt;&gt; y = exp(-0.5*x**2)*cos(pi*x)</span>
+<span class="sd">&gt;&gt;&gt; plot(x, y)</span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                       -+1                                      </span>
+<span class="sd">                                     // |\\                                     </span>
+<span class="sd">                                    /   |  \                                    </span>
+<span class="sd">                                   /    |   \                                   </span>
+<span class="sd">                                  /     |   \                                   </span>
+<span class="sd">                                  /     |    \                                  </span>
+<span class="sd">                                 /      |     \                                 </span>
+<span class="sd">                                /       |      \                                </span>
+<span class="sd">                               /        |      \                                </span>
+<span class="sd">   -------\                    /        |       \                    -------*   </span>
+<span class="sd">---+-------\\-----------------/---------+--------\-----------------//-------+---</span>
+<span class="sd">   -2        \                /         |        \                /       +2    </span>
+<span class="sd">              \\              /         |         \             //              </span>
+<span class="sd">                \            /          |         \            /                </span>
+<span class="sd">                 \\         /           |          \         //                 </span>
+<span class="sd">                   \       /            |           \       /                   </span>
+<span class="sd">                    \    //             |            \-    //                   </span>
+<span class="sd">                     ----               -0.63          ---/                     </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">&gt;&gt;&gt; </span>
+<span class="sd">&gt;&gt;&gt; plot(x, y, draw_axes=False)</span>
+<span class="sd">                                                                                </span>
+<span class="sd">                                       -+1                                      </span>
+<span class="sd">                                     //  \\                                     </span>
+<span class="sd">                                    /      \                                    </span>
+<span class="sd">                                   /        \                                   </span>
+<span class="sd">                                  /         \                                   </span>
+<span class="sd">                                  /          \                                  </span>
+<span class="sd">                                 /            \                                 </span>
+<span class="sd">                                /              \                                </span>
+<span class="sd">                               /               \                                </span>
+<span class="sd">   -------\                    /                \                    -------*   </span>
+<span class="sd">   +       \\                 /                  \                 //       +   </span>
+<span class="sd">   -2        \                /                  \                /       +2    </span>
+<span class="sd">              \\              /                   \             //              </span>
+<span class="sd">                \            /                    \            /                </span>
+<span class="sd">                 \\         /                      \         //                 </span>
+<span class="sd">                   \       /                        \       /                   </span>
+<span class="sd">                    \    //                          \-    //                   </span>
+<span class="sd">                     ----               -0.63          ---/                     </span>
+<span class="sd">                                                                                </span>
+<span class="sd">&gt;&gt;&gt; </span>
+<span class="sd">&gt;&gt;&gt; # plot symbols (the dot argument) at data points:</span>
+<span class="sd">&gt;&gt;&gt; plot(x, y, plot_slope=False)</span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                       *+1                                      </span>
+<span class="sd">                                     ** |**                                     </span>
+<span class="sd">                                    *   |  *                                    </span>
+<span class="sd">                                   *    |   *                                   </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                  *     |    *                                  </span>
+<span class="sd">                                 *      |     *                                 </span>
+<span class="sd">                                *       |      *                                </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">   ********                    *        |       *                    ********   </span>
+<span class="sd">---+-------**-----------------*---------+--------*-----------------**-------+---</span>
+<span class="sd">   -2        *                          |                         *       +2    </span>
+<span class="sd">              **              *         |         *             **              </span>
+<span class="sd">                *            *          |         *            *                </span>
+<span class="sd">                 **         *           |          *         **                 </span>
+<span class="sd">                   *       *            |           *       *                   </span>
+<span class="sd">                    *    **             |            **    **                   </span>
+<span class="sd">                     ****               -0.63          ****                     </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">&gt;&gt;&gt;  </span>
+<span class="sd">&gt;&gt;&gt; # drop axis labels:</span>
+<span class="sd">&gt;&gt;&gt; plot(x, y, plot_labels=False)</span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                       -\                                       </span>
+<span class="sd">                                     // |\\                                     </span>
+<span class="sd">                                    /   |  \                                    </span>
+<span class="sd">                                   /    |   \                                   </span>
+<span class="sd">                                  /     |   \                                   </span>
+<span class="sd">                                  /     |    \                                  </span>
+<span class="sd">                                 /      |     \                                 </span>
+<span class="sd">                                /       |      \                                </span>
+<span class="sd">                               /        |      \                                </span>
+<span class="sd">   -------\                    /        |       \                    -------*   </span>
+<span class="sd">-----------\\-----------------/---------+--------\-----------------//-----------</span>
+<span class="sd">             \                /         |        \                /             </span>
+<span class="sd">              \\              /         |         \             //              </span>
+<span class="sd">                \            /          |         \            /                </span>
+<span class="sd">                 \\         /           |          \         //                 </span>
+<span class="sd">                   \       /            |           \       /                   </span>
+<span class="sd">                    \    //             |            \-    //                   </span>
+<span class="sd">                     ----               |              ---/                     </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">&gt;&gt;&gt; </span>
+<span class="sd">&gt;&gt;&gt; plot(x, y, dot=&#39;o&#39;, plot_slope=False)</span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                       o+1                                      </span>
+<span class="sd">                                     oo |oo                                     </span>
+<span class="sd">                                    o   |  o                                    </span>
+<span class="sd">                                   o    |   o                                   </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                  o     |    o                                  </span>
+<span class="sd">                                 o      |     o                                 </span>
+<span class="sd">                                o       |      o                                </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">   oooooooo                    o        |       o                    oooooooo   </span>
+<span class="sd">---+-------oo-----------------o---------+--------o-----------------oo-------+---</span>
+<span class="sd">   -2        o                          |                         o       +2    </span>
+<span class="sd">              oo              o         |         o             oo              </span>
+<span class="sd">                o            o          |         o            o                </span>
+<span class="sd">                 oo         o           |          o         oo                 </span>
+<span class="sd">                   o       o            |           o       o                   </span>
+<span class="sd">                    o    oo             |            oo    oo                   </span>
+<span class="sd">                     oooo               -0.63          oooo                     </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">&gt;&gt;&gt; </span>
+<span class="sd">&gt;&gt;&gt; # store plot in a string:</span>
+<span class="sd">&gt;&gt;&gt; p = plot(x, y, output=str)</span>
+<span class="sd">&gt;&gt;&gt; print p</span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">                                       -+1                                      </span>
+<span class="sd">                                     // |\\                                     </span>
+<span class="sd">                                    /   |  \                                    </span>
+<span class="sd">                                   /    |   \                                   </span>
+<span class="sd">                                  /     |   \                                   </span>
+<span class="sd">                                  /     |    \                                  </span>
+<span class="sd">                                 /      |     \                                 </span>
+<span class="sd">                                /       |      \                                </span>
+<span class="sd">                               /        |      \                                </span>
+<span class="sd">   -------\                    /        |       \                    -------*   </span>
+<span class="sd">---+-------\\-----------------/---------+--------\-----------------//-------+---</span>
+<span class="sd">   -2        \                /         |        \                /       +2    </span>
+<span class="sd">              \\              /         |         \             //              </span>
+<span class="sd">                \            /          |         \            /                </span>
+<span class="sd">                 \\         /           |          \         //                 </span>
+<span class="sd">                   \       /            |           \       /                   </span>
+<span class="sd">                    \    //             |            \-    //                   </span>
+<span class="sd">                     ----               -0.63          ---/                     </span>
+<span class="sd">                                        |                                       </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c">#-----------------------------------------------</span>
+<span class="c">#aplotter.py - ascii art function plotter</span>
+<span class="c">#Copyright (c) 2006, Imri Goldberg</span>
+<span class="c">#All rights reserved.</span>
+<span class="c">#Additional documentation and examples by Hans Petter Langtangen.</span>
+<span class="c">#</span>
+<span class="c">#Redistribution and use in source and binary forms,</span>
+<span class="c">#with or without modification, are permitted provided</span>
+<span class="c">#that the following conditions are met:</span>
+<span class="c">#</span>
+<span class="c">#    * Redistributions of source code must retain the</span>
+<span class="c">#		above copyright notice, this list of conditions</span>
+<span class="c">#		and the following disclaimer.</span>
+<span class="c">#    * Redistributions in binary form must reproduce the</span>
+<span class="c">#		above copyright notice, this list of conditions</span>
+<span class="c">#		and the following disclaimer in the documentation</span>
+<span class="c">#		and/or other materials provided with the distribution.</span>
+<span class="c">#    * Neither the name of the &lt;ORGANIZATION&gt; nor the names of</span>
+<span class="c">#		its contributors may be used to endorse or promote products</span>
+<span class="c">#		derived from this software without specific prior written permission.</span>
+<span class="c">#</span>
+<span class="c">#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+<span class="c">#AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+<span class="c">#IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</span>
+<span class="c">#ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE</span>
+<span class="c">#LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</span>
+<span class="c">#DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span>
+<span class="c">#SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER</span>
+<span class="c">#CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,</span>
+<span class="c">#OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c">#OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">#-----------------------------------------------</span>
+
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">sys</span>
+
+
+<span class="n">EPSILON</span> <span class="o">=</span> <span class="mf">0.000001</span>
+
+<span class="k">def</span> <span class="nf">transposed</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+		<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mat</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span> <span class="nf">y_reversed</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>    
+	<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">)):</span>
+		<span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+	<span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+	<span class="k">if</span> <span class="mi">0</span><span class="o">&lt;</span><span class="n">x</span><span class="p">:</span>
+		<span class="k">return</span> <span class="mi">1</span>
+	<span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span>
+		<span class="k">return</span> <span class="mi">0</span>
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+<div class="viewcode-block" id="Plotter"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter">[docs]</a><span class="k">class</span> <span class="nc">Plotter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Plotter.PlotData"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.PlotData">[docs]</a>	<span class="k">class</span> <span class="nc">PlotData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+		<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">x_mod</span><span class="p">,</span> <span class="n">y_mod</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">x_size</span> <span class="o">=</span> <span class="n">x_size</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">y_size</span> <span class="o">=</span> <span class="n">y_size</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">min_x</span> <span class="o">=</span> <span class="n">min_x</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">max_x</span> <span class="o">=</span> <span class="n">max_x</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">min_y</span> <span class="o">=</span> <span class="n">min_y</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">max_y</span> <span class="o">=</span> <span class="n">max_y</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">x_mod</span> <span class="o">=</span> <span class="n">x_mod</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">y_mod</span> <span class="o">=</span> <span class="n">y_mod</span>
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">x_step</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_size</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">y_step</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_size</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">inv_x_step</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">x_step</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">inv_y_step</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">y_step</span>
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_step</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_step</span>
+		<span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+			<span class="n">s</span> <span class="o">=</span> <span class="s">&quot;size: </span><span class="si">%s</span><span class="s">, bl: </span><span class="si">%s</span><span class="s">, tr: </span><span class="si">%s</span><span class="s">, step: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_size</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_y</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_y</span><span class="p">),</span>
+														 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_step</span><span class="p">))</span>
+			<span class="k">return</span> <span class="n">s</span>
+	</div>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">x_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;x_size&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">y_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;y_size&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">will_draw_axes</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;draw_axes&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">new_line</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;newline&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">dot</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;dot&quot;</span><span class="p">,</span> <span class="s">&quot;*&quot;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_slope</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;plot_slope&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">x_margin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;x_margin&quot;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">y_margin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;y_margin&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">will_plot_labels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;plot_labels&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+	<span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Plotter.get_symbol_by_slope"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.get_symbol_by_slope">[docs]</a>	<span class="k">def</span> <span class="nf">get_symbol_by_slope</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">default_symbol</span><span class="p">):</span>
+		<span class="n">draw_symbol</span> <span class="o">=</span> <span class="n">default_symbol</span>
+		<span class="k">if</span> <span class="n">slope</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;|&quot;</span>
+		<span class="k">elif</span> <span class="n">slope</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slope</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span>
+		<span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;-&quot;</span>
+		<span class="k">elif</span> <span class="n">slope</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slope</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span>
+		<span class="k">elif</span> <span class="n">slope</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;|&quot;</span>
+		<span class="k">return</span> <span class="n">draw_symbol</span>    
+
+</div>
+<div class="viewcode-block" id="Plotter.plot_labels"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.plot_labels">[docs]</a>	<span class="k">def</span> <span class="nf">plot_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_size</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="k">return</span>
+
+		<span class="n">margin_factor</span> <span class="o">=</span> <span class="mi">1</span>
+
+		<span class="n">do_plot_x_label</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="n">do_plot_y_label</span> <span class="o">=</span> <span class="bp">True</span>
+
+		<span class="n">x_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+g</span><span class="s">&quot;</span>
+		<span class="k">if</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_size</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+			<span class="n">do_plot_x_label</span> <span class="o">=</span> <span class="bp">False</span>
+		<span class="k">elif</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_size</span> <span class="o">&lt;</span> <span class="mi">23</span><span class="p">:</span>
+			<span class="n">x_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span> 
+
+		<span class="n">y_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+g</span><span class="s">&quot;</span>    
+		<span class="k">if</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_size</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+			<span class="n">do_plot_y_label</span> <span class="o">=</span> <span class="bp">False</span>
+		<span class="k">elif</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_size</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">:</span>
+			<span class="n">y_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span>
+			
+		<span class="n">act_min_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span> <span class="o">+</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_mod</span><span class="o">*</span><span class="n">margin_factor</span><span class="p">)</span>
+		<span class="n">act_max_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_mod</span><span class="o">*</span><span class="n">margin_factor</span><span class="p">)</span>
+		<span class="n">act_min_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span> <span class="o">+</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_mod</span><span class="o">*</span><span class="n">margin_factor</span><span class="p">)</span>
+		<span class="n">act_max_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">max_y</span> <span class="o">-</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_mod</span><span class="o">*</span><span class="n">margin_factor</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">act_min_x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">min_x_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">act_min_x</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">min_x_str</span> <span class="o">=</span> <span class="n">x_str</span> <span class="o">%</span> <span class="n">act_min_x</span>
+
+		<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">act_max_x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">max_x_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">act_max_x</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">max_x_str</span> <span class="o">=</span> <span class="n">x_str</span> <span class="o">%</span> <span class="n">act_max_x</span>
+		
+		<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">act_min_y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">min_y_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">act_min_y</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">min_y_str</span> <span class="o">=</span> <span class="n">y_str</span> <span class="o">%</span> <span class="n">act_min_y</span>
+
+		<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">act_max_y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">max_y_str</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%+.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">act_max_y</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">max_y_str</span> <span class="o">=</span> <span class="n">y_str</span> <span class="o">%</span> <span class="n">act_max_y</span>
+						 
+		<span class="n">min_x_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">act_min_x</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+		<span class="n">max_x_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">act_max_x</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+		<span class="n">min_y_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">act_min_y</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+		<span class="n">max_y_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">act_max_y</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span><span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+								 
+
+		<span class="c">#print plot_data</span>
+		
+		<span class="n">y_zero_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+
+		<span class="c">#if plot_data.min_x &lt; 0 and plot_data.max_x &gt; 0:</span>
+		<span class="n">x_zero_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+		<span class="c">#else:</span>
+		
+		<span class="c">#pass</span>
+
+		<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_zero_coord</span><span class="p">][</span><span class="n">min_y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span>
+		<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_zero_coord</span><span class="p">][</span><span class="n">max_y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span>
+		<span class="n">output_buffer</span><span class="p">[</span><span class="n">min_x_coord</span><span class="p">][</span><span class="n">y_zero_coord</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span>
+		<span class="n">output_buffer</span><span class="p">[</span><span class="n">max_x_coord</span><span class="p">][</span><span class="n">y_zero_coord</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span>
+
+		<span class="k">if</span> <span class="n">do_plot_x_label</span><span class="p">:</span>        
+
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">min_x_str</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">min_x_coord</span><span class="o">+</span><span class="n">i</span><span class="p">][</span><span class="n">y_zero_coord</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">max_x_str</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">max_x_coord</span><span class="o">+</span><span class="n">i</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">max_x_str</span><span class="p">)][</span><span class="n">y_zero_coord</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+
+		<span class="k">if</span> <span class="n">do_plot_y_label</span><span class="p">:</span>
+
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">max_y_str</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_zero_coord</span><span class="o">+</span><span class="n">i</span><span class="p">][</span><span class="n">max_y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">min_y_str</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_zero_coord</span><span class="o">+</span><span class="n">i</span><span class="p">][</span><span class="n">min_y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+			
+
+		
+		
+	</div>
+<div class="viewcode-block" id="Plotter.plot_data"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.plot_data">[docs]</a>	<span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xy_seq</span><span class="p">,</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_slope</span><span class="p">:</span>
+			<span class="n">xy_seq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">xy_seq</span><span class="p">)</span>
+			<span class="c">#sort according to the x coord</span>
+			<span class="n">xy_seq</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="n">prev_p</span> <span class="o">=</span> <span class="n">xy_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">e_xy_seq</span> <span class="o">=</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xy_seq</span><span class="p">)</span>
+			<span class="n">e_xy_seq</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">e_xy_seq</span><span class="p">:</span>
+				<span class="n">draw_symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>
+				<span class="n">line_drawn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="n">prev_p</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">),</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">)</span>
+				<span class="n">prev_p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="n">line_drawn</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">xy_seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+						<span class="n">px</span><span class="p">,</span><span class="n">py</span> <span class="o">=</span> <span class="n">xy_seq</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+						<span class="n">nx</span><span class="p">,</span><span class="n">ny</span> <span class="o">=</span> <span class="n">xy_seq</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+						<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="n">px</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">EPSILON</span><span class="p">:</span>
+							<span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">plot_data</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ny</span><span class="o">-</span><span class="n">py</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="n">px</span><span class="p">)</span>
+							<span class="n">draw_symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_symbol_by_slope</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">draw_symbol</span><span class="p">)</span>
+					<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_x</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_y</span><span class="p">:</span>
+						<span class="k">continue</span>
+					
+					<span class="n">x_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+					<span class="n">y_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>            
+					<span class="k">if</span> <span class="n">x_coord</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x_coord</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">)</span> <span class="ow">and</span> <span class="n">y_coord</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_coord</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+						<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_axes</span><span class="p">:</span>
+							<span class="k">if</span> <span class="n">y_coord</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span> <span class="ow">and</span> <span class="n">draw_symbol</span> <span class="o">==</span> <span class="s">&quot;-&quot;</span><span class="p">:</span>
+								<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;=&quot;</span>
+						<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_coord</span><span class="p">][</span><span class="n">y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="n">draw_symbol</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">xy_seq</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_x</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_y</span><span class="p">:</span>
+					<span class="k">continue</span>
+				<span class="n">x_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+				<span class="n">y_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">x_coord</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x_coord</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">)</span> <span class="ow">and</span> <span class="n">y_coord</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_coord</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+					<span class="n">output_buffer</span><span class="p">[</span><span class="n">x_coord</span><span class="p">][</span><span class="n">y_coord</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>
+
+</div>
+<div class="viewcode-block" id="Plotter.plot_line"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.plot_line">[docs]</a>	<span class="k">def</span> <span class="nf">plot_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">):</span>
+
+		<span class="n">start_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+		<span class="n">end_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+
+		<span class="n">x0</span><span class="p">,</span><span class="n">y0</span> <span class="o">=</span> <span class="n">start_coord</span>
+		<span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">end_coord</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">):</span>
+			<span class="k">return</span> <span class="bp">True</span>    
+		
+		<span class="n">clipped_line</span> <span class="o">=</span> <span class="n">clip_line</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">),</span> <span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">max_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_y</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">clipped_line</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">start</span><span class="p">,</span><span class="n">end</span> <span class="o">=</span> <span class="n">clipped_line</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">False</span>
+		<span class="n">start_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+		<span class="n">end_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+
+		<span class="n">x0</span><span class="p">,</span><span class="n">y0</span> <span class="o">=</span> <span class="n">start_coord</span>
+		<span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">end_coord</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">):</span>
+			<span class="k">return</span> <span class="bp">True</span>
+		<span class="n">x_zero_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+		<span class="n">y_zero_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>   
+
+		<span class="k">if</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="s">&quot;|&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">plot_data</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="n">draw_symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_symbol_by_slope</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+
+			<span class="n">delta</span> <span class="o">=</span> <span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">,</span> <span class="n">y1</span><span class="o">-</span><span class="n">y0</span>
+			<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&gt;</span><span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+				<span class="n">s</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+				<span class="n">slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]))):</span>
+					<span class="n">cur_draw_symbol</span> <span class="o">=</span> <span class="n">draw_symbol</span>
+					<span class="n">x</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">s</span>
+					<span class="n">cur_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y0</span><span class="o">+</span><span class="n">slope</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_axes</span> <span class="ow">and</span> <span class="n">cur_y</span> <span class="o">==</span> <span class="n">y_zero_coord</span> <span class="ow">and</span> <span class="n">draw_symbol</span> <span class="o">==</span> <span class="s">&quot;-&quot;</span><span class="p">:</span>
+						<span class="n">cur_draw_symbol</span> <span class="o">=</span> <span class="s">&quot;=&quot;</span>
+					<span class="n">output_buffer</span><span class="p">[</span><span class="n">x0</span><span class="o">+</span><span class="n">x</span><span class="p">][</span><span class="n">cur_y</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_draw_symbol</span>
+				
+				
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">s</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+				<span class="n">slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">]))):</span>
+					<span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">s</span>
+					<span class="n">cur_draw_symbol</span> <span class="o">=</span> <span class="n">draw_symbol</span>
+					<span class="n">cur_y</span> <span class="o">=</span> <span class="n">y0</span><span class="o">+</span><span class="n">y</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_axes</span> <span class="ow">and</span> <span class="n">cur_y</span> <span class="o">==</span> <span class="n">y_zero_coord</span> <span class="ow">and</span> <span class="n">draw_symbol</span> <span class="o">==</span> <span class="s">&quot;-&quot;</span><span class="p">:</span>
+						<span class="n">cur_draw_symbol</span> <span class="o">=</span> <span class="s">&quot;=&quot;</span>
+					<span class="n">output_buffer</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x0</span><span class="o">+</span><span class="n">slope</span><span class="o">*</span><span class="n">y</span><span class="p">)][</span><span class="n">cur_y</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_draw_symbol</span>
+		<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+			<span class="k">print</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span>
+			<span class="k">print</span> <span class="n">start_coord</span><span class="p">,</span> <span class="n">end_coord</span>
+			<span class="k">print</span> <span class="n">plot_data</span>
+			<span class="k">raise</span> <span class="n">e</span>
+
+		<span class="k">return</span> <span class="bp">False</span>            
+		
+		</div>
+<div class="viewcode-block" id="Plotter.plot_single"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.plot_single">[docs]</a>	<span class="k">def</span> <span class="nf">plot_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">min_x</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_x</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">min_y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_double</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)),</span><span class="n">seq</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span>
+		
+
+
+</div>
+<div class="viewcode-block" id="Plotter.plot_double"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.plot_double">[docs]</a>	<span class="k">def</span> <span class="nf">plot_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_seq</span><span class="p">,</span> <span class="n">y_seq</span><span class="p">,</span> <span class="n">min_x</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_x</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">min_y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">min_x</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_seq</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">max_x</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_seq</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">min_y</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_seq</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">max_y</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y_seq</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">max_y</span> <span class="o">==</span> <span class="n">min_y</span><span class="p">:</span>
+			<span class="n">max_y</span> <span class="o">+=</span> <span class="mi">1</span>
+
+		<span class="n">x_mod</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_x</span><span class="o">-</span><span class="n">min_x</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x_margin</span>
+		<span class="n">y_mod</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y_margin</span>
+		<span class="n">min_x</span><span class="o">-=</span><span class="n">x_mod</span>
+		<span class="n">max_x</span><span class="o">+=</span><span class="n">x_mod</span>
+		<span class="n">min_y</span><span class="o">-=</span><span class="n">y_mod</span>
+		<span class="n">max_y</span><span class="o">+=</span><span class="n">y_mod</span>
+
+
+		<span class="n">plot_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_size</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="n">x_mod</span><span class="p">,</span> <span class="n">y_mod</span><span class="p">)</span>
+
+		<span class="n">output_buffer</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&quot; &quot;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y_size</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_size</span><span class="p">)]</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">will_draw_axes</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">draw_axes</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_seq</span><span class="p">,</span> <span class="n">y_seq</span><span class="p">),</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">will_plot_labels</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">plot_labels</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">)</span>
+
+		<span class="n">trans_result</span> <span class="o">=</span> <span class="n">transposed</span><span class="p">(</span><span class="n">y_reversed</span><span class="p">(</span><span class="n">output_buffer</span><span class="p">))</span>
+
+		<span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_line</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">trans_result</span><span class="p">])</span>
+		<span class="k">return</span> <span class="n">result</span>
+</div>
+<div class="viewcode-block" id="Plotter.draw_axes"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.draw_axes">[docs]</a>	<span class="k">def</span> <span class="nf">draw_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_buffer</span><span class="p">,</span> <span class="n">plot_data</span><span class="p">):</span>
+		
+		
+		<span class="n">draw_x</span> <span class="o">=</span> <span class="bp">False</span>
+		<span class="n">draw_y</span> <span class="o">=</span> <span class="bp">False</span>
+
+		<span class="k">if</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">draw_y</span> <span class="o">=</span> <span class="bp">True</span>
+			<span class="n">zero_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_x</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">x_step</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">y_size</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">zero_x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;|&quot;</span>
+				
+		<span class="k">if</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">max_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">draw_x</span> <span class="o">=</span> <span class="bp">True</span>
+			<span class="n">zero_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">min_y</span><span class="p">,</span> <span class="n">plot_data</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>    
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">plot_data</span><span class="o">.</span><span class="n">x_size</span><span class="p">):</span>
+				<span class="n">output_buffer</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">zero_y</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;-&quot;</span>
+
+		<span class="k">if</span> <span class="n">draw_x</span> <span class="ow">and</span> <span class="n">draw_y</span><span class="p">:</span>
+			<span class="n">output_buffer</span><span class="p">[</span><span class="n">zero_x</span><span class="p">][</span><span class="n">zero_y</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;+&quot;</span>
+		
+		</div>
+	<span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Plotter.get_coord"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.Plotter.get_coord">[docs]</a>	<span class="k">def</span> <span class="nf">get_coord</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">val</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span><span class="o">/</span><span class="n">step</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">result</span>
+</div></div>
+<span class="k">def</span> <span class="nf">clip_line</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">,</span> <span class="n">line_pt_2</span><span class="p">,</span> <span class="n">rect_bottom_left</span><span class="p">,</span> <span class="n">rect_top_right</span><span class="p">):</span>
+	<span class="n">ts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+		<span class="k">return</span> <span class="p">((</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span>
+				<span class="p">(</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+	<span class="k">if</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+		<span class="k">return</span> <span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+				<span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+	<span class="k">if</span> <span class="p">((</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span>
+		<span class="p">(</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span>
+		<span class="p">(</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span>
+		<span class="p">(</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rect_top_right</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+		<span class="k">return</span> <span class="n">line_pt_1</span><span class="p">,</span> <span class="n">line_pt_2</span>
+
+	<span class="n">ts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">float</span><span class="p">(</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
+	<span class="n">ts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">float</span><span class="p">(</span><span class="n">rect_top_right</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">line_pt_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
+	<span class="n">ts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">float</span><span class="p">(</span><span class="n">rect_bottom_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
+	<span class="n">ts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">float</span><span class="p">(</span><span class="n">rect_top_right</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">line_pt_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">line_pt_1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
+	
+	<span class="n">ts</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">ts</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="k">return</span> <span class="bp">None</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pt_1</span> <span class="o">+</span> <span class="n">t</span><span class="o">*</span><span class="p">(</span><span class="n">pt_2</span><span class="o">-</span><span class="n">pt_1</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">ts</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="k">for</span> <span class="p">(</span><span class="n">pt_1</span><span class="p">,</span> <span class="n">pt_2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">line_pt_1</span><span class="p">,</span> <span class="n">line_pt_2</span><span class="p">)]</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+	
+
+
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../aplotter.html#scitools.aplotter.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">flags</span><span class="p">):</span>
+	<span class="n">limit_flags_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&quot;min_x&quot;</span><span class="p">,</span><span class="s">&quot;min_y&quot;</span><span class="p">,</span><span class="s">&quot;max_x&quot;</span><span class="p">,</span><span class="s">&quot;max_y&quot;</span><span class="p">])</span>
+	<span class="n">limit_flags</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">n</span><span class="p">,</span><span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">limit_flags_names</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">flags</span><span class="p">)])</span>
+	<span class="n">settting_flags</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">n</span><span class="p">,</span><span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">-</span> <span class="n">limit_flags_names</span><span class="p">])</span>
+	<span class="n">output</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;output&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">**</span><span class="n">settting_flags</span><span class="p">)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">plot_single</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">**</span><span class="n">limit_flags</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">**</span><span class="n">settting_flags</span><span class="p">)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">plot_double</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">**</span><span class="n">limit_flags</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;can&#39;t draw multiple graphs yet&quot;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
+		<span class="k">print</span> <span class="n">r</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">r</span>
+	</div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Plotter&quot;</span><span class="p">,</span><span class="s">&quot;plot&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_demo</span><span class="p">():</span>
+	<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">from numpy import linspace, exp, sin, pi</span>
+<span class="s">x = linspace(-2, 2, 31)</span>
+<span class="s">y = exp(-0.5*x**2)*sin(2*pi*x)</span>
+<span class="s">&quot;&quot;&quot;</span>
+	<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;plot(x, y)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;plot(x, y, draw_axes=False)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;plot(x, y, plot_slope=False)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;plot(x, y, plot_labels=False)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;plot(x, y, dot=&#39;o&#39;, plot_slope=False)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;p = plot(x, y, output=str)&quot;</span><span class="p">,</span>
+	       <span class="s">&quot;print p&quot;</span>
+	       <span class="p">]</span>
+	<span class="k">print</span> <span class="n">data</span>
+	<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+		<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">c</span>
+	        <span class="k">exec</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+	
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">_demo</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

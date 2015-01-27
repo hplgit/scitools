@@ -1,0 +1,822 @@
+#!/usr/bin/env python
+legal_programs = ['subst',
+                  'replace',
+                  'rename',
+                  'regression',
+                  'profiler',
+                  'ps2mpeg',
+                  'floatdiff',
+                  'file2interactive',
+                  'movie',
+                  'pyreport',
+]
+
+__doc__ = \
+"""
+The scitools script takes a command and runs a corresponding utility.
+The available commands are listed below.
+
+file2interactive:
+  Utility for taking a set of Python statements in a file and
+  creating the corresponding interactive Python shell session.
+
+floatdiff:
+  Script for examining differences in regression tests involving
+  floating-point numbers. Used in [1].
+
+regression:
+  Simple front-end script to the scitools.Regression module. Used in [1].
+
+ps2mpeg:
+  Utility for turning a set of PostScript files into an MPEG movie,
+  using mpeg_encode or ppmtompeg.
+
+profiler:
+  Script for simplifying the execution of Python's profiling tools. Used in [1].
+
+rename:
+  Script for renaming a set of files by substituting one string or
+  regular expression with another.
+
+subst:
+  Script for subsituting a phrase by another in a set of files.
+  Accepts regular expressions. Treated in [1].
+
+replace:
+  Script for subsituting a phrase by another in a set of files.
+  Does not use regular expressions, just plain text (well suited
+  for substituting text with much use of backslashes, curly braces,
+  and other special characters in regular expressions (e.g.,
+  LaTeX text).
+
+movie:
+  Script for creating a movie file from a sequence of image
+  files (frames). By default an HTML file for displaying the
+  image (PNG) files are made.
+
+pyreport:
+  Processes a Python script and pretty prints the results using
+  LateX. If the script uses show() commands (from scitools.easyviz)
+  they are caught by pyreport and the resulting graphs are inserted in
+  the output pdf. Comments lines starting with \"#!\" are interpreted
+  as rst lines and pretty printed accordingly in the pdf.
+
+
+Examples:
+
+1. Substitute "compute_X(" calls, where X is any name, by
+   "calculate_X(" in a series of files code*.py:
+
+scitools subst 'compute_(.+?)\(' 'calculate_\g<1>(' code*.py
+
+Options -s, -m and -x can be issued to turn on pattern matching
+modifies (regular expression flags): re.S/re.DOTALL, re.m/re.MULTILINE
+and re.X/re.VERBOSE, respectively.
+
+Alternatively, using replace, but without regex groups:
+
+scitools replace "compute_X("  "calculate_X"
+
+
+2. Rename files with names like
+
+tmp_bergen_set15060.dat
+tmp_oslo_set31897.dat
+tmp_stavanger_set21864.dat
+tmp_trondheim_set15358.dat
+
+to files with names like
+
+set_15060_bergen.dat
+set_15358_trondheim.dat
+set_21864_stavanger.dat
+set_31897_oslo.dat
+
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+
+A simple further rename is to replace the .dat extension with .data:
+
+scitools rename dat data set*.dat
+
+
+3. Create an interactive session from a file with a list of statements:
+
+Unix> cat tmp2.py
+import os
+origdir = os.getcwd()
+os.chdir(os.pardir)
+os.getcwd()
+origdir
+
+Unix> scitools file2interactive tmp2.py
+>>> import os
+>>> origdir = os.getcwd()
+>>> os.chdir(os.pardir)
+>>> os.getcwd()
+'/Volumes/Shared/main/vc/scitools'
+>>> origdir
+'/Volumes/Shared/main/vc/scitools/test'
+
+
+[1] H. P. Langtangen: Python Scripting for Computational Science.
+    Third edition, second printing. Springer, 2009.
+"""
+
+
+import os, re, sys, shutil, glob
+
+def wildcard_notation(files):
+    """
+    On Unix, a command-line argument like *.py is expanded
+    by the shell. This is not done on Windows, where we must
+    use glob.glob inside Python. This function provides a
+    uniform solution.
+    """
+    if isinstance(files, basestring):
+        files = [files]  # ensure list
+    if sys.platform[:3] == 'win':
+        import glob, operator
+        filelist = [glob.glob(arg) for arg in files]
+        files = reduce(operator.add, filelist)  # flatten
+    return files
+
+def usage_movie():
+    print """Usage:
+scitools movie                   output_file=mymovie.html fps=4  file*.png
+scitools movie encoder=convert   output_file=mymovie.gif  fps=4  file*.jpg
+scitools movie encoder=ffmpeg    output_file=mymovie.avi  fps=4  file*.jpg
+scitools movie encoder=ffmpeg    output_file=mymovie.mpeg fps=4  file*.jpg
+scitools movie encoder=ppmtompeg output_file=mymovie.mpeg fps=24 file*.png
+"""
+
+def main_movie():
+    if len(sys.argv) < 3:
+        print usage_movie()
+        sys.exit(1)
+
+    # Search for arguments to movie function
+    legal_kwargs = ['output_file', 'overwrite_output',
+                    'quiet', 'cleanup', 'force_conversion',
+                    'input_file', 'encoder', 'vbitrate',
+                    'vbuffer', 'fps', 'vcodec', 'qscale',
+                    'qmin', 'qmax', 'iqscale',
+                    'pqscale', 'bqscale', 'pattern', 'size',
+                    'aspect', 'preferred_package', 'gop_size']
+    kw_string_args = ['output_file', 'encoder', 'pattern',
+                      'preferred_package', 'vcodec', 'vbuffer',]
+    kwargs = []
+    kws = []
+    for i, arg in enumerate(sys.argv[2:]):
+        if '=' in arg:
+            kw = arg.split('=')[0].strip()
+            if kw in legal_kwargs:
+                # Special case: kw='value', else arg is kw=value
+                if kw in kw_string_args:
+                    arg = kw + '=' + repr(arg.split('=')[1])
+                kwargs.append(arg)
+                kws.append(kw)
+            else:
+                print '%s: unknown argument to movie'
+        else:
+            break
+
+    if not 'encoder' in kws:
+        kwargs.append('encoder="html"')  # default
+    files = wildcard_notation(sys.argv[i+2:])
+    import scitools.easyviz
+    call = 'scitools.easyviz.movie(input_files=%s, %s)' % \
+           (str(files), ', '.join(kwargs))
+    #print call
+    eval(call)
+
+def usage_replace():
+    print 'Usage: scitools replace from-text to-text file1 file2 ...'
+
+def main_replace():
+    if len(sys.argv) < 4:
+        usage_replace()
+        sys.exit(1)
+
+    from_text = sys.argv[2]
+    to_text = sys.argv[3]
+    files = wildcard_notation(sys.argv[4:])
+    for filename in files:
+        f = open(filename, 'r')
+        text = f.read()
+        f.close()
+        if from_text in text:
+            backup_filename = filename + '.old~~'
+            shutil.copy(filename, backup_filename)
+            print 'replacing %s by %s in' % (from_text, to_text), filename
+            text = text.replace(from_text, to_text)
+            f = open(filename, 'w')
+            f.write(text)
+            f.close()
+
+def usage_subst():
+    print 'Usage: scitools subst [-s -m -x --restore] pattern '\
+          'replacement file1 file2 file3 ...'
+    print '--restore brings back the backup files'
+    print '-s is the re.DOTALL or re.S modifier'
+    print '-m is the re.MULTILINE or re.M modifier'
+    print '-x is the re.VERBODE or re.X modifier'
+
+from scitools.misc import subst
+
+def main_subst():
+    if len(sys.argv) < 4:
+        usage_subst()
+        sys.exit(1)
+
+    from getopt import getopt
+    optlist, args = getopt(sys.argv[2:], 'smx', ['restore'])
+    restore = False
+    pmm = 0  # pattern matching modifiers (re.compile flags)
+    for opt, value in optlist:
+        if opt in ('-s',):
+            if not pmm:  pmm = re.DOTALL
+            else:        pmm = pmm|re.DOTALL
+        if opt in ('-m',):
+            if not pmm:  pmm = re.MULTILINE
+            else:        pmm = pmm|re.MULTILINE
+        if opt in ('-x',):
+            if not pmm:  pmm = re.VERBOSE
+            else:        pmm = pmm|re.VERBOSE
+        if opt in ('--restore',):
+            restore = True
+
+    if restore:
+        for oldfile in args:
+            newfile = re.sub(r'\.old~$', '', oldfile)
+            if not os.path.isfile(oldfile):
+                print '%s is not a file!' % oldfile; continue
+            os.rename(oldfile, newfile)
+            print 'restoring %s as %s' % (oldfile,newfile)
+    else:
+        pattern = args[0]; replacement = args[1]
+        s = subst(pattern, replacement, wildcard_notation(args[2:]), pmm)
+        print s  # print info about substitutions
+
+def usage_rename():
+    print 'Usage: scitools rename from_regex to_regex file1 file2 ...'
+
+doc_rename = """
+Rename a set of files using the power of regular expressions.
+
+Example: Suppose we have a set of files with names
+
+tmp_bergen_set15060.dat
+tmp_oslo_set31897.dat
+tmp_stavanger_set21864.dat
+tmp_trondheim_set15358.dat
+
+and that we want to rename these to
+
+set_15060_bergen.dat
+set_15358_trondheim.dat
+set_21864_stavanger.dat
+set_31897_oslo.dat
+
+The following command, utilizing regular expressions with two
+groups, performs the task:
+
+scitools rename 'tmp_([a-z]+)_set(\d+)' 'set_\g<2>_\g<1>' tmp_*.dat
+
+Copies of the old files are taken for backup and given an extension .old~~:
+
+tmp_bergen_set15060.dat.old~~
+tmp_oslo_set31897.dat.old~~
+tmp_stavanger_set21864.dat.old~~
+tmp_trondheim_set15358.dat.old~~
+
+Supply the command-line argument --no-backup to avoid backing up files
+(might increase speed when renaming large files).
+"""
+
+def rename(from_regex, to_regex, filenames, backup=True, vcs=None):
+    """
+    Rename a list of filenames in *filenames* by substuting
+    *from_regex* by *to_regex* in the filenames. If *backup* is
+    true, a copy of each file is taken (with extension ``.old~~``).
+    The *vcs* may hold the name of a version control system,
+    "git", "hg", "bzr", or "svn", and then the renaming is performed
+    with a version control system command.
+    """
+    from_regex_c = re.compile(from_regex)
+    for filename in filenames:
+        if from_regex_c.search(filename):
+            newname = from_regex_c.sub(to_regex, filename)
+            if backup:
+                if os.path.isfile(filename):
+                    shutil.copy(filename, filename + '.old~~')
+                elif os.path.isdir(filename):
+                    shutil.copytree(filename, filename + '.old~~')
+            if os.path.isfile(filename) or os.path.isdir(filename):
+                if vcs is None:
+                    os.rename(filename, newname)
+                    if os.path.isfile(filename):
+                        print 'file',
+                    if os.path.isdir(filename):
+                        print 'directory',
+                    print '%s renamed to %s' % (filename, newname)
+                elif isinstance(vcs, str):
+                    vcs = vcs.lower()
+                    if vcs == 'git':
+                        cmd = 'git mv %s %s' % (filename, newname)
+                    elif vcs == 'hg' or vcs == 'mercurial':
+                        cmd = 'hg rename %s %s' % (filename, newname)
+                    elif vcs == 'bzr' or vcs == 'bazaar':
+                        cmd = 'bzr mv %s %s' % (filename, newname)
+                    elif vcs == 'svn' or vcs == 'subversion':
+                        cmd = 'svn move %s %s' % (filename, newname)
+                    failure = os.system(cmd)
+                    if failure:
+                        print '*** error: could not run\n', cmd
+                    else:
+                        print cmd
+            else:
+                print 'No such file:', filename
+
+
+
+def main_rename():
+    if len(sys.argv) < 4:
+        usage_rename()
+        print doc_rename
+        sys.exit(1)
+
+    if '--no-backup' in sys.argv:
+        backup = False
+        sys.argv.remove('--no-backup')
+    else:
+        backup = True
+    vcs = None
+    for name in 'git', 'hg', 'bzr', 'svn':
+        if '--%s' % name in sys.argv:
+            vcs = name
+            sys.argv.remove('--%s' % name)
+    from_regex, to_regex = sys.argv[2], sys.argv[3]
+    files = wildcard_notation(sys.argv[4:])
+    rename(from_regex, to_regex, files, backup, vcs)
+
+
+def usage_file2interactive():
+    print 'Usage: scitools file2interactive filename [human]'
+
+doc_file2interactive = """
+Execute a Python script and present output such that it seems that
+each statement is executed in the interactive interpreter.
+
+A funny feature is to add 'human' as a second command-line argument:
+it then seems that the text in the interpreter is written by a
+human, char by char. This can be used to fake typing in an interactive
+shell ;-)
+
+Troubleshooting:
+
+Each multi-line command must be ended by a pure '\n' line. If there
+is more whitespace, the interpreter waits for additional lines and
+the command is corrupted. For example, when defining a class,
+blank lines between the methods must have some whitespace to ensure
+continuation, but the line below the class definition must be empty
+so the command is ended.
+"""
+
+from code import InteractiveInterpreter
+# see InteractiveConsole for example on using InteractiveInterpreter
+import sys, random, time
+
+def printline(prompt, line, human_typing=0):
+    """
+    Print a line with Python code in the interpreter.
+    If human_typing is not 0, the line will be printed as if
+    a human types it. human_typing=1: characters are written
+    with a random delay, human_typing=2: characters are written
+    when the user hits any character on the keyboard
+    (not yet implemented).
+    """
+    # human_typing=2 can make use of a getch()-like function from
+    # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/134892
+    # or
+    # http://www.freenetpages.co.uk/hp/alan.gauld/tutevent.htm
+
+    if not human_typing:
+        print prompt, line
+    else:
+        print prompt,
+        # type one and one character with a random sleep in between
+        max_delay = 0.6  # seconds
+        for char in line:
+            delay = random.uniform(0, max_delay)
+            time.sleep(delay)
+            sys.stdout.write(char)
+            sys.stdout.flush()
+        dummy = raw_input('')
+
+
+class RunFileInInterpreter(InteractiveInterpreter):
+    def __init__(self, locals=None):
+        self._ip = InteractiveInterpreter(locals=locals)
+
+    def run(self, source_code):
+        buffer = []  # collect lines that belong together
+        prompt = '>>>'
+        for line in source_code.split('\n'):
+            #line = line.rstrip()  # indicates wrong end of buffer list
+            printline(prompt, line, human_typing)
+            buffer.append(line)
+            source = '\n'.join(buffer)
+            try:
+                need_more = self._ip.runsource(source)
+            except (SyntaxError,OverflowError), e:
+                print self._ip.showsyntaxerror()
+                sys.exit(1)
+            if need_more:
+                #print 'need more..., source=\n', source
+                prompt = '...'
+                continue # proceed with new line
+            else:
+                #print 'successful execution of final source=\n',source
+                prompt = '>>>'
+                buffer = []
+
+def file2interactive_test():
+    # just provide some demo code for testing:
+    _sc = """
+a = 1
+def f(x):
+    x = x + 2
+    return x
+
+b = f(2)
+dir()
+print 'correct?', b == 4
+    """
+    return _sc
+
+def main_file2interactive():
+    try:
+        filename = sys.argv[2]
+    except:
+        usage_file2interactive()
+        print doc_file2interactive
+        sys.exit(1)
+
+    global human_typing
+    human_typing = 0  # global variable
+    try:
+        if sys.argv[3] == 'human':
+            human_typing = 1
+    except:
+        pass
+
+    # define the complete source code file as _sc string:
+    if filename == 'demo':
+        _sc = file2interactive_test()
+    else:
+        _sc = open(filename, 'r').read()
+    RunFileInInterpreter(locals()).run(_sc)
+
+
+def usage_profiler():
+    print "Usage: scitools profiler program [program options]"
+
+def main_profiler():
+    try:
+        program = sys.argv[2]
+    except:
+        usage_profiler()
+        sys.exit(1)
+    resfile = '.tmp.profile'
+    # add the directory of the script to sys.path in case the script
+    # employs local modules from that directory:
+    sys.path.insert(0, os.path.dirname(program))
+    program_options = ' '.join(["%s" % arg for arg in sys.argv[3:]])
+    # The cProfile or profile module will be used, depending on
+    # the value of the environment variable PYPROFILE
+    # (default is cProfile, the fastest of them)
+    profiler_module = os.environ.get('PYPROFILE', 'cProfile')
+
+    if profiler_module == 'profile':
+        try:
+            import profile
+        except ImportError:
+            raise ImportError('module profile was not found - must be installed')
+    elif profiler_module == 'cProfile':
+        try:
+            import cProfile
+        except ImportError:
+            raise ImportError('module cProfile was not found - must be installed')
+    cmd = 'python -m %(profiler_module)s -o %(resfile)s %(program)s %(program_options)s' % vars()
+    print 'Running\n  ', cmd
+    failure = os.system(cmd)
+    if failure:
+        print 'Could not run\n', cmd
+        sys.exit(1)
+
+    try:
+        import pstats
+    except ImportError:
+        raise ImportError('module pstats was not found - must be installed')
+    p = pstats.Stats(resfile)
+    #p.sort_stats('cumulative')
+    p.sort_stats('time')
+    p.print_stats(30)
+    os.remove('.tmp.profile')
+
+
+
+def usage_ps2mpeg():
+        print "Usage: scitools ps2mpeg [-nocrop] frame0000.ps frame0001.ps ..."\
+              " [movie.mpeg] (series of ps files to be included in an MPEG "\
+              " movie movie.mpeg)"
+
+def main_ps2mpeg():
+    if len(sys.argv) < 3:
+        usage_ps2mpeg()
+        sys.exit(1)
+
+    # check that we have mpeg_encode or ppmtompeg:
+    from scitools.misc import findprograms
+    if not findprograms('mpeg_encode') and not findprograms('ppmtompeg'):
+        print """
+    ps2mpeg.py requires the mpeg_encode MPEG encoder program.
+    Please install mpeg_encode, see URL:
+    http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html
+
+    You may also use the ppmtompeg program included in the netpbm package
+    which is available in most distros.
+    """
+        sys.exit(1)
+    encoder = 'mpeg_encode'
+    if not findprograms(encoder):
+        encoder = 'ppmtompeg'
+
+    # cropping takes time so we can omit that step:
+    crop = 1
+    if sys.argv[2] == "-nocrop":
+        crop = 0
+        del sys.argv[2]
+
+    # did the user supply a filename for the MPEG file?
+    if sys.argv[-1][-3:] != '.ps' and sys.argv[-1][-4:] != '.eps':
+        mpeg_file = sys.argv[-1]
+        del sys.argv[-1]
+    else:
+        mpeg_file = "movie.mpeg"
+
+    found = findprograms(('gs', 'convert', encoder), write_message=True)
+    if not found:
+        sys.exit(1)
+
+    basename = "tmp_";
+    i = 0  # counter
+    for psfile in sys.argv[2:]:
+        ppmfile = "%s%04d.ppm" % (basename, i)
+        gscmd = "gs -q -dBATCH -dNOPAUSE -sDEVICE=ppm "\
+                " -sOutputFile=%(ppmfile)s %(psfile)s" % vars()
+        print gscmd
+        failure = os.system(gscmd)
+        if failure:
+            print '....gs failed, jumping to next file...'
+            continue
+        if crop:
+            # crop the image:
+            tmp_ppmfile = ppmfile + "~"
+            os.rename(ppmfile, tmp_ppmfile)
+            os.system("convert -crop 0x0 ppm:%s ppm:%s" % \
+                      (tmp_ppmfile,ppmfile))
+            # using pnmcrop:
+            # direct std. error to /dev/null and std. output to file:
+            #os.system("pnmcrop %s 2> /dev/null 1> %s" % \
+            #          (tmp_ppmfile,ppmfile))
+            os.remove(tmp_ppmfile)
+        print "%s transformed via gs to %s (%d Kb)" % \
+              (psfile,ppmfile,int(os.path.getsize(ppmfile)/1000))
+        i = i + 1
+    print 'ps2mpeg made the following ppm files:'
+    for f in glob.glob('%s*.ppm' % basename):
+        print f
+
+    first_no = "%04d" % 0                  # first number in ppmfiles
+    last_no  = "%04d" % (len(sys.argv)-3)  # last  number in ppmfiles
+    mpeg_encode_file = "%s.mpeg_encode-input" % basename
+    f = open(mpeg_encode_file, "w")
+    f.write("""
+#
+# lines can generally be in any order
+# only exception is the option 'INPUT' which must be followed by input
+# files in the order in which they must appear, followed by 'END_INPUT'
+
+PATTERN		        I
+# more compact files result from the following pattern, but xanim does not
+# work well (only a few of the frames are shown):
+#PATTERN                 IBBPBBPBBPBBPBB
+OUTPUT		        %(mpeg_file)s
+
+# mpeg_encode really only accepts 3 different file formats, but using a
+# conversion statement it can effectively handle ANY file format
+#
+# you must specify whether you will convert to PNM or PPM or YUV format
+
+BASE_FILE_FORMAT	PPM
+
+# the conversion statement
+#
+# Each occurrence of '*' will be replaced by the input file
+#
+# e.g., if you have a bunch of GIF files, then this might be:
+#	INPUT_CONVERT	giftoppm *
+#
+# if you have a bunch of files like a.Y a.U a.V, etc., then:
+#	INPUT_CONVERT	cat *.Y *.U *.V
+#
+# if you are grabbing from laser disc you might have something like
+#	INPUT_CONVERT	goto frame *; grabppm
+# 'INPUT_CONVERT *' means the files are already in the base file format
+#
+INPUT_CONVERT	*
+
+# number of frames in a GOP.
+#
+# since each GOP must have at least one I-frame, the encoder will find the
+# the first I-frame after GOP_SIZE frames to start the next GOP
+#
+# later, will add more flexible GOP signalling
+#
+GOP_SIZE	30
+#GOP_SIZE	6
+
+# number of slices in a frame
+#
+# 1 is a good number.  another possibility is the number of macroblock rows
+# (which is the height divided by 16)
+#
+SLICES_PER_FRAME	1
+
+# directory to get all input files from (makes this file easier to read)
+INPUT_DIR	.
+
+INPUT
+# '*' is replaced by the numbers 01, 02, 03, 04
+# if I instead do [01-11], it would be 01, 02, ..., 09, 10, 11
+# if I instead do [1-11], it would be 1, 2, 3, ..., 9, 10, 11
+# if I instead do [1-11+3], it would be 1, 4, 7, 10
+# the program assumes none of your input files has a name ending in ']'
+# if you do, too bad!!!
+#
+#
+
+%(basename)s*.ppm    [%(first_no)s-%(last_no)s]
+
+# can have more files here if you want...there is no limit on the number
+# of files
+END_INPUT
+
+# all of the remaining options have to do with the motion search and qscale
+# FULL or HALF -- must be upper case
+PIXEL		HALF
+# means +/- this many pixels
+RANGE		10
+# this must be one of {EXHAUSTIVE, SUBSAMPLE, LOGARITHMIC}
+PSEARCH_ALG	LOGARITHMIC
+# this must be one of {SIMPLE, CROSS2, EXHAUSTIVE}
+#
+# note that EXHAUSTIVE is really, really, really slow
+#
+BSEARCH_ALG	CROSS2
+#
+# these specify the q-scale for I, P, and B frames
+# (values must be between 1 and 31)
+#
+IQSCALE		8
+PQSCALE		10
+BQSCALE		25
+
+# this must be ORIGINAL or DECODED
+REFERENCE_FRAME	ORIGINAL
+""" % vars())
+    f.close()
+    failure = os.system(encoder + " " + mpeg_encode_file)
+    if failure:
+        print '\n\nps2mpeg.py: could not make MPEG movie'
+    else:
+        print "mpeg movie in output file", mpeg_file
+        # remove the generated ppm files:
+        for file in glob.glob("%s*.ppm" % basename):
+            os.remove(file)
+
+
+
+def usage_regression():
+    print 'Usage: scitools regression verify|update|template rootdir|filename'
+
+def main_regression():
+    import scitools.Regression
+
+    try:
+      task = sys.argv[2]
+    except IndexError:
+      usage_regression()
+      sys.exit(1)
+
+    try:
+      name = sys.argv[3]
+    except IndexError:
+      usage_regression()
+      sys.exit(1)
+
+    if task == 'verify' or task == 'update':
+        v = scitools.Regression.Verify(root=name, task=task)
+    elif task == 'template':
+        scitools.Regression.verify_file_template(name)
+    else:
+        print "1st command-line argument must be verify, update, or template"
+
+
+def usage_floatdiff():
+    print "Usage: floatdiff.py file.vd file.rd"
+
+def main_floatdiff():
+    import Tkinter
+    import scitools.Regression
+
+    root = Tkinter.Tk()
+    #Pmw.initialise(root, fontScheme='pmw1')
+    root.title('intelligent float diff')
+
+    if len(sys.argv) == 4:
+        if not os.path.isfile(sys.argv[2]):
+            print 'file "%s" does not exist' % sys.argv[2]
+            return
+        if not os.path.isfile(sys.argv[3]):
+            print 'file "%s" does not exist' % sys.argv[3]
+            return
+
+        fd = scitools.Regression.FloatDiff(root, sys.argv[2], sys.argv[3])
+        if fd.GUI:
+            root.mainloop()
+    else:
+        usage_floatdiff()
+
+
+def usage_pyreport():
+    print """Usage: scitools pyreport [options] pythonfile"""
+
+doc_pyreport = """
+pyreport is a program that runs a Python script and captures its
+output, compiling it to a pretty report in a pdf or an html file. It
+can display the output embedded in the code that produced it and can
+process special comments (literate comments) according to markup
+languages (rst or LaTeX) to compile a very readable document.
+
+Note: This is a modified version of Gael Varoquaux's pyreport that
+enables the use of scitools.easyviz to do the plotting. The original
+pyreport can be downloaded from http://gael-varoquaux.info/computers/pyreport/.
+"""
+
+def main_pyreport():
+    if len(sys.argv) < 3:
+        usage_pyreport()
+        print doc_pyreport
+        sys.exit(1)
+
+    sys.argv = sys.argv[1:]
+    from scitools.pyreport import pyreport
+    pyreport.commandline_call()
+
+
+if __name__ == '__main__':
+    try:
+        program = sys.argv[1]
+    except IndexError:
+        print '%s: missing first argument, must be help, --help, -h or one of\n%s\n\n' % \
+              (sys.argv[0], str(legal_programs)[1:-1])
+        sys.exit(1)
+
+    if program == 'subst':
+        main_subst()
+    elif program == 'replace':
+        main_replace()
+    elif program == 'rename':
+        main_rename()
+    elif program == 'file2interactive':
+        main_file2interactive()
+    elif program == 'profiler':
+        main_profiler()
+    elif program == 'ps2mpeg':
+        main_ps2mpeg()
+    elif program == 'regression':
+        main_regression()
+    elif program == 'floatdiff':
+        main_floatdiff()
+    elif program == 'movie':
+        main_movie()
+    elif program == 'pyreport':
+        main_pyreport()
+    elif program == 'help' or program == '--help' or program == '-h':
+        for p in legal_programs:
+            exec('usage_%s()' % p)
+        print '\n', __doc__
+    else:
+        print 'Cannot recognize command', program

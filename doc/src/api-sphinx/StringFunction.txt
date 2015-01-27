@@ -1,0 +1,10 @@
+
+:mod:`scitools.StringFunction`
+==============================
+
+.. automodule:: scitools.StringFunction
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

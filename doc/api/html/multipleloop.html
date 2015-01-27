@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.multipleloop &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.multipleloop">
+<span id="scitools-multipleloop"></span><h1><a class="reference internal" href="#module-scitools.multipleloop" title="scitools.multipleloop"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.multipleloop</span></tt></a><a class="headerlink" href="#module-scitools.multipleloop" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a tool for handling computer experiments with
+of a set of input parameters, where each input parameter
+is varied in a prescribed fashion.</p>
+<p>In short, the parameters are held in a dictionary where the keys are
+the names of the parameters and the values are the numerical, string
+or other values of the parameters.  The value can take on multiple
+values: e.g., an integer parameter &#8216;a&#8217; can have values -1, 1 and
+10. Similarly, a string parameter &#8216;method&#8217; can have values &#8216;Newton&#8217;
+and &#8216;Bisection&#8217;. The module will generate all combination of all
+parameters and values, which in the mentioned example will be
+(-1, &#8216;Newton&#8217;), (1, &#8216;Newton&#8217;), (10, &#8216;Newton&#8217;), (-1, &#8216;Bisection&#8217;),
+(1, &#8216;Bisection&#8217;), and (10, &#8216;Bisection&#8217;). Particular combination
+of values can easily be removed.</p>
+<p>The usage and implementation of the module are documented in the
+book &#8220;Python Scripting for Computational Science&#8221; (H. P. Langtangen,
+Springer, 2009), Chapter 12.1.</p>
+<p>Simple use of basic functionality in the module are shown below.
+See the book for explanations and more comprehensive examples.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scitools.multipleloop</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># parameter names and multiple values,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># using the special multipleloop syntax:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="s">&#39;1 &amp; 2 &amp; 5&#39;</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">:</span> <span class="s">&#39;hello &amp; world&#39;</span><span class="p">}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># turn multiple values syntax like 1 &amp; 2 &amp; 5 into list of values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;A&#39;</span><span class="p">])</span>
+<span class="go">[1, 2, 5]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prm_values</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="go">[(&#39;A&#39;, [1, 2, 5]), (&#39;B&#39;, [&#39;hello&#39;, &#39;world&#39;])]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># main function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">varied</span> <span class="o">=</span> <span class="n">combine</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># all[i] holds all parameter values in experiment no i,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># names holds the parameter names, and varied holds the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># parameter names that are actually varied (not fixed values)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">names</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">varied</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">[[1, &#39;hello&#39;],</span>
+<span class="go"> [2, &#39;hello&#39;],</span>
+<span class="go"> [5, &#39;hello&#39;],</span>
+<span class="go"> [1, &#39;world&#39;],</span>
+<span class="go"> [2, &#39;world&#39;],</span>
+<span class="go"> [5, &#39;world&#39;]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">experiment</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Experiment </span><span class="si">%4d</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">experiment</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="c"># newline</span>
+<span class="gp">... </span>    <span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c"># experiment counter</span>
+<span class="gp">...</span>
+<span class="go">Experiment    1: A: 1 B: hello</span>
+<span class="go">Experiment    2: A: 2 B: hello</span>
+<span class="go">Experiment    3: A: 5 B: hello</span>
+<span class="go">Experiment    4: A: 1 B: world</span>
+<span class="go">Experiment    5: A: 2 B: world</span>
+<span class="go">Experiment    6: A: 5 B: world</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># turn parameter names and values into command-line options</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># (useful for running a program that takes parameter names prefixed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># by - or -- as command-line options):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">=</span> <span class="n">options</span><span class="p">(</span><span class="nb">all</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">c</span>
+<span class="gp">... </span>    <span class="c">#commands.getstatusoutput(programname + &#39; &#39; + c)</span>
+<span class="gp">...</span>
+<span class="go">-A True -B &#39;hello&#39;</span>
+<span class="go">-A True -B &#39;hello&#39;</span>
+<span class="go">-A True -B &#39;hello&#39;</span>
+<span class="go">-A True -B &#39;world&#39;</span>
+<span class="go">-A True -B &#39;world&#39;</span>
+<span class="go">-A True -B &#39;world&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;all combinations: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">all combinations: 6</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># compute pairs:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;all pairs: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nb">all</span><span class="p">);</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">all pairs: 6</span>
+<span class="go">[[1, &#39;hello&#39;],</span>
+<span class="go"> [2, &#39;hello&#39;],</span>
+<span class="go"> [5, &#39;hello&#39;],</span>
+<span class="go"> [5, &#39;world&#39;],</span>
+<span class="go"> [2, &#39;world&#39;],</span>
+<span class="go"> [1, &#39;world&#39;]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># alternative class interface:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span> <span class="o">=</span> <span class="n">MultipleLoop</span><span class="p">(</span><span class="n">option_prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">experiments</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span><span class="o">.</span><span class="n">combine</span><span class="p">()</span>  <span class="c"># compute all combinations</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># remove all experiments corresponding to a condition:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nremoved</span> <span class="o">=</span> <span class="n">experiments</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;A == 5&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># look at the attributes of this instance:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">experiments</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+<span class="go">[[1, &#39;hello&#39;], [2, &#39;hello&#39;], [1, &#39;world&#39;], [2, &#39;world&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">experiments</span><span class="o">.</span><span class="n">names</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">experiments</span><span class="o">.</span><span class="n">varied</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">experiments</span><span class="o">.</span><span class="n">options</span>
+<span class="go">[&quot;-A True -B &#39;hello&#39;&quot;, &quot;-A True -B &#39;hello&#39;&quot;, &quot;-A True -B &#39;world&#39;&quot;,</span>
+<span class="go"> &quot;-A True -B &#39;world&#39;&quot;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">experiments</span><span class="o">.</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="go">[(&#39;A&#39;, [1, 2, 5]), (&#39;B&#39;, [&#39;hello&#39;, &#39;world&#39;])]</span>
+</pre></div>
+</div>
+<p>Here is another example with more experiments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;1 &amp; 0 &amp; 0.5&#39;</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="s">&#39;y &amp; siny&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">:</span> <span class="s">&#39;[1:1.3,0.1]&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prm_values</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>[(&#8216;b&#8217;, [1, 0, 0.5]),</dt>
+<dd>(&#8216;w&#8217;, [1, 1.1000000000000001, 1.2000000000000002]),
+(&#8216;func&#8217;, [&#8216;y&#8217;, &#8216;siny&#8217;])]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># main function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">varied</span> <span class="o">=</span> <span class="n">combine</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">names</span>
+<span class="go">[&#39;b&#39;, &#39;w&#39;, &#39;func&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">varied</span>
+<span class="go">[&#39;b&#39;, &#39;w&#39;, &#39;func&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">[[1, 1, &#39;y&#39;],</span>
+<span class="go"> [0, 1, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1, &#39;y&#39;],</span>
+<span class="go"> [1, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [1, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [1, 1, &#39;siny&#39;],</span>
+<span class="go"> [0, 1, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1, &#39;siny&#39;],</span>
+<span class="go"> [1, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [1, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;siny&#39;]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;all combinations: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">all combinations: 18</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># compute pairs:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">(</span><span class="n">prm_values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;all pairs: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nb">all</span><span class="p">);</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">all</span><span class="p">)</span>
+<span class="go">all pairs: 9</span>
+<span class="go">[[1, 1, &#39;y&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0, 1, &#39;siny&#39;],</span>
+<span class="go"> [1, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [1, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1, &#39;siny&#39;]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># alternative class interface:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span> <span class="o">=</span> <span class="n">MultipleLoop</span><span class="p">(</span><span class="n">option_prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">experiments</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span><span class="o">.</span><span class="n">combine</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># remove all experiments corresponding to a condition:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nremoved</span> <span class="o">=</span> <span class="n">experiments</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;b == 1&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># look at the attributes of this instance:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">experiments</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+<span class="go">[[0, 1, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1, &#39;y&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0, 1, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;siny&#39;]]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># explore the response of varied parameters:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># function = []  # list of (response, (param1, param2, ...))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># the (param1, param2, ...) list equals the varied parameter values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># in each experiment (varied_parameters in the loop below)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">cmlargs</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">varied_parameters</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">args</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">experiments</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)])</span>
+<span class="gp">... </span>    <span class="k">print</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;can call some function:&#39;</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;response = myfunc(</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">args</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;or run some program with options:&#39;</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;prompt&gt; myprog &#39;</span><span class="p">,</span> <span class="n">cmlargs</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;and extract a response from the program output&#39;</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;function.append((response, varied_parameters))&#39;</span>
+<span class="gp">...</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w True -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w True -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1.1, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w 1.1000000000000001 -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1.1, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w 1.1000000000000001 -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1.2, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w 1.2000000000000002 -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1.2, func=y)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w 1.2000000000000002 -func &#39;y&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w True -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w True -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1.1, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w 1.1000000000000001 -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1.1, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w 1.1000000000000001 -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0, w=1.2, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b False -w 1.2000000000000002 -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+<span class="go">can call some function:</span>
+<span class="go">response = myfunc(b=0.5, w=1.2, func=siny)</span>
+<span class="go">or run some program with options:</span>
+<span class="go">prompt&gt; myprog  -b 0.5 -w 1.2000000000000002 -func &#39;siny&#39;</span>
+<span class="go">and extract a response from the program output</span>
+<span class="go">function.append((response, varied_parameters))</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="scitools.multipleloop.MultipleLoop">
+<em class="property">class </em><tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">MultipleLoop</tt><big>(</big><em>option_prefix='--'</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop" title="Permalink to this definition">¶</a></dt>
+<dd><p>High-level, simplified interface to the functionality in
+the multipleloop module.</p>
+<p>Typical application:</p>
+<div class="highlight-python"><pre>p = {'name1': 'multiple values', 'name2': 'values', ...}
+experiments = scitools.multipleloop.MultipleLoop(option_prefix='-')
+for name in p:
+    experiments.register_parameter(name, p[name])
+experiments.combine()  # find all combinations of all parameters
+for cmlargs, parameters, varied_parameters in experiments:
+    &lt;run experiment: some program + cmlargs&gt;
+    &lt;extract response, varied_parameters holds the values of
+     the parameters that were varied in this experiment (the
+     independent variables mapping onto the response)</pre>
+</div>
+<p>Attributes (m is some MultipleLoop object):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>m.names</td>
+<td>names of all parameters</td>
+</tr>
+<tr class="row-even"><td>m.varied</td>
+<td>names of parameters with multiple values
+(the rest of the parameters have constant values
+throughout the experiments)</td>
+</tr>
+<tr class="row-odd"><td>m.options</td>
+<td>list of strings of all command-line arguments
+(-name value), one for each experiment</td>
+</tr>
+<tr class="row-even"><td>m.all</td>
+<td>list of all experiments</td>
+</tr>
+<tr class="row-odd"><td>m.prm_values</td>
+<td>list of (name, valuelist) tuples</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;1 &amp; 0 &amp; 0.5&#39;</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="s">&#39;y &amp; siny&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">:</span> <span class="s">&#39;[1:1.3,0.1]&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span> <span class="o">=</span> <span class="n">MultipleLoop</span><span class="p">(</span><span class="n">option_prefix</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">experiments</span><span class="o">.</span><span class="n">register_parameter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">experiments</span><span class="o">.</span><span class="n">combine</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># remove all experiments corresponding to a condition:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nremoved</span> <span class="o">=</span> <span class="n">experiments</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;b == 1&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># look at the attributes of this instance:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">experiments</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+<span class="go">[[0, 1, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1, &#39;y&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;y&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;y&#39;],</span>
+<span class="go"> [0, 1, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.1000000000000001, &#39;siny&#39;],</span>
+<span class="go"> [0, 1.2000000000000002, &#39;siny&#39;],</span>
+<span class="go"> [0.5, 1.2000000000000002, &#39;siny&#39;]]</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.multipleloop.MultipleLoop.add" title="scitools.multipleloop.MultipleLoop.add"><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt></a>(name,&nbsp;values)</td>
+<td>Register a parameter and its value or multiple values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.multipleloop.MultipleLoop.combine" title="scitools.multipleloop.MultipleLoop.combine"><tt class="xref py py-obj docutils literal"><span class="pre">combine</span></tt></a>()</td>
+<td>Compute all combinations of all parameters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.multipleloop.MultipleLoop.next" title="scitools.multipleloop.MultipleLoop.next"><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.multipleloop.MultipleLoop.register_parameter" title="scitools.multipleloop.MultipleLoop.register_parameter"><tt class="xref py py-obj docutils literal"><span class="pre">register_parameter</span></tt></a>(name,&nbsp;values)</td>
+<td>Register a parameter and its value or multiple values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.multipleloop.MultipleLoop.remove" title="scitools.multipleloop.MultipleLoop.remove"><tt class="xref py py-obj docutils literal"><span class="pre">remove</span></tt></a>(condition)</td>
+<td>Remove experiments that fulfill a boolean condition.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>option_prefix='--'</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>option_prefix is the prefix that will be used in command-line
+options (typically &#8216;-&#8216; or &#8216;&#8211;&#8217;).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.__iter__">
+<tt class="descname">__iter__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.multipleloop.MultipleLoop.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.multipleloop'</em><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.add">
+<tt class="descname">add</tt><big>(</big><em>name</em>, <em>values</em><big>)</big><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a parameter and its value or multiple values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.combine">
+<tt class="descname">combine</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute all combinations of all parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.register_parameter">
+<tt class="descname">register_parameter</tt><big>(</big><em>name</em>, <em>values</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.register_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.register_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a parameter and its value or multiple values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.MultipleLoop.remove">
+<tt class="descname">remove</tt><big>(</big><em>condition</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#MultipleLoop.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.MultipleLoop.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove experiments that fulfill a boolean condition.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;w &lt; 1.0 and p = 1.2) or (q in (1,2,3) and f &lt; 0.1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(names of the parametes must be used)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.multipleloop.ReportHTML">
+<em class="property">class </em><tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">ReportHTML</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#ReportHTML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.ReportHTML" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.multipleloop.ReportHTML.dump" title="scitools.multipleloop.ReportHTML.dump"><tt class="xref py py-obj docutils literal"><span class="pre">dump</span></tt></a>(text)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.multipleloop.ReportHTML.experiment_section" title="scitools.multipleloop.ReportHTML.experiment_section"><tt class="xref py py-obj docutils literal"><span class="pre">experiment_section</span></tt></a>(parameters,&nbsp;names,&nbsp;varied)</td>
+<td>Start new H1 section in the HTML document.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.multipleloop.ReportHTML.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#ReportHTML.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.ReportHTML.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.multipleloop.ReportHTML.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.multipleloop'</em><a class="headerlink" href="#scitools.multipleloop.ReportHTML.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.ReportHTML.dump">
+<tt class="descname">dump</tt><big>(</big><em>text</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#ReportHTML.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.ReportHTML.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.multipleloop.ReportHTML.experiment_section">
+<tt class="descname">experiment_section</tt><big>(</big><em>parameters</em>, <em>names</em>, <em>varied</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#ReportHTML.experiment_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.ReportHTML.experiment_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start new H1 section in the HTML document.
+parameters is a list of the values of all parameters
+in an experiment, names holds the names of all
+parameters, and varied holds the names of the
+parameters that are actually varied.
+The three input lists are computed by functions in
+this module (or the MultipleLoops class).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.multipleloop.combine">
+<tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">combine</tt><big>(</big><em>prm_values</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the combination of all parameter values in the prm_values
+(nested) list. Main function in this module.</p>
+<p>param prm_values: nested list <tt class="docutils literal"><span class="pre">(parameter_name,</span> <span class="pre">list_of_parameter_values)</span></tt>
+or dictionary <tt class="docutils literal"><span class="pre">prm_values[parameter_name]</span> <span class="pre">=</span> <span class="pre">list_of_parameter_values</span></tt>.
+return: (all, names, varied) where</p>
+<blockquote>
+<div><ul class="simple">
+<li>all contains all combinations (experiments)
+all[i] is the list of individual parameter values in
+experiment no i</li>
+<li>names contains a list of all parameter names</li>
+<li>varied holds a list of parameter names that are varied
+(i.e. where there is more than one value of the parameter,
+the rest of the parameters have fixed values)</li>
+</ul>
+</div></blockquote>
+<p>Code example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dx</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dt</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">dx</span><span class="p">;</span>  <span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;dx&#39;</span><span class="p">:</span> <span class="n">dx</span><span class="p">,</span> <span class="s">&#39;dt&#39;</span><span class="p">:</span> <span class="n">dt</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span>
+<span class="go">{&#39;dt&#39;: [ 0.75 , 0.375,], &#39;dx&#39;: [ 0.25  , 0.125 , 0.0625,]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">varied</span> <span class="o">=</span> <span class="n">combine</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span>
+<span class="go">[[0.75, 0.25], [0.375, 0.25], [0.75, 0.125], [0.375, 0.125],</span>
+<span class="go"> [0.75, 0.0625], [0.375, 0.0625]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.multipleloop.input2values">
+<tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">input2values</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#input2values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.input2values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a string s with multiple loop syntax into
+a list of single values (for the corresponding parameter).</p>
+<p>Multiple loop syntax:
+&#8216;-1 &amp; -3.4 &amp; 20 &amp; 70 &amp; [0:10,1.3] &amp; [0:10] &amp; 11.76&#8217;</p>
+<p>That is, &amp; is delimiter between different values, [0:10,1.3]
+generates a loop from 0 up to and including 10 with steps 1.3,
+[0:10] generates the integers 1,2,...,10.</p>
+<p>Interactive session:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">input2values</span><span class="p">(</span><span class="s">&#39;-1 &amp; -3.4 &amp; 20 &amp; 70 &amp; [0:10,1.3] &amp; [0:10] &amp; 11.76&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>[-1, -3.3999999999999999, 20, 70, 0, 1.3, 2.6000000000000001,</dt>
+<dd>3.9000000000000004, 5.2000000000000002, 6.5, 7.7999999999999998,
+9.0999999999999996, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11.76]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;w&#39;</span><span class="p">:</span> <span class="s">&#39;[0.7:1.3,0.1]&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;1 &amp; 0.3 &amp; 0&#39;</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="s">&#39;y &amp; siny&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;w&#39;</span><span class="p">])</span>
+<span class="go">[0.69999999999999996, 0.79999999999999993, 0.89999999999999991,</span>
+<span class="go"> 0.99999999999999989, 1.0999999999999999, 1.2, 1.3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">])</span>
+<span class="go">[1, 0.29999999999999999, 0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">])</span>
+<span class="go">[&#39;y&#39;, &#39;siny&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prm_values</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">input2values</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prm_values</span>
+<span class="go">[(&#39;b&#39;, [1, 0.29999999999999999, 0]),</span>
+<span class="go"> (&#39;func&#39;, [&#39;y&#39;, &#39;siny&#39;]),</span>
+<span class="go"> (&#39;w&#39;, [0.69999999999999996, 0.79999999999999993, 0.89999999999999991,</span>
+<span class="go">        0.99999999999999989, 1.0999999999999999, 1.2, 1.3])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.multipleloop.options">
+<tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">options</tt><big>(</big><em>all</em>, <em>names</em>, <em>prefix='--'</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of command-line options and their values.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>all</td>
+<td>all[i] holds a list of parameter values in experiment no i</td>
+</tr>
+<tr class="row-even"><td>names</td>
+<td>names[i] holds name of parameter no. i</td>
+</tr>
+<tr class="row-odd"><td>prefix</td>
+<td>an option equals prefix + name (prefix is &#8216;&#8211;&#8217; or &#8216;-&#8216;)</td>
+</tr>
+<tr class="row-even"><td>return</td>
+<td>cmd[i] holds -name value pairs of all parameters in
+experiment no. i</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.multipleloop.pairs">
+<tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">pairs</tt><big>(</big><em>prm_values</em>, <em>n=2</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute parameter combinations of the parameter values in
+prm_values (list of (name, values) pairs, where values is
+a list of values). Not all combinations are computed (as
+in function combine), but only a subset so that all pairs
+of all parameter values appear once. This gives a substantially
+smaller set of combinations than when all parameter values
+are combined with all others. n=2 correspond to pairs,
+n=3 to triplets, and so on.</p>
+<p>The computations are performed with the aid of the AllPairs
+package developed and maintained by MetaCommunications Engineering,
+see <a class="reference external" href="http://pypi.python.org/pypi/AllPairs/2.0.1">http://pypi.python.org/pypi/AllPairs/2.0.1</a>.
+Only input and output are adapted here to the
+syntax of the multipleloop module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.multipleloop.remove">
+<tt class="descclassname">scitools.multipleloop.</tt><tt class="descname">remove</tt><big>(</big><em>condition</em>, <em>all</em>, <em>names</em><big>)</big><a class="reference internal" href="_modules/scitools/multipleloop.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.multipleloop.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove experiments that fulfill a boolean condition.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">all</span> <span class="o">=</span> <span class="n">remove</span><span class="p">(</span><span class="s">&#39;w &lt; 1.0 and p = 1.2) or (q in (1,2,3) and f &lt; 0.1&#39;</span><span class="p">,</span> <span class="nb">all</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(names of the parametes must be used)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/multipleloop.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

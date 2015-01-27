@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.avplotter &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.avplotter">
+<span id="scitools-avplotter"></span><h1><a class="reference internal" href="#module-scitools.avplotter" title="scitools.avplotter"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.avplotter</span></tt></a><a class="headerlink" href="#module-scitools.avplotter" title="Permalink to this headline">¶</a></h1>
+<p>avplotter (&#8220;ascii vertical plotter&#8221;) is a simple ASCII plotter for
+curve plots, where the x axis points downward and the y axis
+is horizontal. The plot is realized by printing it line by line.
+There are two main applications: 1) very long time series, and
+2) plots that would be convenient to have as pure text.</p>
+<p>See the documentation of class Plotter for examples of various
+types of plots.</p>
+<dl class="class">
+<dt id="scitools.avplotter.Plotter">
+<em class="property">class </em><tt class="descclassname">scitools.avplotter.</tt><tt class="descname">Plotter</tt><big>(</big><em>ymin</em>, <em>ymax</em>, <em>width=68</em>, <em>symbols='*o+x&#64;'</em>, <em>vertical_line=0</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#Plotter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.Plotter" title="Permalink to this definition">¶</a></dt>
+<dd><p>ASCII plotter with x axis downwards and y axis horizontal.
+Can make a plot by writing out new x values line by line in a
+terminal window or a file.
+Very suited for long time series.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_periods</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolution_per_period</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_periods</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">num_periods</span><span class="o">*</span><span class="n">resolution_per_period</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">t</span><span class="p">))</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;t=</span><span class="si">%5.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="s">&#39;</span><span class="si">%5.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">y</span>
+<span class="gp">...</span>
+<span class="go">t= 0.00                          |                           0.00</span>
+<span class="go">t= 0.29                          |     *                     0.29</span>
+<span class="go">t= 0.57                          |           *               0.57</span>
+<span class="go">t= 0.86                          |                *          0.82</span>
+<span class="go">t= 1.14                          |                    *      1.01</span>
+<span class="go">t= 1.43                          |                      *    1.12</span>
+<span class="go">t= 1.71                          |                       *   1.14</span>
+<span class="go">t= 2.00                          |                     *     1.06</span>
+<span class="go">t= 2.28                          |                  *        0.89</span>
+<span class="go">t= 2.57                          |            *              0.64</span>
+<span class="go">t= 2.86                          |      *                    0.34</span>
+<span class="go">t= 3.14                          |                           0.00</span>
+<span class="go">t= 3.43                   *      |                          -0.34</span>
+<span class="go">t= 3.71             *            |                          -0.64</span>
+<span class="go">t= 4.00       *                  |                          -0.89</span>
+<span class="go">t= 4.28    *                     |                          -1.06</span>
+<span class="go">t= 4.57  *                       |                          -1.14</span>
+<span class="go">t= 4.86   *                      |                          -1.12</span>
+<span class="go">t= 5.14     *                    |                          -1.01</span>
+<span class="go">t= 5.43         *                |                          -0.82</span>
+<span class="go">t= 5.71              *           |                          -0.57</span>
+<span class="go">t= 6.00                    *     |                          -0.29</span>
+<span class="go">t= 6.28                          |                          -0.00</span>
+<span class="go">t= 6.57                          |     *                     0.27</span>
+<span class="go">t= 6.85                          |          *                0.51</span>
+<span class="go">t= 7.14                          |             *             0.69</span>
+<span class="go">t= 7.43                          |                *          0.81</span>
+<span class="go">t= 7.71                          |                 *         0.86</span>
+<span class="go">t= 8.00                          |                 *         0.84</span>
+<span class="go">t= 8.28                          |               *           0.76</span>
+<span class="go">t= 8.57                          |            *              0.62</span>
+<span class="go">t= 8.85                          |        *                  0.44</span>
+<span class="go">t= 9.14                          |    *                      0.23</span>
+<span class="go">t= 9.42                          |                           0.00</span>
+<span class="go">t= 9.71                     *    |                          -0.23</span>
+<span class="go">t=10.00                 *        |                          -0.44</span>
+<span class="go">t=10.28             *            |                          -0.62</span>
+<span class="go">t=10.57          *               |                          -0.76</span>
+<span class="go">t=10.85        *                 |                          -0.84</span>
+<span class="go">t=11.14        *                 |                          -0.86</span>
+<span class="go">t=11.42         *                |                          -0.81</span>
+<span class="go">t=11.71            *             |                          -0.69</span>
+<span class="go">t=12.00               *          |                          -0.51</span>
+<span class="go">t=12.28                    *     |                          -0.27</span>
+<span class="go">t=12.57                          |                          -0.00</span>
+</pre></div>
+</div>
+<p>Here is a one-dimensional random walk example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">random_step</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.05</span><span class="o">*</span><span class="n">random_step</span>
+    <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;HOME!!!!!!!!!&#39;</span>
+        <span class="k">break</span>
+    <span class="k">print</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Interrupted by Ctrl-C&#39;</span>
+        <span class="k">break</span>
+</pre></div>
+</div>
+<p>One can easily plot two or more curves side by side. Here we
+plot two curves (sine and cosine), each with a width of 25
+characters:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_sin</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">p_cos</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">p_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span> <span class="n">p_cos</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The output reads:</p>
+<div class="highlight-python"><pre>             |                          |           c
+             |   s                      |          c
+             |       s                  |       c
+             |          s               |   c
+             |           s              |
+             |          s          c    |
+             |       s         c        |
+             |   s          c           |
+             |             c            |
+        s    |              c           |
+    s        |                 c        |
+ s           |                     c    |
+s            |                         c|
+ s           |                          |   c
+    s        |                          |       c
+        s    |                          |          c
+            s|                          |           c
+             |   s                      |          c
+             |       s                  |       c
+             |          s               |   c
+             |           s              |
+             |          s          c    |
+             |       s         c        |
+             |   s          c           |
+             |             c            |
+        s    |              c           |
+    s        |                 c        |
+ s           |                     c    |
+s            |                         c|
+ s           |                          |   c
+    s        |                          |       c
+        s    |                          |          c
+            s|                          |           c
+             |   s                      |          c
+             |       s                  |       c
+             |          s               |   c
+             |           s              |
+             |          s          c    |
+             |       s         c        |
+             |   s          c           |
+             |             c            |
+        s    |              c           |
+    s        |                 c        |
+ s           |                     c    |
+s            |                         c|
+ s           |                          |   c
+    s        |                          |       c
+        s    |                          |          c
+            s|                          |           c</pre>
+</div>
+<p>Alternatively, two curves (here sine and cosine) can be
+plotted in the same coordinate system:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s">&#39;sc&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="n">tp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The output from this code becomes:</p>
+<div class="highlight-python"><pre>                         |                        c
+                         |         s            c
+                         |                 c
+                         |         c            s
+                         |                        s
+               c         |                      s
+       c                 |                 s
+  c                      |         s
+c                        |
+  c            s         |
+       c                 |
+  s            c         |
+s                        |
+  s                      |         c
+       s                 |                 c
+               s         |                      c
+                         |                        c
+                         |         s            c
+                         |                 c
+                         |         c            s
+                         |                        s
+               c         |                      s
+       c                 |                 s
+  c                      |         s
+c                        |
+  c            s         |
+       c                 |
+  s            c         |
+s                        |
+  s                      |         c
+       s                 |                 c
+               s         |                      c
+                         |                        c
+                         |         s            c
+                         |                 c
+                         |         c            s
+                         |                        s
+               c         |                      s
+       c                 |                 s
+  c                      |         s
+c                        |
+  c            s         |
+       c                 |
+  s            c         |
+s                        |
+  s                      |         c
+       s                 |                 c
+               s         |                      c
+                         |                        c</pre>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.avplotter.Plotter.plot" title="scitools.avplotter.Plotter.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(x,&nbsp;*y,&nbsp;**kwargs)</td>
+<td>Return next line in plot, given x and some y values.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.avplotter.Plotter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>ymin</em>, <em>ymax</em>, <em>width=68</em>, <em>symbols='*o+x&#64;'</em>, <em>vertical_line=0</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#Plotter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.Plotter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a line by line plotter with the x axis pointing
+downward. The <cite>ymin</cite> and <cite>ymax</cite> variables define the
+extent of the y axis. The <cite>width</cite> parameter is the number
+of characters used for the y domain (axis). The symbols
+used for curves are given by the <cite>symbols</cite> string
+(first symbol, by default is <tt class="docutils literal"><span class="pre">*</span></tt>, next is <tt class="docutils literal"><span class="pre">o</span></tt>).
+The <cite>vertical_line</cite> parameter specifies for which y value
+where the x axis is drawn (y=0 by default).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scitools.avplotter.Plotter.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'scitools.avplotter'</em><a class="headerlink" href="#scitools.avplotter.Plotter.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.avplotter.Plotter.plot">
+<tt class="descname">plot</tt><big>(</big><em>x</em>, <em>*y</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#Plotter.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.Plotter.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next line in plot, given x and some y values.</p>
+<p>Supported kwargs:
+print_out_of_range_value: if True, print the value if it
+is out of range.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.plot">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">plot</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Easyviz-style plot command.
+args holds x1, y1, x2, y2, ...:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>No other keyword arguments has any effect.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.run_random_walk">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">run_random_walk</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#run_random_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.run_random_walk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.test_2_curves_v1">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">test_2_curves_v1</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#test_2_curves_v1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.test_2_curves_v1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.test_2_curves_v2">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">test_2_curves_v2</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#test_2_curves_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.test_2_curves_v2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.test_random_walk">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">test_random_walk</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#test_random_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.test_random_walk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="scitools.avplotter.test_sin">
+<tt class="descclassname">scitools.avplotter.</tt><tt class="descname">test_sin</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/avplotter.html#test_sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.avplotter.test_sin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/avplotter.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
