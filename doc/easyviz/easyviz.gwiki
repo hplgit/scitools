@@ -1,7 +1,7 @@
 #summary Easyviz Documentation
 
 By *H. P. Langtangen* and *J. H. Ring*
-==== Apr 12, 2014 ====
+==== Jan 27, 2015 ====
 
 <wiki: toc max_depth="2" />
 
@@ -47,10 +47,10 @@ The present documentation is available in a number of formats:
   * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html Sphinx HTML]
   * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt Plain text]
   * [http://code.google.com/p/scitools/wiki/EasyvizDocumentation Wiki]
-  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt Doconce source]
+  * [https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt DocOnce source]
 
 The documentation is written in the
-[https://github.com/hplgit/doconce Doconce]
+[https://github.com/hplgit/doconce DocOnce]
 format and can be translated into a
 number of different formats (reST, Sphinx, LaTeX, HTML, XML,
 OpenOffice, RTF, Word, and plain untagged ASCII).
@@ -810,7 +810,8 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2p.png
 
 
 
-*Minimalistic Typing.* When exploring mathematics in the interactive Python shell, most of us
+*Minimalistic Typing.*
+When exploring mathematics in the interactive Python shell, most of us
 are interested in the quickest possible commands.
 Here is an example of minimalistic syntax for
 comparing the two sample functions we have used in the previous examples:
@@ -900,32 +901,53 @@ ylabel('y(t)')
 zlabel('z(t)')
 title('plot3 example')
 }}}
-Figure ref{fig:plot3} shows the resulting plot.
+Figure fig:plot3 shows the resulting plot.
 The file `examples/plot3_demo.py` contains this and more examples.
 
-FIGURE: [figs/plot3_demo, width=400] Example of curve in 3D space. label{fig:plot3}
 
-===== Making Animations =====
-label{easyviz:movie}
+
+---------------------------------------------------------------
+
+Figure:  Example of curve in 3D space. (fig:plot3)
+
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot3_demo.png
+
+
+---------------------------------------------------------------
+
+
+
+==== Making Animations ====
 
 A sequence of plots can be combined into an animation and stored in a
 movie file. First we need to generate a series of hardcopies, i.e.,
 plots stored in files.  Thereafter we must use a tool to combine the
 individual plot files into a movie file.
 
-__Example.__ The function
-$f(x; m, s) = (2\pi)^{-1/2}s^{-1}\exp{\left[-{1\over2}\left({x-m\over s}\right)^2\right]}$|$f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)$
+*Example.* The function
+`f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)`
 is known as the Gaussian function or the probability density function
 of the normal (or Gaussian) distribution.  This bell-shaped function is
-"wide" for large $s$ and "peak-formed" for small $s$, see Figure
-ref{fig:plot2q}. The function is symmetric around $x=m$ ($m=0$ in the
+"wide" for large `s` and "peak-formed" for small `s`, see Figure
+fig:plot2q. The function is symmetric around `x=m` (`m=0` in the
 figure).  Our goal is to make an animation where we see how this
-function evolves as $s$ is decreased. In Python we implement the
+function evolves as `s` is decreased. In Python we implement the
 formula above as a function `f(x, m, s)`.
 
-FIGURE:[figs/plot2q, width=400] Different shapes of a Gaussian function. label{fig:plot2q}
 
-The animation is created by varying $s$ in a loop and for each $s$
+
+---------------------------------------------------------------
+
+Figure:  Different shapes of a Gaussian function. (fig:plot2q)
+
+https://scitools.googlecode.com/hg/doc/easyviz/figs/plot2q.png
+
+
+---------------------------------------------------------------
+
+
+
+The animation is created by varying `s` in a loop and for each `s`
 issue a `plot` command. A moving curve is then visible on the screen.
 One can also make a movie file that can be played as any other
 computer movie using a standard movie player. To this end, each plot
@@ -935,21 +957,21 @@ Easyviz. All necessary steps will be apparent in the complete program
 below, but before diving into the code we need to comment upon a
 couple of issues with setting up the `plot` command for animations.
 
-The underlying plotting program will normally adjust the $y$ axis to the
+The underlying plotting program will normally adjust the `y` axis to the
 maximum and minimum values of the curve if we do not specify the axis
 ranges explicitly. For an animation such automatic axis adjustment is
 misleading - the axis ranges must be fixed to avoid a jumping
 axis. The relevant values for the axis range is the minimum and
-maximum value of $f$. The minimum value is zero, while the maximum
-value appears for $x=m$ and increases with decreasing $s$. The range
-of the $y$ axis must therefore be $[0,f(m; m, \min s)]$.
+maximum value of `f`. The minimum value is zero, while the maximum
+value appears for `x=m` and increases with decreasing `s`. The range
+of the `y` axis must therefore be `[0,f(m; m, \min s)]`.
 
-The function $f$ is defined for all $-\infty < x < \infty$, but the
-function value is very small already $3s$ away from $x=m$. We may therefore
-limit the $x$ coordinates to $[m-3s,m+3s]$.
+The function `f` is defined for all `-\infty < x < \infty`, but the
+function value is very small already `3s` away from `x=m`. We may therefore
+limit the `x` coordinates to `[m-3s,m+3s]`.
 
 Now we are ready to take a look at the complete code
-for animating how the Gaussian function evolves as the $s$ parameter
+for animating how the Gaussian function evolves as the `s` parameter
 is decreased from 2 to 0.2:
 
 {{{
@@ -988,7 +1010,8 @@ Also note that we, simply because we think it is visually more
 attractive, let the `y` axis go from -0.1 although the `f` function is
 always greater than zero.
 
-*Remarks on Filenames.* For each frame (plot) in the movie we store the plot in a file.  The
+*Remarks on Filenames.*
+For each frame (plot) in the movie we store the plot in a file.  The
 different files need different names and an easy way of referring to
 the set of files in right order. We therefore suggest to use filenames
 of the form `tmp0001.png`, `tmp0002.png`, `tmp0003.png`, etc.  The
@@ -1034,7 +1057,8 @@ os.chdir(subdir)           # move to subfolder
 os.chdir(os.pardir)        # optional: move up to parent folder
 }}}
 
-*Movie Formats.* Having a set of (e.g.) `tmp*.png` files, one can simply generate a movie by
+*Movie Formats.*
+Having a set of (e.g.) `tmp*.png` files, one can simply generate a movie by
 a `movie('tmp*.png')` call. The format of the movie is determined by
 which video encoders that are installed on the computer. The `movie`
 function runs through a list of encoders (`convert`, `mencoder`,
@@ -2155,7 +2179,9 @@ https://scitools.googlecode.com/hg/doc/easyviz/figs/slice1.png
 <wiki:comment> OBS: </wiki:comment>
 <wiki:comment> Slicing with a Surface-object does not work for JHR so far in VTK </wiki:comment>
 
-*Contours in Slice Planes.* With the `contourslice` command we can create contour plots
+*Contours in Slice Planes.*
+
+With the `contourslice` command we can create contour plots
 in planes aligned with the coordinate axes. Here is an example
 using 3D scalar field data from the `flow` function:
 {{{
@@ -2775,11 +2801,13 @@ chapter, if you encounter strange errors during Easyviz plotting.
 
 ==== Linux/Unix ====
 
-*Compile from Source.* Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+*Compile from Source.*
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
 easily on most Unix systems. You also need the `Gnuplot` Python
 module, which can be obtained from `gnuplot-py.sourceforge.net`.
 
-*Debian/Ubuntu.* Prebuilt versions are available for Debian/Ubuntu:
+*Debian/Ubuntu.*
+Prebuilt versions are available for Debian/Ubuntu:
 run
 {{{
 apt-get install gnuplot gnuplot-x11 python-gnuplot
@@ -2793,7 +2821,8 @@ software that SciTools depend on.
 On Windows, one can either use Gnuplot under Cygwin or use a precompiled
 binary from sourgeforce.net.
 
-*Using the Gnuplot Cygwin package.* In this case there are two things that needs to be changed in the
+*Using the Gnuplot Cygwin package.*
+In this case there are two things that needs to be changed in the
 `gp_cygwin.py` file in the top-level directory of the `Gnuplot.py`
 source tree. First you need to change the `gnuplot_command` variable
 to `gnuplot` instead of `pgnuplot.exe`. Then you should change the
@@ -2804,7 +2833,9 @@ and launch X11 by running `startx` from a Cygwin prompt. Try to run
 the `test.py` script that comes with `Gnuplot.py`. If everything
 works, Easyviz can use Gnuplot.
 
-*Using Gnuplot Binaries.* First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+*Using Gnuplot Binaries.*
+
+First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
 A possible URL is
 {{{
 http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
@@ -2857,7 +2888,8 @@ python setup.py install
 }}}
 in the root directory of the Matplotlib code.
 
-*Windows.* You can download prebuilt binaries from the Matplotlib home page.
+*Windows.*
+You can download prebuilt binaries from the Matplotlib home page.
 
 == Troubleshooting ==
 

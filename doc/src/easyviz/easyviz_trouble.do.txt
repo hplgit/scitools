@@ -114,7 +114,7 @@ plotting).
 
 For the Gnuplot backend you can try the following commands in a
 terminal window:
-!bc rpy
+!bc sys
 Unix/DOS> gnuplot
 gnuplot> plot sin(x)
 !ec
@@ -366,5 +366,3 @@ supported by all backends):
   * xlabel,
   * ylabel,
   * zlabel
-
-

@@ -564,7 +564,7 @@ xlabel('x(t)')
 ylabel('y(t)')
 zlabel('z(t)')
 title('plot3 example')
-!et
+!ec
 Figure ref{fig:plot3} shows the resulting plot.
 The file `examples/plot3_demo.py` contains this and more examples.
 

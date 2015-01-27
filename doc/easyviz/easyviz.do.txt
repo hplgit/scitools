@@ -1,7 +1,8 @@
 TITLE: Easyviz Documentation
 AUTHOR: H. P. Langtangen at Simula Research Laboratory & Univ. of Oslo
-AUTHOR: J. H. Ring at Simula Research Laboratory & Univ. of Oslo
+AUTHOR: J. H. Ring at Simula Research Laboratory
 DATE: today
+
 TOC: on
 
 ======= Easyviz =======
@@ -763,7 +764,7 @@ xlabel('x(t)')
 ylabel('y(t)')
 zlabel('z(t)')
 title('plot3 example')
-!et
+!ec
 Figure ref{fig:plot3} shows the resulting plot.
 The file `examples/plot3_demo.py` contains this and more examples.
 
@@ -2556,7 +2557,7 @@ plotting).
 
 For the Gnuplot backend you can try the following commands in a
 terminal window:
-!bc rpy
+!bc sys
 Unix/DOS> gnuplot
 gnuplot> plot sin(x)
 !ec
@@ -2808,5 +2809,3 @@ supported by all backends):
   * xlabel,
   * ylabel,
   * zlabel
-
-
