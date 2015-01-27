@@ -2,7 +2,7 @@ import math, numpy, wave, commands, sys, os
 
 max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
-def write(data, sample_rate, filename):
+def write(data, filename, sample_rate=44100):
     """
     Writes the array data to the specified filename.
     The array data type can be arbitrary as it will be
@@ -32,7 +32,7 @@ def read(filename):
     sounddata = data.reshape((len(data)/channels,channels))
     return sounddata.astype(numpy.int16),sample_rate
 
-def play(data, sample_rate, player=None):
+def play(data, sample_rate=44100, player=None):
     """
     Play a file with array data.  (The array is first written to file
     using the write function so the data type can be arbitrary.)  The
@@ -42,7 +42,7 @@ def play(data, sample_rate, player=None):
     spesific command is run.
     """
     tmpfile = 'tmp.wav'
-    write(data, sample_rate, tmpfile)
+    write(data, tmpfile, sample_rate)
 
     if player:
         msg = 'Unable to open sound file with %s' %player
@@ -156,7 +156,7 @@ def play_triangle_fourier(T, length, N):
     data = data.astype(numpy.int16)
     data = data.reshape(len(data), 1)
     play(data,sample_rate)
-    
+
 def _test1():
     filename = 'tmp.wav'
 
@@ -164,7 +164,7 @@ def _test1():
     tone2 = max_amplitude*note(293.66, 1, 1)
     tone3 = max_amplitude*note(440, 1, 0.8)
     data = numpy.concatenate((tone1, tone2, tone3))
-    write(data, 44100, filename)
+    write(data, filename, 44100)
     data,sample_rate = read(filename)
     play(data,sample_rate)
 
