@@ -94,6 +94,8 @@ def _check_terminals(terms):
 
 if sys.platform == "darwin":
     _check_terminals(['aqua', 'wxt', 'x11'])
+elif sys.platform == "linux2":
+    _check_terminals(['wxt', 'qt', 'x11'])
 
 _gnuplotpy_major = Gnuplot.__version__[0]
 _gnuplotpy_minor = Gnuplot.__version__[2]
