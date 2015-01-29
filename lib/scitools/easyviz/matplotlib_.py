@@ -684,7 +684,10 @@ class MatplotlibBackend(BaseClass):
                 #ax = Axes3D(fig)
                 ax = fig.add_subplot(111, projection='3d')
                 if self._mplsurf is not None:
-                    ax.collections.remove(self._mplsurf)
+                    try:
+                        ax.collections.remove(self._mplsurf)
+                    except ValueError:
+                        pass
                 self._mplsurf = ax.plot_surface(x, y, z, rstride=1, cstride=1,
                                                 linewidth=0, cmap=colormap,
                                                 antialiased=False)
