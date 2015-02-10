@@ -71,10 +71,27 @@ from .FloatComparison import float_eq, float_ne, float_lt, float_le, \
 import collections
 from functools import reduce
 from Heaviside import *
+import numpy
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
              memoryorder=None):
+    """Now just a call to numpy.meshgrid (for numpy version >= 1.7)."""
+    # In the past, numpy.meshgrid only worked for 2D problems and this
+    # was the generalization that is now incorporated in numpy v1.7.
+    args = []
+    if x is not None:
+        args.append(x)
+    if y is not None:
+        args.append(y)
+    if z is not None:
+        args.append(z)
+    return numpy.meshgrid(*args, indexing=indexing, sparse=sparse)
+
+def meshgrid_scitools(x=None, y=None, z=None, sparse=False, indexing='xy',
+                      memoryorder=None):
     """
+    Original scitools.std.meshgrid:
+
     Extension of ``numpy.meshgrid`` to 1D, 2D and 3D problems, and also
     support of both "matrix" and "grid" numbering.
     (See below how it relates to ``meshgrid``, ``ogrid``, and ``mgrid``

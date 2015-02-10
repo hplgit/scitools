@@ -32,7 +32,7 @@ Tip:
 from __future__ import division
 
 from .common import *
-from scitools.numpyutils import ones, ravel, shape, newaxis, rank, transpose, \
+from scitools.numpyutils import ones, ravel, shape, newaxis, transpose, \
      linspace, floor, array
 from scitools.globaldata import DEBUG, VERBOSE
 from scitools.misc import check_if_module_exists , system
@@ -525,7 +525,7 @@ class GnuplotBackend(BaseClass):
                  isinstance(cmap[1], int) and \
                  isinstance(cmap[2], int):
             self._g('set palette rgbformulae %d,%d,%d' % cmap) # model RGB?
-        elif isinstance(cmap, collections.Sequence) and rank(cmap) == 2:
+        elif isinstance(cmap, collections.Sequence) and cmap.ndim == 2:
             m, n = shape(cmap)
             assert n==3, "colormap must be %dx3, not %dx%d." % (m,m,n)
             tmpf = tempfile.mktemp(suffix='.map')
@@ -797,7 +797,7 @@ class GnuplotBackend(BaseClass):
         # get line specifiactions:
         marker, color, style, width = self._get_linespecs(item)
 
-        if rank(y) == 1:
+        if y.ndim == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
 
@@ -908,11 +908,11 @@ class GnuplotBackend(BaseClass):
             withstring += 'l palette'
 
         if item.getp('indexing') == 'xy':
-            if rank(x) == 2 and rank(y) == 2:
+            if x.ndim == 2 and y.ndim == 2:
                 x = x[0,:];  y = y[:,0]
             z = transpose(z, [1,0])
         else:
-            if rank(x) == 2 and rank(y) == 2:
+            if x.ndim == 2 and y.ndim == 2:
                 x = x[:,0];  y = y[0,:]
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'with': withstring,
@@ -971,10 +971,10 @@ class GnuplotBackend(BaseClass):
 
         if item.getp('indexing') == 'xy':
             z = transpose(z, [1,0])
-            if rank(x) == 2 and rank(y) == 2:
+            if x.ndim == 2 and y.ndim == 2:
                 x = x[0,:];  y = y[:,0]
         else:
-            if rank(x) == 2 and rank(y) == 2:
+            if x.ndim == 2 and y.ndim == 2:
                 x = x[:,0];  y = y[0,:]
         kwargs = {'title': self._fix_latex(item.getp('legend')),
                   'binary': 0,
@@ -1018,7 +1018,7 @@ class GnuplotBackend(BaseClass):
             # draw velocity vectors as arrows with components (u,v) at
             # points (x,y):
             if shape(x) != shape(u):
-                if rank(x) == 2:
+                if x.ndim == 2:
                     x = x*ones(shape(u))
                 else:
                     if item.getp('indexing') == 'xy':
@@ -1026,7 +1026,7 @@ class GnuplotBackend(BaseClass):
                     else:
                         x = x[:,newaxis]*ones(shape(u))
             if shape(y) != shape(u):
-                if rank(y) == 2:
+                if y.ndim == 2:
                     y = y*ones(shape(u))
                 else:
                     if item.getp('indexing') == 'xy':
@@ -1093,7 +1093,7 @@ class GnuplotBackend(BaseClass):
         v = item.getp('vdata')  # volume
 
         sx, sy, sz = item.getp('slices')
-        if rank(sz) == 2:
+        if sz.ndim == 2:
             # sx, sy, and sz defines a surface
             pass
         else:
@@ -1112,11 +1112,11 @@ class GnuplotBackend(BaseClass):
         v = item.getp('vdata')  # volume
 
         sx, sy, sz = item.getp('slices')
-        if rank(sz) == 2:
-            # sx, sy, and sz defines a surface
+        if sz.ndim == 2:
+            # sx, sy, and sz define a surface
             pass
         else:
-            # sx, sy, and sz is either numbers or vectors with numbers
+            # sx, sy, and sz are either numbers or vectors with numbers
             pass
 
         cvector = item.getp('cvector')

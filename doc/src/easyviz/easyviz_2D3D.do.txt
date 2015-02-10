@@ -120,8 +120,8 @@ contour plots:
   * `contour3`: Same as `contour`, but the curves are drawn at their
     corresponding height levels in 3D space.
 
-  * `meshc`: Works in the same way as `mesh` except that a
-     contour plot is drawn in the plane beneath the mesh.
+  * `meshc`: Displays the same plot as `mesh`, but with an additional
+     contour plot drawn in a plane beneath the mesh.
 
   * `surfc`: Same as `meshc` except that a solid surface is
     drawn instead of a wireframe mesh.
@@ -177,7 +177,7 @@ contour plots.
 
 FIGURE:[figs/contourf_ex1, width=500] Filled contour plot created by the contourf command (VTK backend). label{fig:contourf_ex1}
 
-The contour lines can be "lifted up" in 3D space, as shown in Figure
+The contour lines can be ``lifted up'' in 3D space, as shown in Figure
 ref{fig:contour3_ex1}, using the `contour3` command:
 !bc pycod
 contour3(xv, yv, values, 15)
@@ -554,13 +554,3 @@ streamribbon(x, y, z, u, v, w, sx, sy, sz,
 Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
 
 FIGURE:[figs/streamribbon_ex1, width=500] Stream ribbons (VTK backend). label{fig:streamribbon_ex1}
-
-
-
-
-
-
-
-
-
-
