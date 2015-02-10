@@ -593,7 +593,7 @@ class MatplotlibBackend(BaseClass):
         if opacity is None:
             opacity = 1.0
 
-        if rank(y) == 1:
+        if y.ndim == 1:
             y = reshape(y,(len(y),1))
         nx, ny = shape(y)
 
@@ -860,7 +860,7 @@ class MatplotlibBackend(BaseClass):
         v = item.getp('vdata')  # volume
 
         sx, sy, sz = item.getp('slices')
-        if rank(sz) == 2:
+        if sz.ndim == 2:
             # sx, sy, and sz defines a surface
             pass
         else:
@@ -876,7 +876,7 @@ class MatplotlibBackend(BaseClass):
         v = item.getp('vdata')  # volume
 
         sx, sy, sz = item.getp('slices')
-        if rank(sz) == 2:
+        if sz.ndim == 2:
             # sx, sy, and sz defines a surface
             pass
         else:
