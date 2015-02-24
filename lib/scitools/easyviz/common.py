@@ -8,7 +8,6 @@ from .misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
 
 from warnings import warn
-import collections
 
 
 def docadd(comment, *lists, **kwargs):
@@ -392,7 +391,7 @@ class Line(PlotProperties):
         # The proper casting should be in the backends plotroutine
 
         if 'z' in kwargs:
-            if not not isinstance(kwargs['z'], collections.Sequence):
+            if not operator.isSequenceType(kwargs['z']):
                 raise TypeError("Can only plot sequence types, "\
                                 "z is %s" % type(kwargs['z']))
             z = kwargs['z']
@@ -404,7 +403,7 @@ class Line(PlotProperties):
                     # now y is the indicies of z
                     y = list(range(len(z)))
                 else:
-                    if not isinstance(kwargs['y'], collections.Sequence):
+                    if not operator.isSequenceType(kwargs['y']):
                         raise TypeError("Can only plot sequence types, "\
                                         "y is %s" % type(kwargs['y']))
                     y = kwargs['y']
@@ -414,7 +413,7 @@ class Line(PlotProperties):
                     # now x is the indicies of y
                     x = list(range(len(y)))
                 else:
-                    if not isinstance(kwargs['x'], collections.Sequence):
+                    if not operator.isSequenceType(kwargs['x']):
                         raise TypeError("Can only plot sequence types, "\
                                         "x is %s" % type(kwargs['x']))
                     x = kwargs['x']
