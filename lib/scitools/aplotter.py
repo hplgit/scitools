@@ -326,7 +326,10 @@ class Plotter(object):
 
 		#print plot_data
 
-		y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)
+		if plot_data.min_y < 0 and plot_data.max_y > 0:
+			y_zero_coord = self.get_coord(0, plot_data.min_y, plot_data.y_step)
+		else:
+			y_zero_coord = self.get_coord(plot_data.min_y, plot_data.min_y, plot_data.y_step)
 
 		if plot_data.min_x < 0 and plot_data.max_x > 0:
 			x_zero_coord = self.get_coord(0, plot_data.min_x, plot_data.x_step)
