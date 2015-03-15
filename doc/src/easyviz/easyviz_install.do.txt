@@ -1,6 +1,6 @@
 Easyviz comes with the SciTools package, so to install Easyviz, you
 must install SciTools, which is available from
-"Google code": "http://code.google.com/p/scitools".
+"GitHub": "https://github.com/hplgit/scitools".
 
 If you run a Linux system that allows installation from Debian
 repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and

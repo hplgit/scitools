@@ -6,13 +6,12 @@ Contents
     4. Configuration file
     5. License
     6. Credits
-    7. Contact
 
 -------------------------------------------------------------------------------
 1. Introduction
 
-SciTools is a Python package containing many useful tools for scientific 
-computing in Python. The package is built on top of other widely used 
+SciTools is a Python package containing many useful tools for scientific
+computing in Python. The package is built on top of other widely used
 packages such as NumPy, SciPy, ScientificPython, Gnuplot, etc.
 
 -------------------------------------------------------------------------------
@@ -30,7 +29,7 @@ users to use NumPy only.
 There are several different ways of installing SciTools:
 
  - Normal install ([, ... ] means optional)
-  
+
      python setup.py install [,--prefix=$PREFIX]
 
    This install makes SciTools use Matplotlib as plotting engine, if a
@@ -50,7 +49,7 @@ There are several different ways of installing SciTools:
 
    The default plotting engine is specified in the file scitools.cfg in the
    scitools package directory, and the --easyviz_backend option leads to
-   an automatic edit of the "backend" line in the [easyviz] section of 
+   an automatic edit of the "backend" line in the [easyviz] section of
    that configuration file.
 
    Don't edit the scitools.cfg file manually before installation (use
@@ -67,8 +66,8 @@ There are several different ways of installing SciTools:
 
  - Setuptools using eggs
 
-   First build the egg with the following command	
-    
+   First build the egg with the following command
+
      python setupegg.py [, egg_info --tag-svn-revision ] bdist_egg
 
    The --easyviz_backend option can be used, as described above, to
@@ -76,7 +75,7 @@ There are several different ways of installing SciTools:
 
    Then install the created egg using easy_install
 
-     easy_install [, --prefix=$PREFIX] dist/Scitools-0.7-py2.6.egg 
+     easy_install [, --prefix=$PREFIX] dist/Scitools-0.7-py2.6.egg
 
    (Version numbers of SciTools and Python in this filename may vary.)
 
@@ -91,12 +90,11 @@ There are several different ways of installing SciTools:
  - Debian/Ubuntu packages
 
    If you have Debian, or a Debian based platform like Ubuntu, you can
-   do 
+   do
 
      sudo apt-get install python-scitools
 
-   as SciTools is now a part of Debian. You can also find newer Debian 
-   packages for SciTools at googlecode.com.
+   as SciTools is now a part of Debian.
 
 
  - Extended (not supported anymore)
@@ -106,7 +104,7 @@ There are several different ways of installing SciTools:
    scitools plus some standard Python modules like Gnuplot, IPython,
    epydoc, etc. Put scitools++/lib in PYTHONPATH and scitools++/bin in
    PATH. Or you may run scitools++/setup.py to install scitools++ in the
-   official installation directories on your system. 
+   official installation directories on your system.
 
 -------------------------------------------------------------------------------
 4. Configuration File
@@ -140,8 +138,8 @@ granted by Allen Downey to include these under a BSD license.
 
 SciTools was initially mainly developed by Hans Petter Langtangen
 <hpl@simula.no> for his book "Python Scripting for Computational
-Science" (Springer, 1st edition 2003, 3rd edition 2009). 
-The Easyviz package was mainly developed by Johannes H. Ring 
+Science" (Springer, 1st edition 2003, 3rd edition 2009).
+The Easyviz package was mainly developed by Johannes H. Ring
 <johannr@simula.no>. Johannes H. Ring has been the principal
 maintainer of SciTools.
 
@@ -159,25 +157,3 @@ Joachim B. Haga <jobh@simula.no>
 Mario Pernici <Mario.Pernici@mi.infn.it>
 Ilmar Wilbers <ilmarw@simula.no>
 Arve Knudsen <arvenk@simula.no>
-
--------------------------------------------------------------------------------
-7. Contact
-
-Comments, suggestions, bug fixes should be sent to
-
-    scitools@googlegroups.com
-
-The latest release of SciTools can be obtained from
-
-    http://scitools.googlecode.com
-
-while the latest Subversion revision can be obtained either anonymously 
-(for non-members) by
-
-    svn co http://scitools.googlecode.com/svn/trunk/ scitools
-
-while SciTools members should use
-
-    svn co https://scitools.googlecode.com/svn/trunk/ scitools --username USERNAME
-
-See http://code.google.com/p/scitools/source/checkout for details.
