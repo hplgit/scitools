@@ -28,7 +28,14 @@ users to use NumPy only.
 
 There are several different ways of installing SciTools:
 
+ - If you have Anaconda, SciTools is available as a conda package:
+
+     conda install --channel johannr scitools
+
  - Normal install ([, ... ] means optional)
+   First check out the scitools package from GitHub:
+   https://github.com/hplgit/scitools. Then go to the scitools
+   directory and run
 
      python setup.py install [,--prefix=$PREFIX]
 
@@ -79,14 +86,6 @@ There are several different ways of installing SciTools:
 
    (Version numbers of SciTools and Python in this filename may vary.)
 
- - Manual installation
-
-   Put the lib subdirectory in a directory contained in PYTHONPATH,
-   and the bin subdirectory in a directory contained in PATH.
-   (This gives access to the directories for scitools, easyviz, etc.)
-   Edit the scitools.cfg file to set the desired default plotting engine
-   (look for the "backend =" line in the [easyviz] section).
-
  - Debian/Ubuntu packages
 
    If you have Debian, or a Debian based platform like Ubuntu, you can
@@ -95,16 +94,8 @@ There are several different ways of installing SciTools:
      sudo apt-get install python-scitools
 
    as SciTools is now a part of Debian.
-
-
- - Extended (not supported anymore)
-
-   Run build_scitools++.py. This makes a new directory build/scitools++
-   that you can move to any convenient place. scitools++ contains
-   scitools plus some standard Python modules like Gnuplot, IPython,
-   epydoc, etc. Put scitools++/lib in PYTHONPATH and scitools++/bin in
-   PATH. Or you may run scitools++/setup.py to install scitools++ in the
-   official installation directories on your system.
+   NOTE: The Debian packages are often old - it is better to rely
+   on checking out the repo and running setup.py.
 
 -------------------------------------------------------------------------------
 4. Configuration File
