@@ -502,15 +502,12 @@ plot(t, y1, t, y2, xlabel='t', ylabel='y',
 !ec
 The sequence of the multiple legends is such that the first legend
 corresponds to the first curve, the second legend to the second curve,
-and so on. The visual result appears in Figures ref{fig:plot2a}
-and ref{fig:plot2a:gp}.
+and so on. The visual result appears in Figure ref{fig:plot2a}.
 
 Doing a `hold('off')` makes the next `plot` command create a new
 plot in the same window. This new plot just erases the previous curves.
 
 FIGURE:[figs/plot2a, width=400] Two curves in the same plot, PNG file produced by Gnuplot. label{fig:plot2a}
-
-FIGURE:[figs/plot2a_gp, width=350] Two curves in the same plot, PostScript file produced by Gnuplot. label{fig:plot2a:gp}
 
 With the keyword argrument `grid=True` to `plot` we can add a
 grid, which is frequently used when plotting curves (see
@@ -1246,13 +1243,15 @@ configuration file, called `scitools.cfg` has several sections
 (`[easyviz]`, `[gnuplot]`, and `[matplotlib]`) where parameters
 controlling the behavior of plotting can be set. For example, the
 backend for Easyviz can be controlled with the `backend` parameter:
-!bc dsni
+
+!bc dat
 [easyviz]
 backend = vtk
 !ec
 Similarly, Matplotlib's use of LaTeX can be controlled by a boolean
 parameter:
-!bc dsni
+
+!bc dat
 [matplotlib]
 text.usetex = <bool> false
 !ec
@@ -1272,20 +1271,23 @@ and other paramteres by editing your local `.scitools.cfg` file.
 Parameters set in the configuration file can also be set directly
 on the command line when running a program. The name of the
 command-line option is
-!bc dsni
+
+!bc
 --SCITOOLS_sectionname_parametername
 !ec
 where `sectionname` is the name of the section in the file
 and `parametername` is the name of the
 parameter. For example, setting the `backend` parameter in the
 `[easyviz]` section by
-!bc dsni
+
+!bc
 --SCITOOLS_easyviz_backend gnuplot
 !ec
 Here is an example where we use Matplotlib as backend, turn on
 the use of LaTeX in Matplotlib, and avoid the potentially slow import
 of SciPy:
-!bc dsni
+
+!bc sys
 python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
     --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
 !ec
@@ -1648,8 +1650,8 @@ contour plots:
   * `contour3`: Same as `contour`, but the curves are drawn at their
     corresponding height levels in 3D space.
 
-  * `meshc`: Works in the same way as `mesh` except that a
-     contour plot is drawn in the plane beneath the mesh.
+  * `meshc`: Displays the same plot as `mesh`, but with an additional
+     contour plot drawn in a plane beneath the mesh.
 
   * `surfc`: Same as `meshc` except that a solid surface is
     drawn instead of a wireframe mesh.
@@ -1705,7 +1707,7 @@ contour plots.
 
 FIGURE:[figs/contourf_ex1, width=500] Filled contour plot created by the contourf command (VTK backend). label{fig:contourf_ex1}
 
-The contour lines can be "lifted up" in 3D space, as shown in Figure
+The contour lines can be ``lifted up'' in 3D space, as shown in Figure
 ref{fig:contour3_ex1}, using the `contour3` command:
 !bc pycod
 contour3(xv, yv, values, 15)
@@ -2083,16 +2085,6 @@ Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
 
 FIGURE:[figs/streamribbon_ex1, width=500] Stream ribbons (VTK backend). label{fig:streamribbon_ex1}
 
-
-
-
-
-
-
-
-
-
-
 ===== Bar Charts =====
 
 Easyviz also supports a unified interface to simple bar charts.
@@ -2312,7 +2304,7 @@ label{ev:tut:install}
 
 Easyviz comes with the SciTools package, so to install Easyviz, you
 must install SciTools, which is available from
-"Google code": "http://code.google.com/p/scitools".
+"GitHub": "https://github.com/hplgit/scitools".
 
 If you run a Linux system that allows installation from Debian
 repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
@@ -2469,7 +2461,7 @@ automatically chosen.
 Yes. It is wise to perform a diagnostic test before reporting any error
 or trouble to the SciTools maintainers. Find the source folder of SciTools
 and go to the `misc` subfolder. Run
-!bc dsni
+!bc sys
 python diagonstic.py
 !ec
 On the screen, you can see what you have of working software that Easyviz
