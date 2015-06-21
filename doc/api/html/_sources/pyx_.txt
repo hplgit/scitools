@@ -1,0 +1,10 @@
+
+:mod:`scitools.easyviz.pyx_`
+============================
+
+.. automodule:: scitools.easyviz.pyx_
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

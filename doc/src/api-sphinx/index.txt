@@ -1,0 +1,66 @@
+
+SciTools Documentation
+======================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 1
+
+   scitools
+   BoxField
+   BoxGrid
+   EfficiencyTable
+   FloatComparison
+   Lumpy
+   NumPyDB
+   PrmDictBase
+   Regression
+   StringFunction
+   TkGUI
+   avplotter
+   aplotter
+   basics
+   configdata
+   convergencerate
+   debug
+   errorcheck
+   filetable
+   globaldata
+   misc
+   modulecheck
+   MovingPlotWindow
+   multipleloop
+   numpytools
+   numpyutils
+   pprint2
+   redirect_io
+   sound
+   std
+   easyviz
+   blt_
+   common
+   dx_
+   gnuplot_
+   grace_
+   matlab2_
+   matlab_
+   matplotlib_
+   misc
+   movie
+   pyx_
+   template_
+   utils
+   veusz_
+   visit_
+   vtk_
+   vtk_new_
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

@@ -1,0 +1,10 @@
+
+:mod:`scitools.Regression`
+==========================
+
+.. automodule:: scitools.Regression
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

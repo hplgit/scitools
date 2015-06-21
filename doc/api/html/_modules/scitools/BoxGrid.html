@@ -1,0 +1,879 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.BoxGrid &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.BoxGrid</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class for uniform and non-uniform grid on an interval, rectangle, or box.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">scitools.errorcheck</span> <span class="kn">import</span> <span class="n">right_type</span><span class="p">,</span> <span class="n">wrong_type</span>
+<span class="kn">from</span> <span class="nn">scitools.numpyutils</span> <span class="kn">import</span> <span class="n">ndgrid</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">wrap2callable</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> \
+     <span class="n">zeros</span><span class="p">,</span> <span class="n">linspace</span>
+
+<span class="c"># constants for indexing the space directions:</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">X2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">X3</span> <span class="o">=</span> <span class="mi">2</span>
+
+
+<div class="viewcode-block" id="UniformBoxGrid"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid">[docs]</a><span class="k">class</span> <span class="nc">UniformBoxGrid</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple uniform grid on an interval, rectangle, box, or hypercube.</span>
+
+<span class="sd">    =============      ====================================================</span>
+<span class="sd">      Attributes                           Description</span>
+<span class="sd">    =============      ====================================================</span>
+<span class="sd">    nsd                no of spatial dimensions in the grid</span>
+<span class="sd">    min_coor           array of minimum coordinates</span>
+<span class="sd">    max_coor           array of maximum coordinates</span>
+<span class="sd">    division           array of cell divisions in the </span>
+<span class="sd">    delta              array of grid spacings</span>
+<span class="sd">    dirnames           names of the space directions (&#39;x&#39;, &#39;y&#39;, etc.)</span>
+<span class="sd">    shape              (nx+1, ny+1, ...); dimension of array over grid</span>
+<span class="sd">    coor               list of coordinates; self.coor[Y][j] is the</span>
+<span class="sd">                       the j-th coordinate in direction Y (=1)</span>
+<span class="sd">                       X, Y, Z are predefined constants 0, 1, 2</span>
+<span class="sd">    coorv              expanded version of coor for vectorized expressions</span>
+<span class="sd">                       (in 2D, self.coorv[0] = self.coor[0][:,newaxis])</span>
+<span class="sd">    tolerance          small geometric tolerance based on grid coordinates</span>
+<span class="sd">    npoints            total number of grid points</span>
+<span class="sd">    =============      ====================================================</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="UniformBoxGrid.__init__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>                  <span class="c"># minimum coordinates</span>
+                 <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>                  <span class="c"># maximum coordinates</span>
+                 <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>             <span class="c"># cell divisions</span>
+                 <span class="n">dirnames</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">)):</span>  <span class="c"># names of the directions</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a BoxGrid by giving domain range (minimum and</span>
+<span class="sd">        maximum coordinates: min and max tuples/lists/arrays)</span>
+<span class="sd">        and number of cells in each space direction (division tuple/list/array).</span>
+<span class="sd">        The dirnames tuple/list holds the names of the coordinates in</span>
+<span class="sd">        the various spatial directions.</span>
+
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(min=0, max=1, division=10)</span>
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(min=(0,-1), max=(1,1), division=(10,4))</span>
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(min=(0,0,-1), max=(2,1,1), division=(2,3,5))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Allow int/float specifications in one-dimensional grids</span>
+        <span class="c"># (just turn to lists for later multi-dimensional processing)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+            <span class="nb">min</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+            <span class="nb">max</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">division</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+            <span class="n">division</span> <span class="o">=</span> <span class="p">[</span><span class="n">division</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dirnames</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">dirnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">dirnames</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">min</span><span class="p">)</span>
+        <span class="c"># strip dirnames down to right space dim (in case the default</span>
+        <span class="c"># with three components were unchanged by the user):</span>
+        <span class="n">dirnames</span> <span class="o">=</span> <span class="n">dirnames</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">]</span>
+
+        <span class="c"># check consistent lengths:</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">max</span><span class="p">,</span> <span class="n">division</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;Incompatible lengths of arguments to constructor&#39;</span>\
+                    <span class="s">&#39; (</span><span class="si">%d</span><span class="s"> != </span><span class="si">%d</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span> <span class="o">=</span> <span class="n">dirnames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">division</span> <span class="o">=</span> <span class="n">division</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> \
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span>  <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># no of grid points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> \
+                 <span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_more_init</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">_more_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coorv</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coorv</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+            <span class="c"># 1D grid, wrap self.coorv as list:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coorv</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">coorv</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">))</span><span class="o">*</span><span class="mf">1E-14</span>
+
+        <span class="c"># nicknames: xcoor, ycoor, xcoorv, ycoorv, etc</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;coor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;coorv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coorv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="c"># make boundary coordinates for vectorization:</span>
+            <span class="n">xdummy</span><span class="p">,</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ycoorv_xfixed_boundary</span><span class="p">,</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">zcoorv_xfixed_boundary</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zcoor</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">xcoorv_yfixed_boundary</span><span class="p">,</span> \
+            <span class="n">ydummy</span><span class="p">,</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">zcoorv_yfixed_boundary</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xcoor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zcoor</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">xcoorv_yfixed_boundary</span><span class="p">,</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">zcoorv_yfixed_boundary</span><span class="p">,</span> \
+            <span class="n">zdummy</span> <span class="o">=</span> <span class="n">ndgrid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xcoor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            
+    <span class="c"># could have _ in all variable names and define read-only</span>
+    <span class="c"># access via properties</span>
+
+<div class="viewcode-block" id="UniformBoxGrid.string2griddata"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.string2griddata">[docs]</a>    <span class="k">def</span> <span class="nf">string2griddata</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn a text specification of a grid into a dictionary</span>
+<span class="sd">        with the grid data.</span>
+<span class="sd">        For example,</span>
+
+<span class="sd">        &gt;&gt;&gt; s = &quot;domain=[0,10] indices=[0:11]&quot;</span>
+<span class="sd">        &gt;&gt;&gt; data = BoxGrid.string2griddata(s)</span>
+<span class="sd">        &gt;&gt;&gt; data</span>
+<span class="sd">        {&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;), &#39;division&#39;: [10], &#39;max&#39;: [10], &#39;min&#39;: [0]}</span>
+
+<span class="sd">        &gt;&gt;&gt; s = &quot;domain=[0.2,0.5]x[0,2E+00] indices=[0:20]x[0:100]&quot;</span>
+<span class="sd">        &gt;&gt;&gt; data = BoxGrid.string2griddata(s)</span>
+<span class="sd">        &gt;&gt;&gt; data</span>
+<span class="sd">        {&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;, &#39;z&#39;),</span>
+<span class="sd">         &#39;division&#39;: [19, 99],</span>
+<span class="sd">         &#39;max&#39;: [0.5, 2],</span>
+<span class="sd">         &#39;min&#39;: [0.2, 0]}</span>
+
+<span class="sd">        &gt;&gt;&gt; s = &quot;[0,1]x[0,2]x[-1,1.5] [0:25]x[0:10]x[0:16]&quot;</span>
+<span class="sd">        &gt;&gt;&gt; data = BoxGrid.string2griddata(s)</span>
+<span class="sd">        &gt;&gt;&gt; data</span>
+<span class="sd">        {&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;, &#39;z&#39;),</span>
+<span class="sd">         &#39;division&#39;: [24, 9, 15],</span>
+<span class="sd">         &#39;max&#39;: [1.0, 2.0, 1.5],</span>
+<span class="sd">         &#39;min&#39;: [0.0, 0.0, -1.0]}</span>
+
+<span class="sd">        The data dictionary can be used as keyword arguments to the</span>
+<span class="sd">        class UniformBoxGrid constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">domain</span>  <span class="o">=</span> <span class="s">r&#39;\[([^,]*),([^\]]*)\]&#39;</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="s">r&#39;\[([^:,]*):([^\]]*)\]&#39;</span>
+        <span class="kn">import</span> <span class="nn">re</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">nsd</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nsd</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;could not parse &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dirnames</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsd</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="nb">dir</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="nb">dir</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> \
+               <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="nb">dir</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="nb">dir</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;syntax error in &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+
+            <span class="c"># old syntax (nx, xmin, xmax, ny, ymin, etc.):</span>
+            <span class="c">#kwargs[dirnames[dir]] = (float(d[dir][0]), float(d[dir][1]))</span>
+            <span class="c">#kwargs[&#39;n&#39;+dirnames[dir]] = int(i[dir][1]) - int(i[dir][0]) # no of cells!</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="nb">dir</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsd</span><span class="p">)]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="nb">dir</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsd</span><span class="p">)]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;division&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="nb">dir</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="nb">dir</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> \
+                                  <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsd</span><span class="p">)]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dirnames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dirnames</span><span class="p">[:</span><span class="n">nsd</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+    <span class="n">string2griddata</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">string2griddata</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UniformBoxGrid.__getitem__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return access to coordinate array in direction no i, or direction</span>
+<span class="sd">        name i, or return the coordinate of a point if i is an nsd-tuple.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(x=(0,1), y=(-1,1), nx=2, ny=4)  # xy grid</span>
+<span class="sd">        &gt;&gt;&gt; g[0][0] == g.min[0]   # min coor in direction 0</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; g[&#39;x&#39;][0] == g.min[0]   # min coor in direction &#39;x&#39;</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; g[0,4]</span>
+<span class="sd">        (0.0, 1.0)</span>
+<span class="sd">        &gt;&gt;&gt; g = UniformBoxGrid(min=(0,-1), max=(1,1), division=(2,4), dirnames=(&#39;y&#39;, &#39;z&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; g[1][0] == g.min[1]</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; g[&#39;z&#39;][0] == g.min[1]   # min coor in direction &#39;z&#39;</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name2dirindex</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>     <span class="c"># coordinate array</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>  <span class="c"># coordinate itself in 1D</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wrong_type</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="s">&#39;Must be str, int, tuple&#39;</span><span class="p">)</span>
+            
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__setitem__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;subscript assignment is not valid for &#39;</span>\
+                             <span class="s">&#39;</span><span class="si">%s</span><span class="s"> instances&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.ncells"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.ncells">[docs]</a>    <span class="k">def</span> <span class="nf">ncells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return no of cells in direction i.&quot;&quot;&quot;</span>
+        <span class="c"># i has the meaning as in __getitem__. May be removed if not much used</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.name2dirindex"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.name2dirindex">[docs]</a>    <span class="k">def</span> <span class="nf">name2dirindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return direction index corresponding to direction name.</span>
+<span class="sd">        In an xyz-grid, &#39;x&#39; is 0, &#39;y&#39; is 1, and &#39;z&#39; is 2.</span>
+<span class="sd">        In an yz-grid, &#39;x&#39; is not defined, &#39;y&#39; is 0, and &#39;z&#39; is 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">name</span><span class="p">,</span> <span class="s">&#39;is not defined&#39;</span>
+            <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.dirindex2name"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.dirindex2name">[docs]</a>    <span class="k">def</span> <span class="nf">dirindex2name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inverse of name2dirindex.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="s">&#39;is not a valid index&#39;</span>
+            <span class="k">return</span> <span class="bp">None</span>
+    </div>
+<div class="viewcode-block" id="UniformBoxGrid.ok"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.ok">[docs]</a>    <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>  <span class="c"># constructor init only =&gt; always ok</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__len__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Total number of grid points.&quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">*=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__repr__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> \
+            <span class="s">&#39;(min=</span><span class="si">%s</span><span class="s">, max=</span><span class="si">%s</span><span class="s">, division=</span><span class="si">%s</span><span class="s">, dirnames=</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> \
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirnames</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__str__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pretty print, using the syntax of init_fromstring.&quot;&quot;&quot;</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;[</span><span class="si">%g</span><span class="s">,</span><span class="si">%g</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span> \
+                           <span class="k">for</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">)])</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;[0:</span><span class="si">%d</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="n">div</span> <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">])</span>
+        <span class="k">return</span> <span class="s">&#39;domain=</span><span class="si">%s</span><span class="s">  indices=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+                      </div>
+<div class="viewcode-block" id="UniformBoxGrid.interpolator"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.interpolator">[docs]</a>    <span class="k">def</span> <span class="nf">interpolator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a self.nsd dimension array point_values with</span>
+<span class="sd">        values at each grid point, this method returns a function</span>
+<span class="sd">        for interpolating the scalar field defined by point_values</span>
+<span class="sd">        at an arbitrary point.</span>
+
+<span class="sd">        2D Example:</span>
+<span class="sd">        given a filled array point_values[i,j], compute</span>
+<span class="sd">        interpolator = grid.interpolator(point_values)</span>
+<span class="sd">        v = interpolator(0.1243, 9.231)  # interpolate point_values</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; g=UniformBoxGrid(x=(0,2), nx=2, y=(-1,1), ny=2)</span>
+<span class="sd">        &gt;&gt;&gt; g</span>
+<span class="sd">        UniformBoxGrid(x=(0,2), nx=2, y=(-1,1), ny=2)</span>
+<span class="sd">        &gt;&gt;&gt; def f(x,y): return 2+2*x-y</span>
+
+<span class="sd">        &gt;&gt;&gt; f=g.vectorized_eval(f)</span>
+<span class="sd">        &gt;&gt;&gt; f</span>
+<span class="sd">        array([[ 3.,  2.,  1.],</span>
+<span class="sd">               [ 5.,  4.,  3.],</span>
+<span class="sd">               [ 7.,  6.,  5.]])</span>
+<span class="sd">        &gt;&gt;&gt; i=g.interpolator(f)</span>
+<span class="sd">        &gt;&gt;&gt; i(0.1,0.234)        # interpolate (not a grid point)</span>
+<span class="sd">        1.9660000000000002</span>
+<span class="sd">        &gt;&gt;&gt; f(0.1,0.234)        # exact answer</span>
+<span class="sd">        1.9660000000000002</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point_values</span><span class="p">)</span>
+        <span class="c"># make use of wrap2callable, which applies ScientificPython</span>
+        <span class="k">return</span> <span class="n">wrap2callable</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.vectorized_eval"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.vectorized_eval">[docs]</a>    <span class="k">def</span> <span class="nf">vectorized_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate a function f (of the space directions) over a grid.</span>
+<span class="sd">        f is supposed to be vectorized.</span>
+
+<span class="sd">        &gt;&gt;&gt; g = BoxGrid(x=(0,1), y=(0,1), nx=3, ny=3)</span>
+<span class="sd">        &gt;&gt;&gt; # f(x,y) = sin(x)*exp(x-y):</span>
+<span class="sd">        &gt;&gt;&gt; a = g.vectorized_eval(lambda x,y: sin(x)*exp(y-x))</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        [[ 0.          0.          0.          0.        ]</span>
+<span class="sd">         [ 0.23444524  0.3271947   0.45663698  0.63728825]</span>
+<span class="sd">         [ 0.31748164  0.44308133  0.6183698   0.86300458]</span>
+<span class="sd">         [ 0.30955988  0.43202561  0.60294031  0.84147098]]</span>
+
+<span class="sd">        &gt;&gt;&gt; # f(x,y) = 2: (requires special consideration)</span>
+<span class="sd">        &gt;&gt;&gt; a = g.vectorized_eval(lambda x,y: zeros(g.shape)+2)</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        [[ 2.  2.  2.  2.]</span>
+<span class="sd">         [ 2.  2.  2.  2.]</span>
+<span class="sd">         [ 2.  2.  2.  2.]</span>
+<span class="sd">         [ 2.  2.  2.  2.]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coorv</span><span class="p">)</span>
+
+        <span class="c"># check if f is really vectorized:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;calling </span><span class="si">%s</span><span class="s">, which is supposed to be vectorized&#39;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c"># if __name__ is missing</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;calling a function, which is supposed to be vectorized&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compatible</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span><span class="ne">TypeError</span><span class="p">),</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;e=&#39;</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="k">raise</span> <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span><span class="s">&#39;BoxGrid.vectorized_eval(f):</span><span class="se">\n</span><span class="si">%s</span><span class="s">, BUT:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                              <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">a</span>
+        </div>
+<div class="viewcode-block" id="UniformBoxGrid.init_fromstring"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.init_fromstring">[docs]</a>    <span class="k">def</span> <span class="nf">init_fromstring</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">string2griddata</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+    <span class="n">init_fromstring</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">init_fromstring</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UniformBoxGrid.compatible"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.compatible">[docs]</a>    <span class="k">def</span> <span class="nf">compatible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_array</span><span class="p">,</span> <span class="n">name_of_data_array</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that data_array is a NumPy array with dimensions</span>
+<span class="sd">        compatible with the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;data </span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s">, not NumPy array&#39;</span> <span class="o">%</span> \
+                            <span class="p">(</span><span class="n">name_of_data_array</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">data_array</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">data_array</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&quot;data </span><span class="si">%s</span><span class="s"> of shape </span><span class="si">%s</span><span class="s"> is not &quot;</span>\
+                                 <span class="s">&quot;compatible with the grid&#39;s shape </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> \
+                                 <span class="p">(</span><span class="n">name_of_data_array</span><span class="p">,</span> <span class="n">data_array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">True</span> <span class="c"># if we haven&#39;t raised any exceptions</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.iter"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.iter">[docs]</a>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_part</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span> <span class="n">vectorized_version</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return iterator over grid points.</span>
+<span class="sd">        domain_part = &#39;all&#39;:  all grid points</span>
+<span class="sd">        domain_part = &#39;interior&#39;:  interior grid points</span>
+<span class="sd">        domain_part = &#39;all_boundary&#39;:  all boundary points</span>
+<span class="sd">        domain_part = &#39;interior_boundary&#39;:  interior boundary points</span>
+<span class="sd">        domain_part = &#39;corners&#39;:  all corner points</span>
+<span class="sd">        domain_part = &#39;all_edges&#39;:  all points along edges in 3D grids</span>
+<span class="sd">        domain_part = &#39;interior_edges&#39;:  interior points along edges</span>
+
+<span class="sd">        vectorized_version is true if the iterator returns slice</span>
+<span class="sd">        objects for the index slice in each direction.</span>
+<span class="sd">        vectorized_version is false if the iterator visits each point</span>
+<span class="sd">        at a time (scalar version).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">=</span> <span class="n">domain_part</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorized_iter</span> <span class="o">=</span> <span class="n">vectorized_version</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.__iter__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Idea: set up slices for the various self.iterator_domain</span>
+        <span class="c"># values. In scalar mode, make a loop over the slices and</span>
+        <span class="c"># yield the scalar value. In vectorized mode, return the</span>
+        <span class="c"># appropriate slices.</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># elements meant to be slice objects</span>
+                    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;interior&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;all_boundary&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                <span class="c"># boundary i fixed at 0:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span>\
+                           <span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                <span class="c"># boundary i fixed at its max value:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span>\
+                           <span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                        
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;interior_boundary&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                <span class="c"># boundary i fixed at 0:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span>\
+                           <span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                <span class="c"># boundary i fixed at its max value:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span>\
+                           <span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;corners&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i0</span><span class="p">,</span> <span class="n">i0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i0</span><span class="p">,</span> <span class="n">i0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i0</span><span class="p">,</span> <span class="n">i0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i2</span><span class="p">,</span> <span class="n">i2</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;all_edges&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;iterator over &quot;all_edges&quot; is not implemented&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span> <span class="o">==</span> <span class="s">&#39;interior_edges&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;iterator over &quot;interior_edges&quot; is not implemented&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;iterator over &quot;</span><span class="si">%s</span><span class="s">&quot; is not impl.&#39;</span> <span class="o">%</span> \
+                             <span class="bp">self</span><span class="o">.</span><span class="n">iterator_domain</span><span class="p">)</span>
+        
+<span class="c">#    &quot;def __next__(self):&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If vectorized mode:</span>
+<span class="sd">        Return list of slice instances, where the i-th element in the</span>
+<span class="sd">        list represents the slice for the index in the i-th space</span>
+<span class="sd">        direction (0,...,nsd-1).</span>
+
+<span class="sd">        If scalar mode:</span>
+<span class="sd">        Return list of indices (in multi-D) or the index (in 1D).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorized_iter</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="p">[</span><span class="n">slice_in_dir</span> <span class="k">for</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">slice_in_dir</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># scalar version</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slices</span><span class="p">:</span>
+                <span class="n">slices</span> <span class="o">=</span> <span class="p">[</span><span class="n">slice_in_dir</span> <span class="k">for</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">slice_in_dir</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                        <span class="k">yield</span> <span class="n">i</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                            <span class="k">yield</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">slices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">):</span>
+                                <span class="k">yield</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                             
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.locate_cell"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.locate_cell">[docs]</a>    <span class="k">def</span> <span class="nf">locate_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a point (x, (x,y), (x,y,z)), locate the cell in which</span>
+<span class="sd">        the point is located, and return</span>
+<span class="sd">        1) the (i,j,k) vertex index</span>
+<span class="sd">        of the &quot;lower-left&quot; grid point in this cell,</span>
+<span class="sd">        2) the distances (dx, (dx,dy), or (dx,dy,dz)) from this point to</span>
+<span class="sd">        the given point,</span>
+<span class="sd">        3) a boolean list if point matches the</span>
+<span class="sd">        coordinates of any grid lines. If a point matches</span>
+<span class="sd">        the last grid point in a direction, the cell index is</span>
+<span class="sd">        set to the max index such that the (i,j,k) index can be used</span>
+<span class="sd">        directly for look up in an array of values. The corresponding</span>
+<span class="sd">        element in the distance array is then set 0.</span>
+<span class="sd">        4) the indices of the nearest grid point.</span>
+<span class="sd">        </span>
+<span class="sd">        The method only works for uniform grid spacing.</span>
+<span class="sd">        Used for interpolation.</span>
+
+<span class="sd">        &gt;&gt;&gt; g1 = UniformBoxGrid(min=0, max=1, division=4)</span>
+<span class="sd">        &gt;&gt;&gt; cell_index, distance, match, nearest = g1.locate_cell(0.7)</span>
+<span class="sd">        &gt;&gt;&gt; print cell_index</span>
+<span class="sd">        [2]</span>
+<span class="sd">        &gt;&gt;&gt; print distance</span>
+<span class="sd">        [ 0.2]</span>
+<span class="sd">        &gt;&gt;&gt; print match</span>
+<span class="sd">        [False]</span>
+<span class="sd">        &gt;&gt;&gt; print nearest</span>
+<span class="sd">        [3]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; g1.locate_cell(0.5)</span>
+<span class="sd">        ([2], array([ 0.]), [True], [2])</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; g2 = UniformBoxGrid.init_fromstring(&#39;[-1,1]x[-1,2] [0:3]x[0:4]&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print g2.coor</span>
+<span class="sd">        [array([-1.        , -0.33333333,  0.33333333,  1.        ]), array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]</span>
+<span class="sd">        &gt;&gt;&gt; g2.locate_cell((0.2,0.2))</span>
+<span class="sd">        ([1, 1], array([ 0.53333333,  0.45      ]), [False, False], [2, 2])</span>
+<span class="sd">        &gt;&gt;&gt; g2.locate_cell((1,2))</span>
+<span class="sd">        ([3, 4], array([ 0.,  0.]), [True, True], [3, 4])</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">]</span>
+        <span class="n">nsd</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nsd</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;point=</span><span class="si">%s</span><span class="s"> has wrong dimension (this is a </span><span class="si">%d</span><span class="s">D grid!)&#39;</span> <span class="o">%</span> \
+                             <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">))</span>
+        <span class="c">#index = zeros(nsd, int)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">nsd</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">nsd</span><span class="p">)</span>
+        <span class="n">grid_point</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span><span class="o">*</span><span class="n">nsd</span>
+        <span class="n">nearest_point</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">nsd</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
+            <span class="c"># is point inside the domain?</span>
+            <span class="k">if</span> <span class="n">coor</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="n">coor</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;locate_cell: point=</span><span class="si">%s</span><span class="s"> is outside the domain [</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">]&#39;</span> <span class="o">%</span> \
+                    <span class="n">point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">coor</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c"># (need integer division)</span>
+            <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">coor</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">nearest_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nearest_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">:</span>
+                <span class="n">grid_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">nearest_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">:</span>
+                <span class="c"># last cell, update index such that it coincides with the point</span>
+                <span class="n">grid_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">nearest_point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                
+        <span class="k">return</span> <span class="n">index</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">grid_point</span><span class="p">,</span> <span class="n">nearest_point</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.interpolate"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.interpolate">[docs]</a>    <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">v0</span> <span class="o">+</span> <span class="p">(</span><span class="n">v1</span><span class="o">-</span><span class="n">v0</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="UniformBoxGrid.gridline_slice"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.gridline_slice">[docs]</a>    <span class="k">def</span> <span class="nf">gridline_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_coor</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_coor</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute start and end indices of a line through the grid,</span>
+<span class="sd">        and return a tuple that can be used as slice for the</span>
+<span class="sd">        grid points along the line.</span>
+<span class="sd">        </span>
+<span class="sd">        The line must be in x, y or z direction (direction=0,1 or 2).</span>
+<span class="sd">        If end_coor=None, the line ends where the grid ends.</span>
+<span class="sd">        start_coor holds the coordinates of the start of the line.</span>
+<span class="sd">        If start_coor does not coincide with one of the grid points,</span>
+<span class="sd">        the line is snapped onto the grid (i.e., the line coincides with</span>
+<span class="sd">        a grid line).</span>
+
+<span class="sd">        Return: tuple with indices and slice describing the grid point</span>
+<span class="sd">        indices that make up the line, plus a boolean &quot;snapped&quot; which is</span>
+<span class="sd">        True if the original line did not coincide with any grid line,</span>
+<span class="sd">        meaning that the returned line was snapped onto to the grid.</span>
+
+<span class="sd">        &gt;&gt;&gt; g2 = UniformBoxGrid.init_fromstring(&#39;[-1,1]x[-1,2] [0:3]x[0:4]&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print g2.coor</span>
+<span class="sd">        [array([-1.        , -0.33333333,  0.33333333,  1.        ]),</span>
+<span class="sd">         array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]</span>
+
+<span class="sd">        &gt;&gt;&gt; g2.gridline_slice((-1, 0.5), 0)</span>
+<span class="sd">        ((slice(0, 4, 1), 2), False)</span>
+
+<span class="sd">        &gt;&gt;&gt; g2.gridline_slice((-0.9, 0.4), 0)</span>
+<span class="sd">        ((slice(0, 4, 1), 2), True)</span>
+
+<span class="sd">        &gt;&gt;&gt; g2.gridline_slice((-0.2, -1), 1)</span>
+<span class="sd">        ((1, slice(0, 5, 1)), True)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">start_cell</span><span class="p">,</span> <span class="n">start_distance</span><span class="p">,</span> <span class="n">start_match</span><span class="p">,</span> <span class="n">start_nearest</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="n">start_coor</span><span class="p">)</span>
+        <span class="c"># If snapping the line onto to the grid is not desired, the</span>
+        <span class="c"># start_cell and start_match lists must be used for interpolation</span>
+        <span class="c"># (i.e., interpolation is needed in the directions i where</span>
+        <span class="c"># start_match[i] is False).</span>
+        
+        <span class="n">start_snapped</span> <span class="o">=</span> <span class="n">start_nearest</span><span class="p">[:]</span>
+        <span class="k">if</span> <span class="n">end_coor</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">end_snapped</span> <span class="o">=</span> <span class="n">start_snapped</span><span class="p">[:]</span>
+            <span class="n">end_snapped</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="c"># highest legal index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">end_cell</span><span class="p">,</span> <span class="n">end_distance</span><span class="p">,</span> <span class="n">end_match</span><span class="p">,</span> <span class="n">end_nearest</span> <span class="o">=</span> \
+                      <span class="bp">self</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="n">end_coor</span><span class="p">)</span>
+            <span class="n">end_snapped</span> <span class="o">=</span> <span class="n">end_nearest</span><span class="p">[:]</span>
+        <span class="c"># recall that upper index limit must be +1 in a slice:</span>
+        <span class="n">line_slice</span> <span class="o">=</span> <span class="n">start_snapped</span><span class="p">[:]</span>
+        <span class="n">line_slice</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="nb">slice</span><span class="p">(</span><span class="n">start_snapped</span><span class="p">[</span><span class="n">direction</span><span class="p">],</span> <span class="n">end_snapped</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c"># note that if all start_match are true, then the plane</span>
+        <span class="c"># was not snapped</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">line_slice</span><span class="p">),</span> <span class="ow">not</span> <span class="n">array</span><span class="p">(</span><span class="n">start_match</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        </div>
+<div class="viewcode-block" id="UniformBoxGrid.gridplane_slice"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.UniformBoxGrid.gridplane_slice">[docs]</a>    <span class="k">def</span> <span class="nf">gridplane_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">constant_coor</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute a slice for a plane through the grid,</span>
+<span class="sd">        defined by coor[constant_coor]=value.</span>
+<span class="sd">        </span>
+<span class="sd">        Return a tuple that can be used as slice, plus a boolean</span>
+<span class="sd">        parameter &quot;snapped&quot; reflecting if the plane was snapped</span>
+<span class="sd">        onto a grid plane (i.e., value did not correspond to</span>
+<span class="sd">        an existing grid plane).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_coor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_coor</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">start_coor</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">start_cell</span><span class="p">,</span> <span class="n">start_distance</span><span class="p">,</span> <span class="n">start_match</span><span class="p">,</span> <span class="n">start_nearest</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="n">start_coor</span><span class="p">)</span>
+        <span class="n">start_snapped</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span>
+        <span class="n">start_snapped</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_nearest</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span>
+        <span class="c"># recall that upper index limit must be +1 in a slice:</span>
+        <span class="n">end_snapped</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">division</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">)]</span>
+        <span class="n">end_snapped</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_snapped</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span>
+        <span class="n">plane_slice</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start_snapped</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">end_snapped</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> \
+                       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsd</span><span class="p">)]</span>
+        <span class="n">plane_slice</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_nearest</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">plane_slice</span><span class="p">),</span> <span class="ow">not</span> <span class="n">start_match</span><span class="p">[</span><span class="n">constant_coor</span><span class="p">]</span>
+        
+
+        </div></div>
+<div class="viewcode-block" id="BoxGrid"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid">[docs]</a><span class="k">class</span> <span class="nc">BoxGrid</span><span class="p">(</span><span class="n">UniformBoxGrid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extension of class UniformBoxGrid to non-uniform box grids.</span>
+<span class="sd">    The coordinate vectors (in each space direction) can have</span>
+<span class="sd">    arbitrarily spaced coordinate values.</span>
+
+<span class="sd">    The coor argument must be a list of nsd (number of</span>
+<span class="sd">    space dimension) components, each component contains the</span>
+<span class="sd">    grid coordinates in that space direction (stored as an array).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BoxGrid.__init__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coor</span><span class="p">,</span> <span class="n">dirnames</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">)):</span>
+        
+        <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                <span class="nb">min</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">],</span>
+                                <span class="nb">max</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">],</span>
+                                <span class="n">division</span><span class="o">=</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">coor</span><span class="p">],</span>
+                                <span class="n">dirnames</span><span class="o">=</span><span class="n">dirnames</span><span class="p">)</span>
+        <span class="c"># override:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coor</span> <span class="o">=</span> <span class="n">coor</span>
+</div>
+<div class="viewcode-block" id="BoxGrid.__repr__"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> <span class="s">&#39;(coor=</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">coor</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="BoxGrid.locate_cell"><a class="viewcode-back" href="../../BoxGrid.html#scitools.BoxGrid.BoxGrid.locate_cell">[docs]</a>    <span class="k">def</span> <span class="nf">locate_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Cannot locate point in cells in non-uniform grids&#39;</span><span class="p">)</span>
+    
+        </div></div>
+<span class="k">def</span> <span class="nf">_test</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;g=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="c"># dump all the contents of a grid object:</span>
+    <span class="kn">import</span> <span class="nn">scitools.misc</span><span class="p">;</span>  <span class="n">scitools</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">hide_nonpublic</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span>
+    <span class="k">def</span> <span class="nf">fv</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="c"># vectorized evaluation function</span>
+        <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span>
+    <span class="k">def</span> <span class="nf">fs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="c"># scalar version</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="n">fv_arr</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+    <span class="n">fs_arr</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="n">coor</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">nsd</span>
+    <span class="n">itparts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;all&#39;</span><span class="p">,</span> <span class="s">&#39;interior&#39;</span><span class="p">,</span> <span class="s">&#39;all_boundary&#39;</span><span class="p">,</span> <span class="s">&#39;interior_boundary&#39;</span><span class="p">,</span>
+               <span class="s">&#39;corners&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">nsd</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">itparts</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;all_edges&#39;</span><span class="p">,</span> <span class="s">&#39;interior_edges&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">domain_part</span> <span class="ow">in</span> <span class="n">itparts</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">iterator over &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">domain_part</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="n">domain_part</span><span class="p">,</span> <span class="n">vectorized_version</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>  <span class="n">i</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c"># wrap index as list (if 1D)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nsd</span><span class="p">):</span>
+                <span class="n">coor</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">coor</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+            <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">coor</span>
+            <span class="k">if</span> <span class="n">domain_part</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>  <span class="c"># fs_arr shape corresponds to all points</span>
+                <span class="n">fs_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="p">(</span><span class="o">*</span><span class="n">coor</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;vectorized iterator over &quot;</span><span class="si">%s</span><span class="s">&quot;:&#39;</span> <span class="o">%</span> <span class="n">domain_part</span>
+        <span class="k">for</span> <span class="n">slices</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="n">domain_part</span><span class="p">,</span> <span class="n">vectorized_version</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">domain_part</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+                <span class="n">fs_arr</span><span class="p">[</span><span class="n">slices</span><span class="p">]</span> <span class="o">=</span> <span class="n">fv</span><span class="p">(</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">coor</span><span class="p">)</span>
+            <span class="c"># else: more complicated</span>
+            <span class="k">print</span> <span class="n">slices</span>
+    <span class="c"># boundary slices...</span>
+
+    <span class="k">if</span> <span class="n">points</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Interpolation in&#39;</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">coor</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&#39;point </span><span class="si">%s</span><span class="s"> is in cell </span><span class="si">%s</span><span class="s">, distance=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
+    
+
+<span class="k">def</span> <span class="nf">_test2</span><span class="p">():</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">division</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="s">&#39;[0,1]x[-1,2] with indices [0:3]x[0:2]&#39;</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">init_fromstring</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span> <span class="p">[(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)])</span>
+    <span class="n">g3</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g3</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;g3=</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">g3</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;g3[Z]=&#39;</span><span class="p">,</span> <span class="n">g3</span><span class="p">[</span><span class="n">Z</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;g3[Z][1] =&#39;</span><span class="p">,</span> <span class="n">g3</span><span class="p">[</span><span class="n">Z</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;dx, dy, dz spacings:&#39;</span><span class="p">,</span> <span class="n">g3</span><span class="o">.</span><span class="n">delta</span>
+    <span class="n">g4</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                        <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">dirnames</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">))</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">g4</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;g4[&quot;y&quot;][-1]:&#39;</span><span class="p">,</span> <span class="n">g4</span><span class="p">[</span><span class="s">&quot;y&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+<span class="k">def</span> <span class="nf">_test4</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">exp</span>
+    <span class="c"># check vectorization evaluation:</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">division</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="c"># fine, expect to arrive here</span>
+        <span class="k">print</span> <span class="s">&#39;*** Expected error in this test:&#39;</span><span class="p">,</span> <span class="n">msg</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="c"># fine, expect to arrive here</span>
+        <span class="k">print</span> <span class="s">&#39;*** Expected error in this test:&#39;</span><span class="p">,</span> <span class="n">msg</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">print</span> <span class="n">a</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">zeros</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">a</span>
+
+        
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test2</span><span class="p">()</span>
+    <span class="c">#_test4()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

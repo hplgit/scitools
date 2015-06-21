@@ -1,0 +1,3196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.12: http://docutils.sourceforge.net/" />
+<title>Easyviz Documentation</title>
+<meta name="date" content="Jan 27, 2015" />
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7614 2013-02-21 15:55:51Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: grey; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="easyviz-documentation">
+<h1 class="title">Easyviz Documentation</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr class="field"><th class="docinfo-name">Authors:</th><td class="field-body"><ol class="first upperalpha simple" start="8">
+<li><ol class="first upperalpha" start="16">
+<li>Langtangen, J. H. Ring</li>
+</ol>
+</li>
+</ol>
+<div class="last system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">tmp_easyviz.rst</tt>, line 7)</p>
+Bibliographic field &quot;Authors&quot; incompatible with extraction: it must contain either a single paragraph (with authors separated by one of &quot;;,&quot;), multiple paragraphs (one per author), or a bullet list with one paragraph (one author) per item.</div>
+</td>
+</tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>Jan 27, 2015</td></tr>
+</tbody>
+</table>
+<!-- Automatically generated reStructuredText file from DocOnce source
+(https://github.com/hplgit/doconce/) -->
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#easyviz" id="id2">Easyviz</a><ul>
+<li><a class="reference internal" href="#id1" id="id3">Easyviz Documentation</a></li>
+<li><a class="reference internal" href="#guiding-principles" id="id4">Guiding Principles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tutorial" id="id5">Tutorial</a><ul>
+<li><a class="reference internal" href="#a-note-on-import-statements" id="id6">A Note on Import Statements</a></li>
+<li><a class="reference internal" href="#plotting-a-single-curve" id="id7">Plotting a Single Curve</a></li>
+<li><a class="reference internal" href="#controlling-line-styles" id="id8">Controlling Line Styles</a></li>
+<li><a class="reference internal" href="#decorating-the-plot" id="id9">Decorating the Plot</a></li>
+<li><a class="reference internal" href="#using-logarithmic-scales" id="id10">Using Logarithmic Scales</a></li>
+<li><a class="reference internal" href="#plotting-multiple-curves" id="id11">Plotting Multiple Curves</a></li>
+<li><a class="reference internal" href="#making-multiple-figures" id="id12">Making Multiple Figures</a></li>
+<li><a class="reference internal" href="#math-syntax-in-legends-and-titles" id="id13">Math Syntax in Legends and Titles</a></li>
+<li><a class="reference internal" href="#interactive-plotting-sessions" id="id14">Interactive Plotting Sessions</a></li>
+<li><a class="reference internal" href="#curves-in-3d-space" id="id15">Curves in 3D Space</a></li>
+<li><a class="reference internal" href="#making-animations" id="id16">Making Animations</a></li>
+<li><a class="reference internal" href="#controlling-the-aspect-ratio-of-axes" id="id17">Controlling the Aspect Ratio of Axes</a></li>
+<li><a class="reference internal" href="#moving-plot-window" id="id18">Moving Plot Window</a></li>
+<li><a class="reference internal" href="#advanced-easyviz-topics" id="id19">Advanced Easyviz Topics</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visualization-of-scalar-fields" id="id20">Visualization of Scalar Fields</a><ul>
+<li><a class="reference internal" href="#elevated-surface-plots" id="id21">Elevated Surface Plots</a></li>
+<li><a class="reference internal" href="#contour-plots" id="id22">Contour Plots</a></li>
+<li><a class="reference internal" href="#pseudocolor-plots" id="id23">Pseudocolor Plots</a></li>
+<li><a class="reference internal" href="#isosurface-plots" id="id24">Isosurface Plots</a></li>
+<li><a class="reference internal" href="#volumetric-slice-plot" id="id25">Volumetric Slice Plot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visualization-of-vector-fields" id="id26">Visualization of Vector Fields</a><ul>
+<li><a class="reference internal" href="#quiver-plots" id="id27">Quiver Plots</a></li>
+<li><a class="reference internal" href="#stream-plots" id="id28">Stream Plots</a></li>
+<li><a class="reference internal" href="#bar-charts" id="id29">Bar Charts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backends" id="id30">Backends</a></li>
+<li><a class="reference internal" href="#design" id="id31">Design</a><ul>
+<li><a class="reference internal" href="#main-objects" id="id32">Main Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation" id="id33">Installation</a><ul>
+<li><a class="reference internal" href="#installing-gnuplot" id="id34">Installing Gnuplot</a></li>
+<li><a class="reference internal" href="#linux-unix" id="id35">Linux/Unix</a></li>
+<li><a class="reference internal" href="#windows" id="id36">Windows</a></li>
+<li><a class="reference internal" href="#installing-matplotlib" id="id37">Installing Matplotlib</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting" id="id38">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#suddenly-my-old-plots-have-markers" id="id39">Suddenly my old plots have markers</a></li>
+<li><a class="reference internal" href="#can-i-perform-a-diagnostic-test-of-easyviz" id="id40">Can I Perform a Diagnostic Test of Easyviz?</a></li>
+<li><a class="reference internal" href="#the-plot-window-disappears-immediately" id="id41">The Plot Window Disappears Immediately</a></li>
+<li><a class="reference internal" href="#i-get-thread-errors-while-plotting" id="id42">I Get Thread Errors While Plotting</a></li>
+<li><a class="reference internal" href="#i-get-strange-errors-saying-something-about-latex" id="id43">I Get Strange Errors Saying Something About LaTeX</a></li>
+<li><a class="reference internal" href="#old-programs-with-2d-scalar-vector-field-plotting-do-not-work" id="id44">Old Programs with 2D Scalar/Vector Field Plotting Do Not Work</a></li>
+<li><a class="reference internal" href="#check-your-backends" id="id45">Check Your Backends!</a></li>
+<li><a class="reference internal" href="#can-i-easily-turn-off-all-plotting" id="id46">Can I Easily Turn Off All Plotting?</a></li>
+<li><a class="reference internal" href="#how-can-i-change-the-type-of-gnuplot-window" id="id47">How Can I Change the Type of Gnuplot Window?</a></li>
+<li><a class="reference internal" href="#how-can-the-aspect-ratio-of-the-axes-be-controlled" id="id48">How Can The Aspect Ratio of The Axes Be Controlled?</a></li>
+<li><a class="reference internal" href="#trouble-with-gnuplot-and-threads" id="id49">Trouble with Gnuplot and Threads</a></li>
+<li><a class="reference internal" href="#trouble-with-movie-making" id="id50">Trouble with Movie Making</a></li>
+<li><a class="reference internal" href="#i-get-thread-errors-with-gnuplot" id="id51">I Get Thread Errors with Gnuplot</a></li>
+<li><a class="reference internal" href="#where-can-i-find-easyviz-documentation" id="id52">Where Can I Find Easyviz Documentation?</a></li>
+<li><a class="reference internal" href="#grace-gives-error-messages-when-calling-savefig-hardcopy" id="id53">Grace Gives Error Messages When Calling Savefig/Hardcopy</a></li>
+<li><a class="reference internal" href="#i-cannot-find-out-how-my-plot-can-be-created" id="id54">I Cannot Find Out How My Plot Can Be Created</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="easyviz">
+<h1><a class="toc-backref" href="#id2">Easyviz</a></h1>
+<p>Easyviz is a unified interface to various packages for scientific
+visualization and plotting.  The Easyviz interface is written in
+Python with the purpose of making it very easy to visualize data in
+Python scripts. Both curve plots and more advanced 2D/3D visualization
+of scalar and vector fields are supported.  The Easyviz interface was
+designed with three ideas in mind: 1) a simple, Matlab-like syntax; 2)
+a unified interface to lots of visualization engines (called backends
+later): Gnuplot, Matplotlib, Grace, Veusz, Pmw.Blt.Graph, PyX,
+Matlab, VTK, VisIt, OpenDX; and 3) a minimalistic interface which
+offers only basic control of plots: curves, linestyles, legends,
+title, axis extent and names.  More fine-tuning of plots can be done
+by invoking backend-specific commands.</p>
+<p>Easyviz was made back in 2005/2006 so that one can postpone the choice
+of a particular visualization package (and its special associated
+syntax). This is often useful when you quickly need to visualize
+curves or 2D/3D fields in your Python program, but haven't really
+decided which plotting tool to go for. As Python is gaining popularity
+at universities, students are often forced to continuously switch
+between Matlab and Python, which is straightforward for array
+computing, but (previously) annoying for plotting. Easyviz was
+therefore also made to ease the switch between Python and Matlab. In
+recent years, Matplotlib has emerged as the standard plotting package
+for Python, and Matplotlib offers a Matlab-like interface. Many will
+prefer to use Matplotlib and its rich documentation directly rather
+than going through the more limited Easyviz interface (and having the
+flexibility to use other plotting engines).</p>
+<p>If you encounter problems with using Easyviz, please visit the
+<em>Troubleshooting</em> chapter and the <em>Installation</em> chapter at the
+end of the documentation.</p>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id3">Easyviz Documentation</a></h2>
+<p>The present documentation is available in a number of formats:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.pdf">PDF</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.html">Plain HTML</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz_sphinx_html/index.html">Sphinx HTML</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.txt">Plain text</a></li>
+<li><a class="reference external" href="http://code.google.com/p/scitools/wiki/EasyvizDocumentation">Wiki</a></li>
+<li><a class="reference external" href="https://scitools.googlecode.com/hg/doc/easyviz/easyviz.do.txt">DocOnce source</a></li>
+</ul>
+</blockquote>
+<p>The documentation is written in the
+<a class="reference external" href="https://github.com/hplgit/doconce">DocOnce</a>
+format and can be translated into a
+number of different formats (reST, Sphinx, LaTeX, HTML, XML,
+OpenOffice, RTF, Word, and plain untagged ASCII).</p>
+</div>
+<div class="section" id="guiding-principles">
+<h2><a class="toc-backref" href="#id4">Guiding Principles</a></h2>
+<p><strong>First principle.</strong>
+Array data can be plotted with a minimal
+set of keystrokes using a Matlab-like syntax. A simple:</p>
+<pre class="literal-block">
+t = linspace(0, 3, 51)    # 51 points between 0 and 3
+y = t**2*exp(-t**2)
+plot(t, y)
+</pre>
+<p>plots the data in (the NumPy array) <tt class="docutils literal">t</tt> versus the data in (the NumPy
+array) <tt class="docutils literal">y</tt>. If you need legends, control of the axis, as well as
+additional curves, all this is obtained by the standard Matlab-style
+commands:</p>
+<pre class="literal-block">
+y2 = t**4*exp(-t**2)
+# pick out each 4 points and add random noise:
+t3 = t[::4]
+y3 = y2[::4] + random.normal(loc=0, scale=0.02, size=len(t3))
+
+plot(t, y1, 'r-')
+hold('on')
+plot(t, y2, 'b-')
+plot(t3, y3, 'bo')
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
+title('Simple Plot Demo')
+axis([0, 3, -0.05, 0.6])
+xlabel('t')
+ylabel('y')
+show()
+
+hardcopy('tmp0.eps')  # this one can be included in LaTeX
+hardcopy('tmp0.png')  # this one can be included in HTML
+</pre>
+<p>Easyviz also allows these additional function calls to be executed
+as a part of the <tt class="docutils literal">plot</tt> call:</p>
+<pre class="literal-block">
+plot(t, y1, 'r-', t, y2, 'b-', t3, y3, 'bo',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data'),
+     title='Simple Plot Demo',
+     axis=(0, 3, -0.05, 0.6),
+     xlabel='t', ylabel='y',
+     hardcopy='tmp1.eps',
+     show=True)
+
+hardcopy('tmp0.png')
+</pre>
+<p>A scalar function f(x,y) may be visualized
+as an elevated surface with colors using these commands:</p>
+<pre class="literal-block">
+x = linspace(-2, 2, 41)  # 41 point on [-2, 2]
+xv, yv = ndgrid(x, x)    # define a 2D grid with points (xv,yv)
+values = f(xv, yv)       # function values
+surfc(xv, yv, values,
+      shading='interp',
+      clevels=15,
+      clabels='on',
+      hidden='on',
+      show=True)
+</pre>
+<p><strong>Second princple.</strong>
+Easyviz is just a unified interface to other
+plotting packages that can be called from Python. Such plotting
+packages are referred to as backends. Several backends are supported:
+Gnuplot, Matplotlib, Grace (Xmgr), Veusz, Pmw.Blt.Graph, PyX, Matlab,
+VTK, VisIt, OpenDX. In other words, scripts that use Easyviz commands
+only, can work with a variety of backends, depending on what you have
+installed on the machine in question and what quality of the plots you
+demand. For example, switching from Gnuplot to Matplotlib is trivial.</p>
+<p>Scripts with Easyviz commands will most probably run anywhere since at
+least the Gnuplot package can always be installed right away on any
+platform. In practice this means that when you write a script to
+automate investigation of a scientific problem, you can always quickly
+plot your data with Easyviz (i.e., Matlab-like) commands and postpone
+to marry any specific plotting tool. Most likely, the choice of
+plotting backend can remain flexible. This will also allow old scripts
+to work with new fancy plotting packages in the future if Easyviz
+backends are written for those packages.</p>
+<p><strong>Third principle.</strong>
+The Easyviz interface is minimalistic, aimed at
+rapid prototyping of plots. This makes the Easyviz code easy to read
+and extend (e.g., with new backends). If you need more sophisticated
+plotting, like controlling tickmarks, inserting annotations, etc., you
+must grab the backend object and use the backend-specific syntax to
+fine-tune the plot. The idea is that you can get away with Easyviz and
+a plotting package-independent script &quot;95 percent&quot; of the time - only
+now and then there will be demand for package-dependent code for
+fine-tuning and customization of figures.</p>
+<p>These three principles and the Easyviz implementation make simple things
+simple and unified, and complicated things are not more complicated than
+they would otherwise be. You can always start out with the simple
+commands - and jump to complicated fine-tuning only when strictly needed.</p>
+</div>
+</div>
+<div class="section" id="tutorial">
+<h1><a class="toc-backref" href="#id5">Tutorial</a></h1>
+<p>This tutorial starts with plotting a single curve with a simple
+<tt class="docutils literal">plot(x,y)</tt> command. Then we add a legend, axis labels, a title, etc.
+Thereafter we show how multiple curves are plotted together. We also
+explain how line styles and axis range can be controlled. The
+next topic deals with animations and making movie files. More advanced
+subjects, such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects, close the curve
+plotting part of the tutorial.</p>
+<p>Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.</p>
+<div class="section" id="a-note-on-import-statements">
+<h2><a class="toc-backref" href="#id6">A Note on Import Statements</a></h2>
+<p>The recommended standard import of <tt class="docutils literal">numpy</tt>
+and <tt class="docutils literal">matplotlib</tt> in programs reads:</p>
+<pre class="literal-block">
+import numpy as np
+import matplotlib.pyplot as plt
+</pre>
+<p>This import ensures that all functionality from different packages are
+prefixed by a short form of the package name. This convention has,
+from a computer science perspective, many advantages as one sees
+clearly where functionality comes from.  However, convincing
+scientists with extensive Matlab, Fortran, or C++ experience to switch
+to Python can be hard when mathematical formulas are full of <tt class="docutils literal">np.</tt>
+prefixes and all plotting commands are decorated with an &quot;extra&quot;
+<tt class="docutils literal">plt.</tt> The developers of Easyviz think it is a major point to have
+Python code as close to Matlab and standard mathematical syntax as
+possible.  Therefore, examples in this manual employ the &quot;star
+import&quot;:</p>
+<pre class="literal-block">
+from scitools.std import *
+</pre>
+<p>This statement imports the Easyviz plotting commands and also performs
+<tt class="docutils literal">from numpy import *</tt>. Hence, mathematical functions like <tt class="docutils literal">sin</tt> and
+<tt class="docutils literal">log</tt> are available and work for arrays, as in Matlab, and the plotting
+commands are the same as those in Matlab. This type of import statement
+is similar to the popular:</p>
+<pre class="literal-block">
+from matplotlib.pylab import *
+</pre>
+<p>among Matplotlib users (although not promoted by Matplotlib developers).
+The primary additional feature of the
+<tt class="docutils literal">scitools.std</tt> import is the possibility to choose among many different
+backends for plotting, where Matplotlib is one of the options.</p>
+</div>
+<div class="section" id="plotting-a-single-curve">
+<h2><a class="toc-backref" href="#id7">Plotting a Single Curve</a></h2>
+<p>Let us plot the curve y = t**2*exp(-t**2) for
+t values between 0 and 3.  First we generate equally spaced
+coordinates for t, say 31 values (30 intervals). Then we compute the
+corresponding y values at these points, before we call the
+<tt class="docutils literal">plot(t,y)</tt> command to make the curve plot.  Here is the complete
+program:</p>
+<pre class="literal-block">
+from scitools.std import *
+
+def f(t):
+    return t**2*exp(-t**2)
+
+t = linspace(0, 3, 31)    # 31 points between 0 and 3
+y = zeros(len(t))         # allocate y with float elements
+for i in xrange(len(t)):
+    y[i] = f(t[i])
+
+plot(t, y)
+show()  # optional
+</pre>
+<p>If you have problems running this file, make sure you have installed
+SciTools and one or more plotting programs, see the chapter <a class="reference internal" href="#installation">Installation</a>.</p>
+<p>The first line imports all of SciTools and Easyviz that can be handy
+to have when doing scientific computations. This includes everything
+from <tt class="docutils literal">numpy</tt> (from <tt class="docutils literal">numpy import *</tt>),
+all Easyviz plotting commands, some modules (<tt class="docutils literal">sys</tt>, <tt class="docutils literal">math</tt>), and
+all of SciPy (<tt class="docutils literal">from scipy import *</tt>) if SciPy is installed.
+In the program above, we first
+pre-allocate the <tt class="docutils literal">y</tt> array and fill it with values, element by
+element, in a Python loop. Alternatively, we may operate
+on the whole <tt class="docutils literal">t</tt> array at once, which yields faster and shorter code:</p>
+<pre class="literal-block">
+from scitools.std import *
+
+def f(t):
+    return t**2*exp(-t**2)
+
+t = linspace(0, 3, 31)    # 31 points between 0 and 3
+y = f(t)                  # compute all f values at once
+plot(t, y)
+show()                    # optional
+</pre>
+<p>The <tt class="docutils literal">f</tt> function can also be skipped, if desired, so that we can write
+directly:</p>
+<pre class="literal-block">
+y = t**2*exp(-t**2)
+</pre>
+<p>To include the plot in electronic documents, we need a hardcopy of the
+figure in PostScript, PNG, or another image format.  The <tt class="docutils literal">savefig</tt>
+command produces files with images in various formats:</p>
+<pre class="literal-block">
+savefig('tmp1.eps') # produce PostScript
+savefig('tmp1.png') # produce PNG
+savefig('tmp1.pdf') # produce PDF
+savefig('tmp1.svg') # produce SVG (not supported in all backends)
+</pre>
+<p>An alternative name for <tt class="docutils literal">savefig</tt> is <tt class="docutils literal">hardcopy</tt>:</p>
+<pre class="literal-block">
+hardcopy('tmp1.eps') # produce PostScript
+hardcopy('tmp1.png') # produce PNG
+hardcopy('tmp1.pdf') # produce PDF
+</pre>
+<p>The filename extension determines the format: <tt class="docutils literal">.ps</tt> or
+<tt class="docutils literal">.eps</tt> for PostScript, <tt class="docutils literal">.png</tt> for PNG, <tt class="docutils literal">.pdf</tt> for PDF, and <tt class="docutils literal">.svg</tt> for SVG.
+Figures <a class="reference internal" href="#fig-plot1a-g">fig:plot1a:g</a> and <a class="reference internal" href="#fig-plot1a-m">fig:plot1a:m</a> display the resulting
+image file with the plot, as generated
+with the Gnuplot and Matplotlib plotting packages, respectively.
+With <tt class="docutils literal">show(False)</tt>
+we can suppress the plot from being shown at the screen, which is
+useful when creating a large number of figure files in programs.</p>
+<div class="figure" id="fig-plot1a-g">
+<img alt="figs/plot1a_g.png" src="figs/plot1a_g.png" style="width: 400px;" />
+<p class="caption"><em>Default plot generated by Gnuplot</em>  (fig:plot1a:g)</p>
+</div>
+<div class="figure" id="fig-plot1a-m">
+<img alt="figs/plot1a_m.png" src="figs/plot1a_m.png" style="width: 400px;" />
+<p class="caption"><em>Default plot generated by Matplotlib</em>  (fig:plot1a:m)</p>
+</div>
+<p>On some platforms, some backends may result in a plot that is shown in
+just a fraction of a second on the screen before the plot window disappears
+(using the Gnuplot backend on Windows machines or using the Matplotlib
+backend constitute two examples). To make the window stay on the screen,
+add:</p>
+<pre class="literal-block">
+raw_input('Press the Return key to quit: ')
+</pre>
+<p>at the end of the program. The plot window is killed when the program
+terminates, and this statement postpones the termination until the user
+hits the Return key.</p>
+</div>
+<div class="section" id="controlling-line-styles">
+<h2><a class="toc-backref" href="#id8">Controlling Line Styles</a></h2>
+<p>By default, Easyviz plots a curve with a solid line of thickness 1 and
+markers at each data point. If the number of data points exceeds 61,
+just 15 equally spaced markers are drawn to avoid cluttering the plot.
+This default behavior is
+inspired by the usual needs to include markers to
+distinguish multiple curves plots, especially if image files are to
+appear in black and white in printed reports.  However, the line style
+and markers can easily be controlled by adding a string <tt class="docutils literal">s</tt> after the <tt class="docutils literal">y</tt>
+argument: <tt class="docutils literal">plot(x, y, s)</tt>. The syntax of the string <tt class="docutils literal">s</tt> is inspired by
+Matlab. For example, <tt class="docutils literal">r-</tt> means a red solid line of unit thickness and
+no markers
+(see Figure <a class="reference internal" href="#fig-plot1a-rs">fig:plot1a:rs</a>), <tt class="docutils literal"><span class="pre">r--</span></tt> means a red dashed line, <tt class="docutils literal"><span class="pre">r-o</span></tt>
+means a red solid line with circles as markers at each data point,
+<tt class="docutils literal"><span class="pre">r--o</span></tt> is the same except that the line is dashed. In general, if <tt class="docutils literal">s</tt>
+is <tt class="docutils literal">clms</tt>, the first character <tt class="docutils literal">c</tt> is the color, <tt class="docutils literal">l</tt> is the line type,
+<tt class="docutils literal">m</tt> is the marker type, and <tt class="docutils literal">s</tt> is the size of the line and marker. A
+blue line with thickness 6 and cross symbols as markers of size 6 is
+specified by <tt class="docutils literal"><span class="pre">b-x6</span></tt>.  The effect of the given line thickness and
+symbol size depends on the underlying plotting program.  One can omit
+the line type or color: <tt class="docutils literal">yo</tt> specifies yellow circles and <tt class="docutils literal">-</tt> gives
+solid line of thickness 1 and default color .</p>
+<div class="figure" id="fig-plot1a-rs">
+<img alt="figs/plot1a2.png" src="figs/plot1a2.png" style="width: 400px;" />
+<p class="caption"><em>Red solid line</em>  (fig:plot1a:rs)</p>
+</div>
+<dl class="docutils">
+<dt>The different available line colors include</dt>
+<dd><ul class="first last simple">
+<li>yellow:   <tt class="docutils literal">'y'</tt></li>
+<li>magenta:  <tt class="docutils literal">'m'</tt></li>
+<li>cyan:     <tt class="docutils literal">'c'</tt></li>
+<li>red:      <tt class="docutils literal">'r'</tt></li>
+<li>green:    <tt class="docutils literal">'g'</tt></li>
+<li>blue:     <tt class="docutils literal">'b'</tt></li>
+<li>white:    <tt class="docutils literal">'w'</tt></li>
+<li>black:    <tt class="docutils literal">'k'</tt></li>
+</ul>
+</dd>
+<dt>The different available line types are</dt>
+<dd><ul class="first last simple">
+<li>solid line:      <tt class="docutils literal"><span class="pre">'-'</span></tt></li>
+<li>dashed line:     <tt class="docutils literal"><span class="pre">'--'</span></tt></li>
+<li>dotted line:     <tt class="docutils literal">':'</tt></li>
+<li>dash-dot line:   <tt class="docutils literal"><span class="pre">'-.'</span></tt></li>
+</ul>
+</dd>
+<dt>Lots of markers at data points are available:</dt>
+<dd><ul class="first last simple">
+<li>plus sign:                     <tt class="docutils literal">'+'</tt></li>
+<li>circle:                        <tt class="docutils literal">'o'</tt></li>
+<li>asterisk:                      <tt class="docutils literal">'*'</tt></li>
+<li>point:                         <tt class="docutils literal">'.'</tt></li>
+<li>cross:                         <tt class="docutils literal">'x'</tt></li>
+<li>square:                        <tt class="docutils literal">'s'</tt></li>
+<li>diamond:                       <tt class="docutils literal">'d'</tt></li>
+<li>upward-pointing triangle:      <tt class="docutils literal">'^'</tt></li>
+<li>downward-pointing triangle:    <tt class="docutils literal">'v'</tt></li>
+<li>right-pointing triangle:       <tt class="docutils literal">'&gt;'</tt></li>
+<li>left-pointing triangle:        <tt class="docutils literal">'&lt;'</tt></li>
+<li>five-point star (pentagram):   <tt class="docutils literal">'p'</tt></li>
+<li>six-point star (hexagram):     <tt class="docutils literal">'h'</tt></li>
+<li>no marker (default): <tt class="docutils literal">None</tt></li>
+</ul>
+</dd>
+</dl>
+<p>During programming, you can find all these details in the
+documentation of the <tt class="docutils literal">plot</tt> function. Just type <tt class="docutils literal">help(plot)</tt>
+in an interactive Python shell or invoke <tt class="docutils literal">pydoc</tt> with
+<tt class="docutils literal">scitools.easyviz.plot</tt>. This tutorial is available
+through <tt class="docutils literal">pydoc scitools.easyviz</tt>.</p>
+<p>We remark that in the Gnuplot program all the different line types are
+drawn as solid lines on the screen. The hardcopy chooses automatically
+different line types (solid, dashed, etc.) and not in accordance with
+the line type specification.</p>
+</div>
+<div class="section" id="decorating-the-plot">
+<h2><a class="toc-backref" href="#id9">Decorating the Plot</a></h2>
+<p>The x and y axes in curve plots should have labels, here t and
+y, respectively. Also, the curve should be identified with a label,
+or legend as it is often called.  A title above the plot is also
+common.  In addition, we may want to control the extent of the axes (although
+most plotting programs will automatically adjust the axes to the range of the
+data).
+All such things are easily added after the <tt class="docutils literal">plot</tt> command:</p>
+<pre class="literal-block">
+plot(x, y, 'r-')
+xlabel('t')
+ylabel('y')
+legend('t^2*exp(-t^2)')
+axis([0, 3, -0.05, 0.6])   # [tmin, tmax, ymin, ymax]
+title('My First Easyviz Demo')
+</pre>
+<p>This syntax is inspired by Matlab to make the switch between
+Easyviz and Matlab almost trivial.
+Easyviz has also introduced a more &quot;Pythonic&quot; <tt class="docutils literal">plot</tt> command where
+all the plot properties can be set at once:</p>
+<pre class="literal-block">
+plot(t, y, 'r-',
+     xlabel='t',
+     ylabel='y',
+     legend='t^2*exp(-t^2)',
+     axis=[0, 3, -0.05, 0.6],
+     title='My First Easyviz Demo',
+     savefig='tmp1.eps',  # or hardcopy='tmp1.eps'
+     show=True)
+</pre>
+<p>With <tt class="docutils literal">show=False</tt> one can avoid the plot window on the screen and
+just make the hardcopy. This feature is particularly useful if
+one generates a large number of separate figures in the program.
+The keyword <tt class="docutils literal">savefig</tt> can be replaced by <tt class="docutils literal">hardcopy</tt> if desired.</p>
+<p>Note that we in the curve legend write <tt class="docutils literal">t</tt> square as <tt class="docutils literal">t^2</tt> (LaTeX style)
+rather than <tt class="docutils literal"><span class="pre">t**2</span></tt> (program style). Whichever form you choose is up to
+you, but the LaTeX form sometimes looks better in some plotting
+programs (Matplotlib and Gnuplot are two examples).
+See Figure <a class="reference internal" href="#fig-plot1c">fig:plot1c</a> for what the modified
+plot looks like and how <tt class="docutils literal">t^2</tt> is typeset in Gnuplot.</p>
+<div class="figure" id="fig-plot1c">
+<img alt="figs/plot1c.png" src="figs/plot1c.png" style="width: 400px;" />
+<p class="caption"><em>A single curve with</em>  label, title, and axes adjusted.   (fig:plot1c)</p>
+</div>
+</div>
+<div class="section" id="using-logarithmic-scales">
+<h2><a class="toc-backref" href="#id10">Using Logarithmic Scales</a></h2>
+<p>Sometimes logarithmic scales are need on the x or y axis. This is
+easily specified by replacing <tt class="docutils literal">plot(x,y)</tt> by <tt class="docutils literal">loglog(x,y)</tt>, <tt class="docutils literal">semilogx(x,y)</tt>,
+or <tt class="docutils literal">semilogy(x,y)</tt> for the three cases of logarithmic scales on both axes,
+on the x axis only, or on the y axis only. A complete
+example, displayed in Figure <a class="reference internal" href="#fig-plot1d">fig:plot1d</a>, reads:</p>
+<pre class="literal-block">
+def f(t):
+    return exp(-t**2)
+
+t = linspace(0, 3, 51)    # 51 points between 0 and 3
+y = f(t)
+semilogy(t, y, 'r-2')
+
+xlabel('t')
+ylabel('y')
+legend('exp(-t^2)')
+title('Logarithmic scale on the y axis')
+</pre>
+<div class="figure" id="fig-plot1d">
+<img alt="figs/plot1d.png" src="figs/plot1d.png" style="width: 400px;" />
+<p class="caption"><em>Logarithmic scale on one axis</em>  (fig:plot1d)</p>
+</div>
+<p>The specification of
+logarithmic scales can also be done through keyword arguments to the
+<tt class="docutils literal">plot</tt> function: <tt class="docutils literal"><span class="pre">log='xy'</span></tt>, <tt class="docutils literal"><span class="pre">log='x'</span></tt>, or <tt class="docutils literal"><span class="pre">log='y'</span></tt>, which should
+be self-explaining syntax. The following call produces the same plot
+as above:</p>
+<pre class="literal-block">
+plot(t, y, 'r-2',
+     log='y',
+     xlabel='t',
+     ylabel='y',
+     legend='exp(-t^2)',
+     title='Logarithmic scale on the y axis',
+     savefig='tmp1.png',
+     show=True)
+</pre>
+</div>
+<div class="section" id="plotting-multiple-curves">
+<h2><a class="toc-backref" href="#id11">Plotting Multiple Curves</a></h2>
+<p>A common plotting task is to compare two or more curves, which
+requires multiple curves to be drawn in the same plot.
+Suppose we want to plot the two functions f_1(t)=t^2exp(-t^2)
+and f_2(t)=t^4exp(-t^2). If we write two <tt class="docutils literal">plot</tt> commands after
+each other, two separate plots will be made. To make the second
+<tt class="docutils literal">plot</tt> command draw the curve in the first plot, we need to
+issue a <tt class="docutils literal"><span class="pre">hold('on')</span></tt> command. Alternatively, we can provide all
+data in a single <tt class="docutils literal">plot</tt> command. A complete program illustrates the
+different approaches:</p>
+<pre class="literal-block">
+from scitools.std import *   # for curve plotting
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+y2 = f2(t)
+
+# Matlab-style syntax
+plot(t, y1)
+hold('on')
+plot(t, y2)
+
+xlabel('t')
+ylabel('y')
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)')
+title('Plotting two curves in the same plot')
+savefig('tmp2.eps')  # or hardcopy('tmp2.eps')
+
+# Alternative &quot;Pythonic&quot; style
+plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     title='Plotting two curves in the same plot',
+     savefig='tmp2.eps')
+</pre>
+<p>The sequence of the multiple legends is such that the first legend
+corresponds to the first curve, the second legend to the second curve,
+and so on. The visual result appears in Figures <a class="reference internal" href="#fig-plot2a">fig:plot2a</a>
+and <a class="reference internal" href="#fig-plot2a-gp">fig:plot2a:gp</a>.</p>
+<p>Doing a <tt class="docutils literal"><span class="pre">hold('off')</span></tt> makes the next <tt class="docutils literal">plot</tt> command create a new
+plot in the same window. This new plot just erases the previous curves.</p>
+<div class="figure" id="fig-plot2a">
+<img alt="figs/plot2a.png" src="figs/plot2a.png" style="width: 400px;" />
+<p class="caption"><em>Two curves in the same plot, PNG file produced by Gnuplot</em>  (fig:plot2a)</p>
+</div>
+<div class="figure" id="fig-plot2a-gp">
+<img alt="figs/plot2a_gp.png" src="figs/plot2a_gp.png" style="width: 350px;" />
+<p class="caption"><em>Two curves in the same plot, PostScript file produced by Gnuplot</em>  (fig:plot2a:gp)</p>
+</div>
+<p>With the keyword argrument <tt class="docutils literal">grid=True</tt> to <tt class="docutils literal">plot</tt> we can add a
+grid, which is frequently used when plotting curves (see
+Figure <a class="reference internal" href="#fig-plot2f">fig:plot2f</a>).</p>
+<div class="figure" id="fig-plot2f">
+<img alt="figs/plot2f.png" src="figs/plot2f.png" style="width: 400px;" />
+<p class="caption"><em>Curves with a grid</em>  (fig:plot2f)</p>
+</div>
+<p>The default location of the legends is dependent on the backend
+(some have a fixed location, like Gnuplot, and some try to find
+the most optimal location, like Matplotlib). One can control
+the location by the <tt class="docutils literal">loc</tt> keyword to the <tt class="docutils literal">legend</tt> function, e.g.:</p>
+<pre class="literal-block">
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', loc='upper left')
+</pre>
+<p>The most popular values are upper right, upper left, lower left,
+and lower right, depending on the shape of the curves and extend
+of the axes. The keyword argument <tt class="docutils literal">fancybox</tt> draws a box around
+the legends if <tt class="docutils literal">True</tt>, otherwise no box is drawn. The corresponding
+keywords for the <tt class="docutils literal">plot</tt> function are <tt class="docutils literal">legend_loc</tt> and <tt class="docutils literal">legend_fancybox</tt>:</p>
+<pre class="literal-block">
+plot(t, y1, t, y2, xlabel='t', ylabel='y',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     legend_loc=`upper left`, legend_fancybox=True,
+     axis=[0, 4, -0.1, 0.8],
+     title='Plotting two curves in the same plot',
+     savefig='tmp2.eps')
+</pre>
+<p>The <tt class="docutils literal">loc</tt> and <tt class="docutils literal">fancybox</tt> specifications work (at present)
+with Gnuplot and Matplotlib only.</p>
+<div class="figure">
+<img alt="figs/plot2l.png" src="figs/plot2l.png" style="width: 400px;" />
+<p class="caption">A figure with legends placed to the upper left with a box frame</p>
+</div>
+<p>The <tt class="docutils literal">legend</tt> function also accepts a list of legends instead of
+the legends as separate positional arguments. This allows an overlapping
+syntax between Matplotlib and Easyviz so that the same code can apply
+either of the packages (however, Matplotlib's keywords to
+<tt class="docutils literal">plot</tt>, like <tt class="docutils literal">label</tt> and <tt class="docutils literal">linewidth</tt>, are not recognized so not all
+syntax is interchangable).</p>
+</div>
+<div class="section" id="making-multiple-figures">
+<h2><a class="toc-backref" href="#id12">Making Multiple Figures</a></h2>
+<p>The <tt class="docutils literal">hold</tt> command either adds a new curve or replaces old curve(s) by
+new ones. Often one wants to make multiple figures in a program,
+realized as multiple windows on the screen. The <tt class="docutils literal">figure()</tt> command
+creates a new figure:</p>
+<pre class="literal-block">
+x = linspace(-2, 2, 81)
+y1 = sin(pi*x)*exp(-0.5*x**2)
+plot(x, y1)
+
+figure()  # separate plot window
+y2 = sin(pi*x/2)*exp(-0.5*x**2)
+plot(x, y2)
+
+figure()  # yet another plot window
+y3 = sin(pi*x/4)*exp(-0.5*x**2)
+plot(x, y3)
+</pre>
+<p>More information in the <tt class="docutils literal">figure</tt> command is found later on under the
+heading <em>Working with Axis and Figure Objects</em>.</p>
+<p>When plotting multiple curves in the same plot, the individual curves
+get distinct default line styles, depending on the program that is
+used to produce the curve (and the settings for this program). It
+might well happen that you get a green and a red curve (which is bad
+for a significant portion of the male population).  Therefore,
+we often want to control the line style in detail when plotting
+multiple curves.</p>
+<p>Say we want the first curve (<tt class="docutils literal">t</tt> and <tt class="docutils literal">y1</tt>) to be drawn as a red solid
+line (<tt class="docutils literal">r-</tt>) and the second curve (<tt class="docutils literal">t</tt> and <tt class="docutils literal">y2</tt>) as blue circles (<tt class="docutils literal">bo</tt>) at the
+discrete data points:</p>
+<pre class="literal-block">
+plot(t, y1, 'r-')
+hold('on')
+plot(t, y2, 'bo')
+
+# or
+plot(t, y1, 'r-', t, y2, 'bo')
+</pre>
+<p>The resulting effect can be seen in Figure <a class="reference internal" href="#fig-plot2c">fig:plot2c</a>.</p>
+<div class="figure" id="fig-plot2c">
+<img alt="figs/plot2c.png" src="figs/plot2c.png" style="width: 400px;" />
+<p class="caption"><em>Two curves in the same plot, with controlled line styles</em>  (fig:plot2c)</p>
+</div>
+<p>Assume now that we want to plot the blue circles at every 4 points only.
+We can grab every 4 points out of the <tt class="docutils literal">t</tt> array by using an appropriate
+slice: <tt class="docutils literal">t2 = <span class="pre">t[::4]</span></tt>. Note that the first colon means the range from the
+first to the last data point, while the second colon separates this
+range from the stride, i.e., how many points we should &quot;jump over&quot;
+when we pick out a set of values of the array:</p>
+<pre class="literal-block">
+from scitools.std import *
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+t2 = t[::4]
+y2 = f2(t2)
+
+plot(t, y1, 'r-6', t2, y2, 'bo3',
+     xlabel='t', ylabel='y',
+     axis=[0, 4, -0.1, 0.6],
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     title='Plotting two curves in the same plot',
+     hardcopy='tmp2.eps')
+</pre>
+<p>In this plot we also adjust the size of the line and the circles by
+adding an integer: <tt class="docutils literal"><span class="pre">r-6</span></tt> means a red line with thickness 6 and <tt class="docutils literal">bo5</tt>
+means red circles with size 5. The effect of the given line thickness
+and symbol size depends on the underlying plotting program. For
+the Gnuplot program one can view the effect in Figure <a class="reference internal" href="#fig-plot2g">fig:plot2g</a>.</p>
+<div class="figure" id="fig-plot2g">
+<img alt="figs/plot2g.png" src="figs/plot2g.png" style="width: 400px;" />
+<p class="caption"><em>Circles at every 4 points and extended line thickness (6) and circle size (3)</em>  (fig:plot2g)</p>
+</div>
+<p><strong>Another Example.</strong>
+Let us extend the previous example with a third
+curve where the data points are slightly randomly distributed around
+the f_2(t) curve:</p>
+<pre class="literal-block">
+from scitools.std import *
+
+def f1(t):
+    return t**2*exp(-t**2)
+
+def f2(t):
+    return t**2*f1(t)
+
+t = linspace(0, 3, 51)
+y1 = f1(t)
+y2 = f2(t)
+
+# Pick out each 4 points and add random noise
+t3 = t[::4]      # slice, stride 4
+random.seed(11)  # fix random sequence
+noise = random.normal(loc=0, scale=0.02, size=len(t3))
+y3 = y2[::4] + noise
+
+plot(t, y1, 'r-')
+hold('on')
+plot(t, y2, 'ks-')   # black solid line with squares at data points
+plot(t3, y3, 'bo')
+
+legend('t^2*exp(-t^2)', 't^4*exp(-t^2)', 'data')
+title('Simple Plot Demo')
+axis([0, 3, -0.05, 0.6])
+xlabel('t')
+ylabel('y')
+show()
+savefig('tmp3.eps')   # or hardcopy
+savefig('tmp3.png')   # or hardcopy
+</pre>
+<p>The plot is shown in Figure <a class="reference internal" href="#fig-plot2p">fig:plot2p</a>.</p>
+<div class="figure" id="fig-plot2p">
+<img alt="figs/plot2p.png" src="figs/plot2p.png" style="width: 400px;" />
+<p class="caption"><em>A plot with three curves</em>  (fig:plot2p)</p>
+</div>
+<p><strong>Minimalistic Typing.</strong>
+When exploring mathematics in the interactive Python shell, most of us
+are interested in the quickest possible commands.
+Here is an example of minimalistic syntax for
+comparing the two sample functions we have used in the previous examples:</p>
+<pre class="literal-block">
+t = linspace(0, 3, 51)
+plot(t, t**2*exp(-t**2), t, t**4*exp(-t**2))
+</pre>
+<p><strong>Text.</strong>
+A text can be placed at a point (x,y) using the call:</p>
+<pre class="literal-block">
+text(x, y, 'Some text')
+</pre>
+<p><strong>More Examples.</strong>
+The examples in this tutorial, as well as
+additional examples, can be found in the <tt class="docutils literal">examples</tt> directory in the
+root directory of the SciTools source code tree.</p>
+</div>
+<div class="section" id="math-syntax-in-legends-and-titles">
+<h2><a class="toc-backref" href="#id13">Math Syntax in Legends and Titles</a></h2>
+<p>Some backends understand some mathematical syntax. Easyviz accepts
+LaTeX-style syntax and translates it to something appropriate for the
+background in question. As a rule of thumb, write plain LaTeX syntax
+if you need mathematical symbols and expressions in legends and
+titles. Matplotlib will show the result in an excellent way, Gnuplot
+PostScript output will handle super- and subscripts as well as greek
+letters. All other backends will strip off backslashes, dollar signs,
+curly braces, qand other annoying LaTeX syntax. Normally, power
+expressions with double multiplication symbols are replaced by a hat.</p>
+</div>
+<div class="section" id="interactive-plotting-sessions">
+<h2><a class="toc-backref" href="#id14">Interactive Plotting Sessions</a></h2>
+<p>All the Easyviz commands can of course be issued in an interactive
+Python session. The only thing to comment is that the <tt class="docutils literal">plot</tt> command
+returns a result:</p>
+<pre class="literal-block">
+&gt;&gt;&gt; t = linspace(0, 3, 51)
+&gt;&gt;&gt; plot(t, t**2*exp(-t**2))
+[&lt;scitools.easyviz.common.Line object at 0xb5727f6c&gt;]
+</pre>
+<p>Most users will just ignore this output line.</p>
+<p>All Easyviz commands that produce a plot return an object reflecting the
+particular type of plot. The <tt class="docutils literal">plot</tt> command returns a list of
+<tt class="docutils literal">Line</tt> objects, one for each curve in the plot. These <tt class="docutils literal">Line</tt>
+objects can be invoked to see, for instance, the value of different
+parameters in the plot:</p>
+<pre class="literal-block">
+&gt;&gt;&gt; line, = plot(x, y, 'b')
+&gt;&gt;&gt; getp(line)
+{'description': '',
+ 'dims': (4, 1, 1),
+ 'legend': '',
+ 'linecolor': 'b',
+ 'pointsize': 1.0,
+ ...
+</pre>
+<p>Such output is mostly of interest to advanced users.</p>
+</div>
+<div class="section" id="curves-in-3d-space">
+<span id="easyviz-plot3"></span><h2><a class="toc-backref" href="#id15">Curves in 3D Space</a></h2>
+<p>Easyviz also supports curves in 3D space through the <tt class="docutils literal">plot3</tt> function.
+It works as <tt class="docutils literal">plot</tt>, except that it accepts three coordinates:
+<tt class="docutils literal">plot3(x, y, z, <span class="pre">'b-')</span></tt>. Here is an example of how to
+plot the parametric curve:</p>
+<pre class="literal-block">
+\begin{align*}
+x(t) &amp;= (2t+2)\sin(10t),\\
+y(t) &amp;= (2t+2)\cos(10t),\\
+z(t) &amp;= t,
+\end{align*}
+</pre>
+<p>for tin [-5,5]. The corresponding code reads:</p>
+<pre class="literal-block">
+from scitools.std import *
+t = linspace(-5, 5, 501)
+x = (2+t**2)*sin(10*t)
+y = (2+t**2)*cos(10*t)
+z = t
+plot3(x, y, z, 'r-')
+grid('on')
+xlabel('x(t)')
+ylabel('y(t)')
+zlabel('z(t)')
+title('plot3 example')
+</pre>
+<p>Figure <a class="reference internal" href="#fig-plot3">fig:plot3</a> shows the resulting plot.
+The file <tt class="docutils literal">examples/plot3_demo.py</tt> contains this and more examples.</p>
+<div class="figure" id="fig-plot3">
+<img alt="figs/plot3_demo.png" src="figs/plot3_demo.png" style="width: 400px;" />
+<p class="caption"><em>Example of curve in 3D space</em>  (fig:plot3)</p>
+</div>
+</div>
+<div class="section" id="making-animations">
+<span id="easyviz-movie"></span><h2><a class="toc-backref" href="#id16">Making Animations</a></h2>
+<p>A sequence of plots can be combined into an animation and stored in a
+movie file. First we need to generate a series of hardcopies, i.e.,
+plots stored in files.  Thereafter we must use a tool to combine the
+individual plot files into a movie file.</p>
+<p><strong>Example.</strong>
+The function
+f(x; m,s) = 1/(sqrt(2*pi)*s)*exp(-0.5*((x-m)/s)**2)
+is known as the Gaussian function or the probability density function
+of the normal (or Gaussian) distribution.  This bell-shaped function is
+&quot;wide&quot; for large s and &quot;peak-formed&quot; for small s, see Figure
+<a class="reference internal" href="#fig-plot2q">fig:plot2q</a>. The function is symmetric around x=m (m=0 in the
+figure).  Our goal is to make an animation where we see how this
+function evolves as s is decreased. In Python we implement the
+formula above as a function <tt class="docutils literal">f(x, m, s)</tt>.</p>
+<div class="figure" id="fig-plot2q">
+<img alt="figs/plot2q.png" src="figs/plot2q.png" style="width: 400px;" />
+<p class="caption"><em>Different shapes of a Gaussian function</em>  (fig:plot2q)</p>
+</div>
+<p>The animation is created by varying s in a loop and for each s
+issue a <tt class="docutils literal">plot</tt> command. A moving curve is then visible on the screen.
+One can also make a movie file that can be played as any other
+computer movie using a standard movie player. To this end, each plot
+is saved to a file, and all the files are combined together using some
+suitable tool, which is reached through the <tt class="docutils literal">movie</tt> function in
+Easyviz. All necessary steps will be apparent in the complete program
+below, but before diving into the code we need to comment upon a
+couple of issues with setting up the <tt class="docutils literal">plot</tt> command for animations.</p>
+<p>The underlying plotting program will normally adjust the y axis to the
+maximum and minimum values of the curve if we do not specify the axis
+ranges explicitly. For an animation such automatic axis adjustment is
+misleading - the axis ranges must be fixed to avoid a jumping
+axis. The relevant values for the axis range is the minimum and
+maximum value of f. The minimum value is zero, while the maximum
+value appears for x=m and increases with decreasing s. The range
+of the y axis must therefore be [0,f(m; m, min s)].</p>
+<p>The function f is defined for all -infty &lt; x &lt; infty, but the
+function value is very small already 3s away from x=m. We may therefore
+limit the x coordinates to [m-3s,m+3s].</p>
+<p>Now we are ready to take a look at the complete code
+for animating how the Gaussian function evolves as the s parameter
+is decreased from 2 to 0.2:</p>
+<pre class="literal-block">
+from scitools.std import *
+import time
+
+def f(x, m, s):
+    return (1.0/(sqrt(2*pi)*s))*exp(-0.5*((x-m)/s)**2)
+
+m = 0
+s_start = 2
+s_stop = 0.2
+s_values = linspace(s_start, s_stop, 30)
+x = linspace(m -3*s_start, m + 3*s_start, 1000)
+# f is max for x=m; smaller s gives larger max value
+max_f = f(m, m, s_stop)
+
+# Show the movie on the screen
+# and make hardcopies of frames simultaneously
+counter = 0
+for s in s_values:
+    y = f(x, m, s)
+    plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
+         xlabel='x', ylabel='f', legend='s=%4.2f' % s,
+         hardcopy='tmp%04d.png' % counter)
+    counter += 1
+    #time.sleep(0.2)  # can insert a pause to control movie speed
+
+# Make movie file the simplest possible way
+movie('tmp*.png')
+</pre>
+<p>Note that the s values are decreasing (<tt class="docutils literal">linspace</tt> handles this
+automatically if the start value is greater than the stop value).
+Also note that we, simply because we think it is visually more
+attractive, let the y axis go from -0.1 although the f function is
+always greater than zero.</p>
+<p><strong>Remarks on Filenames.</strong>
+For each frame (plot) in the movie we store the plot in a file.  The
+different files need different names and an easy way of referring to
+the set of files in right order. We therefore suggest to use filenames
+of the form <tt class="docutils literal">tmp0001.png</tt>, <tt class="docutils literal">tmp0002.png</tt>, <tt class="docutils literal">tmp0003.png</tt>, etc.  The
+printf format <tt class="docutils literal">04d</tt> pads the integers with zeros such that <tt class="docutils literal">1</tt> becomes
+<tt class="docutils literal">0001</tt>, <tt class="docutils literal">13</tt> becomes <tt class="docutils literal">0013</tt> and so on.  The expression <tt class="docutils literal"><span class="pre">tmp*.png</span></tt> will
+now expand (by an alphabetic sort) to a list of all files in proper
+order. Without the padding with zeros, i.e., names of the form
+<tt class="docutils literal">tmp1.png</tt>, <tt class="docutils literal">tmp2.png</tt>, ..., <tt class="docutils literal">tmp12.png</tt>, etc., the alphabetic order
+will give a wrong sequence of frames in the movie. For instance,
+<tt class="docutils literal">tmp12.png</tt> will appear before <tt class="docutils literal">tmp2.png</tt>.</p>
+<p>Note that the names of plot files specified when making hardopies must
+be consistent with the specification of names in the call to <tt class="docutils literal">movie</tt>.
+Typically, one applies a Unix wildcard notation in the call to
+<tt class="docutils literal">movie</tt>, say <tt class="docutils literal"><span class="pre">plotfile*.png</span></tt>, where the asterisk will match any set of
+characters. When specifying hardcopies, we must then use a filename
+that is consistent with <tt class="docutils literal"><span class="pre">plotfile*.png</span></tt>, that is, the filename must
+start with <tt class="docutils literal">plotfile</tt> and end with <tt class="docutils literal">.png</tt>, but in between
+these two parts we are free to construct (e.g.) a frame number padded
+with zeros.</p>
+<p>We recommend to always remove previously generated plot files before
+a new set of files is made. Otherwise, the movie may get old and new
+files mixed up. The following Python code removes all files
+of the form <tt class="docutils literal"><span class="pre">tmp*.png</span></tt>:</p>
+<pre class="literal-block">
+import glob, os
+for filename in glob.glob('tmp*.png'):
+    os.remove(filename)
+</pre>
+<p>These code lines should be inserted at the beginning of the code example
+above. Alternatively, one may store all plotfiles in a subfolder
+and later delete the subfolder. Here is a suitable code segment:</p>
+<pre class="literal-block">
+import shutil, os
+subdir = 'temp'            # name of subfolder for plot files
+if os.path.isdir(subdir):  # does the subfolder already exist?
+    shutil.rmtree(subdir)  # delete the whole folder
+os.mkdir(subdir)           # make new subfolder
+os.chdir(subdir)           # move to subfolder
+# ...perform all the plotting...
+# ...make movie...
+os.chdir(os.pardir)        # optional: move up to parent folder
+</pre>
+<p><strong>Movie Formats.</strong>
+Having a set of (e.g.) <tt class="docutils literal"><span class="pre">tmp*.png</span></tt> files, one can simply generate a movie by
+a <tt class="docutils literal"><span class="pre">movie('tmp*.png')</span></tt> call. The format of the movie is determined by
+which video encoders that are installed on the computer. The <tt class="docutils literal">movie</tt>
+function runs through a list of encoders (<tt class="docutils literal">convert</tt>, <tt class="docutils literal">mencoder</tt>,
+<tt class="docutils literal">ffmpeg mpeg_encode</tt>, <tt class="docutils literal">ppmtompeg</tt>, <tt class="docutils literal">mpeg2enc</tt>, <tt class="docutils literal">html</tt>) and choses the
+first one which is installed. The fall back encoder <tt class="docutils literal">html</tt> actually
+does not create a video file, but makes insetad an HTML file that can
+play the series of hardcopies made (<tt class="docutils literal"><span class="pre">tmp*.png</span></tt>, for instance).
+When no filename is given to the <tt class="docutils literal">movie</tt> function, the output file
+with the movie has filestem <tt class="docutils literal">movie</tt> and extension depending on the
+video format and the encoder used. For example, if <tt class="docutils literal">convert</tt> was used
+to create an animated GIF file, the default output file is <tt class="docutils literal">movie.gif</tt>.
+Similarly, <tt class="docutils literal">movie.avi</tt> is in AVI format, <tt class="docutils literal">movie.mpeg</tt> is in MPEG format,
+and so forth.</p>
+<p>You can get complete control of the movie format and the name of the
+movie file by supplying the <tt class="docutils literal">encoder</tt> and <tt class="docutils literal">output_file</tt> arguments to
+the <tt class="docutils literal">movie</tt> function. This is the recommended use. Here is an
+example on generating an animated GIF file <tt class="docutils literal">tmpmovie.gif</tt> with
+the <tt class="docutils literal">convert</tt> program from the ImageMagick software suite:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='convert', fps=2,
+      output_file='tmpmovie.gif')
+</pre>
+<p>This call requires ImageMagick to be installed on the machine. The
+argument <tt class="docutils literal">fps</tt> stands for frames per second so here the speed of the
+movie is slow in that there is a delay of half a second between each
+frame (image file).  To view the animated GIF file, one can use the
+<tt class="docutils literal">animate</tt> program (also from ImageMagick) and give the movie file as
+command-line argument. One can alternatively put the GIF file in a web
+page in an IMG tag such that a browser automatically displays the
+movie.</p>
+<p>Making an HTML file that can play the movie in a web browser
+is carried out by the call:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='html', fps=10,
+      output_file='tmpmovie.html')
+</pre>
+<p>Just load <tt class="docutils literal">tmpmovie.html</tt> into a browser (e.g., run <tt class="docutils literal">firefox tmpmovie.html</tt>
+from the command line).</p>
+<p>An AVI movie can be generated by the call:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='ffmpeg', fps=4,
+      output_file='tmpmovie.avi',
+</pre>
+<p>Alternatively, we may generate an MPEG movie using
+the <tt class="docutils literal">ppmtompeg</tt> encoder from the Netpbm suite of
+image manipulation tools:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='ppmtompeg', fps=24,
+      output_file='tmpmovie.mpeg',
+</pre>
+<p>The <tt class="docutils literal">ppmtompeg</tt> supports only a few (high) frame rates.</p>
+<p>The next sample call to <tt class="docutils literal">movie</tt> uses the Mencoder tool and specifies
+some additional arguments (video codec, video bitrate, and the
+quantization scale):</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='mencoder', fps=24,
+      output_file='tmpmovie.mpeg',
+      vcodec='mpeg2video', vbitrate=2400, qscale=4)
+</pre>
+<p>Here is yet another example:</p>
+<pre class="literal-block">
+movie('tmp_*.png', encoder='ffmpeg',
+      output_file='tmpmovie1c.mpeg', vodec='mpeg2video')
+</pre>
+<p>The file <tt class="docutils literal">examples/movie_demo1.py</tt> that comes with the SciTools source
+code generates frames in a movie and creates movie files in many formats.</p>
+<p>Playing movie files can be done by a lot of programs. Windows Media
+Player is a default choice on Windows machines. On Unix, a variety
+of tools can be used. For animated GIF files the <tt class="docutils literal">animate</tt> program
+from the ImageMagick suite is suitable, or one can simply
+show the file in a web page with the HTML command
+<tt class="docutils literal">&lt;img <span class="pre">src=&quot;tmpmovie.gif&quot;&gt;</span></tt>. AVI and MPEG files can be played by,
+for example, the
+<tt class="docutils literal">myplayer</tt>, <tt class="docutils literal">vlc</tt>, or <tt class="docutils literal">totem</tt> programs.</p>
+<p><strong>Making Movies in Batch.</strong>
+Sometimes it is desired to carry out
+large numbers of computer experiments and create movies in each
+individual experiments. Then one probably does not want to have
+the screen full of movie windows. To turn off showing the movie
+on the screen while creating the individual frames, just
+give the <tt class="docutils literal">show=False</tt> keyword argument to the <tt class="docutils literal">plot</tt> function.
+All hardcopies and the movies are then made in batch, which also
+might speed up the program since rendering graphics on the screen
+is avoided.</p>
+</div>
+<div class="section" id="controlling-the-aspect-ratio-of-axes">
+<h2><a class="toc-backref" href="#id17">Controlling the Aspect Ratio of Axes</a></h2>
+<p>By default, Gnuplot, Matplotlib and other plotting packages
+automatically calculate suitable physical sizes of the axis
+in the plotting window. However, sometimes one wants to control
+this, i.e., impose a certain ratio of the physical extent of the
+axis.</p>
+<p>In the <tt class="docutils literal">gnuplot</tt> and <tt class="docutils literal">matplotlib</tt>
+backends, we set <tt class="docutils literal">daspectmode=manual</tt> and
+<tt class="docutils literal"><span class="pre">daspect=[r,1,1]</span></tt>, where <tt class="docutils literal">r</tt> is the ratio of the y-axis length to
+the x-axis length
+(<tt class="docutils literal">r</tt> equal to <tt class="docutils literal">1</tt> gives a square plot area). For example:</p>
+<pre class="literal-block">
+plot(x, y, 'r-',
+     axis=[0, 1, 0, 1],
+     daspect=[1,1,1],
+     daspectmode='manual')
+</pre>
+<p>Note that one should always use <tt class="docutils literal">axis</tt> and set axes limits explicitly
+when prescribing the aspect ratio.</p>
+<p>Suppose the x-axis goes from 0 to 20 and the y-axis from -2 to 2.
+Often we want the units on the axes to have the same length, i.e.,
+the x-axis should be five times as long as the y-axis in this example.
+This is accomplished by <tt class="docutils literal"><span class="pre">daspect=[0.2,1,1])</span></tt>.
+Alternatively, one can apply <tt class="docutils literal"><span class="pre">daspectmode='equal'</span></tt> (which means
+equal physical units on the axis).</p>
+<p>Here is an example which demonstrates various aspects of setting
+the aspect ratio:</p>
+<pre class="literal-block">
+from scitools.std import *
+n = 20  # no of periods of a sine function
+r = 80  # resolution of each period
+x = linspace(0, n, r*n + 1)
+amplitude = 1 + sin(2*pi*0.05*x)
+y = amplitude*sin(2*pi*x)
+
+# x-axis goes from 0 to 20, y-axis from -2 to 2.
+
+subplot(2, 1, 1)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspectmode='equal',
+     title='daspectmode=equal',
+     )
+subplot(2, 1, 2)
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[0.5,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[0.5,1,1]',
+     )
+
+figure()
+plot(x, y,
+     axis=[x[0], x[-1], y.min(), y.max()],
+     daspect=[1,1,1],
+     daspectmode='manual',
+     title='daspectmode=manual, daspect=[1,1,1]',
+     )
+
+show()
+raw_input()
+</pre>
+</div>
+<div class="section" id="moving-plot-window">
+<h2><a class="toc-backref" href="#id18">Moving Plot Window</a></h2>
+<p>When calculating long time series, it may be desirable to have a
+moving plot window that follows the time series. The module
+<tt class="docutils literal">MovingPlotWindow</tt> was made for this purpose. There are three
+different modes of this tool, where each mode moves the window
+in a certain way. With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">continuous movement</tt>,
+the plot window moves with the curves continuously.
+With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">continuous drawing</tt>, the curves are drawn
+from left to right in the plot window, as an animation (one step
+at a time). When the curves reach the right border of the plot window,
+the window (or more correctly, the x-axis) is moved in a jump
+to the right so that the curves are coming in from the left border
+again. With <tt class="docutils literal">mode</tt> set as <tt class="docutils literal">jumps</tt> the curves are plotted directly
+in the window and shown for a specified period of time (the <tt class="docutils literal">pause</tt>
+parameter), then the axis jump one window to the right, and the
+curves are displayed in this (time) window. The <tt class="docutils literal">jumps</tt> mode is
+well suited for quickly browsing a time series. The <tt class="docutils literal">continuous
+drawing</tt> mode is aimed at studing the &quot;tip&quot; of the time series
+as they are computed, and <tt class="docutils literal">continuous movement</tt> is a kind of
+default choice for most purposes. Running the module file gives
+a demo of the three modes.</p>
+<p>Below is an example of how to compute a time series by finite
+differences and comparing this series with the exact solutions.
+For large times, there is a fequency discrepancy that one wants
+to investigate:</p>
+<pre class="literal-block">
+def _demo(I, k, dt, T, mode='continuous movement'):
+    &quot;&quot;&quot;
+    Solve u' = -k**2*u, u(0)=I, u'(0)=0 by a finite difference
+    method with time steps dt, from t=0 to t=T.
+    &quot;&quot;&quot;
+    if dt &gt; 2./k:
+        print 'Unstable scheme'
+    N = int(round(T/float(dt)))
+    u = zeros(N+1)
+    t = linspace(0, T, N+1)
+
+    umin = -1.2*I
+    umax = -umin
+    period = 2*pi/k  # period of the oscillations
+    plot_manager = MovingPlotWindow(8*period, dt, yaxis=[umin, umax],
+                                    mode=mode)
+    u[0] = I
+    u[1] = u[0] - 0.5*dt**2*k**2*u[0]
+    for n in range(1,N):
+        u[n+1] = 2*u[n] - u[n-1] - dt**2*k**2*u[n]
+
+        if plot_manager.plot(n):
+            s = plot_manager.first_index_in_plot
+            plot(t[s:n+2], u[s:n+2], 'r-',
+                 t[s:n+2], I*cos(k*t)[s:n+2], 'b-',
+                 axis=plot_manager.axis(),
+                 title=&quot;Solution of u'' + k^2 u = 0 for t=%6.3f (mode: %s)&quot; \
+                 % (t[n+1], mode))
+        plot_manager.update(n)
+</pre>
+<p>An appropriate import statement is:</p>
+<pre class="literal-block">
+from scitools.MovingPlotWindow import MovingPlotWindow
+</pre>
+</div>
+<div class="section" id="advanced-easyviz-topics">
+<h2><a class="toc-backref" href="#id19">Advanced Easyviz Topics</a></h2>
+<p>The information in the previous sections aims at being sufficient for
+the daily work with plotting curves. Sometimes, however, one wants to
+fine-control the plot or how Easyviz behaves. First, we explain how to
+set the backend. Second, we tell how to speed up the
+<tt class="docutils literal">from scitools.std import *</tt> statement.  Third, we show how to operate with
+the plotting program directly and using plotting program-specific
+advanced features. Fourth, we explain how the user can grab <tt class="docutils literal">Figure</tt>
+and <tt class="docutils literal">Axis</tt> objects that Easyviz produces &quot;behind the curtain&quot;.</p>
+<div class="section" id="controlling-the-backend">
+<h3>Controlling the Backend</h3>
+<p>The Easyviz backend can either be set in a configuration file (see
+&quot;Setting Parameters in the Configuration File&quot; below), by
+importing a special backend in the program, or by adding a
+command-line option:</p>
+<pre class="literal-block">
+--SCITOOLS_easyviz_backend name
+</pre>
+<p>where <tt class="docutils literal">name</tt> is the name of the backend: <tt class="docutils literal">gnuplot</tt>, <tt class="docutils literal">vtk</tt>,
+<tt class="docutils literal">matplotlib</tt>, etc. Which backend you choose depends on what you have
+available on your computer system and what kind of plotting
+functionality you want.</p>
+<p>An alternative method is to import a specific backend in a program. Instead
+of the <tt class="docutils literal">from scitools.std import *</tt> statement one writes:</p>
+<pre class="literal-block">
+from numpy import *
+from scitools.easyviz.gnuplot_ import *  # work with Gnuplot
+# or
+from scitools.easyviz.vtk_ import *      # work with VTK
+</pre>
+<p>Note the trailing underscore in the module names for the various backends.</p>
+<p>The following program prints a list of the names of the
+available backends on your computer system:</p>
+<pre class="literal-block">
+from scitools.std import *
+backends = available_backends()
+print 'Available backends:', backends
+</pre>
+<p>There will be quite some output explaining the missing backends and
+what must be installed to use these backends. Be prepared for exceptions
+and error messages too.</p>
+</div>
+<div class="section" id="importing-just-easyviz">
+<span id="easyviz-imports"></span><h3>Importing Just Easyviz</h3>
+<p>The <tt class="docutils literal">from scitools.std import *</tt> statement imports many modules and packages:</p>
+<pre class="literal-block">
+from numpy import *
+from scitools.numpyutils import *  # some convenience functions
+from numpy.lib.scimath import *
+from scipy import *                # if scipy is installed
+import sys, operator, math
+from scitools.StringFunction import StringFunction
+from glob import glob
+</pre>
+<p>The <tt class="docutils literal">scipy</tt> import can take some time and lead to slow start-up of plot
+scripts. A more minimalistic import for curve plotting is:</p>
+<pre class="literal-block">
+from scitools.easyviz import *
+from numpy import *
+</pre>
+<p>Alternatively, one can edit the SciTools configuration file as
+explained below in the section &quot;Setting Parameters in the
+Configuration File&quot;.</p>
+<p>Many discourage the use of &quot;star import&quot; as shown above. For example,
+the standard import of Numerical Python in all of its documentation is:</p>
+<pre class="literal-block">
+import numpy as np
+</pre>
+<p>A similar import for SciTools and Easyviz is:</p>
+<pre class="literal-block">
+import scitools.std as st
+import numpy as np
+</pre>
+<p>Although <tt class="docutils literal">np</tt> functions are important into the namespace of <tt class="docutils literal">st</tt> in
+this case, we recommend to distinguish the packages when using a prefix.
+A typical plotting example will then read:</p>
+<pre class="literal-block">
+x = np.linspace(0, 3, 51)
+y = x**2*np.exp(-x)
+st.plot(x, y, 'r-', title=&quot;Plot&quot;)
+</pre>
+<p>The corresponding syntax for the
+minimalistic import of <tt class="docutils literal">scitools.easyviz</tt> and <tt class="docutils literal">numpy</tt> reads:</p>
+<pre class="literal-block">
+import scitools.easyviz as ev
+import numpy as np
+</pre>
+</div>
+<div class="section" id="embedding-plots-in-html-without-using-files">
+<h3>Embedding Plots in HTML without Using Files</h3>
+<p>Web applications may prefer to get the plot as a string from the
+plotting software and embed this string directly in HTML. This is
+easy: if the filename for the <tt class="docutils literal">savefig</tt> command contains just the
+extension, say <tt class="docutils literal">.png</tt>, and the backend supports storing the plot
+in a string in PNG format, the string is returned. Otherwise, just
+<tt class="docutils literal">None</tt> is returned. Any any case, a filename of <tt class="docutils literal">.png</tt> implies
+that the plot is also store in the file <tt class="docutils literal">tmp.png</tt>. The only
+backend that can return the plot as a string is <tt class="docutils literal">matplotlib</tt>.</p>
+<p>Here is a recipe on how to create a plot as a string in PNG and SVG
+format and embed the strings directly in HTML:</p>
+<pre class="literal-block">
+from scitools.std import plot, savefig, linspace
+
+x = linspace(0, 1, 10)
+plot(x, y)
+figdata_svg = savefig('.svg')  # create tmp.svg anyway
+figdata_png = savefig('.png')  # create tmp.ong anyway
+if figdata_svg is not None and figdata_png is not None:
+    # Turn PNG data to base64 format
+    import base64
+    figdata_png = base64.b64encode(figdata_png)
+    f = open('tmp.html', 'w')
+    f.write(&quot;&quot;&quot;
+Embedded SVG XML code:&lt;br&gt;
+%(figdata_svg)s
+&lt;br&gt;
+Embedded PNG data:&lt;br&gt;
+&lt;img src=&quot;data:image/png;base64,%(figdata_png)s&quot; width=500&gt;&lt;br&gt;
+Using img tag for SVG file:&lt;br&gt;
+&lt;img alt=&quot;Embedded SVG image&quot; src=&quot;tmp.svg&quot; width=500&gt;&lt;br&gt;
+Using img tag for PNG file:&lt;br&gt;
+&lt;img alt=&quot;Embedded PNG image&quot; src=&quot;tmp.png&quot; width=500&gt;&lt;br&gt;
+Using object embedding:&lt;br&gt;
+&lt;object data=&quot;tmp.svg&quot; type=&quot;image/svg+xml&quot;&gt;&lt;/object&gt;
+&quot;&quot;&quot; % vars())
+    f.close()
+</pre>
+<p>The <tt class="docutils literal">examples/plot2r.py</tt> file contains a demo of this kind where the
+HTML page can be viewed in a browser.</p>
+</div>
+<div class="section" id="setting-parameters-in-the-configuration-file">
+<h3>Setting Parameters in the Configuration File</h3>
+<p>Easyviz is a subpackage of SciTools, and the the SciTools
+configuration file, called <tt class="docutils literal">scitools.cfg</tt> has several sections
+(<tt class="docutils literal">[easyviz]</tt>, <tt class="docutils literal">[gnuplot]</tt>, and <tt class="docutils literal">[matplotlib]</tt>) where parameters
+controlling the behavior of plotting can be set. For example, the
+backend for Easyviz can be controlled with the <tt class="docutils literal">backend</tt> parameter:</p>
+<pre class="literal-block">
+[easyviz]
+backend = vtk
+</pre>
+<p>Similarly, Matplotlib's use of LaTeX can be controlled by a boolean
+parameter:</p>
+<pre class="literal-block">
+[matplotlib]
+text.usetex = &lt;bool&gt; false
+</pre>
+<p>The text <tt class="docutils literal">&lt;bool&gt;</tt> indicates that this is a parameter with a boolean</p>
+<p>A configuration file with name <tt class="docutils literal">.scitools.cfg</tt> file can be placed in
+the current working folder, thereby affecting plots made in this
+folder, or it can be located in the user's home folder, which will
+affect all plotting sessions for the user in question. There is also a
+common SciTools config file <tt class="docutils literal">scitools.cfg</tt> for the whole site, located
+in the directory where the <tt class="docutils literal">scitools</tt> package is installed. It is
+recommended to copy the <tt class="docutils literal">scitools.cfg</tt>, either from installation or
+the SciTools source folder <tt class="docutils literal">lib/scitools</tt>, to <tt class="docutils literal">.scitools.cfg</tt>
+in your home folder. Then you can easily control the Easyviz backend
+and other paramteres by editing your local <tt class="docutils literal">.scitools.cfg</tt> file.</p>
+<p>Parameters set in the configuration file can also be set directly
+on the command line when running a program. The name of the
+command-line option is:</p>
+<pre class="literal-block">
+--SCITOOLS_sectionname_parametername
+</pre>
+<p>where <tt class="docutils literal">sectionname</tt> is the name of the section in the file
+and <tt class="docutils literal">parametername</tt> is the name of the
+parameter. For example, setting the <tt class="docutils literal">backend</tt> parameter in the
+<tt class="docutils literal">[easyviz]</tt> section by:</p>
+<pre class="literal-block">
+--SCITOOLS_easyviz_backend gnuplot
+</pre>
+<p>Here is an example where we use Matplotlib as backend, turn on
+the use of LaTeX in Matplotlib, and avoid the potentially slow import
+of SciPy:</p>
+<pre class="literal-block">
+python myprogram.py --SCITOOLS_easyviz_backend matplotlib \
+    --SCITOOLS_matplotlib_text.usetex true --SCITOOLS_scipy_load no
+</pre>
+</div>
+<div class="section" id="working-with-the-plotting-program-directly">
+<h3>Working with the Plotting Program Directly</h3>
+<p>Easyviz supports just the most common plotting commands, typically the
+commands you use &quot;95 percent&quot; of the time when exploring curves.
+Various plotting packages have lots of additional commands for
+diverse advanced features.  When Easyviz does not have a command
+that supports a particular feature, one can grab the Python object
+that communicates with the underlying plotting program (the
+&quot;backend&quot;) and work with this object directly, using plotting
+program-specific command syntax.  Let us illustrate this principle
+with an example where we add a text and an arrow in the plot, see
+Figure <a class="reference internal" href="#fig-plot2i">fig:plot2i</a>.</p>
+<div class="figure" id="fig-plot2i">
+<img alt="figs/plot2i.png" src="figs/plot2i.png" style="width: 400px;" />
+<p class="caption"><em>Illustration of a text and an arrow using Gnuplot-specific commands</em>  (fig:plot2i)</p>
+</div>
+<p>Easyviz does not support arrows at arbitrary places inside the plot,
+but Gnuplot does. If we use Gnuplot as backend, we may grab the
+<tt class="docutils literal">Gnuplot</tt> object and issue Gnuplot commands to this object
+directly. Here is an example of the typical recipe, written after the
+core of the plot is made in the ordinary (plotting
+program-independent) way:</p>
+<pre class="literal-block">
+if backend == 'gnuplot':
+    g = get_backend()
+    # g is a Gnuplot object, work with Gnuplot commands directly:
+    g('set label &quot;global maximum&quot; at 0.1,0.5 font &quot;Times,18&quot;')
+    g('set arrow from 0.5,0.48 to 0.98,0.37 linewidth 2')
+    g.refresh()
+    g.hardcopy('tmp2.eps')  # make new hardcopy
+
+    g.reset()               # new plot
+    data = Gnuplot.Data(t, t**3*exp(-t), with_='points 3 3',
+                        title='t**3*exp(-t)')
+    func = Gnuplot.Func('t**4*exp(-t)', title='t**4*exp(-t)')
+    g('set tics border font &quot;Courier,14&quot;')
+    g.plot(func, data)
+</pre>
+<p>For the available features and the syntax of commands, we refer to
+the Gnuplot manual and the <tt class="docutils literal">demo.py</tt> program in Python interface to
+Gnuplot. Note that one must call <tt class="docutils literal">g.hardcopy</tt> to save the figure
+to file. A call to <tt class="docutils literal">savefig</tt> or <tt class="docutils literal">hardcopy</tt> remakes the plot, but
+without the special calls <tt class="docutils literal"><span class="pre">g('...')</span></tt> so the label and arrow are
+left out of the hardcopy in the example above.</p>
+<p>Here is an example with Matplotlib:</p>
+<pre class="literal-block">
+if backend == 'matplotlib':
+    pyplot = get_backend()
+    # Work with standard matplotlib.pyplot functions
+</pre>
+<p>The files <tt class="docutils literal"><span class="pre">grab_backend*.py</span></tt> in the <tt class="docutils literal">examples</tt> folder of the SciTools
+source code contain many examples on how to do backend-specific
+operations, especially with Matplotlib.  Note that after having issued
+calls via the <tt class="docutils literal">pyplot</tt> object, one must apply <tt class="docutils literal">pyplot.savefig</tt> to
+correctly save the plot (a plain <tt class="docutils literal">savefig</tt> or <tt class="docutils literal">hardcopy</tt> remakes the
+plot without the features inserted by the <tt class="docutils literal">pyplot</tt> object).</p>
+<p>Here are some useful links to documentation of various plotting packages:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/contents.html">Matplotlib Documentation</a></li>
+<li><a class="reference external" href="http://www.gnuplot.info/documentation.html">Gnuplot Documentation</a></li>
+<li><a class="reference external" href="http://t16web.lanl.gov/Kawano/gnuplot/index-e.html">Gnuplot Tips (Not So Frequently Asked Questions)</a></li>
+<li><a class="reference external" href="http://matplotlib.sourceforge.net/contents.html">Grace User's Guide</a></li>
+<li><a class="reference external" href="http://pyx.sourceforge.net/documentation.html">PyX Documentation</a></li>
+<li><a class="reference external" href="http://alumni.cs.ucr.edu/~titus/pyxTutorial/">PyX Tutorial for Gnuplot Users</a></li>
+</ul>
+</blockquote>
+<p>The idea advocated by Easyviz goes as follows. You can quickly generate
+plots with Easyviz using standard commands that are independent of
+the underlying plotting package. However, when you need advanced
+features, you must add plotting package-specific code as shown
+above. This principle makes Easyviz a light-weight interface, but
+without limiting the available functionality of various plotting programs.</p>
+</div>
+<div class="section" id="working-with-axis-and-figure-objects">
+<h3>Working with Axis and Figure Objects</h3>
+<p>Easyviz supports the concept of Axis objects, as in Matlab.
+The Axis object represents a set of axes, with curves drawn in the
+associated coordinate system. A figure is the complete physical plot.
+One may have several axes in one figure, each axis representing a subplot.
+One may also have several figures, represented by different
+windows on the screen or separate hardcopies.</p>
+<p>Users with Matlab experience may prefer to set axis
+labels, ranges, and the title using an Axis object instead of
+providing the information in separate commands or as part of a <tt class="docutils literal">plot</tt>
+command. The <tt class="docutils literal">gca</tt> (get current axis) command returns an <tt class="docutils literal">Axis</tt>
+object, whose <tt class="docutils literal">set</tt> method can be used to set axis properties:</p>
+<pre class="literal-block">
+plot(t, y1, 'r-', t, y2, 'bo',
+     legend=('t^2*exp(-t^2)', 't^4*exp(-t^2)'),
+     savefig='tmp2.eps')
+
+ax = gca()   # get current Axis object
+ax.setp(xlabel='t', ylabel='y',
+        axis=[0, 4, -0.1, 0.6],
+        title='Plotting two curves in the same plot')
+show()  # show the plot again after ax.setp actions
+</pre>
+<p>The <tt class="docutils literal">figure()</tt> call makes a new figure, i.e., a
+new window with curve plots. Figures are numbered as 1, 2, and so on.
+The command <tt class="docutils literal">figure(3)</tt> sets the current figure object to figure number
+3.</p>
+<p>Suppose we want to plot our <tt class="docutils literal">y1</tt> and <tt class="docutils literal">y2</tt> data in two separate windows.
+We need in this case to work with two <tt class="docutils literal">Figure</tt> objects:</p>
+<pre class="literal-block">
+plot(t, y1, 'r-', xlabel='t', ylabel='y',
+     axis=[0, 4, -0.1, 0.6])
+
+figure()  # new figure
+
+plot(t, y2, 'bo', xlabel='t', ylabel='y')
+</pre>
+<p>We may now go back to the first figure (with the <tt class="docutils literal">y1</tt> data) and
+set a title and legends in this plot, show the plot, and make a PostScript
+version of the plot:</p>
+<pre class="literal-block">
+figure(1)  # go back to first figure
+title('One curve')
+legend('t^2*exp(-t^2)')
+show()
+savefig('tmp2_1.eps')
+</pre>
+<p>We can also adjust figure 2:</p>
+<pre class="literal-block">
+figure(2)  # go to second figure
+title('Another curve')
+savefig('tmp2_2.eps')
+show()
+</pre>
+<p>The current <tt class="docutils literal">Figure</tt> object is reached by <tt class="docutils literal">gcf</tt> (get current figure),
+and the <tt class="docutils literal">dump</tt> method dumps the internal parameters in the <tt class="docutils literal">Figure</tt>
+object:</p>
+<pre class="literal-block">
+fig = gcf(); print fig.dump()
+</pre>
+<p>These parameters may be of interest for troubleshooting when Easyviz
+does not produce what you expect.</p>
+<p>Let us then make a third figure with two plots, or more precisely, two
+axes: one with <tt class="docutils literal">y1</tt> data and one with <tt class="docutils literal">y2</tt> data.
+Easyviz has a command <tt class="docutils literal">subplot(r,c,a)</tt> for creating <tt class="docutils literal">r</tt>
+rows and <tt class="docutils literal">c</tt> columns and set the current axis to axis number <tt class="docutils literal">a</tt>.
+In the present case <tt class="docutils literal">subplot(2,1,1)</tt> sets the current axis to
+the first set of axis in a &quot;table&quot; with two rows and one column.
+Here is the code for this third figure:</p>
+<pre class="literal-block">
+figure()  # new, third figure
+# Plot y1 and y2 as two axis in the same figure
+subplot(2, 1, 1)
+plot(t, y1, xlabel='t', ylabel='y')
+subplot(2, 1, 2)
+plot(t, y2, xlabel='t', ylabel='y')
+title('A figure with two plots')
+show()
+savefig('tmp2_3.eps')
+</pre>
+<p>Note: The Gnuplot backend will overwrite the tickmarks on the y axis
+if two or more curves in the same subplot have significantly different
+variations in y direction. To avoid this cluttering of tickmarks,
+set the axes extent explicitly.</p>
+<p>If we need to place an axis at an arbitrary position in the figure, we
+must use the command:</p>
+<pre class="literal-block">
+ax = axes(viewport=[left, bottom, width, height])
+</pre>
+<p>The four parameteres <tt class="docutils literal">left</tt>, <tt class="docutils literal">bottom</tt>, <tt class="docutils literal">width</tt>, <tt class="docutils literal">height</tt>
+are location values between 0 and 1 ((0,0) is the lower-left corner
+and (1,1) is the upper-right corner). However, this might be a bit
+different in the different backends (see the documentation for the
+backend in question).</p>
+</div>
+<div class="section" id="mathematics-and-latex-in-legends-title-and-axis-labels">
+<h3>Mathematics and LaTeX in Legends, Title, and Axis Labels</h3>
+<p>Some plotting packages support nicely formatted mathematics as
+axis labels, in legends, and in the figure title. For example,
+Matplotlib accepts standard LaTeX syntax, while Gnuplot,
+when saving figures to PostScript format, supports
+greek letters, sub- and super-scripts, exponentials, etc.
+Different plotting engines (backends) will require mathematics in
+legends, titles, and labels to be formatted differently.</p>
+<blockquote>
+<ul class="simple">
+<li>With Matplotlib we recommend to use standard LaTeX.</li>
+<li>With Gnuplot we recommend plain text when plotting on
+the screen, and greek letters preceded with a backslash
+when saving to file. Gnuplot suports LaTeX syntax for
+sub- and super-scripts (underscore and hat, resp.).
+Other types of mathematics should be expressed in plain text.</li>
+</ul>
+</blockquote>
+<p>The file <tt class="docutils literal">examples/math_text.py</tt> tests different syntax in legends,
+axis labels, and titles. Running this script with
+<tt class="docutils literal"><span class="pre">--SCITOOLS_easyviz_backend</span> X</tt> for different values of <tt class="docutils literal">X</tt>
+(<tt class="docutils literal">gnuplot</tt>, <tt class="docutils literal">matplotlib</tt>, <tt class="docutils literal">grace</tt>, <tt class="docutils literal">pyx</tt>, etc.) produces plots
+that one can examine to see various formats treat mathematics with and
+without LaTeX syntax.</p>
+<p>If it is important to have Easyviz code that works with several
+backends, one can apply a little if-else test:</p>
+<pre class="literal-block">
+from scitools.std import *
+...
+if backend == 'gnuplot':
+    title_screen = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+    title_eps = r'\mu=0.5, \alpha=sum(i=1 to n) \tau_i^2'
+elif backend == 'matplotlib':
+    title_screen = title_eps = \
+          r'$mu=0.5$, $\alpha=\sum_{i=1}^n \tau_i^2$'
+else:
+    title_screen = title_eps = 'mu=0.5, alpha=sum(i=1 to n) tau_i^2'
+
+plot(...)
+...
+title(title_screen)
+show()
+title(title_eps)
+savefig('myplot.eps')
+</pre>
+</div>
+<div class="section" id="turning-off-all-plotting">
+<h3>Turning Off All Plotting</h3>
+<p>Sometimes, especially during debugging or when trying out a large-scale
+experiment, it is nice to turn off all plotting on the screen and
+all making of hardcopies. This is easily done by:</p>
+<pre class="literal-block">
+turn_off_plotting(globals())
+</pre>
+<p>All the plot functions now &quot;do nothing&quot; (actually they are <tt class="docutils literal">DoNothing</tt>
+objects from <tt class="docutils literal">scitools.misc</tt>).</p>
+</div>
+</div>
+</div>
+<div class="section" id="visualization-of-scalar-fields">
+<h1><a class="toc-backref" href="#id20">Visualization of Scalar Fields</a></h1>
+<p>A scalar field is a function from space or space-time to a real value.
+This real value typically reflects a scalar physical parameter at every
+point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.  In a
+visualization context, we work with discrete scalar fields that are
+defined on a grid. Each point in the grid is then associated with a
+scalar value.</p>
+<p>There are several ways to visualize a scalar field in Easyviz. Both
+two- and three-dimensional scalar fields are supported. In two
+dimensions (2D) we can create elevated surface plots, contour plots,
+and pseudocolor plots, while in three dimensions (3D) we can create
+isosurface plots, volumetric slice plots, and contour slice plots.</p>
+<div class="section" id="elevated-surface-plots">
+<h2><a class="toc-backref" href="#id21">Elevated Surface Plots</a></h2>
+<p>To create elevated surface plots we can use either the <tt class="docutils literal">surf</tt> or the
+<tt class="docutils literal">mesh</tt> command. Both commands have the same syntax, but the <tt class="docutils literal">mesh</tt>
+command creates a wireframe mesh while the <tt class="docutils literal">surf</tt> command creates a
+solid colored surface.</p>
+<p>Our examples will make use of the scalar field
+f(x,y)=sin(r),
+where r is the distance in the plane from the origin, i.e.,
+r=sqrt(x**2+y**2).
+The x and y values in our 2D domain lie between -5 and 5.</p>
+<p>The example first creates the necessary data arrays for 2D scalar
+field plotting: the coordinates in each direction, extensions of these
+arrays to form a <em>ndgrid</em>, and the function values. The latter array
+is computed in a vectorized operation which requires the extended
+coordinate arrays from the <tt class="docutils literal">ndgrid</tt> function.  The <tt class="docutils literal">mesh</tt> command
+can then produce the plot with a syntax that mirrors the simplicity of
+the <tt class="docutils literal">plot</tt> command for curves:</p>
+<pre class="literal-block">
+x = y = linspace(-5, 5, 21)
+xv, yv = ndgrid(x, y)
+values = sin(sqrt(xv**2 + yv**2))
+h = mesh(xv, yv, values)
+</pre>
+<p>The <tt class="docutils literal">mesh</tt> command returns a reference to a new <tt class="docutils literal">Surface</tt> object, here
+stored in a variable h. This reference can be used to set or get
+properties in the object at a later stage if needed.  The resulting
+plot can be seen in Figure <a class="reference internal" href="#fig-mesh-ex1">fig:mesh_ex1</a>.</p>
+<p>We remark that the computations in the previous example are vectorized.
+The corresponding scalar computations using a double loop read:</p>
+<pre class="literal-block">
+values = zeros(x.size, y.size)
+for i in xrange(x.size):
+    for j in xrange(y.size):
+        values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
+</pre>
+<p>However, for the <tt class="docutils literal">mesh</tt> command to work, we need the vectorized
+extensions <tt class="docutils literal">xv</tt> and <tt class="docutils literal">yv</tt> of <tt class="docutils literal">x</tt> and <tt class="docutils literal">y</tt>.</p>
+<div class="figure" id="fig-mesh-ex1">
+<img alt="figs/mesh_ex1.png" src="figs/mesh_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Result of the mesh command for plotting a 2D scalar field (Gnuplot backend)</em>  (fig:mesh_ex1)</p>
+</div>
+<p>The <tt class="docutils literal">surf</tt> command employs the same syntax, but results in a different
+plot (see Figure <a class="reference internal" href="#fig-surf-ex1">fig:surf_ex1</a>):</p>
+<pre class="literal-block">
+surf(xv, yv, values)
+</pre>
+<div class="figure" id="fig-surf-ex1">
+<img alt="figs/surf_ex1.png" src="figs/surf_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Result of the surf command (Gnuplot backend)</em>  (fig:surf_ex1)</p>
+</div>
+<p>The <tt class="docutils literal">surf</tt> command offers many possibilities to adjust the resulting plot:</p>
+<pre class="literal-block">
+setp(interactive=False)
+surf(xv, yv, values)
+shading('flat')
+colorbar()
+colormap(hot())
+axis([-6,6,-6,6,-1.5,1.5])
+view(35,45)
+show()
+</pre>
+<p>Here we have specified a flat shading model, added a color bar, changed
+the color map to <tt class="docutils literal">hot</tt>, set some suitable axis values, and changed the
+view point (the view takes two arguments: the azimuthal rotation and
+the elevation, both given in degrees).
+The same plot can also be accomplished with one single, compound
+statement (just as Easyviz offers for the <tt class="docutils literal">plot</tt> command):</p>
+<pre class="literal-block">
+surf(xv, yv, values,
+     shading='flat',
+     colorbar='on',
+     colormap=hot(),
+     axis=[-6,6,-6,6,-1.5,1.5],
+     view=[35,45])
+</pre>
+<p>Figure <a class="reference internal" href="#fig-surf-ex2">fig:surf_ex2</a> displays the result.</p>
+<div class="figure" id="fig-surf-ex2">
+<img alt="figs/surf_ex2.png" src="figs/surf_ex2.png" style="width: 500px;" />
+<p class="caption"><em>Result of an extended surf command (Gnuplot backend)</em>  (fig:surf_ex2)</p>
+</div>
+</div>
+<div class="section" id="contour-plots">
+<h2><a class="toc-backref" href="#id22">Contour Plots</a></h2>
+<p>A contour plot is another useful technique for visualizing scalar
+fields. The primary examples on contour plots from everyday life is
+the level curves on geographical maps, reflecting the height of the
+terrain. Mathematically, a contour line, also called an isoline, is
+defined as the implicit curve f(x,y)=c. The contour levels c are
+normally uniformly distributed between the extreme values of the
+function f (this is the case in a map: the height difference between
+two contour lines is constant), but in scientific visualization it is
+sometimes useful to use a few carefully selected c values to
+illustrate particular features of a scalar field.</p>
+<p>In Easyviz, there are several commands for creating different kinds of
+contour plots:</p>
+<blockquote>
+<ul>
+<li><p class="first"><tt class="docutils literal">contour</tt>: Draw a standard contour plot, i.e., lines in the plane.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">contourf</tt>: Draw a filled 2D contour plot, where the space between
+the contour lines is filled with colors.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">contour3</tt>: Same as <tt class="docutils literal">contour</tt>, but the curves are drawn at their
+corresponding height levels in 3D space.</p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">meshc</tt>: Works in the same way as <tt class="docutils literal">mesh</tt> except that a</dt>
+<dd><p class="first last">contour plot is drawn in the plane beneath the mesh.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal">surfc</tt>: Same as <tt class="docutils literal">meshc</tt> except that a solid surface is
+drawn instead of a wireframe mesh.</p>
+</li>
+</ul>
+</blockquote>
+<p>We start with illustrating the plain <tt class="docutils literal">contour</tt> command, assuming that
+we already have computed the <tt class="docutils literal">xv</tt>, <tt class="docutils literal">yv</tt>, and <tt class="docutils literal">values</tt>
+arrays as shown in our first example on scalar field plotting.
+The basic syntax follows that of <tt class="docutils literal">mesh</tt> and <tt class="docutils literal">surf</tt>:</p>
+<pre class="literal-block">
+contour(xv, yv, values)
+</pre>
+<p>By default, five uniformly spaced contour level curves are drawn, see
+Figure <a class="reference internal" href="#fig-contour-ex1">fig:contour_ex1</a>.</p>
+<div class="figure" id="fig-contour-ex1">
+<img alt="figs/contour_ex1.png" src="figs/contour_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Result of the simplest possible contour command (Gnuplot backend)</em>  (fig:contour_ex1)</p>
+</div>
+<p>The number of levels in a contour plot can be specified with an additional
+argument:</p>
+<pre class="literal-block">
+n = 15   # number of desired contour levels
+contour(xv, yv, values, n)
+</pre>
+<p>The result can be seen in Figure <a class="reference internal" href="#fig-contour-ex2">fig:contour_ex2</a>.</p>
+<div class="figure" id="fig-contour-ex2">
+<img alt="figs/contour_ex2.png" src="figs/contour_ex2.png" style="width: 500px;" />
+<p class="caption"><em>A contour plot with 15 contour levels (Gnuplot backend)</em>  (fig:contour_ex2)</p>
+</div>
+<p>Sometimes one wants contour levels that are not equidistant or not
+distributed throughout the range of the scalar field. Individual
+contour levels to be drawn can easily be specified as a list:</p>
+<pre class="literal-block">
+levels = [-0.5, 0.1, 0.3, 0.9]
+contour(xv, yv, values, levels, clabels='on')
+</pre>
+<p>Now, the <tt class="docutils literal">levels</tt> list specify the values of the contour levels, and
+the <tt class="docutils literal">clabel</tt> keyword allows labeling of the level values in the plot.
+Figure <a class="reference internal" href="#fig-contour-ex3">fig:contour_ex3</a> shows the result. We remark that the
+Gnuplot backend colors the contour lines and places the contour values
+and corresponding colors beside the plot. Figures that are reproduced
+in black and white only can then be hard to analyze. Other backends
+may draw the contour lines in black and annotate each line with the
+corresponding contour level value.  Such plots are better suited for
+being displayed in black and white.</p>
+<div class="figure" id="fig-contour-ex3">
+<img alt="figs/contour_ex3.png" src="figs/contour_ex3.png" style="width: 500px;" />
+<p class="caption"><em>Four individually specified contour levels (Gnuplot backend)</em>  (fig:contour_ex3)</p>
+</div>
+<p>The <tt class="docutils literal">contourf</tt> command:</p>
+<pre class="literal-block">
+contourf(xv, yv, values)
+</pre>
+<p>gives a filled contour plot as shown in Figure <a class="reference internal" href="#fig-contourf-ex1">fig:contourf_ex1</a>.
+Only the Matplotlib and VTK backends currently supports filled
+contour plots.</p>
+<div class="figure" id="fig-contourf-ex1">
+<img alt="figs/contourf_ex1.png" src="figs/contourf_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Filled contour plot created by the contourf command (VTK backend)</em>  (fig:contourf_ex1)</p>
+</div>
+<p>The contour lines can be &quot;lifted up&quot; in 3D space, as shown in Figure
+<a class="reference internal" href="#fig-contour3-ex1">fig:contour3_ex1</a>, using the <tt class="docutils literal">contour3</tt> command:</p>
+<pre class="literal-block">
+contour3(xv, yv, values, 15)
+</pre>
+<div class="figure" id="fig-contour3-ex1">
+<img alt="figs/contour3_ex1.png" src="figs/contour3_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Example on the contour3 command for elevated contour levels (Gnuplot backend)</em>  (fig:contour3_ex1)</p>
+</div>
+<p>Finally, we show a simple example illustrating the <tt class="docutils literal">meshc</tt> and <tt class="docutils literal">surfc</tt>
+commands:</p>
+<pre class="literal-block">
+meshc(xv, yv, values,
+      clevels=10,
+      colormap=hot(),
+      grid='off')
+figure()
+surfc(xv, yv, values,
+      clevels=15,
+      colormap=hsv(),
+      grid='off',
+      view=(30,40))
+</pre>
+<p>The resulting plots are displayed in Figures <a class="reference internal" href="#fig-meshc-ex1">fig:meshc_ex1</a> and
+<a class="reference internal" href="#fig-surfc-ex1">fig:surfc_ex1</a>.</p>
+<div class="figure" id="fig-meshc-ex1">
+<img alt="figs/meshc_ex1.png" src="figs/meshc_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Wireframe mesh with contours at the bottom (Gnuplot backend)</em>  (fig:meshc_ex1)</p>
+</div>
+<div class="figure" id="fig-surfc-ex1">
+<img alt="figs/surfc_ex1.png" src="figs/surfc_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Surface plot with contours (Gnuplot backend)</em>  (fig:surfc_ex1)</p>
+</div>
+</div>
+<div class="section" id="pseudocolor-plots">
+<h2><a class="toc-backref" href="#id23">Pseudocolor Plots</a></h2>
+<p>Another way of visualizing a 2D scalar field in Easyviz is the
+<tt class="docutils literal">pcolor</tt> command. This command creates a pseudocolor plot, which is a
+flat surface viewed from above. The simplest form of this command
+follows the syntax of the other commands:</p>
+<pre class="literal-block">
+pcolor(xv, yv, values)
+</pre>
+<p>We can set the color shading in a pseudocolor plot either by giving
+the <tt class="docutils literal">shading</tt> keyword argument to <tt class="docutils literal">pcolor</tt> or by calling the <tt class="docutils literal">shading</tt>
+command. The color shading is specified by a string that can be either
+<tt class="docutils literal">'faceted'</tt> (default), <tt class="docutils literal">'flat'</tt>, or <tt class="docutils literal">'interp'</tt> (interpolated). The Gnuplot and
+Matplotlib backends support <tt class="docutils literal">'faceted'</tt> and <tt class="docutils literal">'flat'</tt> only, while the
+VTK backend supports all of them.</p>
+<div class="figure">
+<img alt="figs/pcolor_ex1.png" src="figs/pcolor_ex1.png" style="width: 500px;" />
+<p class="caption">Pseudocolor plot (Gnuplot backend)</p>
+</div>
+</div>
+<div class="section" id="isosurface-plots">
+<h2><a class="toc-backref" href="#id24">Isosurface Plots</a></h2>
+<p>For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
+lines or isolines for 2D scalar fields. An isosurface connects points in
+a scalar field with (approximately) the same scalar value and is
+mathematically defined by the implicit equation f(x,y,z)=c. In Easyviz,
+isosurfaces are created with the <tt class="docutils literal">isosurface</tt> command. We will
+demonstrate this command using 3D scalar field data from the <tt class="docutils literal">flow</tt>
+function. This function, also found in Matlab,
+generates fluid flow data. Our first isosurface visualization example
+then looks as follows:</p>
+<pre class="literal-block">
+x, y, z, v = flow()  # generate fluid-flow data
+setp(interactive=False)
+h = isosurface(x,y,z,v,-3)
+h.setp(opacity=0.5)
+shading('interp')
+daspect([1,1,1])
+view(3)
+axis('tight')
+show()
+</pre>
+<p>After creating some scalar volume data with the <tt class="docutils literal">flow</tt> function, we
+create an isosurface with the isovalue -3. The isosurface is then
+set a bit transparent (<tt class="docutils literal">opacity=0.5</tt>) before we specify the shading
+model and the view point. We also set the data aspect ratio to be
+equal in all directions with the <tt class="docutils literal">daspect</tt> command.  The resulting
+plot is shown in Figure <a class="reference internal" href="#fig-isosurface1">fig:isosurface1</a>. We remark that the
+Gnuplot backend does not support 3D scalar fields and hence not
+isosurfaces.</p>
+<div class="figure" id="fig-isosurface1">
+<img alt="figs/isosurface1.png" src="figs/isosurface1.png" style="width: 500px;" />
+<p class="caption"><em>Isosurface plot (VTK backend)</em>  (fig:isosurface1)</p>
+</div>
+<p>Here is another example that demonstrates the <tt class="docutils literal">isosurface</tt> command
+(again using the <tt class="docutils literal">flow</tt> function):</p>
+<pre class="literal-block">
+x, y, z, v = flow()
+setp(interactive=False)
+h = isosurface(x,y,z,v,0)
+shading('interp')
+daspect([1,4,4])
+view([-65,20])
+axis('tight')
+show()
+</pre>
+<p>Figure <a class="reference internal" href="#fig-isosurface2">fig:isosurface2</a> shows the resulting plot.</p>
+<div class="figure" id="fig-isosurface2">
+<img alt="figs/isosurface2.png" src="figs/isosurface2.png" style="width: 500px;" />
+<p class="caption"><em>Another isosurface plot (VTK backend)</em>  (fig:isosurface2)</p>
+</div>
+</div>
+<div class="section" id="volumetric-slice-plot">
+<h2><a class="toc-backref" href="#id25">Volumetric Slice Plot</a></h2>
+<p>Another way of visualizing scalar volume data is by using the <tt class="docutils literal">slice_</tt>
+command (since the name <tt class="docutils literal">slice</tt> is already taken by a built-in
+function in Python for array slicing, we have followed the standard
+Python convention and added a trailing underscore to the name in
+Easyviz - <tt class="docutils literal">slice_</tt> is thus the counterpart to the Matlab function
+<tt class="docutils literal">slice</tt>.). This command draws orthogonal slice planes through a
+given volumetric data set. Here is an example on how to use the
+<tt class="docutils literal">slice_</tt> command:</p>
+<pre class="literal-block">
+x, y, z = ndgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
+                   sparse=True)
+v = x*exp(-x**2 - y**2 - z**2)
+xslice = [-1.2, .8, 2]
+yslice = 2
+zslice = [-2, 0]
+slice_(x, y, z, v, xslice, yslice, zslice,
+       colormap=hsv(), grid='off')
+</pre>
+<p>Note that we here use the SciTools function <tt class="docutils literal">seq</tt> for specifying a
+uniform partitioning of an interval - the <tt class="docutils literal">linspace</tt> function from
+<tt class="docutils literal">numpy</tt> could equally well be used.  The first three arguments in the
+<tt class="docutils literal">slice_</tt> call are the grid points in the x, y, and z
+directions. The fourth argument is the scalar field defined on-top of
+the grid. The next three arguments defines either slice planes in the
+three space directions or a surface plane (currently not working). In
+this example we have created 6 slice planes: Three at the x axis (at
+x=-1.2, x=0.8, and x=2), one at the y axis (at y=2), and two
+at the z axis (at z=-2 and z=0.0). The result is presented in
+Figure <a class="reference internal" href="#fig-slice1">fig:slice1</a>.</p>
+<div class="figure" id="fig-slice1">
+<img alt="figs/slice1.png" src="figs/slice1.png" style="width: 500px;" />
+<p class="caption"><em>Slice plot where the x axis is sliced at -1.2, 0.8, and 2, the y axis is sliced at 2, and the z axis is sliced at -2 and 0.0 (VTK backend)</em>  (fig:slice1)</p>
+</div>
+<!-- OBS: -->
+<!-- Slicing with a Surface-object does not work for JHR so far in VTK -->
+<p><strong>Contours in Slice Planes.</strong></p>
+<p>With the <tt class="docutils literal">contourslice</tt> command we can create contour plots
+in planes aligned with the coordinate axes. Here is an example
+using 3D scalar field data from the <tt class="docutils literal">flow</tt> function:</p>
+<pre class="literal-block">
+x, y, z, v = flow()
+setp(interactive=False)
+h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
+axis([0, 10, -3, 3, -3, 3])
+daspect([1, 1, 1])
+ax = gca()
+ax.setp(fgcolor=(1,1,1), bgcolor=(0,0,0))
+box('on')
+view(3)
+show()
+</pre>
+<p>The first four arguments given to <tt class="docutils literal">contourslice</tt> in this example are
+the extended coordinates of the grid (<tt class="docutils literal">x</tt>, <tt class="docutils literal">y</tt>, <tt class="docutils literal">z</tt>) and the 3D scalar
+field values in the volume (<tt class="docutils literal">v</tt>). The next three arguments defines the
+slice planes in which we want to draw contour lines. In this
+particular example we have specified two contour plots in the planes
+x=1,2,dots,9, none in y=const planes (empty
+list) , and one contour plot in the plane z=0. The last argument to
+<tt class="docutils literal">contourslice</tt> is optional, it can be either an integer specifying the
+number of contour lines (the default is five) or, as in the current
+example, a list specifying the level curves. Running the set of
+commands results in the plot shown in Figure <a class="reference internal" href="#fig-contourslice1">fig:contourslice1</a>.</p>
+<div class="figure" id="fig-contourslice1">
+<img alt="figs/contourslice1.png" src="figs/contourslice1.png" style="width: 500px;" />
+<p class="caption"><em>Contours in slice planes (VTK backend)</em>  (fig:contourslice1)</p>
+</div>
+<p>Here is another example where we draw contour slices from a
+three-dimensional MRI data set:</p>
+<pre class="literal-block">
+import scipy.io
+mri = scipy.io.loadmat('mri_matlab_v6.mat')
+D = mri['D']
+image_num = 8
+
+# Displaying a 2D Contour Slice
+contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
+</pre>
+<p>The MRI data set is loaded from the file <tt class="docutils literal">mri_matlab_v6.mat</tt> with the
+aid from the <tt class="docutils literal">loadmat</tt> function available in the <tt class="docutils literal">io</tt> module in the
+SciPy package. We then create a 2D contour slice plot with one slice
+in the plane z=8. Figure <a class="reference internal" href="#fig-contourslice3">fig:contourslice3</a> displays the result.</p>
+<div class="figure" id="fig-contourslice3">
+<img alt="figs/contourslice3.png" src="figs/contourslice3.png" style="width: 500px;" />
+<p class="caption"><em>Contour slice plot of a 3D MRI data set (VTK backend)</em>  (fig:contourslice3)</p>
+</div>
+</div>
+</div>
+<div class="section" id="visualization-of-vector-fields">
+<h1><a class="toc-backref" href="#id26">Visualization of Vector Fields</a></h1>
+<p>A vector field is a function from space or space-time to a vector
+value, where the number of components in the vector corresponds to
+the number of space dimensions. Primary examples on vector fields
+are the gradient of a scalar field; or velocity, displacement, or
+force in continuum physics.</p>
+<p>In Easyviz, a vector field can be visualized either by a quiver
+(arrow) plot or by various kinds of stream plots like stream lines,
+stream ribbons, and stream tubes. Below we will look closer at each of
+these visualization techniques.</p>
+<div class="section" id="quiver-plots">
+<h2><a class="toc-backref" href="#id27">Quiver Plots</a></h2>
+<p>The <tt class="docutils literal">quiver</tt> and <tt class="docutils literal">quiver3</tt> commands draw arrows to illustrate vector
+values (length and direction) at discrete points.  As the names
+indicate, <tt class="docutils literal">quiver</tt> is for 2D vector fields in the plane and <tt class="docutils literal">quiver3</tt>
+plots vectors in 3D space.  The basic usage of the <tt class="docutils literal">quiver</tt> command
+goes as follows:</p>
+<pre class="literal-block">
+x = y = linspace(-5, 5, 21)
+xv, yv = ndgrid(x, y, sparse=False)
+values = sin(sqrt(xv**2 + yv**2))
+uv, vv = gradient(values)
+quiver(xv, yv, uv, vv)
+</pre>
+<p>Our vector field in this example is simply the gradient of the scalar
+field used to illustrate the commands for 2D scalar field plotting.
+The <tt class="docutils literal">gradient</tt> function computes the gradient using finite difference
+approximations.  The result is a vector field with components <tt class="docutils literal">uv</tt> and
+<tt class="docutils literal">vv</tt> in the x and y directions, respectively.  The grid points and
+the vector components are passed as arguments to <tt class="docutils literal">quiver</tt>, which in
+turn produces the plot in Figure <a class="reference internal" href="#fig-quiver-ex1">fig:quiver_ex1</a>.</p>
+<div class="figure" id="fig-quiver-ex1">
+<img alt="figs/quiver_ex1.png" src="figs/quiver_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Velocity vector plot (Gnuplot backend)</em>  (fig:quiver_ex1)</p>
+</div>
+<p>The arrows in a quiver plot are automatically scaled to fit within the
+grid. If we want to control the length of the arrows, we can pass an
+additional argument to scale the default lengths:</p>
+<pre class="literal-block">
+scale = 2
+quiver(xv, yv, uv, vv, scale)
+</pre>
+<p>This value of <tt class="docutils literal">scale</tt> will thus stretch the vectors to their double length.
+To turn off the automatic scaling, we can set the scale value to zero.</p>
+<p>Quiver plots are often used in combination with other plotting
+commands such as pseudocolor plots or contour plots, since this may
+help to get a better perception of a given set of data. Here is an
+example demonstrating this principle for a simple scalar field, where
+we plot the field values as colors and add vectors to illustrate the
+associated gradient field:</p>
+<pre class="literal-block">
+xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
+values = sin(sqrt(xv**2 + yv**2))
+pcolor(xv, yv, values, shading='interp')
+
+# Create a coarser grid for the gradient field
+xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21))
+values = sin(sqrt(xv**2 + yv**2))
+uv, vv = gradient(values)
+hold('on')
+quiver(xv, yv, uv, vv, 'filled', 'k', axis=[-6,6,-6,6])
+figure(2)
+contour(xv, yv, values, 15)
+hold('on')
+quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
+</pre>
+<p>The resulting plots can be seen in Figure <a class="reference internal" href="#fig-quiver-ex2">fig:quiver_ex2</a> and
+<a class="reference internal" href="#fig-quiver-ex3">fig:quiver_ex3</a>.</p>
+<div class="figure" id="fig-quiver-ex2">
+<img alt="figs/quiver_ex2.png" src="figs/quiver_ex2.png" style="width: 500px;" />
+<p class="caption"><em>Combined quiver and pseudocolor plot (VTK backend)</em>  (fig:quiver_ex2)</p>
+</div>
+<div class="figure" id="fig-quiver-ex3">
+<img alt="figs/quiver_ex3.png" src="figs/quiver_ex3.png" style="width: 500px;" />
+<p class="caption"><em>Combined quiver and pseudocolor plot (VTK backend)</em>  (fig:quiver_ex3)</p>
+</div>
+<p>Visualization of 3D vector fields by arrows at grid points can be done
+with the <tt class="docutils literal">quiver3</tt> command. At the time of this writing, only the VTK
+backend supports 3D quiver plots. A simple example of plotting the
+&quot;radius vector field&quot; v=(x,y,z) is given next:</p>
+<pre class="literal-block">
+x = y = z = linspace(-3,3,4)
+xv, yv, zv = ndgrid(x, y, z, sparse=False)
+uv = xv
+vv = yv
+wv = zv
+quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
+</pre>
+<p>The strings <tt class="docutils literal">'filled'</tt> and <tt class="docutils literal">'r'</tt> are optional and makes the arrows
+become filled
+and red, respectively. The resulting plot is presented in Figure
+<a class="reference internal" href="#fig-quiver3-ex1">fig:quiver3_ex1</a>.</p>
+<div class="figure" id="fig-quiver3-ex1">
+<img alt="figs/quiver3_ex1.png" src="figs/quiver3_ex1.png" style="width: 500px;" />
+<p class="caption"><em>3D quiver plot (VTK backend)</em>  (fig:quiver3_ex1)</p>
+</div>
+</div>
+<div class="section" id="stream-plots">
+<h2><a class="toc-backref" href="#id28">Stream Plots</a></h2>
+<p>Stream plots constitute an alternative to arrow plots for visualizing
+vector fields.  The stream plot commands currently available in
+Easyviz are <tt class="docutils literal">streamline</tt>, <tt class="docutils literal">streamtube</tt>, and <tt class="docutils literal">streamribbon</tt>.  Stream
+lines are lines aligned with the vector field, i.e., the vectors are
+tangents to the streamlines. Stream tubes are similar, but now the
+surfaces of thin tubes are aligned with the vectors.  Stream ribbons
+are also similar: thin sheets are aligned with the vectors. The latter
+type of visualization is also known as stream or flow sheets.  In the
+near future, Matlab commands such as <tt class="docutils literal">streamslice</tt> and
+<tt class="docutils literal">streamparticles</tt> might also be implemented.</p>
+<p>We start with an example on how to use the <tt class="docutils literal">streamline</tt> command. In
+this example (and in the following examples) we will use the <tt class="docutils literal">wind</tt>
+data set that is included with Matlab. This data set represents air
+currents over a region of North America and is suitable for testing
+the different stream plot commands. The following commands will load
+the <tt class="docutils literal">wind</tt> data set and then draw some stream lines from it:</p>
+<pre class="literal-block">
+import scipy.io  # needed to load binary .mat-files
+
+# Load the wind data set and create variables
+wind = scipy.io.loadmat('wind.mat')
+x = wind['x']
+y = wind['y']
+z = wind['z']
+u = wind['u']
+v = wind['v']
+w = wind['w']
+
+# Create starting points for the stream lines
+sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5),
+                    sparse=False)
+
+# Draw stream lines
+streamline(x, y, z, u, v, w, sx, sy, sz,
+           view=3, axis=[60,140,10,60,-5,20])
+</pre>
+<p>The <tt class="docutils literal">wind</tt> data set is stored in a binary <tt class="docutils literal">.mat</tt>-file called
+<tt class="docutils literal">wind.mat</tt>. To load the data in this file into Python, we can use the
+<tt class="docutils literal">loadmat</tt> function which is available through the <tt class="docutils literal">io</tt> module in
+SciPy. Using the <tt class="docutils literal">loadmat</tt> function on the <tt class="docutils literal">wind.mat</tt>-file returns a
+Python dictionary (called <tt class="docutils literal">wind</tt> in the current example) containing the NumPy
+arrays <tt class="docutils literal">x</tt>, <tt class="docutils literal">y</tt>, <tt class="docutils literal">z</tt>, <tt class="docutils literal">u</tt>, <tt class="docutils literal">v</tt>, and <tt class="docutils literal">w</tt>. The arrays <tt class="docutils literal">u</tt>, <tt class="docutils literal">v</tt>, and <tt class="docutils literal">w</tt>
+are the 3D vector data, while the arrays <tt class="docutils literal">x</tt>, <tt class="docutils literal">y</tt>, and <tt class="docutils literal">z</tt> defines the
+(3D extended) coordinates for the associated grid. The data arrays in
+the dictionary <tt class="docutils literal">wind</tt> are then stored in seperate variables for easier
+access later.</p>
+<p>Before we call the <tt class="docutils literal">streamline</tt> command we must set up some starting
+point coordinates for the stream lines. In this example, we have used
+the <tt class="docutils literal">ndgrid</tt> command to define the starting points with the line:</p>
+<pre class="literal-block">
+sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
+</pre>
+<p>This command defines starting points which all lie on x=80,
+y=20,30,40,50, and z=0,5,10,15. We now have all the data we need
+for calling the <tt class="docutils literal">streamline</tt> command. The first six arguments to the
+<tt class="docutils literal">streamline</tt> command are the grid coordinates <tt class="docutils literal">(x,y,z)</tt> and the 3D
+vector data <tt class="docutils literal">(u,v,w)</tt>, while the next three arguments are the starting
+points which we defined with the <tt class="docutils literal">ndgrid</tt> command above. The
+resulting plot is presented in Figure <a class="reference internal" href="#fig-streamline-ex1">fig:streamline_ex1</a>.</p>
+<div class="figure" id="fig-streamline-ex1">
+<img alt="figs/streamline_ex1.png" src="figs/streamline_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Stream line plot (Vtk backend)</em>  (fig:streamline_ex1)</p>
+</div>
+<p>The next example demonstrates the <tt class="docutils literal">streamtube</tt> command applied to the
+same <tt class="docutils literal">wind</tt> data set:</p>
+<pre class="literal-block">
+streamtube(x, y, z, u, v, w, sx, sy, sz,
+           daspect=[1,1,1],
+           view=3,
+           axis='tight',
+           shading='interp')
+</pre>
+<p>The arrays <tt class="docutils literal">sx</tt>, <tt class="docutils literal">sy</tt>, and <tt class="docutils literal">sz</tt> are the same as in the previous
+example and defines the starting positions for the center lines of the
+tubes. The resulting plot is presented in Figure
+<a class="reference internal" href="#fig-streamtube-ex1">fig:streamtube_ex1</a>.</p>
+<div class="figure" id="fig-streamtube-ex1">
+<img alt="figs/streamtube_ex1.png" src="figs/streamtube_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Stream tubes (Vtk backend)</em>  (fig:streamtube_ex1)</p>
+</div>
+<p>Finally, we illustrate the <tt class="docutils literal">streamribbon</tt> command:</p>
+<pre class="literal-block">
+streamribbon(x, y, z, u, v, w, sx, sy, sz,
+             ribbonwidth=5,
+             daspect=[1,1,1],
+             view=3,
+             axis='tight',
+             shading='interp')
+</pre>
+<p>Figure <a class="reference internal" href="#fig-streamribbon-ex1">fig:streamribbon_ex1</a> shows the resulting stream ribbons.</p>
+<div class="figure" id="fig-streamribbon-ex1">
+<img alt="figs/streamribbon_ex1.png" src="figs/streamribbon_ex1.png" style="width: 500px;" />
+<p class="caption"><em>Stream ribbons (VTK backend)</em>  (fig:streamribbon_ex1)</p>
+</div>
+</div>
+<div class="section" id="bar-charts">
+<h2><a class="toc-backref" href="#id29">Bar Charts</a></h2>
+<p>Easyviz also supports a unified interface to simple bar charts.
+Here is a simple example for displaying tabular values, with one
+bar for each data point:</p>
+<pre class="literal-block">
+from scitools.std import *
+languages = ['C', 'Java', 'C++', 'PHP', 'VB', 'C#', 'Python',
+             'Perl', 'JavaScript']
+ratings = [18, 18, 9.7, 9.7, 6.4, 4.4, 4.2, 3.6, 2.5]
+bar(ratings, 'r',
+    barticks=languages,
+    ylabel='Ratings in percent (TIOBE Index, April 2010)',
+    axis=[-1, len(languages), 0, 20],
+    hardcopy='tmp.eps')
+</pre>
+<p>The bar chart illustrates the data in the <tt class="docutils literal">ratings</tt> list. These data
+correspond to the names in <tt class="docutils literal">languages</tt>.</p>
+<div class="figure">
+<img alt="figs/pyranking.png" src="figs/pyranking.png" />
+<p class="caption">A simple bar chart illustrating the popularity of common programming languages</p>
+</div>
+<p>One may display groups of bars. The data can then be put in a matrix,
+where rows (1st index) correspond to the groups the columns to the
+data within one group:</p>
+<pre class="literal-block">
+data = [[ 0.15416284  0.7400497   0.26331502]
+        [ 0.53373939  0.01457496  0.91874701]
+        [ 0.90071485  0.03342143  0.95694934]
+        [ 0.13720932  0.28382835  0.60608318]]
+bar(data,
+    barticks=['group 1', 'group 2', 'group 3', 'group 4'],
+    legend=['bar 1', 'bar 2', 'bar 3'],
+    axis=[-1, data.shape[0], 0, 1.3],
+    ylabel='Normalized CPU time',
+    title='Bars from a matrix, now with more annotations')
+</pre>
+<p>When the names of the groups (barticks) are quite long, rotating them
+90 degrees is preferable, and this is done by the keyword
+argument <tt class="docutils literal">rotated_barticks=True</tt>.</p>
+<p>The demo program in <tt class="docutils literal">examples/bar_demo.py</tt> contains additional examples
+and features.</p>
+</div>
+</div>
+<div class="section" id="backends">
+<h1><a class="toc-backref" href="#id30">Backends</a></h1>
+<p>As we have mentioned earlier, Easyviz is just a unified interface to
+other plotting packages, which we refer to as backends. We have
+currently implemented backends for Gnuplot, Grace, OpenDX, Matlab,
+Matplotlib, Pmw.Blt, Veusz, VisIt, and VTK. Some are more early in
+developement than others, like the backends for OpenDx and VisIt.</p>
+<p>Because of limitations in many of the plotting packages, not all
+features in Easyviz are supported by each of the backends.  Gnuplot
+has (at the time of this writing) no support for visualization of 3D
+vector fields, so this is of course not available in the Gnuplot
+backend either.</p>
+<p>Some supported visualization programs are commented on below.</p>
+<p><strong>Gnuplot.</strong>
+Gnuplot is a command-driven interactive or scripted
+plotting utility that works on a wide variety of platforms. Gnuplot
+supports many types of plots in both 2D and 3D, including curve plots,
+contour plots, vector plots, and surface plots.  3D scalar and vector
+fields are not supported. To access Gnuplot from Python and send NumPy
+arrays to Gnuplot, we use the Python module <tt class="docutils literal">Gnuplot</tt>.</p>
+<p><strong>Matlab.</strong>
+Many view Matlab as the de facto standard for making curves
+and plots of 2D scalar/vector fields.</p>
+<p><strong>Matplotlib.</strong>
+Matplotlib is now quickly gaining wide popularity in
+the scientific Python community and has established itself as the de
+facto standard for curve plotting and 2D contour and (recently) surface
+plotting. The interface to Matplotlib is Matlab-insipired, and
+different backends are used to create the plots: Gtk, Tk, WxWidgets
+and many more.  (Since Easyviz and Matplotlib haver very similar
+Matlab-style syntax, Easyviz is just a thin layer on top of Matplotlib
+to enable Matplotlib to be used with the Easyviz unified syntax.)
+Matplotlib is now a comprehensive package with lots of tuning
+possibilities that Easyviz does not support - but one can fetch the
+underlying Matplotlib from Easyviz and call all the functionality of
+Matplotlib directly.</p>
+<p><strong>Grace.</strong>
+Grace is a highly interactive curve plotting program on the
+Unix/X11 platform which has been popular for many years. It does not
+support 2D or 3D scalar or vector fields. However, it has a lot of
+functionality for computing with curves and adjusting/fine-tuning
+plots interactively.</p>
+<p><strong>PyX.</strong>
+PyX is a Python package for the creation of PostScript and
+PDF files. It combines an abstraction of the PostScript drawing model
+with a TeX/LaTeX interface. Complex tasks like 2d and 3d plots in
+publication-ready quality are built out of these primitives.</p>
+<p><strong>Pmw.Blt.Graph.</strong>
+Pmw (Python Mega Widgets) extends the Tkinter
+package with more sophisticated widgets, included an interactive
+widget for curve plotting. This widget is based on the BLT package
+(an extension of Tk written in C).
+The BLT backend offers currenlty only basic plotting functionality.</p>
+<p><strong>Veusz.</strong>
+From <a href="#id55"><span class="problematic" id="id56">`&lt;http://home.gna.org/veusz&lt;Veusz&gt;`_</span></a> homepage&gt;: Veusz is a
+GUI scientific plotting and graphing package. It is designed to
+produce publication-ready Postscript or PDF output. SVG, EMF and
+bitmap formats export are also supported. Veusz has a comprehensive
+GUI and produces really high-quality plots.</p>
+<p><strong>VTK.</strong>
+VTK (Visualization ToolKit) is a package primarily aimed at
+visualizing 2D and 3D scalar and vector fields by a range of techniques.
+VTK is used to achieve 2D and 3D visualizations of the same type as
+Matlab offers. However, VTK can do much more (although the Easyviz
+commands are restricted to what is typically offered by Matlab).</p>
+</div>
+<div class="section" id="design">
+<h1><a class="toc-backref" href="#id31">Design</a></h1>
+<div class="section" id="main-objects">
+<h2><a class="toc-backref" href="#id32">Main Objects</a></h2>
+<p>All code that is common to all backends is gathered together in a file
+called <tt class="docutils literal">common.py</tt>. For each backend there is a separate file where
+the backend dependent code is stored. For example, code that are
+specific for the Gnuplot backend, are stored in a file called
+<tt class="docutils literal">gnuplot_.py</tt> and code specific for the VTK backend are stored in
+<tt class="docutils literal">vtk_.py</tt> (note the final underscore in the stem of the filename - all
+backend files have this underscore).</p>
+<p>Each backend is a subclass of class <tt class="docutils literal">BaseClass</tt>. The <tt class="docutils literal">BaseClass</tt> code
+is found in <tt class="docutils literal">common.py</tt> and contains all common code for the backends.
+Basically, a backend class extends <tt class="docutils literal">BaseClass</tt> with
+rendering capabilities and backend-specific functionality.</p>
+<p>The most important method that needs to be implemented in the backend
+is the <tt class="docutils literal">_replot</tt> method, which updates the backend and the plot after a
+change in the data. Another important method for the backend class is
+the <tt class="docutils literal">hardcopy</tt> method, which stores an image of the data in the current
+figure to a file.</p>
+<p>Inspired by Matlab, the Easyviz interface is organized around figures and
+axes. A figure contains an arbitrary number of axes, and the axes can
+be placed in arbitrary positions in the figure window. Each figure appears
+in a separate window on the screen. The current figure is accessed by
+the <tt class="docutils literal">gcf()</tt> call. Similarly, the current axes are accessed by calling
+<tt class="docutils literal">gca()</tt>.</p>
+<p>It is
+natural to have one class for figures and one for axes. Class <tt class="docutils literal">Figure</tt>
+contains a dictionary with one (default) or more <tt class="docutils literal">Axis</tt> objects in
+addition to several properties such as figure width and height. Class <tt class="docutils literal">Axis</tt>
+has another dictionary with the plot data as well as lots of
+parameters for colors, text fonts, labels on the axes, hidden surfaces, etc.
+For example, when adding an
+elevated surface to the current figure, this surface will be
+appended to a list in the current <tt class="docutils literal">Axis</tt> object.
+Optionally one can add the surface to another <tt class="docutils literal">Axis</tt>
+object by specifying the <tt class="docutils literal">Axis</tt> instance as an argument.</p>
+<p>All the objects that are to be plotted in a figure such as curves,
+surfaces, vectors, and so on, are stored in repsectively classes.  An
+elevated surface, for instance, is represented as an instance of class
+<tt class="docutils literal">Surface</tt>.  All such classes are subclasses of
+<tt class="docutils literal">PlotProperties</tt>. Besides being the base class of all objects that can
+be plotted in a figure
+(<tt class="docutils literal">Line</tt>,
+<tt class="docutils literal">Surface</tt>,
+<tt class="docutils literal">Contours</tt>,
+<tt class="docutils literal">VelocityVectors</tt>,
+<tt class="docutils literal">Streams</tt>,
+<tt class="docutils literal">Volume</tt>),
+class <tt class="docutils literal">PlotProperties</tt> also stores various properties that are common
+to all objects in a figure. Examples include line properties, material
+properties, storage arrays for x and y values for <tt class="docutils literal">Line</tt> objects,
+and x, y, and z values for 3D objects such as <tt class="docutils literal">Volume</tt>.</p>
+<p>The classes mentioned above, i.e., <tt class="docutils literal">BaseClass</tt> with subclasses, class
+<tt class="docutils literal">PlotProperties</tt> with subclasses, as well as class <tt class="docutils literal">Figure</tt> and class
+<tt class="docutils literal">Axis</tt> constitute the most important classes in the Easyviz interface.
+Other less important classes are <tt class="docutils literal">Camera</tt>, <tt class="docutils literal">Light</tt>, <tt class="docutils literal">Colorbar</tt>, and
+<tt class="docutils literal">MaterialProperties</tt>.</p>
+<p>All the classes in <tt class="docutils literal">common.py</tt> follows a convention where class parameters
+are set by a <tt class="docutils literal">setp</tt> method and read by a <tt class="docutils literal">getp</tt> method. For
+example, we can set the limits on the x axis by using the <tt class="docutils literal">setp</tt>
+method in a <tt class="docutils literal">Axis</tt> instance:</p>
+<pre class="literal-block">
+ax = gca()                  # get current axis
+ax.setp(xmin=-2, xmax=2)
+</pre>
+<p>To extract the values of these limits we can write:</p>
+<pre class="literal-block">
+xmin = ax.getp('xmin')
+xmax = ax.getp('xmax')
+</pre>
+<p>Normal use will seldom involve <tt class="docutils literal">setp</tt> and <tt class="docutils literal">getp</tt> functions, since most
+users will apply the Matlab-inspired interface and set, e.g., the
+limits by:</p>
+<pre class="literal-block">
+xlim([-2,2])
+</pre>
+</div>
+</div>
+<div class="section" id="installation">
+<span id="ev-tut-install"></span><h1><a class="toc-backref" href="#id33">Installation</a></h1>
+<p>Easyviz comes with the SciTools package, so to install Easyviz, you
+must install SciTools, which is available from
+<a class="reference external" href="http://code.google.com/p/scitools">Google code</a>.</p>
+<p>If you run a Linux system that allows installation from Debian
+repositories (Ubuntu is such a Linux system), you get SciTools, NumPy, and
+Gnuplot with one Unix command:</p>
+<pre class="literal-block">
+Unix&gt; sudo apt-get install python-scitools
+</pre>
+<p>because SciTools is in standard Debian. You probably want to be able
+to plot with other packages than Gnuplot as well. In addition, it
+is convenient to have ImageMagick installed for conversion between
+plot file formats and some encoders for videos. Here is a suggested
+list for installation on Debian systems:</p>
+<pre class="literal-block">
+Unix&gt; sudo apt-get install python-matplotlib python-tk python-scipy python-scientific imagemagick netpbm ffmpeg python-pyx python-pmw.blt python-vtk dx grace
+</pre>
+<p>Otherwise, you download the tarball with the SciTools software, pack it out,
+go the <tt class="docutils literal">scitools</tt> folder, and run the standard command:</p>
+<pre class="literal-block">
+Unix/DOS&gt; python setup.py install
+</pre>
+<p>Easyviz is reached as the package <tt class="docutils literal">scitools.easyviz</tt> and can be
+imported in several ways (see the paragraph heading
+&quot;Importing Just Easyviz&quot; in the Tutorial).</p>
+<p>Easyviz will not work unless you have one or more plotting programs
+correctly installed. Below, we have collected some brief information
+on installing various programs. (Note that if you do an <tt class="docutils literal"><span class="pre">apt-get</span>
+install <span class="pre">python-scitools</span></tt> all necessary plotting programs are
+automatically installed for you.)</p>
+<p>Please check your plotting program independently of Easyviz, as
+described in the <em>Check Your Backends!</em> section of the <em>Troubleshooting</em>
+chapter, if you encounter strange errors during Easyviz plotting.</p>
+<div class="section" id="installing-gnuplot">
+<h2><a class="toc-backref" href="#id34">Installing Gnuplot</a></h2>
+</div>
+<div class="section" id="linux-unix">
+<h2><a class="toc-backref" href="#id35">Linux/Unix</a></h2>
+<p><strong>Compile from Source.</strong>
+Gnuplot can be downloaded from gnuplot.sourceforge.net. It builds
+easily on most Unix systems. You also need the <tt class="docutils literal">Gnuplot</tt> Python
+module, which can be obtained from <tt class="docutils literal"><span class="pre">gnuplot-py.sourceforge.net</span></tt>.</p>
+<p><strong>Debian/Ubuntu.</strong>
+Prebuilt versions are available for Debian/Ubuntu:
+run:</p>
+<pre class="literal-block">
+apt-get install gnuplot gnuplot-x11 python-gnuplot
+</pre>
+<p>but running these commands are not necessary since on Debian/Ubuntu you
+will install <tt class="docutils literal"><span class="pre">python-scitools</span></tt> which effectively installs all the
+software that SciTools depend on.</p>
+</div>
+<div class="section" id="windows">
+<h2><a class="toc-backref" href="#id36">Windows</a></h2>
+<p>On Windows, one can either use Gnuplot under Cygwin or use a precompiled
+binary from sourgeforce.net.</p>
+<p><strong>Using the Gnuplot Cygwin package.</strong>
+In this case there are two things that needs to be changed in the
+<tt class="docutils literal">gp_cygwin.py</tt> file in the top-level directory of the <tt class="docutils literal">Gnuplot.py</tt>
+source tree. First you need to change the <tt class="docutils literal">gnuplot_command</tt> variable
+to <tt class="docutils literal">gnuplot</tt> instead of <tt class="docutils literal">pgnuplot.exe</tt>. Then you should change the
+<tt class="docutils literal">default_term</tt> variable to <tt class="docutils literal">x11</tt> instead of <tt class="docutils literal">windows</tt> since the
+Gnuplot Cygwin package is not compiled with the Windows
+terminal. Finally, install <tt class="docutils literal">Gnuplot.py</tt> (<tt class="docutils literal">python setup.py install</tt>)
+and launch X11 by running <tt class="docutils literal">startx</tt> from a Cygwin prompt. Try to run
+the <tt class="docutils literal">test.py</tt> script that comes with <tt class="docutils literal">Gnuplot.py</tt>. If everything
+works, Easyviz can use Gnuplot.</p>
+<p><strong>Using Gnuplot Binaries.</strong></p>
+<p>First download the Gnuplot 4.2.4 binaries for Windows (or a newer version)
+A possible URL is:</p>
+<pre class="literal-block">
+http://prdownloads.sourceforge.net/sourceforge/gnuplot/gp424win32.zip
+</pre>
+<p>The zip file may have another name for a newer version of Gnuplot on
+Windows.</p>
+<p>Then unzip the <tt class="docutils literal">gp424win32.zip</tt> file to the folder:</p>
+<pre class="literal-block">
+C:\gnuplot
+</pre>
+<p>Add the folder name:</p>
+<pre class="literal-block">
+C:\gnuplot\bin
+</pre>
+<p>to the <tt class="docutils literal">PATH</tt> environment variable (this is done in a graphical interface for
+setting environment variables).</p>
+<p>Check out the latest SVN revision of the Python interface to
+Gnuplot, which is the Python module file <tt class="docutils literal">Gnuplot.py</tt>:</p>
+<pre class="literal-block">
+svn co https://gnuplot-py.svn.sourceforge.net/svnroot/gnuplot-py/trunk/gnuplot-py
+</pre>
+<p>Install <tt class="docutils literal">Gnuplot.py</tt>:</p>
+<pre class="literal-block">
+cd gnuplot-py
+python setup.py bdist_wininst
+dist\gnuplot-py-1.8+.win32.exe
+</pre>
+<p>Check out the latest SVN revision of SciTools:</p>
+<pre class="literal-block">
+svn co http://scitools.googlecode.com/svn/trunk/ scitools
+</pre>
+<p>Install SciTools:</p>
+<pre class="literal-block">
+cd scitools
+python setup.py bdist_wininst
+dist\SciTools-0.4.win32.exe
+</pre>
+<p>(The SciTools version number differs.)</p>
+</div>
+<div class="section" id="installing-matplotlib">
+<h2><a class="toc-backref" href="#id37">Installing Matplotlib</a></h2>
+<p>This is normally just a matter of:</p>
+<pre class="literal-block">
+python setup.py install
+</pre>
+<p>in the root directory of the Matplotlib code.</p>
+<p><strong>Windows.</strong>
+You can download prebuilt binaries from the Matplotlib home page.</p>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h1><a class="toc-backref" href="#id38">Troubleshooting</a></h1>
+<div class="section" id="suddenly-my-old-plots-have-markers">
+<h2><a class="toc-backref" href="#id39">Suddenly my old plots have markers</a></h2>
+<p>The default behavior of <tt class="docutils literal">plot(x,y)</tt> was changed in August, 2012, such
+that markers are inserted at the data
+points (of at most 15 markers if the array length exceeds 61).
+The reason is that curves in image files printed in black and
+white (typically in reports) were hard to distinguish with the old
+default behavior (line of thickness 1), especially color plots
+generated by Matplotlib in PNG, EPS, and PDF, and PNG plots generated
+by Gnuplot. The new default behavior is
+better suited for increased use of PNG as file format and Matplotlib
+as plotting engine.</p>
+<p>To get the old default behavior, replace <tt class="docutils literal">plot(x,y)</tt> by
+<tt class="docutils literal"><span class="pre">plot(x,y,'-')</span></tt>, or <tt class="docutils literal"><span class="pre">plot(x,y,-2)</span></tt> if thick lines are desired. The
+colors are automatically chosen so that distinct curves get distinct
+colors. Use <tt class="docutils literal">plot(x, y)</tt> if you want both colors and markers to be
+automatically chosen.</p>
+</div>
+<div class="section" id="can-i-perform-a-diagnostic-test-of-easyviz">
+<h2><a class="toc-backref" href="#id40">Can I Perform a Diagnostic Test of Easyviz?</a></h2>
+<p>Yes. It is wise to perform a diagnostic test before reporting any error
+or trouble to the SciTools maintainers. Find the source folder of SciTools
+and go to the <tt class="docutils literal">misc</tt> subfolder. Run:</p>
+<pre class="literal-block">
+python diagonstic.py
+</pre>
+<p>On the screen, you can see what you have of working software that Easyviz
+may use. You do not need to see &quot;ok&quot; after each test, but at least
+one plotting program must be properly installed. Include the detailed
+diagonstics in the <tt class="docutils literal">scitools_diagnostic.log</tt> file as attachment in any
+mail to the SciTools developers.</p>
+</div>
+<div class="section" id="the-plot-window-disappears-immediately">
+<h2><a class="toc-backref" href="#id41">The Plot Window Disappears Immediately</a></h2>
+<p>Depending on the backend used for plotting with Easyviz, the plot
+window may be killed when the program terminates. Adding a statement
+that makes the program halt provides a remedy:</p>
+<pre class="literal-block">
+raw_input('Press Return key to quit: ')
+</pre>
+<p>The plot window will now stay on the screen until hitting the Enter/Return key.</p>
+<p>Another remedy can be to add a <tt class="docutils literal">show()</tt> call at the end of the plotting:</p>
+<pre class="literal-block">
+show()
+</pre>
+<!-- test on Windows! -->
+</div>
+<div class="section" id="i-get-thread-errors-while-plotting">
+<h2><a class="toc-backref" href="#id42">I Get Thread Errors While Plotting</a></h2>
+<p>With the Gnuplot backend, thread errors from Python may occur if you
+plot many curves. The remedy is to do <tt class="docutils literal">import time</tt> and insert
+a <tt class="docutils literal">time.sleep(0.2)</tt> (pause the program for 0.2 sec) between each call
+to the <tt class="docutils literal">plot</tt> command.</p>
+<p>Remark: Scitools v0.8 automatically inserts a 0.2 sec pause when
+plotting many curves with the Gnuplot backend.</p>
+</div>
+<div class="section" id="i-get-strange-errors-saying-something-about-latex">
+<h2><a class="toc-backref" href="#id43">I Get Strange Errors Saying Something About LaTeX</a></h2>
+<p>You probably run Easyviz with Matplotlib as backend, and you do not
+have a working LaTeX installation. Matplotlib applies LaTeX for
+improved rendering of legends, titles, and numbers.  The fix is to
+turn off the use of LaTeX, which is done by the <tt class="docutils literal">text.usetex</tt>
+parameter in the <tt class="docutils literal">matplotlib</tt> section of the configuration file.  Set
+this parameter to <tt class="docutils literal">false</tt>. See the subsection &quot;Setting Parameters in
+the Configuration File&quot; in the section &quot;Advanced Easyviz Topics&quot; in
+the Easyviz tutorial. The tutorial can be reached from the code.google.com
+site or by running pydoc scitools.easyviz. If you use Matplotlib as
+default plotting engine, we recommend to have a <tt class="docutils literal">.scitools.cfg</tt>
+configuration file in your home folder and that use control the use
+of Matplotlib parameters in this file.</p>
+<p>Another fix of LaTeX-related problems is to switch to another backend
+than Matplotlib.</p>
+</div>
+<div class="section" id="old-programs-with-2d-scalar-vector-field-plotting-do-not-work">
+<h2><a class="toc-backref" href="#id44">Old Programs with 2D Scalar/Vector Field Plotting Do Not Work</a></h2>
+<p>SciTools version 0.7 changed the default backend for plotting to
+Matplotlib instead of Gnuplot (provided you have Matplotlib and you
+run <tt class="docutils literal">setup.py</tt> to install SciTools - binaries for Debian still has
+Gnuplot as the plotting engine). Some functionality in Gnuplot, especially
+regarding 2D vector/scalar fields, is not yet present in Matplotlib
+and/or supported by the Easyviz interface to Matplotlib.
+You then need to explicitly run the script with Gnuplot as plottin
+engine:</p>
+<pre class="literal-block">
+python myprogram.py --SCITOOLS_easyviz_backend gnuplot
+</pre>
+<p>or you must import gnuplot explicitly in the program:</p>
+<pre class="literal-block">
+from scitools.std import *
+from scitools.easyviz.gnuplot_ import *
+</pre>
+<p>or you can edit the installed <tt class="docutils literal">scitools.cfg</tt> file (&quot;backend&quot; keyword
+in the &quot;easyviz&quot; section), or your local version <tt class="docutils literal">.scitools.cfg</tt> in
+your home folder, or maybe the simplest solution is to reinstall
+SciTools with Gnuplot as plotting engine:</p>
+<pre class="literal-block">
+python setup.py install --easyviz_backend gnuplot
+</pre>
+</div>
+<div class="section" id="check-your-backends">
+<h2><a class="toc-backref" href="#id45">Check Your Backends!</a></h2>
+<p>When you encounter a problem with Easyviz plotting, make sure that the
+backend works correctly on its own (there may, e.g., be installation
+problems with the backend - Easyviz just calls the backend to do the
+plotting).</p>
+<div class="section" id="gnuplot">
+<h3>Gnuplot</h3>
+<p>For the Gnuplot backend you can try the following commands in a
+terminal window:</p>
+<pre class="literal-block">
+Unix/DOS&gt; gnuplot
+gnuplot&gt; plot sin(x)
+</pre>
+<p>This should result in a plot of the sine function on the screen.
+If this command does not work, Easyviz will not work with the Gnuplot
+backend. A common problem is that Gnuplot is installed, but the path
+to the Gnuplot executable is not registered in the <tt class="docutils literal">PATH</tt> environment
+variable. See the section <em>Installing Gnuplot</em> if you need help with
+installing the Gnuplot program and its Python interface.</p>
+</div>
+<div class="section" id="matplotlib">
+<h3>Matplotlib</h3>
+<p>The following code tests if you have installed Matplotlib correctly:</p>
+<pre class="literal-block">
+import matplotlib.pyplot as plt
+import numpy as np
+x = np.linspace(0, 2*np.pi, 101)
+y = np.sin(x)
+plt.plot(x, y)
+plt.show()
+</pre>
+<p>In case of problems, go to the Matplotlib source directory, remove the
+<tt class="docutils literal">build</tt> subdirectory, and try a new install with <tt class="docutils literal">python setup.py install</tt>.</p>
+</div>
+</div>
+<div class="section" id="can-i-easily-turn-off-all-plotting">
+<h2><a class="toc-backref" href="#id46">Can I Easily Turn Off All Plotting?</a></h2>
+<p>Yes, this is very convenient when debugging other (non-plotting) parts
+of a program. Just write:</p>
+<pre class="literal-block">
+from scitools.std import *
+turn_off_plotting(globals())
+</pre>
+</div>
+<div class="section" id="how-can-i-change-the-type-of-gnuplot-window">
+<h2><a class="toc-backref" href="#id47">How Can I Change the Type of Gnuplot Window?</a></h2>
+<p>The configuration file (<tt class="docutils literal">.scitools.cfg</tt> in your home directory or a
+local directory, copied from <tt class="docutils literal">scitools.cfg</tt> in the SciTools source
+code distribution) has an item for controlling the type of <em>terminal</em>
+used by Gnuplot:</p>
+<pre class="literal-block">
+[gnuplot]
+...
+default_term               = &lt;str&gt; wxt
+</pre>
+<p>Here, the <tt class="docutils literal">wxt</tt> terminal, based on wxWidgets, is chosen. Other
+choices are <tt class="docutils literal">x11</tt> on systems supporting X11 graphics, or <tt class="docutils literal">aqua</tt> on
+Mac. The <tt class="docutils literal">wxt</tt> value is an allround choice since wxWidgets work, in theory,
+on all platforms.</p>
+</div>
+<div class="section" id="how-can-the-aspect-ratio-of-the-axes-be-controlled">
+<h2><a class="toc-backref" href="#id48">How Can The Aspect Ratio of The Axes Be Controlled?</a></h2>
+<p>See the section &quot;Controlling the Aspect Ratio of Axes&quot; in the
+tutorial.</p>
+</div>
+<div class="section" id="trouble-with-gnuplot-and-threads">
+<h2><a class="toc-backref" href="#id49">Trouble with Gnuplot and Threads</a></h2>
+<p>When using the Gnuplot backend, the following error may be encountered:</p>
+<pre class="literal-block">
+thread.error: can't start new thread
+</pre>
+<p>A remedy is to create fewer plots, and for animations, update the plot
+window less frequently. For example:</p>
+<pre class="literal-block">
+for i in range(number_of_frames_in_animation):
+    &lt;prepare data&gt;
+    if i % == 100:     # plot every 100 frames
+        &lt;make plot&gt;
+</pre>
+</div>
+<div class="section" id="trouble-with-movie-making">
+<h2><a class="toc-backref" href="#id50">Trouble with Movie Making</a></h2>
+<p>The call to <tt class="docutils literal">movie</tt> demands that you have video encoders installed.
+The legal encoders are <tt class="docutils literal">mencoder</tt>, <tt class="docutils literal">ffmpeg</tt>, <tt class="docutils literal">mpeg_encode</tt>, <tt class="docutils literal">ppmtompeg</tt>,
+<tt class="docutils literal">mpeg2enc</tt>, and <tt class="docutils literal">convert</tt>. Some of these also require additional
+software to be installed.</p>
+<p>To install (e.g.) <tt class="docutils literal">convert</tt>, you need to install the ImageMagick
+software suite, since <tt class="docutils literal">convert</tt> is a part of that package. ImageMagick
+is easy to install on most platforms. The <tt class="docutils literal">ppmtompeg</tt> encoder is a part
+of the Netpbm software, while <tt class="docutils literal">mpeg2enc</tt> is a part of <tt class="docutils literal">mjpegtools</tt>.</p>
+<p>On Linux Ubuntu you can issue the following installation command to install most of the available encoders for the <tt class="docutils literal">movie</tt> function:</p>
+<pre class="literal-block">
+Unix&gt; sudo apt-get install mencoder ffmpeg libavcodec-unstripped-51 netpbm mjpegtools imagemagick
+</pre>
+<p>When something goes wrong with the movie making, check the output in
+the terminal window. By default, Easyviz prints the command that makes
+the movie. You can manually copy this command and run it again to start
+finding out what can be wrong. Just switching to a different encoder can be
+a quick remedy. The switch is done with the <tt class="docutils literal">encoder</tt> keyword argument
+to <tt class="docutils literal">movie</tt>, e.g.:</p>
+<pre class="literal-block">
+# Make animated GIF movie in the file tmpmovie.gif
+movie('tmp_*.png', encoder='convert', fps=2,
+      output_file='tmpmovie.gif')
+</pre>
+</div>
+<div class="section" id="i-get-thread-errors-with-gnuplot">
+<h2><a class="toc-backref" href="#id51">I Get Thread Errors with Gnuplot</a></h2>
+<p>When plotting inside a loop, e.g.:</p>
+<pre class="literal-block">
+for i in some_values:
+    ...
+    plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
+         xlabel='t', ylabel='Xt', title='My Title')
+</pre>
+<p>Gnuplot may lead to thread errors. A remedy is to do some plotting
+outside the loop and then only update the data inside the loop:</p>
+<pre class="literal-block">
+plot(t, X0, 'r-6', axis=(0, 1, -2, 2),
+     xlabel='t', ylabel='Xt', title='My Title')
+for i in some_values:
+    ...
+    plot(t, X0)
+</pre>
+</div>
+<div class="section" id="where-can-i-find-easyviz-documentation">
+<h2><a class="toc-backref" href="#id52">Where Can I Find Easyviz Documentation?</a></h2>
+<p>There is a verbose Easyviz documentation that mainly focuses on an
+introduction to Easyviz (what you read now is a part of that
+documentation).</p>
+<p>Another useful source of information is the many examples that come
+with the SciTools/Easyviz source code. The examples are located in
+the <tt class="docutils literal">examples</tt> subfolder of the source.</p>
+</div>
+<div class="section" id="grace-gives-error-messages-when-calling-savefig-hardcopy">
+<h2><a class="toc-backref" href="#id53">Grace Gives Error Messages When Calling Savefig/Hardcopy</a></h2>
+<p>Some versions of grace do not like commands for printing the plot
+to file. Try the interactive GUI: set options in Print setup... and
+then click on Print.</p>
+</div>
+<div class="section" id="i-cannot-find-out-how-my-plot-can-be-created">
+<h2><a class="toc-backref" href="#id54">I Cannot Find Out How My Plot Can Be Created</a></h2>
+<p>Note that Easyviz only support the most basic types of plots:</p>
+<blockquote>
+<ul class="simple">
+<li>y=f(x) curves</li>
+<li>bar plots</li>
+<li>contour plots of 2D scalar fields</li>
+<li>elevated 3D surfaces of 2D scalar fields</li>
+<li>3D isosurfaces of 3D scalar fields</li>
+<li>arrows reflecting 2D/3D vector fields</li>
+<li>streamlines, streamtubes, and streamribbon for 3D vector fields.</li>
+</ul>
+</blockquote>
+<p>For such standard plots you can use Easyviz, otherwise you have to
+use a plotting package like Matplotlib, Gnuplot, or VTK directly
+from your Python program.</p>
+<p>The following Matlab-like commands (functions) are available (but not
+supported by all backends):</p>
+<blockquote>
+<ul class="simple">
+<li>autumn,</li>
+<li>axes,</li>
+<li>axis,</li>
+<li>bone,</li>
+<li>box,</li>
+<li>brighten,</li>
+<li>camdolly,</li>
+<li>camlight,</li>
+<li>camlookat,</li>
+<li>campos,</li>
+<li>camproj,</li>
+<li>camroll,</li>
+<li>camtarget,</li>
+<li>camup,</li>
+<li>camva,</li>
+<li>camzoom,</li>
+<li>caxis,</li>
+<li>cla,</li>
+<li>clabel,</li>
+<li>clf,</li>
+<li>close,</li>
+<li>closefig,</li>
+<li>closefigs,</li>
+<li>colorbar,</li>
+<li>colorcube,</li>
+<li>colormap,</li>
+<li>coneplot,</li>
+<li>contour,</li>
+<li>contour3,</li>
+<li>contourf,</li>
+<li>contourslice,</li>
+<li>cool,</li>
+<li>copper,</li>
+<li>daspect,</li>
+<li>dumpfig,</li>
+<li>figure,</li>
+<li>fill,</li>
+<li>fill3,</li>
+<li>flag,</li>
+<li>gca,</li>
+<li>gcf,</li>
+<li>get,</li>
+<li>gray,</li>
+<li>grid,</li>
+<li>hardcopy,</li>
+<li>hidden,</li>
+<li>hold,</li>
+<li>hot,</li>
+<li>hsv,</li>
+<li>ishold,</li>
+<li>isocaps,</li>
+<li>isosurface,</li>
+<li>jet,</li>
+<li>legend,</li>
+<li>light,</li>
+<li>lines,</li>
+<li>loadfig,</li>
+<li>loglog,</li>
+<li>material,</li>
+<li>mesh,</li>
+<li>meshc,</li>
+<li>pcolor,</li>
+<li>pink,</li>
+<li>plot,</li>
+<li>plot3,</li>
+<li>prism,</li>
+<li>quiver,</li>
+<li>quiver3,</li>
+<li>reducevolum,</li>
+<li>savefig,</li>
+<li>semilogx,</li>
+<li>semilogy,</li>
+<li>set,</li>
+<li>shading,</li>
+<li>show,</li>
+<li><a href="#id57"><span class="problematic" id="id58">slice_</span></a>,</li>
+<li>spring,</li>
+<li>streamline,</li>
+<li>streamribbon,</li>
+<li>streamslice,</li>
+<li>streamtube,</li>
+<li>subplot,</li>
+<li>subvolume,</li>
+<li>summer,</li>
+<li>surf,</li>
+<li>surfc,</li>
+<li>surfl,</li>
+<li>title,</li>
+<li>vga,</li>
+<li>view,</li>
+<li>white,</li>
+<li>winter,</li>
+<li>xlabel,</li>
+<li>ylabel,</li>
+<li>zlabel</li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div class="system-messages section">
+<h1>Docutils System Messages</h1>
+<div class="system-message" id="id55">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 2435); <em><a href="#id56">backlink</a></em></p>
+Unknown target name: &quot;&lt;http://home.gna.org/veusz&lt;veusz&gt;&quot;.</div>
+<div class="system-message" id="id57">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">tmp_easyviz.rst</tt>, line 3110); <em><a href="#id58">backlink</a></em></p>
+Unknown target name: &quot;slice&quot;.</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+
+:mod:`scitools.debug`
+=====================
+
+.. automodule:: scitools.debug
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

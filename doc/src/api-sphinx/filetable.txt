@@ -1,0 +1,10 @@
+
+:mod:`scitools.filetable`
+=========================
+
+.. automodule:: scitools.filetable
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

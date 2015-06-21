@@ -1,0 +1,8 @@
+
+:mod:`scitools.globaldata`
+==========================
+
+.. automodule:: scitools.globaldata
+   :members:
+   :undoc-members:
+   :show-inheritance:

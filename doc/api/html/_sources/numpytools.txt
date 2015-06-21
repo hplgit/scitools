@@ -1,0 +1,10 @@
+
+:mod:`scitools.numpytools`
+==========================
+
+.. automodule:: scitools.numpytools
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

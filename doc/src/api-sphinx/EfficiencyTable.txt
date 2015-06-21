@@ -1,0 +1,10 @@
+
+:mod:`scitools.EfficiencyTable`
+===============================
+
+.. automodule:: scitools.EfficiencyTable
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

@@ -1,0 +1,556 @@
+======= Visualization of Scalar Fields =======
+
+A scalar field is a function from space or space-time to a real value.
+This real value typically reflects a scalar physical parameter at every
+point in space (or in space and time). One example is temperature,
+which is a scalar quantity defined everywhere in space and time.  In a
+visualization context, we work with discrete scalar fields that are
+defined on a grid. Each point in the grid is then associated with a
+scalar value.
+
+There are several ways to visualize a scalar field in Easyviz. Both
+two- and three-dimensional scalar fields are supported. In two
+dimensions (2D) we can create elevated surface plots, contour plots,
+and pseudocolor plots, while in three dimensions (3D) we can create
+isosurface plots, volumetric slice plots, and contour slice plots.
+
+===== Elevated Surface Plots =====
+
+To create elevated surface plots we can use either the `surf` or the
+`mesh` command. Both commands have the same syntax, but the `mesh`
+command creates a wireframe mesh while the `surf` command creates a
+solid colored surface.
+
+Our examples will make use of the scalar field
+$f(x,y) = \sin r$|$f(x,y)=sin(r)$,
+where $r$ is the distance in the plane from the origin, i.e.,
+$r=\sqrt{x^2+y^2}$|$r=sqrt(x**2+y**2)$.
+The $x$ and $y$ values in our 2D domain lie between -5 and 5.
+
+The example first creates the necessary data arrays for 2D scalar
+field plotting: the coordinates in each direction, extensions of these
+arrays to form a *ndgrid*, and the function values. The latter array
+is computed in a vectorized operation which requires the extended
+coordinate arrays from the `ndgrid` function.  The `mesh` command
+can then produce the plot with a syntax that mirrors the simplicity of
+the `plot` command for curves:
+!bc pycod
+x = y = linspace(-5, 5, 21)
+xv, yv = ndgrid(x, y)
+values = sin(sqrt(xv**2 + yv**2))
+h = mesh(xv, yv, values)
+!ec
+The `mesh` command returns a reference to a new `Surface` object, here
+stored in a variable h. This reference can be used to set or get
+properties in the object at a later stage if needed.  The resulting
+plot can be seen in Figure ref{fig:mesh_ex1}.
+
+We remark that the computations in the previous example are vectorized.
+The corresponding scalar computations using a double loop read
+!bc pycod
+values = zeros(x.size, y.size)
+for i in xrange(x.size):
+    for j in xrange(y.size):
+        values[i,j] = sin(sqrt(x[i]**2 + y[j]**2))
+!ec
+However, for the `mesh` command to work, we need the vectorized
+extensions `xv` and `yv` of `x` and `y`.
+
+FIGURE:[figs/mesh_ex1, width=500] Result of the mesh command for plotting a 2D scalar field (Gnuplot backend). label{fig:mesh_ex1}
+
+The `surf` command employs the same syntax, but results in a different
+plot (see Figure ref{fig:surf_ex1}):
+!bc pycod
+surf(xv, yv, values)
+!ec
+
+FIGURE:[figs/surf_ex1, width=500] Result of the surf command (Gnuplot backend). label{fig:surf_ex1}
+
+The `surf` command offers many possibilities to adjust the resulting plot:
+!bc pycod
+setp(interactive=False)
+surf(xv, yv, values)
+shading('flat')
+colorbar()
+colormap(hot())
+axis([-6,6,-6,6,-1.5,1.5])
+view(35,45)
+show()
+!ec
+Here we have specified a flat shading model, added a color bar, changed
+the color map to `hot`, set some suitable axis values, and changed the
+view point (the view takes two arguments: the azimuthal rotation and
+the elevation, both given in degrees).
+The same plot can also be accomplished with one single, compound
+statement (just as Easyviz offers for the `plot` command):
+!bc pycod
+surf(xv, yv, values,
+     shading='flat',
+     colorbar='on',
+     colormap=hot(),
+     axis=[-6,6,-6,6,-1.5,1.5],
+     view=[35,45])
+!ec
+Figure ref{fig:surf_ex2} displays the result.
+
+FIGURE:[figs/surf_ex2, width=500] Result of an extended surf command (Gnuplot backend). label{fig:surf_ex2}
+
+
+===== Contour Plots =====
+
+A contour plot is another useful technique for visualizing scalar
+fields. The primary examples on contour plots from everyday life is
+the level curves on geographical maps, reflecting the height of the
+terrain. Mathematically, a contour line, also called an isoline, is
+defined as the implicit curve $f(x,y)=c$. The contour levels $c$ are
+normally uniformly distributed between the extreme values of the
+function $f$ (this is the case in a map: the height difference between
+two contour lines is constant), but in scientific visualization it is
+sometimes useful to use a few carefully selected $c$ values to
+illustrate particular features of a scalar field.
+
+In Easyviz, there are several commands for creating different kinds of
+contour plots:
+
+  * `contour`: Draw a standard contour plot, i.e., lines in the plane.
+
+  * `contourf`: Draw a filled 2D contour plot, where the space between
+    the contour lines is filled with colors.
+
+  * `contour3`: Same as `contour`, but the curves are drawn at their
+    corresponding height levels in 3D space.
+
+  * `meshc`: Displays the same plot as `mesh`, but with an additional
+     contour plot drawn in a plane beneath the mesh.
+
+  * `surfc`: Same as `meshc` except that a solid surface is
+    drawn instead of a wireframe mesh.
+
+We start with illustrating the plain `contour` command, assuming that
+we already have computed the `xv`, `yv`, and `values`
+arrays as shown in our first example on scalar field plotting.
+The basic syntax follows that of `mesh` and `surf`:
+!bc pycod
+contour(xv, yv, values)
+!ec
+By default, five uniformly spaced contour level curves are drawn, see
+Figure ref{fig:contour_ex1}.
+
+FIGURE:[figs/contour_ex1, width=500] Result of the simplest possible contour command (Gnuplot backend). label{fig:contour_ex1}
+
+The number of levels in a contour plot can be specified with an additional
+argument:
+!bc pycod
+n = 15   # number of desired contour levels
+contour(xv, yv, values, n)
+!ec
+The result can be seen in Figure ref{fig:contour_ex2}.
+
+FIGURE:[figs/contour_ex2, width=500] A contour plot with 15 contour levels (Gnuplot backend). label{fig:contour_ex2}
+
+Sometimes one wants contour levels that are not equidistant or not
+distributed throughout the range of the scalar field. Individual
+contour levels to be drawn can easily be specified as a list:
+!bc pycod
+levels = [-0.5, 0.1, 0.3, 0.9]
+contour(xv, yv, values, levels, clabels='on')
+!ec
+Now, the `levels` list specify the values of the contour levels, and
+the `clabel` keyword allows labeling of the level values in the plot.
+Figure ref{fig:contour_ex3} shows the result. We remark that the
+Gnuplot backend colors the contour lines and places the contour values
+and corresponding colors beside the plot. Figures that are reproduced
+in black and white only can then be hard to analyze. Other backends
+may draw the contour lines in black and annotate each line with the
+corresponding contour level value.  Such plots are better suited for
+being displayed in black and white.
+
+FIGURE:[figs/contour_ex3, width=500] Four individually specified contour levels (Gnuplot backend). label{fig:contour_ex3}
+
+The `contourf` command,
+!bc pycod
+contourf(xv, yv, values)
+!ec
+gives a filled contour plot as shown in Figure ref{fig:contourf_ex1}.
+Only the Matplotlib and VTK backends currently supports filled
+contour plots.
+
+FIGURE:[figs/contourf_ex1, width=500] Filled contour plot created by the contourf command (VTK backend). label{fig:contourf_ex1}
+
+The contour lines can be ``lifted up'' in 3D space, as shown in Figure
+ref{fig:contour3_ex1}, using the `contour3` command:
+!bc pycod
+contour3(xv, yv, values, 15)
+!ec
+
+FIGURE:[figs/contour3_ex1, width=500] Example on the contour3 command for elevated contour levels (Gnuplot backend). label{fig:contour3_ex1}
+
+Finally, we show a simple example illustrating the `meshc` and `surfc`
+commands:
+!bc pycod
+meshc(xv, yv, values,
+      clevels=10,
+      colormap=hot(),
+      grid='off')
+figure()
+surfc(xv, yv, values,
+      clevels=15,
+      colormap=hsv(),
+      grid='off',
+      view=(30,40))
+!ec
+The resulting plots are displayed in Figures ref{fig:meshc_ex1} and
+ref{fig:surfc_ex1}.
+
+FIGURE:[figs/meshc_ex1, width=500] Wireframe mesh with contours at the bottom (Gnuplot backend). label{fig:meshc_ex1}
+
+FIGURE:[figs/surfc_ex1, width=500] Surface plot with contours (Gnuplot backend). label{fig:surfc_ex1}
+
+
+===== Pseudocolor Plots =====
+
+Another way of visualizing a 2D scalar field in Easyviz is the
+`pcolor` command. This command creates a pseudocolor plot, which is a
+flat surface viewed from above. The simplest form of this command
+follows the syntax of the other commands:
+!bc pycod
+pcolor(xv, yv, values)
+!ec
+We can set the color shading in a pseudocolor plot either by giving
+the `shading` keyword argument to `pcolor` or by calling the `shading`
+command. The color shading is specified by a string that can be either
+`'faceted'` (default), `'flat'`, or `'interp'` (interpolated). The Gnuplot and
+Matplotlib backends support `'faceted'` and `'flat'` only, while the
+VTK backend supports all of them.
+
+FIGURE:[figs/pcolor_ex1, width=500] Pseudocolor plot (Gnuplot backend).
+
+
+===== Isosurface Plots =====
+
+For 3D scalar fields, isosurfaces or contour surfaces constitute the counterpart to contour
+lines or isolines for 2D scalar fields. An isosurface connects points in
+a scalar field with (approximately) the same scalar value and is
+mathematically defined by the implicit equation $f(x,y,z)=c$. In Easyviz,
+isosurfaces are created with the `isosurface` command. We will
+demonstrate this command using 3D scalar field data from the `flow`
+function. This function, also found in Matlab,
+generates fluid flow data. Our first isosurface visualization example
+then looks as follows:
+!bc pycod
+x, y, z, v = flow()  # generate fluid-flow data
+setp(interactive=False)
+h = isosurface(x,y,z,v,-3)
+h.setp(opacity=0.5)
+shading('interp')
+daspect([1,1,1])
+view(3)
+axis('tight')
+show()
+!ec
+After creating some scalar volume data with the `flow` function, we
+create an isosurface with the isovalue $-3$. The isosurface is then
+set a bit transparent (`opacity=0.5`) before we specify the shading
+model and the view point. We also set the data aspect ratio to be
+equal in all directions with the `daspect` command.  The resulting
+plot is shown in Figure ref{fig:isosurface1}. We remark that the
+Gnuplot backend does not support 3D scalar fields and hence not
+isosurfaces.
+
+FIGURE:[figs/isosurface1, width=500] Isosurface plot (VTK backend). label{fig:isosurface1}
+
+Here is another example that demonstrates the `isosurface` command
+(again using the `flow` function):
+!bc pycod
+x, y, z, v = flow()
+setp(interactive=False)
+h = isosurface(x,y,z,v,0)
+shading('interp')
+daspect([1,4,4])
+view([-65,20])
+axis('tight')
+show()
+!ec
+Figure ref{fig:isosurface2} shows the resulting plot.
+
+FIGURE:[figs/isosurface2, width=500] Another isosurface plot (VTK backend). label{fig:isosurface2}
+
+
+===== Volumetric Slice Plot =====
+
+Another way of visualizing scalar volume data is by using the `slice_`
+command (since the name `slice` is already taken by a built-in
+function in Python for array slicing, we have followed the standard
+Python convention and added a trailing underscore to the name in
+Easyviz - `slice_` is thus the counterpart to the Matlab function
+`slice`.). This command draws orthogonal slice planes through a
+given volumetric data set. Here is an example on how to use the
+`slice_` command:
+!bc pycod
+x, y, z = ndgrid(seq(-2,2,.2), seq(-2,2,.25), seq(-2,2,.16),
+                   sparse=True)
+v = x*exp(-x**2 - y**2 - z**2)
+xslice = [-1.2, .8, 2]
+yslice = 2
+zslice = [-2, 0]
+slice_(x, y, z, v, xslice, yslice, zslice,
+       colormap=hsv(), grid='off')
+!ec
+Note that we here use the SciTools function `seq` for specifying a
+uniform partitioning of an interval - the `linspace` function from
+`numpy` could equally well be used.  The first three arguments in the
+`slice_` call are the grid points in the $x$, $y$, and $z$
+directions. The fourth argument is the scalar field defined on-top of
+the grid. The next three arguments defines either slice planes in the
+three space directions or a surface plane (currently not working). In
+this example we have created 6 slice planes: Three at the $x$ axis (at
+$x=-1.2$, $x=0.8$, and $x=2$), one at the $y$ axis (at $y=2$), and two
+at the $z$ axis (at $z=-2$ and $z=0.0$). The result is presented in
+Figure ref{fig:slice1}.
+
+FIGURE:[figs/slice1, width=500] Slice plot where the $x$ axis is sliced at -1.2, 0.8, and 2, the $y$ axis is sliced at 2, and the $z$ axis is sliced at -2 and 0.0 (VTK backend). label{fig:slice1}
+
+# OBS:
+#Slicing with a Surface-object does not work for JHR so far in VTK
+
+__Contours in Slice Planes.__
+
+With the `contourslice` command we can create contour plots
+in planes aligned with the coordinate axes. Here is an example
+using 3D scalar field data from the `flow` function:
+!bc pycod
+x, y, z, v = flow()
+setp(interactive=False)
+h = contourslice(x, y, z, v, seq(1,9), [], [0], linspace(-8,2,10))
+axis([0, 10, -3, 3, -3, 3])
+daspect([1, 1, 1])
+ax = gca()
+ax.setp(fgcolor=(1,1,1), bgcolor=(0,0,0))
+box('on')
+view(3)
+show()
+!ec
+The first four arguments given to `contourslice` in this example are
+the extended coordinates of the grid (`x`, `y`, `z`) and the 3D scalar
+field values in the volume (`v`). The next three arguments defines the
+slice planes in which we want to draw contour lines. In this
+particular example we have specified two contour plots in the planes
+$x=1,2,\dots,9$, none in $y=\hbox{const}$|$y=const$ planes (empty
+list) , and one contour plot in the plane $z=0$. The last argument to
+`contourslice` is optional, it can be either an integer specifying the
+number of contour lines (the default is five) or, as in the current
+example, a list specifying the level curves. Running the set of
+commands results in the plot shown in Figure ref{fig:contourslice1}.
+
+FIGURE:[figs/contourslice1, width=500] Contours in slice planes (VTK backend). label{fig:contourslice1}
+
+Here is another example where we draw contour slices from a
+three-dimensional MRI data set:
+!bc pycod
+import scipy.io
+mri = scipy.io.loadmat('mri_matlab_v6.mat')
+D = mri['D']
+image_num = 8
+
+# Displaying a 2D Contour Slice
+contourslice(D, [], [], image_num, daspect=[1,1,1], indexing='xy')
+!ec
+The MRI data set is loaded from the file `mri_matlab_v6.mat` with the
+aid from the `loadmat` function available in the `io` module in the
+SciPy package. We then create a 2D contour slice plot with one slice
+in the plane $z=8$. Figure ref{fig:contourslice3} displays the result.
+
+FIGURE:[figs/contourslice3, width=500] Contour slice plot of a 3D MRI data set (VTK backend). label{fig:contourslice3}
+
+
+======= Visualization of Vector Fields =======
+
+A vector field is a function from space or space-time to a vector
+value, where the number of components in the vector corresponds to
+the number of space dimensions. Primary examples on vector fields
+are the gradient of a scalar field; or velocity, displacement, or
+force in continuum physics.
+
+In Easyviz, a vector field can be visualized either by a quiver
+(arrow) plot or by various kinds of stream plots like stream lines,
+stream ribbons, and stream tubes. Below we will look closer at each of
+these visualization techniques.
+
+===== Quiver Plots =====
+
+The `quiver` and `quiver3` commands draw arrows to illustrate vector
+values (length and direction) at discrete points.  As the names
+indicate, `quiver` is for 2D vector fields in the plane and `quiver3`
+plots vectors in 3D space.  The basic usage of the `quiver` command
+goes as follows:
+!bc pycod
+x = y = linspace(-5, 5, 21)
+xv, yv = ndgrid(x, y, sparse=False)
+values = sin(sqrt(xv**2 + yv**2))
+uv, vv = gradient(values)
+quiver(xv, yv, uv, vv)
+!ec
+Our vector field in this example is simply the gradient of the scalar
+field used to illustrate the commands for 2D scalar field plotting.
+The `gradient` function computes the gradient using finite difference
+approximations.  The result is a vector field with components `uv` and
+`vv` in the $x$ and $y$ directions, respectively.  The grid points and
+the vector components are passed as arguments to `quiver`, which in
+turn produces the plot in Figure ref{fig:quiver_ex1}.
+
+FIGURE:[figs/quiver_ex1, width=500] Velocity vector plot (Gnuplot backend). label{fig:quiver_ex1}
+
+The arrows in a quiver plot are automatically scaled to fit within the
+grid. If we want to control the length of the arrows, we can pass an
+additional argument to scale the default lengths:
+!bc pycod
+scale = 2
+quiver(xv, yv, uv, vv, scale)
+!ec
+This value of `scale` will thus stretch the vectors to their double length.
+To turn off the automatic scaling, we can set the scale value to zero.
+
+Quiver plots are often used in combination with other plotting
+commands such as pseudocolor plots or contour plots, since this may
+help to get a better perception of a given set of data. Here is an
+example demonstrating this principle for a simple scalar field, where
+we plot the field values as colors and add vectors to illustrate the
+associated gradient field:
+!bc pycod
+xv, yv = ndgrid(linspace(-5,5,101), linspace(-5,5,101))
+values = sin(sqrt(xv**2 + yv**2))
+pcolor(xv, yv, values, shading='interp')
+
+# Create a coarser grid for the gradient field
+xv, yv = ndgrid(linspace(-5,5,21), linspace(-5,5,21))
+values = sin(sqrt(xv**2 + yv**2))
+uv, vv = gradient(values)
+hold('on')
+quiver(xv, yv, uv, vv, 'filled', 'k', axis=[-6,6,-6,6])
+figure(2)
+contour(xv, yv, values, 15)
+hold('on')
+quiver(xv, yv, uv, vv, axis=[-6,6,-6,6])
+!ec
+The resulting plots can be seen in Figure ref{fig:quiver_ex2} and
+ref{fig:quiver_ex3}.
+
+FIGURE:[figs/quiver_ex2, width=500] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex2}
+
+
+FIGURE:[figs/quiver_ex3, width=500] Combined quiver and pseudocolor plot (VTK backend). label{fig:quiver_ex3}
+
+Visualization of 3D vector fields by arrows at grid points can be done
+with the `quiver3` command. At the time of this writing, only the VTK
+backend supports 3D quiver plots. A simple example of plotting the
+"radius vector field" $\vec v = (x,y,z)$|$v=(x,y,z)$ is given next:
+!bc pycod
+x = y = z = linspace(-3,3,4)
+xv, yv, zv = ndgrid(x, y, z, sparse=False)
+uv = xv
+vv = yv
+wv = zv
+quiver3(xv, yv, zv, uv, vv, wv, 'filled', 'r', axis=[-7,7,-7,7,-7,7])
+!ec
+The strings `'filled'` and `'r'` are optional and makes the arrows
+become filled
+and red, respectively. The resulting plot is presented in Figure
+ref{fig:quiver3_ex1}.
+
+FIGURE:[figs/quiver3_ex1, width=500] 3D quiver plot (VTK backend). label{fig:quiver3_ex1}
+
+
+===== Stream Plots =====
+
+Stream plots constitute an alternative to arrow plots for visualizing
+vector fields.  The stream plot commands currently available in
+Easyviz are `streamline`, `streamtube`, and `streamribbon`.  Stream
+lines are lines aligned with the vector field, i.e., the vectors are
+tangents to the streamlines. Stream tubes are similar, but now the
+surfaces of thin tubes are aligned with the vectors.  Stream ribbons
+are also similar: thin sheets are aligned with the vectors. The latter
+type of visualization is also known as stream or flow sheets.  In the
+near future, Matlab commands such as `streamslice` and
+`streamparticles` might also be implemented.
+
+We start with an example on how to use the `streamline` command. In
+this example (and in the following examples) we will use the `wind`
+data set that is included with Matlab. This data set represents air
+currents over a region of North America and is suitable for testing
+the different stream plot commands. The following commands will load
+the `wind` data set and then draw some stream lines from it:
+!bc pycod
+import scipy.io  # needed to load binary .mat-files
+
+# Load the wind data set and create variables
+wind = scipy.io.loadmat('wind.mat')
+x = wind['x']
+y = wind['y']
+z = wind['z']
+u = wind['u']
+v = wind['v']
+w = wind['w']
+
+# Create starting points for the stream lines
+sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5),
+                    sparse=False)
+
+# Draw stream lines
+streamline(x, y, z, u, v, w, sx, sy, sz,
+           view=3, axis=[60,140,10,60,-5,20])
+!ec
+The `wind` data set is stored in a binary `.mat`-file called
+`wind.mat`. To load the data in this file into Python, we can use the
+`loadmat` function which is available through the `io` module in
+SciPy. Using the `loadmat` function on the `wind.mat`-file returns a
+Python dictionary (called `wind` in the current example) containing the NumPy
+arrays `x`, `y`, `z`, `u`, `v`, and `w`. The arrays `u`, `v`, and `w`
+are the 3D vector data, while the arrays `x`, `y`, and `z` defines the
+(3D extended) coordinates for the associated grid. The data arrays in
+the dictionary `wind` are then stored in seperate variables for easier
+access later.
+
+Before we call the `streamline` command we must set up some starting
+point coordinates for the stream lines. In this example, we have used
+the `ndgrid` command to define the starting points with the line:
+!bc pycod
+sx, sy, sz = ndgrid([80]*4, seq(20,50,10), seq(0,15,5))
+!ec
+This command defines starting points which all lie on $x=80$,
+$y=20,30,40,50$, and $z=0,5,10,15$. We now have all the data we need
+for calling the `streamline` command. The first six arguments to the
+`streamline` command are the grid coordinates `(x,y,z)` and the 3D
+vector data `(u,v,w)`, while the next three arguments are the starting
+points which we defined with the `ndgrid` command above. The
+resulting plot is presented in Figure ref{fig:streamline_ex1}.
+
+FIGURE:[figs/streamline_ex1, width=500] Stream line plot (Vtk backend). label{fig:streamline_ex1}
+
+The next example demonstrates the `streamtube` command applied to the
+same `wind` data set:
+!bc pycod
+streamtube(x, y, z, u, v, w, sx, sy, sz,
+           daspect=[1,1,1],
+	   view=3,
+	   axis='tight',
+	   shading='interp')
+!ec
+The arrays `sx`, `sy`, and `sz` are the same as in the previous
+example and defines the starting positions for the center lines of the
+tubes. The resulting plot is presented in Figure
+ref{fig:streamtube_ex1}.
+
+FIGURE:[figs/streamtube_ex1, width=500] Stream tubes (Vtk backend). label{fig:streamtube_ex1}
+
+Finally, we illustrate the `streamribbon` command:
+!bc pycod
+streamribbon(x, y, z, u, v, w, sx, sy, sz,
+             ribbonwidth=5,
+             daspect=[1,1,1],
+             view=3,
+             axis='tight',
+             shading='interp')
+!ec
+Figure ref{fig:streamribbon_ex1} shows the resulting stream ribbons.
+
+FIGURE:[figs/streamribbon_ex1, width=500] Stream ribbons (VTK backend). label{fig:streamribbon_ex1}

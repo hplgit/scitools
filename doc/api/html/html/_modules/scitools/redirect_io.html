@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.redirect_io &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.redirect_io</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">r&quot;&quot;&quot;</span>
+
+<span class="sd">Example usage:</span>
+<span class="sd">--------------</span>
+
+<span class="sd">Redirect stderr using the &#39;with&#39;-statement:</span>
+
+<span class="sd">&gt;&gt;&gt; from __future__ import with_statement</span>
+<span class="sd">&gt;&gt;&gt; from redirect_io import *</span>
+<span class="sd">&gt;&gt;&gt; with hidden_stderr():</span>
+<span class="sd">...     print &gt;&gt; sys.stderr, &#39;Divide By Cucumber Error&#39;</span>
+<span class="sd">&gt;&gt;&gt;</span>
+
+<span class="sd">Redirect stderr to stout:</span>
+
+<span class="sd">&gt;&gt;&gt; with hidden_stderr(sys.stdout):</span>
+<span class="sd">...     print &gt;&gt; sys.stderr, &#39;Where am I ?&#39;</span>
+<span class="sd">Where am I ?</span>
+<span class="sd">&gt;&gt;&gt;</span>
+
+<span class="sd">Optinal usage without &#39;with&#39;-statement:</span>
+
+<span class="sd">&gt;&gt;&gt; _redirect_err()</span>
+<span class="sd">&gt;&gt;&gt; try:</span>
+<span class="sd">...     print &gt;&gt; sys.stderr, &quot; +++ Divide by Cucumber Error, &quot;\</span>
+<span class="sd">...                          &quot;Please ReInstall Universe And Reboot +++&quot;</span>
+<span class="sd">... finally:</span>
+<span class="sd">...     _return_err()</span>
+<span class="sd">&gt;&gt;&gt;</span>
+
+<span class="sd">Fetch previous error messages:</span>
+
+<span class="sd">&gt;&gt;&gt; print _tmp_err.getvalue() </span>
+<span class="sd">Divide By Cucumber Error</span>
+<span class="sd"> +++ Divide by Cucumber Error, Please ReInstall Universe And Reboot +++</span>
+<span class="sd">&lt;BLANKLINE&gt;</span>
+<span class="sd">&gt;&gt;&gt; </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span> <span class="c"># Comment to run _test_with_statement</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Rolv Erlend Bredesen &lt;rolv@simula.no&gt;&#39;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sys&#39;</span><span class="p">,</span> <span class="s">&#39;_tmp_err&#39;</span><span class="p">,</span> <span class="s">&#39;hidden_stderr&#39;</span><span class="p">,</span> <span class="s">&#39;_redirect_err&#39;</span><span class="p">,</span> <span class="s">&#39;_return_err&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">__future__</span>
+<span class="kn">import</span> <span class="nn">StringIO</span> 
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>  
+
+<span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">2.5</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s">&quot;This module requires version &gt;= 2.5 of python&quot;</span><span class="p">)</span>
+
+<span class="n">_std_err</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+<span class="n">_tmp_err</span> <span class="o">=</span>  <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span> <span class="c"># stream for hidden stderr</span>
+<span class="n">_tmp_err</span><span class="o">.</span><span class="n">__exit__</span> <span class="o">=</span> <span class="n">_tmp_err</span><span class="o">.</span><span class="n">flush</span> <span class="c"># Add __exit__ method</span>
+
+<span class="nd">@contextmanager</span> <span class="c"># &#39;with&#39; requires __enter__ and __exit__</span>
+<div class="viewcode-block" id="hidden_stderr"><a class="viewcode-back" href="../../redirect_io.html#scitools.redirect_io.hidden_stderr">[docs]</a><span class="k">def</span> <span class="nf">hidden_stderr</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">_tmp_err</span><span class="p">):</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">stream</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="bp">None</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_std_err</span>
+
+<span class="c"># For error stream with python version &lt; 2.5</span></div>
+<span class="k">def</span> <span class="nf">_redirect_err</span><span class="p">():</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_tmp_err</span>
+        
+<span class="k">def</span> <span class="nf">_return_err</span><span class="p">():</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_std_err</span>
+    
+        
+<span class="k">def</span> <span class="nf">_test_with_statement</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If the word &#39;with&#39;, which is a reserved keyword from python version 2.6,</span>
+<span class="sd">    is used in python2.5 code then a warning will be printed to sys.stderr</span>
+<span class="sd">    when the code is bytecompiled.</span>
+
+<span class="sd">    In this example we look at capturing the warning messages</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="s">&#39;with_statement&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;2.5&#39;</span>
+    <span class="c"># Force Error</span>
+    <span class="n">statement</span> <span class="o">=</span> <span class="s">&#39;with=3&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="s">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="s">&#39;exec&#39;</span><span class="p">,</span>
+                    <span class="n">__future__</span><span class="o">.</span><span class="n">with_statement</span><span class="o">.</span><span class="n">compiler_flag</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">SyntaxError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Success: &#39;</span><span class="si">%s</span><span class="s">&#39; did not compile&quot;</span> <span class="o">%</span><span class="n">statement</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Statement: &#39;</span><span class="si">%s</span><span class="s">&#39; should not have been compiled&quot;</span> \
+                        <span class="o">%</span> <span class="n">statement</span><span class="p">)</span>
+    
+    <span class="c"># Setup error redirection </span>
+    <span class="n">std_err</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+    <span class="n">tmp_err</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">2.5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">,</span> <span class="s">&quot;This module requires version 2.5 of python&quot;</span>
+        
+    <span class="c"># Compile with error redirection</span>
+    <span class="n">statement1</span> <span class="o">=</span> <span class="s">&#39;with=3&#39;</span>
+    <span class="n">statement2</span> <span class="o">=</span> <span class="s">&#39;print &quot;with&gt;&gt;&quot;, with&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">statement1</span>
+    <span class="k">print</span> <span class="s">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">statement2</span>
+    
+    <span class="c"># Test compilation of code using the reserved keyword with</span>
+    <span class="c"># Redirection standard error under compilation to prevent warning</span>
+    <span class="n">_redirect_err</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">statement1</span><span class="p">,</span> <span class="s">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="s">&#39;single&#39;</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_return_err</span><span class="p">()</span>
+
+    <span class="c"># No warning here</span>
+    <span class="k">exec</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">{},</span> <span class="nb">locals</span><span class="p">()</span>
+
+    <span class="n">_redirect_err</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># This one will give a warning</span>
+        <span class="k">exec</span> <span class="n">statement2</span>     
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_return_err</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;Here is the redirected error stream:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>  <span class="n">tmp_err</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+    <span class="c"># &#39;with&#39;-example</span>
+    <span class="k">print</span> <span class="s">&quot;Testing the use of the &#39;with&#39;-statement&quot;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span>
+        <span class="sd">r&quot;&quot;&quot;&#39;&#39;&#39;In this example we test the use of the &#39;with&#39;-statement&#39;&#39;&#39;</span>
+<span class="sd">        </span>
+<span class="sd">#from __future__ import with_statement # using proper compile flag instead</span>
+<span class="sd">from contextlib import contextmanager  # &#39;with&#39; requires __enter__ and __exit__</span>
+
+<span class="sd">err_ = StringIO.StringIO()</span>
+
+<span class="sd">@contextmanager</span>
+<span class="sd">def stderr_redirected(stream):</span>
+<span class="sd">    err = sys.stderr</span>
+<span class="sd">    sys.stderr = stream</span>
+<span class="sd">    try:</span>
+<span class="sd">        yield None</span>
+<span class="sd">    finally:</span>
+<span class="sd">        sys.stderr = err</span>
+
+<span class="sd">statement = &#39;with_=3&#39; # we have imported the with_statement</span>
+
+<span class="sd">with stderr_redirected(err_):</span>
+<span class="sd">    print &gt;&gt; sys.stderr, &quot;Can you see me?&quot;</span>
+<span class="sd">    c_ = compile(statement, &#39;/dev/null&#39;, &#39;single&#39;, 0, 0)</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span><span class="p">,</span> <span class="s">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="s">&#39;exec&#39;</span><span class="p">,</span> <span class="n">__future__</span><span class="o">.</span><span class="n">with_statement</span><span class="o">.</span><span class="n">compiler_flag</span><span class="p">)</span>
+    <span class="k">exec</span> <span class="n">c</span>
+
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">It appears the with_statement worked.&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;Here is the redirected error stream:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>  <span class="n">err_</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+    
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s">&#39;with_statement&#39;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span> 
+        <span class="kn">import</span> <span class="nn">doctest</span>
+        <span class="kn">import</span> <span class="nn">unittest</span>
+        <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestSuite</span><span class="p">()</span>
+        <span class="n">suite</span><span class="o">.</span><span class="n">addTest</span><span class="p">(</span><span class="n">doctest</span><span class="o">.</span><span class="n">DocTestSuite</span><span class="p">())</span>
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># To run you must comment    </span>
+        <span class="c"># &#39;from __future__ import with_statement &#39; at start of file</span>
+        <span class="n">_test_with_statement</span><span class="p">()</span>
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

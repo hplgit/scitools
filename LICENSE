@@ -1,0 +1,103 @@
+Copyright (c) 2007-2009, Hans Petter Langtangen <hpl@simula.no> and
+Simula Resarch Laboratory.
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met: 
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in
+      the documentation and/or other materials provided with the
+      distribution. 
+
+    * Neither the name of Simula Research Laboratory nor the names of
+      its contributors may be used to endorse or promote products
+      derived from this software without specific prior written 
+      permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-------------------------------------------------------------------------
+
+Other files with different licenses:
+
+lib/scitools/Lumpy.py and lib/scitools/_Gui.py:
+
+  Copyright 2005 Allen B. Downey
+
+    This file contains wrapper classes I use with tkinter.  It is
+    mostly for my own use; I don't support it, and it is not very
+    well documented.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see
+    http://www.gnu.org/licenses/gpl.html or write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA
+
+Permission has been granted by Allen B. Downey to inlcude modified 
+versions of Lumpy.py and Gui.py under a BSD license:
+
+Hi Johannes,
+
+Yes, you are welcome to include modified versions of Gui.py and Lumpy.py
+in SciTools under a BSD license.  Thanks for letting me know about your
+project.
+
+Did you make any changes you think I should integrate into my version?
+
+Cheers,
+Allen
+
+
+On 2/15/08, johannr@simula.no <johannr@simula.no> wrote:
+>
+> Hi,
+>
+> my name is Johannes Ring and I am working for Simula Research Laboratory
+> in Norway. Here we, especially Hans Petter Langtangen
+> (http://simula.no/~hpl), develop a software suite for scientific
+> programming in Python called SciTools. It is built on top of many other
+> useful Python packages like NumPy, SciPy, ScientificPython, etc. We have
+> also used slightly modified versions of your Python modules Lumpy.py and
+> Gui.py. Now we are ready to make a public release of SciTools and we have
+> chosen to release it under a BSD license. Lumpy.py and Gui.py are released
+> under GPL, however, we were wondering if it is okay with you that we
+> include these into SciTools?
+>
+> Regards,
+> Johannes Ring
+>
+>
+
+
+lib/scitools/pyreport/*
+
+  Copyright (C) 2005-2009 Gael Varoquaux <gael.varoquaux@normalesup.org>
+
+  Distributed under the terms of the BSD License.

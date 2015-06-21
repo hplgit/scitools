@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.BoxGrid &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-scitools.BoxGrid">
+<span id="scitools-boxgrid"></span><h1><a class="reference internal" href="#module-scitools.BoxGrid" title="scitools.BoxGrid"><tt class="xref py py-mod docutils literal"><span class="pre">scitools.BoxGrid</span></tt></a><a class="headerlink" href="#module-scitools.BoxGrid" title="Permalink to this headline">¶</a></h1>
+<p>Class for uniform and non-uniform grid on an interval, rectangle, or box.</p>
+<dl class="class">
+<dt id="scitools.BoxGrid.BoxGrid">
+<em class="property">class </em><tt class="descclassname">scitools.BoxGrid.</tt><tt class="descname">BoxGrid</tt><big>(</big><em>coor</em>, <em>dirnames=('x'</em>, <em>'y'</em>, <em>'z')</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#BoxGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.BoxGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid" title="scitools.BoxGrid.UniformBoxGrid"><tt class="xref py py-class docutils literal"><span class="pre">scitools.BoxGrid.UniformBoxGrid</span></tt></a></p>
+<p>Extension of class UniformBoxGrid to non-uniform box grids.
+The coordinate vectors (in each space direction) can have
+arbitrarily spaced coordinate values.</p>
+<p>The coor argument must be a list of nsd (number of
+space dimension) components, each component contains the
+grid coordinates in that space direction (stored as an array).</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">compatible</span></tt>(data_array[,&nbsp;name_of_data_array])</td>
+<td>Check that data_array is a NumPy array with dimensions</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">dirindex2name</span></tt>(i)</td>
+<td>Inverse of name2dirindex.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">gridline_slice</span></tt>(start_coor[,&nbsp;direction,&nbsp;end_coor])</td>
+<td>Compute start and end indices of a line through the grid, and return a tuple that can be used as slice for the grid points along the line.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">gridplane_slice</span></tt>(value[,&nbsp;constant_coor])</td>
+<td>Compute a slice for a plane through the grid, defined by coor[constant_coor]=value.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_fromstring</span></tt>(s)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">interpolate</span></tt>(v0,&nbsp;v1,&nbsp;x0,&nbsp;x1,&nbsp;x)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">interpolator</span></tt>(point_values)</td>
+<td>Given a self.nsd dimension array point_values with values at each grid point, this method returns a function for interpolating the scalar field defined by point_values at an arbitrary point.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">iter</span></tt>([domain_part,&nbsp;vectorized_version])</td>
+<td>Return iterator over grid points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.BoxGrid.locate_cell" title="scitools.BoxGrid.BoxGrid.locate_cell"><tt class="xref py py-obj docutils literal"><span class="pre">locate_cell</span></tt></a>(point)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">name2dirindex</span></tt>(name)</td>
+<td>Return direction index corresponding to direction name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ncells</span></tt>(i)</td>
+<td>Return no of cells in direction i.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ok</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">string2griddata</span></tt>(s)</td>
+<td>Turn a text specification of a grid into a dictionary with the grid data.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">vectorized_eval</span></tt>(f)</td>
+<td>Evaluate a function f (of the space directions) over a grid.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.BoxGrid.BoxGrid.locate_cell">
+<tt class="descname">locate_cell</tt><big>(</big><em>point</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#BoxGrid.locate_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.BoxGrid.locate_cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scitools.BoxGrid.UniformBoxGrid">
+<em class="property">class </em><tt class="descclassname">scitools.BoxGrid.</tt><tt class="descname">UniformBoxGrid</tt><big>(</big><em>min=(0</em>, <em>0)</em>, <em>max=(1</em>, <em>1)</em>, <em>division=(4</em>, <em>4)</em>, <em>dirnames=('x'</em>, <em>'y'</em>, <em>'z')</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Simple uniform grid on an interval, rectangle, box, or hypercube.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Attributes</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>nsd</td>
+<td>no of spatial dimensions in the grid</td>
+</tr>
+<tr class="row-odd"><td>min_coor</td>
+<td>array of minimum coordinates</td>
+</tr>
+<tr class="row-even"><td>max_coor</td>
+<td>array of maximum coordinates</td>
+</tr>
+<tr class="row-odd"><td>division</td>
+<td>array of cell divisions in the</td>
+</tr>
+<tr class="row-even"><td>delta</td>
+<td>array of grid spacings</td>
+</tr>
+<tr class="row-odd"><td>dirnames</td>
+<td>names of the space directions (&#8216;x&#8217;, &#8216;y&#8217;, etc.)</td>
+</tr>
+<tr class="row-even"><td>shape</td>
+<td>(nx+1, ny+1, ...); dimension of array over grid</td>
+</tr>
+<tr class="row-odd"><td>coor</td>
+<td>list of coordinates; self.coor[Y][j] is the
+the j-th coordinate in direction Y (=1)
+X, Y, Z are predefined constants 0, 1, 2</td>
+</tr>
+<tr class="row-even"><td>coorv</td>
+<td>expanded version of coor for vectorized expressions
+(in 2D, self.coorv[0] = self.coor[0][:,newaxis])</td>
+</tr>
+<tr class="row-odd"><td>tolerance</td>
+<td>small geometric tolerance based on grid coordinates</td>
+</tr>
+<tr class="row-even"><td>npoints</td>
+<td>total number of grid points</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.compatible" title="scitools.BoxGrid.UniformBoxGrid.compatible"><tt class="xref py py-obj docutils literal"><span class="pre">compatible</span></tt></a>(data_array[,&nbsp;name_of_data_array])</td>
+<td>Check that data_array is a NumPy array with dimensions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.dirindex2name" title="scitools.BoxGrid.UniformBoxGrid.dirindex2name"><tt class="xref py py-obj docutils literal"><span class="pre">dirindex2name</span></tt></a>(i)</td>
+<td>Inverse of name2dirindex.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.gridline_slice" title="scitools.BoxGrid.UniformBoxGrid.gridline_slice"><tt class="xref py py-obj docutils literal"><span class="pre">gridline_slice</span></tt></a>(start_coor[,&nbsp;direction,&nbsp;end_coor])</td>
+<td>Compute start and end indices of a line through the grid, and return a tuple that can be used as slice for the grid points along the line.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.gridplane_slice" title="scitools.BoxGrid.UniformBoxGrid.gridplane_slice"><tt class="xref py py-obj docutils literal"><span class="pre">gridplane_slice</span></tt></a>(value[,&nbsp;constant_coor])</td>
+<td>Compute a slice for a plane through the grid, defined by coor[constant_coor]=value.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.init_fromstring" title="scitools.BoxGrid.UniformBoxGrid.init_fromstring"><tt class="xref py py-obj docutils literal"><span class="pre">init_fromstring</span></tt></a>(s)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.interpolate" title="scitools.BoxGrid.UniformBoxGrid.interpolate"><tt class="xref py py-obj docutils literal"><span class="pre">interpolate</span></tt></a>(v0,&nbsp;v1,&nbsp;x0,&nbsp;x1,&nbsp;x)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.interpolator" title="scitools.BoxGrid.UniformBoxGrid.interpolator"><tt class="xref py py-obj docutils literal"><span class="pre">interpolator</span></tt></a>(point_values)</td>
+<td>Given a self.nsd dimension array point_values with values at each grid point, this method returns a function for interpolating the scalar field defined by point_values at an arbitrary point.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.iter" title="scitools.BoxGrid.UniformBoxGrid.iter"><tt class="xref py py-obj docutils literal"><span class="pre">iter</span></tt></a>([domain_part,&nbsp;vectorized_version])</td>
+<td>Return iterator over grid points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.locate_cell" title="scitools.BoxGrid.UniformBoxGrid.locate_cell"><tt class="xref py py-obj docutils literal"><span class="pre">locate_cell</span></tt></a>(point)</td>
+<td>Given a point (x, (x,y), (x,y,z)), locate the cell in which the point is located, and return 1) the (i,j,k) vertex index of the &#8220;lower-left&#8221; grid point in this cell, 2) the distances (dx, (dx,dy), or (dx,dy,dz)) from this point to the given point, 3) a boolean list if point matches the coordinates of any grid lines.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.name2dirindex" title="scitools.BoxGrid.UniformBoxGrid.name2dirindex"><tt class="xref py py-obj docutils literal"><span class="pre">name2dirindex</span></tt></a>(name)</td>
+<td>Return direction index corresponding to direction name.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.ncells" title="scitools.BoxGrid.UniformBoxGrid.ncells"><tt class="xref py py-obj docutils literal"><span class="pre">ncells</span></tt></a>(i)</td>
+<td>Return no of cells in direction i.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.ok" title="scitools.BoxGrid.UniformBoxGrid.ok"><tt class="xref py py-obj docutils literal"><span class="pre">ok</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.string2griddata" title="scitools.BoxGrid.UniformBoxGrid.string2griddata"><tt class="xref py py-obj docutils literal"><span class="pre">string2griddata</span></tt></a>(s)</td>
+<td>Turn a text specification of a grid into a dictionary with the grid data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#scitools.BoxGrid.UniformBoxGrid.vectorized_eval" title="scitools.BoxGrid.UniformBoxGrid.vectorized_eval"><tt class="xref py py-obj docutils literal"><span class="pre">vectorized_eval</span></tt></a>(f)</td>
+<td>Evaluate a function f (of the space directions) over a grid.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.compatible">
+<tt class="descname">compatible</tt><big>(</big><em>data_array</em>, <em>name_of_data_array=''</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.compatible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.compatible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that data_array is a NumPy array with dimensions
+compatible with the grid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.dirindex2name">
+<tt class="descname">dirindex2name</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.dirindex2name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.dirindex2name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse of name2dirindex.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.gridline_slice">
+<tt class="descname">gridline_slice</tt><big>(</big><em>start_coor</em>, <em>direction=0</em>, <em>end_coor=None</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.gridline_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.gridline_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute start and end indices of a line through the grid,
+and return a tuple that can be used as slice for the
+grid points along the line.</p>
+<p>The line must be in x, y or z direction (direction=0,1 or 2).
+If end_coor=None, the line ends where the grid ends.
+start_coor holds the coordinates of the start of the line.
+If start_coor does not coincide with one of the grid points,
+the line is snapped onto the grid (i.e., the line coincides with
+a grid line).</p>
+<p>Return: tuple with indices and slice describing the grid point
+indices that make up the line, plus a boolean &#8220;snapped&#8221; which is
+True if the original line did not coincide with any grid line,
+meaning that the returned line was snapped onto to the grid.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">init_fromstring</span><span class="p">(</span><span class="s">&#39;[-1,1]x[-1,2] [0:3]x[0:4]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">g2</span><span class="o">.</span><span class="n">coor</span>
+<span class="go">[array([-1.        , -0.33333333,  0.33333333,  1.        ]),</span>
+<span class="go"> array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">gridline_slice</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">((slice(0, 4, 1), 2), False)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">gridline_slice</span><span class="p">((</span><span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">((slice(0, 4, 1), 2), True)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">gridline_slice</span><span class="p">((</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">((1, slice(0, 5, 1)), True)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.gridplane_slice">
+<tt class="descname">gridplane_slice</tt><big>(</big><em>value</em>, <em>constant_coor=0</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.gridplane_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.gridplane_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a slice for a plane through the grid,
+defined by coor[constant_coor]=value.</p>
+<p>Return a tuple that can be used as slice, plus a boolean
+parameter &#8220;snapped&#8221; reflecting if the plane was snapped
+onto a grid plane (i.e., value did not correspond to
+an existing grid plane).</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.BoxGrid.UniformBoxGrid.init_fromstring">
+<em class="property">static </em><tt class="descname">init_fromstring</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.init_fromstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.init_fromstring" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.interpolate">
+<tt class="descname">interpolate</tt><big>(</big><em>v0</em>, <em>v1</em>, <em>x0</em>, <em>x1</em>, <em>x</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.interpolator">
+<tt class="descname">interpolator</tt><big>(</big><em>point_values</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.interpolator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a self.nsd dimension array point_values with
+values at each grid point, this method returns a function
+for interpolating the scalar field defined by point_values
+at an arbitrary point.</p>
+<p>2D Example:
+given a filled array point_values[i,j], compute
+interpolator = grid.interpolator(point_values)
+v = interpolator(0.1243, 9.231)  # interpolate point_values</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">=</span><span class="n">UniformBoxGrid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">nx</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">ny</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span>
+<span class="go">UniformBoxGrid(x=(0,2), nx=2, y=(-1,1), ny=2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span> <span class="k">return</span> <span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">-</span><span class="n">y</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span>
+<span class="go">array([[ 3.,  2.,  1.],</span>
+<span class="go">       [ 5.,  4.,  3.],</span>
+<span class="go">       [ 7.,  6.,  5.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">interpolator</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.234</span><span class="p">)</span>        <span class="c"># interpolate (not a grid point)</span>
+<span class="go">1.9660000000000002</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.234</span><span class="p">)</span>        <span class="c"># exact answer</span>
+<span class="go">1.9660000000000002</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.iter">
+<tt class="descname">iter</tt><big>(</big><em>domain_part='all'</em>, <em>vectorized_version=True</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return iterator over grid points.
+domain_part = &#8216;all&#8217;:  all grid points
+domain_part = &#8216;interior&#8217;:  interior grid points
+domain_part = &#8216;all_boundary&#8217;:  all boundary points
+domain_part = &#8216;interior_boundary&#8217;:  interior boundary points
+domain_part = &#8216;corners&#8217;:  all corner points
+domain_part = &#8216;all_edges&#8217;:  all points along edges in 3D grids
+domain_part = &#8216;interior_edges&#8217;:  interior points along edges</p>
+<p>vectorized_version is true if the iterator returns slice
+objects for the index slice in each direction.
+vectorized_version is false if the iterator visits each point
+at a time (scalar version).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.locate_cell">
+<tt class="descname">locate_cell</tt><big>(</big><em>point</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.locate_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.locate_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a point (x, (x,y), (x,y,z)), locate the cell in which
+the point is located, and return
+1) the (i,j,k) vertex index
+of the &#8220;lower-left&#8221; grid point in this cell,
+2) the distances (dx, (dx,dy), or (dx,dy,dz)) from this point to
+the given point,
+3) a boolean list if point matches the
+coordinates of any grid lines. If a point matches
+the last grid point in a direction, the cell index is
+set to the max index such that the (i,j,k) index can be used
+directly for look up in an array of values. The corresponding
+element in the distance array is then set 0.
+4) the indices of the nearest grid point.</p>
+<p>The method only works for uniform grid spacing.
+Used for interpolation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">division</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell_index</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">nearest</span> <span class="o">=</span> <span class="n">g1</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cell_index</span>
+<span class="go">[2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">distance</span>
+<span class="go">[ 0.2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">match</span>
+<span class="go">[False]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nearest</span>
+<span class="go">[3]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">([2], array([ 0.]), [True], [2])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">UniformBoxGrid</span><span class="o">.</span><span class="n">init_fromstring</span><span class="p">(</span><span class="s">&#39;[-1,1]x[-1,2] [0:3]x[0:4]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">g2</span><span class="o">.</span><span class="n">coor</span>
+<span class="go">[array([-1.        , -0.33333333,  0.33333333,  1.        ]), array([-1.  , -0.25,  0.5 ,  1.25,  2.  ])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">((</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="go">([1, 1], array([ 0.53333333,  0.45      ]), [False, False], [2, 2])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">locate_cell</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">([3, 4], array([ 0.,  0.]), [True, True], [3, 4])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.name2dirindex">
+<tt class="descname">name2dirindex</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.name2dirindex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.name2dirindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return direction index corresponding to direction name.
+In an xyz-grid, &#8216;x&#8217; is 0, &#8216;y&#8217; is 1, and &#8216;z&#8217; is 2.
+In an yz-grid, &#8216;x&#8217; is not defined, &#8216;y&#8217; is 0, and &#8216;z&#8217; is 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.ncells">
+<tt class="descname">ncells</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.ncells"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.ncells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return no of cells in direction i.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.ok">
+<tt class="descname">ok</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.ok"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.ok" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="scitools.BoxGrid.UniformBoxGrid.string2griddata">
+<em class="property">static </em><tt class="descname">string2griddata</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.string2griddata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.string2griddata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a text specification of a grid into a dictionary
+with the grid data.
+For example,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;domain=[0,10] indices=[0:11]&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">BoxGrid</span><span class="o">.</span><span class="n">string2griddata</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">{&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;), &#39;division&#39;: [10], &#39;max&#39;: [10], &#39;min&#39;: [0]}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;domain=[0.2,0.5]x[0,2E+00] indices=[0:20]x[0:100]&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">BoxGrid</span><span class="o">.</span><span class="n">string2griddata</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">{&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;, &#39;z&#39;),</span>
+<span class="go"> &#39;division&#39;: [19, 99],</span>
+<span class="go"> &#39;max&#39;: [0.5, 2],</span>
+<span class="go"> &#39;min&#39;: [0.2, 0]}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;[0,1]x[0,2]x[-1,1.5] [0:25]x[0:10]x[0:16]&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">BoxGrid</span><span class="o">.</span><span class="n">string2griddata</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
+<span class="go">{&#39;dirnames&#39;: (&#39;x&#39;, &#39;y&#39;, &#39;z&#39;),</span>
+<span class="go"> &#39;division&#39;: [24, 9, 15],</span>
+<span class="go"> &#39;max&#39;: [1.0, 2.0, 1.5],</span>
+<span class="go"> &#39;min&#39;: [0.0, 0.0, -1.0]}</span>
+</pre></div>
+</div>
+<p>The data dictionary can be used as keyword arguments to the
+class UniformBoxGrid constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scitools.BoxGrid.UniformBoxGrid.vectorized_eval">
+<tt class="descname">vectorized_eval</tt><big>(</big><em>f</em><big>)</big><a class="reference internal" href="_modules/scitools/BoxGrid.html#UniformBoxGrid.vectorized_eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scitools.BoxGrid.UniformBoxGrid.vectorized_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a function f (of the space directions) over a grid.
+f is supposed to be vectorized.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">BoxGrid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">nx</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># f(x,y) = sin(x)*exp(x-y):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">[[ 0.          0.          0.          0.        ]</span>
+<span class="go"> [ 0.23444524  0.3271947   0.45663698  0.63728825]</span>
+<span class="go"> [ 0.31748164  0.44308133  0.6183698   0.86300458]</span>
+<span class="go"> [ 0.30955988  0.43202561  0.60294031  0.84147098]]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># f(x,y) = 2: (requires special consideration)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">vectorized_eval</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">zeros</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">[[ 2.  2.  2.  2.]</span>
+<span class="go"> [ 2.  2.  2.  2.]</span>
+<span class="go"> [ 2.  2.  2.  2.]</span>
+<span class="go"> [ 2.  2.  2.  2.]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/BoxGrid.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SciTools 0.8.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

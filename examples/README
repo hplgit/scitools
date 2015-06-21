@@ -1,0 +1,74 @@
+plot0a.py:  summarizing demo script, using Matlab-style syntax.
+plot0b.py:  as plot0a.py, but with a single plot command.
+plot1a.py:  default plot with Easyviz.
+plot1a2.py: as plot1a.py, but with line style specified.
+plot1b.py:  as plot1a.py, but labels, legends, etc. are added in Matlab style.
+plot1c.py:  as plot1b.py, but a single plot command.
+plot1d.py:  as plot1b.py, but with logarithmic scale on the y axis.
+plot1e.py:  as plot1c.py, but with logarithmic scale on the y axis.
+plot2a.py:  plotting two curves, using Matlab style.
+plot2b.py:  as plot2a.py, but a single plot command.
+plot2c.py:  as plot2a.py, but control of the line styles.
+plot2d.py:  as plot2b.py, but control of the line styles.
+plot2e.py:  as plot2c.py, but control of the axis.
+plot2f.py:  as plot2d.py, but control of the axis and with grid added.
+plot2g.py:  as plot2f.py, but with 1/4 of the circles in the second curve.
+plot2i.py:  as plot2f.py, but with label and arrow set with Gnuplot commands.
+plot2j.py:  as plot2e.py, but working with an Axis object.
+plot2k.py:  as other plot2*.py files, but with subplots and multiple figures.
+plot2l.py:  as plot2e.py, but with legend location and legend fancybox.
+plot2m.py:  as plot2b.py, but with latex syntax in legends and title.
+plot2n.py:  as plot2b.py, but with a text in the plot.
+plot2o.py:  demo of how to set the aspect ratio of axis.
+plot2p.py:  demo of plotting three curves of different length.
+plot2q.py:  three Gaussian bell functions (for illustrating movie_demo1 frames).
+plot2r.py:  as plot2b.py, but with a PNG and SVG figure strings in HTML file.
+movie_demo1.py:  primary animation example.
+movie_demo2.py:  another animation example.
+plot_ascii.py: demo of the ASCII plotter (for inclusion in verbatim text).
+
+Check the doc string of the following (often more advanced)
+programs (often for testing purposes) to see what they do:
+
+axes_demo.py
+backend_demo1.py
+backend_demo2.py
+bar1.py
+bar_demo.py
+compatibility_checks.py
+contour_demo.py
+contourslice_demo1.py
+contourslice_demo2.py
+fill_demo.py
+grab_backend_demo.py
+isosurface_demo1.py
+isosurface_demo2.py
+isosurface_demo3.py
+matlab2_demo.py
+mesh_demo.py
+quiver_demo2.py
+quiver_demo1.py
+rotate_vector.py
+rows_of_matrix.py
+slice_demo1.py
+slice_demo2.py
+streamline_demo1.py
+streamline_demo2.py
+streamline_demo3.py
+streamribbon_demo1.py
+streamribbon_demo2.py
+streamtube_demo1.py
+streamtube_demo2.py
+subplot_demo2.py
+subplot_demo.py
+surf_demo0.py
+surf_demo1.py
+surf_demo2.py
+
+
+
+
+
+
+
+

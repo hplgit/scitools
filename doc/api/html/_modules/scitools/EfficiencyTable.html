@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.EfficiencyTable &mdash; SciTools 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.9.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.EfficiencyTable</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains a class for managing efficiency/performance</span>
+<span class="sd">experiments.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="EfficiencyTable"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable">[docs]</a><span class="k">class</span> <span class="nc">EfficiencyTable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage the CPU times of efficiency experiments and make</span>
+<span class="sd">    tabular reports with sorted results.</span>
+
+<span class="sd">    &gt;&gt;&gt; e = EfficiencyTable(&#39;some description of the experiments&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e.add(&#39;about an experiment&#39;, cpu_time)</span>
+<span class="sd">    &gt;&gt;&gt; e.add(&#39;about another experiment&#39;, cpu_time)</span>
+<span class="sd">    &gt;&gt;&gt; e.add(&#39;about a third experiment&#39;, cpu_time)</span>
+<span class="sd">    &gt;&gt;&gt; print e  # prints a sorted table with scaled CPU times</span>
+<span class="sd">    &gt;&gt;&gt; e += e2  # add experiments from EfficiencyTable e2 to e</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EfficiencyTable.__init__"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">normalization_time</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param description: a string acting as headline for this test.</span>
+<span class="sd">        @param normalization_time: all CPU times will be divided by this value</span>
+<span class="sd">        (if not set, the class will find the smallest (best) CPU</span>
+<span class="sd">        time and divide all others by this value.</span>
+
+<span class="sd">        The best_time parameter can also be set in the</span>
+<span class="sd">        set_normalization_time method. The normalization time is not</span>
+<span class="sd">        used before an instance is printed (str method).)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># key=description, value=[CPU-time1, CPU-time2, ]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span> <span class="o">=</span> <span class="n">normalization_time</span>
+</div>
+<div class="viewcode-block" id="EfficiencyTable.add"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">CPU_time</span><span class="p">,</span> <span class="n">function_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the CPU time of an experiment, together with a description</span>
+<span class="sd">        and an optional function_name (which is appended to the</span>
+<span class="sd">        description string).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">function_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># include name of the tested function as part of the description:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">description</span> <span class="o">+</span> <span class="s">&#39; (</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">function_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">description</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CPU_time</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="EfficiencyTable.__iadd__"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.__iadd__">[docs]</a>    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add results in other to present results.</span>
+<span class="sd">        New items (descriptions) are simply registered, while</span>
+<span class="sd">        identical items (descriptions) will have a list of CPU times,</span>
+<span class="sd">        corresponding to the different EfficiencyTable instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">description</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+                <span class="c"># this experiment is already registered, add the lists of CPU times:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">e</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span>
+            </div>
+<div class="viewcode-block" id="EfficiencyTable.__add__"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;As e += table (see __iadd__).&quot;&quot;&quot;</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">EfficiencyTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">experiments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">__iadd__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span>
+</div>
+<div class="viewcode-block" id="EfficiencyTable.set_normalization_time"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.set_normalization_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_normalization_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the CPU time by which all other CPU times will be divided.</span>
+<span class="sd">        By default, this is the maximum CPU time encountered in the data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span> <span class="o">=</span> <span class="n">t</span>
+        </div>
+    <span class="k">def</span> <span class="nf">_reference_CPU_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># try first to see if there is an experiment with the</span>
+            <span class="c"># given normalization time, and if so, use the corresponding</span>
+            <span class="c"># description, otherwise use a dummy description:</span>
+            <span class="k">for</span> <span class="n">description</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">][</span><span class="n">experiment_idx</span><span class="p">]</span> <span class="o">-</span> \
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0E-10</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span><span class="p">,</span> <span class="n">description</span>
+            <span class="c"># no experiment coincides with the given normalization time</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s">&#39;some external experiment&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalization_time</span><span class="p">,</span> <span class="n">description</span>
+            
+                
+        <span class="c"># no given normalization time, find best performance:</span>
+        <span class="c"># (only search among positive CPU times for an experiment with</span>
+        <span class="c"># index experiment_idx)</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="mf">1.0E+20</span>
+        <span class="n">cpu_eps</span> <span class="o">=</span> <span class="mf">1.0E-9</span>  <span class="c"># smallest reliable CPU time (but many repetitions</span>
+                          <span class="c"># may produce small time per call while the</span>
+                          <span class="c"># measurements are reliable)</span>
+        <span class="k">for</span> <span class="n">description</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+            <span class="n">cpu_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">][</span><span class="n">experiment_idx</span><span class="p">]</span>
+            <span class="c"># drop counting very small (unreliable) or negative</span>
+            <span class="c"># (erroneous timings) CPU times:</span>
+            <span class="k">if</span> <span class="n">cpu_time</span> <span class="o">&gt;</span> <span class="n">cpu_eps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cpu_time</span> <span class="o">&lt;</span> <span class="n">best</span><span class="p">:</span>
+                    <span class="n">best</span> <span class="o">=</span> <span class="n">cpu_time</span>
+                    <span class="n">best_key</span> <span class="o">=</span> <span class="n">description</span>
+
+        <span class="k">if</span> <span class="n">best</span> <span class="o">==</span> <span class="mf">1.0E+20</span><span class="p">:</span>
+            <span class="c"># did not find any CPU time &gt; cpu_eps</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;too small CPU times (all less than </span><span class="si">%E</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">cpu_eps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">best</span><span class="p">,</span> <span class="n">best_key</span>
+    
+<div class="viewcode-block" id="EfficiencyTable.__str__"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.EfficiencyTable.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print out a sorted list (with respect to CPU times) of the experiments.</span>
+<span class="sd">        In case of multiple CPU times per description of an experiment,</span>
+<span class="sd">        the table is sorted with respect to the first CPU time entry of each</span>
+<span class="sd">        multiple CPU times list. All CPU times are divided by a normalization</span>
+<span class="sd">        time, which is given to the constructor or to the</span>
+<span class="sd">        set_normalization_time method, or if not prescribed, this class</span>
+<span class="sd">        finds the smallest reliable CPU time (neglecting very small</span>
+<span class="sd">        CPU time).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># inv_dict is the inverse dictionary of self.experiments, i.e.,</span>
+        <span class="c"># CPU time is the key and the description is the valid.</span>
+        <span class="c"># Only the first CPU time entry is used.</span>
+        
+        <span class="c"># inv_dict computation does not work if the CPU times are very</span>
+        <span class="c"># small (0.00 is the key of many), so we need to add a small</span>
+        <span class="c"># random number to very small CPU times</span>
+        <span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">math</span>
+        <span class="n">inv_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># inverse of self.experiments</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+            <span class="n">CPU_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">CPU_time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0E-7</span><span class="p">:</span>
+                <span class="n">CPU_time</span> <span class="o">+=</span> <span class="mf">1.0E-14</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">CPU_time</span> <span class="ow">in</span> <span class="n">inv_dict</span><span class="p">:</span>
+                <span class="c"># this destroys the one-to-one mapping, perturb CPU_time:</span>
+                <span class="n">CPU_time</span> <span class="o">*=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">1.0E-3</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">CPU_time</span>
+            <span class="n">inv_dict</span><span class="p">[</span><span class="n">CPU_time</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="c"># sort CPU-times:</span>
+        <span class="n">cpu_times0</span> <span class="o">=</span> <span class="n">inv_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">cpu_times0</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;*&#39;</span><span class="o">*</span><span class="mi">80</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;*&#39;</span><span class="o">*</span><span class="mi">80</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference_CPU_time</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;reference CPU time based on the experiment</span><span class="se">\n</span><span class="s">   &quot;</span><span class="si">%s</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">with &#39;</span>\
+             <span class="s">&#39;CPU time:</span><span class="se">\n</span><span class="s">  </span><span class="si">%s</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">best_key</span><span class="p">])[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">max_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+        <span class="k">for</span> <span class="n">cpu_time_key</span> <span class="ow">in</span> <span class="n">cpu_times0</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">inv_dict</span><span class="p">[</span><span class="n">cpu_time_key</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%%</span><span class="s">-</span><span class="si">%d</span><span class="s">s | &#39;</span> <span class="o">%</span> <span class="n">max_length</span> <span class="o">%</span> <span class="n">description</span>
+            <span class="k">for</span> <span class="n">cpu_time</span><span class="p">,</span> <span class="n">ref_time</span> <span class="ow">in</span> \
+                    <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">description</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">best_key</span><span class="p">]):</span>
+                <span class="n">nc</span> <span class="o">=</span> <span class="n">cpu_time</span><span class="o">/</span><span class="n">ref_time</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">9999.0</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%10.1e</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">nc</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%8.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">nc</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span> <span class="n">s</span>
+</div></div>
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../EfficiencyTable.html#scitools.EfficiencyTable.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;CPU times&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">3</span>
+            <span class="k">break</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">curves</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp_plot_labels&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">start</span><span class="p">:]:</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">numbers</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)</span>
+        <span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">numbers</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">])):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp_plot_</span><span class="si">%02d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">counter</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">])):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%2d</span><span class="s">  </span><span class="si">%g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%2d</span><span class="s">: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+    <span class="n">labels</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c"># generate Gnuplot script:</span>
+    <span class="n">plotfiles</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&quot;tmp_plot_</span><span class="si">%02d</span><span class="s">&quot; title &quot;</span><span class="si">%d</span><span class="s">&quot; with lines&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> \
+                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">start</span><span class="p">:])</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;plot &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">plotfiles</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp_plot.gnuplot&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">set xrange [0:</span><span class="si">%d</span><span class="s">]</span>
+<span class="si">%s</span><span class="s"></span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">name</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmd</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                   
+        
+        </div>
+<span class="k">def</span> <span class="nf">_test</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="c"># how much does it cost to run an empty loop with</span>
+    <span class="c"># range, xrange and iseq?</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">EfficiencyTable</span><span class="p">(</span><span class="s">&#39;Empty loops, loop length = </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">timeit</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s">&#39;for i in range(n): pass&#39;</span><span class="p">,</span>
+                      <span class="n">setup</span><span class="o">=</span><span class="s">&#39;n=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;for i in range(n): pass&#39;</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s">&#39;for i in xrange(n): pass&#39;</span><span class="p">,</span>
+                      <span class="n">setup</span><span class="o">=</span><span class="s">&#39;n=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;for i in xrange(n): pass&#39;</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+    <span class="n">t3</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s">&#39;for i in iseq(stop=n-1): pass&#39;</span><span class="p">,</span>
+                      <span class="n">setup</span><span class="o">=</span><span class="s">&#39;from scitools.numpyutils import iseq;&#39;</span> <span class="o">+</span>
+                      <span class="s">&#39;n=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;for i in iseq(stop=n-1): pass&#39;</span><span class="p">,</span> <span class="n">t3</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">e</span>
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">_test</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.9.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+TITLE: Easyviz Documentation
+AUTHOR: H. P. Langtangen at Simula Research Laboratory & Univ. of Oslo
+AUTHOR: J. H. Ring at Simula Research Laboratory
+DATE: today
+
+TOC: on
+
+======= Easyviz =======
+
+# #include "easyviz_intro.do.txt"
+
+======= Tutorial =======
+
+This tutorial starts with plotting a single curve with a simple
+`plot(x,y)` command. Then we add a legend, axis labels, a title, etc.
+Thereafter we show how multiple curves are plotted together. We also
+explain how line styles and axis range can be controlled. The
+next topic deals with animations and making movie files. More advanced
+subjects, such as fine tuning of plots (using plotting package-specific
+commands) and working with Axis and Figure objects, close the curve
+plotting part of the tutorial.
+
+Various methods for visualization of scalar fields in 2D and 3D are
+treated next, before we show how 2D and 3D vector fields can be handled.
+
+===== A Note on Import Statements =====
+
+The recommended standard import of `numpy`
+and `matplotlib` in programs reads:
+!bc pycod
+import numpy as np
+import matplotlib.pyplot as plt
+!ec
+This import ensures that all functionality from different packages are
+prefixed by a short form of the package name. This convention has,
+from a computer science perspective, many advantages as one sees
+clearly where functionality comes from.  However, convincing
+scientists with extensive Matlab, Fortran, or C++ experience to switch
+to Python can be hard when mathematical formulas are full of `np.`
+prefixes and all plotting commands are decorated with an "extra"
+`plt.` The developers of Easyviz think it is a major point to have
+Python code as close to Matlab and standard mathematical syntax as
+possible.  Therefore, examples in this manual employ the "star
+import":
+!bc pycod
+from scitools.std import *
+!ec
+This statement imports the Easyviz plotting commands and also performs
+`from numpy import *`. Hence, mathematical functions like `sin` and
+`log` are available and work for arrays, as in Matlab, and the plotting
+commands are the same as those in Matlab. This type of import statement
+is similar to the popular
+!bc pycod
+from matplotlib.pylab import *
+!ec
+among Matplotlib users (although not promoted by Matplotlib developers).
+The primary additional feature of the
+`scitools.std` import is the possibility to choose among many different
+backends for plotting, where Matplotlib is one of the options.
+
+# #include "easyviz_tutorial.do.txt"
+
+# #include "easyviz_2D3D.do.txt"
+
+# #include "easyviz_bars.do.txt"
+
+
+======= Backends =======
+
+# #include "easyviz_backends.do.txt"
+
+======= Design =======
+
+# #include "easyviz_design.do.txt"
+
+======= Installation =======
+label{ev:tut:install}
+
+# #include "easyviz_install.do.txt"
+
+======= Troubleshooting =======
+
+# #include "easyviz_trouble.do.txt"

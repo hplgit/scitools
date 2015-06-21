@@ -1,0 +1,1278 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>scitools.Regression &mdash; SciTools 0.8.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SciTools 0.8.3 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for scitools.Regression</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Regression module for automating regression tests.</span>
+
+<span class="sd">    ================   =================================================</span>
+<span class="sd">          Class                          Description</span>
+<span class="sd">    ================   =================================================</span>
+<span class="sd">    TestRun            utilities for easy set up of regression tests</span>
+<span class="sd">    TestRunNumerics    extensions of TestRun for numerical computing</span>
+<span class="sd">    Verify             search for test scripts, run them, compare</span>
+<span class="sd">                       new results with reference results</span>
+<span class="sd">    VerifyDiffpack     tailored Verify for Diffpack (incl. compilation)</span>
+<span class="sd">    FloatDiff          visual diff between files with real numbers</span>
+<span class="sd">    ================   =================================================</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">Let us start with a very simple Python script, circle.py, for which we</span>
+<span class="sd">would like to create a regression test::</span>
+
+<span class="sd">  #!/usr/bin/env python</span>
+<span class="sd">  &#39;&#39;&#39;Numerical integration of circular motion.&#39;&#39;&#39;</span>
+<span class="sd">  import math, sys, os</span>
+
+<span class="sd">  R=1; w=2*math.pi;  # global constants</span>
+<span class="sd">  def advance(x, y, dt, t):</span>
+<span class="sd">      &#39;&#39;&#39;advance (x,y) point one time step dt with Forward Euler,</span>
+<span class="sd">         the equations describe circular motion of a body:</span>
+<span class="sd">         dx/dt = -w*R*cos(2pi*w*t), dy/dt = w*R*sin(2pi*w*t)</span>
+<span class="sd">      &#39;&#39;&#39;</span>
+<span class="sd">      x = x - dt*w*R*math.sin(w*t);  y = y + dt*w*R*math.cos(w*t)</span>
+<span class="sd">      return (x,y)</span>
+
+<span class="sd">  # integrate from 0 to tstop</span>
+<span class="sd">  try:</span>
+<span class="sd">      tstop = float(sys.argv[1]); dt = float(sys.argv[2])</span>
+<span class="sd">  except:</span>
+<span class="sd">      print &#39;Usage: %s tstop dt&#39; % sys.argv[0]; sys.exit(1)</span>
+
+<span class="sd">  # make output format compatible with the plotpairs.py script:</span>
+<span class="sd">  xmax = R*1.8; xmin = -xmax; ymin = xmin; ymax = xmax</span>
+<span class="sd">  print xmin, xmax, ymin, ymax</span>
+<span class="sd">  n = int(tstop/dt) + 1;</span>
+<span class="sd">  x = R; y = 0</span>
+<span class="sd">  for i in range(n):</span>
+<span class="sd">      t = i*dt</span>
+<span class="sd">      x, y = advance(x, y, dt, t)</span>
+<span class="sd">      print x, y</span>
+<span class="sd">  print &#39;end&#39;</span>
+
+<span class="sd">This script takes two input parameters from the command line:</span>
+<span class="sd">the stop time for the simulation, and the time step.</span>
+<span class="sd">The output is a series of numbers. We may run the script as::</span>
+
+<span class="sd">  unix&gt; python circle.py 3 0.1 &gt; result</span>
+
+<span class="sd">Let us assume that we are sure that the produced results in this</span>
+<span class="sd">case are correct. A regression test then means that we can</span>
+<span class="sd">automatically (in the future) run the above command and compare</span>
+<span class="sd">the new results with archived correct results.</span>
+
+<span class="sd">The procedure for using the Regression module in this examples</span>
+<span class="sd">goes as follows.</span>
+
+<span class="sd">  1. Create a name of the test, say &quot;circle&quot;.</span>
+<span class="sd">  2. Create circle.verify for running the test and saving</span>
+<span class="sd">     desired results in a file circle.v.</span>
+<span class="sd">  3. If we believe the results are correct, copy circle.v to</span>
+<span class="sd">     circle.r. This circle.r file represents the archived correct</span>
+<span class="sd">     results.</span>
+
+<span class="sd">Later, we may run::</span>
+
+<span class="sd">  unix&gt; regression.py verify circle</span>
+
+<span class="sd">to rerun the test and investigate differences between circle.v</span>
+<span class="sd">(new results) and circle.r (archived correct results).</span>
+<span class="sd">A whole directory tree can be examined for tests (.verify files)</span>
+<span class="sd">by a similar command::</span>
+
+<span class="sd">  unix&gt; regression.py verify root-of-tree</span>
+
+<span class="sd">Sometimes the new results are correct, but there are significant</span>
+<span class="sd">differences between old and new results, because of, e.g., a change</span>
+<span class="sd">in output formatting. New results can in this case be updated to</span>
+<span class="sd">archive status by::</span>
+
+<span class="sd">  unix&gt; regression.py update root-of-tree</span>
+
+<span class="sd">For the circle.py script, a typical circle.verify script takes</span>
+<span class="sd">the following trivial form if we write it in bash::</span>
+
+<span class="sd">  #!/bin/sh</span>
+<span class="sd">  ./circle.py 3 0.1 &gt; circle.v</span>
+
+<span class="sd">The Regression module has tools for running programs, automatically</span>
+<span class="sd">measuring CPU time, selecting lines from a file to put in the .v</span>
+<span class="sd">file, ignoring round-off errors in numerical results, etc.</span>
+<span class="sd">A more sophisticated test, which also accounts for numerical precision</span>
+<span class="sd">in the output, goes as follows (to understand the various statements</span>
+<span class="sd">you will need to consult Appendix B.4 in the textbook &quot;Python Scripting</span>
+<span class="sd">for Computational Science&quot;, by H. P. Langtangen)::</span>
+
+<span class="sd">  #!/usr/bin/env python</span>
+<span class="sd">  import os, sys</span>
+<span class="sd">  from Regression import TestRunNumerics, defaultfilter</span>
+<span class="sd">  test = TestRunNumerics(&#39;circle2.v&#39;)</span>
+<span class="sd">  test.run(&#39;circle.py&#39;, options=&#39;1 0.21&#39;)</span>
+<span class="sd">  # truncate numerical expressions in the output:</span>
+<span class="sd">  test.approx(defaultfilter)</span>
+<span class="sd">  # generate circle2.vd file in correct format:</span>
+<span class="sd">  fd = open(&#39;circle2.vd&#39;, &#39;w&#39;)</span>
+<span class="sd">  fd.write(&#39;## exact data\n&#39;)</span>
+<span class="sd">  # grab the output from circle.py, throw away the</span>
+<span class="sd">  # first and last line, and merge the numbers into</span>
+<span class="sd">  # one column:</span>
+<span class="sd">  cmd = &#39;circle.py 1 0.21&#39;</span>
+<span class="sd">  output = os.popen(cmd)</span>
+<span class="sd">  res = output.readlines()</span>
+<span class="sd">  output.close()</span>
+<span class="sd">  numbers = []</span>
+<span class="sd">  for line in res[1:-1]: # skip first and last line</span>
+<span class="sd">      for r in line.split():</span>
+<span class="sd">          numbers.append(r)</span>
+<span class="sd">  # dump length of numbers and its contents:</span>
+<span class="sd">  fd.write(&#39;%d\n&#39; % len(numbers))</span>
+<span class="sd">  for r in numbers: fd.write(r + &#39;\n&#39;)</span>
+<span class="sd">  fd.close()</span>
+
+<span class="sd">This sample script can be adapted to a wide range of cases.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">string</span><span class="o">,</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">scitools.misc</span> <span class="kn">import</span> <span class="n">system</span> <span class="k">as</span> <span class="n">os_system</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">Tkinter</span><span class="o">,</span> <span class="nn">Pmw</span>
+    <span class="n">_has_TkPmw</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c"># cannot run floatdiff tools</span>
+    <span class="n">_has_TkPmw</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="TestRun"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun">[docs]</a><span class="k">class</span> <span class="nc">TestRun</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility for writing individual regression tests.</span>
+<span class="sd">    Example on usage:</span>
+<span class="sd">    from scitools.Regression import TestRun</span>
+<span class="sd">    test = TestRun(&quot;test1.v&quot;)</span>
+<span class="sd">    # run a program, place output on test1.v:</span>
+<span class="sd">    test.run(&quot;myprog&quot;, options=&quot;-g -p 3.2&quot;, inputfile=&quot;test1.i&quot;)</span>
+<span class="sd">    # append a file to test1.v:</span>
+<span class="sd">    test.append(&quot;res1.dat&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">logfile</span><span class="p">,</span>         <span class="c"># .v file</span>
+                  <span class="n">removepath</span><span class="o">=</span><span class="s">&#39; &#39;</span>   <span class="c"># remove this from sys.argv[0] output</span>
+                  <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean up logfile, create a new one with header.&quot;&quot;&quot;</span>
+
+        <span class="c"># use absolute path such that it is easy to write to the</span>
+        <span class="c"># logfile even after an os.chdir is performed</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;.v&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;error in logfile name; must contain .v suffix&#39;</span><span class="p">)</span>
+
+        <span class="c"># remove logfile if it exists:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+
+        <span class="c"># remove the detailed version as well:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlogfile</span> <span class="o">=</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s">&#39;-d&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlogfile</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlogfile</span><span class="p">)</span>
+
+        <span class="c"># make the logfile:</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">tm</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">removepath</span> <span class="o">=</span> <span class="n">removepath</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">removepath</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: test performed on </span><span class="si">%d</span><span class="s">.</span><span class="si">%02d</span><span class="s">.</span><span class="si">%02d</span><span class="s"> &#39;</span> <span class="o">%</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">tm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">tm</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;posix&#39;</span><span class="p">:</span>  <span class="c"># is &#39;posix&#39;, &#39;nt&#39; or &#39;mac&#39;</span>
+            <span class="c"># unix</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span>
+            <span class="c">#vfile.write(&#39;(%s %s running %s)&#39; % (u[1],u[4],u[0]))</span>
+            <span class="c"># this information is repeated at the end</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c"># make a scratch directory for storing, e.g., gif-files:</span>
+        <span class="k">if</span> <span class="s">&#39;HOME&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;HOME&#39;</span><span class="p">],</span> <span class="s">&#39;tmp&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;win&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span> <span class="o">=</span> <span class="s">r&#39;C:\regression_temp&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span> <span class="o">=</span> <span class="s">&#39;/tmp/regresson_temp&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">)</span>
+
+        <span class="c"># add current working directory to the path:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">curdir</span>
+
+<div class="viewcode-block" id="TestRun.run"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">inputfile</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run program, store output on logfile.&quot;&quot;&quot;</span>
+        <span class="c"># the logfile is always opened in the constructor so</span>
+        <span class="c"># we can safely append here</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">#### Test: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">))</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; running </span><span class="si">%(program)s</span><span class="s"> </span><span class="si">%(options)s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">())</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c"># do not use time.clock() to measure CPU time; it will not</span>
+        <span class="c"># notice the CPU time(here waiting time) of a system command</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">times</span><span class="p">()</span>  <span class="c"># [user,system,cuser,csystem,elapsed]</span>
+        <span class="k">if</span> <span class="n">inputfile</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &gt;&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &lt; </span><span class="si">%s</span><span class="s"> &gt;&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">,</span><span class="n">inputfile</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;ERROR in </span><span class="si">%s</span><span class="s">: execution failure arose from the &#39;</span> \
+                  <span class="s">&#39;command</span><span class="se">\n</span><span class="s">  </span><span class="si">%s</span><span class="se">\n\n</span><span class="si">%s</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">cmd</span><span class="p">,</span><span class="n">output</span><span class="p">)</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">print</span> <span class="n">msg</span>
+        <span class="c"># write CPU time of system command(user+system time</span>
+        <span class="c"># of child processes):</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">times</span><span class="p">();</span> <span class="n">tm</span> <span class="o">=</span> <span class="n">t1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">t0</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">t1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">t0</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;CPU time of </span><span class="si">%(program)s</span><span class="s">: </span><span class="si">%(tm).1f</span><span class="s"> seconds&#39;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">())</span>
+        <span class="c">#if re.search(&#39;(x|sun)&#39;,sys.platform):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;posix&#39;</span><span class="p">:</span>  <span class="c"># is &#39;posix&#39;, &#39;nt&#39; or &#39;mac&#39;</span>
+            <span class="c"># unix</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">uname</span><span class="p">()</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; on </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestRun.loadfile"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.loadfile">[docs]</a>    <span class="k">def</span> <span class="nf">loadfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a file as a list of lines for text processing.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&#39;File&#39;</span><span class="p">,</span><span class="nb">file</span><span class="p">,</span><span class="s">&#39;does not exist&#39;</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">FILE</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">FILE</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">lines</span>
+</div>
+<div class="viewcode-block" id="TestRun.grepfile"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.grepfile">[docs]</a>    <span class="k">def</span> <span class="nf">grepfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">return_lineinfo</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a text consisting of the lines matching regex</span>
+<span class="sd">        (regex can be string or list of strings, and</span>
+<span class="sd">        return_lineinfo is true if each matched line is</span>
+<span class="sd">        prefixed with the filename and the line file as</span>
+<span class="sd">        a list of lines for text processing).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="p">[</span><span class="n">regex</span><span class="p">]</span>  <span class="c"># assume regex is a list of regex</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&#39;File&#39;</span><span class="p">,</span><span class="nb">file</span><span class="p">,</span><span class="s">&#39;does not exist&#39;</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">FILE</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">FILE</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">matched_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">line_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">line_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regex</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">return_lineinfo</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%5d</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">line_counter</span><span class="p">)</span> <span class="o">+</span> <span class="n">line</span>
+                    <span class="n">matched_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">matched_lines</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestRun.write"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write message to logfile.&quot;&quot;&quot;</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">--------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>  <span class="s">&#39;--------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TestRun.silentrun"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.silentrun">[docs]</a>    <span class="k">def</span> <span class="nf">silentrun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run program without storing output on logfile.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;posix&#39;</span><span class="p">:</span>
+            <span class="c"># can write to /dev/null:</span>
+            <span class="n">failure</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &gt; /dev/null&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">failure</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;ERROR in </span><span class="si">%s</span><span class="s">: execution failure with </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">)</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">print</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="TestRun.graphics"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.graphics">[docs]</a>    <span class="k">def</span> <span class="nf">graphics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run e.g. graphics program if the environment variable</span>
+<span class="sd">        BATCH_REGRESSION is not set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;BATCH_REGRESSION&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">batch</span><span class="p">:</span>
+            <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">),</span>
+                                        <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+                <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;ERROR in </span><span class="si">%s</span><span class="s">: execution failure with </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+                      <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">,</span><span class="n">output</span><span class="p">)</span>
+                <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="k">print</span> <span class="n">msg</span>
+</div>
+<div class="viewcode-block" id="TestRun.append"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">maxlines</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Append a file or a list of files to the logfile.&quot;&quot;&quot;</span>
+
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+
+        <span class="c"># We need different code depending in whether file is a string</span>
+        <span class="c"># (a filename) or a list of filenames(e.g. from glob.glob).</span>
+        <span class="c"># The types module defines the names of the built-in types</span>
+        <span class="c"># in Python(here we need StringType and ListType)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="p">[</span><span class="nb">file</span><span class="p">]</span>  <span class="c"># make a list</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="nb">file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;ERROR in </span><span class="si">%s</span><span class="s">: append(file,...), the arg is of illegal &#39;</span>\
+                  <span class="s">&#39;type </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: No file named </span><span class="si">%s</span><span class="s"> was found by Regression.TestRun.append&#39;</span> <span class="o">%</span> \
+                            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">f</span><span class="p">))</span>
+                <span class="k">print</span> <span class="s">&#39;No file named&#39;</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="s">&#39;was found by Regression.TestRun.append&#39;</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">FILE</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">FILE</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">FILE</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">----- appending file </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">maxlines</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">printlines</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>   <span class="c"># print all lines</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">printlines</span> <span class="o">=</span> <span class="n">maxlines</span>
+                <span class="k">if</span> <span class="n">printlines</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                    <span class="n">printlines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;(just </span><span class="si">%d</span><span class="s"> lines) &#39;</span> <span class="o">%</span> <span class="n">printlines</span><span class="p">)</span>
+            <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="c">#print &#39;treating file&#39;,f,&#39;with&#39;,printlines,&#39;lines&#39;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">printlines</span><span class="p">):</span>
+                <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TestRun.picture"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.picture">[docs]</a>    <span class="k">def</span> <span class="nf">picture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Insert HTML commands for a gif picture.&quot;&quot;&quot;</span>
+        <span class="c"># convert to gif:</span>
+        <span class="n">filestem</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;(.*)\.[e]?ps&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">psfile</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;picture: psfile=&#39;</span><span class="p">,</span><span class="n">psfile</span><span class="p">,</span><span class="s">&#39;filestem=&#39;</span><span class="p">,</span><span class="n">filestem</span>
+        <span class="n">os_system</span><span class="p">(</span><span class="s">&#39;convert </span><span class="si">%s</span><span class="s"> gif:</span><span class="si">%s</span><span class="s">.gif&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">psfile</span><span class="p">,</span> <span class="n">filestem</span><span class="p">))</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>  <span class="c"># use pid to makea unique giffile name</span>
+        <span class="n">giffile_with_full_path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">-</span><span class="si">%d</span><span class="s">.gif&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">,</span><span class="n">pid</span><span class="p">,</span><span class="n">filestem</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.gif </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filestem</span><span class="p">,</span> <span class="n">giffile_with_full_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_insertgif</span> <span class="p">(</span><span class="n">giffile_with_full_path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestRun.movie"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRun.movie">[docs]</a>    <span class="k">def</span> <span class="nf">movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_of_psfiles</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Insert HTML commands for an animated gif picture.&quot;&quot;&quot;</span>
+        <span class="c"># convert to animated gif:</span>
+        <span class="n">filelist</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_of_psfiles</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>  <span class="c"># use pid to make unique giffile name</span>
+        <span class="n">giffile_with_full_path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/anim-</span><span class="si">%d</span><span class="s">.gif&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scratchdir</span><span class="p">,</span><span class="n">pid</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;making an animated gif sequence of psfiles:&#39;</span><span class="p">,</span><span class="n">filelist</span>
+        <span class="n">os_system</span><span class="p">(</span><span class="s">&#39;convert -loop 60 -delay 10 </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                  <span class="p">(</span><span class="n">filelist</span><span class="p">,</span><span class="n">giffile_with_full_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_insertgif</span> <span class="p">(</span><span class="n">giffile_with_full_path</span><span class="p">)</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">_insertgif</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">giffile_with_full_path</span><span class="p">):</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;IMG SRC=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;&#39;</span> <span class="o">%</span> <span class="n">giffile_with_full_path</span><span class="p">)</span>
+        <span class="c"># always trigger a diff by inserting a comment containing time.time():</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; &lt;!-- diff-triggering comment: </span><span class="si">%f</span><span class="s"> --&gt;</span><span class="se">\n</span><span class="s">&lt;P&gt;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span>\
+                     <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+
+
+</div>
+<div class="viewcode-block" id="TestRunNumerics"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRunNumerics">[docs]</a><span class="k">class</span> <span class="nc">TestRunNumerics</span><span class="p">(</span><span class="n">TestRun</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extends class TestRun with an additional logfile for</span>
+<span class="sd">    dump of large sets of floating-point numbers for a second-level</span>
+<span class="sd">    regression test.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">removepath</span><span class="o">=</span><span class="s">&#39;  &#39;</span><span class="p">):</span>
+        <span class="n">TestRun</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">removepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span> <span class="o">=</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s">&#39;d&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">)</span>
+        <span class="c"># don&#39;t bring the float logfile into existence if not necessary</span>
+
+
+    <span class="k">def</span> <span class="nf">_approxline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">realfilter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replace floating-point numbers in line by approximate</span>
+<span class="sd">        numbers(computed by realfilter)(called from approx).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># the returned line has name newline</span>
+        <span class="n">newline</span> <span class="o">=</span> <span class="n">line</span>
+
+        <span class="c"># regex for real numbers (but not integers, \. must be a part!)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;&quot;&quot;</span>
+<span class="s">        (                            # start group</span>
+<span class="s">        [+\-]?\d\.\d+[Ee][+\-]\d\d   # -1.34E-01 etc</span>
+<span class="s">        |                            # OR</span>
+<span class="s">                                     # </span><span class="si">%f</span><span class="s"> format with more than 3 decimals:</span>
+<span class="s">        [+\-]?\d+\.\d\d\d\d+         # -1.2556, not 7, not 7., not 7.22</span>
+<span class="s">        |                            # OR</span>
+<span class="s">        [+\-]?\.\d\d\d\d+            # .3656 (more than 4 decimals)</span>
+<span class="s">        )                            # end group</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span>
+                       <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+        <span class="c"># possible problem: 0 or 0.0 is never approximated by the</span>
+        <span class="c"># regex above (but 0.00E+00 is!)</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c"># start of substring to test for next match</span>
+        <span class="k">while</span> <span class="n">b</span><span class="p">:</span>
+            <span class="n">strno</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">strno</span><span class="p">)</span>
+            <span class="n">newno</span> <span class="o">=</span> <span class="n">realfilter</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+            <span class="n">newline</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">newline</span><span class="p">,</span> <span class="n">strno</span><span class="p">,</span> <span class="n">newno</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c">#print &#39;found %s, replaced by %s, to form\n   %s\n&#39; % (strno, newno, newline)</span>
+            <span class="c"># b.end() refers to local index in current substring:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+            <span class="c"># further search in the substring starting with index:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">index</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">newline</span>
+
+<div class="viewcode-block" id="TestRunNumerics.approx"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRunNumerics.approx">[docs]</a>    <span class="k">def</span> <span class="nf">approx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realfilter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run through logfile, find all real numbers and replace</span>
+<span class="sd">        them by approximate real numbers computed by realfilter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logfile_copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="o">+</span><span class="s">&#39;.tmp&#39;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="n">logfile_copy</span><span class="p">)</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile_copy</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">afile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="c"># new approximate logfile</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">vfile</span><span class="p">:</span>
+            <span class="c"># strip some digits:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_approxline</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">realfilter</span><span class="p">)</span>
+            <span class="c"># replace -0 by 0:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;[eE]-00&#39;</span><span class="p">,</span> <span class="s">&#39;e+00&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;-0([, )])&#39;</span><span class="p">,</span> <span class="s">&#39;0\g&lt;1&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">afile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">vfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">afile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TestRunNumerics.floatdump"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.TestRunNumerics.floatdump">[docs]</a>    <span class="k">def</span> <span class="nf">floatdump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run program and direct output to self.floatlogfile.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">):</span>
+            <span class="c"># bring the float logfile into existence:</span>
+            <span class="n">ff</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">);</span> <span class="n">ff</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &gt;&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">program</span><span class="p">,</span><span class="n">options</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">floatlogfile</span><span class="p">)</span>
+        <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;ERROR in </span><span class="si">%s</span><span class="s">: execution failure arose from the &#39;</span> \
+                  <span class="s">&#39;command</span><span class="se">\n</span><span class="s">  </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scriptfilename</span><span class="p">,</span><span class="n">cmd</span><span class="p">,</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">print</span> <span class="n">msg</span>
+
+        <span class="c"># improvement: load output from system command into a list</span>
+        <span class="c"># of strings and examine the output format (must be in the</span>
+        <span class="c"># valid format!) OR: dump in a separate file, read it line</span>
+        <span class="c"># by line (better) and if the format is ok, append it</span>
+
+        <span class="c"># format specification: see test program at the end of the file</span>
+</div></div>
+<div class="viewcode-block" id="defaultfilter"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.defaultfilter">[docs]</a><span class="k">def</span> <span class="nf">defaultfilter</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0E-14</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c"># set very small numbers to 0 exactly</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%11.4e</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">r</span>
+    <span class="k">return</span> <span class="n">p</span>
+</div>
+<div class="viewcode-block" id="exactfilter"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.exactfilter">[docs]</a><span class="k">def</span> <span class="nf">exactfilter</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0E-14</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c"># set very small numbers to 0 exactly</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%g</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">r</span>                  <span class="c"># keep the precision</span>
+    <span class="k">return</span> <span class="n">p</span>
+</div>
+<span class="kn">import</span> <span class="nn">stat</span>
+<div class="viewcode-block" id="walk"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.walk">[docs]</a><span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple copy of os.path.walk, but does not break when a file</span>
+<span class="sd">    marked for visit is deleted during the process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">os</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">stat</span><span class="o">.</span><span class="n">ST_MODE</span><span class="p">]):</span>
+                <span class="n">walk</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c">#print &#39;walk: could not work with the file&#39;,name</span>
+            <span class="c">#many files are naturally cleaned up during regression</span>
+            <span class="c">#tests (.o files e.g.)</span>
+            <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Verify"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.Verify">[docs]</a><span class="k">class</span> <span class="nc">Verify</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Automates regression tests by running through a directory</span>
+<span class="sd">    tree, searching for .verify files, executing them and</span>
+<span class="sd">    comparing .v with .r files. The result of the comparison</span>
+<span class="sd">    (the differing lines) are reported in HTML documents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">root</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span>        <span class="c"># root directory or a single file</span>
+                 <span class="n">task</span><span class="o">=</span><span class="s">&#39;verify&#39;</span><span class="p">,</span>   <span class="c"># &#39;verify&#39; or &#39;update&#39;</span>
+                 <span class="n">diffsummary</span> <span class="o">=</span> <span class="s">&#39;verify_log&#39;</span><span class="p">,</span>
+                 <span class="n">diffprog</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># alternatives: diff, diff.py, diff.pl</span>
+                 <span class="p">):</span>
+        <span class="c"># files are opened with changing os.getcwd so we need full path:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                        <span class="n">diffsummary</span> <span class="o">+</span> <span class="s">&#39;.htm&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                        <span class="n">diffsummary</span> <span class="o">+</span> <span class="s">&#39;_details.htm&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diffprog</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;DIFFPROG&#39;</span><span class="p">,</span> <span class="s">&#39;diff.py&#39;</span><span class="p">)</span>
+            <span class="c">#self.diffprog = os.environ.get(&#39;DIFFPROG&#39;, &#39;diff&#39;)  # Unix diff</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span> <span class="o">=</span> <span class="n">diffprog</span>
+
+        <span class="c"># remove old files, create new ones:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">)</span>
+
+        <span class="c"># use font colors in the HTML file to indicated the kind of diff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GREEN</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">RED</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span>
+
+        <span class="c"># bring files into existence and write HTML header:</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">);</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;body&gt;</span><span class="se">\n</span><span class="s">&#39;</span>\
+                  <span class="s">&#39;&lt;font color=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s"> color&lt;/font&gt;: true differences&lt;br&gt;</span><span class="se">\n</span><span class="s">&#39;</span>\
+                  <span class="s">&#39;&lt;font color=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s"> color&lt;/font&gt;: CPU time differences &#39;</span>\
+                  <span class="s">&#39;only</span><span class="se">\n</span><span class="s">&lt;p&gt;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">GREEN</span><span class="p">))</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">ds_d</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;body&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">ds_d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testcounter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c"># the main action: run tests and diff!</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="c"># walk through a directory structure:</span>
+            <span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search4verify</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="c"># run just a single test:</span>
+            <span class="nb">file</span> <span class="o">=</span> <span class="n">root</span>   <span class="c"># root is just a file</span>
+            <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dirname</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span> <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_singlefile</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Verify: root=&#39;</span><span class="p">,</span><span class="n">root</span><span class="p">,</span><span class="s">&#39;does not exist&#39;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># write HTML footer:</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">);</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;/body&gt;&lt;/html&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">ds_d</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;/body&gt;&lt;/html&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">ds_d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_singlefile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run a single regression test.&quot;&quot;&quot;</span>
+        <span class="c"># does the filename end with .verify?</span>
+        <span class="c">#if re.search(r&#39;\.verify$&#39;, file):</span>
+        <span class="c">#    basename = re.sub(r&#39;\.verify$&#39;, &#39;&#39;, file)</span>
+        <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.verify&#39;</span><span class="p">):</span>
+            <span class="n">basename</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[:</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;update&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;verify&#39;</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">running verification test in&#39;</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_diff</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_search4verify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called by function walk.&quot;&quot;&quot;</span>
+        <span class="c"># change directory to current directory:</span>
+        <span class="n">origdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span> <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_singlefile</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;verify&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+        <span class="c"># change directory back again (required by walk):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">origdir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.v&#39;</span><span class="p">;</span>  <span class="n">rfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.r&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">vfile</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&#39;   </span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s"> in </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vfile</span><span class="p">,</span><span class="n">rfile</span><span class="p">,</span><span class="n">dirname</span><span class="p">)</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.vd&#39;</span><span class="p">;</span>  <span class="n">rfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.rd&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">vfile</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&#39;   </span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vfile</span><span class="p">,</span><span class="n">rfile</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span><span class="p">,</span> <span class="n">scriptfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run script and find differences from reference results.&quot;&quot;&quot;</span>
+        <span class="c"># run scriptfile, but ensure that it is executable</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">scriptfile</span><span class="p">,</span> <span class="mo">0755</span><span class="p">)</span>
+        <span class="c"># 0755: owner all, group+others can read and execute</span>
+        <span class="c"># 0644: owner r+w, group+others r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scriptfile</span><span class="p">)</span>
+
+        <span class="c"># compare new output (.v) with reference results (.r)</span>
+        <span class="n">vfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.v&#39;</span><span class="p">;</span>  <span class="n">rfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.r&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">vfile</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">rfile</span><span class="p">):</span>
+                <span class="c"># if no rfile exists, copy vfile to rfile:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># compute difference:</span>
+                <span class="n">diffprog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span>
+                <span class="k">if</span> <span class="n">diffprog</span> <span class="o">==</span> <span class="s">&#39;diff.pl&#39;</span> <span class="ow">or</span> <span class="n">diffprog</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;diff.py&#39;</span><span class="p">):</span>
+                    <span class="c"># diff.pl is slow for large files</span>
+                    <span class="c"># choose another program if filesize &gt; 50K</span>
+                    <span class="n">Kb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">vfile</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span>
+                    <span class="k">if</span> <span class="n">Kb</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
+                        <span class="n">diffprog</span> <span class="o">=</span> <span class="s">&#39;diff -w&#39;</span>  <span class="c"># Unix C program</span>
+                        <span class="k">print</span> <span class="s">&#39;Warning: switching diff program from&#39;</span><span class="p">,</span>\
+                              <span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span><span class="p">,</span> <span class="s">&#39;to&#39;</span><span class="p">,</span> <span class="n">diffprog</span>
+                <span class="n">diffcmd</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">diffprog</span><span class="p">,</span><span class="n">rfile</span><span class="p">,</span><span class="n">vfile</span><span class="p">)</span>
+                <span class="k">print</span> <span class="s">&#39;...&#39;</span> <span class="o">+</span> <span class="n">diffcmd</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">diffcmd</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="n">ndifflines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+                <span class="n">summaryline</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(dirname)s</span><span class="s">: </span><span class="si">%(rfile)s</span><span class="s"> &#39;</span>\
+                              <span class="s">&#39;</span><span class="si">%(vfile)s</span><span class="s">   </span><span class="si">%(ndifflines)d</span><span class="s"> lines&#39;</span> <span class="o">%</span> <span class="nb">vars</span><span class="p">()</span>
+
+                <span class="c"># no of tests so far:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">testcounter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testcounter</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="n">ds</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffsummary</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ndifflines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">summaryline</span><span class="p">);</span> <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; differ&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># write more detailed info about differences</span>
+
+                    <span class="c"># check if the diff lines are only CPU-time diffs</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffCPUonly</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+                        <span class="n">cpu_msg</span> <span class="o">=</span> <span class="s">&#39; (CPU time only!)&#39;</span>
+                        <span class="n">font_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GREEN</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cpu_msg</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                        <span class="n">font_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RED</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;FONT COLOR=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&lt;/FONT&gt;&#39;</span> <span class="o">%</span> \
+                             <span class="p">(</span><span class="n">font_color</span><span class="p">,</span><span class="n">summaryline</span><span class="p">))</span>
+
+                    <span class="c"># link to file with details:</span>
+                    <span class="n">anchor</span> <span class="o">=</span> <span class="s">&#39;part&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testcounter</span><span class="p">)</span>
+                    <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; &lt;A HREF=&quot;</span><span class="si">%s</span><span class="s">#</span><span class="si">%s</span><span class="s">&quot;&gt;differ&lt;/A&gt;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> \
+                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">,</span><span class="n">anchor</span><span class="p">,</span><span class="n">cpu_msg</span><span class="p">))</span>
+
+                    <span class="c"># write the detailed summary:</span>
+                    <span class="n">ds_d</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffdetails</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+                    <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;P&gt;&lt;A NAME=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;&#39;</span>\
+                    <span class="s">&#39;&lt;B&gt;</span><span class="si">%s</span><span class="s"> differ&lt;/B&gt;&lt;/A&gt;&#39;</span>\
+                    <span class="s">&#39;&lt;BR&gt;The differences were calculated by </span><span class="si">%s</span><span class="s">.&#39;</span>\
+                    <span class="s">&#39;&lt;PRE&gt;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">anchor</span><span class="p">,</span><span class="n">summaryline</span><span class="p">,</span><span class="n">diffprog</span><span class="p">))</span>
+                    <span class="n">ds_d</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+                    <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&lt;/PRE&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">diffprog</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span><span class="p">:</span>
+                        <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;P&gt;&lt;B&gt;NOTE: </span><span class="si">%s</span><span class="s"> was used instead of </span><span class="si">%s</span><span class="s"> &#39;</span>\
+                                   <span class="s">&#39;because of the large filesizes!&lt;/B&gt;&lt;P&gt;&#39;</span> <span class="o">%</span> \
+                                   <span class="p">(</span><span class="n">diffprog</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">diffprog</span><span class="p">))</span>
+
+                    <span class="c"># check if floating-point files are present:</span>
+                    <span class="n">vfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.vd&#39;</span><span class="p">;</span>  <span class="n">rfile</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.rd&#39;</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">vfile</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">rfile</span><span class="p">):</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c"># write a shell file that can be</span>
+                            <span class="c"># executed from a link:</span>
+                            <span class="n">shfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span><span class="s">&#39;tmp.&#39;</span><span class="o">+</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;_fdiff.sh&#39;</span><span class="p">)</span>
+                            <span class="n">shfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">shfilename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+                            <span class="n">shfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;floatdiff.py </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span>\
+                                         <span class="p">(</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">))</span>
+                            <span class="n">shfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">shfilename</span><span class="p">,</span> <span class="mo">0755</span><span class="p">)</span>
+                            <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                             <span class="s">&#39;&lt;P&gt;&lt;A HREF=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;Floating-point difference &#39;</span>\
+                             <span class="s">&#39;between </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s"> without any approximations&lt;/A&gt;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> \
+                               <span class="p">(</span><span class="n">shfilename</span><span class="p">,</span><span class="n">vfile</span><span class="p">,</span> <span class="n">rfile</span><span class="p">))</span>
+                            <span class="c"># check if there _are_ differences...</span>
+                            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;posix&#39;</span><span class="p">:</span>
+                                <span class="n">diff</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">&#39;diff </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> | wc -l&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vfile</span><span class="p">,</span><span class="n">rfile</span><span class="p">))</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                                <span class="n">diff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                                <span class="k">if</span> <span class="n">diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                    <span class="n">ds_d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39; (no differences!)</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+                    <span class="n">ds_d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+                <span class="n">ds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&lt;BR&gt;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;ran </span><span class="si">%s</span><span class="s">, but no </span><span class="si">%s</span><span class="s">.v file found - check that </span><span class="si">%s</span><span class="s">.verify defines </span><span class="si">%s</span><span class="s">.v as logfile&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scriptfile</span><span class="p">,</span><span class="n">basename</span><span class="p">,</span><span class="n">basename</span><span class="p">,</span><span class="n">basename</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Verify.diffCPUonly"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.Verify.diffCPUonly">[docs]</a>    <span class="k">def</span> <span class="nf">diffCPUonly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">difflines</span><span class="p">):</span>
+        <span class="c"># do all differing lines contain something with cpu or date?</span>
+        <span class="n">cpu_only</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">difflines</span><span class="p">:</span>
+            <span class="c"># avoid special diff.pl lines and date:</span>
+            <span class="k">if</span>  <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;---&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;Diffpack Version &#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;: test performed on &#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;^\d+c\d+$&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;(Mon|Tue|Wed|Thu|Fri|Sat|Sun) \w{3}\s+\d+ \d\d:\d\d:\d\d \d{4}&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;diff-triggering comment&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;cpu&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">):</span>
+                    <span class="n">cpu_only</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="k">break</span>
+        <span class="k">return</span> <span class="n">cpu_only</span>
+
+    <span class="c"># the run function can be overrided in subclasses and tailored to special</span>
+    <span class="c"># tests where it is necessary to, e.g., compile special applications</span>
+    <span class="c"># prior to running the script</span>
+</div>
+<div class="viewcode-block" id="Verify.run"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.Verify.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scriptfile</span><span class="p">):</span>
+        <span class="c"># recall that os.chdir has been taken to the scriptfiles&#39;s dir</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="n">scriptfile</span><span class="p">)</span>
+        <span class="c"># path is executable since we made an os.chmod in self._diff</span>
+        <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Failure in regression test&#39;</span><span class="p">,</span> <span class="n">path</span>
+            <span class="k">print</span> <span class="n">output</span>
+</div>
+<div class="viewcode-block" id="Verify.clean"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.Verify.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">):</span>
+        <span class="k">return</span>
+
+</div></div>
+<div class="viewcode-block" id="VerifyDiffpack"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.VerifyDiffpack">[docs]</a><span class="k">class</span> <span class="nc">VerifyDiffpack</span><span class="p">(</span><span class="n">Verify</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extend class Verify with compilation of Diffpack applications,</span>
+<span class="sd">    clean-up of applications, and a parameter self.makemode for running</span>
+<span class="sd">    applications in opt or nopt mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s">&#39;verify&#39;</span><span class="p">,</span>
+                 <span class="n">diffsummary</span> <span class="o">=</span> <span class="s">&#39;verify_log&#39;</span><span class="p">,</span>
+                 <span class="n">diffprog</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                 <span class="n">makemode</span> <span class="o">=</span> <span class="s">&#39;opt&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">makemode</span> <span class="o">=</span> <span class="n">makemode</span>
+        <span class="c"># run all the stuff:</span>
+        <span class="n">Verify</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">diffsummary</span><span class="p">,</span> <span class="n">diffprog</span><span class="p">)</span>
+
+<div class="viewcode-block" id="VerifyDiffpack.run"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.VerifyDiffpack.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scriptfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run script, but compile the application first.&quot;&quot;&quot;</span>
+        <span class="c"># is this a Verify directory? (recall that we have chdir&#39;ed to dir)</span>
+        <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;/Verify&#39;</span><span class="p">):</span>
+            <span class="c"># go to parent directory (os.pardir is &#39;..&#39;):</span>
+            <span class="n">thisdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span>  <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
+            <span class="c">#print &#39;\na Verify dir with a parent dir\n  &#39;,os.getcwd(),\</span>
+            <span class="c">#      &#39;\nLet&#39;s compile!\n&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">...compile app in&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s">&#39;Makefile&#39;</span><span class="p">):</span>
+                <span class="c"># yes, we have a makefile!</span>
+                <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="s">&#39;Make MODE=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">makemode</span><span class="p">,</span>
+                                            <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;Could not compile in directory&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">thisdir</span><span class="p">)</span> <span class="c"># back to Verify dir</span>
+
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">...run regression test &#39;&#39;+scriptfile+&#39;&#39; for VerifyDiffpack.run:&#39;</span>
+        <span class="c"># call parent class&#39; run function:</span>
+        <span class="n">Verify</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scriptfile</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="VerifyDiffpack.clean"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.VerifyDiffpack.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean up files, typically executables etc.&quot;&quot;&quot;</span>
+        <span class="c"># is this a Verify directory? (recall that we have chdir&#39;ed to dir)</span>
+        <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;/Verify&#39;</span><span class="p">):</span>
+            <span class="c"># go to parent directory and clean application:</span>
+            <span class="n">thisdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span>  <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s">&#39;Makefile&#39;</span><span class="p">):</span>
+                <span class="c"># yes, we have a makefile!</span>
+                <span class="n">failure</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">os_system</span><span class="p">(</span><span class="s">&#39;Make clean&#39;</span><span class="p">,</span>
+                                            <span class="n">failure_handling</span><span class="o">=</span><span class="s">&#39;silent&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">failure</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;Could not run Make clean in directory&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">thisdir</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="FloatDiff"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff">[docs]</a><span class="k">class</span> <span class="nc">FloatDiff</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_TkPmw</span><span class="p">:</span>  <span class="c"># global variable set in top of the script</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s">&#39;Could not import Tkinter and Pmw&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GUI</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c"># true or false</span>
+        <span class="nb">list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loadfiles</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildGUI</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">resizescrollregion</span><span class="p">()</span> <span class="c"># make the scrollbars right</span>
+
+        <span class="k">return</span>
+
+<div class="viewcode-block" id="FloatDiff.loadfiles"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.loadfiles">[docs]</a>    <span class="k">def</span> <span class="nf">loadfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Purpose: build &quot;list&quot;, a list of relevant info for</span>
+<span class="sd">        all differences found between file1 and file2</span>
+<span class="sd">        (list can afterwards be visualized in buildGUI).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># first check if the files are identical:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;posix&#39;</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">&#39;diff </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> | wc -l&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">file2</span><span class="p">))</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;files </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s"> are identical, no need to launch GUI&#39;</span> \
+                      <span class="o">%</span> <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">file2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">GUI</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">);</span>  <span class="n">f2</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file2</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">line1</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span> <span class="n">line2</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">line2</span><span class="p">:</span> <span class="k">break</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;^##&#39;</span><span class="p">,</span><span class="n">line1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">line1</span> <span class="o">!=</span> <span class="n">line2</span><span class="p">:</span>
+                    <span class="c"># strange; the two comment lines are different</span>
+                    <span class="k">print</span> <span class="s">&#39;two comment lines are different!&#39;</span>
+                    <span class="k">print</span> <span class="s">&#39;line1:</span><span class="se">\n</span><span class="s">  &#39;</span><span class="p">,</span> <span class="n">line1</span>
+                    <span class="k">print</span> <span class="s">&#39;line2:</span><span class="se">\n</span><span class="s">  &#39;</span><span class="p">,</span> <span class="n">line2</span>
+                <span class="n">comment</span> <span class="o">=</span> <span class="n">line1</span>
+            <span class="n">line1</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span> <span class="n">line2</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">line2</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;wrong datafile format; &#39;</span>\
+                      <span class="s">&#39;comment line not proceeded by data&#39;</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line1</span> <span class="o">!=</span> <span class="n">line2</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> has </span><span class="si">%s</span><span class="s"> items, whereas </span><span class="si">%s</span><span class="s"> has </span><span class="si">%s</span><span class="s"> items&#39;</span> <span class="o">%</span> \
+                     <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">line1</span><span class="p">,</span><span class="n">file2</span><span class="p">,</span><span class="n">line2</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">nitems1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line1</span><span class="p">)</span>
+            <span class="n">differences</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="nb">max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1E+20</span><span class="p">;</span> <span class="nb">min</span> <span class="o">=</span> <span class="o">-</span><span class="nb">max</span><span class="p">;</span> <span class="n">avg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nitems1</span><span class="p">):</span>
+                <span class="n">s1</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">s1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">s2</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;wrong datafile format&#39;</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c"># test that only one number is there... (no space)</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">s2</span><span class="p">):</span>
+                    <span class="k">print</span> <span class="s">&#39;wrong datafile format&#39;</span>
+                    <span class="k">print</span> <span class="s">&#39;lines:&#39;</span><span class="p">,</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span><span class="n">s2</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">r1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span> <span class="n">r2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+                <span class="c"># statistics:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">r1</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">):</span>  <span class="nb">max</span> <span class="o">=</span> <span class="n">r1</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">r1</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">):</span>  <span class="nb">min</span> <span class="o">=</span> <span class="n">r1</span>
+                <span class="n">avg</span> <span class="o">=</span> <span class="n">avg</span> <span class="o">+</span> <span class="n">r1</span>
+                <span class="c"># difference?</span>
+                <span class="k">if</span> <span class="n">s1</span> <span class="o">!=</span> <span class="n">s2</span><span class="p">:</span>
+                    <span class="c"># report this difference:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">r1</span> <span class="o">-</span> <span class="n">r2</span>
+                    <span class="n">differences</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)))</span>
+            <span class="n">avg</span> <span class="o">=</span> <span class="n">avg</span> <span class="o">/</span> <span class="n">nitems1</span>
+            <span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">comment</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">avg</span><span class="p">))</span>
+        <span class="n">f1</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">list</span>
+</div>
+<div class="viewcode-block" id="FloatDiff.buildGUI"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.buildGUI">[docs]</a>    <span class="k">def</span> <span class="nf">buildGUI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build list of fields and canvas (text and plot).&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">list</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">buttonframe</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+        <span class="n">buttonframe</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">canvasframe</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+        <span class="n">canvasframe</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fieldlist</span> <span class="o">=</span> <span class="n">Pmw</span><span class="o">.</span><span class="n">ScrolledListBox</span><span class="p">(</span><span class="n">buttonframe</span><span class="p">,</span>
+                <span class="n">listbox_selectmode</span> <span class="o">=</span> <span class="s">&#39;extended&#39;</span><span class="p">,</span>
+                <span class="n">vscrollmode</span><span class="o">=</span><span class="s">&#39;dynamic&#39;</span><span class="p">,</span>
+                <span class="n">label_text</span> <span class="o">=</span> <span class="s">&#39;list of fields&#39;</span><span class="p">,</span>
+                <span class="n">labelpos</span> <span class="o">=</span> <span class="s">&#39;n&#39;</span><span class="p">,</span>  <span class="c"># needed if label_text is present</span>
+                <span class="n">listbox_width</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="n">listbox_height</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="n">selectioncommand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectfield</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fieldlist</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">Pmw</span><span class="o">.</span><span class="n">ScrolledCanvas</span><span class="p">(</span><span class="n">canvasframe</span><span class="p">,</span>
+            <span class="n">borderframe</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">labelpos</span> <span class="o">=</span> <span class="s">&#39;n&#39;</span><span class="p">,</span>
+            <span class="n">label_text</span> <span class="o">=</span> <span class="s">&#39;intelligent float diff between </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s">&#39;</span> \
+                                          <span class="o">%</span> <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">file2</span><span class="p">),</span>
+            <span class="n">usehullsize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hull_width</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span> <span class="n">hull_height</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+            <span class="n">vscrollmode</span> <span class="o">=</span> <span class="s">&#39;static&#39;</span><span class="p">,</span> <span class="n">hscrollmode</span> <span class="o">=</span> <span class="s">&#39;static&#39;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textdiffs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">maxdiffs</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">differences</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">maxdiffs</span><span class="p">:</span> <span class="n">maxdiffs</span> <span class="o">=</span> <span class="n">n</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s">&#39;tag&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">differences</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c"># no diff, proceed with next</span>
+
+            <span class="n">textdiff</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">interior</span><span class="p">(),</span>
+                                    <span class="n">width</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="n">maxdiffs</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">wrap</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">)</span>
+                                    <span class="c">#width=52,height=str(maxdiffs)+&#39;c&#39;,wrap=&#39;none&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">textdiffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">textdiff</span><span class="p">)</span>
+            <span class="n">textwin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">create_window</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s">&#39;nw&#39;</span><span class="p">,</span>
+                      <span class="n">window</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">textdiffs</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span> <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+            <span class="n">textdiff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span>
+            <span class="s">&#39;line: </span><span class="si">%-10s</span><span class="s">      </span><span class="si">%-10s</span><span class="s">      float diff</span><span class="se">\n\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">file2</span><span class="p">))</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="n">differences</span><span class="p">:</span>
+                <span class="n">textdiff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%4d</span><span class="s">: &#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">textdiff</span><span class="p">,</span> <span class="n">s1</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">s2</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">textdiff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%-16g</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+
+            <span class="c"># create graph:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Pmw</span><span class="o">.</span><span class="n">Blt</span><span class="o">.</span><span class="n">Vector</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Pmw</span><span class="o">.</span><span class="n">Blt</span><span class="o">.</span><span class="n">Vector</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Pmw</span><span class="o">.</span><span class="n">Blt</span><span class="o">.</span><span class="n">Vector</span><span class="p">())</span>
+            <span class="c"># note: these vectors are recreated in the next part</span>
+            <span class="c"># of the loop, must have a list of such vectors, indexed</span>
+            <span class="c"># by counter!</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="n">differences</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vdata</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdata</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+                <span class="n">graph</span> <span class="o">=</span> <span class="n">Pmw</span><span class="o">.</span><span class="n">Blt</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">interior</span><span class="p">(),</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                                      <span class="n">height</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">maxdiffs</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">line_create</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">,</span>
+                              <span class="n">xdata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vdata</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span>
+                              <span class="n">ydata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span>
+                              <span class="n">label</span><span class="o">=</span><span class="s">&#39;new results&#39;</span><span class="p">,</span>
+                              <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">dashes</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">line_create</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">,</span>
+                              <span class="n">xdata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rdata</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span>
+                              <span class="n">ydata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ycoor</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span>
+                              <span class="n">label</span><span class="o">=</span><span class="s">&#39;reference&#39;</span><span class="p">,</span>
+                              <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">dashes</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;plot of </span><span class="si">%s</span><span class="s"> vs </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file1</span><span class="p">,</span><span class="n">file2</span><span class="p">))</span>
+            <span class="c">#self.vavg = Pmw.Blt.Vector(); self.vavg = [avg]*n # does not work!</span>
+
+            <span class="n">plotwin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">create_window</span><span class="p">(</span><span class="mi">420</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s">&#39;nw&#39;</span><span class="p">,</span>
+                      <span class="n">window</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span> <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">xaxis_configure</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="nb">max</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>     <span class="n">ymax</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">yaxis_configure</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c"># insert item in list:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fieldlist</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span><span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="c"># strip trailing \n</span>
+<span class="c">#            button = Tkinter.Button(buttonframe,</span>
+<span class="c">#                                    text=comment,</span>
+<span class="c">#                     command=lambda f=self.lift, c=self.canvas,</span>
+<span class="c">#                     p=self.graphs[counter], t=self.textdiffs[counter]:</span>
+<span class="c">#                               f(c,p,t))</span>
+<span class="c">#            button.pack(side=&#39;top&#39;)</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">Tkinter</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">buttonframe</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&#39;QUIT&#39;</span><span class="p">,</span>
+                       <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">,</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FloatDiff.selectfield"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.selectfield">[docs]</a>    <span class="k">def</span> <span class="nf">selectfield</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fieldlist</span><span class="o">.</span><span class="n">curselection</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">textdiffs</span><span class="p">[</span><span class="n">counter</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="FloatDiff.lift"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.lift">[docs]</a>    <span class="k">def</span> <span class="nf">lift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">win1</span><span class="p">,</span> <span class="n">win2</span><span class="p">):</span>
+        <span class="n">win1</span><span class="o">.</span><span class="n">lift</span><span class="p">()</span>
+        <span class="n">win2</span><span class="o">.</span><span class="n">lift</span><span class="p">()</span>
+        <span class="c"># adapt the scroll region:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">resizescrollregion</span><span class="p">()</span>
+
+        <span class="c">#does not work with embedded windows:</span>
+        <span class="c">#self.canvas.lift(win1)</span>
+        <span class="c">#self.canvas.component(&#39;canvas&#39;).lift(win1)</span>
+</div>
+<div class="viewcode-block" id="FloatDiff.highlight"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.FloatDiff.highlight">[docs]</a>    <span class="k">def</span> <span class="nf">highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">):</span>
+        <span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">s2</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s">&#39;equal&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s">&#39;diff&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">s2</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s">&#39;equal&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">s2</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s">&#39;diff&#39;</span><span class="p">)</span>
+        <span class="n">text</span><span class="o">.</span><span class="n">tag_configure</span><span class="p">(</span><span class="s">&#39;diff&#39;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)):</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;equal&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="verify_file_template"><a class="viewcode-back" href="../../Regression.html#scitools.Regression.verify_file_template">[docs]</a><span class="k">def</span> <span class="nf">verify_file_template</span><span class="p">(</span><span class="n">casename</span><span class="p">,</span> <span class="n">floats</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s">#!/usr/bin/env python</span>
+<span class="s">import os, sys</span>
+<span class="s">from scitools.Regression import TestRunNumerics, defaultfilter</span>
+<span class="s">test = TestRunNumerics(&#39;</span><span class="si">%s</span><span class="s">.v&#39;)</span>
+<span class="s">test.run(&#39;</span><span class="si">%s</span><span class="s">.py&#39;, options=&#39;...&#39;)</span>
+<span class="s"># test.append(somefile)</span>
+<span class="s"># truncate numerical expressions in the output:</span>
+<span class="s">test.approx(defaultfilter)</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">casename</span><span class="p">,</span> <span class="n">casename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">floats</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s"># generate </span><span class="si">%s</span><span class="s">.vd file in correct format:</span>
+<span class="s">fd = open(&#39;</span><span class="si">%s</span><span class="s">.vd&#39;, &#39;w&#39;)</span>
+<span class="s">fd.write(&#39;## exact data</span><span class="se">\n</span><span class="s">&#39;)</span>
+<span class="s"># write out float data in some way</span>
+<span class="s"># ...</span>
+<span class="s">fd.close()</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">casename</span><span class="p">,</span> <span class="n">casename</span><span class="p">)</span>
+    <span class="n">vf</span> <span class="o">=</span> <span class="n">casename</span> <span class="o">+</span> <span class="s">&#39;.verify&#39;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">vf</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&#39;a template regression script is written to&#39;</span><span class="p">,</span> <span class="n">vf</span>
+
+
+<span class="c"># tests of the current module:</span>
+</div>
+<span class="k">def</span> <span class="nf">_test_floatdiff</span><span class="p">():</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+    <span class="c">#Pmw.initialise(root, fontScheme=&#39;pmw1&#39;)</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;intelligent float diff&#39;</span><span class="p">)</span>
+
+    <span class="c"># make two files with almost equal data:</span>
+    <span class="n">file1</span> <span class="o">=</span> <span class="s">&#39;tmptest.v&#39;</span><span class="p">;</span>  <span class="n">file2</span> <span class="o">=</span> <span class="s">&#39;tmptest.r&#39;</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">);</span>  <span class="n">f2</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file2</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">f1</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;&quot;&quot;## field1</span>
+<span class="s">10</span>
+<span class="s">1.345</span>
+<span class="s">3.45</span>
+<span class="s">6.9</span>
+<span class="s">4</span>
+<span class="s">9</span>
+<span class="s">8.999999</span>
+<span class="s">1.065432E-01</span>
+<span class="s">1.07E-01</span>
+<span class="s">1.06E-01</span>
+<span class="s">0.04E-01</span>
+<span class="s">## field2</span>
+<span class="s">11</span>
+<span class="s">1.6</span>
+<span class="s">3.1</span>
+<span class="s">2.0</span>
+<span class="s">1.1</span>
+<span class="s">1.7</span>
+<span class="s">1.8</span>
+<span class="s">1.9</span>
+<span class="s">0</span>
+<span class="s">-9.3</span>
+<span class="s">-14.4</span>
+<span class="s">-1.6</span>
+<span class="s">## field3</span>
+<span class="s">10</span>
+<span class="s">1.9</span>
+<span class="s">3.3</span>
+<span class="s">2.7</span>
+<span class="s">0.8</span>
+<span class="s">0.88</span>
+<span class="s">0.8000</span>
+<span class="s">0.8001</span>
+<span class="s">0.8002</span>
+<span class="s">0.8003</span>
+<span class="s">0.8004</span>
+<span class="s">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">f2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;&quot;&quot;## field1</span>
+<span class="s">10</span>
+<span class="s">1.344</span>
+<span class="s">3.66</span>
+<span class="s">7.0</span>
+<span class="s">4</span>
+<span class="s">9</span>
+<span class="s">8.999999</span>
+<span class="s">1.065432E-01</span>
+<span class="s">1.07E-01</span>
+<span class="s">1.06E-01</span>
+<span class="s">1.0376243E-01</span>
+<span class="s">## field2</span>
+<span class="s">11</span>
+<span class="s">1.61</span>
+<span class="s">3.11</span>
+<span class="s">2.01</span>
+<span class="s">1.11</span>
+<span class="s">1.7</span>
+<span class="s">1.8</span>
+<span class="s">1.9</span>
+<span class="s">0</span>
+<span class="s">-9.3</span>
+<span class="s">-14.400</span>
+<span class="s">-1.6000E+00</span>
+<span class="s">## field3</span>
+<span class="s">10</span>
+<span class="s">1.9</span>
+<span class="s">3.3</span>
+<span class="s">2.7</span>
+<span class="s">0.8001</span>
+<span class="s">0.88001</span>
+<span class="s">0.8000001</span>
+<span class="s">0.8001</span>
+<span class="s">0.8002</span>
+<span class="s">0.8003</span>
+<span class="s">0.8001</span>
+<span class="s">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">f1</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">FloatDiff</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">)</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Usage: </span><span class="si">%s</span><span class="s"> [template | verify | update | floatdiff] [verify/update-root]&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">verifyroot</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">verifyroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;floatdiff&#39;</span><span class="p">:</span>
+        <span class="n">_test_floatdiff</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;template&#39;</span><span class="p">:</span>
+        <span class="n">verify_file_template</span><span class="p">(</span><span class="s">&#39;somecase&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># task == &#39;verify&#39; or task == &#39;update&#39;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Verify</span><span class="p">(</span><span class="n">verifyroot</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="s">&#39;verify_log&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s">&#39;verify&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;check verify_log.htm&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/scitools_logo.jpg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SciTools 0.8.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, H. P. Langtangen, J. Ring, ++.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

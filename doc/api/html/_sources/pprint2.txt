@@ -1,0 +1,10 @@
+
+:mod:`scitools.pprint2`
+=======================
+
+.. automodule:: scitools.pprint2
+   :members:
+   :undoc-members:
+   :special-members:
+   :inherited-members:
+   :show-inheritance:

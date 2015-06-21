@@ -1,0 +1,2744 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: /home/johannr/work/scriptingsuite/trunk/packages/scitools/lib/scitools/easyviz/doc/figs/mesh_ex1.eps
+%%Creator: gnuplot 4.0 patchlevel 0
+%%CreationDate: Fri Apr 27 13:16:16 2007
+%%DocumentFonts: (atend)
+%%BoundingBox: 50 50 410 302
+%%Orientation: Portrait
+%%EndComments
+/gnudict 256 dict def
+gnudict begin
+/Color true def
+/Solid false def
+/gnulinewidth 5.000 def
+/userlinewidth gnulinewidth def
+/vshift -66 def
+/dl {10.0 mul} def
+/hpt_ 31.5 def
+/vpt_ 31.5 def
+/hpt hpt_ def
+/vpt vpt_ def
+/Rounded false def
+/M {moveto} bind def
+/L {lineto} bind def
+/R {rmoveto} bind def
+/V {rlineto} bind def
+/N {newpath moveto} bind def
+/C {setrgbcolor} bind def
+/f {rlineto fill} bind def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke M
+  0 vshift R show } def
+/Rshow { currentpoint stroke M
+  dup stringwidth pop neg vshift R show } def
+/Cshow { currentpoint stroke M
+  dup stringwidth pop -2 div vshift R show } def
+/UP { dup vpt_ mul /vpt exch def hpt_ mul /hpt exch def
+  /hpt2 hpt 2 mul def /vpt2 vpt 2 mul def } def
+/DL { Color {setrgbcolor Solid {pop []} if 0 setdash }
+ {pop pop pop 0 setgray Solid {pop []} if 0 setdash} ifelse } def
+/BL { stroke userlinewidth 2 mul setlinewidth
+      Rounded { 1 setlinejoin 1 setlinecap } if } def
+/AL { stroke userlinewidth 2 div setlinewidth
+      Rounded { 1 setlinejoin 1 setlinecap } if } def
+/UL { dup gnulinewidth mul /userlinewidth exch def
+      dup 1 lt {pop 1} if 10 mul /udl exch def } def
+/PL { stroke userlinewidth setlinewidth
+      Rounded { 1 setlinejoin 1 setlinecap } if } def
+/LTw { PL [] 1 setgray } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 udl mul 2 udl mul] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 1 0 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 1 0 DL } def
+/LT2 { PL [2 dl 3 dl] 0 0 1 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/Pnt { stroke [] 0 setdash
+   gsave 1 setlinecap M 0 0 V stroke grestore } def
+/Dia { stroke [] 0 setdash 2 copy vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath stroke
+  Pnt } def
+/Pls { stroke [] 0 setdash vpt sub M 0 vpt2 V
+  currentpoint stroke M
+  hpt neg vpt neg R hpt2 0 V stroke
+  } def
+/Box { stroke [] 0 setdash 2 copy exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V closepath stroke
+  Pnt } def
+/Crs { stroke [] 0 setdash exch hpt sub exch vpt add M
+  hpt2 vpt2 neg V currentpoint stroke M
+  hpt2 neg 0 R hpt2 vpt2 V stroke } def
+/TriU { stroke [] 0 setdash 2 copy vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath stroke
+  Pnt  } def
+/Star { 2 copy Pls Crs } def
+/BoxF { stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V  hpt2 0 V  0 vpt2 V
+  hpt2 neg 0 V  closepath fill } def
+/TriUF { stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath fill } def
+/TriD { stroke [] 0 setdash 2 copy vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath stroke
+  Pnt  } def
+/TriDF { stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath fill} def
+/DiaF { stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath fill } def
+/Pent { stroke [] 0 setdash 2 copy gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath stroke grestore Pnt } def
+/PentF { stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath fill grestore } def
+/Circle { stroke [] 0 setdash 2 copy
+  hpt 0 360 arc stroke Pnt } def
+/CircleF { stroke [] 0 setdash hpt 0 360 arc fill } def
+/C0 { BL [] 0 setdash 2 copy moveto vpt 90 450  arc } bind def
+/C1 { BL [] 0 setdash 2 copy        moveto
+       2 copy  vpt 0 90 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C2 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 90 180 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C3 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 0 180 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C4 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 180 270 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C5 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 0 90 arc
+       2 copy moveto
+       2 copy  vpt 180 270 arc closepath fill
+               vpt 0 360 arc } bind def
+/C6 { BL [] 0 setdash 2 copy moveto
+      2 copy  vpt 90 270 arc closepath fill
+              vpt 0 360 arc closepath } bind def
+/C7 { BL [] 0 setdash 2 copy moveto
+      2 copy  vpt 0 270 arc closepath fill
+              vpt 0 360 arc closepath } bind def
+/C8 { BL [] 0 setdash 2 copy moveto
+      2 copy vpt 270 360 arc closepath fill
+              vpt 0 360 arc closepath } bind def
+/C9 { BL [] 0 setdash 2 copy moveto
+      2 copy  vpt 270 450 arc closepath fill
+              vpt 0 360 arc closepath } bind def
+/C10 { BL [] 0 setdash 2 copy 2 copy moveto vpt 270 360 arc closepath fill
+       2 copy moveto
+       2 copy vpt 90 180 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C11 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 0 180 arc closepath fill
+       2 copy moveto
+       2 copy  vpt 270 360 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C12 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 180 360 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C13 { BL [] 0 setdash  2 copy moveto
+       2 copy  vpt 0 90 arc closepath fill
+       2 copy moveto
+       2 copy  vpt 180 360 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/C14 { BL [] 0 setdash 2 copy moveto
+       2 copy  vpt 90 360 arc closepath fill
+               vpt 0 360 arc } bind def
+/C15 { BL [] 0 setdash 2 copy vpt 0 360 arc closepath fill
+               vpt 0 360 arc closepath } bind def
+/Rec   { newpath 4 2 roll moveto 1 index 0 rlineto 0 exch rlineto
+       neg 0 rlineto closepath } bind def
+/Square { dup Rec } bind def
+/Bsquare { vpt sub exch vpt sub exch vpt2 Square } bind def
+/S0 { BL [] 0 setdash 2 copy moveto 0 vpt rlineto BL Bsquare } bind def
+/S1 { BL [] 0 setdash 2 copy vpt Square fill Bsquare } bind def
+/S2 { BL [] 0 setdash 2 copy exch vpt sub exch vpt Square fill Bsquare } bind def
+/S3 { BL [] 0 setdash 2 copy exch vpt sub exch vpt2 vpt Rec fill Bsquare } bind def
+/S4 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt Square fill Bsquare } bind def
+/S5 { BL [] 0 setdash 2 copy 2 copy vpt Square fill
+       exch vpt sub exch vpt sub vpt Square fill Bsquare } bind def
+/S6 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt vpt2 Rec fill Bsquare } bind def
+/S7 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt vpt2 Rec fill
+       2 copy vpt Square fill
+       Bsquare } bind def
+/S8 { BL [] 0 setdash 2 copy vpt sub vpt Square fill Bsquare } bind def
+/S9 { BL [] 0 setdash 2 copy vpt sub vpt vpt2 Rec fill Bsquare } bind def
+/S10 { BL [] 0 setdash 2 copy vpt sub vpt Square fill 2 copy exch vpt sub exch vpt Square fill
+       Bsquare } bind def
+/S11 { BL [] 0 setdash 2 copy vpt sub vpt Square fill 2 copy exch vpt sub exch vpt2 vpt Rec fill
+       Bsquare } bind def
+/S12 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill Bsquare } bind def
+/S13 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill
+       2 copy vpt Square fill Bsquare } bind def
+/S14 { BL [] 0 setdash 2 copy exch vpt sub exch vpt sub vpt2 vpt Rec fill
+       2 copy exch vpt sub exch vpt Square fill Bsquare } bind def
+/S15 { BL [] 0 setdash 2 copy Bsquare fill Bsquare } bind def
+/D0 { gsave translate 45 rotate 0 0 S0 stroke grestore } bind def
+/D1 { gsave translate 45 rotate 0 0 S1 stroke grestore } bind def
+/D2 { gsave translate 45 rotate 0 0 S2 stroke grestore } bind def
+/D3 { gsave translate 45 rotate 0 0 S3 stroke grestore } bind def
+/D4 { gsave translate 45 rotate 0 0 S4 stroke grestore } bind def
+/D5 { gsave translate 45 rotate 0 0 S5 stroke grestore } bind def
+/D6 { gsave translate 45 rotate 0 0 S6 stroke grestore } bind def
+/D7 { gsave translate 45 rotate 0 0 S7 stroke grestore } bind def
+/D8 { gsave translate 45 rotate 0 0 S8 stroke grestore } bind def
+/D9 { gsave translate 45 rotate 0 0 S9 stroke grestore } bind def
+/D10 { gsave translate 45 rotate 0 0 S10 stroke grestore } bind def
+/D11 { gsave translate 45 rotate 0 0 S11 stroke grestore } bind def
+/D12 { gsave translate 45 rotate 0 0 S12 stroke grestore } bind def
+/D13 { gsave translate 45 rotate 0 0 S13 stroke grestore } bind def
+/D14 { gsave translate 45 rotate 0 0 S14 stroke grestore } bind def
+/D15 { gsave translate 45 rotate 0 0 S15 stroke grestore } bind def
+/DiaE { stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V closepath stroke } def
+/BoxE { stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V closepath stroke } def
+/TriUE { stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V closepath stroke } def
+/TriDE { stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V closepath stroke } def
+/PentE { stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  closepath stroke grestore } def
+/CircE { stroke [] 0 setdash 
+  hpt 0 360 arc stroke } def
+/Opaque { gsave closepath 1 setgray fill grestore 0 setgray closepath } def
+/DiaW { stroke [] 0 setdash vpt add M
+  hpt neg vpt neg V hpt vpt neg V
+  hpt vpt V hpt neg vpt V Opaque stroke } def
+/BoxW { stroke [] 0 setdash exch hpt sub exch vpt add M
+  0 vpt2 neg V hpt2 0 V 0 vpt2 V
+  hpt2 neg 0 V Opaque stroke } def
+/TriUW { stroke [] 0 setdash vpt 1.12 mul add M
+  hpt neg vpt -1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt 1.62 mul V Opaque stroke } def
+/TriDW { stroke [] 0 setdash vpt 1.12 mul sub M
+  hpt neg vpt 1.62 mul V
+  hpt 2 mul 0 V
+  hpt neg vpt -1.62 mul V Opaque stroke } def
+/PentW { stroke [] 0 setdash gsave
+  translate 0 hpt M 4 {72 rotate 0 hpt L} repeat
+  Opaque stroke grestore } def
+/CircW { stroke [] 0 setdash 
+  hpt 0 360 arc Opaque stroke } def
+/BoxFill { gsave Rec 1 setgray fill grestore } def
+/BoxColFill {
+  gsave Rec
+  /Fillden exch def
+  currentrgbcolor
+  /ColB exch def /ColG exch def /ColR exch def
+  /ColR ColR Fillden mul Fillden sub 1 add def
+  /ColG ColG Fillden mul Fillden sub 1 add def
+  /ColB ColB Fillden mul Fillden sub 1 add def
+  ColR ColG ColB setrgbcolor
+  fill grestore } def
+%
+% PostScript Level 1 Pattern Fill routine
+% Usage: x y w h s a XX PatternFill
+%	x,y = lower left corner of box to be filled
+%	w,h = width and height of box
+%	  a = angle in degrees between lines and x-axis
+%	 XX = 0/1 for no/yes cross-hatch
+%
+/PatternFill { gsave /PFa [ 9 2 roll ] def
+    PFa 0 get PFa 2 get 2 div add PFa 1 get PFa 3 get 2 div add translate
+    PFa 2 get -2 div PFa 3 get -2 div PFa 2 get PFa 3 get Rec
+    gsave 1 setgray fill grestore clip
+    currentlinewidth 0.5 mul setlinewidth
+    /PFs PFa 2 get dup mul PFa 3 get dup mul add sqrt def
+    0 0 M PFa 5 get rotate PFs -2 div dup translate
+	0 1 PFs PFa 4 get div 1 add floor cvi
+	{ PFa 4 get mul 0 M 0 PFs V } for
+    0 PFa 6 get ne {
+	0 1 PFs PFa 4 get div 1 add floor cvi
+	{ PFa 4 get mul 0 2 1 roll M PFs 0 V } for
+    } if
+    stroke grestore } def
+%
+/Symbol-Oblique /Symbol findfont [1 0 .167 1 0 0] makefont
+dup length dict begin {1 index /FID eq {pop pop} {def} ifelse} forall
+currentdict end definefont pop
+/MFshow {
+   { dup 5 get 3 ge
+     { 5 get 3 eq {gsave} {grestore} ifelse }
+     {dup dup 0 get findfont exch 1 get scalefont setfont
+     [ currentpoint ] exch dup 2 get 0 exch R dup 5 get 2 ne {dup dup 6
+     get exch 4 get {show} {stringwidth pop 0 R} ifelse }if dup 5 get 0 eq
+     {dup 3 get {2 get neg 0 exch R pop} {pop aload pop M} ifelse} {dup 5
+     get 1 eq {dup 2 get exch dup 3 get exch 6 get stringwidth pop -2 div
+     dup 0 R} {dup 6 get stringwidth pop -2 div 0 R 6 get
+     show 2 index {aload pop M neg 3 -1 roll neg R pop pop} {pop pop pop
+     pop aload pop M} ifelse }ifelse }ifelse }
+     ifelse }
+   forall} bind def
+/MFwidth {0 exch {dup 3 get{dup dup 0 get findfont exch 1 get scalefont
+     setfont 6 get stringwidth pop add} {pop} ifelse} forall} bind def
+/MLshow { currentpoint stroke M
+  0 exch R MFshow } bind def
+/MRshow { currentpoint stroke M
+  exch dup MFwidth neg 3 -1 roll R MFshow } def
+/MCshow { currentpoint stroke M
+  exch dup MFwidth -2 div 3 -1 roll R MFshow } def
+end
+%%EndProlog
+gnudict begin
+gsave
+50 50 translate
+0.050 0.050 scale
+0 setgray
+newpath
+(Helvetica) findfont 200 scalefont setfont
+0.400 UL
+LTb
+gsave %% colour palette begin
+/maxcolors 0 def
+/HSV2RGB {  exch dup 0.0 eq {pop exch pop dup dup} % achromatic gray
+  { /HSVs exch def /HSVv exch def 6.0 mul dup floor dup 3 1 roll sub
+     /HSVf exch def /HSVi exch cvi def /HSVp HSVv 1.0 HSVs sub mul def
+	 /HSVq HSVv 1.0 HSVs HSVf mul sub mul def 
+	 /HSVt HSVv 1.0 HSVs 1.0 HSVf sub mul sub mul def
+	 /HSVi HSVi 6 mod def 0 HSVi eq {HSVv HSVt HSVp}
+	 {1 HSVi eq {HSVq HSVv HSVp}{2 HSVi eq {HSVp HSVv HSVt}
+	 {3 HSVi eq {HSVp HSVq HSVv}{4 HSVi eq {HSVt HSVp HSVv}
+	 {HSVv HSVp HSVq} ifelse} ifelse} ifelse} ifelse} ifelse
+  } ifelse} def
+/Constrain {
+  dup 0 lt {0 exch pop}{dup 1 gt {1 exch pop} if} ifelse} def
+/YIQ2RGB {
+  3 copy -1.702 mul exch -1.105 mul add add Constrain 4 1 roll
+  3 copy -0.647 mul exch -0.272 mul add add Constrain 5 1 roll
+  0.621 mul exch -0.956 mul add add Constrain 3 1 roll } def
+/CMY2RGB {  1 exch sub exch 1 exch sub 3 2 roll 1 exch sub 3 1 roll exch } def
+/XYZ2RGB {  3 copy -0.9017 mul exch -0.1187 mul add exch 0.0585 mul exch add
+  Constrain 4 1 roll 3 copy -0.0279 mul exch 1.999 mul add exch
+  -0.9844 mul add Constrain 5 1 roll -0.2891 mul exch -0.5338 mul add
+  exch 1.91 mul exch add Constrain 3 1 roll} def
+/SelectSpace {ColorSpace (HSV) eq {HSV2RGB}{ColorSpace (XYZ) eq {
+  XYZ2RGB}{ColorSpace (CMY) eq {CMY2RGB}{ColorSpace (YIQ) eq {YIQ2RGB}
+  if} ifelse} ifelse} ifelse} def
+/InterpolatedColor true def
+/grayindex {/gidx 0 def
+  {GrayA gidx get grayv ge {exit} if /gidx gidx 1 add def} loop} def
+/dgdx {grayv GrayA gidx get sub GrayA gidx 1 sub get
+  GrayA gidx get sub div} def 
+/redvalue {RedA gidx get RedA gidx 1 sub get
+  RedA gidx get sub dgdxval mul add} def
+/greenvalue {GreenA gidx get GreenA gidx 1 sub get
+  GreenA gidx get sub dgdxval mul add} def
+/bluevalue {BlueA gidx get BlueA gidx 1 sub get
+  BlueA gidx get sub dgdxval mul add} def
+/interpolate {
+  grayindex grayv GrayA gidx get sub abs 1e-5 le
+    {RedA gidx get GreenA gidx get BlueA gidx get}
+    {/dgdxval dgdx def redvalue greenvalue bluevalue} ifelse} def
+/GrayA [0 .3 .4 .5 .8 1 ] def
+/RedA [0 0 0 1 1 0 ] def
+/GreenA [0 1 1 1 0 0 ] def
+/BlueA [1 1 0 0 0 0 ] def
+/maxcolorsLast {maxcolors 1 sub maxcolors div} def
+/pm3dround {maxcolors 0 gt {dup maxcolorsLast ge {pop 1}
+{maxcolors mul floor maxcolors div} ifelse} if} def
+/pm3dGamma 1.0 1.5 div def
+/ColorSpace (RGB) def
+Color true and { % COLOUR vs. GRAY map
+  InterpolatedColor { %% Interpolation vs. RGB-Formula
+    /g {stroke pm3dround /grayv exch def interpolate
+        SelectSpace setrgbcolor} bind def
+  }{
+  /g {stroke pm3dround dup cF7 Constrain exch dup cF5 Constrain exch cF15 Constrain 
+       SelectSpace setrgbcolor} bind def
+  } ifelse
+}{
+  /g {stroke pm3dround pm3dGamma exp setgray} bind def
+} ifelse
+/h {rlineto rlineto rlineto fill} bind def
+1.000 UP
+1.000 UL
+LT0
+.6758 g 3856 3942 M
+-64 -123 V
+1.000 UL
+LT0
+.6606 g 4075 3930 M
+-80 -169 V
+1.000 UL
+LT0
+.6689 g 3856 3942 M
+48 -149 V
+1.000 UL
+LT0
+.0364 g 2443 2677 M
+10 1 V
+1.000 UL
+LT0
+.6425 g 4075 3930 M
+84 -240 V
+1.000 UL
+LT0
+.0272 g 4796 2635 M
+-43 27 V
+1.000 UL
+LT0
+.7845 g 3985 4167 M
+3856 3942 L
+1.000 UL
+LT0
+.0358 g 2449 2671 M
+-6 6 V
+1.000 UL
+LT0
+.05 g 2314 2685 M
+129 -8 V
+1.000 UL
+LT0
+.7845 g 3985 4167 M
+90 -237 V
+1.000 UL
+LT0
+.0224 g 4886 2589 M
+-90 46 V
+1.000 UL
+LT0
+.0228 g 4773 2626 M
+23 9 V
+1.000 UL
+LT0
+.037 g 2389 2578 M
+-75 107 V
+1.000 UL
+LT0
+.086 g 2186 2720 M
+128 -35 V
+1.000 UL
+LT0
+.0224 g 4976 2553 M
+-90 36 V
+1.000 UL
+LT0
+.0179 g 4814 2566 M
+72 23 V
+1.000 UL
+LT0
+.0122 g 2332 2520 M
+-56 23 V
+1.000 UL
+LT0
+.0197 g 2378 2561 M
+-102 -18 V
+1.000 UL
+LT0
+.0601 g 2186 2720 M
+90 -177 V
+1.000 UL
+LT0
+.0289 g 2147 2563 M
+129 -20 V
+1.000 UL
+LT0
+.1448 g 2057 2791 M
+129 -71 V
+1.000 UL
+LT0
+.0306 g 5066 2529 M
+-90 24 V
+1.000 UL
+LT0
+.0173 g 4863 2508 M
+113 45 V
+1.000 UL
+LT0
+.0254 g 2229 2466 M
+-82 97 V
+1.000 UL
+LT0
+.1136 g 2057 2791 M
+90 -228 V
+1.000 UL
+LT0
+.0815 g 2018 2631 M
+129 -68 V
+1.000 UL
+LT0
+.05 g 5156 2525 M
+-90 4 V
+1.000 UL
+LT0
+.0208 g 4944 2457 M
+122 72 V
+1.000 UL
+LT0
+.0357 g 2360 2538 M
+-106 -70 V
+1.000 UL
+LT0
+.231 g 1928 2903 M
+129 -112 V
+1.000 UL
+LT0
+.0362 g 4858 2512 M
+23 -18 V
+1.000 UL
+LT0
+.0129 g 2185 2400 M
+-77 57 V
+1.000 UL
+LT0
+.0291 g 2287 2471 M
+-179 -14 V
+1.000 UL
+LT0
+.0684 g 2018 2631 M
+90 -174 V
+1.000 UL
+LT0
+.0543 g 1980 2522 M
+128 -65 V
+1.000 UL
+LT0
+.1989 g 1928 2903 M
+90 -272 V
+1.000 UL
+LT0
+.1706 g 1890 2754 M
+128 -123 V
+1.000 UL
+LT0
+.0317 g 5156 2525 M
+5027 2408 L
+1.000 UL
+LT0
+.0315 g 4864 2504 M
+163 -96 V
+1.000 UL
+LT0
+.086 g 5246 2547 M
+-90 -22 V
+1.000 UL
+LT0
+.0673 g 2367 2544 M
+2216 2407 L
+1.000 UL
+LT0
+.346 g 1800 3055 M
+128 -152 V
+1.000 UL
+LT0
+.0289 g 5207 2390 M
+-90 -8 V
+1.000 UL
+LT0
+.0601 g 5246 2547 M
+5117 2382 L
+1.000 UL
+LT0
+.0127 g 4997 2359 M
+120 23 V
+1.000 UL
+LT0
+.0277 g 4920 2439 M
+197 -57 V
+1.000 UL
+LT0
+.0511 g 2070 2377 M
+-90 145 V
+1.000 UL
+LT0
+.1566 g 1890 2754 M
+90 -232 V
+1.000 UL
+LT0
+.1475 g 1851 2658 M
+129 -136 V
+1.000 UL
+LT0
+.1448 g 4780 2614 M
+38 -55 V
+1.000 UL
+LT0
+.0089 g 2151 2326 M
+-81 51 V
+1.000 UL
+LT0
+.032 g 2266 2416 M
+-196 -39 V
+1.000 UL
+LT0
+.0511 g 1941 2452 M
+129 -75 V
+1.000 UL
+LT0
+.1448 g 5336 2606 M
+-90 -59 V
+1.000 UL
+LT0
+.3178 g 1800 3055 M
+90 -301 V
+1.000 UL
+LT0
+.2977 g 1761 2928 M
+129 -174 V
+1.000 UL
+LT0
+.101 g 4793 2589 M
+176 -209 V
+1.000 UL
+LT0
+.1834 g 2486 2729 M
+2314 2460 L
+1.000 UL
+LT0
+.081 g 2379 2520 M
+2167 2327 L
+1.000 UL
+LT0
+.0735 g 5277 2433 M
+-70 -43 V
+1.000 UL
+LT0
+.1136 g 5336 2606 M
+5207 2390 L
+1.000 UL
+LT0
+.0242 g 5084 2300 M
+123 90 V
+1.000 UL
+LT0
+.0575 g 4861 2463 M
+210 -161 V
+1.000 UL
+LT0
+.4852 g 1671 3234 M
+129 -179 V
+1.000 UL
+LT0
+.0554 g 2028 2321 M
+-87 131 V
+1.000 UL
+LT0
+.1475 g 1851 2658 M
+90 -206 V
+1.000 UL
+LT0
+.1566 g 1813 2614 M
+128 -162 V
+1.000 UL
+LT0
+.0312 g 2250 2333 M
+-216 -17 V
+1.000 UL
+LT0
+.2886 g 1761 2928 M
+90 -270 V
+1.000 UL
+LT0
+.2886 g 1723 2858 M
+128 -200 V
+1.000 UL
+LT0
+.231 g 5426 2705 M
+-90 -99 V
+1.000 UL
+LT0
+.2553 g 4641 2871 M
+215 -400 V
+1.000 UL
+LT0
+.0766 g 2340 2390 M
+-90 -57 V
+1.000 UL
+LT0
+.098 g 2379 2520 M
+2250 2333 L
+1.000 UL
+LT0
+.0213 g 2124 2248 M
+126 85 V
+1.000 UL
+LT0
+.023 g 5036 2233 M
+-86 92 V
+1.000 UL
+LT0
+.0317 g 5155 2286 M
+-205 39 V
+1.000 UL
+LT0
+.098 g 4821 2454 M
+129 -129 V
+1.000 UL
+LT0
+.159 g 4731 2665 M
+219 -340 V
+1.000 UL
+LT0
+.0588 g 1905 2419 M
+212 -169 V
+1.000 UL
+LT0
+.4651 g 1671 3234 M
+90 -306 V
+1.000 UL
+LT0
+.4553 g 1633 3137 M
+128 -209 V
+1.000 UL
+LT0
+.2153 g 2469 2648 M
+-90 -128 V
+1.000 UL
+LT0
+.3122 g 2597 2948 M
+2379 2520 L
+1.000 UL
+LT0
+.2325 g 5426 2705 M
+-76 -153 V
+1.000 UL
+LT0
+.0293 g 5173 2294 M
+-129 -63 V
+1.000 UL
+LT0
+.1724 g 1813 2614 M
+87 -187 V
+1.000 UL
+LT0
+.031 g 2301 2230 M
+-90 -5 V
+1.000 UL
+LT0
+.063 g 2340 2390 M
+2211 2225 L
+1.000 UL
+LT0
+.0129 g 2094 2194 M
+117 31 V
+1.000 UL
+LT0
+.0295 g 2006 2279 M
+205 -54 V
+1.000 UL
+LT0
+.1791 g 1774 2622 M
+191 -296 V
+1.000 UL
+LT0
+.2977 g 1723 2858 M
+90 -244 V
+1.000 UL
+LT0
+.3178 g 1684 2844 M
+129 -230 V
+1.000 UL
+LT0
+.6372 g 1543 3422 M
+128 -188 V
+1.000 UL
+LT0
+.5154 g 2726 3234 M
+2551 2856 L
+1.000 UL
+LT0
+.1513 g 2430 2459 M
+-90 -69 V
+1.000 UL
+LT0
+.1939 g 2469 2648 M
+2340 2390 L
+1.000 UL
+LT0
+.339 g 5506 2829 M
+-80 -124 V
+1.000 UL
+LT0
+.0367 g 4911 2272 M
+190 -59 V
+1.000 UL
+LT0
+.0287 g 5001 2160 M
+-90 112 V
+1.000 UL
+LT0
+.1042 g 4821 2454 M
+90 -182 V
+1.000 UL
+LT0
+.1042 g 4783 2383 M
+128 -111 V
+1.000 UL
+LT0
+.1069 g 1864 2441 M
+190 -217 V
+1.000 UL
+LT0
+.4553 g 1633 3137 M
+90 -279 V
+1.000 UL
+LT0
+.4651 g 1594 3094 M
+129 -236 V
+1.000 UL
+LT0
+.2153 g 4731 2665 M
+90 -211 V
+1.000 UL
+LT0
+.2312 g 4693 2639 M
+128 -185 V
+1.000 UL
+LT0
+.0205 g 5091 2203 M
+-88 -43 V
+1.000 UL
+LT0
+.3354 g 4641 2871 M
+90 -206 V
+1.000 UL
+LT0
+.3732 g 4603 2906 M
+128 -241 V
+1.000 UL
+LT0
+.066 g 2392 2240 M
+-91 -10 V
+1.000 UL
+LT0
+.1193 g 2430 2459 M
+2301 2230 L
+1.000 UL
+LT0
+.0243 g 2175 2136 M
+126 94 V
+1.000 UL
+LT0
+.5033 g 4513 3146 M
+128 -275 V
+1.000 UL
+LT0
+.0561 g 1954 2299 M
+213 -159 V
+1.000 UL
+LT0
+.3354 g 2559 2772 M
+-90 -124 V
+1.000 UL
+LT0
+.3732 g 2597 2948 M
+2469 2648 L
+1.000 UL
+LT0
+.6275 g 1543 3422 M
+90 -285 V
+1.000 UL
+LT0
+.6275 g 1504 3351 M
+129 -214 V
+1.000 UL
+LT0
+.0228 g 4955 2094 M
+-82 91 V
+1.000 UL
+LT0
+.0336 g 5041 2153 M
+-168 32 V
+1.000 UL
+LT0
+.098 g 4783 2383 M
+90 -198 V
+1.000 UL
+LT0
+.0766 g 4744 2254 M
+129 -69 V
+1.000 UL
+LT0
+.0684 g 5182 2235 M
+-90 -92 V
+1.000 UL
+LT0
+.0543 g 5220 2266 M
+5092 2143 L
+1.000 UL
+LT0
+.0199 g 5084 2139 M
+8 4 V
+1.000 UL
+LT0
+.1448 g 1954 2299 M
+-90 142 V
+1.000 UL
+LT0
+.231 g 1774 2622 M
+90 -181 V
+1.000 UL
+LT0
+.226 g 2520 2516 M
+-90 -57 V
+1.000 UL
+LT0
+.2928 g 2559 2772 M
+2430 2459 L
+1.000 UL
+LT0
+.1566 g 5310 2416 M
+-90 -150 V
+1.000 UL
+LT0
+.1475 g 5349 2461 M
+5220 2266 L
+1.000 UL
+LT0
+.346 g 1684 2844 M
+90 -222 V
+1.000 UL
+LT0
+.086 g 2044 2194 M
+-90 105 V
+1.000 UL
+LT0
+.2312 g 4693 2639 M
+90 -256 V
+1.000 UL
+LT0
+.2153 g 4654 2525 M
+129 -142 V
+1.000 UL
+LT0
+.0056 g 2353 2064 M
+-90 33 V
+1.000 UL
+LT0
+.0435 g 2392 2240 M
+2263 2097 L
+1.000 UL
+LT0
+.0198 g 2134 2116 M
+129 -19 V
+1.000 UL
+LT0
+.0329 g 2044 2194 M
+219 -97 V
+1.000 UL
+LT0
+.7845 g 1414 3588 M
+129 -166 V
+1.000 UL
+LT0
+.098 g 2482 2237 M
+-90 3 V
+1.000 UL
+LT0
+.1726 g 2520 2516 M
+2392 2240 L
+1.000 UL
+LT0
+.4852 g 1594 3094 M
+90 -250 V
+1.000 UL
+LT0
+.05 g 2134 2116 M
+-90 78 V
+1.000 UL
+LT0
+.2886 g 5439 2647 M
+-90 -186 V
+1.000 UL
+LT0
+.2886 g 5477 2717 M
+5349 2461 L
+1.000 UL
+LT0
+.5411 g 2687 3105 M
+-90 -157 V
+1.000 UL
+LT0
+.562 g 2726 3234 M
+2597 2948 L
+1.000 UL
+LT0
+.3891 g 4603 2906 M
+90 -267 V
+1.000 UL
+LT0
+.3891 g 4564 2836 M
+129 -197 V
+1.000 UL
+LT0
+.6372 g 1504 3351 M
+90 -257 V
+1.000 UL
+LT0
+.0134 g 4891 2047 M
+-57 29 V
+1.000 UL
+LT0
+.0242 g 4968 2096 M
+-134 -20 V
+1.000 UL
+LT0
+.063 g 4744 2254 M
+90 -178 V
+1.000 UL
+LT0
+.031 g 4706 2094 M
+128 -18 V
+1.000 UL
+LT0
+.0099 g 2443 2026 M
+-90 38 V
+1.000 UL
+LT0
+.0601 g 2482 2237 M
+2353 2064 L
+1.000 UL
+LT0
+.0164 g 2224 2057 M
+129 7 V
+1.000 UL
+LT0
+.0306 g 2224 2057 M
+-90 59 V
+1.000 UL
+LT0
+.1939 g 4654 2525 M
+90 -271 V
+1.000 UL
+LT0
+.1513 g 4616 2336 M
+128 -82 V
+1.000 UL
+LT0
+.4421 g 2649 2864 M
+-90 -92 V
+1.000 UL
+LT0
+.5033 g 2687 3105 M
+2559 2772 L
+1.000 UL
+LT0
+.5411 g 4513 3146 M
+90 -240 V
+1.000 UL
+LT0
+.562 g 4474 3135 M
+129 -229 V
+1.000 UL
+LT0
+.2845 g 2610 2540 M
+-90 -24 V
+1.000 UL
+LT0
+.3753 g 2649 2864 M
+2520 2516 L
+1.000 UL
+LT0
+.1166 g 2572 2210 M
+-90 27 V
+1.000 UL
+LT0
+.2098 g 2610 2540 M
+2482 2237 L
+1.000 UL
+LT0
+.4553 g 5567 2914 M
+-90 -197 V
+1.000 UL
+LT0
+.4545 g 5584 2947 M
+5477 2717 L
+1.000 UL
+LT0
+.1136 g 5143 2255 M
+-90 -146 V
+1.000 UL
+LT0
+.0815 g 5182 2235 M
+5053 2109 L
+1.000 UL
+LT0
+.0289 g 4924 2031 M
+129 78 V
+1.000 UL
+LT0
+.7845 g 1414 3588 M
+90 -237 V
+1.000 UL
+LT0
+.1989 g 5272 2425 M
+-90 -190 V
+1.000 UL
+LT0
+.1706 g 5310 2416 M
+5182 2235 L
+1.000 UL
+LT0
+.7267 g 2816 3395 M
+-90 -161 V
+1.000 UL
+LT0
+.7267 g 2854 3466 M
+2726 3234 L
+1.000 UL
+LT0
+.0224 g 2314 2010 M
+-90 47 V
+1.000 UL
+LT0
+.3732 g 4564 2836 M
+90 -311 V
+1.000 UL
+LT0
+.3354 g 4526 2660 M
+128 -135 V
+1.000 UL
+LT0
+.0601 g 5014 2126 M
+-90 -95 V
+1.000 UL
+LT0
+.0057 g 4796 1986 M
+128 45 V
+1.000 UL
+LT0
+.6646 g 4423 3334 M
+90 -188 V
+1.000 UL
+LT0
+.7057 g 4384 3379 M
+129 -233 V
+1.000 UL
+LT0
+.0099 g 2533 1981 M
+-90 45 V
+1.000 UL
+LT0
+.0664 g 2572 2210 M
+2443 2026 L
+1.000 UL
+LT0
+.0159 g 2314 2010 M
+129 16 V
+1.000 UL
+LT0
+.0269 g 4785 2000 M
+-79 94 V
+1.000 UL
+LT0
+.1193 g 4616 2336 M
+90 -242 V
+1.000 UL
+LT0
+.066 g 4577 2116 M
+129 -22 V
+1.000 UL
+LT0
+.8052 g 4294 3552 M
+129 -218 V
+1.000 UL
+LT0
+.3178 g 5400 2633 M
+-90 -217 V
+1.000 UL
+LT0
+.2977 g 5439 2647 M
+5310 2416 L
+1.000 UL
+LT0
+.9903 g 3677 3800 M
+-89 31 V
+1.000 UL
+LT0
+.9866 g 3805 3819 M
+-217 12 V
+1.000 UL
+LT0
+.9933 g 3459 3821 M
+129 10 V
+1.000 UL
+LT0
+.9835 g 3459 3821 M
+-160 -38 V
+1.000 UL
+LT0
+.0682 g 5014 2126 M
+4850 2021 L
+1.000 UL
+LT0
+.1166 g 2662 2154 M
+-90 56 V
+1.000 UL
+LT0
+.2231 g 2700 2522 M
+2572 2210 L
+1.000 UL
+LT0
+.9933 g 3895 3796 M
+-90 23 V
+1.000 UL
+LT0
+.9903 g 3677 3800 M
+128 19 V
+1.000 UL
+LT0
+.2928 g 4526 2660 M
+90 -324 V
+1.000 UL
+LT0
+.226 g 4487 2404 M
+129 -68 V
+1.000 UL
+LT0
+.8627 g 2945 3602 M
+-91 -136 V
+1.000 UL
+LT0
+.0224 g 2404 1974 M
+-90 36 V
+1.000 UL
+LT0
+.7018 g 5696 3186 M
+-15 -29 V
+1.000 UL
+LT0
+.8856 g 3420 3640 M
+35 -115 V
+1.000 UL
+LT0
+.3164 g 2700 2522 M
+-90 18 V
+1.000 UL
+LT0
+.4291 g 2739 2907 M
+2610 2540 L
+1.000 UL
+LT0
+.0065 g 2593 1948 M
+-60 33 V
+1.000 UL
+LT0
+.0601 g 2662 2154 M
+2533 1981 L
+1.000 UL
+LT0
+.0164 g 2404 1974 M
+129 7 V
+1.000 UL
+LT0
+.6646 g 2777 3210 M
+-90 -105 V
+1.000 UL
+LT0
+.7057 g 2816 3395 M
+2687 3105 L
+1.000 UL
+LT0
+.562 g 4474 3135 M
+90 -299 V
+1.000 UL
+LT0
+.5411 g 4436 3006 M
+128 -170 V
+1.000 UL
+LT0
+.0435 g 4667 1961 M
+-90 155 V
+1.000 UL
+LT0
+.1726 g 4487 2404 M
+90 -288 V
+1.000 UL
+LT0
+.098 g 4449 2125 M
+128 -9 V
+1.000 UL
+LT0
+.4651 g 5529 2871 M
+-90 -224 V
+1.000 UL
+LT0
+.4553 g 5567 2914 M
+5439 2647 L
+1.000 UL
+LT0
+.9748 g 3549 3709 M
+-90 112 V
+1.000 UL
+LT0
+.9994 g 3330 3790 M
+129 31 V
+1.000 UL
+LT0
+.8944 g 3767 3697 M
+3653 3516 L
+1.000 UL
+LT0
+.8941 g 3549 3709 M
+79 -192 V
+1.000 UL
+LT0
+.0198 g 4757 1967 M
+-90 -6 V
+1.000 UL
+LT0
+.0329 g 4886 2033 M
+-219 -72 V
+1.000 UL
+LT0
+.0056 g 4539 1940 M
+128 21 V
+1.000 UL
+LT0
+.8939 g 3857 3615 M
+-38 -84 V
+1.000 UL
+LT0
+.5199 g 2739 2907 M
+-90 -43 V
+1.000 UL
+LT0
+.6034 g 2777 3210 M
+2649 2864 L
+1.000 UL
+LT0
+.9718 g 3767 3697 M
+-90 103 V
+1.000 UL
+LT0
+.9718 g 3549 3709 M
+128 91 V
+1.000 UL
+LT0
+.098 g 2752 2075 M
+-90 79 V
+1.000 UL
+LT0
+.2098 g 2790 2458 M
+2662 2154 L
+1.000 UL
+LT0
+.9478 g 4204 3660 M
+-90 60 V
+1.000 UL
+LT0
+.9767 g 3985 3753 M
+129 -33 V
+1.000 UL
+LT0
+.9773 g 3895 3796 M
+219 -76 V
+1.000 UL
+LT0
+.9352 g 3420 3640 M
+129 69 V
+1.000 UL
+LT0
+.9994 g 3985 3753 M
+-90 43 V
+1.000 UL
+LT0
+.9748 g 3767 3697 M
+128 99 V
+1.000 UL
+LT0
+.9598 g 3420 3640 M
+-90 150 V
+1.000 UL
+LT0
+.9994 g 3202 3763 M
+128 27 V
+1.000 UL
+LT0
+.0306 g 2495 1951 M
+-91 23 V
+1.000 UL
+LT0
+.9352 g 3857 3615 M
+-90 82 V
+1.000 UL
+LT0
+.0523 g 2752 2075 M
+2651 1963 L
+1.000 UL
+LT0
+.5033 g 4436 3006 M
+90 -346 V
+1.000 UL
+LT0
+.4421 g 4397 2764 M
+129 -104 V
+1.000 UL
+LT0
+.9352 g 3292 3651 M
+128 -11 V
+1.000 UL
+LT0
+.0164 g 4629 1921 M
+-90 19 V
+1.000 UL
+LT0
+.0601 g 4449 2125 M
+90 -185 V
+1.000 UL
+LT0
+.0099 g 4410 1915 M
+129 25 V
+1.000 UL
+LT0
+.1448 g 5143 2255 M
+5014 2126 L
+1.000 UL
+LT0
+.086 g 4886 2033 M
+128 93 V
+1.000 UL
+LT0
+.231 g 5272 2425 M
+5143 2255 L
+1.000 UL
+LT0
+.3753 g 4397 2764 M
+90 -360 V
+1.000 UL
+LT0
+.2845 g 4358 2441 M
+129 -37 V
+1.000 UL
+LT0
+.0785 g 2781 2045 M
+-29 30 V
+1.000 UL
+LT0
+.1726 g 2880 2351 M
+2752 2075 L
+1.000 UL
+LT0
+.2098 g 4358 2441 M
+91 -316 V
+1.000 UL
+LT0
+.1166 g 4320 2110 M
+129 15 V
+1.000 UL
+LT0
+.3164 g 2790 2458 M
+-90 64 V
+1.000 UL
+LT0
+.4476 g 2829 2894 M
+2700 2522 L
+1.000 UL
+LT0
+.7267 g 4384 3379 M
+90 -244 V
+1.000 UL
+LT0
+.7267 g 4346 3309 M
+128 -174 V
+1.000 UL
+LT0
+.05 g 4757 1967 M
+129 66 V
+1.000 UL
+LT0
+.6275 g 5657 3116 M
+-90 -202 V
+1.000 UL
+LT0
+.7092 g 5696 3186 M
+-8 -17 V
+1.000 UL
+LT0
+.6974 g 5786 3340 M
+5567 2914 L
+1.000 UL
+LT0
+.9172 g 4294 3552 M
+-90 108 V
+1.000 UL
+LT0
+.9705 g 4075 3713 M
+129 -53 V
+1.000 UL
+LT0
+.8463 g 2906 3486 M
+-90 -91 V
+1.000 UL
+LT0
+.8627 g 2945 3602 M
+2816 3395 L
+1.000 UL
+LT0
+.346 g 5400 2633 M
+5272 2425 L
+1.000 UL
+LT0
+.9748 g 3292 3651 M
+-90 112 V
+1.000 UL
+LT0
+.9933 g 3073 3715 M
+129 48 V
+1.000 UL
+LT0
+.9352 g 3947 3614 M
+-90 1 V
+1.000 UL
+LT0
+.9598 g 3985 3753 M
+3857 3615 L
+1.000 UL
+LT0
+.9165 g 3292 3651 M
+48 -115 V
+1.000 UL
+LT0
+.0306 g 4629 1921 M
+128 46 V
+1.000 UL
+LT0
+.0159 g 4500 1887 M
+-90 28 V
+1.000 UL
+LT0
+.0664 g 4320 2110 M
+90 -195 V
+1.000 UL
+LT0
+.0099 g 4281 1882 M
+129 33 V
+1.000 UL
+LT0
+.9994 g 4075 3713 M
+-90 40 V
+1.000 UL
+LT0
+.8463 g 4294 3552 M
+90 -173 V
+1.000 UL
+LT0
+.8627 g 4255 3527 M
+129 -148 V
+1.000 UL
+LT0
+.94 g 4165 3653 M
+129 -101 V
+1.000 UL
+LT0
+.0057 g 2803 1861 M
+-90 26 V
+1.000 UL
+LT0
+.0317 g 2585 1946 M
+128 -59 V
+1.000 UL
+LT0
+.0186 g 2495 1951 M
+218 -64 V
+1.000 UL
+LT0
+.2231 g 4230 2436 M
+90 -326 V
+1.000 UL
+LT0
+.1166 g 4191 2068 M
+129 42 V
+1.000 UL
+LT0
+.2845 g 2880 2351 M
+-90 107 V
+1.000 UL
+LT0
+.4291 g 2919 2824 M
+2790 2458 L
+1.000 UL
+LT0
+.5603 g 2829 2894 M
+-90 13 V
+1.000 UL
+LT0
+.6645 g 2867 3256 M
+2739 2907 L
+1.000 UL
+LT0
+.9718 g 3163 3684 M
+129 -33 V
+1.000 UL
+LT0
+.05 g 2585 1946 M
+-90 5 V
+1.000 UL
+LT0
+.9903 g 3163 3684 M
+-90 31 V
+1.000 UL
+LT0
+.9564 g 2945 3602 M
+128 113 V
+1.000 UL
+LT0
+.9564 g 3035 3645 M
+-90 -43 V
+1.000 UL
+LT0
+.0224 g 4500 1887 M
+129 34 V
+1.000 UL
+LT0
+.7481 g 2867 3256 M
+-90 -46 V
+1.000 UL
+LT0
+.8052 g 2906 3486 M
+2777 3210 L
+1.000 UL
+LT0
+.9303 g 3947 3614 M
+-40 -63 V
+1.000 UL
+LT0
+.4852 g 5529 2871 M
+5400 2633 L
+1.000 UL
+LT0
+.4291 g 4268 2820 M
+90 -379 V
+1.000 UL
+LT0
+.3164 g 4230 2436 M
+128 5 V
+1.000 UL
+LT0
+.0164 g 4371 1863 M
+-90 19 V
+1.000 UL
+LT0
+.0601 g 4191 2068 M
+90 -186 V
+1.000 UL
+LT0
+.0063 g 4187 1855 M
+94 27 V
+1.000 UL
+LT0
+.7057 g 4346 3309 M
+90 -303 V
+1.000 UL
+LT0
+.6646 g 4307 3124 M
+129 -118 V
+1.000 UL
+LT0
+.2378 g 2940 2259 M
+-60 92 V
+1.000 UL
+LT0
+.3753 g 3009 2698 M
+2880 2351 L
+1.000 UL
+LT0
+.2098 g 4101 2384 M
+90 -316 V
+1.000 UL
+LT0
+.098 g 4063 2001 M
+128 67 V
+1.000 UL
+LT0
+.7845 g 5786 3340 M
+-90 -154 V
+1.000 UL
+LT0
+.6034 g 4307 3124 M
+90 -360 V
+1.000 UL
+LT0
+.5199 g 4268 2820 M
+129 -56 V
+1.000 UL
+LT0
+.9933 g 4165 3653 M
+-90 60 V
+1.000 UL
+LT0
+.9748 g 3947 3614 M
+128 99 V
+1.000 UL
+LT0
+.0224 g 4371 1863 M
+129 24 V
+1.000 UL
+LT0
+.9718 g 4037 3635 M
+-90 -21 V
+1.000 UL
+LT0
+.0467 g 4146 1857 M
+-83 144 V
+1.000 UL
+LT0
+.1726 g 3973 2289 M
+90 -288 V
+1.000 UL
+LT0
+.0663 g 3936 1922 M
+127 79 V
+1.000 UL
+LT0
+.0289 g 2893 1869 M
+-90 -8 V
+1.000 UL
+LT0
+.0056 g 3022 1833 M
+-219 28 V
+1.000 UL
+LT0
+.0601 g 2675 1969 M
+128 -108 V
+1.000 UL
+LT0
+.0103 g 3112 1820 M
+-90 13 V
+1.000 UL
+LT0
+.0233 g 2893 1869 M
+129 -36 V
+1.000 UL
+LT0
+.9718 g 3253 3581 M
+-90 103 V
+1.000 UL
+LT0
+.9903 g 3035 3645 M
+128 39 V
+1.000 UL
+LT0
+.5603 g 2919 2824 M
+-90 70 V
+1.000 UL
+LT0
+.6849 g 2957 3243 M
+2829 2894 L
+1.000 UL
+LT0
+.1203 g 3844 2162 M
+89 -238 V
+1.000 UL
+LT0
+.4476 g 4140 2820 M
+90 -384 V
+1.000 UL
+LT0
+.3164 g 4101 2384 M
+129 52 V
+1.000 UL
+LT0
+.6372 g 5657 3116 M
+5529 2871 L
+1.000 UL
+LT0
+.086 g 2675 1969 M
+-90 -23 V
+1.000 UL
+LT0
+.9172 g 2996 3511 M
+-90 -25 V
+1.000 UL
+LT0
+.94 g 3035 3645 M
+2906 3486 L
+1.000 UL
+LT0
+.8627 g 4255 3527 M
+91 -218 V
+1.000 UL
+LT0
+.8463 g 4217 3411 M
+129 -102 V
+1.000 UL
+LT0
+.0306 g 4243 1852 M
+128 11 V
+1.000 UL
+LT0
+.9564 g 4255 3527 M
+-90 126 V
+1.000 UL
+LT0
+.9903 g 4037 3635 M
+128 18 V
+1.000 UL
+LT0
+.1618 g 3844 2162 M
+-94 -103 V
+1.000 UL
+LT0
+.2292 g 3625 2294 M
+52 -156 V
+1.000 UL
+LT0
+.0317 g 4114 1859 M
+-90 -46 V
+1.000 UL
+LT0
+.0186 g 4243 1852 M
+-219 -39 V
+1.000 UL
+LT0
+.0057 g 3896 1799 M
+128 14 V
+1.000 UL
+LT0
+.9449 g 3283 3554 M
+-30 27 V
+1.000 UL
+LT0
+.9748 g 3125 3622 M
+128 -41 V
+1.000 UL
+LT0
+.4291 g 4011 2762 M
+90 -378 V
+1.000 UL
+LT0
+.2845 g 3973 2289 M
+128 95 V
+1.000 UL
+LT0
+.9933 g 3125 3622 M
+-90 23 V
+1.000 UL
+LT0
+.2601 g 3625 2294 M
+-33 -53 V
+1.000 UL
+LT0
+.226 g 3973 2289 M
+3844 2162 L
+1.000 UL
+LT0
+.2928 g 3754 2488 M
+90 -326 V
+1.000 UL
+LT0
+.7892 g 2957 3243 M
+-90 13 V
+1.000 UL
+LT0
+.86 g 2996 3511 M
+2867 3256 L
+1.000 UL
+LT0
+.9564 g 4127 3583 M
+128 -56 V
+1.000 UL
+LT0
+.3753 g 3883 2649 M
+90 -360 V
+1.000 UL
+LT0
+.5199 g 3009 2698 M
+-90 126 V
+1.000 UL
+LT0
+.6645 g 3048 3173 M
+2919 2824 L
+1.000 UL
+LT0
+.0233 g 3767 1820 M
+-90 -24 V
+1.000 UL
+LT0
+.0056 g 3896 1799 M
+-219 -3 V
+1.000 UL
+LT0
+.0103 g 3549 1796 M
+128 0 V
+1.000 UL
+LT0
+.6645 g 4178 3181 M
+90 -361 V
+1.000 UL
+LT0
+.5603 g 4140 2820 M
+128 0 V
+1.000 UL
+LT0
+.5414 g 3228 2857 M
+-84 -217 V
+1.000 UL
+LT0
+.4467 g 3009 2698 M
+81 -156 V
+1.000 UL
+LT0
+.8052 g 4217 3411 M
+90 -287 V
+1.000 UL
+LT0
+.7481 g 4178 3181 M
+129 -57 V
+1.000 UL
+LT0
+.6034 g 3138 3045 M
+3009 2698 L
+1.000 UL
+LT0
+.7845 g 5786 3340 M
+5657 3116 L
+1.000 UL
+LT0
+.9903 g 4127 3583 M
+-90 52 V
+1.000 UL
+LT0
+.9746 g 3924 3555 M
+113 80 V
+1.000 UL
+LT0
+.05 g 4114 1859 M
+129 -7 V
+1.000 UL
+LT0
+.0815 g 2983 1925 M
+-90 -56 V
+1.000 UL
+LT0
+.1136 g 2765 2028 M
+128 -159 V
+1.000 UL
+LT0
+.0543 g 3202 1874 M
+-90 -54 V
+1.000 UL
+LT0
+.0173 g 3331 1799 M
+-219 21 V
+1.000 UL
+LT0
+.0684 g 2983 1925 M
+129 -105 V
+1.000 UL
+LT0
+.3354 g 3754 2488 M
+3625 2294 L
+1.000 UL
+LT0
+.3732 g 3536 2606 M
+89 -312 V
+1.000 UL
+LT0
+.0601 g 3986 1894 M
+-90 -95 V
+1.000 UL
+LT0
+.0289 g 3767 1820 M
+129 -21 V
+1.000 UL
+LT0
+.4169 g 3536 2606 M
+-84 -168 V
+1.000 UL
+LT0
+.0511 g 3421 1861 M
+-90 -62 V
+1.000 UL
+LT0
+.0173 g 3549 1796 M
+-218 3 V
+1.000 UL
+LT0
+.0511 g 3202 1874 M
+129 -75 V
+1.000 UL
+LT0
+.1448 g 2765 2028 M
+-90 -59 V
+1.000 UL
+LT0
+.9994 g 3215 3579 M
+-90 43 V
+1.000 UL
+LT0
+.9705 g 2996 3511 M
+129 111 V
+1.000 UL
+LT0
+.9478 g 3086 3489 M
+-90 22 V
+1.000 UL
+LT0
+.0684 g 3638 1888 M
+-89 -92 V
+1.000 UL
+LT0
+.0543 g 3421 1861 M
+128 -65 V
+1.000 UL
+LT0
+.6849 g 4050 3181 M
+90 -361 V
+1.000 UL
+LT0
+.5603 g 4011 2762 M
+129 58 V
+1.000 UL
+LT0
+.7892 g 3048 3173 M
+-91 70 V
+1.000 UL
+LT0
+.877 g 3086 3489 M
+2957 3243 L
+1.000 UL
+LT0
+.4421 g 3883 2649 M
+3754 2488 L
+1.000 UL
+LT0
+.5033 g 3664 2832 M
+90 -344 V
+1.000 UL
+LT0
+.94 g 4127 3583 M
+90 -172 V
+1.000 UL
+LT0
+.9172 g 4088 3449 M
+129 -38 V
+1.000 UL
+LT0
+.9933 g 3998 3573 M
+129 10 V
+1.000 UL
+LT0
+.5644 g 3446 2903 M
+3321 2625 L
+1.000 UL
+LT0
+.5478 g 3228 2857 M
+81 -217 V
+1.000 UL
+LT0
+.086 g 3986 1894 M
+128 -35 V
+1.000 UL
+LT0
+.6645 g 3921 3123 M
+90 -361 V
+1.000 UL
+LT0
+.5199 g 3883 2649 M
+128 113 V
+1.000 UL
+LT0
+.6034 g 3793 3008 M
+90 -359 V
+1.000 UL
+LT0
+.1136 g 3857 1966 M
+-90 -146 V
+1.000 UL
+LT0
+.0815 g 3638 1888 M
+129 -68 V
+1.000 UL
+LT0
+.86 g 4088 3449 M
+90 -268 V
+1.000 UL
+LT0
+.7892 g 4050 3181 M
+128 0 V
+1.000 UL
+LT0
+.5411 g 3664 2832 M
+3536 2606 L
+1.000 UL
+LT0
+.562 g 3446 2903 M
+90 -297 V
+1.000 UL
+LT0
+.9861 g 3215 3579 M
+112 -41 V
+1.000 UL
+LT0
+.7481 g 3138 3045 M
+-90 128 V
+1.000 UL
+LT0
+.86 g 3176 3428 M
+3048 3173 L
+1.000 UL
+LT0
+.9994 g 3305 3540 M
+-90 39 V
+1.000 UL
+LT0
+.9767 g 3086 3489 M
+129 90 V
+1.000 UL
+LT0
+.7057 g 3356 3148 M
+3228 2857 L
+1.000 UL
+LT0
+.6646 g 3138 3045 M
+90 -188 V
+1.000 UL
+LT0
+.9478 g 3176 3428 M
+-90 61 V
+1.000 UL
+LT0
+.9705 g 4088 3449 M
+-90 124 V
+1.000 UL
+LT0
+.9994 g 3870 3542 M
+128 31 V
+1.000 UL
+LT0
+.8052 g 3266 3320 M
+3138 3045 L
+1.000 UL
+LT0
+.1475 g 3292 1998 M
+-90 -124 V
+1.000 UL
+LT0
+.1566 g 3073 2036 M
+129 -162 V
+1.000 UL
+LT0
+.1706 g 3073 2036 M
+-90 -111 V
+1.000 UL
+LT0
+.1989 g 2855 2127 M
+128 -202 V
+1.000 UL
+LT0
+.1566 g 3511 2011 M
+-90 -150 V
+1.000 UL
+LT0
+.1475 g 3292 1998 M
+129 -137 V
+1.000 UL
+LT0
+.9478 g 3960 3439 M
+128 10 V
+1.000 UL
+LT0
+.6646 g 3793 3008 M
+3664 2832 L
+1.000 UL
+LT0
+.7057 g 3575 3135 M
+89 -303 V
+1.000 UL
+LT0
+.877 g 3960 3439 M
+90 -258 V
+1.000 UL
+LT0
+.7892 g 3921 3123 M
+129 58 V
+1.000 UL
+LT0
+.1448 g 3857 1966 M
+129 -72 V
+1.000 UL
+LT0
+.231 g 2855 2127 M
+-90 -99 V
+1.000 UL
+LT0
+.7267 g 3575 3135 M
+3446 2903 L
+1.000 UL
+LT0
+.7267 g 3356 3148 M
+90 -245 V
+1.000 UL
+LT0
+.9767 g 3960 3439 M
+-90 103 V
+1.000 UL
+LT0
+.9994 g 3741 3515 M
+129 27 V
+1.000 UL
+LT0
+.9933 g 3395 3480 M
+-90 60 V
+1.000 UL
+LT0
+.997 g 3523 3519 M
+-218 21 V
+1.000 UL
+LT0
+.9705 g 3176 3428 M
+129 112 V
+1.000 UL
+LT0
+.9172 g 3266 3320 M
+-90 108 V
+1.000 UL
+LT0
+.86 g 3831 3391 M
+90 -268 V
+1.000 UL
+LT0
+.7481 g 3793 3008 M
+128 115 V
+1.000 UL
+LT0
+.8052 g 3702 3296 M
+91 -288 V
+1.000 UL
+LT0
+.1989 g 3728 2078 M
+-90 -190 V
+1.000 UL
+LT0
+.1706 g 3511 2011 M
+127 -123 V
+1.000 UL
+LT0
+.9903 g 3612 3467 M
+-89 52 V
+1.000 UL
+LT0
+.997 g 3741 3515 M
+-218 4 V
+1.000 UL
+LT0
+.9903 g 3395 3480 M
+128 39 V
+1.000 UL
+LT0
+.9478 g 3831 3391 M
+129 48 V
+1.000 UL
+LT0
+.8627 g 3485 3354 M
+3356 3148 L
+1.000 UL
+LT0
+.8463 g 3266 3320 M
+90 -172 V
+1.000 UL
+LT0
+.94 g 3395 3480 M
+3266 3320 L
+1.000 UL
+LT0
+.9705 g 3831 3391 M
+-90 124 V
+1.000 UL
+LT0
+.9933 g 3612 3467 M
+129 48 V
+1.000 UL
+LT0
+.8463 g 3702 3296 M
+3575 3135 L
+1.000 UL
+LT0
+.8627 g 3485 3354 M
+90 -219 V
+1.000 UL
+LT0
+.9564 g 3485 3354 M
+-90 126 V
+1.000 UL
+LT0
+.9172 g 3702 3296 M
+129 95 V
+1.000 UL
+LT0
+.94 g 3612 3467 M
+90 -171 V
+1.000 UL
+LT0
+.9564 g 3485 3354 M
+127 113 V
+1.000 UL
+LT0
+.231 g 3728 2078 M
+129 -112 V
+1.000 UL
+LT0
+.2977 g 3163 2198 M
+-90 -162 V
+1.000 UL
+LT0
+.3178 g 2945 2266 M
+128 -230 V
+1.000 UL
+LT0
+.2886 g 3382 2185 M
+-90 -187 V
+1.000 UL
+LT0
+.2886 g 3163 2198 M
+129 -200 V
+1.000 UL
+LT0
+.346 g 2945 2266 M
+-90 -139 V
+1.000 UL
+LT0
+.3178 g 3600 2229 M
+-89 -218 V
+1.000 UL
+LT0
+.2977 g 3382 2185 M
+129 -174 V
+1.000 UL
+LT0
+.346 g 3600 2229 M
+128 -151 V
+1.000 UL
+LT0
+.4553 g 3254 2394 M
+-91 -196 V
+1.000 UL
+LT0
+.4651 g 3035 2434 M
+128 -236 V
+1.000 UL
+LT0
+.4852 g 3035 2434 M
+-90 -168 V
+1.000 UL
+LT0
+.4651 g 3472 2409 M
+-90 -224 V
+1.000 UL
+LT0
+.4553 g 3254 2394 M
+128 -209 V
+1.000 UL
+LT0
+.4852 g 3472 2409 M
+128 -180 V
+1.000 UL
+LT0
+.6372 g 3125 2609 M
+-90 -175 V
+1.000 UL
+LT0
+.6275 g 3344 2596 M
+-90 -202 V
+1.000 UL
+LT0
+.6275 g 3125 2609 M
+129 -215 V
+1.000 UL
+LT0
+.6372 g 3344 2596 M
+128 -187 V
+1.000 UL
+LT0
+.7845 g 3215 2762 M
+-90 -153 V
+1.000 UL
+LT0
+.7845 g 3215 2762 M
+129 -166 V
+1.000 UL
+LT0
+0.400 UL
+LTb
+3138 729 M
+3085 695 V
+0.400 UL
+LTb
+3138 729 M
+977 1721 L
+0.400 UL
+LTb
+977 1721 M
+1322 297 V
+0.400 UL
+LTb
+6223 1424 M
+4911 2026 L
+0.400 UL
+LTb
+977 3816 M
+0 -2095 V
+1.000 UL
+LTa
+3138 729 M
+977 1721 L
+0.400 UL
+LTb
+3138 729 M
+-56 26 V
+0.400 UL
+LTb
+3245 647 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-6)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1033 1695 M
+-56 26 V
+1.000 UL
+LTa
+3651 845 M
+1491 1837 L
+0.400 UL
+LTb
+3651 845 M
+-55 26 V
+0.400 UL
+LTb
+3758 763 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-4)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1547 1811 M
+-56 26 V
+1.000 UL
+LTa
+4166 961 M
+2005 1952 L
+0.400 UL
+LTb
+4166 961 M
+-57 25 V
+0.400 UL
+LTb
+4273 879 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-2)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+2062 1926 M
+-57 26 V
+1.000 UL
+LTa
+4680 1076 M
+3036 1831 L
+0.400 UL
+LTb
+4680 1076 M
+-56 26 V
+0.400 UL
+LTb
+4787 994 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+5195 1192 M
+3872 1799 L
+0.400 UL
+LTb
+5195 1192 M
+-57 26 V
+0.400 UL
+LTb
+5302 1110 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 2)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+5709 1308 M
+4463 1880 L
+0.400 UL
+LTb
+5709 1308 M
+-56 26 V
+0.400 UL
+LTb
+5816 1226 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 4)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+6223 1424 M
+4911 2026 L
+0.400 UL
+LTb
+6223 1424 M
+-56 25 V
+0.400 UL
+LTb
+6331 1342 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 6)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+3138 729 M
+3085 695 V
+0.400 UL
+LTb
+3138 729 M
+51 12 V
+stroke
+3040 692 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-6)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+6172 1412 M
+51 12 V
+1.000 UL
+LTa
+2778 894 M
+3085 695 V
+0.400 UL
+LTb
+2778 894 M
+51 12 V
+stroke
+2679 858 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-4)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+5812 1577 M
+51 12 V
+1.000 UL
+LTa
+2417 1060 M
+3086 694 V
+0.400 UL
+LTb
+2417 1060 M
+52 11 V
+stroke
+2319 1023 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-2)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+5451 1742 M
+52 12 V
+1.000 UL
+LTa
+2057 1225 M
+3086 694 V
+0.400 UL
+LTb
+2057 1225 M
+52 12 V
+stroke
+1959 1188 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+5091 1908 M
+52 11 V
+1.000 UL
+LTa
+1697 1390 M
+1805 406 V
+0.400 UL
+LTb
+1697 1390 M
+52 12 V
+stroke
+1599 1353 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 2)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+1337 1556 M
+1419 319 V
+0.400 UL
+LTb
+1337 1556 M
+51 11 V
+stroke
+1239 1519 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 4)]
+] -66.7 MCshow
+0.400 UL
+LTb
+1.000 UL
+LTa
+977 1721 M
+1322 297 V
+0.400 UL
+LTb
+977 1721 M
+51 11 V
+stroke
+878 1684 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 6)]
+] -66.7 MCshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 2420 M
+-63 0 V
+stroke
+851 2420 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-1)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 2559 M
+-63 0 V
+stroke
+851 2559 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-0.8)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 2698 M
+-63 0 V
+stroke
+851 2698 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-0.6)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 2838 M
+-63 0 V
+stroke
+851 2838 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-0.4)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 2978 M
+-63 0 V
+stroke
+851 2978 M
+[ [(Helvetica) 200.0 0.0 true true 0 (-0.2)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3118 M
+-63 0 V
+stroke
+851 3118 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3257 M
+-63 0 V
+stroke
+851 3257 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0.2)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3397 M
+-63 0 V
+stroke
+851 3397 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0.4)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3537 M
+-63 0 V
+stroke
+851 3537 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0.6)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3677 M
+-63 0 V
+stroke
+851 3677 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 0.8)]
+] -66.7 MRshow
+0.400 UL
+LTb
+0.400 UL
+LTb
+1040 3816 M
+-63 0 V
+stroke
+851 3816 M
+[ [(Helvetica) 200.0 0.0 true true 0 ( 1)]
+] -66.7 MRshow
+0.400 UL
+LTb
+1.000 UP
+grestore % colour palette end
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%DocumentFonts: Helvetica
