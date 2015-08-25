@@ -36,5 +36,5 @@ streamtube(x,y,z,u,v,w,sx,sy,sz,
 
 raw_input('Press Return key to quit: ')
 
-#hardcopy('tmp_streamtube1.eps')
-#hardcopy('tmp_streamtube1.png')
+#savefig('tmp_streamtube1.eps')
+#savefig('tmp_streamtube1.png')

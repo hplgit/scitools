@@ -11,7 +11,7 @@ plot(t, y, 'r-2',
      ylabel='y',
      legend='exp(-t^2)',
      title='Logarithmic scale on the y axis',
-     savefig='plot1e.png',  # or hardcopy='plot1e.eps'
+     savefig='plot1e.png',  # or savefig='plot1e.eps'
      show=True)
 
 savefig('plot1e.eps')

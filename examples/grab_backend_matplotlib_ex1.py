@@ -56,7 +56,7 @@ if __name__ == '__main__':
     if backend == 'matplotlib':
         # Set alpha on patches
         _pyplot_patch_alpha(0.3)
-        # Don't use normal hardcopy after an update in backend
+        # Don't use normal savefig after an update in backend
         pyplot.savefig('tmp_transparent_fill.png') 
 
     raw_input('Press Return key to quit: ')

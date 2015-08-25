@@ -18,7 +18,7 @@ t_values = linspace(-1, 1, 61)
 counter = 1
 for t in t_values:
     y = f(x, t)
-    plot(x, y, hardcopy='tmp_%04d.png' % counter)
+    plot(x, y, savefig='tmp_%04d.png' % counter)
     counter += 1
 
 # Make movie file the simplest possible way

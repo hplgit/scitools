@@ -27,9 +27,9 @@ setp(show=True)
 show()
 #sleep(3)
 
-#hardcopy('tmp_streamribbon1a_hq.eps')
-#hardcopy('tmp_streamribbon1a_lq.eps', vector_file=False)
-#hardcopy('tmp_streamribbon1a.png')
+#savefig('tmp_streamribbon1a_hq.eps')
+#savefig('tmp_streamribbon1a_lq.eps', vector_file=False)
+#savefig('tmp_streamribbon1a.png')
 
 figure()
 # alternative syntax:
@@ -43,6 +43,6 @@ streamribbon(x,y,z,u,v,w,sx,sy,sz,
 
 raw_input('Press Return key to quit: ')
 
-#hardcopy('tmp_streamribbon1b_hq.eps')
-#hardcopy('tmp_streamribbon1b_lq.eps', vector_file=False)
-#hardcopy('tmp_streamribbon1b.png')
+#savefig('tmp_streamribbon1b_hq.eps')
+#savefig('tmp_streamribbon1b_lq.eps', vector_file=False)
+#savefig('tmp_streamribbon1b.png')

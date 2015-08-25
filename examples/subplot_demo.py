@@ -16,8 +16,8 @@ subplot(2,2,4)
 plot(x, cos(pi*x), xlabel='x', ylabel='y', title='subplot(2,2,4)')
 show()
 
-#hardcopy('subplot1a.eps', color=True)
-#hardcopy('subplot1a.png', color=True)
+#savefig('subplot1a.eps', color=True)
+#savefig('subplot1a.png', color=True)
 
 figure()
 t = linspace(0,1,51)
@@ -39,8 +39,8 @@ xlabel('time (sec)')
 ylabel('voltage (mV)')
 show()
 
-#hardcopy('subplot1b.eps', color=True)
-#hardcopy('subplot1b.png', color=True)
+#savefig('subplot1b.eps', color=True)
+#savefig('subplot1b.png', color=True)
 
 raw_input("Press Return key to quit: ")
 

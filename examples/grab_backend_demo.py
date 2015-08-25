@@ -110,22 +110,22 @@ elif backend == 'pyx':
 elif backend == 'blt':
     pass
 
-print "Now we store a hardcopy of the tuned plot."
+print "Now we store a savefig of the tuned plot."
 raw_input('Press Return key to continue:')
 
-#hardcopy('grab_backend1.eps')  # Will destroy all changes!
-#hardcopy('grab_backend1.png')  # Will destroy all changes!
+#savefig('grab_backend1.eps')  # Will destroy all changes!
+#savefig('grab_backend1.png')  # Will destroy all changes!
 
-# We have made changes in the backend directly and a call to hardcopy in
+# We have made changes in the backend directly and a call to savefig in
 # Easyviz would normally destroy all these changes. However, setting the
-# keyword argument replot to False in the hardcopy function will make sure
+# keyword argument replot to False in the savefig function will make sure
 # that the changes are not destroyed:
 if backend == 'gnuplot':
     # Unfortunately, setting replot to False does not currently work in the
-    # Gnuplot backend. So, in this case we must use the hardcopy command from
+    # Gnuplot backend. So, in this case we must use the savefig command from
     # the Gnuplot.py module:
-    g.hardcopy(filename='tmp_grab_backend1.eps', terminal='postscript', mode='eps')
-    g.hardcopy(filename='tmp_grab_backend1.png', terminal='png')
+    g.savefig(filename='tmp_grab_backend1.eps', terminal='postscript', mode='eps')
+    g.savefig(filename='tmp_grab_backend1.png', terminal='png')
 else:
     savefig('grab_backend1.eps', replot=False)
     if not backend == 'pyx':

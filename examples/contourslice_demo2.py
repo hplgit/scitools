@@ -27,8 +27,8 @@ daspect([1,1,1])
 colormap('default')
 show()
 
-#hardcopy('tmp_contourslice2a.eps')
-#hardcopy('tmp_contourslice2a.png')
+#savefig('tmp_contourslice2a.eps')
+#savefig('tmp_contourslice2a.png')
 
 figure()
 BUG = 1
@@ -41,5 +41,5 @@ show()
 #sleep(3)
 raw_input('Press Return key to quit: ')
 
-## hardcopy('tmp_contourslice2b.eps')
-## hardcopy('tmp_contourslice2b.png')
+## savefig('tmp_contourslice2b.eps')
+## savefig('tmp_contourslice2b.png')

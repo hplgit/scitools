@@ -14,7 +14,7 @@ yslice = 2
 zslice = [-2+BUG,0]
 slice_(x,y,z,v,xslice,yslice,zslice,grid='off')
 
-#hardcopy('tmp_slice1.eps')
-#hardcopy('tmp_slice1.png')
+#savefig('tmp_slice1.eps')
+#savefig('tmp_slice1.png')
 
 raw_input('Press Return key to quit: ')

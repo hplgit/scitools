@@ -34,9 +34,9 @@ if pos is not None:
     ax = axes(viewport=pos)  # create a new axis at the given position
     plot(ax, x, y2, 'b--')   # draw a curve in the new axis
 
-hardcopy('tmp_axes1a.eps')
+savefig('tmp_axes1a.eps')
 if not backend == 'pyx':
-    hardcopy('tmp_axes1a.png')
+    savefig('tmp_axes1a.png')
 
 if backend == 'matlab2':
     save('tmp_test_axes.m')

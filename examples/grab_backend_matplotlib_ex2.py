@@ -68,7 +68,7 @@ def main():
     
 if __name__ == '__main__':
     main()
-    hardcopy('tmp_normal_frame.png')
+    savefig('tmp_normal_frame.png')
 
     if backend != 'matplotlib':
         print 'Cannot demonstrate matplotlib specialities when backend (%s) is not matplotlib!' % (backend)
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         pyplot.text(.05, -.8, 'Check out the nice thick frame',
                    {'size':20}, horizontalalignment='left',)
         
-        # Use backend hardcopy since normal hardcopy would reset text and title
+        # Use backend savefig since normal savefig would reset text and title
         pyplot.savefig('tmp_thick_frame.png')  
 
         # Load a font set from matplotlib (check matplotlib's fonts_demo)

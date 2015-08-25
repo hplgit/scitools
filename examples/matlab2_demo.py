@@ -10,7 +10,7 @@ print get_script()
 
 # As we can see, the result is no output. This is because the _replot method
 # has not been called yet. However, we don't need to call this method
-# explicitly. Instead we should call either show or hardcopy (both of which
+# explicitly. Instead we should call either show or savefig (both of which
 # calls _replot). Here we use show:
 
 show()
@@ -38,13 +38,13 @@ zz = peaks(xx, yy)
 contour(xx,yy,zz,12,hold='on')
 uu, vv = gradient(zz)
 quiver(xx,yy,uu,vv,hold='off')
-hardcopy('tmp0.ps',color=True)
+savefig('tmp0.ps',color=True)
 save_m('mytest2.m')
 
 # Here, we begin by calling reset(). This ensures that the string with the
 # Matlab commands is empty before we start calling different plotting
-# commands. After calling contour and quiver, we use the hardcopy command to
-# store the plot to a PostScript file. As mentioned above, hardcopy calls
+# commands. After calling contour and quiver, we use the savefig command to
+# store the plot to a PostScript file. As mentioned above, savefig calls
 # _replot so there is no need to call show in this case. At the end we call
 # save_m to store the Matlab commands in the file mytest2.m. We can then run
 # the script as we did above:

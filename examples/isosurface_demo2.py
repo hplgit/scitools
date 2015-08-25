@@ -42,5 +42,5 @@ show()
 
 raw_input('Press Return key to quit: ')
 
-#hardcopy('tmp_isosurf2a.eps')
-#hardcopy('tmp_isosurf2a.png')
+#savefig('tmp_isosurf2a.eps')
+#savefig('tmp_isosurf2a.png')

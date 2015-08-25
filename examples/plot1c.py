@@ -11,7 +11,7 @@ plot(t, y, 'r-',
      legend='t^2*exp(-t^2)',
      axis=[0, 3, -0.05, 0.6],
      title='My First Easyviz Demo',
-     savefig='plot1c.png',  # or hardcopy='plot1c.eps'
+     savefig='plot1c.png',  # or savefig='plot1c.eps'
      show=True)
 
 savefig('plot1c.eps')

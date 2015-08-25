@@ -21,8 +21,8 @@ view(3) # because camva, camproj, and campos currently not working
 setp(show=True)
 show()
 
-#hardcopy('tmp_contourslice1a.eps')
-#hardcopy('tmp_contourslice1a.png')
+#savefig('tmp_contourslice1a.eps')
+#savefig('tmp_contourslice1a.png')
 
 figure()
 # alternative syntax:
@@ -32,8 +32,8 @@ h = contourslice(x,y,z,v,seq(1,9),[],[0],linspace(-8,2,10),
                  fgcolor=(1,1,1), bgcolor=(0,0,0),
                  box='on')
 
-#hardcopy('tmp_contourslice1b.eps')
-#hardcopy('tmp_contourslice1b.png')
+#savefig('tmp_contourslice1b.eps')
+#savefig('tmp_contourslice1b.png')
 
 #sleep(3)
 raw_input('Press Return key to quit: ')

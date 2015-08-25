@@ -16,16 +16,16 @@ axis([-1,1,-1,1])
 title('The vector field F(x,y)=(-y,x)')
 show()
 
-#hardcopy('quiver1a.eps', color=True)
-#hardcopy('quiver1a.png', color=True)
+#savefig('quiver1a.eps', color=True)
+#savefig('quiver1a.png', color=True)
 
 figure()
 # Now, turn off automatic scaling:
 quiver(xv,yv,-yv,xv,0,axis=[-1,1,-1,1])
 show()
 
-#hardcopy('quiver1b.eps', color=True)
-#hardcopy('quiver1b.png', color=True)
+#savefig('quiver1b.eps', color=True)
+#savefig('quiver1b.png', color=True)
 
 figure()
 # Plot the gradient field of the function f(x,y)=x**3-3x-2y**2:
@@ -36,7 +36,7 @@ quiver(xv,yv,dx,dy,axis='equal',xmin=-2,xmax=2,ymin=-1,ymax=1,
        title='The gradient vector field of f(x,y)=x**3-3x-2y**2')
 show()
 
-#hardcopy('quiver1c.eps', color=True)
-#hardcopy('quiver1c.png', color=True)
+#savefig('quiver1c.eps', color=True)
+#savefig('quiver1c.png', color=True)
 
 raw_input('Press Return key to quit: ')

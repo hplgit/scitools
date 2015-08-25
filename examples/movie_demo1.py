@@ -22,7 +22,7 @@ for s in s_values:
     y = f(x, m, s)
     plot(x, y, axis=[x[0], x[-1], -0.1, max_f],
          xlabel='x', ylabel='f', legend='s=%4.2f' % s,
-         hardcopy='tmp_%04d.png' % counter)
+         savefig='tmp_%04d.png' % counter)
     counter += 1
     #time.sleep(0.2)  # can insert a pause to control movie speed
 

@@ -25,8 +25,8 @@ hold('on')
 quiver(xv, yv, uu, vv, 'filled', 'k', axis=[-6,6,-6,6])
 show()
 
-#hardcopy('quiver2a.eps')
-#hardcopy('quiver2a.png')
+#savefig('quiver2a.eps')
+#savefig('quiver2a.png')
 
 
 figure()
@@ -34,7 +34,7 @@ contour(xv, yv, values, 15, hold=True)
 quiver(xv, yv, uu, vv, axis=[-6,6,-6,6])
 show()
 
-#hardcopy('quiver2b.eps')
-#hardcopy('quiver2b.png')
+#savefig('quiver2b.eps')
+#savefig('quiver2b.png')
 
 raw_input("Press Return key to quit: ")
