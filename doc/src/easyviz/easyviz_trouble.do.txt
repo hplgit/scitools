@@ -22,7 +22,7 @@ automatically chosen.
 Yes. It is wise to perform a diagnostic test before reporting any error
 or trouble to the SciTools maintainers. Find the source folder of SciTools
 and go to the `misc` subfolder. Run
-!bc dsni
+!bc sys
 python diagonstic.py
 !ec
 On the screen, you can see what you have of working software that Easyviz
