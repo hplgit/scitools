@@ -313,9 +313,10 @@ u2 = interpolate(u, V2)
     if dolfin.__version__[:3] == "1.0":
         nodal_values = dolfin_function.vector().array().copy()
     else:
-        map = dolfin_function.function_space().dofmap().vertex_to_dof_map(dolfin_mesh)
+        #map = dolfin_function.function_space().dofmap().vertex_to_dof_map(dolfin_mesh)
+        d2v = dolfin.dof_to_vertex_map(dolfin_function.function_space())
         nodal_values = dolfin_function.vector().array().copy()
-        nodal_values[map] = dolfin_function.vector().array().copy()
+        nodal_values[d2v] = dolfin_function.vector().array().copy()
 
     if uniform_mesh:
         grid = dolfin_mesh2UniformBoxGrid(dolfin_mesh, division)

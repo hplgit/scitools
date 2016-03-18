@@ -78,22 +78,25 @@ class Plotter:
 
     Here is a one-dimensional random walk example::
 
-        import time, numpy as np
-        p = Plotter(-1, 1, width=75)
-        np.random.seed(10)
-        y = 0
-        while True:
-            random_step = 1 if np.random.random() > 0.5 else -1
-            y = y + 0.05*random_step
-            if y < -1:
-                print 'HOME!!!!!!!!!'
-                break
-            print p.plot(0, y)
-            try:
-                time.sleep(0.1)
-            except KeyboardInterrupt:
-                print 'Interrupted by Ctrl-C'
-                break
+    from scitools.avplotter importer Plotter
+    import time, numpy as np
+    p = Plotter(-1, 1, width=75)   # Horizontal axis: 75 chars wide
+    dx = 0.05
+    np.random.seed(10)
+    x = 0
+    while True:
+        random_step = 1 if np.random.random() > 0.5 else -1
+        x = x + dx*random_step
+        if x < -1:
+            print 'HOME!!!'
+            break
+        print p.plot(0, x)
+	# Allow Ctrl+c to abort the simulation
+        try:
+            time.sleep(0.1)  # Wait for interrupt
+        except KeyboardInterrupt:
+            print 'Interrupted by Ctrl+c'
+            break
 
     One can easily plot two or more curves side by side. Here we
     plot two curves (sine and cosine), each with a width of 25
@@ -1681,20 +1684,22 @@ def test_random_walk():
 
 def run_random_walk():
     import time, numpy as np
-    p = Plotter(-1, 1, width=75)
+    p = Plotter(-1, 1, width=75)   # Horizontal axis: 75 chars wide
+    dx = 0.05
     np.random.seed(10)
-    y = 0
+    x = 0
     while True:
         random_step = 1 if np.random.random() > 0.5 else -1
-        y = y + 0.05*random_step
-        if y < -1:
+        x = x + dx*random_step
+        if x < -1:
             print 'HOME!!!'
             break
-        print p.plot(0, y)
+        print p.plot(0, x)
+	# Allow Ctrl+c to abort the simulation
         try:
-            time.sleep(0.1)
+            time.sleep(0.1)  # Wait for interrupt
         except KeyboardInterrupt:
-            print 'Interrupted by Ctrl-C'
+            print 'Interrupted by Ctrl+c'
             break
 
 def _compare(ans, s):
