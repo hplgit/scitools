@@ -116,7 +116,7 @@ Science" (Springer, 1st edition 2003, 3rd edition 2009).
 The Easyviz package was mainly developed by Johannes H. Ring
 <johannr@simula.no>. Johannes H. Ring has been the principal
 maintainer of SciTools. The package was extended for the
-book "A Primer on Scientific Programming with Python", bu H. P. Langtangen,
+book "A Primer on Scientific Programming with Python", by H. P. Langtangen,
 4th edition, Springer, 2014.
 
 Some modules included in SciTools are written by others:
