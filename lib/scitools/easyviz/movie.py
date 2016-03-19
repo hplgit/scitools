@@ -36,7 +36,7 @@ class MovieEncoder(object):
         }
     _legal_encoders = 'convert mencoder ffmpeg avconv mpeg_encode ppmtompeg '\
                       'mpeg2enc html'.split()
-    _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm'.split()
+    _legal_file_types = 'png gif jpg ps eps bmp tif tga pnm pdf'.split()
 
     def __init__(self, input_files, **kwargs):
         self._prop = {}
