@@ -227,14 +227,16 @@ if basic_NumPy == 'numpy':
 	import numpy
 	oldversion = (numpy.version.version[0] == '0')
         majorversion = int(numpy.version.version[0])
-        minorversion = int(numpy.version.version[2])
+        minorversion = int(numpy.version.version[1])
+        patch = int(numpy.version.version[2])
+        has_oldnumeric = (majorversion == 1 and minorversion < 9)
 	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
 	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
 		n, module = _numpy_name.split('.')
 		exec "from %s import %s as %s" %(n, module, _Numeric_name)
 	    elif oldversion and (_Numeric_name == 'MLab'):
 		from numpy.lib import mlab as MLab
-            elif (oldversion or (majorversion == 1 and minorversion < 1)) \
+            elif (oldversion or (majorversion == 1 and patch < 1)) \
                      and (_Numeric_name == 'MA'):
                 import numpy.core.ma; MA = numpy.core.ma
 	    elif _numpy_name != '':
@@ -244,7 +246,7 @@ if basic_NumPy == 'numpy':
 	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
 	from numpy import *
-	if not oldversion:
+	if has_oldnumeric:
 	    # get the old names too (NewAxis, Float, etc.):
 	    from numpy.oldnumeric import *
 	del oldversion
