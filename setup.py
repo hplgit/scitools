@@ -88,7 +88,7 @@ setup(
     description = scitools.__doc__,
     license = "BSD",
     name = "SciTools",
-    url = "http://scitools.googlecode.com",
+    url = "https://github.com/hplgit/scitools",
     package_dir = {'': 'lib'},
     # Must specify package directories and not individual module files
     # (py_modules) since package_data= only works with packages=
