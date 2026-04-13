@@ -4,7 +4,7 @@ A collection of Python utilities originally developed for the
 """
 
 import time, sys, os, re, getopt, math, threading, shutil, collections
-import commands
+import subprocess
 from .errorcheck import right_type
 from scitools.StringFunction import StringFunction
 
@@ -51,13 +51,13 @@ def check_if_module_exists(modulename, msg='',
                   (modulename, msg)
         if raise_exception:
             if msg:
-                print msg
+                print(msg)
                 #print 'The problem arose in ',
                 debug.trace(frameno=-3)
             raise ImportError(message)
         else:
             if msg:
-                print '\n', message
+                print(('\n', message))
                 #print 'The problem arose in ',
                 debug.trace(frameno=-3)
             if abort:
@@ -66,9 +66,9 @@ def check_if_module_exists(modulename, msg='',
                 return False
     except Exception as e:
         if msg:
-            print msg
-            print 'Got an exception while trying to import %s:\n' % \
-                modulename, e
+            print(msg)
+            print(('Got an exception while trying to import %s:\n' % \
+                modulename, e))
 
 
 def func_to_method(func, class_, method_name=None):
@@ -90,7 +90,7 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
     ================  ========================================================
     ================  ========================================================
     command           operating system command to be executed
-    verbose           False: no output, True: print command prior to execution
+    verbose           False: no output, True: print(command) prior to execution
     failure_handling  one of 'exit', 'warning', 'exception', or 'silent'
                       (in case of failure, the output from the command is
                       always displayed)
@@ -101,7 +101,7 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
     ================  ========================================================
     """
     if verbose:
-        print 'Running operating system command\n   %s' % command
+        print(('Running operating system command\n   %s' % command))
     if fake:
         return 0, 'testing "%s"' % command
 
@@ -111,16 +111,16 @@ def system(command, verbose=True, failure_handling='exit', fake=False):
         failure = result.close()
     else:
         # Unix/Linux/Mac:
-        failure, output = commands.getstatusoutput(command)
+        failure, output = subprocess.getstatusoutput(command)
 
     if failure:
         msg = 'Failure when running operating system command'\
               '\n  %s\nOutput:\n%s' % (command, output)
         if failure_handling == 'exit':
-            print msg, '\nExecution aborted!'
+            print((msg, '\nExecution aborted!'))
             sys.exit(1)
         if failure_handling == 'warning':
-            print 'Warning:', msg
+            print(('Warning:', msg))
         elif failure_handling == 'exception':
             raise OSError(msg)
         elif failure_handling == 'silent':
@@ -276,7 +276,7 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
     >>> print s, type(s)
     <__main__.A instance at 0xb70f6fcc> <type 'instance'>
 
-    With debug=True, the function will print out the exception
+    With debug=True, the function will print(out) the exception
     encountered when doing eval(s, globals_, locals_), and this may
     point out problems with, e.g., imports in the calling code
     (insufficient variables in globals_).
@@ -301,11 +301,11 @@ def str2obj(s, globals_=None, locals_=None, debug=False):
             return b
         except Exception as e:
             if debug:
-                print """
+                print(("""
 scitools.misc.str2obj:
 Tried to do eval(s) with s="%s", and it resulted in an exception:
     %s
-""" % (s, e)
+""" % (s, e)))
             # eval(s) did not work, s is probably a string:
             return s
 
@@ -592,7 +592,7 @@ def function_UI(functions, argv, verbose=True):
 
     def all_usage():
         for fname in sorted(usage):
-            print fname, ' '.join(usage[fname])
+            print((fname, ' '.join(usage[fname])))
 
     # call: function-name arg1 arg2 ...
     if len(argv) < 2:
@@ -603,9 +603,9 @@ def function_UI(functions, argv, verbose=True):
     if len(argv) == 2 and argv[1] in function_names and usage[argv[1]]:
         fname = argv[1]
         if usage[fname]:
-            print 'Usage:', fname, ' '.join(usage[fname])
+            print(('Usage:', fname, ' '.join(usage[fname])))
             if doc[fname]:
-                print '\nDocstring:\n', doc[fname]
+                print(('\nDocstring:\n', doc[fname]))
             sys.exit(1)
 
     if len(argv) == 2 and argv[1].endswith('help'):
@@ -620,7 +620,7 @@ def function_UI(functions, argv, verbose=True):
     #if len(argv[2:]) == len(usage[fname]):
         # Correct no arguments (eh, can leave out keyword args...)
     if verbose:
-        print 'Calling', cmd
+        print(('Calling', cmd))
     return cmd
 
 
@@ -691,7 +691,7 @@ def find(func, rootdir, arg=None):
         elif os.path.isfile(fullpath):
             func(fullpath, arg) # file is regular, apply func
         else:
-            print 'find: cannot treat ', fullpath
+            print(('find: cannot treat ', fullpath))
 
 
 def sorted_os_path_walk(root, func, arg):
@@ -735,11 +735,11 @@ def subst(patterns, replacements, filenames,
     ==========================  ======================================
     """
     # if some arguments are strings, convert them to lists:
-    if isinstance(patterns, basestring):
+    if isinstance(patterns, str):
         patterns = [patterns]
-    if isinstance(replacements, basestring):
+    if isinstance(replacements, str):
         replacements = [replacements]
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, str):
         filenames = [filenames]
 
     # pre-compile patterns:
@@ -818,10 +818,10 @@ def timer(func, args=[], kwargs={}, repetitions=10, comment=''):
     a specified number of times (repetitions) and
     write out the elapsed time and the CPU time together.
     """
-    t0 = time.time();  c0 = time.clock()
+    t0 = time.time();  c0 = time.perf_counter()
     for i in range(repetitions):
         func(*args, **kwargs)
-    cpu_time = time.clock()-c0
+    cpu_time = time.perf_counter()-c0
     elapsed_time = time.time()-t0
     try:    # instance method?
         name = func.__self__.__class__.__name__ + '.' + func.__name__
@@ -830,8 +830,8 @@ def timer(func, args=[], kwargs={}, repetitions=10, comment=''):
             name = func.__name__
         except:
             name = ''
-    print '%s %s (%d calls): elapsed=%g, CPU=%g' % \
-          (comment, name, repetitions, elapsed_time, cpu_time)
+    print(('%s %s (%d calls): elapsed=%g, CPU=%g' % \
+          (comment, name, repetitions, elapsed_time, cpu_time)))
     return cpu_time/float(repetitions)
 
 
@@ -849,10 +849,10 @@ def timer_system(command, comment=''):
     t1 = os.times()
     # some programs return nonzero even when they work (grep, for inst.)
     if failure:
-        print 'Note: os.system(%s) failed' % command, 'returned', failure
+        print(('Note: os.system(%s) failed' % command, 'returned', failure))
     cpu_time = t1[2]-t0[2] + t1[3]-t0[3]
-    print '%s system command: "%s": elapsed=%g CPU=%g' % \
-          (comment, command, t1[4]-t0[4], cpu_time)
+    print(('%s system command: "%s": elapsed=%g CPU=%g' % \
+          (comment, command, t1[4]-t0[4], cpu_time)))
     return cpu_time
 
 
@@ -894,7 +894,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
                    'convert' : 'File format conversion from ImageMagick',
                  }
       if not findprograms(programs, write_message=True):
-          print 'the mentioned programs need to be installed'
+          print('the mentioned programs need to be installed')
           sys.exit(1)
     """
     def program_exists(fullpath):
@@ -923,7 +923,7 @@ def findprograms(programs, searchlibs=[], write_message=False):
                     return True
         # else, not found:
         if write_message:
-            print 'program %s not found' % programs
+            print(('program %s not found' % programs))
         return False
 
     elif isinstance(programs, (list,tuple)):
@@ -953,10 +953,10 @@ def findprograms(programs, searchlibs=[], write_message=False):
         for program in fullpaths:
             if not fullpaths[program]:
                 if isinstance(program, dict):
-                    print "program '%s' (%s) not found" % \
-                          (program,programs[program])
+                    print(("program '%s' (%s) not found" % \
+                          (program,programs[program])))
                 else:  # list or tuple
-                    print 'program "%s" not found' % program
+                    print(('program "%s" not found' % program))
                 missing = True
         if missing:
             return None
@@ -982,17 +982,17 @@ def pathsearch(programs=[], modules=[], where=0):
             if os.path.isdir(dir): # skip non-existing directories
                 # check read and execute access in this directory:
                 if not os.access(dir, os.R_OK | os.X_OK):
-                    print dir, 'does not have read/execute access'
+                    print((dir, 'does not have read/execute access'))
                     sys.exit(1)
                 fullpath = os.path.join(dir,program)
                 if os.path.isfile(fullpath):
                     found = 1
                     if where:
-                        print program, 'found in', dir
+                        print((program, 'found in', dir))
                     break
         if not found:
-            print "The program '%s' was not found" % program
-            print 'PATH contains the directories\n','\n'.join(paths)
+            print(("The program '%s' was not found" % program))
+            print(('PATH contains the directories\n','\n'.join(paths)))
 
     path = os.environ['PYTHONPATH']
     paths = re.split(os.pathsep, path)
@@ -1002,18 +1002,18 @@ def pathsearch(programs=[], modules=[], where=0):
             if os.path.isdir(dir): # skip non-existing directories
                 # check read and execute access in this directory:
                 if not os.access(dir, os.R_OK | os.X_OK):
-                    print dir, 'does not have read/execute access'
+                    print((dir, 'does not have read/execute access'))
                     sys.exit(1)
                 fullpath = os.path.join(dir,module) + '.py'
                 if os.path.isfile(fullpath):
                     found = 1
                     if where:
-                        print module, 'found in', dir
+                        print((module, 'found in', dir))
                     break
         if not found:
-            print "The module '%s' was not found" % module
-            print 'PYTHONPATH contains the directories\n',\
-            '\n'.join(paths)
+            print(("The module '%s' was not found" % module))
+            print(('PYTHONPATH contains the directories\n',\
+            '\n'.join(paths)))
 
 def preprocess_all_files(rootdir, options=''):
     """
@@ -1233,7 +1233,7 @@ def movefiles(files, destdir, confirm=True, verbose=True, copy=True):
     for file in files:
         perform_action = 'y'
         if confirm:
-            print 'move %s to %s?' % (file, destdir)
+            print(('move %s to %s?' % (file, destdir)))
             perform_action = sys.stdin.readline().strip()
         if perform_action in ('y', 'Y', 'yes', 'YES'):
             fullpath = os.path.abspath(file)
@@ -1247,12 +1247,12 @@ def movefiles(files, destdir, confirm=True, verbose=True, copy=True):
             if not os.path.isdir(newdir): os.makedirs(newdir)
             shutil.copy2(file, newpath)
             if os.path.isfile(newpath):
-                print 'fount',newpath
+                print(('fount',newpath))
             s = 'copied'
             if not copy:  # pure move
                 os.remove(file); s = 'moved'
             if verbose:
-                print s, file, 'to', newpath
+                print((s, file, 'to', newpath))
 
 # backward compatibility:
 from .debug import debugregex, dump
@@ -1286,10 +1286,10 @@ class BackgroundCommand(threading.Thread):
         kw = [key+'='+self.kwargs[key] for key in self.kwargs]
         cmd = '%s=%s(%s,%s)' % (self.result, self.func.__name__,
                                 ','.join(self.args), ','.join(kw))
-        print 'running %s in a thread' % cmd
+        print(('running %s in a thread' % cmd))
         self.__dict__[self.result] = self.func(*self.args,**self.kwargs)
         self.finished = True
-        print cmd, 'finished'
+        print((cmd, 'finished'))
 
 BG = BackgroundCommand  # short form
 
@@ -1298,9 +1298,9 @@ class Download(threading.Thread):
         self.url = url;  self.filename = filename
         threading.Thread.__init__(self)
     def run(self):
-        print 'Fetching', self.url
-        urllib.urlretrieve(self.url, self.filename)
-        print self.filename, 'is downloaded'
+        print(('Fetching', self.url))
+        urllib.request.urlretrieve(self.url, self.filename)
+        print((self.filename, 'is downloaded'))
 
 def hardware_info():
     """
@@ -1403,7 +1403,7 @@ def _test_memusage(narrays=100, m=1000):
         elif len(refs) > 0:
             del refs[0]
         mu = memusage()/1000000.0
-        print 'memory usage: %.2fMb' % mu
+        print(('memory usage: %.2fMb' % mu))
 
 
 def isiterable(data):
@@ -1430,7 +1430,7 @@ def flatten(nested_data):
     for e in it:
         # note: strings are bad because, when iterated they return
         # strings, leading to an infinite loop
-        if isiterable(e) and not isinstance(e, basestring):
+        if isiterable(e) and not isinstance(e, str):
             # recurse into iterators
             for f in flatten(e):
                 yield f
@@ -1509,7 +1509,7 @@ def _cmldict_demo():
     args = "--m 9.1 --b 7 --c 0.1 -A 3.3".split()
     defaults = { 'm' : '1.8', 'func' : 'siny' }
     p = cmldict(args, defaults, 0)
-    print p
+    print(p)
 
     # shuffle values into other variables:
     m = p['m']
@@ -1520,18 +1520,18 @@ def _cmldict_demo():
     # take action:
     for option in p:
         if option == "m":
-            print "option is m", p[option]
+            print(("option is m", p[option]))
         elif option == "b":
-            print "option is b", p[option]
+            print(("option is b", p[option]))
         elif option == "c":
-            print "option is c", p[option]
+            print(("option is c", p[option]))
         elif option == "A":
-            print "option is A", p[option]
+            print(("option is A", p[option]))
         elif option == "func":
-            print "option is func", p[option]
+            print(("option is func", p[option]))
 
     args.append('--error'); args.append('yes')
-    print "\nNow comes an exception (!)"
+    print("\nNow comes an exception (!)")
     p = cmldict(args, defaults, 1)
 
 # used in StringFunction doc as an example:
@@ -1543,7 +1543,7 @@ def _test_function(x, c=0, a=1, b=2):
 
 # -- tests ---
 def f(a, b, max=1.2, min=2.2):  # some function
-    print 'a=%g, b=%g, max=%g, min=%g' % (a,b,max,min)
+    print(('a=%g, b=%g, max=%g, min=%g' % (a,b,max,min)))
 
 
 class DoNothing(object):
@@ -1593,13 +1593,13 @@ class DoNothing(object):
 
     def __getattribute__(self, name):
         if name != 'silent' and not self.silent:
-            print 'ignoring action "%s" (DoNothing object)' % name
+            print(('ignoring action "%s" (DoNothing object)' % name))
         return DoNothing()
 
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         raise StopIteration()
 
 
@@ -1668,7 +1668,7 @@ class Recorder:
             if kwargs:
                 s += ', ' + ', '.join(['%s=%s' % (key, kwargs[key]) for key in kwargs])
             s += ')'
-            print s
+            print(s)
 
 class _RecordHelper:
     def __init__(self, obj, name, recorder):
@@ -1778,6 +1778,6 @@ if __name__ == '__main__':
     if task == 'debugregex':
         r = r'<(.*?)>'
         s = '<r1>is a tag</r1> and <s1>s1</s1> is too.'
-        print debugregex(r,s)
-        print debugregex(r'(\d+\.\d*)','a= 51.243 and b =1.45')
+        print((debugregex(r,s)))
+        print((debugregex(r'(\d+\.\d*)','a= 51.243 and b =1.45')))
 

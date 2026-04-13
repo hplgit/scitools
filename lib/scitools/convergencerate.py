@@ -17,8 +17,8 @@ Here is a simple example::
     e = [compute_error(hi) for hi in h]
 
     rates, C = OneDiscretizationPrm.pairwise_rates(h, e)
-    print C, rates  # see if rates converges
-    print 'final rate:', rates[-1]
+    print(C), rates  # see if rates converges
+    print('final rate:'), rates[-1]
 
 There is support for fitting more general error models, like
 C1*h^r1 + C2*h*dt^r2, with nonlinear least squares, but in that case it
@@ -154,17 +154,17 @@ class OneDiscretizationPrm(object):
 
         # linear least squares fit:
         a1, C1 = OneDiscretizationPrm.linear_loglog_fit(log(d), log(e))
-        print "linear LS fit: const=%e rate=%.1f" % (C1, a1)
+        print(("linear LS fit: const=%e rate=%.1f" % (C1, a1)))
 
         # nonlinear least squares fit (no log-log):
         a2, C2 = OneDiscretizationPrm.nonlinear_fit(d, e, initial_guess)
-        print "nonlinear LS fit: const=%e rate=%.1f" % (C2, a2)
+        print(("nonlinear LS fit: const=%e rate=%.1f" % (C2, a2)))
 
         # pairwise estimate of the rate:
         rates, C3 = OneDiscretizationPrm.pairwise_rates(d, e)
         a3 = rates[-1]
-        print "pairwise fit: const=%e rate=%.1f" % (C3, a3)
-        print "all rates:", rates
+        print(("pairwise fit: const=%e rate=%.1f" % (C3, a3)))
+        print(("all rates:", rates))
 
         if C1 < 0 or C2 < 0 or C3 < 0:
             raise ValueError('Some fits give negative const value! Cannot plot.')
@@ -329,7 +329,7 @@ def analyze_filedata():
         plot_title = ''
     from scitools.filetable import read
     data = read(f)
-    print data
+    print(data)
     OneDiscretizationPrm.analyze(data[:,0], data[:,1],
                                  initial_guess=(C,r),
                                  plot_title=plot_title)
@@ -342,7 +342,7 @@ def analyze_filedata():
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print 'Usage: %s filename C-guess r-guess [plot-title]' % sys.argv[0]
+        print(('Usage: %s filename C-guess r-guess [plot-title]' % sys.argv[0]))
     elif sys.argv[1] == 'example':
         _test1()
     else:

@@ -52,7 +52,7 @@ from ._Gui import *
 # get the version of Python
 v = sys.version.split()[0].split('.')
 if v[0] != '2':
-    print 'You must have at least Python version 2.0 to run Lumpy.'
+    print('You must have at least Python version 2.0 to run Lumpy.')
     sys.exit()
 
 minor = int(v[1])
@@ -194,7 +194,7 @@ class Thing(object):
         # the number of things.
         Thing.things_drawn += 1
         if Thing.things_drawn % 100 == 0:
-            print Thing.things_drawn
+            print((Thing.things_drawn))
             #self.diag.lumpy.update()
 
         # each thing has a list of tags: its own tag plus
@@ -206,7 +206,7 @@ class Thing(object):
 
         # invoke drawme in the child class
         drawn = self.drawme(diag, pos, flip, tags)
-        if drawn == None:
+        if drawn is None:
             drawn = [self]
 
         self.set_offset(pos)
@@ -451,11 +451,11 @@ class Instance(Mapping):
         else:
             # otherwise, display all of the instance variables
             if hasdict(val):
-                iter_ = iter(val.__dict__.items())
+                iter_ = iter(list(val.__dict__.items()))
             elif hasslots(val):
                 iter_ = [(k, getattr(val, k)) for k in val.__slots__]
             else:
-                t = [k for k, v in type(val).__dict__.items()
+                t = [k for k, v in list(type(val).__dict__.items())
                      if str(v).find('attribute') == 1]
                 iter_ = [(k, getattr(val, k)) for k in t]
 
@@ -467,7 +467,7 @@ class Instance(Mapping):
                 seq += make_bindings(lumpy, enumerate(val))
 
             if isinstance(val, dict):
-                seq += make_bindings(lumpy, iter(val.items()))
+                seq += make_bindings(lumpy, iter(list(val.items())))
 
         # if this instance has a name attribute, show it
         attr = '__name__'
@@ -492,7 +492,7 @@ class Frame(Mapping):
     """The graphical representation of a frame,
     implemented as a list of Bindings"""
     def __init__(self, lumpy, frame):
-        iter_ = iter(frame.locals.items())
+        iter_ = iter(list(frame.locals.items()))
         self.bindings = make_bindings(lumpy, iter_)
         self.label = frame.func
         self.boxoptions = dict(outline='blue')
@@ -564,7 +564,7 @@ class Class(Instance):
         """compute the maximum height between this class and
         a leaf class (one with no children)
         """
-        if self.height != None:
+        if self.height is not None:
             return
         if not self.childs:
             self.height = 0
@@ -579,7 +579,7 @@ class Class(Instance):
         """compute the maximum depth between this class and
         a root class (one with no parents)
         """
-        if self.depth != None:
+        if self.depth is not None:
             return
         if not self.parents:
             self.depth = 0
@@ -625,7 +625,7 @@ class ClassDiagramClass(Thing):
         # have to wait until the Lumpy representation of the stack
         # is complete before we can go looking for instance vars.
         for key, val in list(classobj.__dict__.items()):
-            if vars != None and key not in vars: continue
+            if vars is not None and key not in vars: continue
 
             if iscallable(val):
                 self.methods.append(val)
@@ -958,7 +958,7 @@ def make_thing(lumpy, val):
     # values
     if lumpy.pedantic:
         thing = lumpy.lookup(val)
-        if thing != None: return thing
+        if thing is not None: return thing
 
     # otherwise for simple immutable types, ignore aliasing and
     # just draw
@@ -970,7 +970,7 @@ def make_thing(lumpy, val):
 
     # now check for aliasing even if we're not pedantic
     thing = lumpy.lookup(val)
-    if thing != None: return thing
+    if thing is not None: return thing
 
     # check the type of the value and dispatch accordingly
     if type(val) == type(Lumpy) or type(val) == type(type(int)):
@@ -1018,7 +1018,7 @@ class Snapframe(object):
             try:
                 del self.locals[key]
             except KeyError:
-                print key, "this shouldn't happen"
+                print((key, "this shouldn't happen"))
 
 class Snapshot(object):
     """the data structure that represents a stack"""
@@ -1037,7 +1037,7 @@ class Snapshot(object):
     def spew(self):
         """print the frames in this snapshot"""
         for frame in self.frames:
-            print frame.func, frame
+            print((frame.func, frame))
 
     def clean(self, ref):
         """Remove all the variables in the reference stack from self"""
@@ -1103,7 +1103,7 @@ class Lumpy(Gui):
         """restrict this class so that when it is drawn, only
         the given vars are shown
         """
-        if vars == None: vars = []
+        if vars is None: vars = []
         self.instance_vars[classobj] = vars
 
     def opaque_class(self, classobj):
@@ -1126,7 +1126,7 @@ class Lumpy(Gui):
 
     def opaque_module(self, modobj):
         """make all classes defined in this module opaque"""
-        for var, val in modobj.__dict__.items():
+        for var, val in list(modobj.__dict__.items()):
             if type(val) == type(Lumpy):
                 self.opaque_class(val)
 
@@ -1178,7 +1178,7 @@ class Lumpy(Gui):
         if obj:
             thing = make_thing(self, obj)
         else:
-            if self.stack == None:
+            if self.stack is None:
                 self.make_stack()
             thing = self.stack
 
@@ -1216,13 +1216,13 @@ class Lumpy(Gui):
         """
 
         # if there is not already a snapshot, make one
-        if self.stack == None:
+        if self.stack is None:
             self.make_stack()
 
         # scan the the stack looking for has-a
         # relationships (note that we can't do this until the
         # stack is complete)
-        for val in self.values.values():
+        for val in list(self.values.values()):
             if isinstance(val, Instance) and val.cls is not None:
                 val.scan_bindings(val.cls)
 
@@ -1320,7 +1320,7 @@ class Diagram(object):
             arrow.draw(self)
 
     def update_arrows(self, n=None):
-        """update up to n arrows (or all of them is n==None)"""
+        """update up to n arrows (or all of them is n is None)"""
         i = 0
         for arrow in self.arrows:
             arrow.update()
@@ -1363,7 +1363,7 @@ class ClassDiagram(Diagram):
         or if there are none, then all the classes Lumpy has seen."""
         pos = Pos([2,2])
 
-        if self.classes == None:
+        if self.classes is None:
             classes = self.lumpy.get_class_list()
         else:
             classes = [make_thing(self.lumpy, cls) for cls in self.classes]
@@ -1382,7 +1382,7 @@ class ClassDiagram(Diagram):
 
         # if we're drawing all the classes, start with the roots;
         # otherwise draw the classes we were given.
-        if self.classes == None:
+        if self.classes is None:
             drawn = self.draw_classes(roots, pos)
         else:
             drawn = self.draw_classes(classes, pos)

@@ -364,7 +364,7 @@ def update_from_dolfin_array(dolfin_array, box_field):
     return box_field
 
 def _test(g):
-    print 'grid: %s' % g
+    print('grid: %s' % g)
 
     # function: 1 + x + y + z
     def f(*args):
@@ -394,44 +394,44 @@ def _test(g):
     midptindex = tuple(array(g.shape,int)/2)
     ptcoor = g[midptindex]
     # tuples with just one item does not work as indices
-    print 'mid point %s has indices %s' % (ptcoor, midptindex)
-    print 'f%s=%g' % (ptcoor, f(*ptcoor))
-    print 'u at %s: %g' % (midptindex, u[midptindex])
+    print('mid point %s has indices %s' % (ptcoor, midptindex))
+    print('f%s=%g' % (ptcoor, f(*ptcoor)))
+    print('u at %s: %g' % (midptindex, u[midptindex]))
     v_index = list(midptindex); v_index.append(slice(g.nsd))
-    print 'v at %s: %s' % (midptindex, v[v_index])
+    print('v at %s: %s' % (midptindex, v[v_index]))
 
     # test extraction of lines:
     if u.grid.nsd >= 2:
         direction = u.grid.nsd-1
         coor, u_coor, fixed_coor, snapped = \
               u.gridline(u.grid.min_coor, direction)
-        if snapped: print 'Error: snapped line'
-        print 'line in x[%d]-direction, starting at %s' % \
-              (direction, u.grid.min_coor)
-        print coor
-        print u_coor
+        if snapped: print('Error: snapped line')
+        print('line in x[%d]-direction, starting at %s' % \
+              (direction, u.grid.min_coor))
+        print(coor)
+        print(u_coor)
 
         direction = 0
         point = u.grid.min_coor.copy()
         point[direction+1] = u.grid.max_coor[direction+1]
         coor, u_coor, fixed_coor, snapped = \
               u.gridline(u.grid.min_coor, direction)
-        if snapped: print 'Error: snapped line'
-        print 'line in x[%d]-direction, starting at %s' % \
-              (direction, point)
-        print coor
-        print u_coor
+        if snapped: print('Error: snapped line')
+        print('line in x[%d]-direction, starting at %s' % \
+              (direction, point))
+        print(coor)
+        print(u_coor)
 
     if u.grid.nsd == 3:
         y_center = (u.grid.max_coor[1] + u.grid.min_coor[1])/2.0
         xc, yc, uc, fixed_coor, snapped = \
             u.gridplane(value=y_center, constant_coor=1)
-        print 'Plane y=%g:' % fixed_coor,
-        if snapped: print ' (snapped from y=%g)' % y_center
-        else: print
-        print xc
-        print yc
-        print uc
+        print('Plane y=%g:' % fixed_coor, end=' ')
+        if snapped: print(' (snapped from y=%g)' % y_center)
+        else: print()
+        print(xc)
+        print(yc)
+        print(uc)
 
 def _test2():
     g1 = UniformBoxGrid(min=0, max=1, division=4)

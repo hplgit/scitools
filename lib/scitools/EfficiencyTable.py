@@ -221,7 +221,7 @@ def _test(n):
                       setup='from scitools.numpyutils import iseq;' +
                       'n=%d' % n).timeit(5)
     e.add('for i in iseq(stop=n-1): pass', t3)
-    print e
+    print(e)
 
 if __name__ == '__main__':
     import sys

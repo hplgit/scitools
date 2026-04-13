@@ -1,4 +1,4 @@
-import math, numpy, wave, commands, sys, os
+import math, numpy, wave, subprocess, sys, os
 
 max_amplitude = 2**15-1 # iinfo('int16').max if numpy >= 1.0.3
 
@@ -49,7 +49,7 @@ def play(data, sample_rate=44100, player=None):
         if sys.platform[:3] == 'win':
             status = os.system('%s %s' %(player, tmpfile))
         else:
-            status, output = commands.getstatusoutput('%s %s' %(player, tmpfile))
+            status, output = subprocess.getstatusoutput('%s %s' %(player, tmpfile))
             msg += '\nError message:\n%s' %output
         if status != 0:
             raise OSError(msg)
@@ -58,7 +58,7 @@ def play(data, sample_rate=44100, player=None):
     if sys.platform[:5] == 'linux':
         open_commands = ['gnome-open', 'kmfclient exec', 'exo-open', 'xdg-open', 'open']
         for cmd in open_commands:
-            status, output = commands.getstatusoutput('%s %s' %(cmd, tmpfile))
+            status, output = subprocess.getstatusoutput('%s %s' %(cmd, tmpfile))
             if status == 0:
                 break
         if status != 0:
@@ -66,7 +66,7 @@ def play(data, sample_rate=44100, player=None):
                               ' keyword argument.')
 
     elif sys.platform == 'darwin':
-        commands.getstatusoutput('open %s' %tmpfile)
+        subprocess.getstatusoutput('open %s' %tmpfile)
     else:
         # assume windows
         os.system('start %s' %tmpfile)

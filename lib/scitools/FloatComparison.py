@@ -203,7 +203,7 @@ class FloatComparison:
         return self.gt(a, b, rtol, atol)
 
     def __str__(self):
-        """Return pretty print of operator, incl. tolerances."""
+        """Return pretty print(of) operator, incl. tolerances."""
         if self.comparison_op == '==':
             s = 'a == b, computed as abs(a-b) < %g + %g*abs(b)' % \
                 (FloatComparison.atol, FloatComparison.rtol)
@@ -253,17 +253,17 @@ def _test():
         f.set_absolute_tolerance(1E-4)
         f.set_relative_tolerance(1E-4)
 
-    print 'atol=%g, rtol=%g' % (float_eq.atol, float_eq.rtol)
+    print(('atol=%g, rtol=%g' % (float_eq.atol, float_eq.rtol)))
 
     def printout(f):
         r1 = f(a, b1)
-        print str(f) + ', a=%.16f, b=%.16f: ' % (a, b1) + str(r1)
+        print((str(f) + ', a=%.16f, b=%.16f: ' % (a, b1) + str(r1)))
         r2 = f(a, b2)
-        print str(f) + ', a=%.16f, b=%.16f: ' % (a, b2) + str(r2)
+        print((str(f) + ', a=%.16f, b=%.16f: ' % (a, b2) + str(r2)))
         r3 = f(a_a, a_b1)
-        print str(f) + ', a=%s, b=%s: ' % (a_a, a_b1) + str(r3)
+        print((str(f) + ', a=%s, b=%s: ' % (a_a, a_b1) + str(r3)))
         r4 = f(a_a, a_b2)
-        print str(f) + ', a=%s, b=%s: ' % (a_a, a_b2) + str(r4)
+        print((str(f) + ', a=%s, b=%s: ' % (a_a, a_b2) + str(r4)))
         return r1, r2, r3, r4
 
     ok = True
@@ -276,7 +276,7 @@ def _test():
             if True in res:
                 ok = False
     msg = 'works' if ok else 'does not work'
-    print '\nThe module', msg
+    print(('\nThe module', msg))
 
 
 if __name__ == '__main__':

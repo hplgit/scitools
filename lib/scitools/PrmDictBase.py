@@ -8,7 +8,7 @@ import numbers
 
 def message(m):
     if os.environ.get('DEBUG', '0') == '1':
-        print m
+        print(m)
 
 
 class PrmDictBase(object):
@@ -26,7 +26,7 @@ convenient features:
  - keeping all input data in one place
  - setting of one or more parameters where the type of the value
    must match the type of the previous (initial) value
- - pretty print of all defined parameters
+ - pretty print(of) all defined parameters
  - copying parameters from dictionaries to, e.g., local variables
    and back again, or to local namespaces and back again
  - easy transition from parameter dictionaries to more sophisticated
@@ -111,8 +111,8 @@ Here is an example::
 
         def compute2(self):
             # turn numerical parameters into local variables:
-            exec self.dicts2variables(self._prm_list)
-            # or exec self.dicts2variables(self.numerical_prm)  # selected prms
+            exec(self).dicts2variables(self._prm_list)
+            # or exec(self).dicts2variables(self.numerical_prm)  # selected prms
 
             # now we have local variables n, dt, tstop, density, Cp, k, L
             # that we can compute with, say
@@ -147,9 +147,9 @@ Here is an example::
                 k = list(d.keys())
                 k.sort(lambda a,b: cmp(a.lower(),b.lower()))
                 prm_names += k
-        print 'registered parameters:\n'
+        print('registered parameters:\n')
         for i in prm_names:
-            print i
+            print(i)
         # alternative (sort all in one bunch):
         # names = []
         # for d in self._prm_list:
@@ -163,7 +163,7 @@ Here is an example::
             keys = list(d.keys())
             keys.sort(lambda a,b: cmp(a.lower(),b.lower()))
             for prm in keys:
-                print '%s = %s' % (prm, d[prm])
+                print(('%s = %s' % (prm, d[prm])))
 
     def set(self, **kwargs):
         """Set kwargs data in parameter dictionaries."""
@@ -181,8 +181,8 @@ Here is an example::
                     if self.set_in_dict(prm, kwargs[prm], d):
                         _set = True
                         break
-                except TypeError, msg:
-                    print msg
+                except TypeError as msg:
+                    print(msg)
                     #break
                     sys.exit(1)  # type error is fatal
 
@@ -264,7 +264,7 @@ Here is an example::
                       'lambda self: self.%s["%s"], %s)' % \
                       (self.__class__.__name__, prm, ds, prm,
                        ' doc="read-only property"')
-                print cmd
+                print(cmd)
                 exec(cmd, global_namespace, locals())
 
     def dicts2namespace(self, namespace, dicts, overwrite=True):
@@ -286,7 +286,7 @@ Here is an example::
             else:
                 for key in d:
                     if key in namespace and not overwrite:
-                        print 'cannot overwrite %s' % key
+                        print(('cannot overwrite %s' % key))
                     else:
                         namespace[key] = d[key]
 
@@ -329,7 +329,7 @@ Here is an example::
         all parameters in dicts (list of dictionaries of parameters).
         For example, if dicts[1] has a key n with value 1.0, the
         statement 'n=1.0' will be included in the returned string.
-        The calling code will typically exec this returned string
+        The calling code will typically exec(this) returned string
         to make local variables (short hands) from parameters stored
         in dictionaries. (Note that such local variables are read-only,
         changing their values will not be reflected in the dictionaries!).
@@ -351,7 +351,7 @@ Here is an example::
         This is the inverse of the dicts2variables function.
 
         Usage:
-        exec self.dicts2variables(self.numerical_prm)
+        exec(self).dicts2variables(self.numerical_prm)
         # work with read-only n, dt, tstop
         ...
         # update (in case n, dt, tstop was changed):

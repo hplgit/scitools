@@ -14,6 +14,7 @@ import os, sys, operator, math
 #---- build doc string from _numpyload/util doc strings ----
 
 from . import _numpyload as _load
+import importlib
 _load.__doc__ += """
 
 Example on what gets imported
@@ -23,19 +24,19 @@ Example on what gets imported
 Python module after import of numpytools (or _numpyload):
 
 # default:
-unix/DOS> python -c "from numpytools import *; print basic_NumPy"
+unix/DOS> python -c "from numpytools import *; print(basic_NumPy)"
 numpy
 
 # set the NUMPYARRAY environment variable:
-unix/DOS> python -c "import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print basic_NumPy"
+unix/DOS> python -c "import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print(basic_NumPy)"
 Numeric
 
 # import a Numerical Python module (precedence over NUMPYARRAY variable):
-unix/DOS> python -c "import numpy; import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print basic_NumPy"
+unix/DOS> python -c "import numpy; import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print(basic_NumPy)"
 numpy
 
 # add flag on the command line (precedence over import):
-unix/DOS> python -c "import numpy; import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print basic_NumPy" --numarray
+unix/DOS> python -c "import numpy; import os; os.environ['NUMPYARRAY']='Numeric'; from numpytools import *; print(basic_NumPy)" --numarray
 numarray
 """
 
@@ -63,14 +64,14 @@ if __name__ == '__main__':
         Verify that some packages imported by numpytools
         works for Numeric, numarray, or numpy.
         """
-        print "\nUsing %s in %s" % (N.basic_NumPy, N.__name__)
+        print(("\nUsing %s in %s" % (N.basic_NumPy, N.__name__)))
         for name in namecheck:
             if hasattr(N, name):
-                print "%s.%s : %s " % (
+                print(("%s.%s : %s " % (
                     N.__name__,
                     name,
-                    eval("N.%s.__name__" % name))
-        print ""
+                    eval("N.%s.__name__" % name))))
+        print("")
 
     def _test1():
         """Call verify function for N as Numeric, numarray, and numpy."""
@@ -78,10 +79,10 @@ if __name__ == '__main__':
         from . import numpytools as N
         verify(N)
         sys.argv[-1] = '--numarray'
-        reload(N)
+        importlib.reload(N)
         verify(N)
         sys.argv[-1] = '--numpy'
-        reload(N)
+        importlib.reload(N)
         verify(N)
 
     #_test1()
@@ -163,12 +164,12 @@ if __name__ == '__main__':
         try:
             __import__(arg[2:])
         except:
-            print "You don't have %s installed" %arg[2:]
+            print(("You don't have %s installed" %arg[2:]))
             continue
 
         sys.argv[-1] = arg
-        print '\nNow testing with system arg %10s\n%s' %(arg, '='*38)
-        print N, dir(N)
-        reload(N);  verify(N)
+        print(('\nNow testing with system arg %10s\n%s' %(arg, '='*38)))
+        print((N, dir(N)))
+        importlib.reload(N);  verify(N)
         suite = unittest.makeSuite(numpytoolsTest)
         unittest.TextTestRunner(verbosity=2).run(suite)

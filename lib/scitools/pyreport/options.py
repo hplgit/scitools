@@ -9,7 +9,8 @@ from optparse import OptionParser
 import sys
 
 # Local imports
-from version import __version__
+from .version import __version__
+from functools import reduce
 
 def silent_execute( string, return_stderr=True):
     """ Execute the given shell adding '> /dev/null' if under a posix OS 
@@ -86,12 +87,12 @@ option_parser.add_option("-t", "--type", metavar="TYPE",
                 action="store", type="string", dest="outtype",
                 default=None,
                 help="output to TYPE, TYPE can be " + 
-                                        ", ".join(allowed_types.keys()))
+                                        ", ".join(list(allowed_types.keys())))
 option_parser.add_option("-f", "--figuretype", metavar="TYPE",
                 action="store", type="string", dest="figuretype",
                 default=None,
                 help="output figure type TYPE  (TYPE can be of %s depending on report output type)" 
-                % (", ".join(reduce(lambda x, y : set(x).union(y) , allowed_types.values()) )) )
+                % (", ".join(reduce(lambda x, y : set(x).union(y) , list(allowed_types.values())) )) )
 option_parser.add_option("-c", "--commentchar",
                 action="store", dest="commentchar", default="!",
                 metavar="CHAR",
@@ -110,7 +111,7 @@ option_parser.add_option("-p", "--nopyreport",
                      "file to specify options")
 option_parser.add_option("-q", "--quiet",
                 action="store_true", dest="quiet", default=False,
-                help="don't print status messages to stderr")
+                help="don't print(status) messages to stderr")
 option_parser.add_option("-v", "--verbose",
                 action="store_true", dest="verbose", default=False,
                 help="print all the message, including tex messages")
@@ -145,7 +146,7 @@ def parse_options(arguments, initial_options=copy.copy(default_options),
     ({'outfilename': 'foo', 'outtype': 'ps', 'silent': True}, [])
     """
     (options, args) = option_parser.parse_args(args=arguments)
-    if (options.outtype == None and 
+    if (options.outtype is None and 
             options.outfilename and 
             '.' in options.outfilename) :
         basename, extension = os.path.splitext(options.outfilename)

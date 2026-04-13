@@ -5,6 +5,10 @@
 """
 
 import os, sys, operator, math
+import collections.abc
+import numbers
+from functools import reduce
+import importlib
 
 
 # copied into this file by preprocess.py:
@@ -190,7 +194,7 @@ if basic_NumPy is None:
 
 # check the environment variable NUMPYARRAY:
 if basic_NumPy is None:
-    if os.environ.has_key('NUMPYARRAY'):
+    if 'NUMPYARRAY' in os.environ:
         if   os.environ['NUMPYARRAY'] == 'numpy':
             basic_NumPy = 'numpy'
         elif os.environ['NUMPYARRAY'] == 'numarray':
@@ -224,30 +228,30 @@ _NumPy_modules = (
 if basic_NumPy == 'numpy':
     try:
         # fix backward compatibility with Numeric names:
-	import numpy
-	oldversion = (numpy.version.version[0] == '0')
+        import numpy
+        oldversion = (numpy.version.version[0] == '0')
         majorversion = int(numpy.version.version[0])
         minorversion = int(numpy.version.version[2])
-	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
-	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
-		n, module = _numpy_name.split('.')
-		exec "from %s import %s as %s" %(n, module, _Numeric_name)
-	    elif oldversion and (_Numeric_name == 'MLab'):
-		from numpy.lib import mlab as MLab
+        for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
+            if oldversion and (_Numeric_name in ['RNG', 'FFT']):
+                n, module = _numpy_name.split('.')
+                exec("from %s import %s as %s" %(n, module, _Numeric_name))
+            elif oldversion and (_Numeric_name == 'MLab'):
+                from numpy.lib import mlab as MLab
             elif (oldversion or (majorversion == 1 and minorversion < 1)) \
                      and (_Numeric_name == 'MA'):
                 import numpy.core.ma; MA = numpy.core.ma
-	    elif _numpy_name != '':
-		exec 'import %s; %s = %s' % \
-		(_numpy_name, _Numeric_name, _numpy_name)
+            elif _numpy_name != '':
+                exec('import %s; %s = %s' % \
+                (_numpy_name, _Numeric_name, _numpy_name))
 
-	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
+        del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
-	from numpy import *
-	if not oldversion:
-	    # get the old names too (NewAxis, Float, etc.):
-	    from numpy.oldnumeric import *
-	del oldversion
+        from numpy import *
+        if not oldversion:
+            # get the old names too (NewAxis, Float, etc.):
+            from numpy.oldnumeric import *
+        del oldversion
         # define new names compatible with Numeric:
         LinearAlgebra.solve_linear_equations = linalg.solve
         LinearAlgebra.inverse = linalg.inv
@@ -271,9 +275,9 @@ if basic_NumPy == 'numpy':
             return a.max()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return max(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -284,9 +288,9 @@ if basic_NumPy == 'numpy':
             return a.min()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return min(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -297,8 +301,8 @@ if basic_NumPy == 'numarray':
     try:
         for _Numeric_name, _numarray_name, _dummy1 in _NumPy_modules[1:]:
             if _numarray_name:
-                exec 'import %s; %s = %s' % \
-                     (_numarray_name, _Numeric_name, _numarray_name)
+                exec('import %s; %s = %s' % \
+                     (_numarray_name, _Numeric_name, _numarray_name))
 
         # RNG is not supported, make an object that gives an error message:
         class __Dummy:
@@ -325,9 +329,9 @@ if basic_NumPy == 'numarray':
             return a.max()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return max(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -338,9 +342,9 @@ if basic_NumPy == 'numarray':
             return a.min()
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return min(a)  # does not work for nested sequences
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -351,7 +355,7 @@ if basic_NumPy == 'Numeric':
     try:
         for _Numeric_name, _dummy1, _dummy2 in _NumPy_modules[1:]:
             if _Numeric_name != 'MA':  # exclude MA, see comment above
-                exec 'import %s' % _Numeric_name
+                exec('import %s' % _Numeric_name)
         del _Numeric_name, _dummy1, _dummy2, _NumPy_modules
 
         from Numeric import *
@@ -429,9 +433,9 @@ if basic_NumPy == 'Numeric':
             return max(a.flat)  # use Python's list min
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return max(a)
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmax of %s not supported' % type(a))
@@ -443,9 +447,9 @@ if basic_NumPy == 'Numeric':
             return min(a.flat)
         except AttributeError:
             # not a NumPy array
-            if operator.isSequenceType(a):
+            if isinstance(a, collections.abc.Sequence):
                 return min(a)
-            elif operator.isNumberType(a):
+            elif isinstance(a, numbers.Number):
                 return a
             else:
                 raise TypeError('arrmin of %s not supported' % type(a))
@@ -499,7 +503,7 @@ def NumPy_type(a):
 	return "tuple"
     elif isinstance(a, list):
 	return "list"
-    exec "import %s" % basic_NumPy # Why isn't basic_NumPy imported?
+    exec("import %s" % basic_NumPy) # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy
 
@@ -615,7 +619,7 @@ if __name__.find('numpyutils') != -1:
 # modules (Numeric, numpy, numarray)
 
 import operator
-from FloatComparison import float_eq, float_ne, float_lt, float_le, \
+from .FloatComparison import float_eq, float_ne, float_lt, float_le, \
      float_gt, float_ge
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
@@ -745,7 +749,7 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
 
     import types
     def fixed(coor):
-        return isinstance(coor, (float, complex, int, types.NoneType))
+        return isinstance(coor, (float, complex, int, type(None)))
 
     if not fixed(x):
         x = asarray(x)
@@ -968,10 +972,10 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
     m, n = A.shape
     V = zeros((m,n))
 
-    for j in xrange(n):
+    for j in range(n):
         v0 = A[:,j]
         v = v0.copy()
-        for i in xrange(j):
+        for i in range(j):
             vi = V[:,i]
 
             if (abs(vi) > tol).any():
@@ -979,11 +983,11 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
         V[:,j] = v
 
     if remove_null_vectors:
-        indices = [i for i in xrange(n) if (abs(V[:,i]) < tol).all()]
-        V = V[ix_(range(m), indices)]
+        indices = [i for i in range(n) if (abs(V[:,i]) < tol).all()]
+        V = V[ix_(list(range(m)), indices)]
 
     if normalize:
-        for j in xrange(V.shape[1]):
+        for j in range(V.shape[1]):
             V[:,j] /= linalg.norm(V[:,j])
 
     if remove_noise:
@@ -1838,7 +1842,7 @@ def NumPy_array_iterator(a, **kwargs):
     # build the code of the generator function in a text string
     # (since the number of nested loops needed to iterate over all
     # elements are parameterized through len(a.shape))
-    dims = range(len(a.shape))
+    dims = list(range(len(a.shape)))
     offset_code1 = ['offset%d_start=0' % d for d in dims]
     offset_code2 = ['offset%d_stop=0'  % d for d in dims]
     for d in range(len(a.shape)):
@@ -1860,9 +1864,9 @@ def NumPy_array_iterator(a, **kwargs):
     no_value = kwargs.get('no_value', False)
 
     for line in offset_code1:
-        exec line
+        exec(line)
     for line in offset_code2:
-        exec line
+        exec(line)
     code = 'def nested_loops(a):\n'
     indentation = ' '*4
     indent = '' + indentation
@@ -1877,7 +1881,7 @@ def NumPy_array_iterator(a, **kwargs):
         code += indent + 'yield ' + index
     else:
         code += indent + 'yield ' + 'a[%s]' % index + ', (' + index + ')'
-    exec code
+    exec(code)
     return nested_loops, code
 
 def compute_histogram(samples, nbins=50, piecewise_constant=True):
@@ -1941,9 +1945,9 @@ def factorial(n, method='reduce'):
     ==========================   =====================
 
     """
-    if not isinstance(n, (int, long, float)):
+    if not isinstance(n, (int, float)):
         raise TypeError('factorial(n): n must be integer not %s' % type(n))
-    n = long(n)
+    n = int(n)
 
     if n == 0 or n == 1:
         return 1
@@ -1959,26 +1963,26 @@ def factorial(n, method='reduce'):
         else:
             return n*factorial(n-1, method)
     elif method == 'lambda recursive':
-        fc = lambda n: n and fc(n-1)*long(n) or 1
+        fc = lambda n: n and fc(n-1)*int(n) or 1
         return fc(n)
     elif method == 'lambda functional':
         fc = lambda n: n<=0 or \
-             reduce(lambda a,b: long(a)*long(b), xrange(1,n+1))
+             reduce(lambda a,b: int(a)*int(b), list(range(1,n+1)))
         return fc(n)
     elif method == 'lambda list comprehension':
         fc = lambda n: [j for j in [1] for i in range(2,n+1) \
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        return reduce(operator.mul, xrange(2, n+1))
+        return reduce(operator.mul, list(range(2, n+1)))
     elif method == 'scipy':
         try:
             import scipy.misc.common as sc
             return sc.factorial(n)
         except ImportError:
-            print 'numpyutils.factorial: scipy is not available'
-            print 'default method="reduce" is used instead'
-            return reduce(operator.mul, xrange(2, n+1))
+            print('numpyutils.factorial: scipy is not available')
+            print('default method="reduce" is used instead')
+            return reduce(operator.mul, list(range(2, n+1)))
             # or return factorial(n)
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
@@ -1999,7 +2003,7 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
         msg = '%s  copy of array %s, from %s to %s' % \
               (comment, a.shape, type(a), type(a_new))
         if message == 'warning':
-            print 'Warning: %s' % msg
+            print(('Warning: %s' % msg))
         elif message == 'exception':
             raise TypeError(msg)
     return a_new
@@ -2033,7 +2037,7 @@ def iseq(start=0, stop=None, inc=1):
     if stop is None: # allow isequence(3) to be 0, 1, 2, 3
         # take 1st arg as stop, start as 0, and inc=1
         stop = start; start = 0; inc = 1
-    return xrange(start, stop+inc, inc)
+    return list(range(start, stop+inc, inc))
 
 sequence = seq  # backward compatibility
 isequence = iseq  # backward compatibility
@@ -2125,7 +2129,7 @@ def arr(shape=None, element_type=float,
 
     if data is not None:
 
-        if not operator.isSequenceType(data):
+        if not isinstance(data, collections.abc.Sequence):
             raise TypeError('arr: data argument is not a sequence type')
 
         if isinstance(shape, (list,tuple)):
@@ -2148,12 +2152,12 @@ def arr(shape=None, element_type=float,
             raise TypeError(
                 'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
-        if not isinstance(file_, (basestring, file, StringIO)):
+        if not isinstance(file_, (str, file, StringIO)):
             raise TypeError(
                 'file_ argument must be a string (filename) or '\
                 'open file object, not %s' % type(file_))
 
-        if isinstance(file_, basestring):
+        if isinstance(file_, str):
             file_ = open(file_, 'r')
         # skip blank lines:
         while True:
@@ -2168,7 +2172,7 @@ def arr(shape=None, element_type=float,
                              ('d', element_type))
 
         d = array([float(word) for word in file_.read().split()])
-        if isinstance(file_, basestring):
+        if isinstance(file_, str):
             f.close()
         # shape array d:
         if ncolumns > 1:
@@ -2201,7 +2205,7 @@ def arr(shape=None, element_type=float,
             return linspace(interval[0], interval[1], shape)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print((e, 'of size %s' % shape))
 
     else:
         # no data, no file, just make zeros
@@ -2216,35 +2220,35 @@ def arr(shape=None, element_type=float,
             return zeros(shape, dtype=element_type, order=order)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print((e, 'of size %s' % shape))
 
 def _test():
     _test_FloatComparison()
     # test norm functions for multi-dimensional arrays:
-    a = array(range(27))
+    a = array(list(range(27)))
     a.shape = (3,3,3)
     functions = [norm_l2, norm_L2, norm_l1, norm_L1, norm_inf]
     results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]
     for f, r in zip(functions, results):
         if not float_eq(f(a), r):
-            print '%s failed: result=%g, not %g' % (f.__name__, f(a), r)
+            print(('%s failed: result=%g, not %g' % (f.__name__, f(a), r)))
 
     # Gram-Schmidt:
     A = array([[1,2,3], [3,4,5], [6,4,1]], float)
     V1 = Gram_Schmidt(A, normalize=True)
     V2 = Gram_Schmidt1(A)
     if not float_eq(V1, V2):
-        print 'The two Gram_Schmidt versions did not give equal results'
-        print 'Gram_Schmidt:\n', V1
-        print 'Gram_Schmidt1:\n', V2
+        print('The two Gram_Schmidt versions did not give equal results')
+        print(('Gram_Schmidt:\n', V1))
+        print(('Gram_Schmidt1:\n', V2))
 
     # Null space:
     K = array([[1,2,3], [1,2,3], [0,0,0], [-1, -2, -3]], float)
     #K = random.random(3*7).reshape(7,3) # does not work...
-    print 'K=\n', K
-    print 'null(K)=\n', null(K)
+    print(('K=\n', K))
+    print(('null(K)=\n', null(K)))
     r = K*null(K)
-    print 'K*null(K):', r
+    print(('K*null(K):', r))
 
 
 if __name__ == '__main__':
@@ -2253,7 +2257,7 @@ if __name__ == '__main__':
 
 #---- build doc string from _numpyload/util doc strings ----
 
-import _numpyload as _load
+from . import _numpyload as _load
 _load.__doc__ += """
 
 Example on what gets imported
@@ -2279,7 +2283,7 @@ unix/DOS> python -c "import numpy; import os; os.environ['NUMPYARRAY']='Numeric'
 numarray
 """
 
-import numpyutils as _utils
+from . import numpyutils as _utils
 # insert numpyutils and _numpyload documentation into the
 # doc string of this numpytools module:
 __doc__ = __doc__ % (_load.__doc__, _utils.__doc__)
@@ -2303,25 +2307,25 @@ if __name__ == '__main__':
         Verify that some packages imported by numpytools
         works for Numeric, numarray, or numpy.
         """
-        print "\nUsing %s in %s" % (N.basic_NumPy, N.__name__)
+        print(("\nUsing %s in %s" % (N.basic_NumPy, N.__name__)))
         for name in namecheck:
             if hasattr(N, name):
-                print "%s.%s : %s " % (
+                print(("%s.%s : %s " % (
                     N.__name__,
                     name,
-                    eval("N.%s.__name__" % name))
-        print ""
+                    eval("N.%s.__name__" % name))))
+        print("")
 
     def _test1():
         """Call verify function for N as Numeric, numarray, and numpy."""
         sys.argv.append('--Numeric')
-        import numpytools as N
+        from . import numpytools as N
         verify(N)
         sys.argv[-1] = '--numarray'
-        reload(N)
+        importlib.reload(N)
         verify(N)
         sys.argv[-1] = '--numpy'
-        reload(N)
+        importlib.reload(N)
         verify(N)
 
     #_test1()
@@ -2331,7 +2335,7 @@ if __name__ == '__main__':
 
     # Test meshgrid function
     import unittest
-    import numpytools as N
+    from . import numpytools as N
 
     class numpytoolsTest(unittest.TestCase):
         def setUp(self):
@@ -2403,12 +2407,12 @@ if __name__ == '__main__':
         try:
             __import__(arg[2:])
         except:
-            print "You don't have %s installed" %arg[2:]
+            print(("You don't have %s installed" %arg[2:]))
             continue
 
         sys.argv[-1] = arg
-        print '\nNow testing with system arg %10s\n%s' %(arg, '='*38)
-        print N, dir(N)
-        reload(N);  verify(N)
+        print(('\nNow testing with system arg %10s\n%s' %(arg, '='*38)))
+        print((N, dir(N)))
+        importlib.reload(N);  verify(N)
         suite = unittest.makeSuite(numpytoolsTest)
         unittest.TextTestRunner(verbosity=2).run(suite)

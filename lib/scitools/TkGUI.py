@@ -7,7 +7,7 @@ the book "Python Scripting for Computational Science".
 # ParameterInterface
 #
 
-import Tkinter, os
+import tkinter, os
 from scitools.misc import import_module
 Pmw = import_module('Pmw')
 
@@ -39,13 +39,13 @@ class DrawFunction:
         can also be set as keyword arguments in the configure method.
         """
         self.master = parent
-        self.top = Tkinter.Frame(self.master)
+        self.top = tkinter.Frame(self.master)
         # packed in self.pack(); the user can then place this
         # DrawFunction wherever it is desired in a big GUI
 
-        frame1 = Tkinter.Frame(self.top);  frame1.pack(side='top')
+        frame1 = tkinter.Frame(self.top);  frame1.pack(side='top')
         if yrange_widgets:
-            column1 = Tkinter.Frame(frame1)
+            column1 = tkinter.Frame(frame1)
             column1.pack(side='left')
             if ylabel:  yl = ylabel
             else:       yl = 'y'
@@ -76,11 +76,11 @@ class DrawFunction:
         self.g.bind('<ButtonPress>',   self.mouse_down)
         self.g.bind('<ButtonRelease>', self.mouse_up)
 
-        row1 = Tkinter.Frame(self.top)
+        row1 = tkinter.Frame(self.top)
         row1.pack(side='top')
-        Tkinter.Button(row1, text='Interpolate to grid',
+        tkinter.Button(row1, text='Interpolate to grid',
             width=20, command=self.interpolate).pack(side='left',padx=2)
-        Tkinter.Button(row1, text='Erase drawing',
+        tkinter.Button(row1, text='Erase drawing',
             width=20, command=self.erase).pack(side='left',padx=2)
 
         self.erase() # some init
@@ -276,7 +276,7 @@ class DrawFunctionDialog:
 
 
 def _test_DrawFunction():
-    root = Tkinter.Tk()
+    root = tkinter.Tk()
     Pmw.initialise(root)
     import scitools.misc; scitools.misc.fontscheme6(root)
     root.title('DrawFunction demo')
@@ -324,10 +324,10 @@ class CanvasCoords:
         self.xy_scale = self.canvas_x/self.x_range
 
     def print_coordinate_system(self):
-        print "canvas = (%d,%d)" % (self.canvas_x, self.canvas_y)
-        print "canvas origin = (%d,%d)" % (self.x_origin, self.y_origin)
-        print "range of physical x coordinate =", self.x_range
-        print "xy_scale (from physical to canvas): ", self.xy_scale
+        print(("canvas = (%d,%d)" % (self.canvas_x, self.canvas_y)))
+        print(("canvas origin = (%d,%d)" % (self.x_origin, self.y_origin)))
+        print(("range of physical x coordinate =", self.x_range))
+        print(("xy_scale (from physical to canvas): ", self.xy_scale))
 
     # --- transformations between physical and canvas coordinates: ---
 
@@ -380,8 +380,8 @@ class CanvasCoords:
     p2c4 = physical2canvas4
 
 def _CanvasCoords_test():
-    root = Tkinter.Tk()
-    c = Tkinter.Canvas(root,width=400, height=400)
+    root = tkinter.Tk()
+    c = tkinter.Canvas(root,width=400, height=400)
     c.pack()
     # let physical (x,y) be at (200,200) and let the x range be 2:
     C.set_coordinate_system(400,400, 200,200, 2.0)
@@ -575,7 +575,7 @@ def commandline2dict(argv, parameters):
     p = scitools.misc.cmldict(sys.argv[1:], cmlargs=None, validity=0)
     # p[key] holds all command-line args, we are only interested
     # in those keys corresponding to parameters.keys()
-    for key in p.keys():
+    for key in list(p.keys()):
         if key in list(parameters.keys()):
             parameters[key].set(p[key])
 
@@ -653,22 +653,22 @@ class InputPrmGUI(InputPrm):
         setting and getting the value in/from a GUI.
         """
         if unit is not None:
-            self._v = Tkinter.StringVar()  # value with unit
+            self._v = tkinter.StringVar()  # value with unit
         else:
             if str2type == float:
-                self._v = Tkinter.DoubleVar()
+                self._v = tkinter.DoubleVar()
                 self._validate = {'validator' : 'real'}
             elif str2type == str:
-                self._v = Tkinter.StringVar()
+                self._v = tkinter.StringVar()
             elif str2type == int:
-                self._v = Tkinter.IntVar()
+                self._v = tkinter.IntVar()
                 self._validate = {'validator' : 'int'}
             elif str2type == str2bool:
-                self._v = Tkinter.StringVar()
+                self._v = tkinter.StringVar()
             elif str2type == complex:
-                self._v = Tkinter.StringVar()
+                self._v = tkinter.StringVar()
             elif str2type == str2obj:
-                self._v = Tkinter.StringVar()
+                self._v = tkinter.StringVar()
             else:
                 raise ValueError(
                     'str2type %s for parameter %s is not supported' % \
@@ -723,7 +723,7 @@ class InputPrmGUI(InputPrm):
                 step = float(self._values[2])  # try if present
             except:
                 step = (max - min)/100.0       # default
-            self.widget = Tkinter.Scale(self.parent,
+            self.widget = tkinter.Scale(self.parent,
                      orient='horizontal',
                      from_=min, to=max,
                      tickinterval=(max - min)/5.0,
@@ -746,7 +746,7 @@ class InputPrmGUI(InputPrm):
                menubutton_textvariable=self._v
                )
         elif self._widget_type == 'checkbutton':
-            self.widget = Tkinter.Checkbutton(self.parent,
+            self.widget = tkinter.Checkbutton(self.parent,
                                               text=label,
                                               variable=self._v)
         # no packing of widgets
@@ -762,9 +762,9 @@ class InputPrmGUI(InputPrm):
         # is registered:
         try:
             gui = self._v.get()  # fails if value has unit
-        except ValueError, msg:
+        except ValueError as msg:
             if self.unit is None:
-                print msg, '\nvalue with unit, but no registered unit!'
+                print((msg, '\nvalue with unit, but no registered unit!'))
                 sys.exit(1)
             # else: ok, go on with self._scan and interpret
 
@@ -1024,7 +1024,7 @@ class Parameters:
         p = scitools.misc.cmldict(argv, cmlargs=None, validity=0)
         # p[key] holds all command-line args, we are only interested
         # in those keys corresponding to self.dict.keys()
-        for key in p.keys():
+        for key in list(p.keys()):
             if key.find('__') != -1:
                 key_blanks = key.replace('__', ' ')
             else:
@@ -1084,7 +1084,7 @@ def parametersGUI(p, parent, pack_side='top',
         frame.pack(side=pack_side, fill='both', expand=1)
         frame = frame.interior()
     else:
-        frame = Tkinter.Frame(parent, borderwidth=2)
+        frame = tkinter.Frame(parent, borderwidth=2)
         frame.pack(side=pack_side, fill='both', expand=1)
 
     widgets = []  # for alignment
@@ -1185,9 +1185,9 @@ class AutoSimVizGUI:
 
 
         self.master = parent
-        self.top = Tkinter.Frame(self.master)
+        self.top = tkinter.Frame(self.master)
         self.top.pack(expand=1, fill='both')  # could be moved to pack method...
-        self.top_columns = Tkinter.Frame(self.top)
+        self.top_columns = tkinter.Frame(self.top)
         self.top_columns.pack(expand=1, fill='both')
 
         self.pane = pane
@@ -1285,26 +1285,26 @@ class AutoSimVizGUI:
             parent = self.top_pane.pane('buttons')
         else:
             parent = self.top_columns
-        self.button_frame = Tkinter.Frame(parent)
+        self.button_frame = tkinter.Frame(parent)
         self.button_frame.pack(side='left')
 
         # put a help button first:
         if type(help) is type(""):  # description given?
             self.description = help
-            Tkinter.Button(self.button_frame, text="Help", width=10,
+            tkinter.Button(self.button_frame, text="Help", width=10,
                command=self._helpwindow).\
                pack(side='top', padx=5, pady=3, anchor="n")
 
 
         if logo is not None:
-            self.logo = Tkinter.PhotoImage(file=logo)
-            Tkinter.Label(self.button_frame, image=self.logo).\
+            self.logo = tkinter.PhotoImage(file=logo)
+            tkinter.Label(self.button_frame, image=self.logo).\
                          pack(side='top', pady=20)
 
         if buttons:
             for button_name, func in buttons:
                 width = max(len(button_name), 10)
-                Tkinter.Button(self.button_frame, text=button_name,
+                tkinter.Button(self.button_frame, text=button_name,
                            width=width, command=func).\
                            pack(side='top', padx=5, pady=3)
 
@@ -1339,12 +1339,12 @@ class AutoSimVizGUI:
                 parent = self.top_pane.pane('plot')
             else:
                 parent = self.top_columns
-            self.plotframe = Tkinter.Frame(parent)
+            self.plotframe = tkinter.Frame(parent)
             self.plotframe.pack(side='left', expand=1, fill='both')
             # size of plot canvas:
             width=400; total_height=500
         elif placement == 'bottom':
-            self.plotframe = Tkinter.Frame(self.top)
+            self.plotframe = tkinter.Frame(self.top)
             self.plotframe.pack(side='bottom', expand=1, fill='both')
             # size of plot canvas:
             width=None; total_height=no_of_plotframes*200
@@ -1356,7 +1356,7 @@ class AutoSimVizGUI:
                 self.g.append(Pmw.Blt.Graph(self.plotframe,
                                             width=width,height=height))
             except:
-                print "Python is not linked with Blt"; sys.exit(1)
+                print("Python is not linked with Blt"); sys.exit(1)
             # place the plot areas below each other:
             self.g[i].pack(side='top',expand=1, fill='both')
 
@@ -1449,8 +1449,8 @@ class AutoSimVizGUI:
         f = open(filename, 'r')
         lines = f.readlines()
         if len(lines) != len(self.data[graph][counter]['x']):
-            print "Blt vector has length=%d, but %s has %d lines" % \
-                  (len(self.data[graph][counter]['x']),len(lines))
+            print(("Blt vector has length=%d, but %s has %d lines" % \
+                  (len(self.data[graph][counter]['x']),len(lines))))
         for i in range(len(self.data[graph][counter]['x'])):
             self.data[graph][counter]['x'][i], \
             self.data[graph][counter]['y'][i] = \
@@ -1466,7 +1466,7 @@ class AutoSimVizGUI:
         containing self.description.
         """
         # read file into a text widget in a _separate_ window:
-        self.filewindow = Tkinter.Toplevel(self.master) # new window
+        self.filewindow = tkinter.Toplevel(self.master) # new window
 
         lines = self.description.split('\n')
         nlines = min(len(lines),30)
@@ -1482,7 +1482,7 @@ class AutoSimVizGUI:
         self.filetext.insert('end', self.description)
 
         # add a quit button:
-        Tkinter.Button(self.filewindow, text="Quit",
+        tkinter.Button(self.filewindow, text="Quit",
                command=self.filewindow.destroy).pack(pady=10)
 
 
@@ -1549,13 +1549,13 @@ class AutoSimVizCGI:
 """
         # perform simulation and visualization as next step
         #return s
-        print s
+        print(s)
 
     def footer(self):
         """Write out HTML footer instructions."""
         s = """\n</body></html>\n"""
         #return s
-        print s
+        print(s)
 
 def _test1_Parameters():
     d = {'A': 1.0, 'w': 0.2, 'func': 'siny', 'y0': 0.0}
@@ -1564,29 +1564,29 @@ def _test1_Parameters():
     p.add('tstop', 2.0, widget_type='slider', values=(0,10))
     p.add('plot', False)
     d = p.get()
-    print d
-    print repr(p)
+    print(d)
+    print((repr(p)))
     p['plot'] = True
     for name in p:
-        print 'p[%s]=%s' % (name, p[name])
+        print(('p[%s]=%s' % (name, p[name])))
     return p
 
 def _test1_Parameters_wGUI():
-    parent = Tkinter.Tk()
+    parent = tkinter.Tk()
     Pmw.initialise(parent)
     import scitools.misc
     scitools.misc.fontscheme1(parent)
     p = _test1_Parameters()
     parametersGUI(p, parent, scrolled=False)
     def get():
-        print p.get()
-    Tkinter.Button(parent, text='Dump', command=get).pack(pady=10)
-    Tkinter.Button(parent, text='Quit', command=parent.quit).pack(pady=10)
+        print((p.get()))
+    tkinter.Button(parent, text='Dump', command=get).pack(pady=10)
+    tkinter.Button(parent, text='Quit', command=parent.quit).pack(pady=10)
     parent.mainloop()
 
 if __name__ == '__main__':
     cmd = sys.argv[1] + '(' + '  '.join(sys.argv[2:]) + ')'
-    print cmd
+    print(cmd)
     exec(cmd)
 
 
@@ -1676,7 +1676,7 @@ class FuncSpec:
             self.image = kwargs['image']
         if 'function_object' in kwargs:
             self.function_object = kwargs['function_object']
-            if type(self.function_object) == types.ClassType:
+            if type(self.function_object) == type:
                 raise TypeError(
                     'class type, not instance, provided as '\
                     'function_object for %s' % self.name)
@@ -1716,7 +1716,7 @@ class FuncSpec:
                 'not %s' % type(self.vector))
 
         if self.description is not None:
-            if not isinstance(self.description, basestring):
+            if not isinstance(self.description, str):
                 raise TypeError(
                     'description must be string, not %s' % \
                     type(self.description))
@@ -1754,13 +1754,13 @@ class StringFormula:
     def __init__(self, parent, func_spec):
         self.fspec = func_spec
         self.master = parent
-        self.top = Tkinter.Frame(parent, borderwidth=2)
+        self.top = tkinter.Frame(parent, borderwidth=2)
         self.top.pack(side='top')
 
         # note that StringFunction works for scalar and vector fields!
         # just use [formula_x, formula_y]
 
-        self.formula = Tkinter.StringVar()
+        self.formula = tkinter.StringVar()
         if self.fspec.formula is not None:
             self.formula.set(self.fspec.formula)
 
@@ -1791,26 +1791,26 @@ class UserFunction:
     def __init__(self, parent, func_spec):
         self.fspec = func_spec
         self.master = parent
-        self.top = Tkinter.Frame(parent, borderwidth=2)
+        self.top = tkinter.Frame(parent, borderwidth=2)
         self.top.pack(side='top')
-        Tkinter.Label(self.top,
+        tkinter.Label(self.top,
         text=self.fspec.get_independent_variables()).pack()
         if self.fspec.formula:
             width = min(len(self.fspec.formula)+5, 30)
-            Tkinter.Label(self.top, text=self.fspec.formula,
+            tkinter.Label(self.top, text=self.fspec.formula,
                           width=width).pack()
         else:
-            print 'Warning: UserFunction, name=%s, has no formula!' % \
-                  self.fspec.name
-            Tkinter.Label(self.top, text='no function expression known').pack()
+            print(('Warning: UserFunction, name=%s, has no formula!' % \
+                  self.fspec.name))
+            tkinter.Label(self.top, text='no function expression known').pack()
         if self.fspec.parameters:
-            print self.fspec.parameters, type(self.fspec.parameters)
-            Tkinter.Label(self.top, text='parameters: ' +
-                          ', '.join(self.fspec.parameters.keys())).pack()
+            print((self.fspec.parameters, type(self.fspec.parameters)))
+            tkinter.Label(self.top, text='parameters: ' +
+                          ', '.join(list(self.fspec.parameters.keys()))).pack()
 
         if self.fspec.image is not None:
-            self.image = Tkinter.PhotoImage(file=self.fspec.image)
-            Tkinter.Label(self.top, image=self.image).pack()
+            self.image = tkinter.PhotoImage(file=self.fspec.image)
+            tkinter.Label(self.top, image=self.image).pack()
 
         # widgets for setting parameters:
         if self.fspec.parameters:
@@ -1873,7 +1873,7 @@ class FunctionChoices:
     """
     def __init__(self, parent, func_spec_list):
         self.master = parent
-        self.top = Tkinter.Frame(self.master, borderwidth=2)
+        self.top = tkinter.Frame(self.master, borderwidth=2)
         self.top.pack(expand=True, fill='both')
         self.nb = Pmw.NoteBook(self.top)
         self.func_spec_list = func_spec_list # list of FuncSpec objects
@@ -1919,14 +1919,14 @@ class FunctionSelector:
     """
     def __init__(self, parent):
         self.master = parent
-        self.top = Tkinter.Frame(self.master, borderwidth=2)
+        self.top = tkinter.Frame(self.master, borderwidth=2)
         self.top.pack(expand=True, fill='both')
         self.nb = Pmw.NoteBook(self.top)
         self.page = {}  # FunctionChoices widgets
 
     def add(self, name, func_spec_list):
         new_page = self.nb.add(name, tab_text=name)
-        group = Tkinter.Frame(new_page, borderwidth=2)
+        group = tkinter.Frame(new_page, borderwidth=2)
         group.pack(expand=True, fill='both')
         w = FunctionChoices(group, func_spec_list)
         self.page[name] = w
@@ -1970,9 +1970,9 @@ def _test_FunctionChoices(root):
             independent_variables=('q', 't'),
             function_object=MyFunc(0,0)),
           ]
-    print nb
+    print(nb)
     gui = FunctionChoices(root, nb)
-    Tkinter.Button(root, text='get',
+    tkinter.Button(root, text='get',
                    # note that gui is local so obj=gui is needed to
                    # remember the gui object...
                    command=gui.get).pack(pady=5)
@@ -2104,20 +2104,20 @@ def _test_FunctionSelector(root):
         I_func, page = s.get('initial condition')
         bc_func, page = s.get('boundary conditions')
         from scitools.misc import dump
-        print 'f_func:'
+        print('f_func:')
         dump(f_func, hide_nonpublic=False)
-        print 'I_func:'
+        print('I_func:')
         dump(I_func, hide_nonpublic=False)
-        print 'bc_func:'
+        print('bc_func:')
         dump(bc_func, hide_nonpublic=False)
 
-    Tkinter.Button(root, text='get',
+    tkinter.Button(root, text='get',
                    command=get).pack(pady=5)
     root.mainloop()
 
 
 def _FunctionSelector_test():
-    root = Tkinter.Tk()
+    root = tkinter.Tk()
     Pmw.initialise(root)
     import scitools.misc
     scitools.misc.fontscheme6(root)
@@ -2154,7 +2154,7 @@ class FuncDependenceViz:
         Gnuplot = import_module('Gnuplot')
         self.Gnuplot = Gnuplot
         self.master = master
-        self.top = Tkinter.Frame(master, borderwidth=2)
+        self.top = tkinter.Frame(master, borderwidth=2)
         self.top.pack()  # could leave this pack for a pack class function
 
         self.p_intervals = parameter_intervals
@@ -2166,14 +2166,14 @@ class FuncDependenceViz:
             # set parameter value to midpoint in interval:
             self.p[pname] = (self.p_intervals[pname][0] + \
                              self.p_intervals[pname][1])/2.0
-            self.slider_var[pname] = Tkinter.DoubleVar()
+            self.slider_var[pname] = tkinter.DoubleVar()
             self.slider_var[pname].set(self.p[pname])
 
         # define the sliders:
         for pname in self.p_intervals:
             pmin = self.p_intervals[pname][0]
             pmax = self.p_intervals[pname][1]
-            slider = Tkinter.Scale(self.top,
+            slider = tkinter.Scale(self.top,
                            orient='horizontal',
                            from_=pmin,
                            to=pmax,
@@ -2195,20 +2195,20 @@ class FuncDependenceViz:
             # does not work: slider.bind('<B1-Motion>', self.visualize)
 
         # define a widget row where xmin/xmax and n can be adjusted:
-        self.xmin = Tkinter.DoubleVar(); self.xmin.set(xmin)
-        self.xmax = Tkinter.DoubleVar(); self.xmax.set(xmax)
-        self.n = Tkinter.IntVar(); self.n.set(resolution)
+        self.xmin = tkinter.DoubleVar(); self.xmin.set(xmin)
+        self.xmax = tkinter.DoubleVar(); self.xmax.set(xmax)
+        self.n = tkinter.IntVar(); self.n.set(resolution)
 
-        row = Tkinter.Frame(self.top, borderwidth=2)
+        row = tkinter.Frame(self.top, borderwidth=2)
         row.pack()
-        Tkinter.Label(row, text="x min:").pack(side='left')
-        Tkinter.Entry(row, textvariable=self.xmin, width=5,
+        tkinter.Label(row, text="x min:").pack(side='left')
+        tkinter.Entry(row, textvariable=self.xmin, width=5,
                       justify='right').pack(side='left')
-        Tkinter.Label(row, text="  x max:").pack(side='left')
-        Tkinter.Entry(row, textvariable=self.xmax, width=5,
+        tkinter.Label(row, text="  x max:").pack(side='left')
+        tkinter.Entry(row, textvariable=self.xmax, width=5,
                       justify='right').pack(side='left')
-        Tkinter.Label(row, text="  no of points:").pack(side='left')
-        Tkinter.Entry(row, textvariable=self.n, width=3,
+        tkinter.Label(row, text="  no of points:").pack(side='left')
+        tkinter.Entry(row, textvariable=self.n, width=3,
                       justify='right').pack(side='left')
 
         # make graph widget or use a plotting program?
@@ -2222,7 +2222,7 @@ class FuncDependenceViz:
 
         self.viztool = viztool  # user-specified plotting tool
 
-        print have_blt, viztool
+        print((have_blt, viztool))
         if have_blt and viztool == "Pmw.Blt.Graph":
             self.g.pack(expand=1, fill='both')
         else:
@@ -2233,7 +2233,7 @@ class FuncDependenceViz:
         self.make_vectors()  # vectors for x and y values in plot
 
         # PostScript plot:
-        Tkinter.Button(row, text="Postscript plot",
+        tkinter.Button(row, text="Postscript plot",
                        command=self.psdump).pack(side='left',padx=5)
         # bind 'p' to dumping the plot in PostScript:
         # (must bind to master, not self.top)
@@ -2241,8 +2241,8 @@ class FuncDependenceViz:
         self.master.bind('<q>', self.quit)  # convenient
 
     def psdump(self, event=None):
-        import tkFileDialog
-        fname = tkFileDialog.SaveAs(
+        import tkinter.filedialog
+        fname = tkinter.filedialog.SaveAs(
                 filetypes=[('psfiles','*.ps')],
                 initialfile="tmp.ps",
                 title="Save plot in PostScript format").show()
@@ -2293,8 +2293,8 @@ class FuncDependenceViz:
         colors = ['red','blue','green','black','grey',
                   'black','yellow','orange']
         if len(self.funcs) > len(colors):
-            print "Cannot handle more than %d functions"\
-                  % len(self.funcs); sys.exit(1)
+            print(("Cannot handle more than %d functions"\
+                  % len(self.funcs))); sys.exit(1)
         color_counter = 0
         for curvename in self.funcs:
             if self.g.element_exists(curvename):
@@ -2385,7 +2385,7 @@ def _test_FuncDependenceViz():
 
     f = { 'U': U, 'F': F }   # function names and objects
 
-    root = Tkinter.Tk()
+    root = tkinter.Tk()
     Pmw.initialise(root)
     try:
         viztool = sys.argv[1]
@@ -2404,16 +2404,16 @@ def _test_FuncDependenceViz():
 
 
 def _test():
-    print 'Testing DrawFunction:'
+    print('Testing DrawFunction:')
     _test_DrawFunction()
-    print 'Testing CanvasCoords:'
+    print('Testing CanvasCoords:')
     _CanvasCoords_test()
-    print 'Testing FunctionSelector:'
+    print('Testing FunctionSelector:')
     _FunctionSelector_test()
-    print 'Testing ParameterInterface:'
+    print('Testing ParameterInterface:')
     _test1_Parameters()
     _test1_Parameters_wGUI()
-    print 'Testing FuncDependenceViz:'
+    print('Testing FuncDependenceViz:')
     _test_FuncDependenceViz()
 
 if __name__ == '__main__':
