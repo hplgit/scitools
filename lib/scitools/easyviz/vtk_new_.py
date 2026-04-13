@@ -34,23 +34,23 @@ Notes:
 
 """
 
-from __future__ import division
 
-from common import *
+
+from .common import *
 from scitools.globaldata import DEBUG, VERBOSE, OPTIMIZATION
 from scitools.misc import check_if_module_exists
 from scitools.numpyutils import allclose
-from misc import _update_from_config_file
+from .misc import _update_from_config_file
 
 check_if_module_exists('vtk', msg='You need to install the vtk package.', abort=False)
 import vtk
 import os
 
 check_if_module_exists('Tkinter', msg='You need to install the Tkinter package.')
-import Tkinter
+import tkinter
 # use old behavior in Tkinter module to get around issue with Tcl
 # (more info: http://www.python.org/doc/2.3/whatsnew/node18.html)
-Tkinter.wantobjects = 0
+tkinter.wantobjects = 0
 
 try:
     import vtkTkRenderWidget
@@ -83,7 +83,7 @@ if OPTIMIZATION == 'weave':
         try:
             import weave
         except ImportError:
-            print "Weave not available. Optimization turned off."
+            print("Weave not available. Optimization turned off.")
 
 
 class _VTKFigure(object):
@@ -93,14 +93,14 @@ class _VTKFigure(object):
         self.width = width
         self.height = height
         self.master = plt._master
-        self.root = Tkinter.Toplevel(self.master)
+        self.root = tkinter.Toplevel(self.master)
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.root.bind("<KeyPress-q>", self.close)
         self.root.minsize(200, 200)
         self.root.geometry('%sx%s' % (width,height))
         self.root.withdraw()
-        self.frame = Tkinter.Frame(self.root, relief='sunken', bd=2)
+        self.frame = tkinter.Frame(self.root, relief='sunken', bd=2)
         self.frame.pack(side='top', fill='both', expand=1)
         self.tkw = vtkTkRenderWidget.vtkTkRenderWidget(self.frame,
                                                        width=width,
@@ -153,7 +153,7 @@ class VTKBackend(BaseClass):
     def _init(self, *args, **kwargs):
         """Perform initialization that is special for this backend."""
 
-        self._master = Tkinter.Tk()
+        self._master = tkinter.Tk()
         self._master.withdraw()
         self.figure(self.getp('curfig'))
 
@@ -226,9 +226,9 @@ class VTKBackend(BaseClass):
             }
 
         if DEBUG:
-            print "Setting backend standard variables"
+            print("Setting backend standard variables")
             for disp in 'self._markers self._colors self._line_styles'.split():
-                print disp, eval(disp)
+                print(disp, eval(disp))
 
     def _get_color(self, color, default=None):
         if not (isinstance(color, (tuple,list)) and len(color) == 3):
@@ -240,7 +240,7 @@ class VTKBackend(BaseClass):
     def _set_scale(self, ax):
         """Set linear or logarithmic (base 10) axis scale."""
         if DEBUG:
-            print "Setting scales"
+            print("Setting scales")
         scale = ax.getp('scale')
         if scale == 'loglog':
             # use logarithmic scale on both x- and y-axis
@@ -258,7 +258,7 @@ class VTKBackend(BaseClass):
     def _set_labels(self, ax):
         """Add text labels for x-, y-, and z-axis."""
         if DEBUG:
-            print "Setting labels"
+            print("Setting labels")
         xlabel = ax.getp('xlabel')
         ylabel = ax.getp('ylabel')
         zlabel = ax.getp('zlabel')
@@ -275,7 +275,7 @@ class VTKBackend(BaseClass):
     def _set_title(self, ax):
         """Add a title at the top of the axis."""
         if DEBUG:
-            print "Setting title"
+            print("Setting title")
         title = self._fix_latex(ax.getp('title'))
         if title:
             tprop = vtk.vtkTextProperty()
@@ -297,7 +297,7 @@ class VTKBackend(BaseClass):
     def _set_limits(self, ax):
         """Set axis limits in x, y, and z direction."""
         if DEBUG:
-            print "Setting axis limits"
+            print("Setting axis limits")
         mode = ax.getp('mode')
         if mode == 'auto':
             # let plotting package set 'nice' axis limits in the x, y,
@@ -407,7 +407,7 @@ class VTKBackend(BaseClass):
     def _set_box(self, ax):
         """Turn box around axes boundary on or off."""
         if DEBUG:
-            print "Setting box"
+            print("Setting box")
         if ax.getp('box'):
             # display box
             pass
@@ -418,7 +418,7 @@ class VTKBackend(BaseClass):
     def _set_grid(self, ax):
         """Turn grid lines on or off."""
         if DEBUG:
-            print "Setting grid"
+            print("Setting grid")
         if ax.getp('grid'):
             # turn grid lines on
             pass
@@ -429,7 +429,7 @@ class VTKBackend(BaseClass):
     def _set_hidden_line_removal(self, ax):
         """Turn on/off hidden line removal for meshes."""
         if DEBUG:
-            print "Setting hidden line removal"
+            print("Setting hidden line removal")
         if ax.getp('hidden'):
             # turn hidden line removal on
             pass
@@ -440,7 +440,7 @@ class VTKBackend(BaseClass):
     def _set_colorbar(self, ax):
         """Add a colorbar to the axis."""
         if DEBUG:
-            print "Setting colorbar"
+            print("Setting colorbar")
         cbar = ax.getp('colorbar')
         if cbar.getp('visible'):
             # turn on colorbar
@@ -454,7 +454,7 @@ class VTKBackend(BaseClass):
     def _set_caxis(self, ax):
         """Set the color axis scale."""
         if DEBUG:
-            print "Setting caxis"
+            print("Setting caxis")
         if ax.getp('caxismode') == 'manual':
             cmin, cmax = ax.getp('caxis')
             # NOTE: cmin and cmax might be None:
@@ -469,7 +469,7 @@ class VTKBackend(BaseClass):
     def _set_colormap(self, ax):
         """Set the colormap."""
         if DEBUG:
-            print "Setting colormap"
+            print("Setting colormap")
         cmap = ax.getp('colormap')
         # cmap is plotting package dependent
         if not isinstance(cmap, vtk.vtkLookupTable):
@@ -479,7 +479,7 @@ class VTKBackend(BaseClass):
     def _set_view(self, ax):
         """Set viewpoint specification."""
         if DEBUG:
-            print "Setting view"
+            print("Setting view")
         cam = ax.getp('camera')
 
         view = cam.getp('view')
@@ -538,7 +538,7 @@ class VTKBackend(BaseClass):
 
     def _set_axis_props(self, ax):
         if DEBUG:
-            print "Setting axis properties"
+            print("Setting axis properties")
         self._set_title(ax)
         self._set_scale(ax)
         self._set_limits(ax)
@@ -922,7 +922,7 @@ for (int k=0; k<nz; k++) {
     def _add_line(self, item):
         """Add a 2D or 3D curve to the scene."""
         if DEBUG:
-            print "Adding a line"
+            print("Adding a line")
         # get data:
         x = item.getp('xdata')
         y = item.getp('ydata')
@@ -939,7 +939,7 @@ for (int k=0; k<nz; k++) {
 
     def _add_surface(self, item, shading='faceted'):
         if DEBUG:
-            print "Adding a surface"
+            print("Adding a surface")
 
         sgrid = self._create_2D_scalar_data(item)
 
@@ -988,7 +988,7 @@ for (int k=0; k<nz; k++) {
         # latter specifies that the contours should be placed at the
         # bottom (as in meshc or surfc).
         if DEBUG:
-            print "Adding contours"
+            print("Adding contours")
 
         sgrid = self._create_2D_scalar_data(item)
         plane = vtk.vtkStructuredGridGeometryFilter()
@@ -1081,7 +1081,7 @@ for (int k=0; k<nz; k++) {
 
     def _add_vectors(self, item):
         if DEBUG:
-            print "Adding vectors"
+            print("Adding vectors")
         # uncomment the following command if there is no support for
         # automatic scaling of vectors in the current plotting package:
         item.scale_vectors()
@@ -1141,7 +1141,7 @@ for (int k=0; k<nz; k++) {
 
     def _add_streams(self, item):
         if DEBUG:
-            print "Adding streams"
+            print("Adding streams")
 
         if rank(item.getp('udata')) == 3:
             sgrid = self._create_3D_vector_data(item)
@@ -1220,7 +1220,7 @@ for (int k=0; k<nz; k++) {
 
     def _add_isosurface(self, item):
         if DEBUG:
-            print "Adding a isosurface"
+            print("Adding a isosurface")
         # grid components:
         x, y, z = item.getp('xdata'), item.getp('ydata'), item.getp('zdata')
         v = item.getp('vdata')  # volume
@@ -1254,7 +1254,7 @@ for (int k=0; k<nz; k++) {
 
     def _add_slices(self, item, contours=False):
         if DEBUG:
-            print "Adding slices in a volume"
+            print("Adding slices in a volume")
 
         sgrid = self._create_3D_scalar_data(item)
 
@@ -1349,13 +1349,13 @@ for (int k=0; k<nz; k++) {
 
     def _add_contourslices(self, item):
         if DEBUG:
-            print "Adding contours in slice planes"
+            print("Adding contours in slice planes")
 
         self._add_slices(item, contours=True)
 
     def _set_figure_size(self, fig):
         if DEBUG:
-            print "Setting figure size"
+            print("Setting figure size")
         width, height = fig.getp('size')
         if width and height:
             # set figure width and height
@@ -1377,7 +1377,7 @@ for (int k=0; k<nz; k++) {
             # as fig._g
             name = 'Figure ' + str(fig.getp('number'))
             if DEBUG:
-                print "creating figure %s in backend" % name
+                print("creating figure %s in backend" % name)
 
             fig._g = _VTKFigure(self, title=name)
 
@@ -1426,7 +1426,7 @@ for (int k=0; k<nz; k++) {
         """Replot all axes and all plotitems in the backend."""
         # NOTE: only the current figure (gcf) is redrawn.
         if DEBUG:
-            print "Doing replot in backend"
+            print("Doing replot in backend")
 
         fig = self.gcf()
         # reset the plotting package instance in fig._g now if needed
@@ -1435,7 +1435,7 @@ for (int k=0; k<nz; k++) {
         self._set_figure_size(fig)
 
         nrows, ncolumns = fig.getp('axshape')
-        for axnr, ax in fig.getp('axes').items():
+        for axnr, ax in list(fig.getp('axes').items()):
             if ax.getp('numberofitems') == 0:
                 continue
             self._ax = ax  # link for faster access
@@ -1475,7 +1475,7 @@ for (int k=0; k<nz; k++) {
         if self.getp('show'):
             # display plot on the screen
             if DEBUG:
-                print "\nDumping plot data to screen\n"
+                print("\nDumping plot data to screen\n")
                 debug(self)
             pass
         self._g.display(show=self.getp('show'))
@@ -1540,7 +1540,7 @@ for (int k=0; k<nz; k++) {
             self._replot()
 
         if DEBUG:
-            print "Hardcopy to %s" % filename
+            print("Hardcopy to %s" % filename)
 
         basename, ext = os.path.splitext(filename)
         if not ext:

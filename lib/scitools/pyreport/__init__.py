@@ -24,4 +24,4 @@ __author__   = 'Gael Varoquaux'
 __license__  = 'BSD'
 __revision__ = "$Revision: $"
 
-from version import __version__
+from .version import __version__

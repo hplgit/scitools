@@ -118,19 +118,22 @@ def tobool(value):
     'off', or any integer) to a bool object. The string values are
     treated in a case-insensitive way.
     """
-    trues  = "1", "yes", "Yes", "YES", "true",  "True",  "on",  1
-    falses = "0", "no",  "No",  "NO",  "false", "False", "off", 0
-    value = value.lower() # case-insensitive check
-
-    if value in trues:
-        value = True
-    elif value in falses:
-        value = False
-    elif isinstance(value, int):
+    trues  = "1", "yes", "Yes", "YES", "true",  "True",  "on",  "On", "ON", 1
+    falses = "0", "no",  "No",  "NO",  "false", "False", "off", "Off", "OFF", 0
+    
+    if isinstance(value, int):
         return bool(value)
-    else:
-        raise ValueError('the value %s cannot be converted to bool' % value)
-    return value
+    
+    if isinstance(value, str):
+        value = value.split(';')[0].strip()
+        value_lower = value.lower()
+        
+        if value_lower in [t.lower() if isinstance(t, str) else t for t in trues]:
+            return True
+        elif value_lower in [f.lower() if isinstance(f, str) else f for f in falses]:
+            return False
+    
+    raise ValueError('the value %s cannot be converted to bool' % value)
 
 def _option_interpolation_error(files, section, option, value,
                                 str2type, read_only):
@@ -186,8 +189,8 @@ def load_config_file(name,
     @return: a SafeConfigParser object and a list of filenames of the
     files that were read to set parameters in the SafeConfigParser object.
     """
-    import ConfigParser
-    config = ConfigParser.SafeConfigParser(default_dict4intpl)
+    import configparser
+    config = configparser.ConfigParser(default_dict4intpl)
     if case_sensitive_options:
         config.optionxform = str
 
@@ -199,7 +202,7 @@ def load_config_file(name,
                                        '%s%s' % (name, extension))
     read_files = []
     if os.path.isfile(default_config_file):
-        config.readfp(open(default_config_file, 'r'))
+        config.read_file(open(default_config_file, 'r'))
         read_files.append(default_config_file)
     #else:
     #    print 'No data in', default_config_file
@@ -294,17 +297,16 @@ the same directory as the calling module in the package).
         data[section] = {}
         for option in config.options(section):
             value = config.get(section, option)
-            # check if value has the syntax "<str2type> expression"
+            value = value.split(';')[0].strip()
+            if not value:
+                continue
             str2type = None
             if value.startswith('<'):
                 read_only = False
                 gt = value.find('>')
                 str2type = value[1:gt]
                 value = value[gt+1:].strip()
-                # variable interpolation are destroyed by <str> specs;
-                # could process all values without %(...)s first and
-                # then remove all <type> specifications to make
-                # variable interpolation correct
+                value = value.split(';')[0].strip()
                 if '<%s>' % str2type in value:
                     _option_interpolation_error(files, section, option,
                                                 value, str2type, False)
@@ -313,8 +315,7 @@ the same directory as the calling module in the package).
                 gt = value.find('>')
                 str2type = value[2:gt]
                 value = value[gt+1:].strip()
-                # set this option in the config file so that
-                # variable interpolation may work:
+                value = value.split(';')[0].strip()
                 config.set(section, option, value)
                 if 'r<%s>' % str2type in value:
                     _option_interpolation_error(files, section, option,
@@ -357,9 +358,9 @@ the same directory as the calling module in the package).
                         del sys.argv[i]  # option
                         del sys.argv[i]  # value
                     except IndexError:
-                        print """
+                        print("""
 %s command-line option must be followed by a value!
-""" % cml_option
+""" % cml_option)
                         sys.exit(1)
 
                     data[section][option][VALUE] = \
@@ -470,8 +471,8 @@ data glob = <str> *_simulation_results.*
     pprint.pprint(data)
     data_values = values_only(data)
     pprint.pprint(data_values)
-    print dict2xml(data)
-    print dict2xml(data, syntax='plain')
+    print(dict2xml(data))
+    print(dict2xml(data, syntax='plain'))
 
 if __name__ == '__main__':
     _test()

@@ -28,8 +28,8 @@ comments (literate comments) embedded in the code in a pdf (or html, or rst...)
 import sys
 
 # Local imports
-from main import main
-from options import parse_options, option_parser
+from .main import main
+from .options import parse_options, option_parser
 
 #------------------------------- Entry point ---------------------------------
 def commandline_call():
@@ -41,7 +41,7 @@ def commandline_call():
         if len(args)==0:
             option_parser.print_help()
         else:
-            print  >> sys.stderr, "1 argument: input file"
+            print("1 argument: input file", file=sys.stderr)
         sys.exit(1)
 
     import time
@@ -57,7 +57,7 @@ def commandline_call():
     main(pyfile, overrides=options)
     # FIXME: wath about the options defined in the script: options.quiet
     if not 'quiet' in options:
-        print >>sys.stderr, "Ran script in %.2fs" % (time.time() - t1)
+        print("Ran script in %.2fs" % (time.time() - t1), file=sys.stderr)
 
 
 if __name__ == '__main__':

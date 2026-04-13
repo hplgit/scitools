@@ -52,7 +52,7 @@ from ._Gui import *
 # get the version of Python
 v = sys.version.split()[0].split('.')
 if v[0] != '2':
-    print 'You must have at least Python version 2.0 to run Lumpy.'
+    print('You must have at least Python version 2.0 to run Lumpy.')
     sys.exit()
 
 minor = int(v[1])
@@ -194,7 +194,7 @@ class Thing(object):
         # the number of things.
         Thing.things_drawn += 1
         if Thing.things_drawn % 100 == 0:
-            print Thing.things_drawn
+            print(Thing.things_drawn)
             #self.diag.lumpy.update()
 
         # each thing has a list of tags: its own tag plus
@@ -451,11 +451,11 @@ class Instance(Mapping):
         else:
             # otherwise, display all of the instance variables
             if hasdict(val):
-                iter_ = iter(val.__dict__.items())
+                iter_ = iter(list(val.__dict__.items()))
             elif hasslots(val):
                 iter_ = [(k, getattr(val, k)) for k in val.__slots__]
             else:
-                t = [k for k, v in type(val).__dict__.items()
+                t = [k for k, v in list(type(val).__dict__.items())
                      if str(v).find('attribute') == 1]
                 iter_ = [(k, getattr(val, k)) for k in t]
 
@@ -467,7 +467,7 @@ class Instance(Mapping):
                 seq += make_bindings(lumpy, enumerate(val))
 
             if isinstance(val, dict):
-                seq += make_bindings(lumpy, iter(val.items()))
+                seq += make_bindings(lumpy, iter(list(val.items())))
 
         # if this instance has a name attribute, show it
         attr = '__name__'
@@ -492,7 +492,7 @@ class Frame(Mapping):
     """The graphical representation of a frame,
     implemented as a list of Bindings"""
     def __init__(self, lumpy, frame):
-        iter_ = iter(frame.locals.items())
+        iter_ = iter(list(frame.locals.items()))
         self.bindings = make_bindings(lumpy, iter_)
         self.label = frame.func
         self.boxoptions = dict(outline='blue')
@@ -1018,7 +1018,7 @@ class Snapframe(object):
             try:
                 del self.locals[key]
             except KeyError:
-                print key, "this shouldn't happen"
+                print(key, "this shouldn't happen")
 
 class Snapshot(object):
     """the data structure that represents a stack"""
@@ -1037,7 +1037,7 @@ class Snapshot(object):
     def spew(self):
         """print the frames in this snapshot"""
         for frame in self.frames:
-            print frame.func, frame
+            print(frame.func, frame)
 
     def clean(self, ref):
         """Remove all the variables in the reference stack from self"""
@@ -1126,7 +1126,7 @@ class Lumpy(Gui):
 
     def opaque_module(self, modobj):
         """make all classes defined in this module opaque"""
-        for var, val in modobj.__dict__.items():
+        for var, val in list(modobj.__dict__.items()):
             if type(val) == type(Lumpy):
                 self.opaque_class(val)
 
@@ -1222,7 +1222,7 @@ class Lumpy(Gui):
         # scan the the stack looking for has-a
         # relationships (note that we can't do this until the
         # stack is complete)
-        for val in self.values.values():
+        for val in list(self.values.values()):
             if isinstance(val, Instance) and val.cls is not None:
                 val.scan_bindings(val.cls)
 

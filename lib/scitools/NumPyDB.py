@@ -153,7 +153,7 @@ class NumPyDB_pickle (NumPyDB):
         fd.close()
         return a, id
 
-import cPickle
+import pickle
 
 class NumPyDB_cPickle (NumPyDB):
     """Use basic cPickle class."""
@@ -167,7 +167,7 @@ class NumPyDB_cPickle (NumPyDB):
         fd = open(self.dn, 'a');  fm = open(self.pn, 'a')
         # fd.tell(): return current position in datafile
         fm.write("%d\t\t %s\n" % (fd.tell(), identifier))
-        cPickle.dump(a, fd, 1)  # 1: binary storage
+        pickle.dump(a, fd, 1)  # 1: binary storage
         fd.close();  fm.close()
 
     def load(self, identifier, bestapprox=None):
@@ -182,7 +182,7 @@ class NumPyDB_cPickle (NumPyDB):
         if pos < 0: return [None, "not found"]
         fd = open(self.dn, 'r')
         fd.seek(pos)
-        a = cPickle.load(fd)
+        a = pickle.load(fd)
         fd.close()
         return [a, id]
 
@@ -281,7 +281,7 @@ def main(n, length, method, name):
         raise ValueError("illegal method name='%s'" % method)
 
     import time
-    t0 = time.clock()
+    t0 = time.perf_counter()
     for i in range(n):
         u = arange(i, length/2+i, 0.4999999)
         # (generate numbers with many digits so repr(u) has
@@ -301,23 +301,23 @@ def main(n, length, method, name):
         raise ValueError("illegal method name='%s'" % method)
 
     w = datain.load('time=4')
-    print "identifier='time=4':", w
+    print("identifier='time=4':", w)
     # not found, no exact match for 't=4', should have
     # 'time=4.000000e+00'
     w = datain.load('time=4.000000e+00')
-    print "identifier='time=4.000000e+00': found"
-    if len(w[0]) < 20: print w[0]
+    print("identifier='time=4.000000e+00': found")
+    if len(w[0]) < 20: print(w[0])
 
     w = datain.load('time=5', bestapprox=_test_dist)
-    print "identifier='time=5' and bestapprox=_test_dest found"
-    if len(w[0]) < 20: print w[0]
-    t1 = time.clock()
-    print "%s %.2f s" % (out, t1-t0)
+    print("identifier='time=5' and bestapprox=_test_dest found")
+    if len(w[0]) < 20: print(w[0])
+    t1 = time.perf_counter()
+    print("%s %.2f s" % (out, t1-t0))
     if os.path.isfile(name+'.dat'):
         filesize = os.path.getsize(name+'.dat')/1000000.0
     elif os.path.isfile(name):  # shelve technique leads to no extension
         filesize = os.path.getsize(name)/1000000.0
-    print "filesize=%.2fMb\n\n" % filesize
+    print("filesize=%.2fMb\n\n" % filesize)
     for filename in (name+'.dat', name+'.map', name):
         if os.path.isfile(filename):
             os.remove(filename)
@@ -329,6 +329,6 @@ if __name__ == '__main__':
     except:  length = 10
     try:     methods = [sys.argv[3]]
     except:  methods = ['pickle','cPickle','shelve','text']
-    print 'NumPy array type:', basic_NumPy
+    print('NumPy array type:', basic_NumPy)
     for method in methods:
         main(n, length, method, "tmpdata_" + method)

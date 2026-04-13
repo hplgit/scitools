@@ -18,7 +18,7 @@ __doc__ += open(os.path.join(os.path.dirname(__file__), 'scitools.cfg')).read()
 
 if hasattr(__name__, 'VERBOSE'):  # test if we have global data present...
     if VERBOSE >= 3:
-        print 'global data import: no need to initialize data'
+        print('global data import: no need to initialize data')
 else:
     # initialize global data from file - this is only done once
 
@@ -46,6 +46,6 @@ else:
     backend = _config_data['easyviz']['backend'][0]
 
     if VERBOSE >= 2:
-        print 'Initialized SAFECODE=%s, VERBOSE=%s, DEBUG=%s from %s' % \
-              (SAFECODE, VERBOSE, DEBUG, ', '.join(_files))
+        print('Initialized SAFECODE=%s, VERBOSE=%s, DEBUG=%s from %s' % \
+              (SAFECODE, VERBOSE, DEBUG, ', '.join(_files)))
 
