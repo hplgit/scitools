@@ -25,7 +25,7 @@ def next(clear_figure=False, prompt='', pause=0,
         hardcopy('tmp_easyviz_plot%03d.eps' % hardcopy_counter, color=True)
         hardcopy_counter += 1
     if prompt:
-        raw_input(prompt)
+        input(prompt)
     if pause:
         time.sleep(pause)
     if clear_figure:

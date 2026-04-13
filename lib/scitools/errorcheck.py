@@ -255,7 +255,7 @@ def right_type(a, expected_types, raise_exception=True):
         if a_is_class_def:
             # a is a class object
             #print 'a is class definition'
-            if type(a) == types.ClassType:
+            if type(a) == type:
                 try:
                     if issubclass(a, tp):
                         match = True
@@ -321,12 +321,12 @@ def _test():
         pass
 
     C = myclass()
-    print right_type(myfunc, [callable, float, int])
-    print right_type(A, [float, int])
-    print right_type(C, [myclass])
-    print right_type(myclass, [myclass])
-    print right_type(B, tuple, raise_exception=False)
-    print message
+    print(right_type(myfunc, [callable, float, int]))
+    print(right_type(A, [float, int]))
+    print(right_type(C, [myclass]))
+    print(right_type(myclass, [myclass]))
+    print(right_type(B, tuple, raise_exception=False))
+    print(message)
 
 if __name__ == '__main__':
     _test()

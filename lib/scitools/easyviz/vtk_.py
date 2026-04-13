@@ -1,4 +1,4 @@
-from common import *
+from .common import *
 from scitools.numpyutils import ravel, zeros, array, allclose, rank, \
      meshgrid, newaxis
 from scitools.globaldata import DEBUG, VERBOSE
@@ -10,10 +10,10 @@ import vtk
 #import vtk.util.colors
 import os
 
-import Tkinter
+import tkinter
 # use old behavior in Tkinter module to get around issue with Tcl
 # (more info: http://www.python.org/doc/2.3/whatsnew/node18.html)
-Tkinter.wantobjects = 0
+tkinter.wantobjects = 0
 
 try: import vtkTkRenderWidget
 except:
@@ -80,16 +80,16 @@ class VtkBackend(BaseClass):
             del _graphics_fact
             del _image_fact
             del v
-        except Exception, msg:
+        except Exception as msg:
             if DEBUG:
-                print "No mesa", msg
+                print("No mesa", msg)
 
     def _create_Tk_gui(self):
         fig = self.gcf()
         if self._master is None:
-            self._master = Tkinter.Tk()
+            self._master = tkinter.Tk()
             self._master.withdraw()
-        fig._root = Tkinter.Toplevel(self._master)
+        fig._root = tkinter.Toplevel(self._master)
         fig._root.title("Easyviz VTK Data Visualizer - Figure %d" % \
                         self._attrs['curfig'])
         # if the window is closed, we should delete the current figure and
@@ -101,11 +101,11 @@ class VtkBackend(BaseClass):
         fig._root.minsize(200, 200)
         fig._root.bind("<KeyPress-q>", _close_fig)
         fig._root.withdraw()
-        master_f = Tkinter.Frame(fig._root, relief='sunken', bd=2)
+        master_f = tkinter.Frame(fig._root, relief='sunken', bd=2)
         master_f.pack(side='top', fill='both', expand=1)
-        renwin_frame = Tkinter.Frame(master_f)
+        renwin_frame = tkinter.Frame(master_f)
         renwin_frame.pack(side='left', fill='both', expand=1)
-        frame = Tkinter.Frame(renwin_frame)
+        frame = tkinter.Frame(renwin_frame)
         frame.pack(side='top', fill='both', expand=1)
         width, height = fig.getp('size')
         if width is None or height is None:
@@ -260,7 +260,7 @@ class VtkBackend(BaseClass):
                 ub[2] *= dar[1];  ub[3] *= dar[1]
                 ub[4] *= dar[2];  ub[5] *= dar[2]
             elif mode == 'fill':
-                print "axis mode 'fill' not implemented in VtkBackend"
+                print("axis mode 'fill' not implemented in VtkBackend")
             elif mode == 'manual':
                 bounds = ax._vtk_scaled_bounds
                 unscaled_bounds = ax._vtk_bounds
@@ -375,10 +375,10 @@ class VtkBackend(BaseClass):
         tprop.SetFontFamilyToArial()
         tprop.SetVerticalJustificationToTop()
         tprop.SetJustificationToCentered()
-	mapper = vtk.vtkTextMapper()
+    mapper = vtk.vtkTextMapper()
         mapper.SetInput(self._fix_latex(self._axis.getp('title')))
         mapper.SetTextProperty(tprop)
-	actor = vtk.vtkActor2D()
+    actor = vtk.vtkActor2D()
         actor.SetMapper(mapper)
         actor.GetPositionCoordinate().SetCoordinateSystemToView()
         actor.GetPositionCoordinate().SetValue(0.0, 0.95)
@@ -1201,7 +1201,7 @@ class VtkBackend(BaseClass):
         except:
             try:
                 fig._g = self._create_Tk_gui()
-            except Tkinter.TclError:
+            except tkinter.TclError:
                 # can't create gui; only offscreen rendering
                 fig._g = vtk.vtkRenderWindow()
                 try:
@@ -1238,11 +1238,11 @@ class VtkBackend(BaseClass):
             del self._figs[num]
             self.figure(curfig) # put back the current figure
         else:
-            print 'no such figure with number', num
+            print('no such figure with number', num)
 
     def closefigs(self):
         """Close all figure windows."""
-        keys = self._figs.keys()
+        keys = list(self._figs.keys())
         for key in keys:
             closefig(key)
         BaseClass.closefigs(self)
@@ -1373,7 +1373,7 @@ class VtkBackend(BaseClass):
             lut, beta = args
         elif nargs == 1: # brighten(beta)
             if not hasattr(self._axis, '_vtk_colormap'):
-                print "brighten: no colormap set."
+                print("brighten: no colormap set.")
                 return
             lut = self._axis._vtk_colormap
             beta = args[0]

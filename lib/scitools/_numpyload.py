@@ -216,30 +216,30 @@ _NumPy_modules = (
 if basic_NumPy == 'numpy':
     try:
         # fix backward compatibility with Numeric names:
-	import numpy
-	oldversion = (numpy.version.version[0] == '0')
+    import numpy
+    oldversion = (numpy.version.version[0] == '0')
         majorversion = int(numpy.version.version[0])
         minorversion = int(numpy.version.version[2])
-	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
-	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
-		n, module = _numpy_name.split('.')
-		exec("from %s import %s as %s" %(n, module, _Numeric_name))
-	    elif oldversion and (_Numeric_name == 'MLab'):
-		from numpy.lib import mlab as MLab
+    for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
+        if oldversion and (_Numeric_name in ['RNG', 'FFT']):
+        n, module = _numpy_name.split('.')
+        exec("from %s import %s as %s" %(n, module, _Numeric_name))
+        elif oldversion and (_Numeric_name == 'MLab'):
+        from numpy.lib import mlab as MLab
             elif (oldversion or (majorversion == 1 and minorversion < 1)) \
                      and (_Numeric_name == 'MA'):
                 import numpy.core.ma; MA = numpy.core.ma
-	    elif _numpy_name != '':
-		exec('import %s; %s = %s' %
+        elif _numpy_name != '':
+        exec('import %s; %s = %s' %
                      (_numpy_name, _Numeric_name, _numpy_name))
 
-	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
+    del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
-	from numpy import *
-	if not oldversion:
-	    # get the old names too (NewAxis, Float, etc.):
-	    from numpy.oldnumeric import *
-	del oldversion
+    from numpy import *
+    if not oldversion:
+        # get the old names too (NewAxis, Float, etc.):
+        from numpy.oldnumeric import *
+    del oldversion
         # define new names compatible with Numeric:
         LinearAlgebra.solve_linear_equations = linalg.solve
         LinearAlgebra.inverse = linalg.inv
@@ -488,9 +488,9 @@ def NumPy_type(a):
 
     # Check for non NumPy types first
     if isinstance(a, tuple):
-	return "tuple"
+    return "tuple"
     elif isinstance(a, list):
-	return "list"
+    return "list"
     exec("import %s" % basic_NumPy) # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy

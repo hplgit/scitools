@@ -136,7 +136,7 @@ import os, time, sys, string, re
 from scitools.misc import system as os_system
 from types import *
 try:
-    import Tkinter, Pmw
+    import tkinter, Pmw
     _has_TkPmw = True
 except ImportError:
     # cannot run floatdiff tools
@@ -217,7 +217,7 @@ class TestRun:
         vfile.write(' running %(program)s %(options)s\n' % vars())
         vfile.close()
 
-        # do not use time.clock() to measure CPU time; it will not
+        # do not use time.perf_counter() to measure CPU time; it will not
         # notice the CPU time(here waiting time) of a system command
         t0 = os.times()  # [user,system,cuser,csystem,elapsed]
         if inputfile == '':
@@ -231,7 +231,7 @@ class TestRun:
                   'command\n  %s\n\n%s\n\n' % (self.scriptfilename,cmd,output)
             vfile.write(msg)
             vfile.close()
-            print msg
+            print(msg)
         # write CPU time of system command(user+system time
         # of child processes):
         t1 = os.times(); tm = t1[2] - t0[2] + t1[3] - t0[3]
@@ -248,7 +248,7 @@ class TestRun:
         """Return a file as a list of lines for text processing."""
 
         if not os.path.isfile(file):
-            print 'File',file,'does not exist'; sys.exit(1)
+            print('File',file,'does not exist'); sys.exit(1)
         FILE = open(file, 'r')
         lines = FILE.readlines()
         FILE.close()
@@ -267,7 +267,7 @@ class TestRun:
             regex = [regex]  # assume regex is a list of regex
 
         if not os.path.isfile(file):
-            print 'File',file,'does not exist'; sys.exit(1)
+            print('File',file,'does not exist'); sys.exit(1)
 
         FILE = open(file, 'r')
         lines = FILE.readlines()
@@ -304,7 +304,7 @@ class TestRun:
             msg = 'ERROR in %s: execution failure with %s %s\n' % \
                  (self.scriptfilename,program,options)
             vfile.write(msg)
-            print msg
+            print(msg)
 
     def graphics(self, program, options=''):
         """
@@ -320,7 +320,7 @@ class TestRun:
                 msg = 'ERROR in %s: execution failure with %s %s\n%s\n' % \
                       (self.scriptfilename,program,options,output)
                 vfile.write(msg)
-                print msg
+                print(msg)
 
     def append(self, file, maxlines=0):
         """Append a file or a list of files to the logfile."""
@@ -337,14 +337,14 @@ class TestRun:
         elif isinstance(file, list):
             filelist = file
         else:
-            print 'ERROR in %s: append(file,...), the arg is of illegal '\
-                  'type %s' % (self.scriptfilename,type(file))
+            print('ERROR in %s: append(file,...), the arg is of illegal '\
+                  'type %s' % (self.scriptfilename,type(file)))
 
         for f in filelist:
             if not os.path.isfile(f):
                 vfile.write('%s: No file named %s was found by Regression.TestRun.append' % \
                             (self.scriptfilename,f))
-                print 'No file named',f,'was found by Regression.TestRun.append'
+                print('No file named',f,'was found by Regression.TestRun.append')
                 sys.exit(1)
             FILE = open(f, 'r')
             lines = FILE.readlines()
@@ -368,7 +368,7 @@ class TestRun:
         """Insert HTML commands for a gif picture."""
         # convert to gif:
         filestem = re.sub(r'(.*)\.[e]?ps', '', psfile)
-        print 'picture: psfile=',psfile,'filestem=',filestem
+        print('picture: psfile=',psfile,'filestem=',filestem)
         os_system('convert %s gif:%s.gif' % (psfile, filestem))
         pid = os.getpid()  # use pid to makea unique giffile name
         giffile_with_full_path = '%s/%s-%d.gif' % \
@@ -383,7 +383,7 @@ class TestRun:
         pid = os.getpid()  # use pid to make unique giffile name
         giffile_with_full_path = '%s/anim-%d.gif' % \
                                 (self.scratchdir,pid)
-        print 'making an animated gif sequence of psfiles:',filelist
+        print('making an animated gif sequence of psfiles:',filelist)
         os_system('convert -loop 60 -delay 10 %s %s' % \
                   (filelist,giffile_with_full_path))
         self._insertgif (giffile_with_full_path)
@@ -482,7 +482,7 @@ class TestRunNumerics(TestRun):
         if failure:
             msg = 'ERROR in %s: execution failure arose from the ' \
                   'command\n  %s\n%s\n\n' % (self.scriptfilename,cmd,output)
-            print msg
+            print(msg)
 
         # improvement: load output from system command into a list
         # of strings and examine the output format (must be in the
@@ -581,7 +581,7 @@ class Verify:
             if dirname == '': dirname = os.getcwd()
             self._singlefile(dirname, task, os.path.basename(file))
         else:
-            print 'Verify: root=',root,'does not exist'
+            print('Verify: root=',root,'does not exist')
             sys.exit(1)
 
         # write HTML footer:
@@ -602,7 +602,7 @@ class Verify:
             if task == 'update':
                 self._update(dirname, basename)
             elif task == 'verify':
-                print '\n\nrunning verification test in', dirname,
+                print('\n\nrunning verification test in', dirname, end=' ')
                 self._diff(dirname, basename, file)
 
     def _search4verify(self, task, dirname, files):
@@ -620,11 +620,11 @@ class Verify:
         vfile = basename + '.v';  rfile = basename + '.r'
         if os.path.isfile(vfile):
             os.rename(vfile, rfile)
-            print '   %s -> %s in %s' % (vfile,rfile,dirname)
+            print('   %s -> %s in %s' % (vfile,rfile,dirname))
         vfile = basename + '.vd';  rfile = basename + '.rd'
         if os.path.isfile(vfile):
             os.rename(vfile, rfile)
-            print '   %s -> %s' % (vfile,rfile)
+            print('   %s -> %s' % (vfile,rfile))
 
     def _diff(self, dirname, basename, scriptfile):
         """Run script and find differences from reference results."""
@@ -649,10 +649,10 @@ class Verify:
                     Kb = os.path.getsize(vfile)/1000
                     if Kb > 50:
                         diffprog = 'diff -w'  # Unix C program
-                        print 'Warning: switching diff program from',\
-                              self.diffprog, 'to', diffprog
+                        print('Warning: switching diff program from',\
+                              self.diffprog, 'to', diffprog)
                 diffcmd = '%s %s %s' % (diffprog,rfile,vfile)
-                print '...' + diffcmd
+                print('...' + diffcmd)
                 time.sleep(1)
                 res = os.popen(diffcmd).readlines()
                 ndifflines = len(res)
@@ -726,7 +726,7 @@ class Verify:
                 ds.write('<BR>\n')
                 ds.close()
         else:
-            print 'ran %s, but no %s.v file found - check that %s.verify defines %s.v as logfile' % (scriptfile,basename,basename,basename)
+            print('ran %s, but no %s.v file found - check that %s.verify defines %s.v as logfile' % (scriptfile,basename,basename,basename))
             sys.exit(1)
 
     def diffCPUonly(self, difflines):
@@ -754,8 +754,8 @@ class Verify:
         # path is executable since we made an os.chmod in self._diff
         failure, output = os_system(path, failure_handling='silent')
         if failure:
-            print 'Failure in regression test', path
-            print output
+            print('Failure in regression test', path)
+            print(output)
 
     def clean(self, dirname):
         return
@@ -784,16 +784,16 @@ class VerifyDiffpack(Verify):
             thisdir = os.getcwd();  os.chdir(os.pardir)
             #print '\na Verify dir with a parent dir\n  ',os.getcwd(),\
             #      '\nLet's compile!\n'
-            print '\n...compile app in', os.getcwd()
+            print('\n...compile app in', os.getcwd())
             if os.path.isfile('Makefile'):
                 # yes, we have a makefile!
                 failure, output = os_system('Make MODE=%s' % self.makemode,
                                             failure_handling='silent')
                 if failure:
-                    print 'Could not compile in directory', os.getcwd()
+                    print('Could not compile in directory', os.getcwd())
             os.chdir(thisdir) # back to Verify dir
 
-            print '\n\n...run regression test ''+scriptfile+'' for VerifyDiffpack.run:'
+            print('\n\n...run regression test ''+scriptfile+'' for VerifyDiffpack.run:')
         # call parent class' run function:
         Verify.run(self,scriptfile)
 
@@ -808,7 +808,7 @@ class VerifyDiffpack(Verify):
                 failure, output = os_system('Make clean',
                                             failure_handling='silent')
                 if failure:
-                    print 'Could not run Make clean in directory', os.getcwd()
+                    print('Could not run Make clean in directory', os.getcwd())
             os.chdir(thisdir)
 
 class FloatDiff:
@@ -817,7 +817,7 @@ class FloatDiff:
             raise ImportError('Could not import Tkinter and Pmw')
 
         self.master = master
-        self.top = Tkinter.Frame(master, borderwidth=5)
+        self.top = tkinter.Frame(master, borderwidth=5)
         self.top.pack()
         self.GUI = 1  # true or false
         list = self.loadfiles(file1, file2)
@@ -840,8 +840,8 @@ class FloatDiff:
             diff = os.popen('diff %s %s | wc -l' % (file1,file2)).readlines()
             diff = int(diff[0])
             if diff == 0:
-                print 'files %s and %s are identical, no need to launch GUI' \
-                      % (file1,file2)
+                print('files %s and %s are identical, no need to launch GUI' \
+                      % (file1,file2))
                 self.GUI = 0
                 return None
 
@@ -853,18 +853,18 @@ class FloatDiff:
             if re.search('^##',line1):
                 if line1 != line2:
                     # strange; the two comment lines are different
-                    print 'two comment lines are different!'
-                    print 'line1:\n  ', line1
-                    print 'line2:\n  ', line2
+                    print('two comment lines are different!')
+                    print('line1:\n  ', line1)
+                    print('line2:\n  ', line2)
                 comment = line1
             line1 = f1.readline(); line2 = f2.readline()
             if not line1 or not line2:
-                print 'wrong datafile format; '\
-                      'comment line not proceeded by data'
+                print('wrong datafile format; '\
+                      'comment line not proceeded by data')
                 sys.exit(1)
             if line1 != line2:
-                print '%s has %s items, whereas %s has %s items' % \
-                     (file1,line1,file2,line2)
+                print('%s has %s items, whereas %s has %s items' % \
+                     (file1,line1,file2,line2))
                 break
             nitems1 = int(line1)
             differences = []
@@ -872,11 +872,11 @@ class FloatDiff:
             for i in range(nitems1):
                 s1 = f1.readline(); s2 = f2.readline()
                 if not s1 or not s2:
-                    print 'wrong datafile format'; sys.exit(1)
+                    print('wrong datafile format'); sys.exit(1)
                 # test that only one number is there... (no space)
                 if re.search(' ', s1) or re.search(' ', s2):
-                    print 'wrong datafile format'
-                    print 'lines:','\n',s1,'\n',s2; sys.exit(1)
+                    print('wrong datafile format')
+                    print('lines:','\n',s1,'\n',s2); sys.exit(1)
                 r1 = float(s1); r2 = float(s2)
                 # statistics:
                 if (r1 > max):  max = r1
@@ -898,9 +898,9 @@ class FloatDiff:
         if not list or not self.GUI:
             return
 
-        buttonframe = Tkinter.Frame(self.top)
+        buttonframe = tkinter.Frame(self.top)
         buttonframe.pack(side='left')
-        canvasframe = Tkinter.Frame(self.top)
+        canvasframe = tkinter.Frame(self.top)
         canvasframe.pack(side='right')
 
         self.fieldlist = Pmw.ScrolledListBox(buttonframe,
@@ -939,7 +939,7 @@ class FloatDiff:
             if n == 0:
                 continue  # no diff, proceed with next
 
-            textdiff = Tkinter.Text(self.canvas.interior(),
+            textdiff = tkinter.Text(self.canvas.interior(),
                                     width=52,height=maxdiffs+3,wrap='none')
                                     #width=52,height=str(maxdiffs)+'c',wrap='none')
             self.textdiffs.append(textdiff)
@@ -998,7 +998,7 @@ class FloatDiff:
 #                               f(c,p,t))
 #            button.pack(side='top')
             counter = counter + 1
-        Tkinter.Button(buttonframe, text='QUIT',
+        tkinter.Button(buttonframe, text='QUIT',
                        command=self.master.quit).pack(side='top',pady=5)
 
     def selectfield(self):
@@ -1060,13 +1060,13 @@ fd.close()
     f = open(vf, 'w')
     f.write(s)
     f.close()
-    print 'a template regression script is written to', vf
+    print('a template regression script is written to', vf)
 
 
 # tests of the current module:
 
 def _test_floatdiff():
-    root = Tkinter.Tk()
+    root = tkinter.Tk()
     #Pmw.initialise(root, fontScheme='pmw1')
     root.title('intelligent float diff')
 
@@ -1155,7 +1155,7 @@ def _test_floatdiff():
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print 'Usage: %s [template | verify | update | floatdiff] [verify/update-root]' % sys.argv[0]
+        print('Usage: %s [template | verify | update | floatdiff] [verify/update-root]' % sys.argv[0])
         sys.exit(1)
     task = sys.argv[1]
     try:
@@ -1171,5 +1171,5 @@ if __name__ == '__main__':
         # task == 'verify' or task == 'update'
         v = Verify(verifyroot, task, 'verify_log')
         if task == 'verify':
-            print 'check verify_log.htm'
+            print('check verify_log.htm')
 

@@ -233,7 +233,7 @@ class UniformBoxGrid(object):
         try:
             return self.dirnames.index(name)
         except ValueError:
-            print name, 'is not defined'
+            print(name, 'is not defined')
             return None
 
     def dirindex2name(self, i):
@@ -241,7 +241,7 @@ class UniformBoxGrid(object):
         try:
             return self.dirnames[i]
         except IndexError:
-            print i, 'is not a valid index'
+            print(i, 'is not a valid index')
             return None
 
     def ok(self):
@@ -334,7 +334,7 @@ class UniformBoxGrid(object):
         try:
             self.compatible(a)
         except (IndexError,TypeError) as e:
-            print 'e=',e, type(e), e.__class__.__name__
+            print('e=',e, type(e), e.__class__.__name__)
             raise e.__class__('BoxGrid.vectorized_eval(f):\n%s, BUT:\n%s' % \
                               (msg, e))
         return a
@@ -457,9 +457,9 @@ class UniformBoxGrid(object):
                             self._slices[-1].append((0, slice(i2, i2+1, 1)))
 
         elif self.iterator_domain == 'all_edges':
-            print 'iterator over "all_edges" is not implemented'
+            print('iterator over "all_edges" is not implemented')
         elif self.iterator_domain == 'interior_edges':
-            print 'iterator over "interior_edges" is not implemented'
+            print('iterator over "interior_edges" is not implemented')
         else:
             raise ValueError('iterator over "%s" is not impl.' % \
                              self.iterator_domain)
@@ -482,16 +482,16 @@ class UniformBoxGrid(object):
             for s in self._slices:
                 slices = [slice_in_dir for dir, slice_in_dir in s]
                 if len(slices) == 1:
-                    for i in xrange(slices[0].start, slices[0].stop):
+                    for i in range(slices[0].start, slices[0].stop):
                         yield i
                 elif len(slices) == 2:
-                    for i in xrange(slices[0].start, slices[0].stop):
-                        for j in xrange(slices[1].start, slices[1].stop):
+                    for i in range(slices[0].start, slices[0].stop):
+                        for j in range(slices[1].start, slices[1].stop):
                             yield [i, j]
                 elif len(slices) == 3:
-                    for i in xrange(slices[0].start, slices[0].stop):
-                        for j in xrange(slices[1].start, slices[1].stop):
-                            for k in xrange(slices[2].start, slices[2].stop):
+                    for i in range(slices[0].start, slices[0].stop):
+                        for j in range(slices[1].start, slices[1].stop):
+                            for k in range(slices[2].start, slices[2].stop):
                                 yield [i, j, k]
 
 
@@ -690,7 +690,7 @@ class BoxGrid(UniformBoxGrid):
 
 
 def _test(g, points=None):
-    print 'g=%s' % str(g)
+    print('g=%s' % str(g))
     # dump all the contents of a grid object:
     import scitools.misc;  scitools.misc.dump(g, hide_nonpublic=False)
     from numpy import zeros
@@ -709,27 +709,27 @@ def _test(g, points=None):
     if g.nsd == 3:
         itparts += ['all_edges', 'interior_edges']
     for domain_part in itparts:
-        print '\niterator over "%s"' % domain_part
+        print('\niterator over "%s"' % domain_part)
         for i in g.iter(domain_part, vectorized_version=False):
             if isinstance(i, int):  i = [i]  # wrap index as list (if 1D)
             for k in range(g.nsd):
                 coor[k] = g.coor[k][i[k]]
-            print i, coor
+            print(i, coor)
             if domain_part == 'all':  # fs_arr shape corresponds to all points
                 fs_arr[i] = fs(*coor)
-        print 'vectorized iterator over "%s":' % domain_part
+        print('vectorized iterator over "%s":' % domain_part)
         for slices in g.iter(domain_part, vectorized_version=True):
             if domain_part == 'all':
                 fs_arr[slices] = fv(*g.coor)
             # else: more complicated
-            print slices
+            print(slices)
     # boundary slices...
 
     if points is not None:
-        print '\n\nInterpolation in', g, '\n', g.coor
+        print('\n\nInterpolation in', g, '\n', g.coor)
         for p in points:
             index, distance = g.locate_cell(p)
-            print 'point %s is in cell %s, distance=%s' % (p, index, distance)
+            print('point %s is in cell %s, distance=%s' % (p, index, distance))
 
 
 def _test2():
@@ -740,14 +740,14 @@ def _test2():
     _test(g2, [(0.2,0.2), (1,2)])
     g3 = UniformBoxGrid(min=(0,0,-1), max=(1,1,1), division=(4,1,2))
     _test(g3)
-    print 'g3=\n%s' % str(g3)
-    print 'g3[Z]=', g3[Z]
-    print 'g3[Z][1] =', g3[Z][1]
-    print 'dx, dy, dz spacings:', g3.delta
+    print('g3=\n%s' % str(g3))
+    print('g3[Z]=', g3[Z])
+    print('g3[Z][1] =', g3[Z][1])
+    print('dx, dy, dz spacings:', g3.delta)
     g4 = UniformBoxGrid(min=(0,-1), max=(1,1),
                         division=(4,2), dirnames=('y','z'))
     _test(g4)
-    print 'g4["y"][-1]:', g4["y"][-1]
+    print('g4["y"][-1]:', g4["y"][-1])
 
 def _test4():
     from numpy import sin, zeros, exp
@@ -757,17 +757,17 @@ def _test4():
         g.vectorized_eval(lambda x,y: 2)
     except TypeError as msg:
         # fine, expect to arrive here
-        print '*** Expected error in this test:', msg
+        print('*** Expected error in this test:', msg)
     try:
         g.vectorized_eval(lambda x,y: zeros((2,2))+2)
     except IndexError as msg:
         # fine, expect to arrive here
-        print '*** Expected error in this test:', msg
+        print('*** Expected error in this test:', msg)
 
     a = g.vectorized_eval(lambda x,y: sin(x)*exp(y-x))
-    print a
+    print(a)
     a = g.vectorized_eval(lambda x,y: zeros(g.shape)+2)
-    print a
+    print(a)
 
 
 if __name__ == '__main__':

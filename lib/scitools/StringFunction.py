@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Make a string with a mathematical expression behave as a Python function."""
-from __future__ import division
+
 
 # Default import of mathematical functions (in case the user
 # supplies expressions with math functions and does not provide
@@ -204,7 +204,7 @@ class StringFunction:
             self._globals = globals()
 
         self._prms = kwargs.copy()
-	try:    del self._prms['independent_variable']
+        try:    del self._prms['independent_variable']
         except: pass
         try:    del self._prms['independent_variables']
         except: pass
@@ -258,9 +258,9 @@ class StringFunction:
                 try:
                     self.__call__ = eval(s, self._globals)
                 except Exception as e:
-                    print """
+                    print("""
 Making StringFunction with formula %s failed!
-Tried to build a lambda function:\n %s""" % (self._f, s)
+Tried to build a lambda function:\n %s""" % (self._f, s))
                     raise e
 
                 ## the following makes all instances have the same function :-(
@@ -307,8 +307,8 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
         except TypeError as e:
             if str(e).find('only rank-0 arrays can be converted to Python scalars') != -1:
 
-                print '\nThe call resulted in the exception TypeError:'
-                print e
+                print('\nThe call resulted in the exception TypeError:')
+                print(e)
 
                 # *args contains NumPy arrays and the operations in
                 # the string formula are not compatible
@@ -322,21 +322,21 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
                             not_NumPy = True
                         break
                 if math_funcs and not_NumPy:
-                    print '\nThis message is caused by using scalar math\n'\
+                    print('\nThis message is caused by using scalar math\n'\
                           'functions (like %s) with array arguments.\n'\
                           'Make some\nfrom numarray import *\n'\
                           'or similar in the calling code and '\
                           'supply the globals=globals() constructor\n'\
                           'argument when creating the StringFunction instance.'\
-                          % f
+                          % f)
                 else:
-                    print 'Internal error - this should not happen...'
+                    print('Internal error - this should not happen...')
             else:
-                print e
+                print(e)
         except NameError as e:
-            print e
+            print(e)
         else:
-            print 'This call worked perfectly!'
+            print('This call worked perfectly!')
 
     def __str__(self):
         """
@@ -363,7 +363,7 @@ Tried to build a lambda function:\n %s""" % (self._f, s)
     def __repr__(self):
         """Return the code required to reconstruct this instance."""
         kwargs = ', '.join(['%s=%s' % (key, repr(value)) \
-                            for key, value in self._prms.items()])
+                            for key, value in list(self._prms.items())])
         return """StringFunction(%s, independent_variables=%s, %s)""" % \
                (repr(self._f), repr(self._var), kwargs)
 
@@ -447,7 +447,7 @@ double %(function_name)s (%(varlist)s)
         import re
         if re.search(r'pow\s*\(', expr):
             # try to replace pow(x,a) by x**a
-            expr = re.sub(r'pow\(([^,]+),([^)]+)\)', '((\g<1>)**(\g<2>))',
+            expr = re.sub(r'pow\(([^,]+),([^)]+)\)', r'((\g<1>)**(\g<2>))',
                           expr)
         # set parameter values:
         setp = '\n'.join(['      %s = %s' % (name, self._prms[name]) \
@@ -541,18 +541,18 @@ def _doctest():
 
 def _demo():
     f = StringFunction('a+b*sin(x)', a=1, b=4)
-    print f(2)
+    print(f(2))
     f.set_parameters(a=-1, b=pi)
-    print f(1)
-    print 'internals:', str(f), repr(f), f._lambda, f._prms
+    print(f(1))
+    print('internals:', str(f), repr(f), f._lambda, f._prms)
     f = StringFunction('amp*sin(a*t)*exp(-6.211*x)',
                        independent_variables=('x','t'))
     f.set_parameters(amp=0.1, a=1)
-    print f(0,pi/2.0,a=2)
-    print 'internals:', str(f), repr(f), f._lambda, f._prms
-    print f.C_code()
-    print f.Cpp_code()
-    print f.F77_code()
+    print(f(0,pi/2.0,a=2))
+    print('internals:', str(f), repr(f), f._lambda, f._prms)
+    print(f.C_code())
+    print(f.Cpp_code())
+    print(f.F77_code())
 
 
 # simplified "pedagogical" versions from the
@@ -602,7 +602,7 @@ class StringFunction_v4:
         self.__name__ = self._f  # class name = function expression
         self._f_compiled = compile(self._f, '<string>', 'eval')
         self._prms = kwargs.copy()
-	try:
+        try:
             del self._prms['independent_variable']
             del self._prms['globals']
         except: pass
@@ -657,7 +657,7 @@ class StringFunction_v4:
         except:
             pass
         kwargs = ', '.join(['%s=%s' % (key, repr(value)) \
-                            for key, value in self._prms.items()])
+                            for key, value in list(self._prms.items())])
         return """StringFunction1(%s, independent_variable=%s, %s)""" % \
                (repr(self._f), repr(self._var), kwargs)
 
@@ -698,14 +698,14 @@ class StringFunction_v5(StringFunction_v4):
         except:
             pass
         kwargs = ', '.join(['%s=%s' % (key, repr(value)) \
-                            for key, value in self._prms.items()])
+                            for key, value in list(self._prms.items())])
         return """StringFunction(%s, independent_variables=%s, %s)""" % \
                (repr(self._f), repr(self._var), kwargs)
 
 
 
 def _efficiency():
-    print '\nPerform some efficiency tests (this might take some time...):'
+    print('\nPerform some efficiency tests (this might take some time...):')
     formula = 'sin(x) + x**3 + 2*x'
     formula_wprm = formula + ' + A*B'
     def s0(x):
@@ -722,7 +722,7 @@ def _efficiency():
     x = 0.9
     # verification first:
     values = [s(x) for s in (s0, s1, s2, s3, s4, s5, s6, s7)]
-    print 'values of %s for x=%s: %s' % (formula, x, values)
+    print('values of %s for x=%s: %s' % (formula, x, values))
 
     n = 400000
     from scitools.misc import timer
@@ -738,8 +738,8 @@ def _efficiency():
         t = timer(s, args=(x,), repetitions=100000,
                   comment=name)
         e.add(name, t)
-    print e
-    print 'End of efficiency tests\n'
+    print(e)
+    print('End of efficiency tests\n')
 
 if __name__ == '__main__':
     _doctest()

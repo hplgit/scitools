@@ -9,7 +9,8 @@ from optparse import OptionParser
 import sys
 
 # Local imports
-from version import __version__
+from .version import __version__
+from functools import reduce
 
 def silent_execute( string, return_stderr=True):
     """ Execute the given shell adding '> /dev/null' if under a posix OS 
@@ -86,12 +87,12 @@ option_parser.add_option("-t", "--type", metavar="TYPE",
                 action="store", type="string", dest="outtype",
                 default=None,
                 help="output to TYPE, TYPE can be " + 
-                                        ", ".join(allowed_types.keys()))
+                                        ", ".join(list(allowed_types.keys())))
 option_parser.add_option("-f", "--figuretype", metavar="TYPE",
                 action="store", type="string", dest="figuretype",
                 default=None,
                 help="output figure type TYPE  (TYPE can be of %s depending on report output type)" 
-                % (", ".join(reduce(lambda x, y : set(x).union(y) , allowed_types.values()) )) )
+                % (", ".join(reduce(lambda x, y : set(x).union(y) , list(allowed_types.values())) )) )
 option_parser.add_option("-c", "--commentchar",
                 action="store", dest="commentchar", default="!",
                 metavar="CHAR",

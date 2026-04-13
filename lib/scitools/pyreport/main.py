@@ -10,21 +10,21 @@ import sys
 import re
 import os
 # to treat StdIn, StdOut as files:
-import cStringIO
+import io
 from docutils import core as docCore
 from docutils import io as docIO
 import copy
 from traceback import format_exc
-import __builtin__ # to override import ! :->
+import builtins # to override import ! :->
 import platform
 import tokenize
 import token
 
 # Local imports
-from options import allowed_types, default_options, HAVE_PDFLATEX, \
+from .options import allowed_types, default_options, HAVE_PDFLATEX, \
         verbose_execute, silent_execute
-import code_hasher
-from python_parser import python2html
+from . import code_hasher
+from .python_parser import python2html
 
 DEBUG = False
 PYTHON_VERSION = int(''.join(str(s) for s in
@@ -54,7 +54,7 @@ def guess_names_and_types(options, allowed_types=allowed_types):
     # Find types for figures and output:
     if options.outtype is None:
         if options.figuretype:
-            for key in allowed_types.keys():
+            for key in list(allowed_types.keys()):
                 if not options.figuretype in allowed_types[key]:
                     allowed_types.pop(key)
         # FIXME: pdf should not be hard coded, but this should be the first 
@@ -66,18 +66,18 @@ def guess_names_and_types(options, allowed_types=allowed_types):
         else:
             options.outtype = "rst"
         if options.verbose:
-            print >> sys.stderr, "No output type specified, outputting to %s" \
-                            % options.outtype
+            print("No output type specified, outputting to %s" \
+                            % options.outtype, file=sys.stderr)
 
     if options.outtype in allowed_types:
         if options.figuretype is None:
             options.figuretype = allowed_types[options.outtype][0]
         elif not options.figuretype in allowed_types[options.outtype]:
-            print >> sys.stderr, "Warning: %s figures requested incompatible with %s output" % (options.figuretype, options.outtype)
+            print("Warning: %s figures requested incompatible with %s output" % (options.figuretype, options.outtype), file=sys.stderr)
             options.figuretype = allowed_types[options.outtype][0]
-            print >> sys.stderr, "Using %s figures" % options.figuretype
+            print("Using %s figures" % options.figuretype, file=sys.stderr)
     else:
-        print >> sys.stderr, "Error: unsupported output type requested"
+        print("Error: unsupported output type requested", file=sys.stderr)
         sys.exit(1)
 
     return options
@@ -93,7 +93,7 @@ def open_outfile(options):
     elif not options.outfile:
         outfilename = "%s.%s" % (options.outfilename, options.outtype)
         if not options.quiet:
-            print >> sys.stderr, "Outputing report to " + outfilename
+            print("Outputing report to " + outfilename, file=sys.stderr)
         # Special case (ugly): binary files:
         if options.outtype in set(("pdf", "ps", "eps", "dvi")):
             outfilename = "%s.tex" % (options.outfilename)
@@ -167,21 +167,21 @@ class SandBox(object):
     
         # This import should not be needed, but it works around a very
         # strange bug I encountered once.
-        import cStringIO
+        import io
         # create file-like string to capture output
-        code_out = cStringIO.StringIO()
-        code_err = cStringIO.StringIO()
+        code_out = io.StringIO()
+        code_err = io.StringIO()
    
         captured_exception = None
         # capture output and errors
         sys.stdout = code_out
         sys.stderr = code_err
         try:
-            exec block_text in self.namespace
-        except Exception, captured_exception:
+            exec(block_text, self.namespace)
+        except Exception as captured_exception:
             if isinstance(captured_exception, KeyboardInterrupt):
                 raise captured_exception
-            print >> sys.stderr, format_exc()      
+            print(format_exc(), file=sys.stderr)      
         
         # restore stdout and stderr
         sys.stdout = sys.__stdout__
@@ -194,16 +194,16 @@ class SandBox(object):
         code_err.close()
 
         if captured_exception: 
-            print >> sys.stderr, "Error in executing script on block starting line ", line_number ,": " 
-            print >> sys.stderr, error_value
+            print("Error in executing script on block starting line ", line_number ,": ", file=sys.stderr) 
+            print(error_value, file=sys.stderr)
         self.namespace = globals()
         self.namespace.update(locals())
 
         if out_value and not self.options.noecho:
             if self.options.outfilename == "-" :
-                print >> sys.stderr, out_value
+                print(out_value, file=sys.stderr)
             else:
-                print out_value
+                print(out_value)
         if self.myshow:
             self.current_figure_list = self.myshow.figure_list[
                                         len(self.total_figure_list):]
@@ -244,7 +244,7 @@ class MyShow(object):
         figure_name = '%s%d.%s' % ( self.basename,
                 len(self.figure_list), self.figure_extension )
         self.figure_list += (figure_name, )
-        print "Here goes figure %s" % figure_name
+        print("Here goes figure %s" % figure_name)
         if self.use_easyviz:
             import scitools.easyviz
             scitools.easyviz.hardcopy(figure_name)
@@ -338,13 +338,13 @@ def execute_block_list(block_list, options=copy.copy(default_options)):
     """
     if not options.noexecute:
         if not options.quiet :
-            print >> sys.stderr, "Running python script %s:\n" % \
-                                                        options.infilename
+            print("Running python script %s:\n" % \
+                                                        options.infilename, file=sys.stderr)
         # FIXME: I really have to have a close look at this code path. It
         # smells
         myshow._set_options(options)
         #__builtin__.__import__ = myimport
-        __builtin__.__import__ = MyImport(options)
+        builtins.__import__ = MyImport(options)
         
         execute_block = SandBox(myshow, options=options)
 
@@ -352,7 +352,7 @@ def execute_block_list(block_list, options=copy.copy(default_options)):
         execute_block = lambda block : [block.start_row, block.string, 
                                                 None, None, ()] 
 
-    output_list = map(execute_block, block_list)
+    output_list = list(map(execute_block, block_list))
   
     # python can have strange histerisis effect, with kwargs and passing by
     # reference. We need to reinitialise these to there defaults:
@@ -398,7 +398,7 @@ def shape_output_list(output_list, options):
 
     DEBUGwrite( output_list, 'condensedoutputlist')
 
-    output_list = map(check_rst_block, output_list)
+    output_list = list(map(check_rst_block, output_list))
     DEBUGwrite( output_list, 'checkedoutput_list')
     return output_list
 
@@ -413,7 +413,7 @@ def py2commentblocks(string, firstlinenum, options):
         >>> py2commentblocks("a\n#$Latex\n", 1, default_options)
         [['inputBlock', 'a\n', 2], ['latexBlock', 'Latex\n']]
     """
-    input_stream = cStringIO.StringIO(string)
+    input_stream = io.StringIO(string)
     block_list = []
     pos = 0
     current_block = ""
@@ -452,7 +452,7 @@ def py2commentblocks(string, firstlinenum, options):
             current_block = ""
             pos = 0
             lines = tokencontent.splitlines()
-            lines = map(lambda z : z + "\n", lines[:])
+            lines = [z + "\n" for z in lines[:]]
             for line in lines:
                 if line[0:3] == "#!/" and reallinenum == 1:
                     # This is a "#!/foobar on the first line, this 
@@ -537,7 +537,7 @@ def tex2pdf(filename, options):
     else:
         execute = silent_execute
     if not options.quiet :
-        print >> sys.stderr, "Compiling document to "+options.outtype
+        print("Compiling document to "+options.outtype, file=sys.stderr)
     if options.outtype == "ps":
         execute("latex --interaction scrollmode %s.tex -output-directory=%s" %(filename, os.path.dirname(filename)))
         execute("dvips %s.dvi -o %s.ps" % (filename, filename) )
@@ -552,7 +552,7 @@ def tex2pdf(filename, options):
         else:
             execute("latex --interaction scrollmode %s.tex -output-directory=%s" %(filename, os.path.dirname(filename)))
             execute("dvips -E %s.dvi -o %s.eps" % (filename, filename))
-            print "Doing pdf %s" % filename
+            print("Doing pdf %s" % filename)
             execute("epstopdf %s.eps" % filename)
 
     safe_unlink(filename+".tex")
@@ -611,8 +611,8 @@ def check_rst_block(block):
         if compiled_rst.parse_messages:
             # FIXME: It would be nice to add the line number where the error 
             # happened
-            print >> sys.stderr, """Error reading rst on literate comment line 
-falling back to plain text"""
+            print("""Error reading rst on literate comment line 
+falling back to plain text""", file=sys.stderr)
         else:
             block[0] = "rstBlock"
     return block
@@ -717,7 +717,7 @@ class ReportCompiler(object):
     def blocks2rst_string( self, output_list ):
         """ given a list of output blocks, returns a rst string ready to 
         be compiled"""
-        output_list = map( self.block2rst, output_list)
+        output_list = list(map( self.block2rst, output_list))
         rst_string = "".join(output_list)
         # To make the ouput more compact and readable:
         rst_string = re.sub(r"\n\n(\n)+","\n\n",rst_string)
@@ -727,7 +727,7 @@ class ReportCompiler(object):
     def compile( self, output_list, fileobject, options):
         """ Compiles the output_list to the rst file given the filename"""
         rst_string = self.preamble + self.blocks2rst_string(output_list)
-        print >>fileobject, rst_string
+        print(rst_string, file=fileobject)
 
 
 class TracCompiler(ReportCompiler):
@@ -902,7 +902,7 @@ function hide_all(contentDiv,controlDiv){
         hideall += r""")">toggle all code blocks</div><br>
         """
         html_string = re.sub(r"<body>", protect(hideall), html_string)
-        print >>fileobject, html_string
+        print(html_string, file=fileobject)
 
 
 class TexCompiler(ReportCompiler):
@@ -1091,7 +1091,7 @@ class TexCompiler(ReportCompiler):
         #    if options.verbose:
         #        print >> sys.stderr, "Compiling figures"
         #    self.figure_list = map(epstopdf, self.figure_list)
-        print >>fileobject, tex_string
+        print(tex_string, file=fileobject)
 
 
     def compile2pdf(self, output_list, fileobject, options):
@@ -1100,7 +1100,7 @@ class TexCompiler(ReportCompiler):
         self.compile2tex( output_list, fileobject, options)
         fileobject.close()
         tex2pdf(options.outfilename, options)
-        map(safe_unlink, self.figure_list)
+        list(map(safe_unlink, self.figure_list))
         self.figure_list = ()
 
 
