@@ -3,7 +3,7 @@
 import os, glob, re
 
 from scitools.misc import findprograms
-from misc import _check_type
+from .misc import _check_type
 
 class MovieEncoder(object):
     """
@@ -46,7 +46,7 @@ class MovieEncoder(object):
             if key in self._prop:
                 self._prop[key] = kwargs[key]
 
-        print '\n\n' # provide some space before print statements
+        print('\n\n') # provide some space before print(statements)
 
         # Determine which encoder to be used
         encoder = self._prop['encoder']
@@ -89,16 +89,16 @@ class MovieEncoder(object):
                 wildcard_format = input_files
             all_input_files = glob.glob(wildcard_format)
             if not all_input_files:
-                print 'No files of the form %s exist.' % input_files
+                print(('No files of the form %s exist.' % input_files))
             else:
-                print 'Found %d files of the format %s.' % \
-                (len(all_input_files), input_files)
+                print(('Found %d files of the format %s.' % \
+                (len(all_input_files), input_files)))
         else:  # list of specific filenames
             all_input_files = input_files
         error_encountered = False
         for f in all_input_files:
             if not os.path.isfile(f):
-                print 'Input file %s does not exist.' % f
+                print(('Input file %s does not exist.' % f))
                 error_encountered = True
         if error_encountered:
             raise IOError('Some input files were not found.')
@@ -122,7 +122,7 @@ class MovieEncoder(object):
             if isinstance(files, str):
                 files = glob.glob(files)
                 files.sort()
-            print '\nMaking HTML code for displaying', ', '.join(files)
+            print(('\nMaking HTML code for displaying', ', '.join(files)))
             fps = self._prop['fps']
             interval_ms = 1000.0/fps
             outf = self._prop['output_file']
@@ -138,7 +138,7 @@ class MovieEncoder(object):
             f = open(outf, 'w')
             f.write(header + jscode + form + footer)
             f.close()
-            print "\n\nmovie in output file", outf
+            print(("\n\nmovie in output file", outf))
             return
 
         # Get command string (all other encoders are run as stand-alone apps)
@@ -146,13 +146,13 @@ class MovieEncoder(object):
 
         # Run command
         if not self._prop['quiet']:
-            print "\nscitools.easyviz.movie function runs the command: \n\n%s\n" % cmd
+            print(("\nscitools.easyviz.movie function runs the command: \n\n%s\n" % cmd))
         failure = os.system(cmd)
         if failure:
-            print '\n\nscitools.easyviz.movie could not make movie'
+            print('\n\nscitools.easyviz.movie could not make movie')
             raise SystemError('Check error messages from the encoder in the terminal window')
         elif not self._prop['quiet']:
-            print "\n\nmovie in output file", self._prop['output_file']
+            print(("\n\nmovie in output file", self._prop['output_file']))
 
         # Clean up temporary files
         if self._prop['cleanup'] and hasattr(self, '_tmp_files'):
@@ -383,12 +383,10 @@ class MovieEncoder(object):
         aspect = self._prop['aspect']
         if aspect is not None:
             if aspect not in legal_aspects:
-                raise(ValueError, \
-                      "%s only supports the following aspect ratios: %s" % \
-                      (encoder, legal_aspects))
+                raise ValueError
         else:
             aspect = 1.0
-        print aspect
+        print(aspect)
 
         # get image files:
         files = self._prop['input_files']
@@ -553,7 +551,7 @@ FORCE_ENCODE_LAST_FRAME
         cmd += ' -I p'  # interlacing mode: p = none / progressive
         cmd += ' -j "%s"' % files # set image files
         # find start image:
-        for i in xrange(9999):
+        for i in range(9999):
             if os.path.isfile(files % i):
                 cmd += ' -b %d' % i
                 break
@@ -594,7 +592,7 @@ FORCE_ENCODE_LAST_FRAME
         fps = str(self._prop['fps'])
         if not fps in legal_fps:
             raise ValueError("fps must be %s, not %s" % \
-                             (fps_convert.keys(), fps))
+                             (list(fps_convert.keys()), fps))
         cmd += ' -F %s' % legal_fps[fps]
         #cmd += ' --cbr' # constant bit rate
         gop_size = self._prop['gop_size']
@@ -606,13 +604,13 @@ FORCE_ENCODE_LAST_FRAME
         legal_aspects = {'1.0': 1, '1.3': 2, '1.7': 3, '2.21': 4}
         aspect = self._get_aspect_ratio()
         if aspect is not None:
-            if aspect not in legal_aspects.values():
+            if aspect not in list(legal_aspects.values()):
                 aspect = str(aspect)
-                for key in legal_aspects.keys():
+                for key in list(legal_aspects.keys()):
                     if aspect.startswith(key):
                         aspect = legal_aspects[key]
                         break
-                if aspect not in legal_aspects.values():
+                if aspect not in list(legal_aspects.values()):
                     raise ValueError(
                         "aspect must be either 1:1, 4:3, 16:9, or 2.21:1," \
                         " not '%s'" % aspect)
@@ -687,18 +685,18 @@ FORCE_ENCODE_LAST_FRAME
                     options += '-resize %sx%s' % size
                 cmd = "%(app)s %(options)s %(file_)s %(new_file)s" % vars()
             if not quiet:
-                print cmd
+                print(cmd)
             failure = os.system(cmd)
             if failure:
-                print "... %s failed, jumping to next file..." % app
+                print(("... %s failed, jumping to next file..." % app))
                 continue
             new_files.append(new_file)
             if not quiet:
                 apps = app
                 if app != convert and pnmtoany != '':
                     apps += ' and %s' % pnmtoany
-                print "%s transformed via %s to %s (%d Kb)" % \
-                      (file_,apps,new_file,int(os.path.getsize(new_file)/1000))
+                print(("%s transformed via %s to %s (%d Kb)" % \
+                      (file_,apps,new_file,int(os.path.getsize(new_file)/1000))))
             i += 1
 
         return new_files
@@ -780,9 +778,8 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600,
        htmlfile.write(jscode + form)
        # Or write a new standalone file that act as movie player
        filename = plotfiles[0][:-4] + '.html'
-       htmlfile = open(filename, 'w')
-       htmlfile.write(header + jscode + form + footer)
-       htmlfile.close
+       with open(filename, 'w') as htmlfile:
+           htmlfile.write(header + jscode + form + footer)
 
     This function is based on code written by R. J. LeVeque, based on
     a template from Alan McIntyre.
@@ -792,7 +789,7 @@ def html_movie(plotfiles, interval_ms=300, width=800, height=600,
 
     # Start with expanding plotfiles if it is a filename generator
     if not isinstance(plotfiles, (tuple,list)):
-        if not isinstance(plotfiles, (str,unicode)):
+        if not isinstance(plotfiles, str):
             raise TypeError('plotfiles must be list or filename generator, not %s' % type(plotfiles))
 
         filename_generator = plotfiles

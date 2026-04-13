@@ -40,14 +40,14 @@ def message(module, critical=1, msg=None):
     """
     try:
         exec("import "+ module)
-        print "You have the Python", module, "module installed..."
+        print(("You have the Python", module, "module installed..."))
         success = True
     except:
-        print "*** The", module, "Python module is not available..."
+        print(("*** The", module, "Python module is not available..."))
         success = False
-        if msg: print "    (%s)" % msg
+        if msg: print(("    (%s)" % msg))
         if not critical:
-            print "       ....but this is not critical"
+            print("       ....but this is not critical")
             success = False
     return success
 
@@ -57,11 +57,11 @@ def PmwBlt(verbose=0):
         # check if we manage to create a Blt graph:
         import Pmw;  s = Pmw.Blt.Graph
         if verbose:
-            print "You have the Python Pmw.Blt.Graph widget available..."
+            print("You have the Python Pmw.Blt.Graph widget available...")
         return True
     except:
         if verbose:
-            print "*** Python is not correctly linked with BLT (no Pmw.Blt.Graph widget)"
+            print("*** Python is not correctly linked with BLT (no Pmw.Blt.Graph widget)")
         return False
 
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     class SomeClass:
         def __init__(self, *args):
-            import modulecheck
+            from . import modulecheck
             modulecheck.exception("SomeClass:", "A", "B", "C")
 
             # if we come here, no exception from modulecheck.exception
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         a = SomeClass()
     except:
         import sys
-        print "Test worked; ", "\n", sys.exc_type, "\n", sys.exc_value
+        print(("Test worked; ", "\n", sys.exc_info()[0], "\n", sys.exc_info()[1]))
 
     # this should work fine:
-    if exception("just testing...", "os"):  print "bug!"
+    if exception("just testing...", "os"):  print("bug!")

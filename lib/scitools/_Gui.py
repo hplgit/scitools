@@ -85,8 +85,8 @@ avoid keeping track of parent widgets explicitly.
 
 
 from math import *
-from Tkinter import *
-from tkFont import *
+from tkinter import *
+from tkinter.font import *
 
 class Gui(Tk):
     """Gui provides wrappers for many of the methods in the Tk
@@ -129,7 +129,7 @@ class Gui(Tk):
         """make a return a frame.
         As a side effect, the new frame becomes the current frame
         """
-        options.update(dict(zip(Gui.argnames,args)))
+        options.update(dict(list(zip(Gui.argnames,args))))
         underride(options, fill=BOTH, expand=1)
         if self.debug:
             override(options, bd=5, relief=RIDGE)
@@ -181,8 +181,8 @@ class Gui(Tk):
         By default, the widget is packed in the next available
         space, but parameters i and j can override.
         """
-        if i == None: i = self.frame.i
-        if j == None: j = self.frame.j
+        if i is None: i = self.frame.i
+        if j is None: j = self.frame.j
         widget.grid(row=i, column=j, **options)
 
         # increment j by 1, or by columnspan
@@ -202,7 +202,7 @@ class Gui(Tk):
         """make an entry widget."""
         
         # roll the positional arguments into the option dictionary
-        options.update(dict(zip(Gui.argnames,args)))
+        options.update(dict(list(zip(Gui.argnames,args))))
 
         # underride fill and expand
         underride(options, fill=BOTH, expand=1)
@@ -345,7 +345,7 @@ class Gui(Tk):
         # roll the positional arguments into the option dictionary,
         # then divide into options for the widget constructor, pack
         # or grid
-        options.update(dict(zip(Gui.argnames,args)))
+        options.update(dict(list(zip(Gui.argnames,args))))
         widopt, packopt, gridopt = split_options(options)
 
         # make the widget and either pack or grid it
@@ -502,7 +502,7 @@ def pairiter(seq):
     """return an iterator that yields consecutive pairs from seq"""
     it = iter(seq)
     while True:
-        yield [it.next(), it.next()]
+        yield [next(it), next(it)]
 
 def pair(seq):
     """return a list of consecutive pairs from seq"""
@@ -520,7 +520,7 @@ def flatten(seq):
 
 def underride(d, **kwds):
     """Add entries from (kwds) to (d) only if they are not already set"""
-    for key, val in kwds.iteritems():
+    for key, val in list(kwds.items()):
         if key not in d:
             d[key] = val
 
@@ -543,7 +543,7 @@ class GuiCanvas(Canvas):
         Canvas.__init__(self, w, **options)
 
         # the default transform is a standard CanvasTransform
-        if transforms == None:
+        if transforms is None:
             self.transforms = [CanvasTransform(self)]
         else:
             self.transforms = transforms
@@ -557,7 +557,7 @@ class GuiCanvas(Canvas):
         """add the given transform at the given index in the
         transform list (appending is the default).
         """
-        if index == None:
+        if index is None:
             self.transforms.append(transform)
         else:
             self.transforms.insert(index, transform)            
@@ -586,7 +586,7 @@ class GuiCanvas(Canvas):
         if isinstance(item, list):
             item = item[0]
         bbox = Canvas.bbox(self, item)
-        if bbox == None: return bbox
+        if bbox is None: return bbox
         bbox = pair(bbox)
         bbox = self.invert(bbox)
         return BBox(bbox)
@@ -595,7 +595,7 @@ class GuiCanvas(Canvas):
         """provides get and set access to item coordinates,
         with coordinate translation in both directions.
         """
-        if coords != None:
+        if coords is not None:
             coords = self.trans(coords)
             coords = flatten(coords)
             Canvas.coords(self, item, *coords)
@@ -709,7 +709,7 @@ class Transform:
         """apply (func) to a list of points.
         If (func) is none, apply self.trans.
         """
-        if func == None:
+        if func is None:
             func = self.trans
 
         if isinstance(points[0], (list, tuple)):
@@ -812,7 +812,7 @@ class Callable:
         self.kwds = kwds
 
     def __call__(self):
-        return apply(self.func, self.args, self.kwds)
+        return self.func(*self.args, **self.kwds)
 
     def __str__(self):
         return self.func.__name__
@@ -907,7 +907,7 @@ def widget_demo():
     def print_selection(event):
         """print the current color in the listbox
         """
-        print get_selection()
+        print((get_selection()))
 
     def apply_color():
         """get the current color from the listbox and apply it
@@ -996,7 +996,7 @@ def widget_demo():
         weight = b1.var.get()
         slant = b2.var.get()
         font = Font(family=family, size=size, weight=weight, slant=slant)
-        print font.actual()
+        print((font.actual()))
         ca.itemconfig(item3, font=font)
 
     g.la(TOP, text='Font:')
@@ -1058,7 +1058,7 @@ def widget_demo():
     g.gr(3, rweights=[1,1,1], cweights=[1,1,1], side=LEFT)
 
     def print_num(i):
-        print i
+        print(i)
 
     # grid the buttons
     for i in range(1, 10):
@@ -1070,7 +1070,7 @@ def widget_demo():
 
 
 def main(script, function=None, *args):
-    if function == None:
+    if function is None:
         widget_demo()
     else:
         # function is normally tk_example or gui_example

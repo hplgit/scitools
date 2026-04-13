@@ -468,12 +468,12 @@ def pairs(prm_values, n=2):
         import metacomm.combinatorics.all_pairs2
         all_pairs = metacomm.combinatorics.all_pairs2.all_pairs2
     except ImportError:
-        print """
+        print("""
 The pairs functions in the scitools.multipleloop module requires
 the AllPairs package by MetaCommunications Engineering.
 Go to see http://pypi.python.org/pypi/AllPairs/2.0.1, download
 and install the package (python setup.py install).
-"""
+""")
         sys.exit(1)
 
     list_of_values = [values for name, values in prm_values]
@@ -574,15 +574,15 @@ all, names, varied = combine(prm_values)
 # all[i] holds all parameter values in experiment no i,
 # names holds the parameter names, and varied holds the
 # parameter names that are actually varied (not fixed values)
-print names
-print varied
+print(names)
+print(varied)
 pprint.pprint(all)
 
 e = 1
 for experiment in all:
-    print 'Experiment %%4d:' %% e,
+    print('Experiment %%4d:') %% e,
     for name, value in zip(names, experiment):
-        print '%%s: %%s' %% (name, value),
+        print('%%s: %%s') %% (name, value),
     print # newline
     e += 1  # experiment counter
 
@@ -592,15 +592,15 @@ for experiment in all:
 # by - or -- as command-line options):
 cmd = options(all, names, prefix='-')
 for c in cmd:
-    print c
+    print(c)
     #commands.getstatusoutput(programname + ' ' + c)
 
 
-print 'all combinations: %%d' %% len(all)
+print('all combinations: %%d') %% len(all)
 
 # compute pairs:
 all = pairs(prm_values)
-print 'all pairs: %%d' %% len(all); pprint.pprint(all)
+print('all pairs: %%d') %% len(all); pprint.pprint(all)
 
 # alternative class interface:
 experiments = MultipleLoop(option_prefix='-')
@@ -614,9 +614,9 @@ nremoved = experiments.remove('%s == %s')
 
 # look at the attributes of this instance:
 pprint.pprint(experiments.all)
-print experiments.names
-print experiments.varied
-print experiments.options
+print(experiments.names)
+print(experiments.varied)
+print(experiments.options)
 pprint.pprint(experiments.prm_values)
 
 # explore the response of varied parameters:
@@ -627,24 +627,24 @@ pprint.pprint(experiments.prm_values)
 for cmlargs, parameters, varied_parameters in experiments:
     args = ', '.join(['%%s=%%s' %% (name,value) for name, value in zip(experiments.names, parameters)])
     print
-    print 'can call some function:'
-    print 'response = myfunc(%%s)' %% args
-    print 'or run some program with options:'
-    print 'prompt> myprog ', cmlargs
-    print 'and extract a response from the program output'
-    print 'function.append((response, varied_parameters))'
+    print('can call some function:')
+    print('response = myfunc(%%s)') %% args
+    print('or run some program with options:')
+    print('prompt> myprog '), cmlargs
+    print('and extract a response from the program output')
+    print('function.append((response, varied_parameters))')
 
 """ % (p, p[one_name], one_name, one_name, one_value)
     f = open('_tmp.py', 'w')
     f.write(code)
     f.close()
-    import commands
-    failure, output = commands.getstatusoutput('scitools file2interactive _tmp.py')
+    import subprocess
+    failure, output = subprocess.getstatusoutput('scitools file2interactive _tmp.py')
     if not failure:
         return output
     else:
-        print '_demo: could not run command'
-    print output
+        print('_demo: could not run command')
+    print(output)
 
 def _doc_str_example():
     p = {'A': '1 & 2 & 5', 'B': 'hello & world'}
@@ -657,10 +657,10 @@ def _doc_str_example():
 def _dump(all, names, varied):
     e = 1
     for experiment in all:
-        print 'Experiment %4d:' % e,
+        print('Experiment %4d:' % e, end=' ')
         for name, value in zip(names, experiment):
-            print '%s:' % name, value,
-        print # newline
+            print('%s:' % name, value, end=' ')
+        print() # newline
         e += 1  # experiment counter
 
 def _test1():
@@ -676,20 +676,20 @@ def _test1():
     _dump(all, names, varied)
     p = {'w': [0.7, 1.3, 0.1], 'b': [1, 0], 'func': ['y', 'siny']}
     all, names, varied = combine(p)
-    print '\n\n\n'
+    print('\n\n\n')
     _dump(all, names, varied)
-    print options(all, names, prefix='-')
+    print(options(all, names, prefix='-'))
 
 def _test2():
     p = {'w': '[0.7:1.3,0.1]', 'b': '1 & 0.3 & 0', 'func': 'y & siny'}
-    print input2values(p['w'])
-    print input2values(p['b'])
-    print input2values(p['func'])
+    print(input2values(p['w']))
+    print(input2values(p['b']))
+    print(input2values(p['func']))
     prm_values = [(name, input2values(p[name])) \
                   for name in p]
-    print 'prm_values:', prm_values
+    print('prm_values:', prm_values)
     all, names, varied = combine(prm_values)
-    print 'all:', all
+    print('all:', all)
 
     # rule out b=0 when w>1
     all_restricted = [];
@@ -703,7 +703,7 @@ def _test2():
     names2 = names[:]
     names2[names.index('b')] = 'damping'
     names2[names.index('w')] = 'omega'
-    print options(all, names, prefix='--')
+    print(options(all, names, prefix='--'))
     conditions = (('b',operator.eq,0), ('w',operator.gt,1))
     def rule_out(all, conditions):
         all_restricted = []
@@ -813,7 +813,7 @@ class MultipleLoop:
         self.counter = 0
         return self
 
-    def next(self):
+    def __next__(self):
         if self.counter > len(self.options)-1:
             raise StopIteration()
         self.cmlargs = self.options[self.counter]
@@ -870,7 +870,7 @@ Fixed parameters:
             self.dump("""\n</body></html>\n""")
 
 if __name__ == '__main__':
-    print _doc_str_example()
+    print(_doc_str_example())
     #_test1()
     #_test2()
 

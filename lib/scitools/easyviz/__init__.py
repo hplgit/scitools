@@ -1183,7 +1183,7 @@ to investigate.
             method with time steps dt, from t=0 to t=T.
             """
             if dt > 2./k:
-                print 'Unstable scheme'
+                print('Unstable scheme')
             N = int(round(T/float(dt)))
             u = zeros(N+1)
             t = linspace(0, T, N+1)
@@ -1266,7 +1266,7 @@ available backends on your computer system:
 
         from scitools.std import *
         backends = available_backends()
-        print 'Available backends:', backends
+        print('Available backends:'), backends
 
 There will be quite some output explaining the missing backends and
 what must be installed to use these backends. Be prepared for exceptions
@@ -1576,7 +1576,7 @@ object:
 
 .. code-block:: python
 
-        fig = gcf(); print fig.dump()
+        fig = gcf(); print(fig.dump())
 
 These parameters may be of interest for troubleshooting when Easyviz
 does not produce what you expect.
@@ -3415,13 +3415,13 @@ supported by all backends):
 __author__ = "Johannes H. Ring, Hans Petter Langtangen, Rolv Erlend Bredesen"
 
 _import_list = []  # used as in basics.py to keep track of what we import
-import time as _time; _t0 = _time.clock();
+import time as _time; _t0 = _time.perf_counter();
 _import_times = 'easyviz import times: '
 
 from scitools.globaldata import backend, VERBOSE   # read-only import
 _import_list.append("from scitools.globaldata import backend, VERBOSE")
 
-_t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
+_t1 = _time.perf_counter(); _import_times += 'config: %s ' % (_t1 - _t0)
 
 # Note: this import is always performed, also before any
 # specialized import a la from scitools.easyviz.matplotlib_ import *
@@ -3429,22 +3429,22 @@ _t1 = _time.clock(); _import_times += 'config: %s ' % (_t1 - _t0)
 # file specification of the backend
 cmd = 'from %s_ import *' % backend
 exec(cmd)
-_t2 = _time.clock(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
+_t2 = _time.perf_counter(); _import_times += '%s: %s ' % (backend, _t2 - _t1)
 _import_list.append(cmd)
 
-from utils import *
-from movie import movie
+from .utils import *
+from .movie import movie
 _import_list.append('from utils import *\nfrom movie import movie')
 
-_t3 = _time.clock(); _import_times += 'utils: %s ' % (_t3 - _t2)
+_t3 = _time.perf_counter(); _import_times += 'utils: %s ' % (_t3 - _t2)
 
 if VERBOSE >= 2:
     for i in _import_list:
-        print i
+        print(i)
 if VERBOSE >= 3:
-    print _import_times
+    print(_import_times)
 if VERBOSE >= 1:
-    print "scitools.easyviz backend is %s" % backend
+    print(("scitools.easyviz backend is %s" % backend))
 
 __doc__ += '\nImport statements in this module:\n' + '\n'.join(_import_list)
 

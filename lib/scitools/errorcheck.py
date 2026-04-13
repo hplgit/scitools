@@ -9,27 +9,27 @@ Example: given a program "check.py"::
     try:
         right_length(q1, 2)
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
     try:
         right_size1(q1, (2,2))
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
     try:
         q2 = linspace(0, 1, 6)
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
     try:
         right_size2(q1, q2)
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
     try:
         right_type(q2, list)
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
     try:
         wrong_type(q1)
     except Exception as e:
-        print e.__class__.__name__, e
+        print(e.__class__.__name__), e
 
 Here is the output (each call triggers the exception)::
 
@@ -255,7 +255,7 @@ def right_type(a, expected_types, raise_exception=True):
         if a_is_class_def:
             # a is a class object
             #print 'a is class definition'
-            if type(a) == types.ClassType:
+            if type(a) == type:
                 try:
                     if issubclass(a, tp):
                         match = True
@@ -321,12 +321,12 @@ def _test():
         pass
 
     C = myclass()
-    print right_type(myfunc, [callable, float, int])
-    print right_type(A, [float, int])
-    print right_type(C, [myclass])
-    print right_type(myclass, [myclass])
-    print right_type(B, tuple, raise_exception=False)
-    print message
+    print((right_type(myfunc, [callable, float, int])))
+    print((right_type(A, [float, int])))
+    print((right_type(C, [myclass])))
+    print((right_type(myclass, [myclass])))
+    print((right_type(B, tuple, raise_exception=False)))
+    print(message)
 
 if __name__ == '__main__':
     _test()

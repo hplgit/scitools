@@ -6,10 +6,10 @@ full code blocks ready for execution.
 import token
 import tokenize
 import re
-import StringIO
+import io
 import platform
 
-from options import parse_options
+from .options import parse_options
 
 PYTHON_VERSION = int(''.join(str(s) for s in 
                             platform.python_version_tuple()[:2]))
@@ -20,7 +20,7 @@ def xreadlines(s):
     """
     if  s and not s[-1]=="\n":
         s += "\n"
-    return (line for line in StringIO.StringIO(s))
+    return (line for line in io.StringIO(s))
 
 
 ##############################################################################
@@ -78,7 +78,7 @@ class CodeLine(object):
                 self.open_symbols[token.content] += 1
             elif token.content in self.closing_symbols:
                 self.open_symbols[self.closing_symbols[token.content]] += -1
-            self.brakets_balanced = ( self.open_symbols.values() == [0, 0, 0] ) 
+            self.brakets_balanced = ( list(self.open_symbols.values()) == [0, 0, 0] ) 
         
         self.complete = ( self.brakets_balanced 
                           and ( token.type in ('NEWLINE', 'ENDMARKER')
@@ -147,7 +147,7 @@ class CodeHasher(object):
             as the xreadline method of a file, or what is returned by the 
             xreadline function of this module.
         """
-        self.xreadlines = xreadlines
+        self.__iter__ = xreadlines
 
     def next_line_generator(self):
         return self.xreadlines.next().expandtabs()

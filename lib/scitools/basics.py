@@ -56,10 +56,10 @@ Debug functions
 
 The following functions are imported from the debug module:
 
-  - watch(var): print out the name, type, and value of a variable and
+  - watch(var): print(out) the name, type, and value of a variable and
     where in a program this output was requested (used to monitor variables).
 
-  - trace(message): print a message and where in the program this
+  - trace(message): print(a) message and where in the program this
     message was requested (used to trace the execution).
 
 These debug functions require the DEBUG variable to be different from 0.
@@ -73,7 +73,7 @@ _import_list = []
 # Measure CPU time for various import statements
 _import_times = 'scitools import times: '
 import time as _time
-_t0 = _time.clock()
+_t0 = _time.perf_counter()
 
 import os
 # Add the configuration file as part of the doc string
@@ -85,7 +85,7 @@ _import_list.append("from globaldata import *")
 from . import globaldata as _globaldata
 #import pprint; pprint.pprint(_globaldata._config_data)
 
-_t1 = _time.clock(); _import_times += 'config=%g ' % (_t1 - _t0)
+_t1 = _time.perf_counter(); _import_times += 'config=%g ' % (_t1 - _t0)
 
 # *** try to import SciPy if it is installed ***
 # idea: load scipy, if not, load numpy or numpytools
@@ -104,15 +104,15 @@ if _globaldata._load_scipy:
         _import_list.append("from scipy import *")
     except ImportError:
         # ImportError is likely due to missin scipy
-        if VERBOSE >= 2: print 'tried to import scipy, but could not find it'
+        if VERBOSE >= 2: print('tried to import scipy, but could not find it')
         pass
-    _t2 = _time.clock(); _import_times += 'scipy=%g ' % (_t2 - _t1)
+    _t2 = _time.perf_counter(); _import_times += 'scipy=%g ' % (_t2 - _t1)
 
 # didn't want, or couldn't load, scipy:
 if not has_scipy:
     if _globaldata._load_numpytools:
         from .numpytools import *
-        _t2 = _time.clock(); _import_times += 'numpytools=%g ' % (_t2 - _t1)
+        _t2 = _time.perf_counter(); _import_times += 'numpytools=%g ' % (_t2 - _t1)
         _import_list.append("from .numpytools import *")
     else:
         # load numpy and numpyutils
@@ -123,7 +123,7 @@ if not has_scipy:
 
         except ImportError:
             raise ImportError('numpy was requested, but it could not be found')
-        _t2 = _time.clock(); _import_times += 'numpy=%g ' % (_t2 - _t1)
+        _t2 = _time.perf_counter(); _import_times += 'numpy=%g ' % (_t2 - _t1)
 
 # nice to have imports:
 import sys, operator, math
@@ -145,9 +145,9 @@ _import_list.append("from debug import watch, trace")
 
 if VERBOSE >= 2:
     for i in _import_list:
-        print i
+        print(i)
 
 if VERBOSE >= 3:
-    print _import_times
+    print(_import_times)
 
 __doc__ += '\nImport statements in this module:\n' + '\n'.join(_import_list)

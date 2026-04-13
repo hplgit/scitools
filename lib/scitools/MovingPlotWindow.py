@@ -41,7 +41,7 @@ class MovingPlotWindow:
             difference method with time steps dt, from t=0 to t=T.
             """
             if dt > 2./k:
-                print 'Unstable scheme'
+                print('Unstable scheme')
             N = int(round(T/float(dt)))
             u = st.zeros(N+1)
             t = st.linspace(0, T, N+1)
@@ -155,7 +155,7 @@ def _demo(I, k, dt, T, mode='continuous movement'):
     method with time steps dt, from t=0 to t=T.
     """
     if dt > 2./k:
-        print 'Unstable scheme'
+        print('Unstable scheme')
     N = int(round(T/float(dt)))
     u = zeros(N+1)
     t = linspace(0, T, N+1)

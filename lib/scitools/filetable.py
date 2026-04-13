@@ -166,16 +166,16 @@ def write_v2(fileobj, a):
     """Write a two-dim. NumPy array a in tabular form to fileobj."""
     # written by Mario Pernici <Mario.Pernici@mi.infn.it>
     if a.shape[1] == 1:
-        for i in xrange(a.shape[0]): fileobj.write('%g\n' % a[i,0])
+        for i in range(a.shape[0]): fileobj.write('%g\n' % a[i,0])
     elif a.shape[1] == 2:
-        for i in xrange(a.shape[0]): fileobj.write('%g\t%g\n' % \
+        for i in range(a.shape[0]): fileobj.write('%g\t%g\n' % \
                                                 (a[i,0],a[i,1]))
     elif a.shape[1] == 3:
-        for i in xrange(a.shape[0]): fileobj.write('%g\t%g\t%g\n' % \
+        for i in range(a.shape[0]): fileobj.write('%g\t%g\t%g\n' % \
                                                 (a[i,0],a[i,1],a[i,2]))
     else:
         str_fmt = '%g\t'*(a.shape[1] - 1) + '%g\n'
-        for i in xrange(a.shape[0]):
+        for i in range(a.shape[0]):
             fileobj.write(str_fmt % tuple(a[i]))
 
     # don't think about
@@ -201,7 +201,7 @@ def write(fileobj, a):
     str_fmt = '%g\t'*(shape1 - 1) + '%g\n'
     # use a big format string
     str_fmt_N = str_fmt * N
-    for i in xrange(shape0/N):
+    for i in range(shape0/N):
       a1 = a[i:i+N,:]
       # put a1 in  1D array form; ravel better than reshape for
       # non-contiguous arrays.
@@ -235,36 +235,36 @@ def _generate(nrows, ncolumns, filename):
 def _test(n):
     _generate(n, 3, "tmp.1")
     import time
-    t0 = time.clock()
+    t0 = time.perf_counter()
     f = open("tmp.1", "r")
     narrays = int(f.readline().split()[1])
-    print 'found %d arrays in file' % narrays
+    print(('found %d arrays in file' % narrays))
     for i in range(narrays):
         q = read(f)
-        print 'read an array with shape', q.shape
-    t1 = time.clock()
-    print "read:", t1-t0, "seconds\n"
+        print(('read an array with shape', q.shape))
+    t1 = time.perf_counter()
+    print(("read:", t1-t0, "seconds\n"))
     f.close()
-    t0 = time.clock()
+    t0 = time.perf_counter()
     f = open("tmp.2", "w")
     write(f,q)
-    t1 = time.clock()
-    print "write:", t1-t0, "seconds"
+    t1 = time.perf_counter()
+    print(("write:", t1-t0, "seconds"))
     
     # compare with TableIO:
     try:
         import TableIO.TableIO as TableIO
     except:
         sys.exit(0) # exit silently
-    t0 = time.clock()
+    t0 = time.perf_counter()
     p = TableIO.readColumns("tmp.1", "#")
     #print 'p:', p
-    t1 = time.clock()
-    print "TableIO.readColumns:", t1-t0, "seconds\n"
-    t0 = time.clock()
+    t1 = time.perf_counter()
+    print(("TableIO.readColumns:", t1-t0, "seconds\n"))
+    t0 = time.perf_counter()
     TableIO.writeArray("tmp.3", array(p))
-    t1 = time.clock()
-    print "TableIO.writeArray:", t1-t0,"seconds"
+    t1 = time.perf_counter()
+    print(("TableIO.writeArray:", t1-t0,"seconds"))
 
 if __name__ == '__main__':
     _test(100000)

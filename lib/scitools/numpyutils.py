@@ -70,7 +70,7 @@ from .FloatComparison import float_eq, float_ne, float_lt, float_le, \
      float_gt, float_ge
 import collections
 from functools import reduce
-from Heaviside import *
+from .Heaviside import *
 import numpy
 
 def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
@@ -411,11 +411,11 @@ def Gram_Schmidt1(vecs, row_wise_storage=True):
 
     basis[:,0] /= sqrt(dot(basis[:,0], basis[:,0]))
     for i in range(1, m):
-	v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
-    	U = basis[:,:i]
-	P = eye - dot(U, dot(inv(dot(transpose(U), U)), transpose(U)))
-	basis[:, i] = dot(P, v)
-	basis[:, i] /= sqrt(dot(basis[:, i], basis[:, i]))
+        v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
+        U = basis[:,:i]
+        P = eye - dot(U, dot(inv(dot(transpose(U), U)), transpose(U)))
+        basis[:, i] = dot(P, v)
+        basis[:, i] /= sqrt(dot(basis[:, i], basis[:, i]))
 
     return transpose(basis) if row_wise_storage else basis
 
@@ -460,10 +460,10 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
     m, n = A.shape
     V = zeros((m,n))
 
-    for j in xrange(n):
+    for j in range(n):
         v0 = A[:,j]
         v = v0.copy()
-        for i in xrange(j):
+        for i in range(j):
             vi = V[:,i]
 
             if (abs(vi) > tol).any():
@@ -471,11 +471,11 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
         V[:,j] = v
 
     if remove_null_vectors:
-        indices = [i for i in xrange(n) if (abs(V[:,i]) < tol).all()]
-        V = V[ix_(range(m), indices)]
+        indices = [i for i in range(n) if (abs(V[:,i]) < tol).all()]
+        V = V[ix_(list(range(m)), indices)]
 
     if normalize:
-        for j in xrange(V.shape[1]):
+        for j in range(V.shape[1]):
             V[:,j] /= linalg.norm(V[:,j])
 
     if remove_noise:
@@ -1150,7 +1150,7 @@ def _test_factorial(n=80):
     cpu_min = min(list(cpu.values()))
     cpu = {version: cpu[version]/cpu_min for version in cpu}
     for version in cpu:
-        print '%-25s %5.1f' % (version, cpu[version])
+        print('%-25s %5.1f' % (version, cpu[version]))
 
 def factorial(n, method='math'):
     """
@@ -1195,9 +1195,9 @@ def factorial(n, method='math'):
             import scipy.misc
             return scipy.misc.factorial(n)
         except ImportError:
-            print 'numpyutils.factorial: scipy is not available'
-            print 'default method="reduce" is used instead'
-            return reduce(operator.mul, range(2, n+1))
+            print('numpyutils.factorial: scipy is not available')
+            print('default method="reduce" is used instead')
+            return reduce(operator.mul, list(range(2, n+1)))
             # or return factorial(n)
     elif method == 'plain iterative':
         f = 1
@@ -1214,14 +1214,14 @@ def factorial(n, method='math'):
         return fc(n)
     elif method == 'lambda functional':
         fc = lambda n: n<=0 or \
-             reduce(lambda a,b: a*b, range(1,n+1))
+             reduce(lambda a,b: a*b, list(range(1,n+1)))
         return fc(n)
     elif method == 'lambda list comprehension':
         fc = lambda n: [j for j in [1] for i in range(2,n+1) \
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        return reduce(operator.mul, range(2, n+1))
+        return reduce(operator.mul, list(range(2, n+1)))
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
 
@@ -1241,7 +1241,7 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
         msg = '%s  copy of array %s, from %s to %s' % \
               (comment, a.shape, type(a), type(a_new))
         if message == 'warning':
-            print 'Warning: %s' % msg
+            print('Warning: %s' % msg)
         elif message == 'exception':
             raise TypeError(msg)
     return a_new
@@ -1275,7 +1275,7 @@ def iseq(start=0, stop=None, inc=1):
     if stop is None: # allow isequence(3) to be 0, 1, 2, 3
         # take 1st arg as stop, start as 0, and inc=1
         stop = start; start = 0; inc = 1
-    return xrange(start, stop+inc, inc)
+    return range(start, stop+inc, inc)
 
 sequence = seq  # backward compatibility
 isequence = iseq  # backward compatibility
@@ -1390,7 +1390,7 @@ def arr(shape=None, element_type=float,
             raise TypeError(
                 'shape is %s, must be list/tuple or int' % type(shape))
     elif file_ is not None:
-        if isinstance(file_, basestring):
+        if isinstance(file_, str):
             file_ = open(file_, 'r')
         # skip blank lines:
         while True:
@@ -1405,7 +1405,7 @@ def arr(shape=None, element_type=float,
                              ('d', element_type))
 
         d = array([float(word) for word in file_.read().split()])
-        if isinstance(file_, basestring):
+        if isinstance(file_, str):
             f.close()
         # shape array d:
         if ncolumns > 1:
@@ -1438,7 +1438,7 @@ def arr(shape=None, element_type=float,
             return linspace(interval[0], interval[1], shape)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print(e, 'of size %s' % shape)
 
     else:
         # no data, no file, just make zeros
@@ -1453,7 +1453,7 @@ def arr(shape=None, element_type=float,
             return zeros(shape, dtype=element_type, order=order)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print(e, 'of size %s' % shape)
 
 def _test():
     _test_FloatComparison()
@@ -1464,24 +1464,24 @@ def _test():
     results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]
     for f, r in zip(functions, results):
         if not float_eq(f(a), r):
-            print '%s failed: result=%g, not %g' % (f.__name__, f(a), r)
+            print('%s failed: result=%g, not %g' % (f.__name__, f(a), r))
 
     # Gram-Schmidt:
     A = array([[1,2,3], [3,4,5], [6,4,1]], float)
     V1 = Gram_Schmidt(A, normalize=True)
     V2 = Gram_Schmidt1(A)
     if not float_eq(V1, V2):
-        print 'The two Gram_Schmidt versions did not give equal results'
-        print 'Gram_Schmidt:\n', V1
-        print 'Gram_Schmidt1:\n', V2
+        print('The two Gram_Schmidt versions did not give equal results')
+        print('Gram_Schmidt:\n', V1)
+        print('Gram_Schmidt1:\n', V2)
 
     # Null space:
     K = array([[1,2,3], [1,2,3], [0,0,0], [-1, -2, -3]], float)
     #K = random.random(3*7).reshape(7,3) # does not work...
-    print 'K=\n', K
-    print 'null(K)=\n', null(K)
+    print('K=\n', K)
+    print('null(K)=\n', null(K))
     r = K*null(K)
-    print 'K*null(K):', r
+    print('K*null(K):', r)
 
 
 if __name__ == '__main__':

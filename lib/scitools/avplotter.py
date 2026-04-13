@@ -88,14 +88,14 @@ class Plotter:
         random_step = 1 if np.random.random() > 0.5 else -1
         x = x + dx*random_step
         if x < -1:
-            print 'HOME!!!'
+            print('HOME!!!')
             break
-        print p.plot(0, x)
+        print(p.plot)(0, x)
 	# Allow Ctrl+c to abort the simulation
         try:
             time.sleep(0.1)  # Wait for interrupt
         except KeyboardInterrupt:
-            print 'Interrupted by Ctrl+c'
+            print('Interrupted by Ctrl+c')
             break
 
     One can easily plot two or more curves side by side. Here we
@@ -108,7 +108,7 @@ class Plotter:
         from numpy import linspace
         tp = linspace(0, 6*pi, 6*8+1)
         for t in tp:
-            print p_sin.plot(t, sin(t)), p_cos.plot(t, cos(t))
+            print(p_sin.plot)(t, sin(t)), p_cos.plot(t, cos(t))
 
     The output reads::
 
@@ -170,7 +170,7 @@ class Plotter:
         from numpy import linspace
         tp = linspace(0, 6*pi, 6*8+1)
         for t in tp:
-            print p.plot(t, sin(t), cos(t))
+            print(p.plot)(t, sin(t), cos(t))
 
     The output from this code becomes::
 
@@ -267,7 +267,7 @@ class Plotter:
         Return next line in plot, given x and some y values.
 
         Supported kwargs:
-        print_out_of_range_value: if True, print the value if it
+        print_out_of_range_value: if True, print(the) value if it
         is out of range.
 
         """
@@ -326,7 +326,7 @@ def plot(*args, **kwargs):
         except IndexError:
             raise ValueError('index %d in x_array is illegal in args[%d] (length=%d)' % (i, j, len(args[j])))
 
-        print p.plot(x_array, *y)
+        print((p.plot(x_array, *y)))
 
 
 def test_sin():
@@ -1692,14 +1692,14 @@ def run_random_walk():
         random_step = 1 if np.random.random() > 0.5 else -1
         x = x + dx*random_step
         if x < -1:
-            print 'HOME!!!'
+            print('HOME!!!')
             break
-        print p.plot(0, x)
+        print((p.plot(0, x)))
 	# Allow Ctrl+c to abort the simulation
         try:
             time.sleep(0.1)  # Wait for interrupt
         except KeyboardInterrupt:
-            print 'Interrupted by Ctrl+c'
+            print('Interrupted by Ctrl+c')
             break
 
 def _compare(ans, s):

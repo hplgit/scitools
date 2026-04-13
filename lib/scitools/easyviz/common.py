@@ -8,6 +8,7 @@ from .misc import _check_xyz, _check_xyuv, _check_xyzuvw, _check_xyzv, \
      _check_size, _check_type, _toggle_state, _update_from_config_file
 
 from warnings import warn
+import collections.abc
 
 
 def docadd(comment, *lists, **kwargs):
@@ -318,22 +319,22 @@ class PlotProperties(object):
             if color in self._colors or color == "":
                 self._prop['linecolor'] = color
             else:
-                print "Illegal line color choice, %s is not known" % color
+                print(("Illegal line color choice, %s is not known" % color))
             if linetype != "" or marker != "":
                 if linetype in self._linestyles:
                     self._prop['linetype'] = linetype
                 elif linetype == "":
                     self._prop['linetype'] = linetype # Since marker is known
                 else:
-                    print "Illegal line style choice, %s is not known" % \
-                          linetype
+                    print(("Illegal line style choice, %s is not known" % \
+                          linetype))
                 if marker in self._markers:
                     self._prop['linemarker'] = marker
                 elif marker == "":
                     self._prop['linemarker'] = marker # Since linetype is known
                 else:
-                    print "Illegal line marker choice, %s is not known" % \
-                          marker
+                    print(("Illegal line marker choice, %s is not known" % \
+                          marker))
 
     def get_limits(self):
         """
@@ -391,29 +392,29 @@ class Line(PlotProperties):
         # The proper casting should be in the backends plotroutine
 
         if 'z' in kwargs:
-            if not operator.isSequenceType(kwargs['z']):
+            if not isinstance(kwargs['z'], collections.abc.Sequence):
                 raise TypeError("Can only plot sequence types, "\
                                 "z is %s" % type(kwargs['z']))
             z = kwargs['z']
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
             if 'y' in kwargs:  # will only set y variable if z is set
-                if isinstance(kwargs['y'], basestring) \
+                if isinstance(kwargs['y'], str) \
                        and kwargs['y'] == 'auto':
                     # now y is the indicies of z
                     y = list(range(len(z)))
                 else:
-                    if not operator.isSequenceType(kwargs['y']):
+                    if not isinstance(kwargs['y'], collections.abc.Sequence):
                         raise TypeError("Can only plot sequence types, "\
                                         "y is %s" % type(kwargs['y']))
                     y = kwargs['y']
             if 'x' in kwargs:  # will only set x variable if y is set
-                if isinstance(kwargs['x'], basestring) \
+                if isinstance(kwargs['x'], str) \
                        and kwargs['x'] == 'auto':
                     # now x is the indicies of y
                     x = list(range(len(y)))
                 else:
-                    if not operator.isSequenceType(kwargs['x']):
+                    if not isinstance(kwargs['x'], collections.abc.Sequence):
                         raise TypeError("Can only plot sequence types, "\
                                         "x is %s" % type(kwargs['x']))
                     x = kwargs['x']
@@ -429,19 +430,19 @@ class Line(PlotProperties):
             self._set_data(x, y, z)
 
         elif 'y' in kwargs:
-            if not operator.isSequenceType(kwargs['y']):
+            if not isinstance(kwargs['y'], collections.abc.Sequence):
                 raise TypeError("Can only plot sequence types, "\
                                 "y is %s" % type(kwargs['y']))
             y = kwargs['y']
             if 'format' in kwargs:
                 self.setformat(kwargs['format'])
             if 'x' in kwargs:  # will only set x variable if y is set
-                if isinstance(kwargs['x'], basestring) \
+                if isinstance(kwargs['x'], str) \
                        and kwargs['x'] == 'auto':
                     # now x is the indicies of y
                     x = list(range(len(y)))
                 else:
-                    if not operator.isSequenceType(kwargs['x']):
+                    if not isinstance(kwargs['x'], collections.abc.Sequence):
                         raise TypeError("Can only plot sequence types, "\
                                         "x is %s" % type(kwargs['x']))
                     x = kwargs['x']
@@ -667,7 +668,7 @@ class Contours(PlotProperties):
 
         if nargs == 2 or nargs == 4:
             tmp = args[-1]
-            if operator.isSequenceType(tmp):
+            if isinstance(tmp, collections.abc.Sequence):
                 self._prop['cvector'] = tmp
                 self._prop['clevels'] = len(tmp)
             elif isinstance(tmp, int):
@@ -1109,8 +1110,8 @@ class Colorbar(object):
             if kwargs['cblocation'] in self._locations:
                 self._prop['cblocation'] = kwargs['cblocation']
             else:
-                print "colorbar location must be one of %s, not %s" % \
-                      (self._locations, kwargs['cblocation'])
+                print(("colorbar location must be one of %s, not %s" % \
+                      (self._locations, kwargs['cblocation'])))
 
         if 'cbtitle' in kwargs:
             self._prop['cbtitle'] = str(kwargs['cbtitle'])
@@ -1263,7 +1264,7 @@ class Camera(object):
             if self._prop['azimuth'] is None:
                 self._prop['azimuth'] = 0
 
-        if self._prop['azimuth'] is not None: # elevation is also != None
+        if self._prop['azimuth'] is not None: # elevation is also is not None
             self._prop['view'] = 3
             self._prop['camup'] = (0,0,1)
 
@@ -1472,7 +1473,7 @@ class Axis(object):
                 self._prop['scale'] = 'loglog'
             # Note: The only way to reset scale to linear after log is to
             # use plot(args,log=None)
-            elif kwargs['log'] == None:
+            elif kwargs['log'] is None:
                 self._prop['scale'] = 'linear'
 
         for key in self._ranges:
@@ -1977,7 +1978,7 @@ class BaseClass(object):
             if hasattr(args[0], 'getp'):
                 obj = args[0]
                 if nargs == 1:
-                    print obj
+                    print(obj)
                 else:
                     return obj.getp(args[1])
             else:
@@ -2292,7 +2293,7 @@ class BaseClass(object):
             ax.setp(hold=args[0])
         elif nargs == 0:
             ax.toggle('hold')
-            print "hold state is %s" % ax.getp('hold')
+            print(("hold state is %s" % ax.getp('hold')))
         else:
             raise TypeError('hold: wrong number of arguments')
 
@@ -2781,11 +2782,11 @@ class BaseClass(object):
                     raise ValueError('legend: wrong value of fancybox=%s' % value)
                 ax.setp(legend_fancybox=value)
             else:
-                print 'legend: ignoring keyword argument "%s"' % key
+                print(('legend: ignoring keyword argument "%s"' % key))
 
         items = ax.getp('plotitems')
         if len(items) == 0:
-            print 'plot is empty, cannot add legend'
+            print('plot is empty, cannot add legend')
             return
         if nargs > 1:
             # Consistency check of len(args) and number of items in axis
@@ -3110,11 +3111,11 @@ class BaseClass(object):
                         if isinstance(legend, str):
                             ax.getp('plotitems')[-1-i].setp(legend=legend)
                         else:
-                            print "Legend "+legend+" is not a string"
+                            print(("Legend "+legend+" is not a string"))
                 else:
-                    print 'Number of legend items (%d) is not equal to '\
+                    print(('Number of legend items (%d) is not equal to '\
                           'number of lines in plotcommand (%d)' % \
-                          (len(legends), no_lines)
+                          (len(legends), no_lines)))
             elif isinstance(legends,str): # only one legend
                 ax.getp('plotitems')[-1].setp(legend=legends)
             del kwargs['legend']
@@ -3379,11 +3380,11 @@ class BaseClass(object):
                         if isinstance(legend, str):
                             ax.getp('plotitems')[-1-i].setp(legend=legend)
                         else:
-                            print "Legend "+legend+" is not a string"
+                            print(("Legend "+legend+" is not a string"))
                 else:
-                    print "Number of legend items (%d) is not equal to " \
+                    print(("Number of legend items (%d) is not equal to " \
                           "number of lines (%d) in plotcommand" % \
-                          (len(legends), no_lines)
+                          (len(legends), no_lines)))
             elif isinstance(legends,str): # only one legend
                 ax.getp('plotitems')[-1].setp(legend=legends)
             del kwargs['legend']
@@ -5363,15 +5364,15 @@ def debug(plt, level=10):
     def print_(item, spaces=10):
         """Indent print"""
         pref = ' '*spaces
-        print pref+('\n'+pref).join((str(item)).split('\n'))
+        print((pref+('\n'+pref).join((str(item)).split('\n'))))
 
-    print "plt:"
-    print plt
+    print("plt:")
+    print(plt)
     if level > 0:
         for fignr in plt._figs:
-            print "\nFig %d:" % fignr
+            print(("\nFig %d:" % fignr))
             fig = plt._figs[fignr]
-            print fig
+            print(fig)
 
             if level > 1:
                 axes_ = fig.getp('axes')
@@ -5400,4 +5401,4 @@ def debug(plt, level=10):
                                 print_("Material:", 12)
                                 print_(item.getp('material'), 16)
 
-                            print ''
+                            print('')

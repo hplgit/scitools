@@ -186,8 +186,8 @@ def load_config_file(name,
     @return: a SafeConfigParser object and a list of filenames of the
     files that were read to set parameters in the SafeConfigParser object.
     """
-    import ConfigParser
-    config = ConfigParser.SafeConfigParser(default_dict4intpl)
+    import configparser
+    config = configparser.ConfigParser(default_dict4intpl)
     if case_sensitive_options:
         config.optionxform = str
 
@@ -199,7 +199,8 @@ def load_config_file(name,
                                        '%s%s' % (name, extension))
     read_files = []
     if os.path.isfile(default_config_file):
-        config.readfp(open(default_config_file, 'r'))
+        with open(default_config_file, 'r') as f:
+            config.read_file(f)
         read_files.append(default_config_file)
     #else:
     #    print 'No data in', default_config_file
@@ -357,9 +358,9 @@ the same directory as the calling module in the package).
                         del sys.argv[i]  # option
                         del sys.argv[i]  # value
                     except IndexError:
-                        print """
+                        print(("""
 %s command-line option must be followed by a value!
-""" % cml_option
+""" % cml_option))
                         sys.exit(1)
 
                     data[section][option][VALUE] = \
@@ -470,8 +471,8 @@ data glob = <str> *_simulation_results.*
     pprint.pprint(data)
     data_values = values_only(data)
     pprint.pprint(data_values)
-    print dict2xml(data)
-    print dict2xml(data, syntax='plain')
+    print((dict2xml(data)))
+    print((dict2xml(data, syntax='plain')))
 
 if __name__ == '__main__':
     _test()
