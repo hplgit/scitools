@@ -190,7 +190,7 @@ if basic_NumPy is None:
 
 # check the environment variable NUMPYARRAY:
 if basic_NumPy is None:
-    if os.environ.has_key('NUMPYARRAY'):
+    if 'NUMPYARRAY' in os.environ:
         if   os.environ['NUMPYARRAY'] == 'numpy':
             basic_NumPy = 'numpy'
         elif os.environ['NUMPYARRAY'] == 'numarray':
@@ -224,30 +224,30 @@ _NumPy_modules = (
 if basic_NumPy == 'numpy':
     try:
         # fix backward compatibility with Numeric names:
-	import numpy
-	oldversion = (numpy.version.version[0] == '0')
+        import numpy
+        oldversion = (numpy.version.version[0] == '0')
         majorversion = int(numpy.version.version[0])
         minorversion = int(numpy.version.version[2])
-	for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
-	    if oldversion and (_Numeric_name in ['RNG', 'FFT']):
-		n, module = _numpy_name.split('.')
-		exec "from %s import %s as %s" %(n, module, _Numeric_name)
-	    elif oldversion and (_Numeric_name == 'MLab'):
-		from numpy.lib import mlab as MLab
+        for _Numeric_name, _dummy1, _numpy_name in _NumPy_modules[1:]:
+            if oldversion and (_Numeric_name in ['RNG', 'FFT']):
+                n, module = _numpy_name.split('.')
+                exec("from %s import %s as %s" %(n, module, _Numeric_name))
+            elif oldversion and (_Numeric_name == 'MLab'):
+                from numpy.lib import mlab as MLab
             elif (oldversion or (majorversion == 1 and minorversion < 1)) \
                      and (_Numeric_name == 'MA'):
                 import numpy.core.ma; MA = numpy.core.ma
-	    elif _numpy_name != '':
-		exec 'import %s; %s = %s' % \
-		(_numpy_name, _Numeric_name, _numpy_name)
+            elif _numpy_name != '':
+                exec('import %s; %s = %s' % \
+                (_numpy_name, _Numeric_name, _numpy_name))
 
-	del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
+        del _Numeric_name, _dummy1, _numpy_name, _NumPy_modules
 
-	from numpy import *
-	if not oldversion:
-	    # get the old names too (NewAxis, Float, etc.):
-	    from numpy.oldnumeric import *
-	del oldversion
+        from numpy import *
+        if not oldversion:
+            # get the old names too (NewAxis, Float, etc.):
+            from numpy.oldnumeric import *
+        del oldversion
         # define new names compatible with Numeric:
         LinearAlgebra.solve_linear_equations = linalg.solve
         LinearAlgebra.inverse = linalg.inv
@@ -256,8 +256,8 @@ if basic_NumPy == 'numpy':
         LinearAlgebra.eigenvectors = linalg.eig
 
     except ImportError as e:
-        raise ImportError('%s\nnumpy import failed!\n'\
-              'see doc of %s module for how to choose Numeric instead' % \
+        raise ImportError('%s\nnumpy import failed!\n'
+              'see doc of %s module for how to choose Numeric instead' %
               (e, __name__))
 
 
@@ -297,8 +297,8 @@ if basic_NumPy == 'numarray':
     try:
         for _Numeric_name, _numarray_name, _dummy1 in _NumPy_modules[1:]:
             if _numarray_name:
-                exec 'import %s; %s = %s' % \
-                     (_numarray_name, _Numeric_name, _numarray_name)
+                exec('import %s; %s = %s' % \
+                     (_numarray_name, _Numeric_name, _numarray_name))
 
         # RNG is not supported, make an object that gives an error message:
         class __Dummy:
@@ -311,8 +311,8 @@ if basic_NumPy == 'numarray':
         from numarray import *
 
     except ImportError as e:
-        raise ImportError('%s\nnumarray import failed!\n'\
-        'see doc of %s module for how to choose Numeric instead' % \
+        raise ImportError('%s\nnumarray import failed!\n'
+        'see doc of %s module for how to choose Numeric instead' %
         (e, __name__))
 
     def array_output_precision(no_of_decimals):
@@ -351,7 +351,7 @@ if basic_NumPy == 'Numeric':
     try:
         for _Numeric_name, _dummy1, _dummy2 in _NumPy_modules[1:]:
             if _Numeric_name != 'MA':  # exclude MA, see comment above
-                exec 'import %s' % _Numeric_name
+                exec('import %s' % _Numeric_name)
         del _Numeric_name, _dummy1, _dummy2, _NumPy_modules
 
         from Numeric import *
@@ -404,8 +404,8 @@ if basic_NumPy == 'Numeric':
         del _problems
 
     except ImportError as e:
-        raise ImportError('%s\nNumeric import failed!\n'\
-        'see doc of %s module for how to choose numarray instead' % \
+        raise ImportError('%s\nNumeric import failed!\n'
+        'see doc of %s module for how to choose numarray instead' %
         (e, __name__))
 
 
@@ -496,10 +496,10 @@ def NumPy_type(a):
 
     # Check for non NumPy types first
     if isinstance(a, tuple):
-	return "tuple"
+        return "tuple"
     elif isinstance(a, list):
-	return "list"
-    exec "import %s" % basic_NumPy # Why isn't basic_NumPy imported?
+        return "list"
+    exec("import %s" % basic_NumPy) # Why isn't basic_NumPy imported?
     if isinstance(a, eval(types[basic_NumPy])):
         return basic_NumPy
 
@@ -743,9 +743,8 @@ def meshgrid(x=None, y=None, z=None, sparse=False, indexing='xy',
     sequence on the left-hand side and instead adjust a keyword argument.
     """
 
-    import types
     def fixed(coor):
-        return isinstance(coor, (float, complex, int, types.NoneType))
+        return isinstance(coor, (float, complex, int, type(None)))
 
     if not fixed(x):
         x = asarray(x)
@@ -919,11 +918,11 @@ def Gram_Schmidt1(vecs, row_wise_storage=True):
 
     basis[:,0] /= sqrt(dot(basis[:,0], basis[:,0]))
     for i in range(1, m):
-	v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
-    	U = basis[:,:i]
-	P = eye - dot(U, dot(inv(dot(transpose(U), U)), transpose(U)))
-	basis[:, i] = dot(P, v)
-	basis[:, i] /= sqrt(dot(basis[:, i], basis[:, i]))
+        v = basis[:,i]/sqrt(dot(basis[:,i], basis[:,i]))
+        U = basis[:,:i]
+        P = eye - dot(U, dot(inv(dot(transpose(U), U)), transpose(U)))
+        basis[:, i] = dot(P, v)
+        basis[:, i] /= sqrt(dot(basis[:, i], basis[:, i]))
 
     return transpose(basis) if row_wise_storage else basis
 
@@ -968,10 +967,10 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
     m, n = A.shape
     V = zeros((m,n))
 
-    for j in xrange(n):
+    for j in range(n):
         v0 = A[:,j]
         v = v0.copy()
-        for i in xrange(j):
+        for i in range(j):
             vi = V[:,i]
 
             if (abs(vi) > tol).any():
@@ -979,11 +978,11 @@ def Gram_Schmidt(vecs, row_wise_storage=True, tol=1E-10,
         V[:,j] = v
 
     if remove_null_vectors:
-        indices = [i for i in xrange(n) if (abs(V[:,i]) < tol).all()]
+        indices = [i for i in range(n) if (abs(V[:,i]) < tol).all()]
         V = V[ix_(range(m), indices)]
 
     if normalize:
-        for j in xrange(V.shape[1]):
+        for j in range(V.shape[1]):
             V[:,j] /= linalg.norm(V[:,j])
 
     if remove_noise:
@@ -1126,7 +1125,7 @@ class Heaviside:
 
 
 class DiracDelta:
-    """
+    r"""
     Smoothed Dirac delta function:
     $\frac{1}{2\epsilon}(1 + \cos(\pi x/\epsilon)$ when
     $x\in [-\epsilon, \epsilon]$ and 0 elsewhere.
@@ -1860,15 +1859,15 @@ def NumPy_array_iterator(a, **kwargs):
     no_value = kwargs.get('no_value', False)
 
     for line in offset_code1:
-        exec line
+        exec(line)
     for line in offset_code2:
-        exec line
+        exec(line)
     code = 'def nested_loops(a):\n'
     indentation = ' '*4
     indent = '' + indentation
     for dim in range(len(a.shape)):
         code += indent + \
-        'for i%d in xrange(%d, a.shape[%d]-%d):\n' \
+        'for i%d in range(%d, a.shape[%d]-%d):\n' \
                 % (dim, eval('offset%d_start' % dim),
                    dim, eval('offset%d_stop' % dim))
         indent += indentation
@@ -1877,7 +1876,7 @@ def NumPy_array_iterator(a, **kwargs):
         code += indent + 'yield ' + index
     else:
         code += indent + 'yield ' + 'a[%s]' % index + ', (' + index + ')'
-    exec code
+    exec(code)
     return nested_loops, code
 
 def compute_histogram(samples, nbins=50, piecewise_constant=True):
@@ -1941,9 +1940,9 @@ def factorial(n, method='reduce'):
     ==========================   =====================
 
     """
-    if not isinstance(n, (int, long, float)):
+    if not isinstance(n, (int, float)):
         raise TypeError('factorial(n): n must be integer not %s' % type(n))
-    n = long(n)
+    n = int(n)
 
     if n == 0 or n == 1:
         return 1
@@ -1963,22 +1962,22 @@ def factorial(n, method='reduce'):
         return fc(n)
     elif method == 'lambda functional':
         fc = lambda n: n<=0 or \
-             reduce(lambda a,b: long(a)*long(b), xrange(1,n+1))
+             reduce(lambda a,b: int(a)*int(b), range(1,n+1))
         return fc(n)
     elif method == 'lambda list comprehension':
         fc = lambda n: [j for j in [1] for i in range(2,n+1) \
                         for j in [j*i]] [-1]
         return fc(n)
     elif method == 'reduce':
-        return reduce(operator.mul, xrange(2, n+1))
+        return reduce(operator.mul, range(2, n+1))
     elif method == 'scipy':
         try:
             import scipy.misc.common as sc
             return sc.factorial(n)
         except ImportError:
-            print 'numpyutils.factorial: scipy is not available'
-            print 'default method="reduce" is used instead'
-            return reduce(operator.mul, xrange(2, n+1))
+            print('numpyutils.factorial: scipy is not available')
+            print('default method="reduce" is used instead')
+            return reduce(operator.mul, range(2, n+1))
             # or return factorial(n)
     else:
         raise ValueError('factorial: method="%s" is not supported' % method)
@@ -1999,7 +1998,7 @@ def asarray_cpwarn(a, dtype=None, message='warning', comment=''):
         msg = '%s  copy of array %s, from %s to %s' % \
               (comment, a.shape, type(a), type(a_new))
         if message == 'warning':
-            print 'Warning: %s' % msg
+            print('Warning: %s' % msg)
         elif message == 'exception':
             raise TypeError(msg)
     return a_new
@@ -2033,7 +2032,7 @@ def iseq(start=0, stop=None, inc=1):
     if stop is None: # allow isequence(3) to be 0, 1, 2, 3
         # take 1st arg as stop, start as 0, and inc=1
         stop = start; start = 0; inc = 1
-    return xrange(start, stop+inc, inc)
+    return range(start, stop+inc, inc)
 
 sequence = seq  # backward compatibility
 isequence = iseq  # backward compatibility
@@ -2201,7 +2200,7 @@ def arr(shape=None, element_type=float,
             return linspace(interval[0], interval[1], shape)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print(e, 'of size %s' % shape)
 
     else:
         # no data, no file, just make zeros
@@ -2216,7 +2215,7 @@ def arr(shape=None, element_type=float,
             return zeros(shape, dtype=element_type, order=order)
         except MemoryError as e:
             # print more information (size of data):
-            print e, 'of size %s' % shape
+            print(e, 'of size %s' % shape)
 
 def _test():
     _test_FloatComparison()
@@ -2227,24 +2226,24 @@ def _test():
     results = [78.7464284904401239, 15.1547572288924073, 351, 13, 26]
     for f, r in zip(functions, results):
         if not float_eq(f(a), r):
-            print '%s failed: result=%g, not %g' % (f.__name__, f(a), r)
+            print('%s failed: result=%g, not %g' % (f.__name__, f(a), r))
 
     # Gram-Schmidt:
     A = array([[1,2,3], [3,4,5], [6,4,1]], float)
     V1 = Gram_Schmidt(A, normalize=True)
     V2 = Gram_Schmidt1(A)
     if not float_eq(V1, V2):
-        print 'The two Gram_Schmidt versions did not give equal results'
-        print 'Gram_Schmidt:\n', V1
-        print 'Gram_Schmidt1:\n', V2
+        print('The two Gram_Schmidt versions did not give equal results')
+        print('Gram_Schmidt:\n', V1)
+        print('Gram_Schmidt1:\n', V2)
 
     # Null space:
     K = array([[1,2,3], [1,2,3], [0,0,0], [-1, -2, -3]], float)
     #K = random.random(3*7).reshape(7,3) # does not work...
-    print 'K=\n', K
-    print 'null(K)=\n', null(K)
+    print('K=\n', K)
+    print('null(K)=\n', null(K))
     r = K*null(K)
-    print 'K*null(K):', r
+    print('K*null(K):', r)
 
 
 if __name__ == '__main__':
@@ -2303,14 +2302,14 @@ if __name__ == '__main__':
         Verify that some packages imported by numpytools
         works for Numeric, numarray, or numpy.
         """
-        print "\nUsing %s in %s" % (N.basic_NumPy, N.__name__)
+        print("\nUsing %s in %s" % (N.basic_NumPy, N.__name__))
         for name in namecheck:
             if hasattr(N, name):
-                print "%s.%s : %s " % (
+                print("%s.%s : %s " % (
                     N.__name__,
                     name,
-                    eval("N.%s.__name__" % name))
-        print ""
+                    eval("N.%s.__name__" % name)))
+        print("")
 
     def _test1():
         """Call verify function for N as Numeric, numarray, and numpy."""
@@ -2403,12 +2402,12 @@ if __name__ == '__main__':
         try:
             __import__(arg[2:])
         except:
-            print "You don't have %s installed" %arg[2:]
+            print("You don't have %s installed" % arg[2:])
             continue
 
         sys.argv[-1] = arg
-        print '\nNow testing with system arg %10s\n%s' %(arg, '='*38)
-        print N, dir(N)
+        print('\nNow testing with system arg %10s\n%s' % (arg, '='*38))
+        print(N, dir(N))
         reload(N);  verify(N)
         suite = unittest.makeSuite(numpytoolsTest)
         unittest.TextTestRunner(verbosity=2).run(suite)
